@@ -1,8 +1,8 @@
-# Datei-Version: 1.18 (2026-11-14) - M08_ARDUINO.py
+# Datei-Version: 1.19 (2026-11-14) - M08_ARDUINO.py
 # ----------------------------------------------------------------------------------------------
 # Name:           M08_ARDUINO.py
 # Path:           proggen/M08_ARDUINO.py
-# Version:        1.18
+# Version:        1.19
 # Last Update:    2026-11-14
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
@@ -26,6 +26,7 @@
 #   1.16  2026-11-12  Excel-Programm 3.5.0L3: platformio.ini: die Bibliothek MobaLedLib wird mit symlink:// verknuepft statt kopiert (file://), wenn der Rechner symbolische Verknuepfungen erlaubt (Lib_Link_Scheme, sonst wie bisher file://); Write_PIO_Extension einmal im Abschnitt [env] statt in jedem Abschnitt (damit auch fuer den Pico); WriteGenButtonReleaseDefine: Text plus Zahl (TypeError bei GEN_BUTTON_RELEASE_COM 2 oder 3) behoben
 #   1.17  2026-11-12  Einstellung 'Test ARDUINO Programm Creation' (ARDUINOTest): Die Fragen nach jedem Schritt kommen jetzt als Web-Dialog (P01.MsgBox) statt tk.messagebox (ohne Tk lieferte askyesno immer Nein: 'Headerfileerstellung abgebrochen - Die Headerdatei wurde nicht geschrieben', Windows 11, Log des Testers)
 #   1.18  2026-11-14  Dialog 'Fehler bei der Ueberpruefung des angeschlossenen Arduino': Knoepfe Suchen / Weiter / Abbrechen (P01.MsgBoxLabelled), Text angepasst
+#   1.19  2026-11-14  Write_PIO_Project und PlatformIO-Projekt fuer OTA (Beitrag des Fork-Entwicklers)
 # ----------------------------------------------------------------------------------------------
 # -*- coding: utf-8 -*-
 #
@@ -627,7 +628,9 @@ def PIO_Cache_Plan():  # v1.07
     # Was beim Loeschen des Zwischenspeichers von PlatformIO geloescht wuerde: Liste {kind, path, size} (siehe headless/headless_pio_cache.py).
     # Gesucht wird in den Projekten, die das Programm angelegt hat: in dieser Sitzung geschriebene und die ueblichen Orte (Beispiele der Bibliothek, Ordner der Arbeitsmappe).
     import headless.headless_pio_cache as HC  # v1.07
+    from headless.headless_esp32_ota import platformio_ota_project
     candidates = list(PIO_Projects)  # v1.07
+    candidates.append(str(platformio_ota_project()))
     for guess in (lambda: M02a.Get_SrcDirExamp(), lambda: GetWorkbookPath() + '/../examples', lambda: PG.ThisWorkbook.Path + '/..', lambda: PG.ThisWorkbook.Path):  # v1.07
         try:  # v1.07
             candidates.append(os.path.abspath(guess()))  # v1.07
@@ -711,7 +714,11 @@ def Lib_Link_Scheme() -> str:  # v1.16
     return _LIB_LINK_SCHEME[0]  # v1.16
 
 
-def __Create_PIO_Build(fp, Environment, ResultName, ComPort, SrcDir):
+def Write_PIO_Project(environment, sketch_dir):
+    return __Create_PIO_Build(None, environment, "", "", sketch_dir, track_project=False)
+
+
+def __Create_PIO_Build(fp, Environment, ResultName, ComPort, SrcDir, track_project=True):
     fn_return_value = False
     fp2 = Integer()
     #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -743,7 +750,8 @@ def __Create_PIO_Build(fp, Environment, ResultName, ComPort, SrcDir):
     fp2 = FreeFile()
     # VBFiles.openFile(fp2, SrcDir + '..//platformio.ini', 'w')  # v1.07 (entfallen)
     VBFiles.openFile(fp2, SrcDir + '..//platformio.ini', 'w')  # v1.07
-    PIO_Projects.add(os.path.abspath(os.path.join(SrcDir, '..')))                    # fuer PIO_Cache_Plan: dort liegt .pio   # v1.07
+    if track_project:
+        PIO_Projects.add(os.path.abspath(os.path.join(SrcDir, '..')))                    # fuer PIO_Cache_Plan: dort liegt .pio   # v1.07
     #Open Replace(SrcDir, "\LEDs_AutoProg\", "\platformio.inx") For Output As #fp2
     VBFiles.writeText(fp2, '; Created by '+ PG.ThisWorkbook.Name, '\n')
     VBFiles.writeText(fp2, '[platformio]', '\n')

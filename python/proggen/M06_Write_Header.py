@@ -1,9 +1,9 @@
-# Datei-Version: 1.05 (2026-11-12) - M06_Write_Header.py
+# Datei-Version: 1.06 (2026-11-14) - M06_Write_Header.py
 # ----------------------------------------------------------------------------------------------
 # Name:           M06_Write_Header.py
 # Path:           proggen/M06_Write_Header.py
-# Version:        1.05
-# Last Update:    2026-11-12
+# Version:        1.06
+# Last Update:    2026-11-14
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
@@ -12,6 +12,7 @@
 #   1.03  2026-10-21  Version K des Excel-Programms: Makros Name_LED_Number und Name_LED_Offset (Proc_Special_Functions), Variable #ChannelOffset (Generate_Config_Line mit ChannelBaseOffset), Adresse 0 (Addr >= 1 in Create_Header_Entry, Addr >= 0 in ProcessLine), keine Pruefung des Boards bei nur Simulator, START_MSG ohne Test_Suffix, inch_t in HandleValue_t
 #   1.04  2026-10-21  Meldung 'Anzahl der verwendeten Eingangskanaele ist zu gross': MaxInput und Channel als Zeichenkette (Replace mit einer Zahl stuerzte ab) und die Klammern richtig gesetzt (MsgBox bekam nur den ersten Teil als Text, Titel und Symbol fehlten)
 #   1.05  2026-11-12  Einstellung 'Test ARDUINO Programm Creation' (ARDUINOTest): Die Fragen nach jedem Schritt kommen jetzt als Web-Dialog (P01.MsgBox) statt tk.messagebox (ohne Tk lieferte askyesno immer Nein: 'Headerfileerstellung abgebrochen - Die Headerdatei wurde nicht geschrieben', Windows 11, Log des Testers)
+#   1.06  2026-11-14  Create_HeaderFile(HeaderOnly): nur die Header-Datei erzeugen (ESP32-OTA); Display-Block des ESP32 (UI_MLLTime) nach Bearbeitung im Browser wieder auf mehrere Zeilen (Beitrag des Fork-Entwicklers)
 # ----------------------------------------------------------------------------------------------
 # -*- coding: utf-8 -*-
 #
@@ -1161,7 +1162,7 @@ def Write_ATTINY_GBM_H_if_used(fp):
 
 
 #--------------------------------------------------------------------------------------------
-def Create_HeaderFile(CreateFilesOnly = False): #20.12.21: Jürgen add CreateFilesOnly for programatically generation of header files
+def Create_HeaderFile(CreateFilesOnly = False, *, HeaderOnly=False): #20.12.21: Jürgen add CreateFilesOnly for programatically generation of header files
 #--------------------------------------------------------------------------------------------
     _fn_return_value = False
     Ctrl_Pressed = False
@@ -1225,7 +1226,7 @@ def Create_HeaderFile(CreateFilesOnly = False): #20.12.21: Jürgen add CreateFil
         SimulatorOnly = M28.Get_Num_Config_Var_Range("SimAutostart", 0, 3, 0) != 3 and shift_pressed
        
     # if SimulatorOnly and CreateFilesOnly == False and M02a.Get_BoardTyp() == M02.HT_AM328:  # v1.03 (entfallen)
-    if SimulatorOnly and CreateFilesOnly == False:                                                  # 08.12.25: Juergen remove platform check  # v1.03
+    if SimulatorOnly and not (CreateFilesOnly or HeaderOnly):                                                  # 08.12.25: Juergen remove platform check  # v1.03
         Debug.Print(" go to UploadToSimulator")
         _fn_return_value = M39.UploadToSimulator(True)
         return _fn_return_value
@@ -1237,7 +1238,7 @@ def Create_HeaderFile(CreateFilesOnly = False): #20.12.21: Jürgen add CreateFil
         return _fn_return_value
     if M37.CheckArduinoHomeDir() == False:
         return _fn_return_value
-    _fn_return_value = Write_Header_File_and_Upload_to_Arduino(CreateFilesOnly, LEDsInUse=LEDs_per_Channel)
+    _fn_return_value = Write_Header_File_and_Upload_to_Arduino(CreateFilesOnly, LEDsInUse=LEDs_per_Channel, HeaderOnly=HeaderOnly)
     # 20.12.21: Jürgen return result of called function
     return _fn_return_value
 
@@ -1442,7 +1443,7 @@ def Store_ValuesTxt_Used():
     _fn_return_value = ( Store_ValuesTxt != '' )
     return _fn_return_value
 
-def Write_Header_File_and_Upload_to_Arduino(CreateFilesOnly=False, LEDsInUse=None): #20.12.21: Jürgen add CreateFilesOnly for programatically generation of header files
+def Write_Header_File_and_Upload_to_Arduino(CreateFilesOnly=False, LEDsInUse=None, *, HeaderOnly=False): #20.12.21: Jürgen add CreateFilesOnly for programatically generation of header files
     global ErrorText, Ext_AddrTxt, Store_ValuesTxt, InChTxt, LocInChNr, Channel, ConfigTxt, LEDs_per_ChannelList, Start_Values
     if PG.global_controller.ARDUINOTest:
         # answer = tk.messagebox.askyesno ('ARDUINOTest','Schreiben der Headerdatei wird gestartet',default='yes')  # v1.05 (entfallen)
@@ -1699,6 +1700,15 @@ def Write_Header_File_and_Upload_to_Arduino(CreateFilesOnly=False, LEDsInUse=Non
     VBFiles.writeText(fp, '// *** Configuration array which defines the behavior of the LEDs ***', '\n')
     VBFiles.writeText(fp, 'MobaLedLib_Configuration()', '\n')
     VBFiles.writeText(fp, '  {', '\n')
+    import re
+    # Browser cell editing can collapse the ESP32 display block onto one line.
+    display_block = (r"(?m)^([ \t]*)#ifdef[ \t]+ESP32[ \t]+"
+                     r"#define[ \t]+USE_ESP32_EXTENSIONS[ \t]+"
+                     r"#define[ \t]+USE_UI[ \t]+"
+                     r"#define[ \t]+UI_MLLTime[ \t]+([0-4])[ \t]*#endif\b")
+    ConfigTxt = re.sub(display_block,
+                       r"\1#ifdef ESP32\n\1#define USE_ESP32_EXTENSIONS\n\1#define USE_UI\n"
+                       r"\1#define UI_MLLTime \2\n\1#endif", ConfigTxt)
     VBFiles.writeText(fp, ConfigTxt, '\n')
     VBFiles.writeText(fp, '  EndCfg // End of the configuration', '\n')
     VBFiles.writeText(fp, '  };', '\n')
@@ -1800,6 +1810,9 @@ def Write_Header_File_and_Upload_to_Arduino(CreateFilesOnly=False, LEDsInUse=Non
     # 02.12.21: Juergen see forum post #7085
     comport = P01.Cells(M02.SH_VARS_ROW, M25.COMPort_COL).Value
     
+    if HeaderOnly:
+        return True
+
     if False: #type(comport) == str and InStr(comport, 'IP:') > 0:
         M06cfg.create_MLLconfig_and_upload_to_PICO(P01.Cells(M02.SH_VARS_ROW, M25.COMPort_COL), ConfigTxt, LEDsInUse)
     else:    
