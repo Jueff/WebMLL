@@ -1,5 +1,5 @@
 # webMobaLedLib – Checkliste für Betatester
-*Datei-Version: 2.60 (2026-11-14), gilt für webMobaLedLib 3.42*
+*Datei-Version: 2.59 (2026-11-14), gilt für webMobaLedLib 3.40*
 
 Danke, dass du die Web-Version testest. Ziel: **Installationsprobleme auf verschiedenen Systemen** und **Probleme der Oberfläche bei verschiedenen Arbeitsweisen** früh finden.
 Es genügt, wenn du das testest, was zu deinem System und deiner Arbeitsweise passt. Jede Rückmeldung hilft, auch „alles funktioniert“.
@@ -258,7 +258,6 @@ Trage das Ergebnis in die Tabelle am Ende ein.
 202. **Firewall und WLAN-Upload (3.38):** Ohne Regel für TCP 32323 schlägt der Upload mit „No response from device“ fehl und der Hinweis erscheint. Nach dem Anlegen der Regel (Anleitung 9.2a) bei eingeschalteter Firewall: Upload erfolgreich?
 203. **Minimale Firmware (3.39):** Zentrale ESP32, Reiter OTA, Passwort eingeben, „Minimale Firmware per USB hochladen“: Wird gebaut und übertragen, blinkt die Heartbeat-LED? Danach „WLAN über USB einrichten“ (WLANs suchen, verbinden). Ist die eigene LEDs_AutoProg.h danach unverändert?
 204. **WLAN-Einstellungen je Blatt (3.40):** Zwei Blätter mit verschiedenen ESP32: Reiter OTA, auf Blatt 1 Hostname/Adresse A, auf Blatt 2 Hostname/Adresse B einstellen. Blatt wechseln: Zeigt der Reiter jeweils die eigenen Werte? Arbeitsmappe speichern und wieder laden (oder Programm neu starten): Bleiben die Werte? Blatt kopieren: Hat die Kopie dieselben Werte? Das Passwort steht nicht in der gespeicherten Datei.
-205. **Automatisch per WLAN verbinden (3.42):** Blatt mit ESP32, WLAN und OTA eingetragen: Reiter Farb Test oder Servo öffnen und Rot/Grün-Testtasten drücken – es verbindet ohne Rückfrage per WLAN. ESP32 ausschalten: Nach einigen Sekunden folgt USB. Der Knopf „Mit ARDUINO verbinden“ fragt weiter WLAN oder USB.
 
 ## 4. Ergebnis
 

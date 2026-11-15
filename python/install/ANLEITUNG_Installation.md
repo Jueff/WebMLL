@@ -1,5 +1,5 @@
 # webMobaLedLib – Installation und Betrieb
-*Datei-Version: 3.78 (2026-11-14), gilt für webMobaLedLib 3.42*
+*Datei-Version: 3.77 (2026-11-14), gilt für webMobaLedLib 3.38*
 
 Windows · macOS · Linux-Desktop · Raspberry Pi
 
