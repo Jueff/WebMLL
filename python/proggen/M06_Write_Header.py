@@ -1,9 +1,9 @@
-# Datei-Version: 1.06 (2026-11-14) - M06_Write_Header.py
+# Datei-Version: 1.08 (2026-11-15) - M06_Write_Header.py
 # ----------------------------------------------------------------------------------------------
 # Name:           M06_Write_Header.py
 # Path:           proggen/M06_Write_Header.py
-# Version:        1.06
-# Last Update:    2026-11-14
+# Version:        1.08
+# Last Update:    2026-11-15
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
@@ -13,6 +13,8 @@
 #   1.04  2026-10-21  Meldung 'Anzahl der verwendeten Eingangskanaele ist zu gross': MaxInput und Channel als Zeichenkette (Replace mit einer Zahl stuerzte ab) und die Klammern richtig gesetzt (MsgBox bekam nur den ersten Teil als Text, Titel und Symbol fehlten)
 #   1.05  2026-11-12  Einstellung 'Test ARDUINO Programm Creation' (ARDUINOTest): Die Fragen nach jedem Schritt kommen jetzt als Web-Dialog (P01.MsgBox) statt tk.messagebox (ohne Tk lieferte askyesno immer Nein: 'Headerfileerstellung abgebrochen - Die Headerdatei wurde nicht geschrieben', Windows 11, Log des Testers)
 #   1.06  2026-11-14  Create_HeaderFile(HeaderOnly): nur die Header-Datei erzeugen (ESP32-OTA); Display-Block des ESP32 (UI_MLLTime) nach Bearbeitung im Browser wieder auf mehrere Zeilen (Beitrag des Fork-Entwicklers)
+#   1.07  2026-11-15  Umschalttaste: Simulator-Option 3 war umgekehrt (VBA: nur ohne Umschalttaste), Wert als bool
+#   1.08  2026-11-15  Simulator-Betriebsart ueber M39.Get_Sim_Mode (Auswahl Kein/Nur/Mit Simulator)
 # ----------------------------------------------------------------------------------------------
 # -*- coding: utf-8 -*-
 #
@@ -1215,15 +1217,19 @@ def Create_HeaderFile(CreateFilesOnly = False, *, HeaderOnly=False): #20.12.21: 
     #    return _fn_return_value
     
     # 04.03.22 Juergen: If shift key is pressed to configuration is sent to the simulator only, also if Autostart Option 3  = simulatorOnly
-    shift_pressed = P01.GetAsyncKeyState(P01.__VK_SHIFT)
+    # shift_pressed = P01.GetAsyncKeyState(P01.__VK_SHIFT)  # v1.07 (entfallen)
+    shift_pressed = bool(P01.GetAsyncKeyState(P01.VK_SHIFT))  # v1.07
     Debug.Print("Shift_pressed: %s",shift_pressed)
     
     # 17.03.22 Juergen: shift key is reverses simualtor option
     #SimulatorOnly = Get_Num_Config_Var_Range("SimAutostart", 0, 3, 0) = 3 and GetAsyncKeyState(VK_SHIFT) = 0
-    SimulatorOnly = M28.Get_Num_Config_Var_Range("SimAutostart", 0, 3, 0) == 3 and shift_pressed
+    # SimulatorOnly = M28.Get_Num_Config_Var_Range("SimAutostart", 0, 3, 0) == 3 and shift_pressed  # v1.07 (entfallen)
+    # SimulatorOnly = M28.Get_Num_Config_Var_Range("SimAutostart", 0, 3, 0) == 3 and not shift_pressed  # v1.07 (entfallen v1.08)
+    SimulatorOnly = M39.Get_Sim_Mode() == 3 and not shift_pressed  # v1.07 wie VBA: Umschalttaste kehrt die Option um  # v1.08
         
     if not SimulatorOnly:
-        SimulatorOnly = M28.Get_Num_Config_Var_Range("SimAutostart", 0, 3, 0) != 3 and shift_pressed
+        # SimulatorOnly = M28.Get_Num_Config_Var_Range("SimAutostart", 0, 3, 0) != 3 and shift_pressed  # v1.08 (entfallen)
+        SimulatorOnly = M39.Get_Sim_Mode() != 3 and shift_pressed  # v1.08
        
     # if SimulatorOnly and CreateFilesOnly == False and M02a.Get_BoardTyp() == M02.HT_AM328:  # v1.03 (entfallen)
     if SimulatorOnly and not (CreateFilesOnly or HeaderOnly):                                                  # 08.12.25: Juergen remove platform check  # v1.03

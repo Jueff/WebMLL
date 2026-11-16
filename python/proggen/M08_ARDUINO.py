@@ -1,9 +1,9 @@
-# Datei-Version: 1.19 (2026-11-14) - M08_ARDUINO.py
+# Datei-Version: 1.20 (2026-11-15) - M08_ARDUINO.py
 # ----------------------------------------------------------------------------------------------
 # Name:           M08_ARDUINO.py
 # Path:           proggen/M08_ARDUINO.py
-# Version:        1.19
-# Last Update:    2026-11-14
+# Version:        1.20
+# Last Update:    2026-11-15
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
@@ -27,6 +27,7 @@
 #   1.17  2026-11-12  Einstellung 'Test ARDUINO Programm Creation' (ARDUINOTest): Die Fragen nach jedem Schritt kommen jetzt als Web-Dialog (P01.MsgBox) statt tk.messagebox (ohne Tk lieferte askyesno immer Nein: 'Headerfileerstellung abgebrochen - Die Headerdatei wurde nicht geschrieben', Windows 11, Log des Testers)
 #   1.18  2026-11-14  Dialog 'Fehler bei der Ueberpruefung des angeschlossenen Arduino': Knoepfe Suchen / Weiter / Abbrechen (P01.MsgBoxLabelled), Text angepasst
 #   1.19  2026-11-14  Write_PIO_Project und PlatformIO-Projekt fuer OTA (Beitrag des Fork-Entwicklers)
+#   1.20  2026-11-15  Simulator-Betriebsart ueber M39.Get_Sim_Mode
 # ----------------------------------------------------------------------------------------------
 # -*- coding: utf-8 -*-
 #
@@ -2420,7 +2421,8 @@ def Compile_and_Upload_Prog_to_Arduino(InoName, ComPortColumn, BuildOptColumn, S
         M30.EndProg()
     #*HL Failed = Not UpdateSimulatorIfNeeded(False, Get_Num_Config_Var_Range("SimAutostart", 0, 3, 0) = 2 Or Get_Num_Config_Var_Range("SimAutostart", 0, 3, 0) = 3)
     
-    Failed = not M39.UpdateSimulatorIfNeeded(False, (M28.Get_Num_Config_Var_Range("SimAutostart", 0, 3, 0) in (2,3)))
+    # Failed = not M39.UpdateSimulatorIfNeeded(False, (M28.Get_Num_Config_Var_Range("SimAutostart", 0, 3, 0) in (2,3)))  # v1.20 (entfallen)
+    Failed = not M39.UpdateSimulatorIfNeeded(False, (M39.Get_Sim_Mode() in (2,3)))  # v1.20
      
     if not Failed:
         # Change to the directory because the Arduino compiler doesn't like special characters like "ä" in the path

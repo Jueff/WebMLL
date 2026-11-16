@@ -1,9 +1,9 @@
-# Datei-Version: 1.14 (2026-11-12) - web_graph.py
+# Datei-Version: 1.16 (2026-11-15) - web_graph.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_graph.py
 # Path:           _web/web_graph.py
-# Version:        1.14
-# Last Update:    2026-11-12
+# Version:        1.16
+# Last Update:    2026-11-15
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
@@ -22,6 +22,8 @@
 #   1.12  2026-11-01  view_model und update bekommen chain_size (Groesse der Kaestchen in der Ansicht Ketten)
 #   1.13  2026-11-01  Groesse und Rueckgaengig in beiden Ansichten, Trennlinie zwischen Grafik und Tabelle (Ansicht Beides)
 #   1.14  2026-11-12  Schalter 'Alle Zeilen' in der Kopfzeile der Ansicht Ketten (all_rows je Blatt): Knoten ohne LEDs tragen den Text 'Ohne LEDs'; view_model meldet all_rows
+#   1.15  2026-11-15  Verteiler: view_model meldet je Knoten vt und plug (aus dem Modell) und die Texte Verteiler / Stecker (vt_texts, vtinfo)
+#   1.16  2026-11-15  Kopfzeile: Schalter Verteiler und Stecker nebeneinander (je Blatt); view_model meldet vt_on und vt_side
 # ----------------------------------------------------------------------------------------------
 
 """Grafische Ansicht des Programm Generators, Stufe 1: Verbindung zwischen Modell, Seite und Browser.
@@ -195,6 +197,9 @@ def view_model(model: dict, plant=None, chain_size=None) -> dict:  # v1.12
         subtitle = tr("{anzahl} Makros", anzahl=len(chain["nodes"])) + (", " + tr("{anzahl} LEDs", anzahl=chain["led_count"]) if chain.get("led_count") else "")  # v1.01
         out["chains"].append({"channel": chain["channel"], "title": tr("Kanal {kanal}", kanal=chain["channel"]), "subtitle": subtitle,  # v1.01
                               "nodes": [node_out(n) for n in chain["nodes"]]})  # v1.01
+    out["vtinfo"] = dict(model.get("vtinfo") or {})  # v1.15: Verteilernummer -> Typ und Sicherung aus den ID-Zeilen
+    out["vt_on"], out["vt_side"] = bool(model.get("vt_on", True)), bool(model.get("vt_side", True))  # v1.16
+    out["vt_texts"] = {"vt": tr("Verteiler {nr}"), "plug": tr("Stecker {nr}"), "back": tr("Signal zurück zum Verteiler")}  # v1.15
     out["other"] = [node_out(n) for n in model.get("other", [])]
     out["other_title"] = tr("Ohne LEDs")
     out["other_subtitle"] = tr("{anzahl} Makros", anzahl=len(out["other"]))
@@ -246,6 +251,10 @@ class GraphPanel:
                     self.mode_toggle = ui.toggle({"chains": tr("Ketten"), "plant": tr("Anlage")}, value="chains", on_change=lambda e: self._layout("mode", e.value)).props("dense no-caps unelevated size=sm")  # v1.07
                     self.all_rows_box = ui.checkbox(tr("Alle Zeilen"), on_change=lambda e: self._layout("all_rows", bool(e.value))).props("dense")  # v1.14: nur in der Ansicht Ketten
                     self.all_rows_box.tooltip(tr("Alle aktiven Zeilen in der Reihenfolge der Tabelle zeigen, auch die ohne LEDs (sie stehen in der Kette der nachfolgenden Zeile mit LEDs)"))  # v1.14
+                    self.vt_box = ui.checkbox(tr("Verteiler"), on_change=lambda e: self._layout("vt", bool(e.value))).props("dense")  # v1.16
+                    self.vt_box.tooltip(tr("Rechteck je Verteilernummer mit Feldern für die Stecker zeigen (reiner Kommentar, wird nicht geprüft)"))  # v1.16
+                    self.vt_side_box = ui.checkbox(tr("Stecker nebeneinander"), on_change=lambda e: self._layout("vt_side", bool(e.value))).props("dense")  # v1.16
+                    self.vt_side_box.tooltip(tr("Die Stecker eines Verteilers nebeneinander statt untereinander zeichnen"))  # v1.16
                     # self.image_button = ui.button(tr("Bild laden ..."), icon="image", on_click=lambda: self._layout("image_load")).props("dense flat no-caps size=sm")  # v1.11 (entfallen)
                     self.image_button = ui.button(tr("Bild laden ..."), icon="image").props("dense flat no-caps size=sm")  # v1.11
                     self.image_button.on("click", js_handler="() => mllGraph.pickImage()")                # im Browser: Dateifenster (nur direkt im Klick erlaubt), Verkleinern, Hochladen  # v1.11
@@ -375,7 +384,7 @@ class GraphPanel:
 
     # def set_plant_controls(self, mode: str, has_image: bool) -> None:  # v1.10 (entfallen)
     # def set_plant_controls(self, mode: str, has_image: bool, size=None, snap=False, undo=None) -> None:  # v1.10 (entfallen)
-    def set_plant_controls(self, mode: str, has_image: bool, size=None, snap=False, undo=None, all_rows=False) -> None:  # v1.14
+    def set_plant_controls(self, mode: str, has_image: bool, size=None, snap=False, undo=None, all_rows=False, vt=True, vt_side=True) -> None:  # v1.16
         """Kopfzeile an die Ansicht anpassen (ohne Ereignis): der Umschalter zeigt die Ansicht, Bild und Zoom nur in der Anlagenansicht"""  # v1.07
         self._guard = True  # v1.07
         try:  # v1.07
@@ -384,6 +393,8 @@ class GraphPanel:
                 self.size_slider.set_value(size)  # v1.10
             self.snap_box.set_value(bool(snap))  # v1.10
             self.all_rows_box.set_value(bool(all_rows))  # v1.14
+            self.vt_box.set_value(bool(vt))  # v1.16
+            self.vt_side_box.set_value(bool(vt_side))  # v1.16
         finally:  # v1.07
             self._guard = False  # v1.07
         plant = mode == "plant"  # v1.07
@@ -395,6 +406,9 @@ class GraphPanel:
             control.set_visibility(True)  # v1.13
         self.image_remove.set_visibility(plant and bool(has_image))  # v1.07
         self.all_rows_box.set_visibility(not plant)  # v1.14: der Schalter gilt nur fuer die Ketten
+        self.vt_box.set_visibility(not plant)  # v1.16
+        self.vt_side_box.set_visibility(not plant)  # v1.16
+        self.vt_side_box.set_enabled(bool(vt))  # v1.16
         self.undo_button.set_enabled(bool(undo))  # v1.10
         self.undo_label.set_text(tr("Rückgängig: {aktion}", aktion=undo) if undo else "")  # v1.10
 

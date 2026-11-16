@@ -1,9 +1,9 @@
-# Datei-Version: 1.08 (2026-11-03) - Prog_Generator.py
+# Datei-Version: 1.09 (2026-11-15) - Prog_Generator.py
 # ----------------------------------------------------------------------------------------------
 # Name:           Prog_Generator.py
 # Path:           mlpyproggen/Prog_Generator.py
-# Version:        1.08
-# Last Update:    2026-11-03
+# Version:        1.09
+# Last Update:    2026-11-15
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
@@ -16,6 +16,7 @@
 #   1.06  2026-10-28  Hinweis nennt den Knopf Git installieren
 #   1.07  2026-11-01  Hinweis bei fehlendem git nennt den Knopf Git installieren fuer alle Betriebssysteme und winget fuer Windows
 #   1.08  2026-11-03  start_ARDUINO_program_cmd: Parameter title ersetzt die Ueberschrift 'Kompilieren und Hochladen gestartet' (fertige Dateien werden nicht kompiliert)
+#   1.09  2026-11-15  Knopfleiste: Umschalttaste beim Klick merken (Simulator: Umschalt + Zum Arduino schicken)
 # ----------------------------------------------------------------------------------------------
 # -*- coding: utf-8 -*-
 #
@@ -740,6 +741,7 @@ class Prog_GeneratorPage(tk.Frame):
             if self.PGIconSize <= 20:
                 padx = button_desc["padx"] * self.PGIconSize / 20.0
             button.pack( side="left",padx=padx)
+            button.bind("<ButtonPress-1>", self.__remember_shift, add="+")  # v1.09
             self.controller.ToolTip(button, text=_T(button_desc["tooltip"]))
             self.controller.pgmenu.add_command(label=button_text, command=button_desc["command"])
             
@@ -756,6 +758,7 @@ class Prog_GeneratorPage(tk.Frame):
                 button=tk.Button(self.button_frame, text=button_text, command=button_desc["command"], height=2) #,compound="center")
             
             button.pack( side="left",padx=button_desc["padx"])
+            button.bind("<ButtonPress-1>", self.__remember_shift, add="+")  # v1.09
             
             self.controller.ToolTip(button, text=_T(button_desc["tooltip"]))            
     
@@ -862,6 +865,10 @@ class Prog_GeneratorPage(tk.Frame):
         P01.ActiveSheet.apply_formatting()
     
             
+    def __remember_shift(self, event):  # v1.09
+        # Umschalttaste beim Druecken der Maustaste merken (P01.GetAsyncKeyState liest sie dort)
+        P01.shift_key = bool(event.state & 0x0001)  # v1.09
+
     def upload_to_ARDUINO_Button_click(self, event=None):
         self.arduinoMonitorPage=self.controller.getFramebyName ("ARDUINOMonitorPage")
         self.arduinoMonitorPage.delete_text_from_textwindow()        

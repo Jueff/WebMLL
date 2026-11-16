@@ -1,0 +1,16 @@
+Datei-Version: 1.00 (2026-11-15) - LIESMICH.txt (webMobaLedLib 3.56)
+
+LED-Simulator fuer Linux
+------------------------
+libMobaLedLibWrapper.so ist der Simulator ohne Windows-Fenster. Quelle: MobaLedLibWrapper von Juergen Winkler
+(github.com/Hardi-St/MobaLedLib_Docu, Tools/MobaLedLib.Win), LGPL 2.1 oder neuer. Die Simulation ist unveraendert,
+das Fenster entfaellt; die Anzeige macht die Web-Oberflaeche.
+
+Fertig gebaut liegt die Bibliothek fuer x86_64 in Configuration/linux_x64/. Fehlt sie (anderer Prozessor, zum Beispiel
+Raspberry Pi), baut das Programm sie beim ersten Start des Simulators selbst. Dafuer wird g++ gebraucht:
+    sudo apt install build-essential
+Von Hand bauen:   bash simulator_linux/build_simulator_linux.sh
+
+Uebersetzen der Konfiguration (Setup uebertragen mit Simulator): benutzt avr-g++ aus PlatformIO
+(Pakete toolchain-atmelavr und framework-arduino-avr im Ordner ~/.platformio/packages) oder der Arduino IDE.
+Eigene Orte:  MLL_AVR_BIN=<Ordner mit avr-g++>   MLL_AVR_PLATFORM=<Ordner framework-arduino-avr>

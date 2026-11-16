@@ -1,9 +1,9 @@
-# Datei-Version: 1.18 (2026-11-14) - XLA_Application.py
+# Datei-Version: 1.20 (2026-11-15) - XLA_Application.py
 # ----------------------------------------------------------------------------------------------
 # Name:           XLA_Application.py
 # Path:           ExcelAPI/XLA_Application.py
-# Version:        1.18
-# Last Update:    2026-11-14
+# Version:        1.20
+# Last Update:    2026-11-15
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
@@ -25,6 +25,8 @@
 #   1.16  2026-11-01  CSelection.EntireRow: die markierten Zeilen (vorher um eine Zeile nach oben verschoben: Zeile kopieren, ausblenden und loeschen wirkten auf die Zeile darueber)
 #   1.17  2026-11-08  Das Scheitern der Importe von headless_sheet und XLF_FormGenerator wird ins Protokoll geschrieben (vorher wurde der ImportError verschluckt; die eigentliche Ursache war nicht zu sehen und es folgte der Ringimport mit P01_Worksheetcalc)
 #   1.18  2026-11-14  Esp32Wlan: WLAN-Einstellungen (esp32_wlan) je Blatt in der Arbeitsmappe sichern und laden
+#   1.19  2026-11-15  GetAsyncKeyState: Umschalttaste vom Mausklick (shift_key) gilt auch ohne keyboard-Modul
+#   1.20  2026-11-15  Evt_Workbook_BeforeClose ruft das Ereignis tatsaechlich auf
 # ----------------------------------------------------------------------------------------------
 # -*- coding: utf-8 -*-
 #
@@ -1027,7 +1029,8 @@ class CWorkbook(object):
     
     def Evt_Workbook_BeforeClose(self):
         if Application.EnableEvents:
-            self.Call_EventProc("BeforeClose")
+            # self.Call_EventProc("BeforeClose")  # v1.20 (entfallen: Ereignis wurde nie aufgerufen)
+            self.Call_EventProc("BeforeClose")(False)  # v1.20
             return
     
     def Evt_SheetTableUpdate(self,sheet,target):
@@ -5481,6 +5484,9 @@ def Format(value,formatstring):
 
 def GetAsyncKeyState(key):
     global shift_key
+    if key == VK_SHIFT and shift_key:  # v1.19 Umschalttaste beim Klick auf den Knopf (auch ohne keyboard-Modul)
+        shift_key = False  # v1.19
+        return True  # v1.19
     try:
         if keyboard_Module_imported:
             if key==__VK_UP:

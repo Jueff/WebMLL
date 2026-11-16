@@ -1,15 +1,17 @@
-# Datei-Version: 1.02 (2026-11-08) - DieseArbeitsmappe.py
+# Datei-Version: 1.04 (2026-11-15) - DieseArbeitsmappe.py
 # ----------------------------------------------------------------------------------------------
 # Name:           DieseArbeitsmappe.py
 # Path:           proggen/DieseArbeitsmappe.py
-# Version:        1.02
-# Last Update:    2026-11-08
+# Version:        1.04
+# Last Update:    2026-11-15
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
 #   1.00  2026-10-12  Stand der Umstellung (nicht erfasst)
 #   1.01  2026-10-27  PlatformIO: keine Pruefung der ARDUINO IDE und der Bibliotheken beim Start, Sketchbook-Pfad = Python-Ordner, Erweiterungen werden geladen
 #   1.02  2026-11-08  Workbook_Open: erster Start einer Neuinstallation: die Voreinstellungen (PlatformIO, Anfaenger Modus) kommen aus first_start_hook vor der Pruefung der ARDUINO IDE (vorher Meldung 'Die ARDUINO IDE wurde nicht gefunden' trotz PlatformIO)
+#   1.03  2026-11-15  Workbook_BeforeClose: Simulatorfenster schliessen
+#   1.04  2026-11-15  Simulator beim Start ueber M39.Sim_Autostart
 # ----------------------------------------------------------------------------------------------
 from vb2py.vbfunctions import *
 from vb2py.vbdebug import *
@@ -68,6 +70,11 @@ def Remove_Special_Events():
 
 def Workbook_BeforeClose(Cancel):
     #--------------------------------------------------
+    try:  # v1.03 Simulatorfenster mit dem Programm schliessen
+        if M39.IsSimulatorActive():  # v1.03
+            M39.CloseSimulator()  # v1.03
+    except BaseException:  # v1.03
+        pass  # v1.03
     if ENABLE_CRITICAL_EVENTS_WB:
         #test P01.Application.CommandBars['row'].FindControl[Id= 883].OnAction = ''
         #test P01.Application.CommandBars['row'].FindControl[Id= 884].OnAction = ''
@@ -143,7 +150,8 @@ def Workbook_Open():
     # 19.01.24: Juergen add OldProgGeneratorFilename
     if M12.Copy_Prog_If_in_LibDir_WithResult(DidCopy):
         M17.Import_from_Old_Version_If_exists(not DidCopy)
-    if M28.Get_Num_Config_Var_Range('SimAutostart', 0, 3, 0) == 1:
+    # if M28.Get_Num_Config_Var_Range('SimAutostart', 0, 3, 0) == 1:  # v1.04 (entfallen)
+    if M39.Sim_Autostart():  # v1.04
         # 04.04.22: Juergen Simulator
         M39.OpenSimulator()
     P01.Application.EnableEvents = True

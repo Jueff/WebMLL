@@ -1,14 +1,15 @@
-# Datei-Version: 1.01 (2026-10-23) - web_form_exchange.py
+# Datei-Version: 1.02 (2026-11-15) - web_form_exchange.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_form_exchange.py
 # Path:           _web/web_form_exchange.py
-# Version:        1.01
-# Last Update:    2026-10-23
+# Version:        1.02
+# Last Update:    2026-11-15
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
 #   1.00  2026-10-17  Neu: Zeilenauswahl fuer Export zu ProgGen und Import von ProgGen als Hinweisband im Reiter Programm Generator
 #   1.01  2026-10-23  Texte mit eingesetzten Werten (f-Strings) mit tr("... {name}", name=...) umgestellt, damit sie uebersetzt werden
+#   1.02  2026-11-15  Reiter und Texte "Patterngenerator" heissen jetzt "Timeline Editor"
 # ----------------------------------------------------------------------------------------------
 """Web-Ersatz fuer proggen/Select_ProgGen_Dest_Form.py und Select_ProgGen_Src_Form.py.
 
@@ -118,7 +119,7 @@ def _clean(text: str) -> str:
     """Namen der Web-Oberflaeche einsetzen; der Hinweis auf die Enter-Taste (Tk-Dialog) entfaellt"""
     lines = [l for l in text.split("\n") if "'Enter'" not in l]
     text = "\n".join(lines).strip()
-    return text.replace("Prog_Generator", "Programm Generator").replace("Pattern_Configurator", "Patterngenerator")
+    return text.replace("Prog_Generator", "Programm Generator").replace("Pattern_Configurator", "Timeline Editor")  # v1.02
 
 
 class ExchangeBanner:
@@ -136,7 +137,7 @@ class ExchangeBanner:
             self.text = ui.label("").style("white-space: pre-line")
             with ui.row().classes("items-center gap-4"):
                 self.chk_arduino = ui.checkbox("gleich zum Arduino schicken")
-                self.chk_back = ui.checkbox("Anschließend zurück zum Patterngenerator", value=True)
+                self.chk_back = ui.checkbox("Anschließend zurück zum Timeline Editor", value=True)  # v1.02
                 ui.button("OK", on_click=self.on_ok).props("dense no-caps color=primary").classes("px-4")
                 ui.button("Abbrechen", on_click=self.on_abort).props("dense no-caps outline").classes("px-2")
         self.card.set_visibility(False)

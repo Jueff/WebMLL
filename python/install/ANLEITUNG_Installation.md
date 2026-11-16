@@ -1,5 +1,5 @@
 # webMobaLedLib – Installation und Betrieb
-*Datei-Version: 3.77 (2026-11-14), gilt für webMobaLedLib 3.38*
+*Datei-Version: 3.88 (2026-11-16), gilt für webMobaLedLib 3.65*
 
 Windows · macOS · Linux-Desktop · Raspberry Pi
 
@@ -341,7 +341,7 @@ Die Knöpfe der Werkzeugleiste des Programm Generators (Dialog Wizard, Setup üb
 
 **Alle Titel haben zwei Zeilen**, damit alle Knöpfe gleich hoch sind (auch in den anderen Sprachen; die Beschriftung ist mindestens zwei Zeilen hoch). Die Titel (ab 2.76): **Dialog Wizard**, **Setup übertragen** (früher „Z. Arduino schicken“), **Zeilen löschen**, **Zeilen verschieben**, **Zeilen duplizieren**, **Tabelle löschen**, **Optionen Werkzeuge**.
 
-Die Symbole liegen im Ordner `images_btn` (Dateinamen wie die alten Bilder `Btn_*.png`, aber ohne Text, etwa 214 × 164 Pixel, durchsichtiger Hintergrund). Fehlt ein Symbol dort, zeigt das Programm das alte Bild aus dem Ordner `images` (mit dem deutschen Text im Bild). Die Knöpfe des Patterngenerators haben noch die alten Bilder.
+Die Symbole liegen im Ordner `images_btn` (Dateinamen wie die alten Bilder `Btn_*.png`, aber ohne Text, etwa 214 × 164 Pixel, durchsichtiger Hintergrund). Fehlt ein Symbol dort, zeigt das Programm das alte Bild aus dem Ordner `images` (mit dem deutschen Text im Bild). Die Knöpfe des Timeline Editors haben noch die alten Bilder.
 
 ### 2.9d Programme für den rechten Arduino (DCC, Selectrix, LNet) mit PlatformIO (2.72)
 
@@ -392,9 +392,9 @@ Das Makro **LEDColorAnim** (Gruppe PatternConfig, Dialog **LED Farb-Animation**)
 
 **Abweichungen vom Excel-/Tk-Programm:** Bei geänderter Dauer werden die Zeiten der Kurve Individuell für **alle drei Kurven** gleich gestreckt (das Tk-Programm streckte nur die erste; die Ausgabe benutzte nur deren Zeiten); beim Senden an die LED gilt der Wert 0 für Grün und Blau (das Tk-Programm ersetzte 0 durch den Startwert); Einfügen und Löschen der Punkte mit Knöpfen.
 
-### 2.10 Der Patterngenerator
+### 2.10 Der Timeline Editor
 
-Der Reiter **Patterngenerator** erstellt aus einer Tabelle ein Muster für die LEDs (Wechselblinker, Lauflicht usw.). Das Ergebnis ist ein Makro, das im Programmgenerator eingetragen wird.
+Der Reiter **Timeline Editor** erstellt aus einer Tabelle ein Muster für die LEDs (Wechselblinker, Lauflicht usw.). Das Ergebnis ist ein Makro, das im Programmgenerator eingetragen wird.
 **Stand:** Anzeigen, Bearbeiten, Berechnen sowie **Export zu ProgGen** und **Import von ProgGen** gehen. Dazu kommen **Optionen** mit den Beispielen und die Auswahldialoge für **Spezial Mode**, **RGB Modul Nr** und **Goto Aktivierung**. Die Seiten zeigen auch ihre **Bilder** und die **Goto-Pfeile**, **Bild einfügen** fügt eigene Bilder ein. **Test Pattern** (seit 2.90) spielt das Muster auf dem Bildschirm ab. **Noch nicht** gibt es das Senden an ein Modul (zurückgestellt, bis ein Tester es braucht; damit auch das Blinken der LED bei RGB Modul Nr), die Wirkung der Spezial Modes auf dem Modul und den Multiplexer.
 
 - **Aufbau:** Oben stehen die gelben Eingabefelder (Erste RGB LED, Anzahl der Ausgabe Kanäle, Mode usw.) und darunter das Ergebnis (`PatternT1(…)`), der Makroname und das Makro. Unten liegt die
@@ -440,16 +440,16 @@ Der Reiter **Patterngenerator** erstellt aus einer Tabelle ein Muster für die L
   - **Export zu ProgGen:** trägt das Makro des Blatts in eine Zeile des Programm Generators ein. Vorher prüft das Programm, ob ein Makroname eingetragen ist, die LED-Tabelle
     nicht leer ist und die Dauer-Zeile stimmt, und meldet sonst den Fehler. Danach springt der Browser zum Programm Generator, über der Tabelle erscheint ein **gelbes Band**:
     In die Zeile klicken, in der das Muster stehen soll, und **OK** drücken. Die Haken „gleich zum Arduino schicken“ (erzeugt die Dateien, kompiliert und lädt hoch) und „Anschließend
-    zurück zum Patterngenerator“ gelten für diesen Vorgang. Bereits vorhandene Einträge in der Spalte „Beleuchtung, Sound, oder andere Effekte“ werden überschrieben, Symbol und Name der Zeile
-    kommen dazu. **Abbrechen** bringt zurück zum Patterngenerator.
+    zurück zum Timeline Editor“ gelten für diesen Vorgang. Bereits vorhandene Einträge in der Spalte „Beleuchtung, Sound, oder andere Effekte“ werden überschrieben, Symbol und Name der Zeile
+    kommen dazu. **Abbrechen** bringt zurück zum Timeline Editor.
   - **Import von ProgGen:** liest ein Muster aus einer Zeile des Programm Generators. Im gelben Band eine Zeile mit einem `PatternT…`-Makro anklicken und **OK** drücken. Das Programm fragt, ob
-    die Daten in das aktuelle Blatt kommen oder ein neues Blatt angelegt wird. Danach zeigt der Browser den Patterngenerator. Wie in der Excel-Version steht im Feld „Schalter Nummer“ danach `#InCh`.
+    die Daten in das aktuelle Blatt kommen oder ein neues Blatt angelegt wird. Danach zeigt der Browser den Timeline Editor. Wie in der Excel-Version steht im Feld „Schalter Nummer“ danach `#InCh`.
 - **Beschreibung:** Der Text des Blatts lässt sich über „Beschreibung“ oben aufklappen.
 - **Spaltenbreite:** Die Muster-Spalten sind gleich breit. Das Programm passt die benutzten Spalten an die Dauer an, wenn die Zeiten sehr unterschiedlich sind (wie in Excel).
   In dieser Tabelle lassen sich die Spalten nicht von Hand verstellen, weil die Balken an den Spaltenbreiten hängen.
 - **Daten:** Die Blätter werden beim Beenden im Datenordner gesichert (`temp_workbook.table_PatternWorkbook.json`) und beim nächsten Start geladen.
 
-**Dateien aus dem Excel-Programm laden:** Dateien im Format `.MLL_pcf` und `.MLL_pgf`, die mit dem Excel-Programm gespeichert wurden, haben den Windows-Zeichensatz (cp1252; als Trennzeichen im Patterngenerator dient das Zeichen `¯`). Das Programm erkennt den Zeichensatz beim Laden selbst: Dateien in **UTF-8** (vom Web-Programm gespeichert, auch mit Kennzeichen am Anfang) und im **Windows-Zeichensatz** lassen sich beide laden, mit Umlauten und Sonderzeichen. Früher kam bei einer Datei aus Excel die Meldung „'utf-8' codec can't decode byte 0xaf …“. Beim **Speichern** schreibt das Programm die Dateien (`.MLL_pcf` und `.MLL_pgf`) ebenfalls im **Windows-Zeichensatz**, damit auch das Excel-Programm sie lesen kann (sonst stimmen Trennzeichen und Umlaute dort nicht). Das lässt sich in den **Programm Einstellungen** mit der Option **Dateien für das Excel-Programm speichern** abschalten (Standard: an). Enthält eine Datei Zeichen, die im Windows-Zeichensatz keinen Platz haben (zum Beispiel ein polnisches „ł“), bleibt sie UTF-8; das Excel-Programm kann sie dann nicht richtig lesen. Das Laden geht immer mit beiden.
+**Dateien aus dem Excel-Programm laden:** Dateien im Format `.MLL_pcf` und `.MLL_pgf`, die mit dem Excel-Programm gespeichert wurden, haben den Windows-Zeichensatz (cp1252; als Trennzeichen im Timeline Editor dient das Zeichen `¯`). Das Programm erkennt den Zeichensatz beim Laden selbst: Dateien in **UTF-8** (vom Web-Programm gespeichert, auch mit Kennzeichen am Anfang) und im **Windows-Zeichensatz** lassen sich beide laden, mit Umlauten und Sonderzeichen. Früher kam bei einer Datei aus Excel die Meldung „'utf-8' codec can't decode byte 0xaf …“. Beim **Speichern** schreibt das Programm die Dateien (`.MLL_pcf` und `.MLL_pgf`) ebenfalls im **Windows-Zeichensatz**, damit auch das Excel-Programm sie lesen kann (sonst stimmen Trennzeichen und Umlaute dort nicht). Das lässt sich in den **Programm Einstellungen** mit der Option **Dateien für das Excel-Programm speichern** abschalten (Standard: an). Enthält eine Datei Zeichen, die im Windows-Zeichensatz keinen Platz haben (zum Beispiel ein polnisches „ł“), bleibt sie UTF-8; das Excel-Programm kann sie dann nicht richtig lesen. Das Laden geht immer mit beiden.
 
 ### 2.11 Vollbild und Adressen der Reiter
 
@@ -463,7 +463,7 @@ Der Reiter **Patterngenerator** erstellt aus einer Tabelle ein Muster für die L
 | Adresse | Reiter |
 |---|---|
 | `/ProgGenerator` | Programm Generator |
-| `/Patterngenerator` | Patterngenerator |
+| `/TimelineEditor` | Timeline Editor (die alte Adresse `/Patterngenerator` gilt weiter) |
 | `/ProgGeneratorEinstellungen` | ProgGenerator Einstellungen |
 | `/Farbtest` | Farb Test |
 | `/ServoTest1` | Servo Einstellungen |
@@ -506,12 +506,11 @@ arbeitet über dieselbe serielle Verbindung wie der Farb Test: zuerst mit dem Ar
 
 Der Reiter **Z21 Simulator** (`/Z21Simulator`) gibt sich gegenüber Modellbahn-Steuerprogrammen (Rocrail, iTrain, Traincontroller, WinDigiPet, Z21-Apps) als **Roco Z21** aus. Weichen- und Lokbefehle des Steuerprogramms schickt er als DCC-Kommando an den Arduino (`@ AAA CC AA`), so lassen sich die DCC-Schalter der MobaLedLib direkt aus dem Steuerprogramm bedienen. Die Z21 zählt Adressen ab 0, die MobaLedLib ab 1; der Simulator rechnet das um.
 
-- **Einschalten:** Programm Einstellungen → **Z21 Simulator anzeigen**, dann Speichern: Der Reiter erscheint sofort (ohne Neustart).
-- **Bedienung:** Zuerst mit dem Arduino verbinden (Knopf **Mit ARDUINO verbinden** in der Kopfzeile; der Start versucht es selbst, startet aber auch ohne Verbindung). Dann **Start Simulator**. Die Seite zeigt die **IP-Adresse und den Port 21105 (UDP)**, die im Steuerprogramm als Z21 einzutragen sind. Läuft das Steuerprogramm auf demselben Rechner, genügt `127.0.0.1`. Im Fenster darunter steht jedes Paket mit Uhrzeit, Absender und dem Befehl an den Arduino. **Stop Simulator** beendet ihn. **Zeige Taster-Adressen** zeigt die Eingangskanäle aus der zuletzt erzeugten Header-Datei.
-- Der Simulator läuft weiter, wenn man den Reiter wechselt oder die Seite neu lädt. Er endet mit **Stop** oder mit dem Beenden des Programms.
-- **Firewall und Netz:** Das Steuerprogramm muss den **UDP-Port 21105** erreichen. **Windows** fragt beim ersten Start nach der Freigabe für Python: **Private Netzwerke** erlauben. **Linux** mit `ufw`: `sudo ufw allow 21105/udp`. Auf dem **Raspberry Pi** ist der Port normalerweise frei, der Simulator läuft dann dauerhaft auf dem Pi. Ist der Port schon belegt (andere Z21-Software, zweiter Simulator), erscheint eine Meldung.
-- **Rückmeldung (RMBUS):** Hat das Steuerprogramm die Rückmeldung angemeldet (Broadcast-Flag „R-Bus“, so tun es zum Beispiel Rocrail und iTrain für die Rückmelder), fragt der Simulator den Arduino alle 100 ms nach dem Stand der Taster und Eingänge und meldet **Änderungen** an das Steuerprogramm (je Gruppe von 10 Modulen). Im Fenster erscheint nur eine Zeile, wenn sich etwas ändert; die Statuszeile nennt, für wie viele Programme die Rückmeldung läuft. Das Intervall steht in der (versteckten) Einstellung `RMbusTimer` (× 100 ms; 0 oder leer = 100 ms).
-- **Noch nicht umgesetzt:** Die **Port-Liste** (bis zu drei Arduinos mit eigenen DCC-Adressbereichen); es wird der eine mit dem Programm verbundene Arduino benutzt.
+- **Einschalten:** Programm Einstellungen → Spezialeinstellungen → **Simulator anzeigen**, Speichern. In der Werkzeugleiste erscheint neben *Setup übertragen* der Knopf **Setup simulieren**. Er schickt die Konfiguration **nur an den Simulator** (keine Lichtmaschine nötig) und ändert keine Einstellung; *Setup übertragen* geht danach wie gewohnt an die Lichtmaschine. Die Option „Simulator“ der Konfigurationsseite des Excel-Programms wird mit dem Haken ignoriert. Die Umschalttaste ist nicht nötig. (Die Auswahl Kein / Nur / Mit Simulator aus 3.56 gibt es nicht mehr.)
+- **Windows:** eigenes Fenster (Datei `Configuration/x64/MobaLedLibWrapper.dll`); Doppelklick wechselt die Darstellung, Taste N zeigt die LED-Nummern, S und Z wählen die Verdrahtung der Matrix.
+- **Linux, Raspberry Pi:** `Configuration/linux_x64/libMobaLedLibWrapper.so` liegt bei (x86_64). Auf anderen Prozessoren (zum Beispiel Raspberry Pi) baut das Programm sie beim ersten Klick auf *Setup simulieren* aus `simulator_linux/` (dafür `sudo apt install build-essential` und die installierte Bibliothek MobaLedLib mit ihrem Quelltext). Fehlt etwas, nennt die Meldung den Grund. Auf einem Raspberry Pi mit PlatformIO bestätigt. Die LEDs erscheinen in einem schwebenden Feld im Browser. Übersetzt wird mit `avr-g++` aus PlatformIO (Pakete `toolchain-atmelavr`, `framework-arduino-avr` im Ordner `~/.platformio/packages`) oder der ARDUINO IDE; eigene Orte über die Umgebungsvariablen `MLL_AVR_BIN` und `MLL_AVR_PLATFORM`. macOS: noch nicht verfügbar.
+- **Testtasten:** Ist der Simulator offen und keine Lichtmaschine verbunden, schalten sie nur den Simulator; die Frage nach der Verbindung kommt höchstens einmal. Bei verbundener Lichtmaschine gehen sie an beide.
+- Das Simulatorfenster schließt sich beim Beenden des Programms. Der Simulator zeigt nur LEDs (keine Servos, kein Sound).
 
 ### 2.15 Sprache der Oberfläche
 
@@ -519,10 +518,10 @@ In den **Programm Einstellungen** wählt man unter **Sprache**: Auto (die Sprach
 
 **Aufbau der Seite Programm Einstellungen (seit 2.94):** Die Einstellungen stehen in **Gruppen mit Überschrift**: **Allgemeine Einstellungen** (Anfänger Modus, Sprache, Darstellung auf kleinen Bildschirmen, Schriftgröße, Schrift von ProgGen/PattGen, Icon Größe), **Programm Generator** (Standardansicht, versteckte Tabellen anzeigen, Bedienung der Tabelle), **Farb Test Einstellungen** (Farbauswahl, LED-Farbkorrektur), **Zugriff aus dem Netz** (Schalter und Passwort) und **Spezialeinstellungen** (alles andere: DM Servo Einstellungen anzeigen, Z21 Simulator anzeigen, IP Upload Timeout, RMBUS-Interval, Dateien für das Excel-Programm speichern). Die Option **Check for Updates** hatte keine Funktion und entfällt. Die **Beschreibungstexte** der Seiten (zum Beispiel unter der Überschrift von Programm Einstellungen, ARDUINO Einstellungen, Farb Test, DCC Keyboard, Sound Test, Servo Einstellungen 2 und Z21 Simulator) sowie die Beschriftungen der Seiten Programm Einstellungen, ARDUINO Einstellungen und Farb Test werden in der eingestellten Sprache angezeigt.
 
-**Anfänger Modus und Experten Modus (seit 2.96):** Eine **neue Installation** startet im **Anfänger Modus**. Er blendet aus, was für den Einstieg nicht nötig ist: die Reiter **Patterngenerator**, **Z21 Simulator** und **ProgGenerator Einstellungen**, den Knopf **Zeilen Färben** und die Makros der Liste `csv/Beginner_Hidden_Macros.csv` in der **Makroauswahl**, in der Suche und in der Grafik. Umschalten: **Programm Einstellungen → Allgemeine Einstellungen → Haken „Anfänger Modus“** (Haken weg = **Experten Modus**, alles sichtbar), danach **Speichern**; die Reiter und der Knopf erscheinen und verschwinden sofort, der Makrobaum beim nächsten Öffnen. **Bestehende Installationen** bleiben nach einem Update im Experten Modus. Der Z21 Simulator und der Reiter DM Servo Einstellungen erscheinen im Experten Modus wie bisher nur mit ihrer Option. Ruft man die Adresse eines ausgeblendeten Reiters auf (zum Beispiel `/Patterngenerator`), öffnet sich der Programm Generator mit einem Hinweis. **Makros**, die schon in der Tabelle stehen, bleiben und lassen sich weiter öffnen; ausgeblendet wird nur die Auswahl neuer Makros. Die **Liste** der ausgeblendeten Makros ist eine Textdatei (Zeilen `Makro;<Name>` oder `Gruppe;<Gruppe>`, Beschreibung am Anfang der Datei); sie ist zunächst **leer** (welche Makros für Anfänger fehlen, wird noch besprochen) und braucht keinen Neustart.
+**Anfänger Modus und Experten Modus (seit 2.96):** Eine **neue Installation** startet im **Anfänger Modus**. Er blendet aus, was für den Einstieg nicht nötig ist: die Reiter **Timeline Editor**, **Z21 Simulator**, **ProgGenerator Einstellungen**, **Servo Einstellungen**, **Sound Test**, **DCC Keyboard**, **Serial Monitor** und **ARDUINO Einstellungen** (seit 3.44), den Knopf **Zeilen Färben** und die Makros der Liste `csv/Beginner_Hidden_Macros.csv` in der **Makroauswahl**, in der Suche und in der Grafik. Umschalten: **Programm Einstellungen → Allgemeine Einstellungen → Haken „Anfänger Modus“** (Haken weg = **Experten Modus**, alles sichtbar), danach **Speichern**; die Reiter und der Knopf erscheinen und verschwinden sofort, der Makrobaum beim nächsten Öffnen. **Bestehende Installationen** bleiben nach einem Update im Experten Modus. Der Z21 Simulator und der Reiter DM Servo Einstellungen erscheinen im Experten Modus wie bisher nur mit ihrer Option. Ruft man die Adresse eines ausgeblendeten Reiters auf (zum Beispiel `/TimelineEditor`), öffnet sich der Programm Generator mit einem Hinweis. Im Anfänger Modus ist außerdem der **Doppelklick auf Name und Beleuchtung** (Makroauswahl) immer eingeschaltet (seit 3.44). **Verteiler in der Grafik (seit 3.45):** In der Ansicht **Ketten** zeichnet die Grafik für jede **Verteilernummer** (Spalte Verteiler-Nr., zum Beispiel V01) ein **Rechteck** mit einem **Feld je Stecker** (Spalte Stecker-Nr.). Die Kette bleibt in der Reihenfolge der Tabelle; zwischen zwei Steckern steht der Hinweis „Signal zurück zum Verteiler“. Zeilen ohne Verteilernummer zwischen Zeilen desselben Verteilers liegen im Rechteck und im Feld des davor stehenden Steckers. Typ und Sicherung stehen aus der **ID-Zeile** (Text in Verteiler-Nr. und Stecker-Nr., zum Beispiel IRM-60.1 und F1) über dem Rechteck; es gilt die nächste ID-Zeile oberhalb der ersten Zeile des Verteilers. Die Angaben sind reiner Kommentar und werden nicht geprüft. In der Kopfzeile der Ansicht Ketten schaltet der Haken **Verteiler** die Rechtecke ein und aus (aus: die Kette wie bisher); der Haken **Stecker nebeneinander** zeichnet die Stecker nebeneinander statt untereinander (seit 3.46, beides je Blatt, vorgegeben: an). In der Anlagenansicht gibt es kein Rechteck. **Makros**, die schon in der Tabelle stehen, bleiben und lassen sich weiter öffnen; ausgeblendet wird nur die Auswahl neuer Makros. Die **Liste** der ausgeblendeten Makros ist eine Textdatei (Zeilen `Makro;<Name>` oder `Gruppe;<Gruppe>`, Beschreibung am Anfang der Datei); sie ist zunächst **leer** (welche Makros für Anfänger fehlen, wird noch besprochen) und braucht keinen Neustart.
 Die Seite wird in allen Browsern neu geladen, und alle Texte erscheinen in der neuen Sprache. Ein Neustart ist nicht nötig.
 
-- **Was übersetzt wird:** alle Texte der Oberfläche: Menüs, Reiter, Knöpfe, Hinweise, die Texte und Beschreibungen in den Formularen (zum Beispiel „Verteiler und Stecker Nummer“, „Optionen und spezielle Funktionen“) und in den **Programm Einstellungen**, die Meldungen des Programm Generators und des Patterngenerators, die **Spaltenköpfe** mit ihren Hinweisen, die **Namensspalte** und die **Typen** in der Tabelle. Die Texte stehen an zwei Stellen: Die Texte, die es schon im Excel-Programm gab, kommen wie dort aus der Tabelle Languages der Excel-Datei; alles, was es nur im Web-Programm gibt, steht im Katalog `python/csv/Web_Languages.csv`. Fehlt ein Text in der Tabelle Languages, wird im Katalog nachgesehen. Stand: **English** ist vollständig (Entwurf), die anderen Sprachen sind nur dort übersetzt, wo die Tabelle Languages eine Übersetzung hat (sonst erscheint English).
+- **Was übersetzt wird:** alle Texte der Oberfläche: Menüs, Reiter, Knöpfe, Hinweise, die Texte und Beschreibungen in den Formularen (zum Beispiel „Verteiler und Stecker Nummer“, „Optionen und spezielle Funktionen“) und in den **Programm Einstellungen**, die Meldungen des Programm Generators und des Timeline Editors, die **Spaltenköpfe** mit ihren Hinweisen, die **Namensspalte** und die **Typen** in der Tabelle. Die Texte stehen an zwei Stellen: Die Texte, die es schon im Excel-Programm gab, kommen wie dort aus der Tabelle Languages der Excel-Datei; alles, was es nur im Web-Programm gibt, steht im Katalog `python/csv/Web_Languages.csv`. Fehlt ein Text in der Tabelle Languages, wird im Katalog nachgesehen. Stand: **English** ist vollständig (Entwurf), die anderen Sprachen sind nur dort übersetzt, wo die Tabelle Languages eine Übersetzung hat (sonst erscheint English).
 - **Gespeichert wird immer deutsch:** In den Zellen, in den Dateien (`.MLL_pgf`) und im erzeugten Arduino-Programm stehen die deutschen Begriffe. Ein Sprachwechsel **ändert keine Daten**; Dateien lassen sich auch in einer anderen Sprache lesen.
   Eine Datei mit den Begriffen einer anderen Sprache (zum Beispiel aus dem Excel-Programm mit niederländischer Oberfläche) wird beim Laden in die deutschen Begriffe umgewandelt. In der Spalte Typ darf man die Begriffe oder ihren
   ersten Buchstaben in der eingestellten Sprache eintippen.
@@ -710,6 +709,33 @@ Das Skript kann **mehrfach** laufen (zum Beispiel nach einem Update).
 Dateimanager (Nemo, Nautilus, Dolphin) eventuell **„Ausführen“** bzw. **„Starter vertrauen“**; sonst Rechtsklick → *Ausführen erlauben* (Mint: in den
 Eigenschaften *Als Programm ausführen*). **Beenden:** Knopf „Beenden“ in der Oberfläche. Zum Beobachten der Meldungen `install/start_linux.sh` im Terminal
 starten. Auf dem Desktop läuft die IDE mit deinem Bildschirm, es wird kein virtuelles Display gebraucht.
+
+### 5.1 Server ohne Bildschirm (seit 3.47)
+
+Auf einem Linux-Server ohne Bildschirm (Heimserver, Mini-PC, virtuelle Maschine) richtet **eine Option** alles ein: Zugriff aus dem Netz mit **Passwort** und ein **Systemdienst**, der beim Start des Servers mitstartet. Du brauchst keinen Tunnel (`ssh -L`) und musst keine Datei von Hand ändern.
+
+```bash
+cd ~/mobaledlib/python/install
+bash install_linux.sh --server
+```
+
+Das Skript **fragt nach dem Passwort** (zweimal, mindestens 4 Zeichen, nicht mit einem Leerzeichen am Anfang oder Ende). Es speichert das Passwort **nur verschlüsselt**. Der Benutzername ist **mobaledlib**. Danach richtet es den Dienst `mobaledlib-web` ein (dabei fragt `sudo` nach dem Passwort des Benutzers) und startet ihn.
+
+| Option (zusammen mit `--server`) | Wirkung |
+|---|---|
+| `--password PW` | das Passwort gleich angeben, ohne Nachfrage (auch für Skripte; Umgebungsvariable `MLL_SERVER_PASSWORD`). **Achtung:** Ein so angegebenes Passwort ist kurz im Prozessverzeichnis des Servers und in der Befehlshistorie sichtbar; das liegt in deiner Verantwortung. Ohne Eingabemöglichkeit und ohne `--password` bricht das Skript ab. |
+| `--port N` | anderer Port als 8080 |
+| `--no-service` | keinen Systemdienst einrichten (nur Passwort); das Skript nennt dann den Befehl zum Starten von Hand |
+
+**Was anders ist als auf dem Desktop:** Es gibt kein Symbol und keinen Menüeintrag. Das Programm lauscht auf **allen Adressen** (`MLL_HOST=0.0.0.0`) und fragt nach Benutzername und Passwort. Auf Debian, Ubuntu und Mint wird außerdem `xvfb` installiert (virtuelles Display für die ARDUINO IDE). Der Dienst läuft unter **deinem Benutzer** (die Dateien und deine Einstellungen gehören dir) und hat Zugriff auf die seriellen Anschlüsse (Gruppe `dialout`).
+
+**Öffnen:** Im Browser eines anderen Geräts im Heimnetz `http://<Adresse des Servers>:8080` eingeben (die Adresse nennt das Skript am Ende). Das Passwort lässt sich später im Programm ändern (**Programm Einstellungen**, Block **Zugriff über das Netz**).
+
+**Firewall:** Hat der Server eine Firewall, muss der Port im Heimnetz erreichbar sein, zum Beispiel `sudo ufw allow from 192.168.0.0/16 to any port 8080 proto tcp`. Das Skript ändert die Firewall nicht.
+
+**Wichtig:** Wer Zugriff hat, kann Programme auf deine Lichtmaschine laden. Betreibe den Server nur im **Heimnetz** und mach ihn nie ungeschützt aus dem **Internet** erreichbar.
+
+**Alltag:** Status `systemctl status mobaledlib-web`, neu starten `sudo systemctl restart mobaledlib-web`, Meldungen `journalctl -u mobaledlib-web -f`. Beim Aktualisieren den Ordner ersetzen und den Dienst neu starten. Das Skript kann **mehrfach** laufen (zum Beispiel um das Passwort neu zu setzen).
 
 ## 6. Raspberry Pi (Dauerdienst)
 
@@ -1053,9 +1079,43 @@ MLL_PASSWORD=mobaledlib # Anfangspasswort; ohne diese Zeile ist die Oberfläche 
 Nach einer Änderung des Ports einmal `sudo bash ~/mobaledlib/python/pi/install_pi.sh --no-check` aufrufen, damit das Symbol den neuen Port kennt.
 
 **Sicherheit:** Wer die Oberfläche erreicht, kann Programme auf den angeschlossenen Arduino laden (und auf dem Pi den Rechner herunterfahren). Das Passwort wird
-ohne Verschlüsselung (kein https) übertragen, und das Standardpasswort ist allgemein bekannt. Nutze den Zugriff nur im eigenen Heimnetz, ändere das Passwort und mach den
+ohne Verschlüsselung (kein https, siehe 8.1) übertragen, und das Standardpasswort ist allgemein bekannt. Nutze den Zugriff nur im eigenen Heimnetz, ändere das Passwort und mach den
 Rechner nicht aus dem Internet erreichbar. Sicherer ist `MLL_HOST=127.0.0.1` und der Zugriff über einen SSH-Tunnel: `ssh -L 8080:localhost:8080 pi@raspberrypi.local`,
 danach im Browser `http://localhost:8080`.
+
+### 8.1 https für den Raspberry Pi (Caddy davorschalten, seit 3.57)
+
+Das Programm selbst spricht nur **http**. Das reicht im Heimnetz, hat aber zwei Folgen: Das Passwort geht unverschlüsselt durchs Netz, und der Browser (Edge, Chrome)
+gibt bei http-Adressen **keinen Zugriff auf die Zwischenablage** frei. Seit 3.57 kopiert das Programm deshalb innerhalb der Seite (Kopieren und Einfügen zwischen den
+Blättern geht), Text aus anderen Programmen lässt sich über http aber nicht einfügen. Wer https möchte, schaltet auf dem Pi das Programm **Caddy** davor. Das Programm
+bleibt dabei unverändert.
+
+**Schnelle Lösung nur für Edge am PC (ohne Einrichtung am Pi):** In Edge `edge://flags/#unsafely-treat-insecure-origin-as-secure` öffnen, die Adresse (zum Beispiel
+`http://raspberrypi.local:8080`) eintragen, auf **Enabled** stellen und Edge neu starten. Das gilt nur für diesen Browser an diesem PC.
+
+**https mit Caddy (auf dem Pi, im Terminal):**
+
+```
+sudo apt install caddy
+sudo tee /etc/caddy/Caddyfile <<'CADDY'
+raspberrypi.local {
+    tls internal
+    reverse_proxy 127.0.0.1:8080
+}
+CADDY
+sudo systemctl restart caddy
+```
+
+- `raspberrypi.local` durch den Rechnernamen des Pi ersetzen (nur dieser Name ist im Zertifikat). Der Zugriff erfolgt danach über `https://raspberrypi.local`.
+- `tls internal`: Caddy erzeugt das Zertifikat selbst und erneuert es selbst. Der Browser kennt die ausstellende Stelle nicht und zeigt zuerst eine **Zertifikatswarnung**
+  („Erweitert → Weiter“ geht).
+- **Warnung dauerhaft entfernen:** Die Datei `/var/lib/caddy/.local/share/caddy/pki/authorities/local/root.crt` vom Pi auf den PC kopieren. Unter Windows doppelklicken,
+  **Zertifikat installieren → Lokaler Computer → Alle Zertifikate in folgendem Speicher speichern → Vertrauenswürdige Stammzertifizierungsstellen**, und Edge neu starten.
+- Websockets (die Dauerverbindung der Oberfläche) und die Anmeldung leitet Caddy ohne weitere Einstellung weiter.
+- **Port 8080 schließen:** In `/etc/mobaledlib-web.env` `MLL_HOST=127.0.0.1` setzen und den Dienst neu starten (`sudo systemctl restart mobaledlib-web`). Dann ist das Programm nur
+  noch über Caddy (https) erreichbar; das Desktop-Symbol am Pi selbst funktioniert weiter. Wer den Zugriff über `http://…:8080` weiter braucht, lässt `MLL_HOST=0.0.0.0`.
+- Mit https wird auch das Passwort verschlüsselt übertragen.
+- **Nicht geprüft** (siehe Checkliste Punkt 216).
 
 ## 9. Fehlersuche
 
@@ -1198,7 +1258,7 @@ Ein Update kann abbrechen, wenn der Strom ausfällt, das Programm beendet wird o
   Projekt festlegen und testen. Seit Version 1.90 wählt das Programm das ESP32-Paket auf Linux mit 64-Bit-ARM nicht mehr automatisch aus (sonst scheiterte die Installation bei jedem Start).
 - **Noch nicht umgesetzte Formulare** (es gab sie in der Tk-Version): LEDAnim und der Mustereditor. Sie zeigen nichts an. **ServoAnim** gibt es seit Version 2.78 (Abschnitt 2.9f), **LEDColorAnim** seit 2.88 (Abschnitt 2.9g). **MultiLEDColorAnim** wird neu entworfen und steht **nicht mehr in der Makroliste**.
 - **Weitere Reiter:** Die Ausgabe beim Kompilieren und Hochladen (der ARDUINO Monitor der Tk-Fassung) erscheint im Protokollfenster. Von den DM Servo Einstellungen fehlen das Programmieren des ATtiny (Hex-Datei über den Bus) und das Formular für den Programmieradapter (2.13).
-- **Patterngenerator:** Das Senden an ein Modul (zurückgestellt, bis ein Tester es braucht), die Wirkung der Spezial Modes auf dem Modul und der Multiplexer fehlen noch (2.10). Test Pattern gibt es seit 2.90.
+- **Timeline Editor:** Das Senden an ein Modul (zurückgestellt, bis ein Tester es braucht), die Wirkung der Spezial Modes auf dem Modul und der Multiplexer fehlen noch (2.10). Test Pattern gibt es seit 2.90.
 - **Stand der Prüfung:** Ausprobiert sind
   - **Raspberry Pi** (Raspberry Pi OS Trixie, Python 3.13): Neuinstallation mit `install_pi.sh`, Dienst, Zugriff aus dem Netz, Desktop-Symbol, IDE, Bibliotheken,
     Boards (ohne ESP32) und das Herunterfahren.

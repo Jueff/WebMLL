@@ -1,4 +1,4 @@
-# Datei-Version: 1.23 (2026-11-14) - web_pattgen.py
+# Datei-Version: 1.24 (2026-11-16) - web_pattgen.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_pattgen.py
 # Path:           _web/web_pattgen.py
@@ -32,6 +32,7 @@
 #   1.21  2026-11-01  Beschreibung des Blatts aus msoTextBox0, aenderbar (Textfeld), wird beim Speichern wieder als msoTextBox0 geschrieben
 #   1.22  2026-11-04  Knopf Test Pattern: das Muster der Seite auf dem Bildschirm abspielen (LED-Kreise, Zeiten, PingPong, Goto), wie im Excel-Programm (web_pattern_test, headless_pattern_test)
 #   1.23  2026-11-14  Patterngenerator: Haken RGB LED in der Tabellenkopfzeile, LED-Farbe waehlen (Rechtsklick), Rampen und Goto-Pfeile in den Zellen, Bilder als eigene Zeile, Analog_Trend (Beitrag des Fork-Entwicklers)
+#   1.24  2026-11-16  Kopieren/Einfuegen ueber window.mllClipSet/mllClipGet (auch ohne sicheren Kontext, http)
 # ----------------------------------------------------------------------------------------------
 """Reiter "Patterngenerator" im Browser.
 
@@ -213,10 +214,10 @@ JS_DBLCLICK = ("e => { if (!e.data || !e.column || !window.mllPDlg) return; cons
 JS_KEYDOWN = ("e => { if (e.editing || !e.event || !e.node || !e.node.data) return; const k = e.event; "  # v1.03
               "const ctrl = k.ctrlKey || k.metaKey; const col = e.column.getColId(); const r = e.node.data._r; "  # v1.03
               "const txt = (e.value === undefined || e.value === null) ? '' : String(e.value); const key = (k.key || '').toLowerCase(); "  # v1.03
-              "if (ctrl && key === 'c') { navigator.clipboard.writeText(txt); } "  # v1.03
-              "else if (ctrl && key === 'x') { navigator.clipboard.writeText(txt); emitEvent('mll_pcell_op', {op: 'delete', r: r, col: col}); } "  # v1.03
+              "if (ctrl && key === 'c') { window.mllClipSet(txt); } "  # v1.24
+              "else if (ctrl && key === 'x') { window.mllClipSet(txt); emitEvent('mll_pcell_op', {op: 'delete', r: r, col: col}); } "  # v1.03
               "else if (ctrl && key === 'v') { k.preventDefault(); "  # v1.03
-              "navigator.clipboard.readText().then(t => emitEvent('mll_pcell_op', {op: 'paste', r: r, col: col, text: t})); } "  # v1.03
+              "window.mllClipGet().then(t => emitEvent('mll_pcell_op', {op: 'paste', r: r, col: col, text: t})); } "  # v1.03
               "else if (k.key === 'Delete') { emitEvent('mll_pcell_op', {op: 'delete', r: r, col: col}); } }")  # v1.03
 # Rechtsklick: die Zelle merken, auf die das Kontextmenue wirkt
 JS_CONTEXT = ("e => { if (!e.node || !e.node.data) return; window.mllPCtxApi = e.api; "  # v1.03
@@ -227,10 +228,10 @@ JS_MENU_EDIT = ("() => { const c = window.mllPCtx, api = window.mllPCtxApi; if (
                 "const go = () => { try { api.setFocusedCell(c.rowIndex, c.col); api.startEditingCell({rowIndex: c.rowIndex, colKey: c.col}); } "  # v1.03
                 "catch (err) { console.error('Zelle bearbeiten:', err); } }; "  # v1.03
                 "setTimeout(go, 400); setTimeout(() => { if (!api.getEditingCells || api.getEditingCells().length === 0) go(); }, 800); }")  # v1.03
-JS_MENU_COPY = "() => navigator.clipboard.writeText(window.mllPCtx ? window.mllPCtx.text : '')"  # v1.03
-JS_MENU_CUT = ("async () => { const c = window.mllPCtx; if (!c) return; await navigator.clipboard.writeText(c.text); "  # v1.03
+JS_MENU_COPY = "() => window.mllClipSet(window.mllPCtx ? window.mllPCtx.text : '')"  # v1.24
+JS_MENU_CUT = ("async () => { const c = window.mllPCtx; if (!c) return; window.mllClipSet(c.text); "  # v1.03
                "emitEvent('mll_pcell_op', {op: 'delete', r: c.r, col: c.col}); }")  # v1.03
-JS_MENU_PASTE = ("async () => { const c = window.mllPCtx; if (!c) return; const t = await navigator.clipboard.readText(); "  # v1.03
+JS_MENU_PASTE = ("async () => { const c = window.mllPCtx; if (!c) return; const t = await window.mllClipGet(); "  # v1.03
                  "emitEvent('mll_pcell_op', {op: 'paste', r: c.r, col: c.col, text: t}); }")  # v1.03
 JS_MENU_DELETE = "() => { const c = window.mllPCtx; if (c) emitEvent('mll_pcell_op', {op: 'delete', r: c.r, col: c.col}); }"  # v1.03
 

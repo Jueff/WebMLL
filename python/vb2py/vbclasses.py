@@ -1,10 +1,10 @@
-# Datei-Version: 1.03 (2026-10-26) - vbclasses.py
+# Datei-Version: 1.04 (2026-11-15) - vbclasses.py
 # -*- coding: utf -*-
 # ----------------------------------------------------------------------------------------------
 # Name:           vbclasses.py
 # Path:           vb2py/vbclasses.py
-# Version:        1.03
-# Last Update:    2026-10-26
+# Version:        1.04
+# Last Update:    2026-11-15
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
@@ -12,6 +12,7 @@
 #   1.01  2026-10-15  Collection.__delitem__: der echte Schluessel wird geloescht, nicht die Position
 #   1.02  2026-10-23  VBFiles.openFile: Dateien zum Lesen werden als UTF-8 (auch mit Kennzeichen) oder, wenn das nicht passt, als Windows-Zeichensatz cp1252 (Dateien aus dem Excel-Programm, zum Beispiel .MLL_pcf) gelesen statt immer als UTF-8; geschrieben wird weiter UTF-8
 #   1.03  2026-10-26  VBFiles.to_excel_charset: Datei in den Windows-Zeichensatz (cp1252) umschreiben, wenn alle Zeichen darin Platz haben (fuer das Excel-Programm), sonst UTF-8 lassen
+#   1.04  2026-11-15  VBFiles.openFile: Binaermodus (rb/wb) ohne newline/encoding (Fehler beim Oeffnen von LEDConfig.bin im Simulator)
 # ----------------------------------------------------------------------------------------------
 
 """
@@ -464,7 +465,11 @@ class _VBFiles:
                 old_file.close()
             #
             # self._channels[channelid] = open(filename, mode,newline="\r\n", encoding="utf-8")  # v1.02 (entfallen)
-            self._channels[channelid] = open(filename, mode,newline="\r\n", encoding=self._encoding_for(filename, mode))  # v1.02
+            # self._channels[channelid] = open(filename, mode,newline="\r\n", encoding=self._encoding_for(filename, mode))  # v1.02 (entfallen) v1.04
+            if 'b' in mode:  # v1.04 Binaerdateien: weder newline noch encoding erlaubt
+                self._channels[channelid] = open(filename, mode)  # v1.04
+            else:  # v1.04
+                self._channels[channelid] = open(filename, mode,newline="\r\n", encoding=self._encoding_for(filename, mode))  # v1.04
             #self._channels[channelid] = open(filename, mode,newline="\r\n", encoding="latin-1")
             
         finally:

@@ -1,9 +1,9 @@
-# Datei-Version: 1.15 (2026-11-14) - web_tabs.py
+# Datei-Version: 1.19 (2026-11-16) - web_tabs.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_tabs.py
 # Path:           _web/web_tabs.py
-# Version:        1.15
-# Last Update:    2026-11-14
+# Version:        1.16
+# Last Update:    2026-11-16
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
@@ -23,6 +23,10 @@
 #   1.13  2026-11-11  Neue Einstellung DetectBootloader (Programm Einstellungen, Spezialeinstellungen): Bootloader des Nano beim Pruefen erkennen
 #   1.14  2026-11-12  Einstellung 'Bootloader des Nano beim Prüfen erkennen': Vorgabe AN, neuer Name NanoBootloaderDetection (vorher DetectBootloader, Vorgabe aus)
 #   1.15  2026-11-14  Neue Option ColoredRowsBold (Programm Einstellungen): Schrift in eingefaerbten Zeilen fett
+#   1.16  2026-11-15  Reiter und Texte "Patterngenerator" heissen jetzt "Timeline Editor"; Adresse /TimelineEditor (/Patterngenerator bleibt gueltig)
+#   1.17  2026-11-15  Anfaenger Modus blendet zusaetzlich Servo Einstellungen, Sound Test, DCC Keyboard, Serial Monitor und ARDUINO Einstellungen aus
+#   1.18  2026-11-15  Neue Option Simulator anzeigen (Spezialeinstellungen)
+#   1.19  2026-11-16  Hinweis der Option Simulator anzeigen: Knopf Setup simulieren statt der Auswahl
 # ----------------------------------------------------------------------------------------------
 """Adressen der Reiter: Ein Reiter laesst sich direkt aufrufen, zum Beispiel http://localhost:8080/Farbtest. Mit dem Zusatz ?vollbild=1 oeffnet er sich gleich im Vollbild
 (Titel, Menue und Reiterleiste ausgeblendet, siehe web_fullscreen). Die Startseite / bleibt wie sie ist (Programm Generator).
@@ -39,7 +43,8 @@ logger = logging.getLogger(__name__)  # v1.06
 
 TAB_URLS = {                                  # Adresse -> Schluessel des Reiters (wie ui.tabs in webmobaledlib.py)
     "ProgGenerator": "pg",
-    "Patterngenerator": "patt",
+    "TimelineEditor": "patt",  # v1.16
+    "Patterngenerator": "patt",  # alte Adresse bleibt gueltig  # v1.16
     "ProgGeneratorEinstellungen": "progcfg",
     "Farbtest": "farb",
     "ServoTest1": "servo1",  # v1.01
@@ -52,7 +57,8 @@ TAB_URLS = {                                  # Adresse -> Schluessel des Reiter
     "ProgrammEinstellungen": "config",
 }
 # TAB_TITLES = {"pg": "Programm Generator", "patt": "Patterngenerator", "progcfg": "ProgGenerator Einstellungen", "farb": "Farb Test", "servo1": "Servo Einstellungen", "servo2": "DM Servo Einstellungen", "sound": "Sound Test", "dcc": "DCC Keyboard", "mon": "Serial Monitor",  # v1.05 (entfallen)
-TAB_TITLES = {"pg": "Programm Generator", "patt": "Patterngenerator", "progcfg": "ProgGenerator Einstellungen", "farb": "Farb Test", "servo1": "Servo Einstellungen", "servo2": "DM Servo Einstellungen", "sound": "Sound Test", "dcc": "DCC Keyboard", "z21": "Z21 Simulator", "mon": "Serial Monitor",  # v1.05
+# TAB_TITLES = {"pg": "Programm Generator", "patt": "Patterngenerator", "progcfg": "ProgGenerator Einstellungen", "farb": "Farb Test", "servo1": "Servo Einstellungen", "servo2": "DM Servo Einstellungen", "sound": "Sound Test", "dcc": "DCC Keyboard", "z21": "Z21 Simulator", "mon": "Serial Monitor",  # v1.05  # v3.43 (entfallen)
+TAB_TITLES = {"pg": "Programm Generator", "patt": "Timeline Editor", "progcfg": "ProgGenerator Einstellungen", "farb": "Farb Test", "servo1": "Servo Einstellungen", "servo2": "DM Servo Einstellungen", "sound": "Sound Test", "dcc": "DCC Keyboard", "z21": "Z21 Simulator", "mon": "Serial Monitor",  # v1.05  # v1.16
               "arduinocfg": "ARDUINO Einstellungen", "config": "Programm Einstellungen"}
 _LOWER = {name.lower(): name for name in TAB_URLS}
 
@@ -89,9 +95,14 @@ PARAM_ADDITIONS = {"ColoredRowsBold": ({"ParName": "ColoredRowsBold", "Cnt": "1"
                                        "Input Text": "Bootloader des Nano beim Prüfen erkennen",  # v1.13
                                        "Hint": "Mit Haken (Vorgabe) spricht das Programm beim Prüfen des angeschlossenen Nano (Optionen Werkzeuge: Haken „Automatisch erkennen“ und „USB Port erkennen“) den Bootloader an und stellt „Nano Normal (old Bootloader)“ oder „Nano (neue Version)“ passend ein. Ohne Haken prüft das Programm nur, ob sich der Anschluss öffnen lässt, und lässt Ihre Einstellung unverändert."},  # v1.14
                                       "IPUploadTimeout"),  # v1.13
+                 "ShowSimulator": ({"ParName": "ShowSimulator", "Cnt": "1", "Type": "Checkbutton", "ConfigName": "ShowSimulator", "ParamLabelWidth": "25", "Min": "0", "Max": "255", "Default": "",  # v1.18
+                                    "Input Text": "Simulator anzeigen",  # v1.18
+                                    # "Hint": "Mit Haken erscheint über der Tabelle die Auswahl Kein Simulator, Nur Simulator, Mit Simulator. Sie gilt statt der Option Simulator der Konfigurationsseite (die dann nicht mehr beachtet wird)."},  # v1.18  # v1.19 (entfallen)
+                                    "Hint": "Mit Haken erscheint neben Setup übertragen der Knopf Setup simulieren (nur Simulator, ohne Lichtmaschine). Die Option Simulator der Konfigurationsseite wird dann nicht mehr beachtet."},  # v1.19
+                                   "NanoBootloaderDetection"),  # v1.18
                  "BeginnerMode": ({"ParName": "BeginnerMode", "Cnt": "1", "Type": "Checkbutton", "ConfigName": "BeginnerMode", "ParamLabelWidth": "25", "Min": "0", "Max": "255", "Default": "",  # v1.12
                                    "Input Text": "Anfänger Modus",  # v1.12
-                                   "Hint": "Mit Haken (Anfänger Modus) werden Funktionen ausgeblendet, die für den Einstieg nicht nötig sind: die Reiter Patterngenerator, Z21 Simulator und ProgGenerator Einstellungen, der Knopf Zeilen Färben und einige Makros in der Makroauswahl. Ohne Haken (Experten Modus) ist alles sichtbar. Eine neue Installation startet im Anfänger Modus."},  # v1.12
+                                   "Hint": "Mit Haken (Anfänger Modus) werden Funktionen ausgeblendet, die für den Einstieg nicht nötig sind: die Reiter Timeline Editor, Z21 Simulator, ProgGenerator Einstellungen, Servo Einstellungen, Sound Test, DCC Keyboard, Serial Monitor und ARDUINO Einstellungen, der Doppelklick auf Name und Beleuchtung öffnet die Makroauswahl, der Knopf Zeilen Färben und einige Makros in der Makroauswahl. Ohne Haken (Experten Modus) ist alles sichtbar. Eine neue Installation startet im Anfänger Modus."},  # v1.12
                                   "Language")}  # v1.12
 
 
@@ -106,7 +117,8 @@ def is_enabled(value) -> bool:  # v1.04
 
 
 BEGINNER_PARAM = "BeginnerMode"  # v1.12
-BEGINNER_HIDDEN_TABS = ("patt", "progcfg", "z21")  # v1.12: im Anfaenger Modus nicht sichtbar (Patterngenerator, ProgGenerator Einstellungen, Z21 Simulator)
+# BEGINNER_HIDDEN_TABS = ("patt", "progcfg", "z21")  # v1.12: im Anfaenger Modus nicht sichtbar (Patterngenerator, ProgGenerator Einstellungen, Z21 Simulator)  # v1.17 (entfallen)
+BEGINNER_HIDDEN_TABS = ("patt", "progcfg", "z21", "servo1", "sound", "dcc", "mon", "arduinocfg")  # v1.17: auch Servo Einstellungen, Sound Test, DCC Keyboard, Serial Monitor, ARDUINO Einstellungen
 
 
 def is_beginner_mode(ctrl) -> bool:  # v1.12

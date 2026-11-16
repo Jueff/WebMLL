@@ -1,4 +1,4 @@
-# Datei-Version: 1.12 (2026-11-14) - web_layout.py
+# Datei-Version: 1.13 (2026-11-15) - web_layout.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_layout.py
 # Path:           _web/web_layout.py
@@ -11,6 +11,7 @@
 #   1.10  2026-11-14  Einheitliche Knopfreihenfolge in allen Dialogen: der Abbrechen-Knopf (mll-cancel) steht immer ganz rechts
 #   1.11  2026-11-14  Kompaktes Layout: Suchleiste so hoch (22 px) und so gross beschriftet (12 px) wie die Werkzeugleistenknoepfe
 #   1.12  2026-11-14  Suchfeld: Loeschkreuz (Marginal) mittig
+#   1.13  2026-11-15  Doppelklick auf Name und Beleuchtung ist im Anfaenger Modus immer eingeschaltet
 # ----------------------------------------------------------------------------------------------
 """Kompaktes Layout fuer kleine Bildschirme (Programm Einstellungen -> Darstellung).
 
@@ -116,6 +117,11 @@ def get_mode(ctrl) -> str:
 
 def get_dblclick(ctrl) -> bool:
     """Schalter "Doppelklick auf Name und Beleuchtung oeffnet die Makroauswahl" (Standard aus)"""
+    try:  # v1.13: im Anfaenger Modus immer eingeschaltet
+        if str(ctrl.getConfigData("BeginnerMode")).strip().lower() in ("1", "true", "ja", "yes", "an", "ein", "on"):  # v1.13
+            return True  # v1.13
+    except Exception:  # noqa: BLE001  # v1.13
+        pass  # v1.13
     value = ctrl.getConfigData(DBLCLICK_KEY)
     return value is True or str(value).strip().lower() in ("1", "true", "ja", "yes", "on")
 

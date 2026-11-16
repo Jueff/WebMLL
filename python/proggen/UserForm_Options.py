@@ -1,9 +1,9 @@
-# Datei-Version: 1.04 (2026-11-13) - UserForm_Options.py
+# Datei-Version: 1.05 (2026-11-16) - UserForm_Options.py
 # ----------------------------------------------------------------------------------------------
 # Name:           UserForm_Options.py
 # Path:           proggen/UserForm_Options.py
-# Version:        1.04
-# Last Update:    2026-11-13
+# Version:        1.05
+# Last Update:    2026-11-16
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
@@ -12,6 +12,7 @@
 #   1.02  2026-10-27  PlatformIO: ESP32 und Pico sind waehlbar, auch wenn die Pakete der ARDUINO IDE fehlen
 #   1.03  2026-11-12  Excel-Programm 3.5.0L3: Support fuer den Arduino Nano Every (ATmega4809) entfernt (Jürgen, 09.11.26)
 #   1.04  2026-11-13  Schreibfehler im Titel: 'Optionen und spezielle Funktionen' (vorher 'Funktionien')
+#   1.05  2026-11-16  ESP32 eingetragen, aber ESP32-Paket der ARDUINO IDE fehlt: eigene Meldung (statt 'Unbekannte Board Option') mit Hilfe: PlatformIO waehlen oder Paket installieren
 # ----------------------------------------------------------------------------------------------
 # -*- coding: utf-8 -*-
 #
@@ -423,7 +424,11 @@ class CUserForm_Options:
                 self.Controls['ESP32_L'].Value = False
             if Side == 'L':
                 self.Controls['PICO_L'].Value = False
-            P01.MsgBox(M09.Get_Language_Str('Unbekannte Board Option: ') + vbCr + BuildOpt, vbInformation, M09.Get_Language_Str('Unbekanntes Board'))
+            # P01.MsgBox(M09.Get_Language_Str('Unbekannte Board Option: ') + vbCr + BuildOpt, vbInformation, M09.Get_Language_Str('Unbekanntes Board'))  # v1.05 (entfallen)
+            if Side == 'L' and InStr(str(BuildOpt), M02.BOARD_ESP32) > 0:  # v1.05: ESP32 ist eingetragen, aber das Paket der ARDUINO IDE fehlt (und PlatformIO ist nicht eingestellt)
+                P01.MsgBox(M09.Get_Language_Str('Als Zentrale ist ESP32 eingetragen, aber das ESP32-Paket der ARDUINO IDE ist nicht installiert.') + vbCr + vbCr + M09.Get_Language_Str('Bitte in den Optionen unter Entwicklungsumgebung PlatformIO wählen oder in der ARDUINO IDE im Boardverwalter das Paket "esp32" von Espressif Systems installieren. Solange das fehlt, wird die Zentrale wie ein Nano behandelt und die ESP32-Pins werden abgelehnt.'), vbInformation, M09.Get_Language_Str('ESP32-Paket fehlt'))  # v1.05
+            else:  # v1.05
+                P01.MsgBox(M09.Get_Language_Str('Unbekannte Board Option: ') + vbCr + BuildOpt, vbInformation, M09.Get_Language_Str('Unbekanntes Board'))  # v1.05
         self.Controls['Board_IDE_' + Side].Value = True
     
     def __Test_Get_Arduino_Typ(self):

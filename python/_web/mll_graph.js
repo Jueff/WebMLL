@@ -1,4 +1,6 @@
-// Datei-Version: 1.14 (2026-11-12) - mll_graph.js (gilt fuer webMobaLedLib 3.21)
+// Datei-Version: 1.16 (2026-11-15) - mll_graph.js (gilt fuer webMobaLedLib 3.46)
+// 1.16: Verteiler abschaltbar (model.vt_on) und Stecker nebeneinander (model.vt_side: Klasse mll-g-plugs side, Pfeil zwischen den Steckern)
+// 1.15: Verteiler in der Ansicht Ketten: je Verteilernummer ein Rechteck (mll-g-vt) mit Stecker-Feldern (mll-g-plug); Pfeil Signal zurueck zum Verteiler zwischen den Steckern (n.vt, n.plug, model.vtinfo, model.vt_texts)
 // 1.14: Zeilen ohne LEDs in einer Kette (Alle Zeilen, n.noled): gestrichelter Rand, hellerer Hintergrund (Klasse mll-g-noled)
 // 1.13: Testtasten der Tabelle auch in der Kette und in der Anlage (n.tests, unter dem Symbol; erst ab 50 Pixel Kaestchengroesse): Maus runter und hoch gehen wie in der Tabelle
 //       als Ereignis mll_tb {row, k, phase} an den Server (Hoch ueber window, auch wenn das Kaestchen dabei neu gezeichnet wird); ein Druck auf eine Taste waehlt kein Kaestchen aus und zieht nichts
@@ -25,6 +27,15 @@
   var CSS = [
     ".mll-g{display:flex;gap:28px;align-items:flex-start;padding:14px;min-width:max-content}",
     ".mll-g-chain{display:flex;flex-direction:column;align-items:center;min-width:calc(var(--cs,140px) + 10px)}",
+    ".mll-g-vt{border:2px solid #6a1b9a;border-radius:8px;padding:4px 6px 8px;margin:4px 0;display:flex;flex-direction:column;align-items:center;background:rgba(106,27,154,.04)}",
+    ".mll-g-vthead{text-align:center;font-size:12px;line-height:1.2;margin-bottom:2px;color:#4a148c}",
+    ".mll-g-vthead b{display:block;font-size:13px}",
+    ".mll-g-plug{border:1px dashed #9575cd;border-radius:6px;padding:2px 6px 6px;margin:2px 0;display:flex;flex-direction:column;align-items:center}",
+    ".mll-g-plugs{display:flex;flex-direction:column;align-items:center}",
+    ".mll-g-plugs.side{flex-direction:row;align-items:flex-start;gap:4px}",
+    ".mll-g-plugs.side .mll-g-back{align-self:center;font-size:18px}",
+    ".mll-g-plughead{font-size:12px;font-weight:bold;color:#4a148c}",
+    ".mll-g-back{font-size:11px;color:#6a1b9a;text-align:center;line-height:1.1;margin:0}",
     ".mll-g-head{text-align:center;margin-bottom:4px;padding:2px 10px;border-bottom:2px solid #1976d2;line-height:1.2}",
     ".mll-g-head b{display:block}",
     ".mll-g-head span{font-size:12px;color:#616161}",
@@ -135,13 +146,38 @@
       '<span class="mll-g-pin mll-g-out"></span></div>';
   }
 
-  function chainHtml(chain, selectedRow, box) {
+  // function chainHtml(chain, selectedRow, box) {  // 1.15 (entfallen: ohne Verteiler)
+  function chainHtml(chain, selectedRow, box, model) {  // 1.15
     var parts = ['<div class="mll-g-chain" data-channel="' + esc(chain.channel) + '"><div class="mll-g-head"><b>' + esc(chain.title) + '</b><span>' + esc(chain.subtitle) + '</span></div>'];
     var nodes = chain.nodes || [];
+    var texts = (model && model.vt_texts) || {}, info = (model && model.vtinfo) || {};
+    var vtOn = !(model && model.vt_on === false), side = !!(model && model.vt_side);  // 1.16
+    var curVt = "", curPlug = null;                                      // 1.15: offenes Rechteck und offenes Stecker-Feld
+    function closePlug() { if (curPlug !== null) { parts.push("</div>"); curPlug = null; } }
+    function closeVt() { closePlug(); if (curVt) { parts.push("</div></div>"); curVt = ""; } }   // 1.16: zusaetzlich das Feld der Stecker
     for (var i = 0; i < nodes.length; i++) {
-      parts.push('<div class="mll-g-line"></div>');            // vor jedem Knoten eine Linie: vom Kopf der Kette bzw. vom Ausgang des vorigen Knotens zum Eingang
-      parts.push(nodeHtml(nodes[i], selectedRow, true, box));              // Knoten einer Kette sind ziehbar (nur innerhalb der Kette verschieben, auf den Papierkorb = loeschen)
+      var n = nodes[i], vt = vtOn ? (n.vt || "") : "", plug = vt ? (n.plug || "") : null;
+      if (vt !== curVt) {                                                // 1.15: neues Rechteck (anderer oder kein Verteiler)
+        closeVt();
+        if (vt) {
+          parts.push('<div class="mll-g-line"></div>');
+          parts.push('<div class="mll-g-vt" data-vt="' + esc(vt) + '"><div class="mll-g-vthead"><b>' + esc((texts.vt || "{nr}").replace("{nr}", vt)) + '</b>' + (info[vt] ? '<span>' + esc(info[vt]) + '</span>' : "") + '</div><div class="mll-g-plugs' + (side ? " side" : "") + '">');
+          curVt = vt;
+        }
+      }
+      if (vt && plug !== curPlug) {                                      // 1.15: neues Stecker-Feld; vom letzten LED des vorigen Steckers geht das Signal zum Verteiler und von dort zum naechsten Stecker
+        var wasPlug = curPlug !== null;
+        closePlug();
+        if (wasPlug) parts.push(side ? '<div class="mll-g-back" title="' + esc(texts.back || "") + '">&#8594;</div>' : '<div class="mll-g-back">&#8629; ' + esc(texts.back || "") + '</div>');  // 1.16: nebeneinander ein Pfeil
+        parts.push('<div class="mll-g-plug" data-plug="' + esc(plug) + '"><div class="mll-g-plughead">' + esc((texts.plug || "{nr}").replace("{nr}", plug)) + '</div>');
+        curPlug = plug;
+        parts.push(nodeHtml(n, selectedRow, true, box));                  // erster Knoten im Feld: keine Linie davor (der Stecker ist der Anfang)
+        continue;
+      }
+      parts.push('<div class="mll-g-line"></div>');                      // vor jedem Knoten eine Linie: vom Kopf der Kette bzw. vom Ausgang des vorigen Knotens zum Eingang
+      parts.push(nodeHtml(n, selectedRow, true, box));                   // Knoten einer Kette sind ziehbar (nur innerhalb der Kette verschieben, auf den Papierkorb = loeschen)
     }
+    closeVt();
     parts.push("</div>");
     return parts.join("");
   }
@@ -393,7 +429,7 @@
     }
     var box = chainBox(model);
     var parts = ['<div class="mll-g" style="--cs:' + box + 'px">'];
-    for (var i = 0; i < chains.length; i++) parts.push(chainHtml(chains[i], selectedRow, box));
+    for (var i = 0; i < chains.length; i++) parts.push(chainHtml(chains[i], selectedRow, box, model));
     parts.push(otherHtml(model, selectedRow, box));
     parts.push(newChainHtml(model));
     parts.push("</div>");
@@ -1012,7 +1048,7 @@
     return isNaN(row) ? null : {row: row, dbl: !!dbl, shift: !!(e && e.shiftKey)};
   }
 
-  var api = {version: "1.13", testsHtml: testsHtml, installTests: installTests, iconSrc: iconSrc, chainBox: chainBox, dragRows: dragRows, split: split, splitFraction: splitFraction, splitApply: splitApply, clampSplit: clampSplit, css: CSS, escapeHtml: esc, render: render, update: update, select: select, hit: hit, install: install, emitHit: emitHit,
+  var api = {version: "1.16", testsHtml: testsHtml, installTests: installTests, iconSrc: iconSrc, chainBox: chainBox, dragRows: dragRows, split: split, splitFraction: splitFraction, splitApply: splitApply, clampSplit: clampSplit, css: CSS, escapeHtml: esc, render: render, update: update, select: select, hit: hit, install: install, emitHit: emitHit,
              renderTree: renderTree, updateTree: updateTree, treeHit: treeHit, installTree: installTree,
              fitSize: fitSize, loadImageFile: loadImageFile, uploadImage: uploadImage, pickImage: pickImage, plantHtml: plantHtml, installPlant: installPlant, multiRows: multiRows, setMulti: setMulti, toggleMulti: toggleMulti, applyMulti: applyMulti, fitView: fitView, zoomBy: zoomBy, zoomAt: zoomAt, applyView: applyView, updateLines: updateLines,
              fit: function (cid) { var el = (typeof document !== "undefined") ? document.getElementById(cid) : null; return el ? fitView(el) : false; },

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Datei-Version: 1.08 (2026-11-08) - install_linux.sh
+# Datei-Version: 1.09 (2026-11-15) - install_linux.sh, gilt fuer webMobaLedLib 3.47
 # Installiert die Web-Oberflaeche von webMobaLedLib auf einem Linux-Desktop (Debian, Ubuntu, Linux Mint, Fedora, Arch ...):
 # im eigenen Benutzerkonto, ohne Systemdienst. Es entsteht eine Python-Umgebung im Projektordner (venv_web), ein Starter im
 # Anwendungsmenue und ein Symbol auf dem Schreibtisch. (Raspberry Pi als Dienst: pi/install_pi.sh)
@@ -13,10 +13,16 @@
 #   --no-desktop-icon     kein Symbol auf dem Schreibtisch (der Eintrag im Anwendungsmenue bleibt)
 #   --no-dialout          die Gruppe dialout (USB-Anschluss des Arduino) nicht eintragen
 #   --no-check            den Test der Installation (pi_check.py) ueberspringen
+#   --server              (seit 1.09) Server ohne Bildschirm: Zugriff aus dem Netz mit Passwort, als Systemdienst (mobaledlib-web, startet beim Booten); kein Symbol, kein Menueeintrag
+#   --password PW         (mit --server) Passwort fuer den Zugriff aus dem Netz; ohne die Option fragt das Skript (zweimal, mindestens 4 Zeichen). Auch: Umgebungsvariable MLL_SERVER_PASSWORD
+#   --port N              (mit --server) Port der Web-Oberflaeche (Voreinstellung 8080)
+#   --no-service          (mit --server) keinen Systemdienst einrichten, nur Passwort und Zugriff aus dem Netz vorbereiten
 set -uo pipefail
 
 WITH_IDE=0; WITH_LIBS=0; WITH_PIO=1; DESKTOP_ICON=1; DIALOUT=1; RUN_CHECK=1
-for a in "$@"; do
+SERVER=0; SERVER_OPTS=0; SERVICE=1; SERVER_PORT=8080; SERVER_PW="${MLL_SERVER_PASSWORD:-}"   # v1.09
+while [ $# -gt 0 ]; do   # v1.09 (vorher for a in "$@")
+  a="$1"; shift   # v1.09
   case "$a" in
     --with-arduino-ide)  WITH_IDE=1; WITH_LIBS=1 ;;
     --with-arduino-libs) WITH_LIBS=1 ;;
@@ -25,11 +31,17 @@ for a in "$@"; do
     --no-desktop-icon)   DESKTOP_ICON=0 ;;
     --no-dialout)        DIALOUT=0 ;;
     --no-check)          RUN_CHECK=0 ;;
-    -h|--help)           sed -n '3,15p' "$0"; exit 0 ;;
+    --server)            SERVER=1; DESKTOP_ICON=0 ;;   # v1.09
+    --no-service)        SERVICE=0; SERVER_OPTS=1 ;;   # v1.09
+    --password)          [ $# -ge 1 ] || { echo "--password braucht einen Wert."; exit 1; }; SERVER_PW="$1"; SERVER_OPTS=1; shift ;;   # v1.09
+    --port)              [ $# -ge 1 ] || { echo "--port braucht einen Wert."; exit 1; }; SERVER_PORT="$1"; SERVER_OPTS=1; shift ;;   # v1.09
+    -h|--help)           sed -n '3,20p' "$0"; exit 0 ;;   # v1.09: Zeilen 3 bis 21
     *) echo "Unbekannte Option: $a"; exit 1 ;;
   esac
 done
 
+case "$SERVER_PORT" in ''|*[!0-9]*) echo "Ungueltiger Port: $SERVER_PORT"; exit 1 ;; esac   # v1.09
+if [ "$SERVER" != "1" ] && [ "$SERVER_OPTS" = "1" ]; then echo "Die Optionen --password, --port und --no-service gelten nur mit --server."; exit 1; fi   # v1.09
 cd "$(dirname "$0")" || exit 1
 HERE="$(pwd)"
 APPDIR="$(cd .. && pwd)"
@@ -59,7 +71,9 @@ SUDO=""; [ "$(id -u)" -ne 0 ] && SUDO="sudo"
 install_packages() {
   if command -v apt-get >/dev/null 2>&1; then                      # Debian, Ubuntu, Linux Mint
     local missing=() p
-    for p in python3 python3-venv python3-pip curl xz-utils git; do dpkg -s "$p" >/dev/null 2>&1 || missing+=("$p"); done
+    # v1.09: die Liste steht jetzt in $want (vorher feste Liste python3 python3-venv python3-pip curl xz-utils git)
+    local want="python3 python3-venv python3-pip curl xz-utils git"; [ "$SERVER" = "1" ] && want="$want xvfb"   # v1.09: xvfb fuer die ARDUINO IDE auf dem Server
+    for p in $want; do dpkg -s "$p" >/dev/null 2>&1 || missing+=("$p"); done
     if [ ${#missing[@]} -gt 0 ]; then
       echo "Systempakete installieren (sudo-Passwort wird abgefragt): ${missing[*]}"
       $SUDO apt-get update && $SUDO apt-get install -y "${missing[@]}" || return 1
@@ -157,7 +171,70 @@ if [ "$WITH_PIO" = "1" ]; then
   MLL_PYTHON="$PY" bash "$HERE/install_platformio.sh" || echo "(PlatformIO: siehe Meldungen oben; Nachholen: bash install_platformio.sh)"
 fi
 
-# --- 6. Starter, Symbol und Eintraege
+# --- 6. Starter, Symbol und Eintraege (nicht auf dem Server)
+if [ "$SERVER" = "1" ]; then   # v1.09
+  echo "[5/5] Server: Zugriff aus dem Netz mit Passwort"
+  set_server_password() {
+    local pw="$SERVER_PW" pw2 tries=0 err
+    while :; do
+      if [ -z "$pw" ]; then
+        if [ ! -t 0 ]; then echo "Kein Passwort angegeben und keine Eingabe moeglich: bitte --password PW oder MLL_SERVER_PASSWORD verwenden."; return 1; fi
+        read -r -s -p "Passwort fuer den Zugriff aus dem Netz (mindestens 4 Zeichen): " pw; echo
+        read -r -s -p "Passwort wiederholen: " pw2; echo
+        [ "$pw" = "$pw2" ] || { echo "Die beiden Eingaben sind nicht gleich."; pw=""; tries=$((tries+1)); [ $tries -ge 3 ] && return 1; continue; }
+      fi
+      err="$(cd "$APPDIR" && MLL_HEADLESS=1 MLL_TK_ROOT=0 MLL_NEWPW="$pw" "$VENV/bin/python" - <<'PY' 2>&1
+import os, sys
+sys.path.insert(0, os.getcwd())
+from _web import web_password as w
+pw = os.environ["MLL_NEWPW"]
+e = w.validate_new(pw, pw)
+if e:
+    print(e)
+    sys.exit(2)
+w.set_password(pw)
+PY
+)" && { echo "Passwort gesetzt (nur verschluesselt gespeichert, Benutzername: mobaledlib)."; return 0; }
+      echo "$err"; pw=""; tries=$((tries+1))
+      [ -n "$SERVER_PW" ] && return 1          # per Aufruf angegeben: nicht erneut fragen
+      [ $tries -ge 3 ] && return 1
+    done
+  }
+  set_server_password || fail
+  if [ "$SERVICE" = "1" ]; then
+    if command -v systemctl >/dev/null 2>&1 && [ -d /run/systemd/system ]; then
+      echo "Systemdienst mobaledlib-web einrichten (sudo-Passwort wird abgefragt) ..."
+      XVFB=""; command -v xvfb-run >/dev/null 2>&1 && XVFB="$(command -v xvfb-run) -a -s \"-screen 0 1280x1024x24\" "
+      ENVF="$(mktemp)"; UNIT="$(mktemp)"
+      printf 'MLL_HOST=0.0.0.0\nMLL_PORT=%s\nMLL_USER=mobaledlib\n' "$SERVER_PORT" > "$ENVF"
+      {
+        echo "# Datei-Version: 1.00 (2026-11-15) - mobaledlib-web.service (erzeugt von install_linux.sh --server)"
+        echo "[Unit]"; echo "Description=webMobaLedLib Programmgenerator (Web-Oberflaeche, Server)"
+        echo "After=network-online.target"; echo "Wants=network-online.target"; echo
+        echo "[Service]"; echo "Type=simple"; echo "User=$(id -un)"; echo "Group=$(id -gn)"
+        echo "SupplementaryGroups=dialout"; echo "WorkingDirectory=$APPDIR"
+        echo "EnvironmentFile=-/etc/mobaledlib-web.env"
+        echo "Environment=MLL_HEADLESS=1"; echo "Environment=MLL_TK_ROOT=0"; echo "Environment=MLL_NO_BROWSER=1"; echo "Environment=PYTHONUNBUFFERED=1"
+        echo "ExecStart=${XVFB}$VENV/bin/python $APPDIR/webmobaledlib.py"
+        echo "Restart=always"; echo "RestartSec=3"; echo
+        echo "[Install]"; echo "WantedBy=multi-user.target"
+      } > "$UNIT"
+      if $SUDO install -m 644 "$ENVF" /etc/mobaledlib-web.env && $SUDO install -m 644 "$UNIT" /etc/systemd/system/mobaledlib-web.service \
+         && $SUDO systemctl daemon-reload && $SUDO systemctl enable mobaledlib-web && $SUDO systemctl restart mobaledlib-web; then
+        echo "Dienst mobaledlib-web laeuft und startet beim Booten (Status: systemctl status mobaledlib-web)."
+        SERVICE_OK=1
+      else
+        echo "Der Systemdienst konnte nicht eingerichtet werden (siehe Meldungen oben)."
+      fi
+      rm -f "$ENVF" "$UNIT"
+    else
+      echo "Kein systemd gefunden: der Dienst wird nicht eingerichtet. Starten von Hand:"
+      echo "  MLL_HOST=0.0.0.0 MLL_PORT=$SERVER_PORT MLL_HEADLESS=1 MLL_NO_BROWSER=1 $VENV/bin/python $APPDIR/webmobaledlib.py"
+    fi
+  else
+    echo "Ohne Dienst (--no-service): Starten mit  MLL_HOST=0.0.0.0 MLL_PORT=$SERVER_PORT MLL_HEADLESS=1 MLL_NO_BROWSER=1 $VENV/bin/python $APPDIR/webmobaledlib.py"
+  fi
+else   # v1.09: ab hier Starter und Symbol nur fuer Desktop-Installationen
 echo "[5/5] Starter und Symbol"
 chmod +x "$HERE/start_linux.sh" 2>/dev/null
 [ -f "$HERE/mobaledlib.png" ] || "$VENV/bin/python" "$HERE/make_icons.py" "$HERE" || echo "(Symbol nicht erzeugt)"
@@ -183,6 +260,7 @@ if [ "$DESKTOP_ICON" = "1" ]; then
   fi
 fi
 command -v update-desktop-database >/dev/null 2>&1 && update-desktop-database "$APPS" >/dev/null 2>&1 || true
+fi   # v1.09: Ende nur Desktop
 
 # --- Test der Installation
 if [ "$RUN_CHECK" = "1" ]; then
@@ -190,6 +268,18 @@ if [ "$RUN_CHECK" = "1" ]; then
   MLL_TK_ROOT=0 MLL_HEADLESS=1 "$VENV/bin/python" "$APPDIR/pi_check.py" || echo "Der Test meldet Probleme, siehe die Meldungen oben."
 fi
 
+if [ "$SERVER" = "1" ]; then   # v1.09
+  IP="$(hostname -I 2>/dev/null | awk '{print $1}')"
+  echo
+  echo "============================================================"
+  echo " Fertig (Server). Oberflaeche:  http://${IP:-<IP-des-Servers>}:$SERVER_PORT"
+  echo "                  Benutzer: mobaledlib   Passwort: das eben gesetzte"
+  echo " Das Passwort aendern: Programm Einstellungen, Zugriff ueber das Netz."
+  echo " ACHTUNG: Nur im Heimnetz betreiben, nie ungeschuetzt aus dem Internet erreichbar machen."
+  echo " Firewall: Der Port $SERVER_PORT muss im Heimnetz erreichbar sein (zum Beispiel: sudo ufw allow from 192.168.0.0/16 to any port $SERVER_PORT proto tcp)."
+  echo "============================================================"
+  exit 0
+fi
 echo
 echo "============================================================"
 echo " Fertig. Starten: Symbol \"webMobaLedLib\" (Schreibtisch oder Anwendungsmenue)"

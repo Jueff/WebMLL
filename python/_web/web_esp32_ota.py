@@ -1,9 +1,9 @@
-# Datei-Version: 1.03 (2026-11-14) - web_esp32_ota.py
+# Datei-Version: 1.04 (2026-11-15) - web_esp32_ota.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_esp32_ota.py
 # Path:           _web/web_esp32_ota.py
-# Version:        1.03
-# Last Update:    2026-11-14
+# Version:        1.04
+# Last Update:    2026-11-15
 # Author:         Harold Linke (Beitrag des Fork-Entwicklers, uebernommen in 3.37)
 # Licence:        LGPL V2.1
 # History of Change:
@@ -11,6 +11,7 @@
 #   1.01  2026-11-14  Firewall-Hinweis bei "No response from device" (Port 32323)
 #   1.02  2026-11-14  Reiter OTA: Knopf "Minimale Firmware per USB hochladen" (schaltet WLAN und OTA ein, ruft minimal_firmware_handler)
 #   1.03  2026-11-14  Knopf umbenannt (Minimale WLAN Firmware per USB hochladen), Reihenfolge: speichern, minimale Firmware, WLAN einrichten, testen
+#   1.04  2026-11-15  Knopf Hilfe im Reiter OTA: oeffnet die Wiki-Seite ESP32 per WLAN und OTA
 # ----------------------------------------------------------------------------------------------
 from subprocess import TimeoutExpired
 
@@ -22,6 +23,7 @@ from headless import headless_esp32_ota
 from _web import web_dialogs
 
 _upload_running = False
+HELP_URL = "https://wiki.mobaledlib.de/anleitungen/webmobaledlib/ota"  # v1.04: Wiki-Seite zu OTA
 minimal_firmware_handler = None  # v1.02: Funktion der Hauptseite (webmobaledlib.py), baut und laedt die minimale Firmware
 HINT_FIREWALL = 'Der ESP32 hat sich nicht zurückgemeldet. Meist blockiert eine Firewall die Rückverbindung: Eingehend TCP-Port {port} zulassen (Windows-Firewall: PowerShell als Administrator, New-NetFirewallRule -DisplayName "MLL OTA" -Direction Inbound -Protocol TCP -LocalPort {port} -Action Allow; andere Firewalls, z. B. ESET: Regel eingehend, TCP, lokaler Port {port}, Zulassen).'  # v1.01
 
@@ -203,6 +205,7 @@ def settings_panel():
         ui.button("Minimale WLAN Firmware per USB hochladen", on_click=minimal).props("outline")
         ui.button("WLAN über USB einrichten", on_click=setup_usb).props("outline")
         ui.button("Verbindung testen", on_click=check).props("outline")
+        ui.button("Hilfe", on_click=lambda: ui.navigate.to(HELP_URL, new_tab=True)).props("flat icon=help")  # v1.04
 
 
 def open_usb_wifi(controller, on_address):

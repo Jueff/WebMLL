@@ -1,9 +1,9 @@
-# Datei-Version: 1.05 (2026-11-13) - headless_graph.py
+# Datei-Version: 1.06 (2026-11-15) - headless_graph.py
 # ----------------------------------------------------------------------------------------------
 # Name:           headless_graph.py
 # Path:           headless/headless_graph.py
-# Version:        1.05
-# Last Update:    2026-11-13
+# Version:        1.06
+# Last Update:    2026-11-15
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
@@ -13,6 +13,7 @@
 #   1.03  2026-11-01  Knoten haben tests (Testtasten der Zeile)
 #   1.04  2026-11-12  build_model(..., all_rows): alle aktiven Zeilen in die Ketten, auch die ohne LEDs (in die Kette der nachfolgenden LED-Zeile, am Ende in die der letzten); Knoten haben noled
 #   1.05  2026-11-13  Inaktive Zeilen (Spalte Aktiv leer) und mit dem Filter ausgeblendete Zeilen erscheinen in der Grafik nie, auch ohne 'Alle Zeilen' (Rueckmeldung des Excel-Entwicklers)
+#   1.06  2026-11-15  Verteiler und Stecker (Spalten Verteiler-Nr. und Stecker-Nr.): Knoten tragen vt und plug, Luecken ohne Nummer innerhalb eines Verteilers erben den Stecker, model["vtinfo"] (Typ und Sicherung aus den ID-Zeilen darueber)
 # ----------------------------------------------------------------------------------------------
 
 """Grafische Ansicht des Programm Generators, Stufe 1: das Modell der Ketten.
@@ -69,6 +70,27 @@ def parse_led_nr(value) -> tuple:  # v1.01
     return None, to_int(text)  # v1.01
 
 
+def is_vt_number(text: str) -> bool:  # v1.06
+    """Verteilernummer wie V01 (andere Texte in der Spalte sind Typangaben der ID-Zeilen)"""  # v1.06
+    return len(text) > 1 and text[0] in "Vv" and text[1:].isdigit()  # v1.06
+
+
+def fill_vt_gaps(nodes: list) -> None:  # v1.06
+    """Zeilen ohne Verteilernummer zwischen Zeilen desselben Verteilers liegen im Rechteck dieses Verteilers und im Stecker davor (ein Rechteck von der ersten bis zur letzten Zeile)"""  # v1.06
+    last = {}  # v1.06
+    for i, n in enumerate(nodes):  # v1.06
+        if n.get("vt"):  # v1.06
+            last[n["vt"]] = i  # v1.06
+    cur = None  # v1.06
+    for i, n in enumerate(nodes):  # v1.06
+        if n.get("vt"):  # v1.06
+            cur = (n["vt"], n["plug"])  # v1.06
+        elif cur is not None and last.get(cur[0], -1) > i:  # v1.06
+            n["vt"], n["plug"], n["vt_gap"] = cur[0], cur[1], True  # v1.06
+        elif cur is not None:  # v1.06
+            cur = None  # v1.06
+
+
 def macro_name(config: str) -> str:
     """Name des Makros aus dem Aufruf in der Spalte Config: 'House(#LED, ...)' -> 'House'"""
     text = str(config or "").strip()
@@ -121,11 +143,20 @@ def build_model(ws, icons=None, display=None, icon_large=None, tests=None, all_r
     c_name, c_desc, c_icon = int(M25.LanName_Col) - 1, int(M25.Descrip_Col) - 1, int(M25.MacIcon_Col) - 1
     first = int(M02.FirstDat_Row) - 1
     c_enable = int(M02.Enable_Col) - 1  # v1.04
+    c_vt, c_plug = int(M25.Dist_Nr_Col) - 1, int(M25.Conn_Nr_Col) - 1  # v1.06
+    vtinfo: dict = {}  # v1.06: Verteilernummer -> Text der ID-Zeile (Beschreibung, Typ, Sicherung)
+    id_row = ""  # v1.06: zuletzt gesehene ID-Zeile (Verteiler ID n, Typ in der Spalte Verteiler-Nr., Sicherung in Stecker-Nr.)
     pending: list = []  # v1.04: Zeilen ohne LEDs, die auf die naechste Zeile mit LEDs warten (nur mit all_rows)
     last_channel = None  # v1.04: Kanal der letzten Zeile mit LEDs
     chains: dict = {}
     for r in range(max(first, 0), sh.get_total_rows()):
         config = str(sh.get_cell_data(r, c_cfg) or "").strip()
+        vt_raw = str(sh.get_cell_data(r, c_vt) or "").strip()  # v1.06
+        plug_raw = str(sh.get_cell_data(r, c_plug) or "").strip()  # v1.06
+        if vt_raw and not is_vt_number(vt_raw):  # v1.06: ID-Zeile (z.B. IRM-60.1 / F1 (F1,25)): gehoert zum Verteiler, der darunter folgt (auch wenn die Zeile inaktiv ist)
+            id_row = " · ".join(x for x in (str(sh.get_cell_data(r, c_desc) or "").strip(), vt_raw, plug_raw) if x)  # v1.06
+        elif is_vt_number(vt_raw) and vt_raw.upper() not in vtinfo:  # v1.06
+            vtinfo[vt_raw.upper()] = id_row  # v1.06
         if config == "":
             continue
         # if all_rows and not _row_active(ws, sh, r, c_enable):  # v1.04 (entfallen v1.05: gilt in beiden Ansichten)
@@ -153,6 +184,8 @@ def build_model(ws, icons=None, display=None, icon_large=None, tests=None, all_r
                 "tests": [dict(item) for item in ((tests or {}).get(r) or [])],                # Testtasten der Zeile (wie in der Tabelle): [{n: Name, c: Farbe, t: Text}]     # Gegenstueck mit hoher Aufloesung (icons_gross), sonst ""  # v1.03
                 "led_from": led_from if in_chain else None,  # v1.01
                 "led_to": (led_from + leds - 1) if (leds > 0 and led_from is not None) else None, "channel": channel}
+        node["vt"] = vt_raw.upper() if is_vt_number(vt_raw) else ""  # v1.06
+        node["plug"] = plug_raw if node["vt"] else ""  # v1.06
         node["noled"] = not in_chain  # v1.04: Zeile ohne LEDs (die Grafik zeichnet sie anders)
         # if leds > 0:  # v1.01 (entfallen)
         if in_chain:  # v1.01
@@ -177,6 +210,9 @@ def build_model(ws, icons=None, display=None, icon_large=None, tests=None, all_r
     for channel in sorted(chains):
         nodes = chains[channel]
         model["chains"].append({"channel": channel, "led_count": sum(n["leds"] for n in nodes), "nodes": nodes})
+    for chain in model["chains"]:  # v1.06
+        fill_vt_gaps(chain["nodes"])  # v1.06
+    model["vtinfo"] = {k: v for k, v in vtinfo.items() if v}  # v1.06
     model["count"] = sum(len(c["nodes"]) for c in model["chains"]) + len(model["other"])
     model["ok"] = True
     return model
