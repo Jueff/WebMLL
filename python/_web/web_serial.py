@@ -1,9 +1,9 @@
-# Datei-Version: 1.05 (2026-11-09) - web_serial.py
+# Datei-Version: 1.10 (2026-11-14) - web_serial.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_serial.py
 # Path:           _web/web_serial.py
-# Version:        1.05
-# Last Update:    2026-11-09
+# Version:        1.10
+# Last Update:    2026-11-14
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
@@ -13,6 +13,11 @@
 #   1.03  2026-10-21  rx_listeners: Funktionen, die jede Zeile vom Arduino bekommen (Rueckmeldung des Z21 Simulators)
 #   1.04  2026-10-26  Zusammengesetzte Meldungen (Verkettungen und f-Strings) mit tr(...) uebersetzbar gemacht
 #   1.05  2026-11-09  Der Verbindungsstatus wird uebersetzt (Nicht Verbunden, Verbunden <Port> - DIRECT/EFFECT Mode)
+#   1.06  2026-11-13  Mit ARDUINO verbinden: DTR und RTS werden vor dem Oeffnen ausgeschaltet (der Nano wurde beim Verbinden zurueckgesetzt: das verzoegerte den Verbindungsaufbau und unterbrach die Anlagensteuerung); der Pico behaelt DTR und RTS an (Excel: 'pico serial USB port needs DTR to be on'); _open_serial, _board_needs_dtr
+#   1.07  2026-11-14  ESP32: Verbindung ueber WLAN mit Anmeldung per HMAC (Port 2323, connect_esp32); Schreibfehler schliesst nur die eigene Verbindung (Beitrag des Fork-Entwicklers)
+#   1.08  2026-11-14  TcpPort: ungueltiger Hostname (UnicodeError, "label too long") wird als OSError gemeldet statt abzustuerzen
+#   1.09  2026-11-14  Automatisches Verbinden (ohne Anschlussangabe): ist fuer das Blatt eine ESP32-WLAN-Verbindung eingetragen (wifi_target_provider), wird zuerst WLAN versucht, sonst USB; connect(wlan=False) erzwingt USB
+#   1.10  2026-11-14  connect_if_not_connected (Testtasten, DCC-Tastatur, Z21 ...) versucht auch mit Anschlussangabe zuerst die eingetragene ESP32-WLAN-Verbindung
 # ----------------------------------------------------------------------------------------------
 """Serielle Verbindung zum Arduino/Pico ohne Tk (Mixin fuer HeadlessAppController).
 
@@ -36,6 +41,7 @@ import queue
 import re
 import select
 import socket
+import hmac
 import threading
 import time
 from collections import deque
@@ -98,7 +104,10 @@ class TcpPort:
     """Minimaler Ersatz fuer telnetlib.Telnet / serial.Serial bei einer IP-Verbindung (WLAN-Pico)."""
 
     def __init__(self, host: str, port: int = 23, timeout: float = 5.0):
-        self.sock = socket.create_connection((host, port), timeout=timeout)
+        try:
+            self.sock = socket.create_connection((host, port), timeout=timeout)
+        except UnicodeError as error:  # v1.08: Adresse mit zu langem Namensteil ("label too long") wie ein Verbindungsfehler behandeln
+            raise OSError("Ungültiger Hostname.") from error
         self.sock.settimeout(2.0)
         self.is_open = True
         self.portstr = host
@@ -247,6 +256,8 @@ class SerialMixin:
                 data = port.read(1)
             except Exception as ex:                       # noqa: BLE001
                 logger.info("Empfangsthread beendet: %s", ex)
+                if isinstance(port, TcpPort) and not stop.is_set() and self.arduino is port:
+                    self.close_arduino_connection_after_write_error(expected_port=port)
                 break
             if not data:
                 continue
@@ -312,6 +323,10 @@ class SerialMixin:
             try:
                 wait = wait_override if wait_override is not None else max(self.waittime_int, 1) / 1000.0  # v1.01
                 burst = self.ARDUINO_has_readbuffer and not (self.waittime_slowmode or slowmode)
+                if isinstance(port, TcpPort) and not (self.waittime_slowmode or slowmode or wait_override is not None):
+                    if port.is_open:
+                        port.write(message.encode())
+                    continue
                 for i, c in enumerate(message):
                     if port is None or not getattr(port, "is_open", False):
                         break
@@ -323,7 +338,7 @@ class SerialMixin:
             except Exception as ex:                       # noqa: BLE001
                 logger.info("Schreibfehler zum Arduino: %s", ex)
                 self.send_error = True
-                self.close_arduino_connection_after_write_error()
+                self.close_arduino_connection_after_write_error(expected_port=port)
             finally:
                 if self._tx_queue.empty():
                     self.send_active = False
@@ -483,10 +498,37 @@ class SerialMixin:
     def is_connection_open(self):
         return bool(self.arduino and getattr(self.arduino, "is_open", False))
 
+    def _board_needs_dtr(self) -> bool:  # v1.06
+        """Braucht der Anschluss DTR (und RTS) an? Nur der Pico: sein serieller USB-Anschluss sendet nur mit DTR (Excel-Programm M07_COM_Port: 'pico serial USB port needs DTR to be on').
+        Alle anderen (Nano, Uno, ESP32) werden von DTR zurueckgesetzt. Unbekannter Typ: wie bisher (an)."""  # v1.06
+        try:  # v1.06
+            import proggen.M02_Public as M02  # v1.06
+            import proggen.M02a_Public as M02a  # v1.06
+            return M02a.Get_BoardTyp() == M02.HT_PICO  # v1.06
+        except Exception:                                          # noqa: BLE001  # v1.06
+            logger.debug("Board-Typ unbekannt: DTR bleibt an", exc_info=True)  # v1.06
+            return True  # v1.06
+
+    def _open_serial(self, serial_module, port):  # v1.06
+        """Serielle Verbindung oeffnen: erst die Eigenschaften setzen, DTR und RTS (ausser beim Pico) AUSschalten, dann open(). Beim klassischen serial.Serial(port, ...) steigt DTR
+        beim Oeffnen und setzt den Nano zurueck (Rueckmeldung des Excel-Entwicklers: Verbinden loest einen Reset aus, das verzoegert den Aufbau und unterbricht die Anlagensteuerung)."""  # v1.06
+        ser = serial_module.Serial()  # v1.06: ohne Port, noch nicht geoeffnet
+        ser.port = port  # v1.06
+        ser.baudrate = 115200  # v1.06
+        ser.timeout = 2  # v1.06
+        ser.parity = serial_module.PARITY_NONE  # v1.06
+        ser.stopbits = serial_module.STOPBITS_ONE  # v1.06
+        ser.bytesize = serial_module.EIGHTBITS  # v1.06
+        if not self._board_needs_dtr():  # v1.06
+            ser.dtr = False  # v1.06
+            ser.rts = False  # v1.06
+        ser.open()  # v1.06
+        return ser  # v1.06
+
     def connect_if_not_connected(self, port=None):
         if self.is_connection_open():
             return True
-        return self.connect(port=port)
+        return self.connect(port=port, wlan=True)  # v1.10: auch mit Anschlussangabe (Testtasten) zuerst die eingetragene WLAN-Verbindung
 
     def _set_connect_status(self, text, fg="black"):
         text = tr(text)  # v1.05: feste Texte wie 'Nicht Verbunden' in der eingestellten Sprache (zusammengesetzte Texte sind schon uebersetzt oder bleiben)
@@ -500,8 +542,24 @@ class SerialMixin:
         self._set_connect_status("Nicht Verbunden", "black")
         return False
 
-    def connect(self, port=None):
+    wifi_target_provider = None  # v1.09: Funktion ohne Argument, liefert (Adresse, Passwort) der eingetragenen ESP32-WLAN-Verbindung des aktiven Blatts oder None (setzt webmobaledlib.py)
+
+    def connect(self, port=None, wlan=None):
+        """wlan=None: ohne Anschlussangabe zuerst die eingetragene ESP32-WLAN-Verbindung versuchen, dann USB; wlan=False: nur USB."""  # v1.09
         with self._conn_lock:
+            if (port is None or wlan) and wlan is not False and self.wifi_target_provider is not None:  # v1.09/v1.10
+                try:
+                    target = self.wifi_target_provider()
+                except Exception:                                  # noqa: BLE001
+                    logger.debug("wifi_target_provider fehlgeschlagen", exc_info=True)
+                    target = None
+                if target:
+                    if self.arduino:
+                        self.disconnect()
+                    logger.info("connect: zuerst WLAN %s", target[0])
+                    if self.connectIP(target[0], esp32_password=target[1]) and self.is_connection_open():
+                        return True
+                    logger.info("connect: WLAN %s nicht erreichbar, weiter mit USB", target[0])
             return self._connect(port)
 
     def _connect(self, port=None):
@@ -524,8 +582,9 @@ class SerialMixin:
         try:
             import serial
             self.ARDUINO_status = "Connecting"
-            self.arduino = serial.Serial(port, baudrate=115200, timeout=2, parity=serial.PARITY_NONE,
-                                         stopbits=serial.STOPBITS_ONE, bytesize=serial.EIGHTBITS)
+            # self.arduino = serial.Serial(port, baudrate=115200, timeout=2, parity=serial.PARITY_NONE,  # v1.06 (entfallen: oeffnete mit DTR an: Reset des Nano)
+            #                              stopbits=serial.STOPBITS_ONE, bytesize=serial.EIGHTBITS)  # v1.06 (entfallen)
+            self.arduino = self._open_serial(serial, port)  # v1.06
         except BaseException as e:                        # noqa: BLE001
             logger.info("Port %s nicht zu oeffnen: %s", port, e)
             macro = self.MacroDef.data.get("StartPage", {}) if getattr(self, "MacroDef", None) else {}
@@ -594,22 +653,41 @@ class SerialMixin:
         self._start_reader()
         return True
 
-    def connectIP(self, IPAdresse=None):
-        """Verbindung zu einem WLAN-Pico (Telnet-Port 23)."""
+    def connect_esp32(self, host, password):
+        with self._conn_lock:
+            if self.arduino:
+                self.disconnect()
+            return self.connectIP(host, esp32_password=password)
+
+    def connectIP(self, IPAdresse=None, *, esp32_password=None):
+        """Connect to a WLAN Pico or authenticate to an ESP32 device session."""
         if not IPAdresse:
             return False
         # self._set_connect_status("Versuch sich mit dem PICO- IP: " + IPAdresse + " zu verbinden ...", "red")  # v1.04 (entfallen)
-        self._set_connect_status(tr('Versuch sich mit dem PICO- IP: ') + IPAdresse + " zu verbinden ...", "red")  # v1.04
+        if esp32_password is None:
+            self._set_connect_status(tr('Versuch sich mit dem PICO- IP: ') + IPAdresse + " zu verbinden ...", "red")
+        else:
+            self._set_connect_status("ESP32-WLAN-Verbindung zu " + IPAdresse + " …", "red")  # v1.04
         t1 = _const("SerialIF_teststring1", "#?LEDs_AutoProg")
         t3 = _const("SerialIF_teststring3", "#?LEDs_AutoProg3")
         try:
-            try:                                           # telnetlib (bis Python 3.12, danach als Paket telnetlib-313-and-up)
-                import telnetlib
-                self.arduino = telnetlib.Telnet(IPAdresse, 23, timeout=5)
-                self.arduino.is_open = True
-                self.arduino.portstr = IPAdresse
-            except ImportError:
-                self.arduino = TcpPort(IPAdresse, 23, timeout=5)   # einfacher Ersatz ohne Telnet-Aushandlung
+            if esp32_password is not None:
+                self.arduino = TcpPort(IPAdresse, 2323, timeout=5)
+                nonce = self.arduino.read_until(timeout=5).strip()
+                if len(nonce) != 32 or any(char not in b"0123456789abcdef" for char in nonce):
+                    raise ConnectionError("Keine gültige ESP32-Anmeldeanfrage")
+                digest = hmac.digest(esp32_password.encode("utf-8"), nonce, "sha256")
+                self.arduino.write(digest.hex().encode("ascii") + b"\n")
+                if self.arduino.read_until(timeout=5).strip() != b"OK":
+                    raise ConnectionError("ESP32-Anmeldung fehlgeschlagen")
+            else:
+                try:
+                    import telnetlib
+                    self.arduino = telnetlib.Telnet(IPAdresse, 23, timeout=5)
+                    self.arduino.is_open = True
+                    self.arduino.portstr = IPAdresse
+                except ImportError:
+                    self.arduino = TcpPort(IPAdresse, 23, timeout=5)
             self.arduino.write(b"#?\n")
             txt = self.arduino.read_until(b"\n", 5).decode(errors="ignore")
             pos = txt.find(t1)
@@ -659,7 +737,9 @@ class SerialMixin:
                 self.send_active = False
             self._set_connect_status("Nicht Verbunden", "black")
 
-    def close_arduino_connection_after_write_error(self):
+    def close_arduino_connection_after_write_error(self, expected_port=None):
+        if expected_port is not None and self.arduino is not expected_port:
+            return
         self._stop_reader()
         try:
             if self.arduino:

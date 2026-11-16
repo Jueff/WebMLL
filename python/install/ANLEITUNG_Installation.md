@@ -1,5 +1,5 @@
 # webMobaLedLib – Installation und Betrieb
-*Datei-Version: 3.70 (2026-11-12), gilt für webMobaLedLib 3.23*
+*Datei-Version: 3.77 (2026-11-14), gilt für webMobaLedLib 3.38*
 
 Windows · macOS · Linux-Desktop · Raspberry Pi
 
@@ -175,6 +175,17 @@ prüft die Bibliotheken und Boards beim Start („Überprüfe Bibliotheken und B
 - **Beenden:** Knopf **„Beenden“** in der Oberfläche (oben rechts). Unter Windows schließt sich dabei das Konsolenfenster. Auf dem Pi startet der Dienst danach
   von selbst neu.
 - Es sollte immer nur **ein Browser** gleichzeitig mit der Oberfläche arbeiten.
+- **Beenden und serielle Schnittstelle (3.24):** Beim Beenden schließt das Programm alle seriellen Verbindungen und beendet sich nach spätestens 8 Sekunden hart, falls
+  etwas hängt. Der COM Port ist danach für andere Programme (zum Beispiel die Arduino IDE) wieder frei.
+- **Automatisch verbinden (3.25):** Öffnest du die Reiter **Farb Test**, **Servo Test**, **DM Servo Test** oder **Sound Test** ohne Verbindung, verbindet das Programm selbst mit dem Arduino (wie ARDUINO → Verbinden) und startet danach den Direktmodus.
+- **Suche in der Tabelle (3.28):** Auf den Datenblättern (DCC, Selectrix, CAN) steht in der Werkzeugleiste ein **Suchfeld**. **Strg+F** setzt den Cursor dorthin (die Suche des Browsers findet nur, was gerade sichtbar ist). Beim Tippen springt die Tabelle zum ersten Treffer ab der gewählten Zelle; alle Treffer sind **gelb**, der aktuelle **orange** hinterlegt. **Eingabetaste** = nächster, **Umschalt+Eingabetaste** = voriger Treffer (oder die Pfeilknöpfe), **Esc** beendet die Suche. Daneben steht die Trefferzahl („3 / 7“). Gesucht wird in allen Spalten (auch Filter) und auch in **inaktiven** Zeilen, aber **nicht** in den beiden Kopfzeilen, ohne Rücksicht auf Groß- und Kleinschreibung. Haken **Wort** (Ganzes Wort): ID.1 findet dann nicht mehr ID.12. Haken **Alle** (Alle Blätter): die Suche geht über alle Datenblätter und wechselt bei einem Treffer das Blatt.
+- **Eingefärbte Zeilen (3.27):** Die Schriftfarbe passt automatisch zur Hintergrundfarbe (schwarz auf hellem, weiß auf dunklem Grund). Mit dem Haken **Schrift in eingefärbten Zeilen fett** (Programm Einstellungen, Gruppe Programm Generator) wird die Schrift in gefärbten Zeilen und Zellen zusätzlich fett.
+- **Letztes Blatt (3.24):** Beim nächsten Start öffnet das Programm das Blatt, an dem du zuletzt gearbeitet hast (vorher immer das erste DCC-Blatt).
+- **Verbinden ohne Reset (3.24):** Beim Verbinden mit einem Nano/Uno/ESP32 bleiben die Signale DTR und RTS aus; der Arduino wird dabei **nicht** zurückgesetzt, die Anlagensteuerung läuft weiter. Nur der Pico braucht DTR und bekommt es.
+- **Testtasten (3.24):** Die Rot/Grün-Tasten der DCC-Seite (und die anderen Testtasten) reihen sich nicht mehr in eine Warteschlange ein. Läuft noch ein Vorgang, erscheint „Es läuft noch ein Vorgang – bitte warten.“
+- **Anordnung der Dialogknöpfe (3.24):** In allen Dialogen steht die bestätigende Aktion **links** (OK, Ja, Suchen, Installieren ...) und **Abbrechen rechts**; der Standardknopf (Eingabetaste) ist der linke. Mit der Taste Esc brichst du ab. Bei der Fehlermeldung zur Prüfung des angeschlossenen Arduino heißen die Knöpfe **Suchen** (anderen Arduino oder COM Port probieren), **Weiter** (Meldung ignorieren und trotzdem programmieren) und **Abbrechen**.
+- **Typwechsel (3.24):** Wechselst du in den Optionen den Arduino-Typ, wird eine bestehende serielle Verbindung getrennt und der gewählte COM Port zurückgesetzt. Beim nächsten Mal sucht das Programm den Anschluss neu, ohne die Meldung „Es ist kein … an COM … angeschlossen“.
+- **Grafik (3.24):** Zeilen mit abgehaktem Kästchen „Aktiv“ erscheinen auch in der normalen Ansicht nicht mehr in der Grafik.
 - **Kein Tk nötig:** Ab Version 1.33 benutzt das Programm auf **allen** Systemen einen Ersatz für Tk (`no_tk`). Es braucht weder `tkinter` (`python3-tk`) noch ein Fenster auf dem
   Bildschirm des Servers. Zum Vergleich bei Fehlern startet `MLL_TK_ROOT=1` mit einem unsichtbaren echten Tk-Fenster (nur wenn `tkinter` und ein Bildschirm vorhanden sind, sonst gilt
   wieder der Ersatz). Das Protokoll nennt die benutzte Art (`Tk: Ersatz no_tk …`).
@@ -1093,6 +1104,12 @@ danach im Browser `http://localhost:8080`.
 | Fenster geht sofort wieder zu | `install\start_windows.bat` in einer Eingabeaufforderung starten und die Meldung lesen; außerdem `webmobaledlib.log` im Datenordner (2.6) |
 | Verknüpfung fehlt auf dem Desktop | Pfad des Projektordners ohne `'` und `&`? Sonst `install\start_windows.bat` per Rechtsklick → *Senden an → Desktop* |
 | IDE-Installation (`/ide`) bricht ab | Download von arduino.cc von Hand (2.2), danach `install_windows.bat /libs` |
+
+### 9.2a ESP32-Upload über WLAN scheitert („No response from device“)
+
+Der ESP32 meldet sich nach der Anmeldung mit einer eigenen Verbindung zurück zum PC. Eine Firewall blockiert diese eingehende Verbindung. Lösung: **eingehend TCP-Port 32323** zulassen.
+- **Windows-Firewall:** PowerShell als Administrator: `New-NetFirewallRule -DisplayName "MLL OTA" -Direction Inbound -Protocol TCP -LocalPort 32323 -Action Allow`
+- **Andere Firewalls (z. B. ESET):** Neue Regel anlegen: Richtung eingehend, Protokoll TCP, lokaler Port 32323, Aktion Zulassen. Die Menünamen hängen von der Version ab (bei ESET: Einstellungen → Netzwerkschutz → Firewall → Regeln).
 
 ### 9.3 macOS
 
