@@ -1,9 +1,14 @@
 Datei-Version: 1.01 (2026-10-18) - HOC_Anwender.md
-Stand: webMobaLedLib 3.85
+Stand: webMobaLedLib 3.86
 
 # webMobaLedLib: Änderungen (Kurzfassung)
 
 Gilt ab Version 1.39. Neueste Version oben.
+
+## Version 3.86 (2026-11-17)
+
+Korrekturen:
+- Hilfe → Update Testversion: Das neueste Release wird nicht mehr fälschlich als „ältere Version“ angezeigt.
 
 ## Version 3.85 (2026-11-17)
 

@@ -1,15 +1,16 @@
-# Datei-Version: 1.13 (2026-11-12) - web_update.py
+# Datei-Version: 1.14 (2026-11-17) - web_update.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_update.py
 # Path:           _web/web_update.py
-# Version:        1.13
-# Last Update:    2026-11-12
+# Version:        1.14
+# Last Update:    2026-11-17
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
 #   1.11  2026-11-08  Das Update loescht keine Datei mehr, die das neue Release in anderer Schreibweise enthaelt und die auf diesem Rechner dieselbe Datei ist (Windows und macOS: ampel.png und Ampel.png sind eine Datei); vorher fehlten danach die neu geschriebenen Dateien (Symbole), das Programm meldete sie als fehlend (fruehere Versionen ohne Eintrag)
 #   1.12  2026-11-09  Testversion: Die Liste der Releases von GitHub (release_entries, available_releases, release_choices) fuer die Auswahl der Version im Dialog; newest_release liest die Antwort ueber _fetch_releases_json
 #   1.13  2026-11-12  Update Testversion: Releases, deren Tag oder Name mit 'test' beginnt (zum Beispiel test1: Tests des Entwicklers), stehen am Ende der Liste (hoechstens 5), werden nie vorgewaehlt und tragen den Zusatz 'Entwicklertest'; pick_release nimmt sie nur, wenn es nichts anderes gibt
+#   1.14  2026-11-17  version_key: Bei Tags wie 'V3.5.0L3-3.85' (Version der MobaLedLib vor der webMobaLedLib-Version) wird die webMobaLedLib-Version genommen; vorher stand bei neueren Releases faelschlich 'aeltere Version'
 # ----------------------------------------------------------------------------------------------
 """Update der Web-Oberflaeche aus dem neuesten Release auf GitHub (Menue Hilfe -> Update webmobaledlib).
 
@@ -336,8 +337,14 @@ def available_releases(timeout: float = 30.0, limit: int = 15) -> list:  # v1.12
 
 def version_key(text) -> tuple:  # v1.12
     """Versionsnummer aus einem Text wie 'v3.04', '3.04 (2026-11-09)' oder 'webMobaLedLib 3.04' als (3, 4); () ohne Nummer"""  # v1.12
-    m = re.search(r"(\d+)\.(\d+)", str(text or ""))  # v1.12
-    return (int(m.group(1)), int(m.group(2))) if m else ()  # v1.12
+    # m = re.search(r"(\d+)\.(\d+)", str(text or ""))  # v1.12 (entfallen: bei 'V3.5.0L3-3.85' kam die Version der MobaLedLib (3.5) statt 3.85)
+    # return (int(m.group(1)), int(m.group(2))) if m else ()  # v1.12 (entfallen)
+    text = str(text or "")  # v1.14
+    found = re.findall(r"(?<![\d.])(\d+)\.(\d+)(?![\d.])", text)  # v1.14: Zahlenpaare ohne dritten Teil (3.5.0 zaehlt nicht); das letzte ist die webMobaLedLib-Version
+    if not found:  # v1.14
+        found = re.findall(r"(\d+)\.(\d+)", text)  # v1.14: wie bisher
+        found = found[:1]  # v1.14
+    return (int(found[-1][0]), int(found[-1][1])) if found else ()  # v1.14
 
 
 def release_choices(entries: list, installed_version: str) -> list:  # v1.12

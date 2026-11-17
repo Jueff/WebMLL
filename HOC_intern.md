@@ -1,5 +1,5 @@
 Datei-Version: 1.01 (2026-10-18) - HOC_intern.md
-Stand: webMobaLedLib 3.85
+Stand: webMobaLedLib 3.86
 
 # webMobaLedLib: History of Change (intern, ausführlich)
 
@@ -24,6 +24,15 @@ Release-Stand 2.12 auf Wunsch des Entwicklers („Release bauen“). **Neu im Ab
 | `archiv/` | frühere Release-Hinweise, Versionslisten und ZIP (nichts gelöscht) |
 
 **Geprüft:** Dateipaket: `testzip` in Ordnung, alle 113 Dateien gleich dem Ordner `headless`, keine `__pycache__`, alle `.py` kompilieren, Versionsprüfung „alles passt“ (50 Einträge), 11 Dateien ausführbar (`.sh`, `.command`). **Nachbau des Entwickler-Ablaufs mit seinem echten Paket (1678 Dateien, Stand 2.05):** meine 113 Dateien darübergelegt, Prüfliste, ZIP gepackt, `release_tools check --previous <sein ZIP>`: **in Ordnung** (Version 2.12, 1678 Dateien, 6 neue, 0 fehlende, ZIP 16,6 MB). Alle 15 Prüfreihen laufen (17, 26, 15, 70, 28, 19, 43, 26, 16, 27, 8, 8, 8, 5, 9 Prüfungen). **Nicht geprüft:** `zip_erstellen.bat` und die Reparaturskripte unter Windows, ein abgebrochenes Update unter Windows, das Verhalten mit Acronis, der Download von GitHub.
+
+## 3.86 (2026-11-17)
+
+Fehler im Dialog „Update Testversion“: Beim Tag `V3.5.0L3-3.85` las `web_update.version_key` mit `re.search` die erste Zahlengruppe (3.5, die Version der MobaLedLib) statt der webMobaLedLib-Version 3.85; 3.5 ist kleiner als die installierte 3.65, deshalb stand „ältere Version“ beim neuesten Release. Jetzt zählen nur Zahlenpaare ohne dritten Teil (`3.5.0` zählt nicht), und das letzte Paar ist die Version. Die Versionsvergleiche im Update selbst (`release_tools.version_key`, Prüfliste) waren nicht betroffen.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_update.py` | 1.14 | `version_key` |
+| `webmobaledlib.py` | 3.86 | Version, `REQUIRED_FILES` |
 
 ## 3.85 (2026-11-17)
 

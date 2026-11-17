@@ -256,6 +256,7 @@
 #   3.83  2026-11-17  Knopf Board und USB Port erkennen steht ueber USB Port erkennen; Reiter LED ARDUINO heisst Lichtmaschine, Reiter OTA heisst WLAN (OTA); Knopf Mit ARDUINO verbinden heisst Mit Lichtmaschine verbinden (mit Meldungen; web_form_options 1.28, web_z21 1.04, Web_Languages.csv)
 #   3.84  2026-11-17  Menue ARDUINO heisst Lichtmaschine (mit Hinweistexten; web_dcckeyboard 1.03, Web_Languages.csv)
 #   3.85  2026-11-17  Bild images/ESP32_image.png ersetzt (neues Bild der ESP32-Zentrale, animiert: Anzeige 'WIFI connected')
+#   3.86  2026-11-17  Update Testversion: Bei Tags wie V3.5.0L3-3.85 stand bei neueren Releases faelschlich 'aeltere Version' (web_update 1.14)
 # ----------------------------------------------------------------------------------------------
 """Web-Oberflaeche (NiceGUI) fuer den Programmgenerator.
 
@@ -369,7 +370,7 @@ REQUIRED_FILES = {  # v1.75
     # "proggen/M06_Write_Header.py": "1.04", "proggen/M20_PageEvents_a_Functions.py": "1.04", "vb2py/vbfunctions.py": "1.01", "proggen/M18_Save_Load.py": "1.04",  # v2.24 (entfallen)
     # "proggen/M06_Write_Header.py": "1.04", "proggen/M20_PageEvents_a_Functions.py": "1.05", "vb2py/vbfunctions.py": "1.01", "proggen/M18_Save_Load.py": "1.04",  # v2.27 (entfallen)
     # "proggen/M06_Write_Header.py": "1.04", "proggen/M20_PageEvents_a_Functions.py": "1.06", "vb2py/vbfunctions.py": "1.01", "proggen/M18_Save_Load.py": "1.04",  # v2.54 (entfallen)
-    "proggen/M06_Write_Header.py": "1.08", "proggen/M20_PageEvents_a_Functions.py": "1.08", "vb2py/vbfunctions.py": "1.01", "proggen/M18_Save_Load.py": "1.04", "proggen/M06_Write_Header_SW.py": "1.06", "proggen/M18_Save_Load.py": "1.05", "_web/web_log.py": "1.07", "proggen/M20_PageEvents_a_Functions.py": "1.11", "proggen/M03_Dialog.py": "1.03", "_web/web_layout.py": "1.17", "_web/web_form_options.py": "1.28", "_web/web_tabs.py": "1.21", "proggen/M08_ARDUINO.py": "1.21", "_web/web_z21.py": "1.04", "_web/web_dcckeyboard.py": "1.03", "headless/headless_gridmodel.py": "1.07", "fast_paths.py": "1.01", "proggen/M20_PageEvents_a_Functions.py": "1.10", "proggen/Userform_Other.py": "1.03", "_web/web_firewall.py": "1.04", "_web/web_esp32_ota.py": "1.05", "proggen/UserForm_Options.py": "1.05",  # v2.54  # v3.56
+    "proggen/M06_Write_Header.py": "1.08", "proggen/M20_PageEvents_a_Functions.py": "1.08", "vb2py/vbfunctions.py": "1.01", "proggen/M18_Save_Load.py": "1.04", "proggen/M06_Write_Header_SW.py": "1.06", "proggen/M18_Save_Load.py": "1.05", "_web/web_log.py": "1.07", "proggen/M20_PageEvents_a_Functions.py": "1.11", "proggen/M03_Dialog.py": "1.03", "_web/web_layout.py": "1.17", "_web/web_form_options.py": "1.28", "_web/web_tabs.py": "1.21", "proggen/M08_ARDUINO.py": "1.21", "_web/web_z21.py": "1.04", "_web/web_dcckeyboard.py": "1.03", "_web/web_update.py": "1.14", "headless/headless_gridmodel.py": "1.07", "fast_paths.py": "1.01", "proggen/M20_PageEvents_a_Functions.py": "1.10", "proggen/Userform_Other.py": "1.03", "_web/web_firewall.py": "1.04", "_web/web_esp32_ota.py": "1.05", "proggen/UserForm_Options.py": "1.05",  # v2.54  # v3.56
     "proggen/M18a_Load_PicoConfig.py": "1.01", "proggen/M17_Import_old_Data.py": "1.01",  # v1.75
     # "proggen/M02_Public.py": "1.01", "proggen/M02a_Public.py": "1.01", "proggen/M03_Dialog.py": "1.01", "proggen/M06_Write_Header_LED2Var.py": "1.01", "proggen/M06_Write_Header_SW.py": "1.01", "proggen/M07_COM_Port.py": "1.02", "proggen/M09_Language.py": "1.01", "proggen/M10_Par_Description.py": "1.01", "proggen/M30_Tools.py": "1.01", "proggen/M32_DCC.py": "1.01", "proggen/M38_Extensions.py": "1.01", "proggen/clsExtension.py": "1.01", "proggen/Userform_Other.py": "1.01", "_web/web_form_other.py": "1.04",  # v1.99 (entfallen)
     # "proggen/M02_Public.py": "1.01", "proggen/M02a_Public.py": "1.01", "proggen/M03_Dialog.py": "1.01", "proggen/M06_Write_Header_LED2Var.py": "1.01", "proggen/M06_Write_Header_SW.py": "1.02", "proggen/M07_COM_Port.py": "1.02", "proggen/M09_Language.py": "1.01", "proggen/M10_Par_Description.py": "1.02", "proggen/M30_Tools.py": "1.01", "proggen/M32_DCC.py": "1.01", "proggen/M38_Extensions.py": "1.01", "proggen/clsExtension.py": "1.01", "proggen/Userform_Other.py": "1.01", "_web/web_form_other.py": "1.04",  # v2.00 (entfallen)
@@ -1230,7 +1231,7 @@ def font_scales(ctrl) -> dict:
 # VERSION = "3.60 (2026-11-16)"  # v3.60 (entfallen)
 # VERSION = "3.61 (2026-11-16)"  # v3.61 (entfallen)
 # VERSION = "3.62 (2026-11-16)"  # v3.62 (entfallen)
-VERSION = "3.85 (2026-11-17)"  # v3.64
+VERSION = "3.86 (2026-11-17)"  # v3.64
 # VERSION = "3.23 (2026-11-12)"  # v3.24 (entfallen)
 # VERSION = "3.22 (2026-11-12)"  # v3.23 (entfallen)
 # VERSION = "3.21 (2026-11-12)"  # v3.22 (entfallen)
