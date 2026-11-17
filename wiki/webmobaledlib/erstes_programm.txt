@@ -1,0 +1,107 @@
+====== webMobaLedLib – Dein erstes Programm ======
+//Seitenstand 1.11 (2026-11-17), gilt für webMobaLedLib 3.85//
+
+Auf dieser Seite bringst du eine LED zum Leuchten. Das dauert etwa **15 Minuten**, beim ersten Mal etwas länger. Danach weißt du, wie alles zusammenhängt.
+
+===== Das brauchst du =====
+
+  * Die **installierte webMobaLedLib**. Falls nicht: [[anleitungen:webmobaledlib:installation|Installation]].
+  * Eine **Lichtmaschine**. Es gibt vier: **Classic** (mit ARDUINO Nano), **Pro** (mit ESP32), **Pico Zero** und **Molli** (beide mit Raspberry Pico). Wie du sie anschließt, steht im [[anleitungen:quickstart|Schnellstart]].
+  * Ein **USB-Kabel**, das Daten überträgt (kein reines Ladekabel).
+
+===== Schritt 1: Das Programm starten =====
+
+Starte die webMobaLedLib mit dem Symbol **webMobaLedLib** (Desktop). Nach 20 bis 60 Sekunden öffnet sich der Browser. Du siehst oben die Reiter und darunter eine Tabelle.
+
+{{:bilder:anleitungen:webmobaledlib:erst_01_start.png?600|Das Programm nach dem Start}}
+
+===== Schritt 2: Den Programmgenerator öffnen =====
+
+Mit dem **Programmgenerator** erstellst du das Programm für die Lichtmaschine. Er ist der erste Reiter oben und beim Start meist schon offen. Hast du einen anderen Reiter geöffnet (zum Beispiel **Programm Einstellungen**), klicke oben auf **Programm Generator**.
+
+{{:bilder:anleitungen:webmobaledlib:erst_02_programmgenerator.png?600|Der Reiter Programm Generator}}
+
+===== Schritt 3: Das richtige Tabellenblatt wählen =====
+
+Unter der Tabelle stehen die **Tabellenblätter**. Wähle das Blatt, das zum **Steuerprotokoll deiner Anlage** passt:
+
+^ Blatt ^ Für ^
+| **DCC** | Anlagen mit einer **DCC**-Zentrale |
+| **Selectrix** | Anlagen mit **Selectrix** |
+| **CAN** | alle **Märklin**-Zentralen (CAN-Bus) |
+| **LNet** | **LocoNet** |
+
+Für diesen ersten Test spielt das Blatt **keine Rolle**, weil noch keine Verbindung zu einer Modellbahnzentrale gebraucht wird. Nimm **DCC**.
+
+{{:bilder:anleitungen:webmobaledlib:erst_03_blatt.png?600|Die Tabellenblätter unter der Tabelle: DCC, Selectrix, CAN, LNet}}
+
+===== Schritt 4: Die Lichtmaschine einstellen =====
+
+Jetzt sagst du dem Programm, **welche Lichtmaschine** du hast und **an welchem USB-Anschluss** sie steckt.
+
+**Wichtig:** Der Knopf **Mit Lichtmaschine verbinden** (oben rechts) funktioniert nur, wenn auf der Lichtmaschine **schon ein MobaLedLib-Programm** läuft. Bei einer **neuen** Lichtmaschine klappt das **nicht**. Stelle sie deshalb so ein:
+
+  - Stecke die Lichtmaschine mit dem USB-Kabel an den Computer.
+  - Klicke in der Werkzeugleiste auf **Optionen Werkzeuge**.
+  - Öffne den Reiter **Lichtmaschine**.
+  - Klicke auf **Board und USB Port erkennen** (der Knopf steht über **USB Port erkennen**). Das Programm sucht an **allen USB-Anschlüssen** nach einer Lichtmaschine und stellt das **erste gefundene Board** ein. Danach öffnet sich das Fenster **USB Port erkennen**. Es zeigt das **gefundene Board mit seinem Anschluss** und, wie bisher, auch die **anderen gefundenen Boards**.
+  - **Übernimm** das gefundene Board mit dem Anschluss oder wähle einen **anderen Typ**. Du musst vorher **kein Board** auswählen.
+  - Findet das Programm nichts, kommt ein Hinweis: Prüfe das USB-Kabel und klicke noch einmal auf **Board und USB Port erkennen**. Du kannst das Board auch **von Hand** wählen (**Lichtmaschine Classic:** **Nano (neue Version)**, **Lichtmaschine Pro:** **ESP32**, **Lichtmaschine Pico Zero** und **Molli:** **Raspberry Pico**) und dann **USB Port erkennen** klicken.
+  - Schließe das Fenster mit **Schließen**.
+
+**Hinweis:** Der Knopf **Board und USB Port erkennen** ersetzt seit **3.82** den Haken **Automatisch erkennen**. Er sucht selbst an **allen USB-Anschlüssen** (es muss vorher weder ein Board noch ein Anschluss eingestellt sein) und erkennt **Nano**, **ESP32** und **Raspberry Pico**. Bei einem Nano spricht das Programm den **Bootloader** an und erkennt **alt (57600 Baud)** und **neu (115200 Baud)**; es stellt **Nano Normal (old Bootloader)** oder **Nano (neue Version)** passend ein. Findet es mehrere Boards, nimmt es das **erste** und zeigt die anderen im Fenster von **USB Port erkennen** mit an. Das Fenster sagt dir also, was gefunden wurde; du kannst es übernehmen oder einen anderen Typ wählen. Eine Datei, in der noch das alte Merkmal „AutoDet“ gespeichert ist, stellt das Board beim Hochladen **nicht mehr** selbst um. Wer die Abfrage des Bootloaders **nicht** möchte, nimmt den Haken **Bootloader des Nano beim Prüfen erkennen** in den [[anleitungen:webmobaledlib:wz_programm_einstellungen|Programm Einstellungen]] (Spezialeinstellungen) weg.
+
+{{:bilder:anleitungen:webmobaledlib:erst_04_optionen.png?500|Optionen Werkzeuge, Reiter Lichtmaschine: Board und USB Port erkennen}}
+
+===== Schritt 5: Das Makro prüfen =====
+
+Ein **Makro** ist eine fertige Funktion, zum Beispiel „Belebtes Haus“. Für den ersten Test nehmen wir **Heartbeat LED**. Sie lässt eine LED in wechselnden Regenbogenfarben blinken. So siehst du sofort, dass alles funktioniert.
+
+Die **erste LED einer Kette** soll **immer eine Heartbeat LED** sein, damit man sieht, dass der **Prozessor arbeitet**. **Alle vier Lichtmaschinen** haben so eine LED **fest auf der Platine**. Du musst also keine LED anschließen.
+
+Die Tabelle enthält diese Zeile **schon**: In der ersten Zeile steht der Haken in **Aktiv**, die Beschreibung **LED auf dem Mainboard** und in der Spalte **Beleuchtung, Geräusch oder andere Effekte** das Makro **Heartbeat LED**. Du musst nichts eintragen.
+
+Fehlt die Zeile (zum Beispiel, weil du sie gelöscht hast), legst du sie neu an:
+
+  - Klicke in der Tabelle in die **erste freie Zeile**.
+  - Klicke in der Werkzeugleiste auf den Knopf **Dialog Wizard**. Es öffnet sich die **Makroauswahl**.
+  - Öffne links die Gruppe **Licht → Lichteffekte** und wähle **Heartbeat LED**.
+  - Bestätige mit **OK**. In der Zeile steht jetzt der Name **Heartbeat LED**.
+
+{{:bilder:anleitungen:webmobaledlib:erst_05_makro.png?600|Die Tabelle mit der Zeile Heartbeat LED}}
+
+===== Schritt 6: Das Programm auf die Lichtmaschine übertragen =====
+
+  - Klicke in der Werkzeugleiste auf den Knopf **Setup übertragen**.
+  - Es öffnet sich ein Fenster, in dem Text erscheint. Das Programm erzeugt jetzt das Programm für die Lichtmaschine und lädt es auf die Lichtmaschine (mit dem **Board** und dem **Anschluss** aus Schritt 4). Dazu gibt das Programm seine **eigene Verbindung** zur Lichtmaschine frei, damit PlatformIO darauf zugreifen kann (siehe [[anleitungen:webmobaledlib:pg_arduino#die_drei_arten_der_verbindung|Die drei Arten der Verbindung]]). **Lass das Fenster offen, bis es fertig ist.**
+  - Das **erste Mal dauert es 5 bis 10 Minuten**, weil PlatformIO noch Werkzeuge aus dem Internet nachlädt. Danach geht es in weniger als einer Minute.
+  - Am Ende meldet das Fenster, dass das Hochladen geklappt hat.
+
+{{:bilder:anleitungen:webmobaledlib:erst_06_uebertragen.png?500|Das Fenster beim Übertragen}}
+
+===== Schritt 7: Fertig! =====
+
+Die **LED auf der Platine** wechselt jetzt ihre Farbe. Die Lichtmaschine hat das Programm gespeichert und steuert die LED von jetzt an allein, auch wenn du den Computer ausschaltest oder das USB-Kabel abziehst. Sie braucht dafür natürlich weiter Strom.
+
+Jetzt läuft auf der Lichtmaschine ein MobaLedLib-Programm. Darum funktioniert ab jetzt auch **Mit Lichtmaschine verbinden** (oben rechts, der Knopf wird dann grün). Damit kannst du zum Beispiel die Testtasten der Tabelle benutzen, siehe [[anleitungen:webmobaledlib:pg_arduino|Verbinden und Übertragen]].
+
+**Glückwunsch!** Du hast dein erstes MobaLedLib-Programm erstellt.
+
+===== Wenn etwas nicht klappt =====
+
+^ Was passiert ^ Was hilft ^
+| **Mit Lichtmaschine verbinden** klappt nicht, oben steht **Nicht verbunden** | Bei einer **neuen** Lichtmaschine ist das normal: Es läuft noch kein MobaLedLib-Programm. Mache Schritt 4 bis 6. Danach klappt das Verbinden. |
+| Bei **USB Port erkennen** erscheint kein Anschluss | Prüfe das USB-Kabel (Daten, nicht nur Laden) und stecke die Lichtmaschine neu an. Klicke dann noch einmal auf **USB Port erkennen**. Unter Windows kann bei Nachbauten ein [[https://www.wch-ic.com/downloads/CH341SER_EXE.html|CH340-Treiber]] fehlen. Unter Linux musst du in der Gruppe //dialout// sein (siehe [[anleitungen:webmobaledlib:linux|Linux]]). |
+| Das Übertragen bricht mit einer Meldung zum **Hochladen** ab | Prüfe das **Board** in **Optionen Werkzeuge → Lichtmaschine**. Bei vielen Nano-Nachbauten (China-Nano) hilft **Nano Normal (old Bootloader)**. Dann noch einmal **Setup übertragen**. |
+| Eine Meldung nennt **PlatformIO nicht gefunden** | Die Installation wurde nicht ganz beendet. Starte das Installationsskript noch einmal (Seite für dein System unter [[anleitungen:webmobaledlib:installation|Installation]]). |
+| Das Übertragen dauert sehr lange | Beim ersten Mal ist das normal (bis zu 10 Minuten). Prüfe die Internetverbindung. |
+| Die LED auf der Platine blinkt nicht | Prüfe die Stromversorgung (USB-Kabel) und ob das **Übertragen** ohne Fehlermeldung zu Ende ging. Prüfe in der Tabelle, ob die erste Zeile den **Haken** in **Aktiv** hat und das Makro **Heartbeat LED** enthält: Die erste Zeile steuert die LED mit der Nummer 0, die Heartbeat LED. Weitere LEDs: Kabel, Stromversorgung und Anschlussbelegung der Platine ([[anleitungen:ueberblick_platinen|Platinen-Überblick]]). |
+
+Mehr zu Problemen allgemein: [[anleitungen:webmobaledlib:fehlersuche|Fehlersuche]].
+
+===== Wie geht es weiter? =====
+
+  * Probiere weitere Makros aus, zum Beispiel **Belebtes Haus** (Gruppe //Licht//) oder **LED einstellbar**. Die Tabelle erlaubt viele Zeilen, jede Zeile ist ein Effekt.
+  * Wie du die Tabelle bedienst, steht auf der Seite [[anleitungen:webmobaledlib:programmgenerator|Der Programmgenerator]]. Was die Makros tun, beschreibt die Seite [[anleitungen:effekte_mll|Alle Funktionen im Detail]].
+  * Eigene Lichtmuster entwirfst du im [[anleitungen:webmobaledlib:patterngenerator|Timeline Editor]] (Reiter oben).
+  * Wörter, die du nicht kennst, stehen auf der Seite [[anleitungen:webmobaledlib:begriffe|Begriffe]].

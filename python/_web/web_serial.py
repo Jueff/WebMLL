@@ -1,9 +1,9 @@
-# Datei-Version: 1.10 (2026-11-14) - web_serial.py
+# Datei-Version: 1.11 (2026-11-16) - web_serial.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_serial.py
 # Path:           _web/web_serial.py
-# Version:        1.10
-# Last Update:    2026-11-14
+# Version:        1.11
+# Last Update:    2026-11-16
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
@@ -18,6 +18,7 @@
 #   1.08  2026-11-14  TcpPort: ungueltiger Hostname (UnicodeError, "label too long") wird als OSError gemeldet statt abzustuerzen
 #   1.09  2026-11-14  Automatisches Verbinden (ohne Anschlussangabe): ist fuer das Blatt eine ESP32-WLAN-Verbindung eingetragen (wifi_target_provider), wird zuerst WLAN versucht, sonst USB; connect(wlan=False) erzwingt USB
 #   1.10  2026-11-14  connect_if_not_connected (Testtasten, DCC-Tastatur, Z21 ...) versucht auch mit Anschlussangabe zuerst die eingetragene ESP32-WLAN-Verbindung
+#   1.11  2026-11-16  Protokoll: Zeilen der Lichtmaschine (Empfang) werden mit Level DEBUG protokolliert, die Startmeldung mit der Auswertung (LEDs je Kanal, Summe, Version) mit Level INFO
 # ----------------------------------------------------------------------------------------------
 """Serielle Verbindung zum Arduino/Pico ohne Tk (Mixin fuer HeadlessAppController).
 
@@ -241,6 +242,7 @@ class SerialMixin:
                 text = data.decode("utf-8")
             except UnicodeDecodeError:
                 text = str(bytes(data))
+            logger.debug("Lichtmaschine: %r", text)  # v1.11
             if not text.startswith("****"):
                 self.queue.put(text)
         logger.info("Empfangsthread (Telnet) beendet")
@@ -286,6 +288,7 @@ class SerialMixin:
                 except UnicodeDecodeError:
                     text = str(bytes(buf))
                 buf.clear()
+                logger.debug("Lichtmaschine: %r", text)  # v1.11
                 if not text.startswith("****"):           # Debugmeldungen des Arduinos
                     self.queue.put(text)
         logger.info("Empfangsthread beendet")
@@ -422,6 +425,8 @@ class SerialMixin:
             except ValueError:
                 total = 20
         self.set_maxLEDcnt(total)
+        logger.info("Startmeldung der Lichtmaschine: %r -> Version %s, LEDs je Kanal %s, Summe %s (hoechste LED-Nummer %s)",  # v1.11
+                    startmessage.strip(), self.ARDUINO_version, self.max_ledcnt_list, total, total - 1)  # v1.11
         self.waittime_int = -1                            # Pause zwischen den Bytes haengt von der LED-Anzahl ab
 
     def set_maxLEDcnt(self, maxLEDcnt):

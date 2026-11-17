@@ -1,0 +1,50 @@
+====== webMobaLedLib – Zugriff aus dem Netz ======
+//Seitenstand 1.04 (2026-11-16), gilt für webMobaLedLib 3.66//
+
+Normalerweise bedienst du die webMobaLedLib auf dem Rechner, auf dem sie läuft. Du kannst sie aber auch von einem **anderen Gerät im Heimnetz** aus bedienen: vom **Laptop**, **Tablet** oder **Smartphone**, zum Beispiel direkt an der Modellbahn. Das ist besonders praktisch mit dem **Raspberry Pi**, der ohne Bildschirm an der Anlage bleibt.
+
+**Wichtig:** Wer Zugriff hat, kann **Programme auf deine Lichtmaschine laden**. Schütze den Zugriff deshalb mit einem **Passwort**, und mach das Programm nie ohne Schutz aus dem **Internet** erreichbar. Es ist nur für dein **Heimnetz** gedacht.
+
+===== Wie ist es voreingestellt? =====
+
+  * **Windows, Mac, Linux:** Das Programm ist **nur auf dem eigenen Rechner** erreichbar (''localhost:8080''). Du musst nichts schützen.
+  * **Linux-Server ohne Bildschirm:** Mit ''bash install_linux.sh --server'' richtet das Installationsskript Passwort und Systemdienst ein, siehe [[anleitungen:webmobaledlib:linux|Installation unter Linux]].
+  * **Raspberry Pi:** Das Programm ist im **Heimnetz** erreichbar und mit einem **Passwort** geschützt. Benutzername **mobaledlib**, Passwort **mobaledlib**. **Ändere das Passwort** (siehe unten). Am Pi selbst brauchst du kein Passwort.
+
+===== Zugriff einschalten (Windows, Mac, Linux) =====
+
+  - Öffne den Reiter **Programm Einstellungen**.
+  - Schalte im Kasten **Zugriff aus dem Netz erlauben** den **Schalter** ein.
+  - Wenn noch kein Passwort eingerichtet ist, fragt ein Fenster danach. Gib ein **Passwort** ein (mindestens 4 Zeichen). Lässt du es leer, gibt es **keinen Schutz**. **Abbrechen** schaltet den Schalter wieder aus.
+  - Klicke auf **Jetzt neu starten**. Das Programm sichert, startet neu, und der Browser lädt die Seite neu.
+  - **Windows:** Beim Einschalten legt das Programm die **Firewall-Regel** „webMLL Server 8080“ an (nur Privatnetzwerke). Windows fragt nach Administratorrechten: Bestätige mit **Ja**.
+
+Du musst dafür **keine Datei von Hand ändern**.
+
+===== Von einem anderen Gerät öffnen =====
+
+  - Finde die **Adresse** des Rechners, auf dem die webMobaLedLib läuft. Beim Raspberry Pi geht oft der Name: ''raspberrypi.local'' (statt ''raspberrypi'' der Name, den du im Imager gewählt hast). Sonst nimm die **IP-Adresse** (steht in deinem Router, zum Beispiel ''192.168.178.79'').
+  - Tippe im Browser des anderen Geräts ein: ''http://<Adresse>:8080''. Beispiel: ''http://raspberrypi.local:8080''.
+  - Das Programm fragt nach **Benutzername** (**mobaledlib**) und **Passwort**.
+
+**Bedienen nie mit zwei Browsern gleichzeitig.** Es sollte immer nur **ein Browser** mit der Oberfläche arbeiten.
+
+===== Das Passwort ändern =====
+
+  - Öffne **Programm Einstellungen**.
+  - Gib im Block **Zugriff über das Netz (Web-Oberfläche)** das neue Passwort **zweimal** ein (mindestens 4 Zeichen).
+  - Klicke auf **Passwort ändern**. Es gilt **sofort**. Das Programm speichert es nicht im Klartext, sondern nur verschlüsselt.
+
+Solange das Standardpasswort gilt, zeigt der Block eine **Warnung**.
+
+**Passwort vergessen?** Öffne die Oberfläche **auf dem Raspberry Pi selbst** (dort ist kein Passwort nötig) und klicke auf **Eigenes Passwort entfernen**. Dann gilt wieder das Anfangspasswort **mobaledlib**.
+
+===== Wenn es nicht klappt =====
+
+^ Was passiert ^ Was hilft ^
+| Das andere Gerät zeigt einen Ladefehler | Meist blockiert die **Firewall** des Rechners. Unter **Windows**: Reiter **Programm Einstellungen**, Bereich **Firewall**, Knopf **Zugriff aus dem Netz freigeben**. Das Netzwerk muss als **Privat** eingestellt sein (nicht „Öffentlich“). |
+| ''raspberrypi.local'' wird nicht gefunden | Das geht nicht in jedem Netz (Gastnetz, manche Router, Android). Nimm statt des Namens die **IP-Adresse** und hänge ''**:8080**'' an. |
+| Der Schalter ist grau und lässt sich nicht einschalten | Die Adresse ist von außen vorgegeben (Startparameter oder Umgebungsvariable). Die Seite nennt den Grund. |
+| Auf dem **iPad oder iPhone** bricht die Verbindung ab, zum Beispiel beim Wechsel der **Tabelle** (Meldung //Connection lost//) | Aktualisiere das Programm auf Version **3.05 oder neuer**. Seit dieser Version merkt sich das Programm die Anmeldung mit einem **Cookie**; Safari, Chrome und Firefox auf dem iPad senden die Anmeldung sonst nicht mit der Dauerverbindung. **Cookies müssen erlaubt sein.** Nach einem Neustart des Programms oder einer Passwortänderung meldest du dich neu an. |
+| **Firefox oder Chrome** auf dem iPad/iPhone zeigt **gar keine Verbindung** und keine Anmeldung | iOS verlangt für Apps die Berechtigung **Lokales Netzwerk**. Schalte sie ein: **Einstellungen → Datenschutz & Sicherheit → Lokales Netzwerk** (oder in den Einstellungen unter dem Namen des Browsers). Oder benutze **Safari**. |
+| Das Passwort wird nicht angenommen | Benutzername **mobaledlib**; Passwort das Standardpasswort oder das, das du gesetzt hast. |

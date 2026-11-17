@@ -1,0 +1,30 @@
+====== webMobaLedLib – Servo Einstellungen ======
+//Seitenstand 1.07 (2026-11-17), gilt für webMobaLedLib 3.85//
+
+Mit dem Reiter **Servo Einstellungen** testest und stellst du **Servos der MobaLedLib-Servoplatine** ein. Das ist die Platine, an der Servos über **LED-Befehle** angeschlossen sind. Du stellst für jeden Servo die **kleinste und größte Stellung** und die **Geschwindigkeit** ein, damit er nirgends anstößt.
+
+Für **Servos im „Direct Mode“** (mit ATtiny) gibt es den Reiter [[anleitungen:webmobaledlib:wz_dmservo|DM Servo Einstellungen]].
+
+{{:bilder:anleitungen:webmobaledlib:wz_02_servo.png?500|Der Reiter Servo Einstellungen}}
+
+Die Seite ist für das **Smartphone** gebaut (eine Spalte, große Tasten). Mit **Vollbild** hast du an der Anlage viel Platz.
+
+===== So stellst du einen Servo ein =====
+
+  - **Voraussetzung:** Auf der Lichtmaschine läuft **schon ein MobaLedLib-Programm** (bei einer **neuen** Lichtmaschine zuerst [[anleitungen:webmobaledlib:pg_arduino|übertragen]]). Du musst nicht vorher auf **Mit Lichtmaschine verbinden** klicken: Das Werkzeug **verbindet sich bei Bedarf selbst**. Es arbeitet im **Direktmodus** ([[anleitungen:webmobaledlib:pg_arduino#die_drei_arten_der_verbindung|Die drei Arten der Verbindung]]).
+  - Wähle in der Zeile **Servo Modul Auswahl** den Servo: die **LED Nummer** der Servoplatine, den **Anschluss** (0 bis 2) und den **LED Kanal**. Nach jeder Änderung wählt das Programm den Servo und lässt ihn **kurz wackeln**, damit du ihn erkennst.
+  - Mit dem **Regler Position** (Werte 10 bis 210) und den Pfeilen daneben bewegst du den Servo und siehst den Wert.
+  - Klicke auf **Servo Konfigurieren**. Das Programm führt dich in **drei Schritten** durch **Minimalposition**, **Maximalposition** und **Geschwindigkeit**.
+  - In jedem Schritt stellst du den Wert mit den Tasten **<< < > >>** ein. **Halte** die Taste gedrückt für größere Schritte. Am Computer geht es auch mit der **Tastatur** (seit 3.14): **Pfeil hoch** = `>`, **Pfeil runter** = `<`, **Bild hoch** = `>>`, **Bild runter** = `<<`; Taste gedrückt halten wie die Maustaste. **Weiter** geht zum nächsten Schritt.
+  - **Einstellungen speichern** speichert die Werte im Servo (in jedem Schritt möglich). **nicht speichern** bricht ab.
+
+===== Weitere Knöpfe =====
+
+  * **Servo zurücksetzen:** Stellt nach einer Rückfrage die **Grundeinstellungen** des Servos wieder her (Grenzen und Geschwindigkeit).
+  * **Beschreibung:** Der Hilfetext oben ist einzeilig. Ein Klick darauf klappt ihn auf.
+
+===== Gut zu wissen =====
+
+  * Wenn du den Reiter wechselst, die Seite schließt oder das Programm beendest, bekommt der Servo den **Wert 0**, und ein laufender Ablauf wird abgebrochen. So bleibt kein Servo in Bewegung.
+  * Die Werte (**LED Nummer**, **Anschluss**, **LED Kanal**) werden gemerkt.
+  * Den **Ablauf einer Servobewegung** stellst du mit dem Assistenten [[anleitungen:webmobaledlib:servo_animation|Servo Animation]] ein.

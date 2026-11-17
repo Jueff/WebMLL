@@ -236,6 +236,26 @@
 #   3.63  2026-11-16  Simulator unter Linux: build_simulator_linux.sh 1.01 erzeugt FastLED.h selbst und prueft die Dateien von Arduino-stub (Fehler 'FastLED.h: No such file or directory' beim Bauen auf dem Raspberry Pi)
 #   3.64  2026-11-16  Kompilieren: Zeile aus nur einem kurzen Bezeichner (z.B. 'r') in der Makrospalte wird vor dem Kompilieren mit Blatt und Zeile gemeldet (M06_Write_Header_SW 1.06)
 #   3.65  2026-11-16  Tabelle reparieren: Zeilen mit '// ' (// Next_LED(, // Reserve LEDs( ...) bekommen wieder Name und Symbol des Makros statt 'Muster Pattern_Configurator' (fast_paths 1.01: Makrosuche behaelt das Praefix '// ')
+#   3.66  2026-11-16  Firewall-Regeln einheitlich benannt: "webMLL Server 8080" (bisher "webMobaLedLib 8080") und in der Beschreibung "webMLL OTA 32323" (bisher "MLL OTA"); alte Regeln werden weiter erkannt (web_firewall 1.04, web_esp32_ota 1.05)
+#   3.67  2026-11-16  Parameterdialog: Zeitangaben mit Nachkommastellen (0.5 Sek, 0.8 Sec) werden akzeptiert (Blink3, AndreaskrLT_RGB u. a.), Komma als Dezimalzeichen erlaubt; Eingaben ausserhalb des Bereichs werden nicht mehr trotz Meldung uebernommen (Userform_Other 1.03)
+#   3.68  2026-11-16  Spalte der Tasten (Typ): wird automatisch so breit, dass alle Tasten hineinpassen (M20_PageEvents_a_Functions 1.10)
+#   3.69  2026-11-16  Protokoll: Antworten der Lichtmaschine (Level DEBUG) und Startmeldung mit Auswertung (INFO), Hinweis im Protokoll, wenn der Farbtest die LED-Nummer begrenzt (web_serial 1.11, web_colorcheck 1.07)
+#   3.70  2026-11-17  Zwischengespeicherter Stand: Auswahl wird protokolliert, nach Verwerfen werden die Spaltennummern neu eingelesen; ignorierte Klicks (Programm beschaeftigt) werden protokolliert; Log-Fenster ohne Fehler bei geschlossener Browserseite (web_log 1.07, M18_Save_Load 1.05)
+#   3.71  2026-11-17  Pull Request 5 (moosbewohner) uebernommen: Zeilen der Tabelle einzeilig (kein Zeilenumbruch mehr in der Spalte Konfiguration), Doppelklick auf die Spalte Typ oeffnet die Typauswahl, Select_Typ_by_Dialog aktualisiert danach Zeile (M20 1.11)
+#   3.72  2026-11-17  Dialog Wizard: in den Spalten A bis C einer Datenzeile startet der Dialog der Adress-Spalte (M03_Dialog 1.02); Spalte Aktiv: Doppelklick wie Einzelklick, nicht editierbar; Zeile 1 nicht von Hand aenderbar (headless_gridmodel 1.07); Spalten ab LED Nr schreibgeschuetzt
+#   3.73  2026-11-17  Doppelklick auf die Spalte Typ einer Zeile ohne Adresse startet den Dialog der Adress-Spalte (bisher passierte nichts)
+#   3.74  2026-11-17  Dialog Wizard (Knopf Dialog) in der Spalte Typ einer Zeile ohne Adresse startet den Dialog der Adress-Spalte (M03_Dialog 1.03)
+#   3.75  2026-11-17  Suche im Programm Generator im normalen Layout zweizeilig (oben Suchfeld mit Pfeilen, darunter Wort und Alle), im kompakten Layout weiter einzeilig (web_layout 1.14)
+#   3.76  2026-11-17  Suche im normalen Layout: der Trefferzaehler steht unter den Pfeilen (zwei Spalten: links Suchfeld und Wort/Alle, rechts Pfeile und Zaehler), kompakt unveraendert einzeilig (web_layout 1.15)
+#   3.77  2026-11-17  Suche: Hintergrund und Rand wie die Werkzeugleistenknoepfe, im normalen Layout so hoch wie die Knoepfe (web_layout 1.16)
+#   3.78  2026-11-17  Version der MobaLedLib (Ver.3.5.0-..) steht unter dem Knopf Beenden statt in der Knopfzeile und wird mit PlatformIO ausgeblendet; im kompakten Layout nicht angezeigt (web_layout 1.17)
+#   3.79  2026-11-17  Ueberarbeitete Symbole der Knoepfe Setup uebertragen, Setup simulieren und Optionen Werkzeuge (images_btn: Btn_Send_to_ARDUINO.png, Btn_Simulate.png, Btn_Options.png)
+#   3.80  2026-11-17  Optionen Werkzeuge, Reiter LED ARDUINO und DCC Arduino: Knopf Erkennen statt des Hakens Automatisch erkennen (erkennt das angeschlossene Board einmalig), der Eintrag Typ von Arduino IDE benutzen entfaellt (Vorschlag des Excel-Entwicklers; web_form_options 1.25, web_tabs 1.20, Web_Languages.csv)
+#   3.81  2026-11-17  Knopf Erkennen funktioniert ohne voreingestellten COM Port und Boardtyp: er durchsucht selbst alle USB Anschluesse und stellt Board und COM Port ein (web_form_options 1.26, Web_Languages.csv)
+#   3.82  2026-11-17  Knopf 'Board und USB Port erkennen': stellt das erste gefundene Board ein und ruft USB Port erkennen auf (Formular mit gefundenem Board und Anschluss, dazu die anderen Boards); das gespeicherte Flag AutoDet wird beim Hochladen nicht mehr ausgewertet (web_form_options 1.27, web_tabs 1.21, M08_ARDUINO 1.21, Web_Languages.csv)
+#   3.83  2026-11-17  Knopf Board und USB Port erkennen steht ueber USB Port erkennen; Reiter LED ARDUINO heisst Lichtmaschine, Reiter OTA heisst WLAN (OTA); Knopf Mit ARDUINO verbinden heisst Mit Lichtmaschine verbinden (mit Meldungen; web_form_options 1.28, web_z21 1.04, Web_Languages.csv)
+#   3.84  2026-11-17  Menue ARDUINO heisst Lichtmaschine (mit Hinweistexten; web_dcckeyboard 1.03, Web_Languages.csv)
+#   3.85  2026-11-17  Bild images/ESP32_image.png ersetzt (neues Bild der ESP32-Zentrale, animiert: Anzeige 'WIFI connected')
 # ----------------------------------------------------------------------------------------------
 """Web-Oberflaeche (NiceGUI) fuer den Programmgenerator.
 
@@ -349,7 +369,7 @@ REQUIRED_FILES = {  # v1.75
     # "proggen/M06_Write_Header.py": "1.04", "proggen/M20_PageEvents_a_Functions.py": "1.04", "vb2py/vbfunctions.py": "1.01", "proggen/M18_Save_Load.py": "1.04",  # v2.24 (entfallen)
     # "proggen/M06_Write_Header.py": "1.04", "proggen/M20_PageEvents_a_Functions.py": "1.05", "vb2py/vbfunctions.py": "1.01", "proggen/M18_Save_Load.py": "1.04",  # v2.27 (entfallen)
     # "proggen/M06_Write_Header.py": "1.04", "proggen/M20_PageEvents_a_Functions.py": "1.06", "vb2py/vbfunctions.py": "1.01", "proggen/M18_Save_Load.py": "1.04",  # v2.54 (entfallen)
-    "proggen/M06_Write_Header.py": "1.08", "proggen/M20_PageEvents_a_Functions.py": "1.08", "vb2py/vbfunctions.py": "1.01", "proggen/M18_Save_Load.py": "1.04", "proggen/M06_Write_Header_SW.py": "1.06", "fast_paths.py": "1.01", "proggen/UserForm_Options.py": "1.05",  # v2.54  # v3.56
+    "proggen/M06_Write_Header.py": "1.08", "proggen/M20_PageEvents_a_Functions.py": "1.08", "vb2py/vbfunctions.py": "1.01", "proggen/M18_Save_Load.py": "1.04", "proggen/M06_Write_Header_SW.py": "1.06", "proggen/M18_Save_Load.py": "1.05", "_web/web_log.py": "1.07", "proggen/M20_PageEvents_a_Functions.py": "1.11", "proggen/M03_Dialog.py": "1.03", "_web/web_layout.py": "1.17", "_web/web_form_options.py": "1.28", "_web/web_tabs.py": "1.21", "proggen/M08_ARDUINO.py": "1.21", "_web/web_z21.py": "1.04", "_web/web_dcckeyboard.py": "1.03", "headless/headless_gridmodel.py": "1.07", "fast_paths.py": "1.01", "proggen/M20_PageEvents_a_Functions.py": "1.10", "proggen/Userform_Other.py": "1.03", "_web/web_firewall.py": "1.04", "_web/web_esp32_ota.py": "1.05", "proggen/UserForm_Options.py": "1.05",  # v2.54  # v3.56
     "proggen/M18a_Load_PicoConfig.py": "1.01", "proggen/M17_Import_old_Data.py": "1.01",  # v1.75
     # "proggen/M02_Public.py": "1.01", "proggen/M02a_Public.py": "1.01", "proggen/M03_Dialog.py": "1.01", "proggen/M06_Write_Header_LED2Var.py": "1.01", "proggen/M06_Write_Header_SW.py": "1.01", "proggen/M07_COM_Port.py": "1.02", "proggen/M09_Language.py": "1.01", "proggen/M10_Par_Description.py": "1.01", "proggen/M30_Tools.py": "1.01", "proggen/M32_DCC.py": "1.01", "proggen/M38_Extensions.py": "1.01", "proggen/clsExtension.py": "1.01", "proggen/Userform_Other.py": "1.01", "_web/web_form_other.py": "1.04",  # v1.99 (entfallen)
     # "proggen/M02_Public.py": "1.01", "proggen/M02a_Public.py": "1.01", "proggen/M03_Dialog.py": "1.01", "proggen/M06_Write_Header_LED2Var.py": "1.01", "proggen/M06_Write_Header_SW.py": "1.02", "proggen/M07_COM_Port.py": "1.02", "proggen/M09_Language.py": "1.01", "proggen/M10_Par_Description.py": "1.02", "proggen/M30_Tools.py": "1.01", "proggen/M32_DCC.py": "1.01", "proggen/M38_Extensions.py": "1.01", "proggen/clsExtension.py": "1.01", "proggen/Userform_Other.py": "1.01", "_web/web_form_other.py": "1.04",  # v2.00 (entfallen)
@@ -1061,7 +1081,8 @@ def cell_renderer_js(bridge_id: int) -> str:
             # "if (params.value) box.append(' '); } "  # v2.77 (entfallen)
             "} "  # v2.77
             "const v = (params.valueFormatted !== undefined && params.valueFormatted !== null) ? params.valueFormatted : params.value; "
-            "if (v !== undefined && v !== null) { box.style.whiteSpace = 'pre-line'; box.append(String(v)); } "
+            # "if (v !== undefined && v !== null) { box.style.whiteSpace = 'pre-line'; box.append(String(v)); } "  # v3.71 (entfallen)
+            "if (v !== undefined && v !== null) { box.style.whiteSpace = params.node.rowPinned ? 'pre-line' : 'nowrap'; box.append(String(v)); } "  # v3.71
             "const tb = params.data && params.data._tb && params.data._tb[params.colDef.field]; "
             "if (tb) { box.style.display = 'flex'; box.style.alignItems = 'center'; "
             "const holder = document.createElement('span'); holder.style.marginLeft = tb[0].lead ? 'auto' : '0'; holder.style.whiteSpace = 'nowrap'; "
@@ -1209,7 +1230,7 @@ def font_scales(ctrl) -> dict:
 # VERSION = "3.60 (2026-11-16)"  # v3.60 (entfallen)
 # VERSION = "3.61 (2026-11-16)"  # v3.61 (entfallen)
 # VERSION = "3.62 (2026-11-16)"  # v3.62 (entfallen)
-VERSION = "3.65 (2026-11-16)"  # v3.64
+VERSION = "3.85 (2026-11-17)"  # v3.64
 # VERSION = "3.23 (2026-11-12)"  # v3.24 (entfallen)
 # VERSION = "3.22 (2026-11-12)"  # v3.23 (entfallen)
 # VERSION = "3.21 (2026-11-12)"  # v3.22 (entfallen)
@@ -1700,21 +1721,23 @@ def font_css(ctrl) -> str:
     return (":root{--mll-title-scale:%.3f;--mll-label-scale:%.3f;--mll-input-scale:%.3f;--mll-grid-scale:%.3f;"
             "--mll-small-scale:%.3f;--mll-grid-font:'%s';}" % (s["title"], s["label"], s["input"], s["grid"], s["small"], s["name"]))
 
-JS_ROW_HEIGHT = ("params => Math.round((params.node.rowPinned ? "
-                 "(params.data && params.data._r === 0 ? 18 : 46) : (22 * (params.data?._lines || 1))) * (window.mllGridScale || 1))")
+# JS_ROW_HEIGHT = ("params => Math.round((params.node.rowPinned ? "  # v3.71 (entfallen)
+#                  "(params.data && params.data._r === 0 ? 18 : 46) : (22 * (params.data?._lines || 1))) * (window.mllGridScale || 1))")  # v3.71 (entfallen)
+JS_ROW_HEIGHT = ("params => Math.round((params.node.rowPinned ? "  # v3.71: eine Zeile je Datenzeile (kein Zeilenumbruch mehr)
+                 "(params.data && params.data._r === 0 ? 18 : 46) : 22) * (window.mllGridScale || 1))")  # v3.71
 
 JS_DBLCLICK = """
 <script>
 // Doppelklick auf Name und Beleuchtung (Spalten und erste Datenzeile setzt der Server in window.mllDbl): Makroauswahl statt Bearbeiten.
 // Schalter in den Programm Einstellungen (Standard aus). Die Capture-Phase faengt das Ereignis vor AG Grid ab, sonst startet das Bearbeiten.
-window.mllDbl = {on: false, cols: [], first: 0};
+window.mllDbl = {on: false, cols: [], typeCol: null, first: 0};  // v3.71
 document.addEventListener('dblclick', function (e) {
   const d = window.mllDbl;
-  if (!d || !d.on) return;
+  if (!d) return;   // v3.71
   const cell = e.target && e.target.closest ? e.target.closest('.ag-cell') : null;
   if (!cell || cell.classList.contains('ag-cell-inline-editing')) return;          // im Editor selbst nichts abfangen
   const col = cell.getAttribute('col-id');
-  if (!col || d.cols.indexOf(col) < 0) return;
+  if (!col || (col !== d.typeCol && (!d.on || !d.cols.includes(col)))) return;   // v3.71: die Spalte Typ oeffnet immer die Typauswahl
   const row = cell.closest('.ag-row');
   const r = row ? parseInt(row.getAttribute('row-id'), 10) : NaN;
   if (isNaN(r) || r < d.first) return;
@@ -1956,12 +1979,18 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
         view_toggle.set_visibility(False)                       # nur fuer Datenblaetter  # v2.29
         find_hooks = {"marks": None}  # v3.28: wird von der Suche gesetzt (Markierung der Treffer nach Blattwechsel)
         with ui.row().classes("items-center gap-1 mll-find no-wrap").style("border: 1px solid rgba(128, 128, 128, 0.6); border-radius: 6px; padding: 0 6px; background: rgba(128, 128, 128, 0.12)") as find_row:  # v3.28: Suche ueber die ganze Tabelle; v3.29: Rahmen und Hintergrund um alle Felder
-            find_input = ui.input(placeholder=tr("Suchen (Strg+F)")).props("dense outlined clearable").classes("mll-find-input").style("width: 130px")  # v3.28 / v3.30 schmaler
-            find_prev = ui.button(icon="keyboard_arrow_up").props("flat dense round size=sm").tooltip(tr("Voriger Treffer (Umschalt+Eingabetaste)"))  # v3.28
-            find_next = ui.button(icon="keyboard_arrow_down").props("flat dense round size=sm").tooltip(tr("Nächster Treffer (Eingabetaste)"))  # v3.28
-            find_count = ui.label("").classes("text-caption").style("white-space: nowrap; min-width: 40px; text-align: center")  # v3.28 / v3.30 schmaler
-            find_word = ui.checkbox(tr("Wort")).props("dense").tooltip(tr("Ganzes Wort"))  # v3.28 / v3.30 kurze Beschriftung, Erklaerung als Hinweis
-            find_all = ui.checkbox(tr("Alle")).props("dense").tooltip(tr("Alle Blätter"))  # v3.28 / v3.30 kurze Beschriftung, Erklaerung als Hinweis
+            # (die Elemente der Suche lagen direkt in find_row)  # v3.75
+            # v3.76: normal zwei Spalten: links Suchfeld und darunter Wort/Alle, rechts die Pfeile und darunter der Zaehler; kompakt (CSS display: contents) wie frueher eine Zeile
+            with ui.column().classes("items-start gap-0 no-wrap mll-find-left"):  # v3.76
+                find_input = ui.input(placeholder=tr("Suchen (Strg+F)")).props("dense outlined clearable").classes("mll-find-input").style("width: 130px")  # v3.28 / v3.30 schmaler
+                with ui.row().classes("items-center gap-1 no-wrap mll-find-checks"):  # v3.76
+                    find_word = ui.checkbox(tr("Wort")).props("dense").classes("mll-find-chk").tooltip(tr("Ganzes Wort"))  # v3.28 / v3.30 kurze Beschriftung, Erklaerung als Hinweis
+                    find_all = ui.checkbox(tr("Alle")).props("dense").classes("mll-find-chk").tooltip(tr("Alle Blätter"))  # v3.28 / v3.30 kurze Beschriftung, Erklaerung als Hinweis
+            with ui.column().classes("items-center gap-0 no-wrap mll-find-right"):  # v3.76
+                with ui.row().classes("items-center gap-1 no-wrap mll-find-arrows"):  # v3.76
+                    find_prev = ui.button(icon="keyboard_arrow_up").props("flat dense round size=sm").classes("mll-find-btn").tooltip(tr("Voriger Treffer (Umschalt+Eingabetaste)"))  # v3.28
+                    find_next = ui.button(icon="keyboard_arrow_down").props("flat dense round size=sm").classes("mll-find-btn").tooltip(tr("Nächster Treffer (Eingabetaste)"))  # v3.28
+                find_count = ui.label("").classes("text-caption mll-find-count").style("white-space: nowrap; min-width: 40px; text-align: center")  # v3.28 / v3.30 schmaler
         find_row.set_visibility(False)                          # nur fuer Datenblaetter  # v3.28
         import proggen.M39_Simulator as M39                     # v3.56
         sim_btn = {"b": None}                                   # v3.58: der Knopf Setup simulieren (wird mit der Werkzeugleiste angelegt)
@@ -1998,7 +2027,7 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
         # sim_select.on_value_change(on_sim_mode)  # v3.56  # v3.58 (entfallen)
         # apply_sim_select()  # v3.56  # v3.58 (entfallen)
         ui.space()  # v2.01
-        lib_version_label = ui.label("").classes("text-caption mll-libver").style("white-space: nowrap; align-self: center")             # Version der MobaLedLib wie in Excel: Ver.3.5.0-K  # v2.01
+        # lib_version_label = ui.label("").classes("text-caption mll-libver").style("white-space: nowrap; align-self: center")             # Version der MobaLedLib wie in Excel: Ver.3.5.0-K  # v2.01  # v3.78 (entfallen: steht jetzt unter dem Knopf Beenden)
 
     def sync_all_sheets():
         for sheet in list(wb.sheets):
@@ -2168,10 +2197,15 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
         ui.space()
         status_label = ui.label("").classes("mll-status")         # Meldung des Programms: verschwindet nach einigen Sekunden
         conn_label = ui.label("").classes("text-caption mll-conn")        # Verbindung zum Arduino: bleibt stehen
-        connect_btn = ui.button("Mit ARDUINO verbinden", on_click=lambda: connect_from_header()).props("unelevated no-caps dense color=negative").classes("mll-connect")      # fuer alle Reiter: rot ohne, gruen mit Verbindung zum Arduino  # v2.01
-        connect_btn.tooltip("Verbindung zum Arduino herstellen (wie ARDUINO → Verbinden). Rot: keine Verbindung, grün: verbunden. Trennen: Menü ARDUINO → Trennen")  # v2.01
+        # connect_btn = ui.button("Mit ARDUINO verbinden", on_click=lambda: connect_from_header()).props("unelevated no-caps dense color=negative").classes("mll-connect")      # fuer alle Reiter: rot ohne, gruen mit Verbindung zum Arduino  # v2.01  # v3.83 (entfallen)
+        connect_btn = ui.button(tr("Mit Lichtmaschine verbinden"), on_click=lambda: connect_from_header()).props("unelevated no-caps dense color=negative").classes("mll-connect")      # fuer alle Reiter: rot ohne, gruen mit Verbindung zum Arduino  # v2.01  # v3.83
+        # connect_btn.tooltip("Verbindung zum Arduino herstellen (wie Lichtmaschine → Verbinden). Rot: keine Verbindung, grün: verbunden. Trennen: Menü Lichtmaschine → Trennen")  # v2.01  # v3.83  # v3.84 (entfallen)
+        connect_btn.tooltip("Verbindung zur Lichtmaschine herstellen (wie ARDUINO → Verbinden). Rot: keine Verbindung, grün: verbunden. Trennen: Menü ARDUINO → Trennen")  # v2.01  # v3.83
         web_fullscreen.button()                                       # Vollbild ein und aus: neben Beenden, in jedem Reiter erreichbar und auch im Vollbild sichtbar  # v1.81
-        ui.button("Beenden", on_click=quit_program, icon="power_settings_new").props("color=negative outline dense").classes("mll-quit")
+        # ui.button("Beenden", on_click=quit_program, icon="power_settings_new").props("color=negative outline dense").classes("mll-quit")  # v3.78 (entfallen)
+        with ui.column().classes("items-end gap-0 mll-quitcol"):  # v3.78: unter dem Knopf Beenden die Version der MobaLedLib (nur mit der ARDUINO IDE)
+            ui.button("Beenden", on_click=quit_program, icon="power_settings_new").props("color=negative outline dense").classes("mll-quit")  # v3.78
+            lib_version_label = ui.label("").classes("text-caption mll-libver").style("white-space: nowrap; line-height: 1.1")  # v3.78 (Version der MobaLedLib wie in Excel: Ver.3.5.0-K)
 
     STATUS_TTL = 10.0                                             # Sekunden, die eine Meldung nach der letzten Aenderung stehen bleibt
     STATUS_COLORS = {"green": "#2e7d32", "red": "#c62828", "orange": "#ef6c00", "blue": "#1565c0", "darkgreen": "#1b5e20"}
@@ -2198,7 +2232,8 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
             connected = False  # v2.01
         if state.get("connected_shown") != connected:                   # Knopf Mit ARDUINO verbinden: rot ohne Verbindung, gruen mit Verbindung  # v2.01
             state["connected_shown"] = connected  # v2.01
-            connect_btn.set_text("Mit ARDUINO verbunden" if connected else "Mit ARDUINO verbinden")  # v2.01
+            # connect_btn.set_text("Mit ARDUINO verbunden" if connected else "Mit ARDUINO verbinden")  # v2.01  # v3.83 (entfallen)
+            connect_btn.set_text(tr("Mit Lichtmaschine verbunden") if connected else tr("Mit Lichtmaschine verbinden"))  # v3.83
             connect_btn.props("color=positive" if connected else "color=negative")  # v2.01
         # state["libver_tick"] = state.get("libver_tick", 0) + 1  # v2.02 (entfallen)
         # if state["libver_tick"] % 10 == 1:                              # Version der MobaLedLib rechts in der Knopfzeile (alle 5 Sekunden neu lesen: nach einer Installation aendert sie sich)  # v2.02 (entfallen)
@@ -2211,8 +2246,15 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
         except Exception:                                  # noqa: BLE001  # v2.01
             ver = ""  # v2.01
         text = ("Ver." + ver) if ver else ""  # v2.01
+        try:  # v3.78: mit PlatformIO ist die Version der Bibliothek im Arduino Ordner nicht massgebend (PlatformIO nimmt die eigene Kopie) -> ausblenden
+            import proggen.M28_Diverse as M28_pio  # v3.78
+            if M28_pio.Is_PlatformIO():  # v3.78
+                text = ""  # v3.78
+        except Exception:                                  # noqa: BLE001  # v3.78
+            logger.debug("Is_PlatformIO nicht ermittelbar", exc_info=True)  # v3.78
         if lib_version_label.text != text:  # v2.01
             lib_version_label.set_text(text)  # v2.01
+        lib_version_label.set_visibility(bool(text))  # v3.78
 
     update_lib_version()                                   # Version der MobaLedLib rechts in der Knopfzeile: beim Aufbau der Seite, nach der Pruefung beim Start und nach jedem Befehl (zum Beispiel einer Installation der Bibliotheken) lesen, nicht laufend  # v2.02
     ui.timer(0.5, refresh_status)
@@ -2859,19 +2901,21 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
 
     def update_dbl(ws, force=False):
         """Dem Browser sagen, ob und in welchen Spalten ein Doppelklick die Makroauswahl oeffnet (nur Datenblaetter, Schalter in den Einstellungen)."""
-        cols, first = [], 0
+        # cols, first = [], 0  # v3.71 (entfallen)
+        cols, type_col, first = [], None, 0  # v3.71
         try:
             if M28.Is_Data_Sheet(ws):
                 M25.Make_sure_that_Col_Variables_match(ws)
                 cols = [f"c{int(M25.LanName_Col) - 1}", f"c{int(M25.Config__Col) - 1}"]
+                type_col = f"c{int(M25.Inp_Typ_Col) - 1}"  # v3.71
                 first = int(M02.FirstDat_Row) - 1
         except Exception:                                    # noqa: BLE001
             logger.debug("Spalten fuer den Doppelklick nicht ermittelbar", exc_info=True)
         on = bool(cols) and web_layout.get_dblclick(ctrl)
-        key = (on, tuple(cols), first)
+        key = (on, tuple(cols), type_col, first)  # v3.71
         if key != dbl_sent["key"] or force:
             dbl_sent["key"] = key
-            ui.run_javascript("window.mllDbl = %s;" % json.dumps({"on": on, "cols": cols, "first": first}))
+            ui.run_javascript("window.mllDbl = %s;" % json.dumps({"on": on, "cols": cols, "typeCol": type_col, "first": first}))  # v3.71
 
     def is_libraries_sheet(ws) -> bool:
         return ws.Name == M02.LIBRARYS__SH
@@ -2879,6 +2923,21 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
     def library_select_column() -> int:
         """0-basierter Index der Spalte "Select" des Blatts Libraries (dort steht der Haken der zu installierenden Zeilen)"""
         return int(M37.SelectRow_Col) - 1
+
+    def readonly_columns(ws):  # v3.72
+        """0-basierte Indizes der Spalten eines Datenblatts, die nicht von Hand bearbeitet werden: Symbol, Aktiv (Haken: Klick oder Leertaste)
+        und alle Spalten ab LED Nr (vom Programm berechnet, wie in Excel gesperrt). Sonst leere Menge."""  # v3.72
+        try:  # v3.72
+            if M28.Is_Data_Sheet(ws):  # v3.72
+                M25.Make_sure_that_Col_Variables_match(ws)  # v3.72
+                cols = set(range(int(M25.LED_Nr__Col) - 1, 1024))  # v3.72
+                cols.add(int(M02.Enable_Col) - 1)  # v3.72
+                if int(M25.MacIcon_Col) > 0:  # v3.72
+                    cols.add(int(M25.MacIcon_Col) - 1)  # v3.72
+                return cols  # v3.72
+        except Exception:                        # noqa: BLE001  # v3.72
+            logger.debug("Schreibgeschuetzte Spalten nicht ermittelbar", exc_info=True)  # v3.72
+        return set()  # v3.72
 
     def enable_column(ws):
         """0-basierter Index der Spalte "Aktiv" (Haken) eines Datenblatts, beim Blatt Libraries der Spalte "Select"."""
@@ -3319,7 +3378,8 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
         shown_rows = getattr(ws.tksheet, "displayed_rows", None)                  # Breite der Zeilennummer nach der groessten angezeigten Nummer (_r + 1)  # v1.96
         max_row_number = (max(shown_rows) + 1) if shown_rows else len(getattr(ws.tksheet, "data", None) or [])  # v1.96
         column_defs, rows, pinned, meta = build_grid(ws.tksheet, collect_icons(ws),
-                                                     no_edit_cols={ic} if ic is not None else None,
+                                                     # no_edit_cols={ic} if ic is not None else None,  # v3.72 (entfallen)
+                                                     no_edit_cols=(readonly_columns(ws) or ({ic} if ic is not None else None)),  # v3.72
                                                      check_cols={ec} if ec is not None else None,
                                                      max_col=last_column(ws), tooltip_cols=tooltip_columns(ws),
                                                      test_buttons=test_button_data(ws),  # v1.96
@@ -3334,8 +3394,8 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
                 if column.get("field") == config_field:
                     column.update(cellEditor="agLargeTextCellEditor", cellEditorPopup=True,
                                   cellEditorParams={"rows": 8, "cols": 65, "maxLength": 20000})
-            for row in rows:
-                row["_lines"] = len(str(row.get(config_field) or "").splitlines()) or 1
+            # for row in rows:  # v3.71 (entfallen)
+            #     row["_lines"] = len(str(row.get(config_field) or "").splitlines()) or 1  # v3.71 (entfallen)
         t_build = time.perf_counter()  # v1.49
         if SHAPES_DEBUG:  # v1.51
             logger.info("SHAPES: show(%s): %s | Zeilen mit Testtasten %s | Zeilen mit Symbol %s", ws.Name, shapes_report(ws),  # v1.51
@@ -3396,8 +3456,8 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
                     grid.run_grid_method("setGridOption", "pinnedTopRowData", pinned)
                 if changed_rows:
                     grid.run_grid_method("applyTransaction", {"update": changed_rows})
-                    if any(r.get("_lines") != old_by_id[r["_r"]].get("_lines") for r in changed_rows):
-                        grid.run_grid_method("resetRowHeights")
+                    # if any(r.get("_lines") != old_by_id[r["_r"]].get("_lines") for r in changed_rows):  # v3.71 (entfallen)
+                    #     grid.run_grid_method("resetRowHeights")  # v3.71 (entfallen)
                     refresh_cols = renderer_columns(changed_rows) | renderer_columns([old_by_id[r["_r"]] for r in changed_rows])  # v1.50
                     refresh_cols |= style_columns(old_rows, changed_rows)  # Farben, die sich geaendert haben (Zeilen faerben)  # v2.23
             else:                                          # Zeilen eingefuegt/geloescht/ausgeblendet: alle Zeilen austauschen
@@ -3639,6 +3699,7 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
         """Wie das tksheet-Ereignis all_select_events: ruft Worksheet_SelectionChange der Makros auf. Dabei wird auch
         die globale Selection der Excel-Schicht gesetzt, die z. B. M23.Proc_Copy_Row (P01.Selection.Row) liest."""
         if state["busy"]:
+            logger.info("Klick auf Zelle ignoriert: Programm ist beschaeftigt (Blatt %s)", getattr(ws, "Name", "?"))  # v3.70
             return
         try:
             if not M28.Is_Data_Sheet(ws):         # die Ereignisse (Worksheet_SelectionChange) gibt es nur auf Datenblaettern;
@@ -3733,6 +3794,13 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
         if is_libraries_sheet(ws0) and c == library_select_column() and r + 1 >= int(M37.First_Dat_Row) and not state["busy"]:
             await toggle_library_select(ws0, r, c)           # wie Is_Libraries_Select_Column im Excel-Original
             return
+        ws_ = state["ws"]  # v3.72
+        if c == enable_column(ws_) and not is_libraries_sheet(ws_):  # v3.72: Doppelklick auf den Haken (Spalte Aktiv) zaehlt wie ein Einzelklick
+            now = time.monotonic()  # v3.72
+            last = state.get("enable_click")  # v3.72
+            state["enable_click"] = (r, c, now)  # v3.72
+            if last and last[0] == r and last[1] == c and now - last[2] < 0.5:  # v3.72
+                return  # v3.72: zweiter Klick des Doppelklicks
         await fire_selection_event(state["ws"])
         ws_ = state["ws"]
         if not state["busy"] and c == icon_column(ws_) and r + 1 >= M02.FirstDat_Row:
@@ -3855,6 +3923,10 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
             return
         row = int(a["data"]["_r"]) + 1
         col = int(event_col_id(a)[1:]) + 1
+        if row - 1 < first_data_row0() or col - 1 in readonly_columns(ws):  # v3.72: Kopfzeilen und berechnete Spalten werden nicht von Hand geaendert
+            logger.info("Eingabe in %s!%s,%s abgelehnt (schreibgeschuetzt)", ws.Name, row, col)  # v3.72
+            show(ws)  # v3.72
+            return  # v3.72
 
         new_value = a["newValue"]
         if new_value is None:                    # Zelle im Grid geleert (null) -> wie Excel: leerer Text
@@ -4185,15 +4257,35 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
                 menu_row("Farbe entfernen")
 
     async def on_dblmacro(e):
-        """Doppelklick auf Name oder Beleuchtung (nur mit dem Schalter in den Programm Einstellungen): wie in Excel die Makroauswahl"""
+        # """Doppelklick auf Name oder Beleuchtung (nur mit dem Schalter in den Programm Einstellungen): wie in Excel die Makroauswahl"""  # v3.71 (entfallen)
+        """Doppelklick auf Typ, Name oder Beleuchtung."""  # v3.71
         a = e.args or {}
-        if state["busy"] or not web_layout.get_dblclick(ctrl):
+        # if state["busy"] or not web_layout.get_dblclick(ctrl):  # v3.71 (entfallen)
+        if state["busy"]:  # v3.71
             return
         try:
             r, c = int(a["r"]), int(str(a["col"])[1:])
         except (KeyError, TypeError, ValueError):
             return
         ws_ = state["ws"]
+        if not M28.Is_Data_Sheet(ws_) or r + 1 < M02.FirstDat_Row:  # v3.71
+            return  # v3.71
+        M25.Make_sure_that_Col_Variables_match(ws_)  # v3.71
+        if c + 1 == M25.Inp_Typ_Col:  # v3.71: Doppelklick auf Typ: Typauswahl (Beitrag moosbewohner, PR 5)
+            def choose_type():  # v3.71
+                ws_.Activate()  # v3.71
+                if not M25.Address_starts_with_a_Number(r + 1):  # v3.73: noch keine Adresse: statt nichts zu tun den Dialog der Adress-Spalte starten
+                    import proggen.F00_mainbuttons as F00_adr  # v3.73
+                    X02.Cells(r + 1, int(M25.DCC_or_CAN_Add_Col) or int(M25.SX_Channel_Col)).Select()  # v3.73
+                    F00_adr.Dialog_Button_Click()  # v3.73: wie der Knopf Dialog mit der Zelle der Adress-Spalte
+                    return  # v3.73
+                M20.Select_Typ_by_Dialog(X02.Cells(r + 1, c + 1))  # v3.71
+
+            await run_in_worker(choose_type)  # v3.71
+            show(ws_)  # v3.71
+            return  # v3.71
+        if not web_layout.get_dblclick(ctrl) or c + 1 not in (M25.LanName_Col, M25.Config__Col):  # v3.71
+            return  # v3.71
         ws_.tksheet.set_selection(cells={(r, c)}, current=(r, c))
         await fire_selection_event(ws_)
         await open_macro_dialog(ws_)
@@ -4788,10 +4880,13 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
                 ui.button("Wiederherstellen (W)", on_click=lambda: dlg.submit("restore")).props("color=primary data-key=W").classes("mll-default")
         choice = await dlg
         web_dialogs.safe_delete(dlg)
+        logger.info("Zwischengespeicherter Stand vom %s: Auswahl %s", when, choice)  # v3.70
         if choice == "restore":
             await run_command(lambda: wb.Load(filename=path), "Wiederherstellen", live=False)()
         else:
             remove_autosave()
+            M25.Col_from_Sheet = ''  # v3.70: Spaltennummern des aktiven Blatts neu einlesen
+            _AUTOSAVE["sig_saved"] = None  # v3.70
 
     import proggen.M06_Write_MLLConfig as M06cfg
     # connect_arduino = run_command(lambda: ctrl.connect(), "Verbinden")          # Menuepunkt ARDUINO -> Verbinden und die Taste Verbinden der Seite Servo Test 1  # v2.01 (entfallen)
@@ -5038,7 +5133,8 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
             ("Tabelle neu berechnen", run_command(recalc_table, "Tabelle neu berechnen")),  # v2.11
             ("Tabelle reparieren (Symbole und Testtasten neu aufbauen) ...", run_command(repair_table, "Tabelle reparieren")),  # v2.11
         ],
-        "ARDUINO": [
+        # "ARDUINO": [  # v3.84 (entfallen)
+        "Lichtmaschine": [  # v3.84
             ("ESP32-Firmware über WLAN hochladen …", lambda: web_esp32_ota.open_dialog(pio=ota_arduino.Find_PIO() if ota_options.Is_PlatformIO() else None)),
             ("Verbinden", connect_arduino),  # v1.86
             ("Trennen", run_command(lambda: ctrl.disconnect(), "Trennen")),
@@ -5058,7 +5154,7 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
                           ("Raspberry Pi neu starten ...", lambda: power_action(True))]
     with menu_slot:
         for title, items in MENU.items():
-            with ui.button(title).props("flat no-caps dense").classes("q-px-sm"):
+            with ui.button(tr(title)).props("flat no-caps dense").classes("q-px-sm"):
                 with ui.menu():
                     for entry in items:
                         if entry is None:

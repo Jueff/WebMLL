@@ -1,14 +1,15 @@
-# Datei-Version: 1.06 (2026-11-14) - web_colorcheck.py
+# Datei-Version: 1.07 (2026-11-16) - web_colorcheck.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_colorcheck.py
 # Path:           _web/web_colorcheck.py
-# Version:        1.06
-# Last Update:    2026-11-14
+# Version:        1.07
+# Last Update:    2026-11-16
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
 #   1.05  2026-11-05  Beschreibungstext der Seite wird uebersetzt (description_text) (fruehere Versionen ohne Eintrag)
 #   1.06  2026-11-14  Dialog Farbpalette: Reihenfolge Ja, Nein, Abbrechen
+#   1.07  2026-11-16  Protokoll: wird die LED-Nummer oder Anzahl auf die Zahl der LEDs der Lichtmaschine (Startmeldung) begrenzt, steht das im Protokoll
 # ----------------------------------------------------------------------------------------------
 """Web-Version der Seite "Farb Test" (ColorCheckPage + ColorWheel + LightGradientBar ohne Tk).
 
@@ -385,6 +386,7 @@ class ColorCheckModel:
         """_update_led_num"""
         self.lednum = int(led)
         if self.lednum + self.ledcount > self._max_led():
+            logger.info("Farbtest: LED-Nummer %s mit %s LED(s) begrenzt, die Lichtmaschine meldet %s LEDs (hoechste Nummer %s)", self.lednum, self.ledcount, self._max_led(), self._max_led() - 1)  # v1.07
             self.lednum = self._max_led() - self.ledcount
         self.highlight_led(self.lednum, self.ledcount, self.ledchannel)
 
@@ -396,6 +398,7 @@ class ColorCheckModel:
         """_update_led_count"""
         self.ledcount = max(int(count), 1)
         if self.lednum + self.ledcount > self._max_led():
+            logger.info("Farbtest: LED-Anzahl %s ab LED %s begrenzt, die Lichtmaschine meldet %s LEDs", self.ledcount, self.lednum, self._max_led())  # v1.07
             self.ledcount = self._max_led() - self.lednum
         self.highlight_led(self.lednum, self.ledcount, self.ledchannel)
 

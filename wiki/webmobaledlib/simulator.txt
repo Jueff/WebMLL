@@ -1,0 +1,63 @@
+====== webMobaLedLib – LED Simulator ======
+//Seitenstand 1.01 (2026-11-16), gilt für webMobaLedLib 3.59//
+
+Der **LED Simulator** zeigt auf dem Bildschirm, **wie deine LEDs leuchten würden**, ohne dass eine Lichtmaschine angeschlossen ist. Du siehst Effekte, Farben und Blinkmuster **sofort** und kannst die **Testtasten** der Tabelle benutzen, als wäre die Anlage da.
+
+**Nicht verwechseln:** Der [[anleitungen:webmobaledlib:wz_z21|Z21 Simulator]] ist etwas ganz anderes. Er steuert die Lichtmaschine aus einem Modellbahnprogramm. Der **LED Simulator** auf dieser Seite ersetzt die Lichtmaschine.
+
+===== Wie funktioniert er? =====
+
+Der Simulator führt **dasselbe Programm** aus wie die Lichtmaschine. Dazu übersetzt das Programm deine Tabelle, wie beim Übertragen, aber **ohne** sie auf eine Lichtmaschine zu laden. Die Konfiguration geht stattdessen an die Simulator-Bibliothek, die auf dem Computer rechnet. Die Farben der LEDs erscheinen als runde Punkte.
+
+Der Simulator zeigt **nur die LEDs**. Servos und Sound gibt es dort nicht.
+
+===== Was du brauchst =====
+
+  * Die Tabelle mit mindestens einem Effekt.
+  * Die **Entwicklungsumgebung** zum Übersetzen, wie beim normalen [[anleitungen:webmobaledlib:pg_arduino|Übertragen]]: PlatformIO oder die ARDUINO IDE.
+  * **Windows:** Nichts weiter. Der Simulator ist als Datei **MobaLedLibWrapper.dll** dabei und zeichnet ein **eigenes Fenster**.
+  * **Linux (auch Raspberry Pi):** Die Bibliothek **libMobaLedLibWrapper.so** liegt für x86_64 bei. Auf anderen Prozessoren (zum Beispiel Raspberry Pi) baut das Programm sie beim ersten Start selbst. Dafür braucht es den **C++-Übersetzer**: ''sudo apt install build-essential''. Die **LEDs** erscheinen **im Browser**. Zum Übersetzen der Konfiguration nutzt das Programm die AVR-Werkzeuge von **PlatformIO** (Pakete //toolchain-atmelavr// und //framework-arduino-avr//) oder der ARDUINO IDE.
+  * **macOS:** Der Simulator ist dort noch nicht verfügbar.
+
+===== Einschalten =====
+
+Der Knopf zum Simulieren ist normalerweise **ausgeblendet**:
+
+  - Öffne **Programm Einstellungen**, Gruppe **Spezialeinstellungen**.
+  - Setze den Haken **Simulator anzeigen** und sichere die Einstellungen.
+  - In der Werkzeugleiste erscheint **neben „Setup übertragen“** der Knopf **Setup simulieren**.
+
+^ Knopf ^ Wirkung ^
+| **Setup übertragen** | Wie immer: die Konfiguration geht an die Lichtmaschine. |
+| **Setup simulieren** | Die Konfiguration geht **nur an den Simulator**. Es wird **keine Lichtmaschine** gebraucht und nichts übertragen. Zum Ausprobieren ohne Hardware. |
+
+Der Knopf ändert **keine Einstellung**: Das nächste **Setup übertragen** geht wieder normal an die Lichtmaschine. Die frühere Simulator-Option der Konfigurationsseite des Excel-Programms wird mit dem Haken **nicht mehr beachtet**.
+
+**Die Umschalttaste (Shift)** brauchst du nicht.
+
+===== Benutzen =====
+
+  - Klicke auf **Setup simulieren**. Das Programm erzeugt die Konfiguration und übersetzt sie (beim ersten Mal dauert das einige Sekunden bis Minuten). Der Simulator öffnet sich.
+  - Klicke in der Tabelle auf die **Testtasten**: Die LEDs im Simulator reagieren wie die Anlage. Schalter und Taster werden mit ihren DCC-Adressen angesprochen.
+  - Änderst du die Tabelle, klicke wieder auf **Setup simulieren**: Der **offene Simulator wird aktualisiert**.
+  - Schließe ihn unter Windows mit dem Fenster, unter Linux mit dem **X** im Feld. Beim **Beenden des Programms** schließt er sich selbst.
+
+==== Die Anzeige ====
+
+  * **Windows:** Ein eigenes Fenster **Leds**. Ein **Doppelklick** ins Fenster wechselt die Darstellung (RGB, einzelne Farbpunkte, beides). Die Taste **N** schaltet die **LED-Nummern** ein und aus, **S** und **Z** wählen die Verdrahtung der Matrix (**Z**: Zeile für Zeile, **S**: Schlangenlinie). Das Fenster bleibt vorn.
+  * **Linux:** Ein **schwebendes Feld** unten rechts im Browser. Die Haken **LED-Nummern** und **S-Verdrahtung** entsprechen den Tasten **N** und **S**. Das **X** schließt den Simulator.
+
+Die Voreinstellung sind **8 × 8 LEDs**, die Punktgröße **24**, und die Anzeige beginnt bei **LED 1** (Versatz 1).
+
+===== Testtasten ohne Lichtmaschine =====
+
+Ist der Simulator offen und **keine Lichtmaschine verbunden**, schalten die Testtasten **nur den Simulator**. Das Programm fragt höchstens **einmal**, ob es sich mit der Lichtmaschine verbinden soll. Lehnst du ab oder gelingt es nicht, bleibt es dabei, **bis eine Verbindung besteht** oder du einen anderen Anschluss einträgst. Ist eine Lichtmaschine verbunden, gehen die Testtasten **an die Lichtmaschine und an den Simulator**.
+
+===== Wenn etwas nicht klappt =====
+
+^ Was passiert ^ Was hilft ^
+| Der Knopf **Setup simulieren** fehlt | Setze in den **Programm Einstellungen** (Spezialeinstellungen) den Haken **Simulator anzeigen** und sichere. |
+| Nichts geht auf, nur eine Meldung zum Übersetzen | Die **Werkzeuge** fehlen. Auf Linux brauchst du PlatformIO mit den AVR-Paketen oder die ARDUINO IDE. Die Meldung zeigt die letzten Zeilen der Ausgabe. Eigene Orte kannst du mit den Umgebungsvariablen ''MLL_AVR_BIN'' (Ordner mit ''avr-g++'') und ''MLL_AVR_PLATFORM'' (Ordner //framework-arduino-avr//) angeben. |
+| Auf Linux: kein Simulator, keine Meldung | Die Bibliothek fehlt für deinen Prozessor und es gibt keinen C++-Übersetzer. Installiere ''build-essential'' und starte das Programm neu. |
+| Die Testtasten fragen nach der Verbindung | Die Frage kommt höchstens einmal. Ohne Lichtmaschine lehnst du sie ab, dann schalten die Testtasten nur den Simulator. |
+| Die LEDs reagieren nicht auf die Testtasten | Klicke noch einmal auf **Setup simulieren**. Die Adresse der Taste muss zur Konfiguration passen. |

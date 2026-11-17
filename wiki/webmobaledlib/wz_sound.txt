@@ -1,0 +1,23 @@
+====== webMobaLedLib – Sound Test ======
+//Seitenstand 1.05 (2026-11-17), gilt für webMobaLedLib 3.85//
+
+Mit dem **Sound Test** probierst du das **MobaLedLib-Soundmodul** aus (die Soundplatine mit dem Baustein MP3-TF-16). Du wählst einen Ton aus und lässt ihn von der Lichtmaschine abspielen, ohne vorher ein Programm zu übertragen. So prüfst du, ob Anschluss und Lautsprecher funktionieren, und findest die Nummer des gewünschten Tons.
+
+{{:bilder:anleitungen:webmobaledlib:wz_03_sound.png?500|Der Reiter Sound Test}}
+
+===== So benutzt du ihn =====
+
+  - **Voraussetzung:** Auf der Lichtmaschine läuft **schon ein MobaLedLib-Programm** (bei einer **neuen** Lichtmaschine zuerst [[anleitungen:webmobaledlib:pg_arduino|übertragen]]). Du musst nicht vorher auf **Mit Lichtmaschine verbinden** klicken: Das Werkzeug **verbindet sich bei Bedarf selbst**. Es arbeitet im **Direktmodus** ([[anleitungen:webmobaledlib:pg_arduino#die_drei_arten_der_verbindung|Die drei Arten der Verbindung]]).
+  - Trage die **Soundmodul-Adresse** ein und den **LED Kanal**, an dem die Soundplatine angeschlossen ist.
+  - Stelle die **Impulslänge** ein. Das ist die Dauer des Signals, das den Ton startet.
+  - Die Werte **R**, **G** und **B** (die **Sound-Auswahl**) bestimmen den **Ton**. Probiere verschiedene Werte aus.
+  - Klicke auf **Sound an ARDUINO schicken**. Das Programm sendet den Wert und beendet das Signal nach der Impulslänge.
+
+Änderungen an **Adresse**, **Impulslänge**, **R**, **G** und **B** werden **gleich gesendet** (nach einer kurzen Pause beim Tippen).
+
+===== Gut zu wissen =====
+
+  * Wenn du den Reiter verlässt oder die Seite schließt, wird ein laufendes Signal beendet.
+  * Die Tastenkürzel Strg+R und Alt+R der Tk-Version gibt es nicht. (Strg+R lädt im Browser die Seite neu.)
+
+Mehr zum Sound: [[anleitungen:anwendungen:verwendung_jq6500|Verwendung des Soundmoduls JQ6500]], [[anleitungen:spezial:sound_hauptplatine|Soundmodule direkt an der Hauptplatine]].

@@ -1,9 +1,9 @@
-# Datei-Version: 1.20 (2026-11-15) - M08_ARDUINO.py
+# Datei-Version: 1.21 (2026-11-17) - M08_ARDUINO.py
 # ----------------------------------------------------------------------------------------------
 # Name:           M08_ARDUINO.py
 # Path:           proggen/M08_ARDUINO.py
-# Version:        1.20
-# Last Update:    2026-11-15
+# Version:        1.21
+# Last Update:    2026-11-17
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
@@ -28,6 +28,7 @@
 #   1.18  2026-11-14  Dialog 'Fehler bei der Ueberpruefung des angeschlossenen Arduino': Knoepfe Suchen / Weiter / Abbrechen (P01.MsgBoxLabelled), Text angepasst
 #   1.19  2026-11-14  Write_PIO_Project und PlatformIO-Projekt fuer OTA (Beitrag des Fork-Entwicklers)
 #   1.20  2026-11-15  Simulator-Betriebsart ueber M39.Get_Sim_Mode
+#   1.21  2026-11-17  Pruefung vor dem Hochladen: das gespeicherte Flag 'AutoDet' wird nicht mehr ausgewertet (kein automatisches Umstellen des Boards mehr; das Board wird mit dem Knopf 'Board und USB Port erkennen' eingestellt)
 # ----------------------------------------------------------------------------------------------
 # -*- coding: utf-8 -*-
 #
@@ -2100,7 +2101,10 @@ def Check_If_Arduino_could_be_programmed_and_set_Board_type(ComPortColumn, Build
         # remove leading "'"
         if len(BuildOptions)>0 and BuildOptions[0]=="'":
             BuildOptions = BuildOptions[1:]
-        AutoDetect = InStr(BuildOptions, M02.AUTODETECT_STR) > 0
+        # AutoDetect = InStr(BuildOptions, M02.AUTODETECT_STR) > 0  # v1.21 (entfallen)
+        AutoDetect = False  # v1.21: das gespeicherte Flag AutoDet wird nur noch aus den Optionen entfernt, nicht mehr ausgewertet
+        if InStr(BuildOptions, M02.AUTODETECT_STR) > 0:  # v1.21
+            BuildOptions = Trim(Replace(BuildOptions, M02.AUTODETECT_STR, ''))  # v1.21
         if AutoDetect:
             BuildOptions = Trim(Replace(BuildOptions, M02.AUTODETECT_STR, ''))
             if InStr(BuildOptions, M02.BOARD_NANO_OLD) or InStr(BuildOptions, M02.BOARD_UNO_NORM) > 0:

@@ -1,0 +1,1697 @@
+Datei-Version: 1.01 (2026-10-18) - HOC_Anwender.md
+Stand: webMobaLedLib 3.85
+
+# webMobaLedLib: Änderungen (Kurzfassung)
+
+Gilt ab Version 1.39. Neueste Version oben.
+
+## Version 3.85 (2026-11-17)
+
+Neue Funktionen:
+- Neues, animiertes Bild der ESP32-Zentrale.
+
+## Version 3.84 (2026-11-17)
+
+Neue Funktionen:
+- Das Menü „ARDUINO“ heißt jetzt „Lichtmaschine“.
+
+## Version 3.83 (2026-11-17)
+
+Neue Funktionen:
+- Optionen Werkzeuge: „Board und USB Port erkennen“ steht jetzt über „USB Port erkennen“.
+- Der Reiter „LED ARDUINO“ heißt „Lichtmaschine“, der Reiter „OTA“ heißt „WLAN (OTA)“.
+- Der Knopf „Mit ARDUINO verbinden“ heißt „Mit Lichtmaschine verbinden“; die zugehörigen Meldungen wurden angepasst.
+
+## Version 3.82 (2026-11-17)
+
+Neue Funktionen:
+- Der Knopf heißt „Board und USB Port erkennen“. Er sucht den angeschlossenen Arduino, stellt das erste gefundene Board ein und zeigt es im Fenster „USB Port erkennen“ zusammen mit dem Anschluss und den anderen gefundenen Boards. Dort kann es übernommen oder ein anderer Typ gewählt werden.
+
+Korrekturen:
+- Das in einer Datei gespeicherte Merkmal „AutoDet“ stellt das Board beim Hochladen nicht mehr automatisch um.
+
+## Version 3.81 (2026-11-17)
+
+Korrektur:
+- Der Knopf „Erkennen“ (Optionen Werkzeuge) braucht keinen vorher eingestellten USB Port und keinen Boardtyp mehr. Er sucht den angeschlossenen Arduino selbst an allen USB Anschlüssen und stellt Board und COM Port ein.
+
+## Version 3.80 (2026-11-17)
+
+Neue Funktionen:
+- Optionen Werkzeuge: Statt des Hakens „Automatisch erkennen“ gibt es den Knopf „Erkennen“. Er erkennt das angeschlossene Board (Nano alt oder neu, ESP32, Pico) einmalig am eingestellten COM Port und stellt es ein.
+- Der Eintrag „Typ von Arduino IDE benutzen“ entfällt.
+
+## Version 3.79 (2026-11-17)
+
+Neue Funktionen:
+- Die Symbole der Knöpfe Setup übertragen, Setup simulieren und Optionen Werkzeuge wurden überarbeitet.
+
+## Version 3.78 (2026-11-17)
+
+Korrekturen:
+- Die Version der MobaLedLib steht jetzt unter dem Knopf Beenden und braucht keinen Platz mehr in der Knopfzeile. Mit PlatformIO als Entwicklungsumgebung wird sie nicht angezeigt, weil sie dort nicht maßgebend ist.
+
+## Version 3.77 (2026-11-17)
+
+Korrekturen:
+- Die Suche hat dieselbe Farbe wie die Knöpfe der Werkzeugleiste und ist im normalen Layout genauso hoch.
+
+## Version 3.76 (2026-11-17)
+
+Korrekturen:
+- Suche im normalen Layout: Der Trefferzähler steht unter den Pfeilen, die Suche wird dadurch noch schmaler.
+
+## Version 3.75 (2026-11-17)
+
+Neue Funktionen:
+- Die Suche im Programm Generator ist im normalen Layout zweizeilig (oben das Suchfeld, darunter Wort und Alle) und braucht weniger Platz. Im kompakten Layout bleibt sie einzeilig.
+
+## Version 3.74 (2026-11-17)
+
+Neue Funktionen:
+- Der Knopf Dialog in der Spalte Typ einer Zeile ohne Adresse öffnet den Dialog der Adress-Spalte (wie der Doppelklick).
+
+## Version 3.73 (2026-11-17)
+
+Neue Funktionen:
+- Ein Doppelklick auf die Spalte Typ in einer Zeile ohne Adresse öffnet den Dialog der Adress-Spalte.
+
+## Version 3.72 (2026-11-17)
+
+Neue Funktionen:
+- Der Dialog Wizard startet in den Spalten A bis C einer Zeile mit Daten den Dialog der Adress-Spalte.
+
+Korrekturen:
+- Ein Doppelklick auf den Haken (Spalte B) öffnet die Zelle nicht mehr zum Bearbeiten und wirkt wie ein Einzelklick.
+- Zeile 1 lässt sich nicht mehr von Hand ändern.
+- Die Spalten ab LED Nr (in der DCC-Tabelle ab Spalte M) sind schreibgeschützt.
+
+## Version 3.71 (2026-11-17)
+
+Neue Funktionen:
+- Ein Doppelklick auf die Spalte Typ öffnet die Auswahl des Schaltertyps (Beitrag von moosbewohner).
+
+Korrekturen:
+- Die Zeilen der Tabelle sind wieder einzeilig, die Spalte Konfiguration bricht nicht mehr um.
+- Nach der Auswahl des Typs werden Adresse, Testtasten und Startwert der Zeile aktualisiert; Adressspannen wie „5 - 8“ werden berücksichtigt.
+
+## Version 3.70 (2026-11-17)
+
+Korrekturen:
+- Nach „Verwerfen“ beim Start („Zwischengespeicherter Stand gefunden“) werden die Spalten des Blatts neu eingelesen.
+- Wird die Browserseite beim Kompilieren neu geladen, erscheinen keine Fehlermeldungen mehr im Protokoll.
+
+## Version 3.69 (2026-11-16)
+
+Neue Funktionen:
+- Das Protokoll enthält jetzt die Antworten der Lichtmaschine und die Startmeldung mit der Zahl der LEDs je Kanal. Das hilft bei Problemen mit dem Farbtest und der Verbindung.
+
+## Version 3.68 (2026-11-16)
+
+Korrekturen:
+- Die Spalte mit den Tasten wird automatisch so breit, dass alle Tasten hineinpassen und bedient werden können (wie im Excel-Programm).
+
+## Version 3.67 (2026-11-16)
+
+Korrekturen:
+- Zeitangaben mit Nachkommastellen wie „0.5 Sek“ oder „0.8 Sec“ werden in den Parameterdialogen (zum Beispiel Blinker komplett einstellbar, Andreaskreuz) wieder akzeptiert. Auch das Komma „0,5 Sek“ ist erlaubt.
+- Ein Wert außerhalb des erlaubten Bereichs wird nach der Meldung nicht mehr übernommen, der Dialog bleibt offen.
+
+## Version 3.66 (2026-11-16)
+
+Neue Funktionen:
+- Die Firewall-Regeln haben einheitliche Namen: „webMLL Server 8080“ für den Server und „webMLL OTA 32323“ für OTA. Alte Regeln mit dem Namen „webMobaLedLib 8080“ werden weiter erkannt und beim Einrichten ersetzt.
+
+## Version 3.65 (2026-11-16)
+
+Korrekturen:
+- Tabelle reparieren: Zeilen wie „// Next_LED(1)“ oder „// Set_LED_OutpPinLst(8)“ behalten ihren Namen und ihr Symbol und werden nicht mehr zu „Muster Pattern_Configurator“.
+
+## Version 3.64 (2026-11-16)
+
+Korrekturen:
+- Ein versehener Eintrag (z. B. ein einzelnes „r“) in der Makrospalte führte zu einem unverständlichen Compilerfehler. Jetzt erscheint vor dem Kompilieren eine Meldung mit Blatt und Zeile, und die Zelle wird markiert.
+
+## Version 3.63 (2026-11-16)
+
+Korrekturen:
+- Linux: Das Bauen der Simulator-Bibliothek auf dem Raspberry Pi scheiterte mit „FastLED.h: No such file or directory“. Das Bauskript erzeugt die Datei jetzt selbst und meldet fehlende Dateien mit Namen.
+
+## Version 3.62 (2026-11-16)
+
+Korrekturen:
+- Linux: Setup simulieren übersetzt die Konfiguration jetzt mit einer eigenen Datei ohne Windows-Pfade. Vorher scheiterte es mit der Meldung „The FastLED library must be installed“.
+
+## Version 3.61 (2026-11-16)
+
+Korrekturen:
+- Linux: Ist der Simulator nicht verfügbar, nennt die Meldung jetzt den Grund (Bibliothek MobaLedLib fehlt, C++-Übersetzer fehlt oder Bauen fehlgeschlagen).
+
+## Version 3.60 (2026-11-16)
+
+Korrekturen:
+- Setup simulieren: Das Fenster „Kompilieren und Hochladen“ zeigt jetzt Fortschritt und Ergebnis und schließt sich nach Erfolg selbst. Vorher blieb es mit der Kopfzeile stehen.
+
+## Version 3.59 (2026-11-16)
+
+Neue Funktionen:
+- Neuer Knopf **Setup simulieren** neben „Setup übertragen“ (sichtbar mit der Option „Simulator anzeigen“): schickt das Setup nur an den Simulator, ohne Lichtmaschine. Die Auswahl „Kein / Nur / Mit Simulator“ über der Tabelle entfällt.
+- Neue Symbole für „Setup übertragen“ (Haus mit Pfeil) und „Setup simulieren“ (Würfel mit Pfeil).
+
+## Version 3.58 (2026-11-16)
+
+Korrekturen:
+- Die Meldung „Ungültige Arduino Pin Nummer“ nennt jetzt die eingestellte Zentrale und sagt, zu welcher Zentrale der Pin passt (zum Beispiel ESP32-Pins bei einer Zentrale, die als Nano gilt).
+- Ist ESP32 als Zentrale eingetragen, aber das ESP32-Paket der ARDUINO IDE nicht installiert, erklärt eine eigene Meldung, was zu tun ist (PlatformIO wählen oder das Paket installieren).
+
+## Version 3.57 (2026-11-16)
+
+Neue Funktionen:
+- Anleitung und Wiki beschreiben, wie man auf dem Raspberry Pi https einrichtet (Caddy), und eine schnelle Lösung für Edge.
+
+Korrekturen:
+- Kopieren und Einfügen in der Tabelle funktioniert jetzt auch, wenn man über http auf den Raspberry Pi zugreift (zum Beispiel mit Edge vom PC); die Meldung „Der Zugriff auf die Zwischenablage wurde vom Browser verweigert“ erscheint nicht mehr. Kopiert wird dann innerhalb des Programms (Text von außen lässt sich in dem Fall nicht einfügen).
+
+## Version 3.56 (2026-11-15)
+
+Neue Funktionen:
+- Simulator: Neue Auswahl „Kein Simulator / Nur Simulator / Mit Simulator“ über der Tabelle. Sie erscheint mit der Option „Simulator anzeigen“ (Programm Einstellungen, Spezialeinstellungen) und ersetzt dann die Simulator-Option der Konfigurationsseite.
+
+## Version 3.55 (2026-11-15)
+
+Neue Funktionen:
+- Der LED-Simulator läuft jetzt auch unter Linux; die LEDs werden im Browser angezeigt. Dafür werden `g++` (nur zum Bauen der Bibliothek, falls nötig) und die AVR-Werkzeuge von PlatformIO gebraucht.
+
+## Version 3.54 (2026-11-15)
+
+Korrekturen:
+- Simulator ohne erreichbaren ARDUINO: Die Frage nach der Verbindung kommt nur noch einmal.
+- Das Simulatorfenster wird beim Beenden des Programms geschlossen.
+
+## Version 3.53 (2026-11-15)
+
+Korrekturen:
+- Simulator ohne angeschlossenen ARDUINO: Die Testtasten fragen nicht mehr bei jedem Druck nach der Verbindung.
+
+## Version 3.52 (2026-11-15)
+
+Korrekturen:
+- Umschalttaste beim Klick auf „Zum Arduino schicken“ wird erkannt; der Simulator startet wie in Excel.
+
+## Version 3.51 (2026-11-15)
+
+Korrekturen:
+- Simulator: Programmstart mit Simulator-Autostart stürzt nicht mehr ab, wenn der Simulator noch nicht übersetzt wurde.
+
+## Version 3.50 (2026-11-15)
+
+Korrekturen:
+- Simulator: Fehler beim Öffnen der Konfigurationsdatei beim Start behoben.
+
+## Version 3.49 (2026-11-15)
+
+Korrekturen:
+- Simulator: Anpassung an die aktuelle Excel-Version (neue Simulator-DLL, Version 1.01).
+
+## Version 3.48 (2026-11-15)
+
+Neue Funktionen:
+- Werkzeugleiste: Zwölf Symbole sind überarbeitet.
+
+## Version 3.47 (2026-11-15)
+
+Neue Funktionen:
+- Linux-Server ohne Bildschirm: `bash install_linux.sh --server` richtet Passwort, Zugriff aus dem Netz und einen Systemdienst ein, der beim Start des Servers mitstartet.
+
+## Version 3.46 (2026-11-15)
+
+Neue Funktionen:
+- Grafik, Ansicht Ketten: Der Haken „Verteiler“ schaltet die Verteiler-Rechtecke ein und aus.
+- Grafik, Ansicht Ketten: Der Haken „Stecker nebeneinander“ zeichnet die Stecker eines Verteilers nebeneinander.
+
+## Version 3.45 (2026-11-15)
+
+Neue Funktionen:
+- Grafik, Ansicht Ketten: Je Verteilernummer ein Rechteck mit einem Feld je Stecker, dazwischen der Hinweis „Signal zurück zum Verteiler“; Typ und Sicherung aus den ID-Zeilen erscheinen an der Überschrift.
+
+## Version 3.44 (2026-11-15)
+
+Neue Funktionen:
+- Anfänger Modus: Der Doppelklick auf Name und Beleuchtung öffnet immer die Makroauswahl.
+- Anfänger Modus: Die Reiter Servo Einstellungen, Sound Test, DCC Keyboard, Serial Monitor und ARDUINO Einstellungen sind ausgeblendet.
+
+## Version 3.43 (2026-11-15)
+
+Neue Funktionen:
+- Reiter OTA: Der Knopf **Hilfe** öffnet die Wiki-Seite zu ESP32 und OTA.
+- Der **Patterngenerator** heißt jetzt **Timeline Editor** (Reiter, Meldungen, Anleitung). Die neue Adresse ist `/TimelineEditor`, die alte Adresse `/Patterngenerator` funktioniert weiter.
+
+## Version 3.42 (2026-11-14)
+
+Neue Funktionen:
+- Automatisches Verbinden (z. B. beim Öffnen von Farb Test, Servo oder Sound): Ist für das Blatt eine ESP32-WLAN-Verbindung eingetragen, wird zuerst WLAN probiert, sonst USB. Das gilt auch für die Testschalter. Der Knopf „Mit ARDUINO verbinden“ fragt weiterhin WLAN oder USB.
+
+## Version 3.41 (2026-11-14)
+
+Korrekturen:
+- Reiter OTA: Der Knopf heißt jetzt „Minimale WLAN Firmware per USB hochladen“, die Knöpfe stehen in der Reihenfolge der Arbeitsschritte (speichern, Firmware hochladen, WLAN einrichten, testen).
+- Reiter OTA: „Minimale Firmware per USB hochladen“ meldete immer „Es läuft noch ein Vorgang“ und startete nicht.
+
+## Version 3.40 (2026-11-14)
+
+Neue Funktionen:
+- ESP32-WLAN-Einstellungen (WLAN, OTA, Hostname, Adresse) gelten je Blatt und werden mit der Arbeitsmappe gespeichert, damit jedes Blatt ein anderes Board ansprechen kann. Das OTA-Passwort wird nicht in der Arbeitsmappe gespeichert, sondern nur lokal je Gerät.
+
+## Version 3.39 (2026-11-14)
+
+Neue Funktionen:
+- Reiter OTA: Der Knopf **Minimale Firmware per USB hochladen** lädt eine kleine Firmware (DCC und Heartbeat-LED, WLAN und OTA eingeschaltet) auf den ESP32. Danach kann das WLAN direkt im selben Formular über USB eingerichtet werden, ohne den Umweg über den Programmgenerator.
+
+## Version 3.38 (2026-11-14)
+
+Korrekturen:
+- ESP32-Upload über WLAN: Blockiert eine Firewall die Rückverbindung („No response from device“), erscheint ein Hinweis mit der nötigen Regel (eingehend TCP-Port 32323). In der Anleitung steht ein neuer Abschnitt 9.2a.
+
+## Version 3.37 (2026-11-14)
+
+Neue Funktionen:
+- **ESP32 per WLAN:** Verbinden über WLAN, Setup per WLAN (OTA) oder USB übertragen, Firmware über WLAN hochladen. Einstellungen im Reiter **OTA** (nur Zentrale ESP32). Das WLAN lässt sich auch über USB einrichten (WLANs suchen, verbinden). Dafür muss die neue Firmware (Paket „Firmware ESP32 OTA“) auf den ESP32 geladen werden.
+- Patterngenerator: Haken **RGB LED**, LED-Farbe wählen, Rampen, Goto-Pfeile und Bilder; mehrzeilige Konfigurationsspalte; DCC-Adressspannen.
+- Die neuen Dialoge sind in allen sechs Sprachen übersetzt.
+
+Korrekturen:
+- „Verbindung testen“ stürzt bei einer ungültigen Adresse („label too long“) nicht mehr ab.
+- USB-Upload funktioniert auch unter Linux und macOS.
+
+## Version 3.36 (2026-11-14)
+
+Neue Funktionen:
+- Port-Auswahl: Die Geräte unter „Andere Typen“ sind anklickbar. Ein Klick (nach Rückfrage) stellt die Zentrale auf den Typ des Geräts um und wählt dessen Anschluss. „Abbrechen“ stellt den alten Typ wieder her.
+
+## Version 3.35 (2026-11-14)
+
+Korrekturen:
+- COM-Port-Auswahl: Je nach gewählter Zentrale (Nano, Pico, ESP32) werden nur noch deren Anschlüsse angeboten; der ESP32 erscheint nicht mehr in der Nano- und Pico-Liste. Wie in Excel zeigt eine Zeile „Andere Typen: COM3(ESP32), COM5(Pico) …“ die übrigen angeschlossenen Geräte.
+
+## Version 3.34 (2026-11-14)
+
+Korrekturen:
+- Suche über alle Blätter: Nach dem Blattwechsel bleibt der erste Treffer sichtbar, die Tabelle springt nicht mehr auf die alte Position zurück.
+
+## Version 3.33 (2026-11-14)
+
+Korrekturen:
+- Suche über alle Blätter: Nach dem Wechsel auf ein anderes Blatt wird sofort zum ersten Treffer gescrollt.
+
+## Version 3.32 (2026-11-14)
+
+Korrekturen:
+- Das Löschkreuz im Suchfeld sitzt jetzt mittig.
+
+## Version 3.31 (2026-11-14)
+
+Korrekturen:
+- Die Suchleiste ist so hoch und so groß beschriftet wie die Knöpfe der Werkzeugleiste.
+
+## Version 3.30 (2026-11-14)
+
+Korrekturen:
+- Kompaktes Layout: Die Suchleiste ist schmaler (Haken „Wort“ und „Alle“), und die Knöpfe Tabelle, Grafik, Beides stehen in der Zeile der Werkzeugleiste.
+
+## Version 3.29 (2026-11-14)
+
+Korrekturen:
+- Die Suche durchsucht die Kopfzeilen der Tabelle nicht mehr.
+- Das Suchfeld ist mit seinen Knöpfen und Haken in einem gemeinsamen Rahmen zusammengefasst.
+
+## Version 3.28 (2026-11-14)
+
+Neue Funktionen:
+- Suche über die ganze Tabelle: Suchfeld in der Werkzeugleiste (Strg+F), findet auch Zeilen außerhalb des sichtbaren Bereichs, auch inaktive Zeilen. Mit Weiter/Zurück, Ganzes Wort und Alle Blätter.
+
+## Version 3.27 (2026-11-14)
+
+Neue Funktionen:
+- Eingefärbte Zeilen bekommen automatisch eine passende Schriftfarbe (schwarz auf hellem, weiß auf dunklem Grund).
+- Neue Option „Schrift in eingefärbten Zeilen fett“ (Programm Einstellungen, Programm Generator).
+
+Korrekturen:
+- Die Testschalter sind in der Tabelle nicht mehr unten abgeschnitten.
+
+## Version 3.26 (2026-11-14)
+
+Korrekturen:
+- Nach dem Import einer PGF-Datei heißen „Pins LED Bus definieren“, „LED Nummer definieren“, „NextLED“ und „Reserve LED“ nicht mehr „Pico Config“.
+
+## Version 3.25 (2026-11-14)
+
+Neue Funktionen:
+- Die Seiten Farb Test, Servo Test, DM Servo Test und Sound Test verbinden beim Öffnen selbst mit dem Arduino, wenn noch keine Verbindung besteht.
+
+## Version 3.24 (2026-11-14)
+
+Verbesserungen (nach Rückmeldungen des Entwicklers des Excel-Programms):
+- Verbinden mit dem Nano löst keinen Reset mehr aus; die Anlagensteuerung läuft weiter.
+- Beim Beenden wird der COM Port sicher freigegeben.
+- Beim Start öffnet sich das zuletzt benutzte Blatt.
+- Die Rot/Grün-Testtasten stauen keine Fehlermeldungen mehr auf: „Es läuft noch ein Vorgang – bitte warten.“
+- Ein Wechsel des Arduino-Typs trennt die Verbindung und setzt den COM Port zurück.
+- Dialoge: bestätigende Knöpfe links, Abbrechen rechts. Die Prüfmeldung zum angeschlossenen Arduino hat die Knöpfe Suchen / Weiter / Abbrechen.
+- Inaktive Tabellenzeilen erscheinen nicht mehr in der Grafik.
+- Tippfehler im Titel der Optionen korrigiert.
+
+## Version 3.23 (2026-11-12)
+
+Korrekturen:
+- „Test ARDUINO Programm Creation“ (Reiter ARDUINO Einstellungen) wirkt jetzt sofort nach dem Speichern; vorher kamen die Fragen erst nach einem Neustart des Programms.
+
+## Version 3.22 (2026-11-12)
+
+Korrekturen:
+- Ist im Reiter „ARDUINO Einstellungen“ der Haken „Test ARDUINO Programm Creation“ eingeschaltet, brach „Setup übertragen“ mit „Headerfileerstellung abgebrochen“ ab, weil die Frage nach jedem Schritt im Browser nicht erschien. Die Fragen erscheinen jetzt als normales Fenster.
+
+## Version 3.21 (2026-11-12)
+
+Neue Funktionen:
+- Grafik, Ansicht Ketten: Das Kontrollkästchen „Alle Zeilen“ zeigt alle aktiven Zeilen der Tabelle in der Reihenfolge der Tabelle in den Ketten, auch die ohne LEDs. Bei mehreren Kanälen stehen sie in der Kette der nachfolgenden Zeile mit LEDs.
+
+## Version 3.20 (2026-11-12)
+
+Neue Funktionen:
+- Die Knöpfe Tabelle, Grafik und Beides haben neue Symbole und stehen im Stil der übrigen Werkzeugleiste; die gewählte Ansicht ist gelb hinterlegt.
+
+## Version 3.19 (2026-11-12)
+
+Korrekturen:
+- Der Knopf „Firmware laden“ im Dialog „Firmware installieren“ heißt jetzt „Firmware herunterladen“.
+
+## Version 3.18 (2026-11-12)
+
+Korrekturen:
+- Firmware herunterladen: Der ausgewählte Eintrag im Baum ist gelb hinterlegt und gut zu erkennen.
+
+## Version 3.17 (2026-11-12)
+
+Korrekturen:
+- Optionen, Reiter LED ARDUINO: Der Kommentar zum Knopf „Firmware installieren“ steht jetzt unter dem Knopf, und die Auswahl des Boards ist nicht mehr zusammengequetscht (auf schmalen Bildschirmen steht sie unter den Knöpfen).
+
+## Version 3.16 (2026-11-12)
+
+Neue Funktionen:
+- Bibliothek MobaLedLib 3.5.0-L3 (Excel-Programm 3.5.0L3).
+- PlatformIO verknüpft die Bibliothek (symlink), statt sie zu kopieren, wenn der Rechner es erlaubt: Änderungen an der Bibliothek gelten sofort.
+
+Korrekturen:
+- Erweiterungen (Extensions) werden jetzt für alle Boards in die platformio.ini geschrieben, auch für den Raspberry Pi Pico.
+- Die Einstellung „Taster Loslassen simulieren“ (GEN_BUTTON_RELEASE_COM) brach bei den Werten 2 und 3 mit einem Fehler ab.
+
+## Version 3.15 (2026-11-12)
+
+Neue Funktionen:
+- Firmware herunterladen: Im Dialog „Firmware installieren“ holt der Knopf „Firmware laden“ die Liste der Pico-Firmware aus dem Internet, zeigt Plattform, Name und Version mit Beschreibung und lädt die gewählte Firmware in den Ordner MobaLedLib/firmware. Danach wird sie vorgewählt und kann auf den Pico geschrieben werden.
+
+Korrekturen:
+- „Firmware installieren“ öffnet auch ohne Firmware-Dateien im Ordner (mit Hinweis).
+
+## Version 3.14 (2026-11-12)
+
+Neue Funktionen:
+- Servo Test: Die Tasten „Pfeil hoch/runter“ und „Bild hoch/runter“ bedienen die Pfeiltasten > < >> <<, solange sie aktiv sind.
+- Der Knopf „Firmware installieren“ steht bei allen Boards zur Verfügung (nicht nur beim Raspberry Pi Pico).
+- Neue Makros und aktualisierte Tabellen aus dem Excel-Programm 3.5.0L3 (Makros, Parameter, Sprachtabelle; bis zu 2000 Eingänge mit ESP32 und PICO).
+
+Korrekturen:
+- Der Arduino Nano Every wird nicht mehr unterstützt (wie im Excel-Programm 3.5.0L3).
+
+## Version 3.13 (2026-11-12)
+
+Neue Funktionen:
+- Die Bootloader-Erkennung des Nano ist jetzt eingeschaltet (Programm Einstellungen → Spezialeinstellungen → „Bootloader des Nano beim Prüfen erkennen“, ausschaltbar). Mit dem Haken „Automatisch erkennen“ erkennt das Programm den alten und den neuen Bootloader und stellt das Board passend ein.
+
+## Version 3.12 (2026-11-12)
+
+Korrekturen:
+- Bootloader-Prüfung (Einstellung „Bootloader des Nano beim Prüfen erkennen“): Das Programm wartet nach dem Zurücksetzen kurz und sendet die Anfrage mehrfach; der kurze Zeitraum, in dem der alte Bootloader antwortet, wird so getroffen.
+- Hilfe → Update Testversion: Releases, deren Name mit „test“ beginnt, stehen am Ende der Liste, sind nie vorgewählt und tragen den Zusatz „Entwicklertest“.
+
+## Version 3.11 (2026-11-11)
+
+Korrekturen:
+- Bootloader-Prüfung (Einstellung „Bootloader des Nano beim Prüfen erkennen“): Antwortet der Nano nicht, meldet das Programm das nach etwa 6 statt 24 Sekunden. Das Protokoll nennt die gesendeten und empfangenen Bytes.
+
+## Version 3.10 (2026-11-11)
+
+Neue Funktionen:
+- Programm Einstellungen → Spezialeinstellungen: „Bootloader des Nano beim Prüfen erkennen“ (Vorgabe aus). Mit Haken erkennt das Programm alten und neuen Bootloader und stellt das Board passend ein.
+
+Korrekturen:
+- Windows: Die Meldung „Der COM Port wird bereits von einem anderen Programm benutzt“ beim Auswählen des USB-Anschlusses erscheint nicht mehr ohne Grund; das Programm schließt den Anschluss und versucht es mehrfach.
+- Raspberry Pi: Ein Nano mit der Beschreibung „USB Serial“ erscheint in der Liste der Anschlüsse; „Es ist kein LED Arduino angeschlossen“ kommt nicht mehr bei einem vorhandenen Nano.
+- Die automatische Erkennung stellt die Wahl „old Bootloader“ / „neue Version“ nicht mehr heimlich um (außer mit der neuen Einstellung).
+- Neue Meldungen: „Hochladen: Keine Antwort“ (Bootloader antwortet nicht) und für Fehlercode -2/-3; die Meldung „Prüfung fehlgeschlagen“ nennt beide Bootloader-Einstellungen.
+- Die IDE-Meldungen zum Netzwerk (javax.jmdns, dns[response …) erscheinen nicht mehr im Fenster und im Protokoll.
+- „LED Arduino Arduino“ in den Texten des Auswahlfensters heißt wieder „LED Arduino“.
+
+## Version 3.09 (2026-11-10)
+
+Korrekturen:
+- Hochladen mit der ARDUINO IDE: Scheitert nur die Prüfung nach dem Schreiben (Rücklesen des Speichers), erscheint jetzt die Meldung „Hochladen: Prüfung fehlgeschlagen“ mit Hilfen (zum Beispiel „Nano Normal (old Bootloader)“ bei Nano-Nachbauten) statt „Es ist ein Fehler aufgetreten“.
+
+## Version 3.08 (2026-11-10)
+
+Korrekturen:
+- Symbolleiste: Der Hinweistext von „Setup übertragen“ lautet „Konfiguration zur Lichtmaschine übertragen“, bei „Zeile einfügen“ fehlte ein Leerzeichen, und „Tabelle löschen“ warnt jetzt: „ACHTUNG: Gesamte Tabelle wird gelöscht!“.
+
+## Version 3.07 (2026-11-10)
+
+Korrekturen:
+- Übersetzungen: Der Schalter „Einfügen/Ersetzen“ im Formular des Makros „Belebtes Haus“ erscheint in der eingestellten Sprache.
+
+## Version 3.06 (2026-11-10)
+
+Korrekturen:
+- Übersetzungen: Das Kontextmenü der Tabelle (Rechtsklick auf Zeilennummer oder Zelle) und das des Patterngenerators erscheinen in der eingestellten Sprache, ebenso die Tastenkürzel und die Meldung bei verweigerter Zwischenablage.
+
+## Version 3.05 (2026-11-10)
+
+Korrekturen:
+- Raspberry Pi mit iPad oder iPhone: Die Verbindung brach beim Wechsel des Tabellenblatts ab. Das Programm merkt sich die Anmeldung jetzt mit einem Cookie, das auch iPad und iPhone beim Aufbau der Verbindung mitsenden.
+
+## Version 3.04 (2026-11-09)
+
+Neue Funktionen:
+- Hilfe → Update Testversion: Man sucht die zu ladende Version aus einer Liste der letzten Releases auf GitHub aus (die neueste ist vorgewählt; auch ältere Versionen, mit zusätzlicher Rückfrage).
+
+## Version 3.03 (2026-11-09)
+
+Korrekturen:
+- Übersetzungen (Hinweise des niederländischen Testers): Die Tooltips der Spaltenüberschriften (Name, LED/Soundkanal und alle Spalten des Blatts LNet), die Tooltips der Symbolleiste, die Anzeige „Zwischengespeichert“, die Titel der Seiten, der Status im Seriellen Monitor, die zugeklappte Beschreibung der Servo-Einstellungen und die Einträge der Auswahlfelder (Standardansicht, Kompaktes Layout) erscheinen in der eingestellten Sprache.
+
+## Version 3.02 (2026-11-08)
+
+Korrekturen:
+- Erster Start einer Neuinstallation: Die Meldung „Die ARDUINO IDE wurde nicht gefunden“ erscheint nicht mehr, wenn PlatformIO installiert ist. Die Erweiterungen werden schon beim ersten Start geladen.
+
+## Version 3.01 (2026-11-08)
+
+Korrekturen:
+- Installation: Mit PlatformIO (Standard) kommt keine Meldung mehr, dass keine ARDUINO IDE gefunden wurde (Installationsskripte für Linux, macOS und Raspberry Pi, Test der Installation, Protokoll).
+
+## Version 3.00 (2026-11-08)
+
+Korrekturen:
+- Update: Ein Update aus einer älteren Version (zum Beispiel 2.77) schlägt unter Windows und macOS nicht mehr mit „nach dem Schreiben nicht lesbar“ fehl; das Release enthält die alten Schreibweisen der Symbol-Dateinamen zusätzlich.
+
+## Version 2.99 (2026-11-08)
+
+Korrekturen:
+- Start: Das Programm bricht nicht mehr mit „cannot import name Calc_Worksheet from partially initialized module“ ab. Scheitert ein Teil beim Laden, steht die wirkliche Ursache jetzt im Protokoll.
+
+## Version 2.98 (2026-11-08)
+
+Korrekturen:
+- Update: Unter Windows und macOS meldete das Programm nach dem Update fehlende Dateien (Symbole, deren Dateiname sich nur in der Schreibweise änderte). Das Update löscht diese Dateien nicht mehr.
+
+## Version 2.97 (2026-11-06)
+
+Korrekturen:
+- Symbole: Die gelieferten Symbole werden vor dem Bauen des Pakets in der Schreibweise der Dateinamen angeglichen (neues Hilfsprogramm align_icon_names.py), damit sie unter Linux und macOS gefunden werden.
+
+## Version 2.96 (2026-11-05)
+
+Neue Funktionen:
+- Anfänger Modus: Eine neue Installation startet im Anfänger Modus. Er blendet die Reiter Patterngenerator, Z21 Simulator und ProgGenerator Einstellungen, den Knopf Zeilen Färben und einige Makros aus. Umschalten zum Experten Modus: Programm Einstellungen, Allgemeine Einstellungen, Haken „Anfänger Modus“ entfernen. Bestehende Installationen bleiben im Experten Modus.
+
+## Version 2.95 (2026-11-05)
+
+Korrekturen:
+- Makros mit Farbparametern (zum Beispiel PushButton_RGB_0_3) werden wieder mit den richtigen Farbwerten erzeugt (vorher stand „True“ im Makro).
+- Ungültige Farbwerte im Parameterformular zeigen eine Meldung mit dem Namen des Parameters statt eines Programmfehlers.
+- Parameter vom Typ Mode (zum Beispiel „Optionale Zähler Parameter“) werden nicht mehr als ungültiger Listenwert zurückgesetzt.
+
+## Version 2.94 (2026-11-05)
+
+Neue Funktionen:
+- Programm Einstellungen: Die Einstellungen stehen in Gruppen mit Überschrift (Allgemeine Einstellungen, Programm Generator, Farb Test Einstellungen, Zugriff aus dem Netz, Spezialeinstellungen). Die Option „Check for Updates“ ohne Funktion entfällt.
+
+Korrekturen:
+- Übersetzungen: Die Beschreibungstexte der Seiten und alle Texte der Seiten Programm Einstellungen, ARDUINO Einstellungen und Farb Test erscheinen in der eingestellten Sprache.
+
+## Version 2.93 (2026-11-05)
+
+Neue Funktionen:
+- Die Leertaste (und der Kontextmenü-Eintrag „Zeilen aktivieren/deaktivieren“) schaltet den Haken der Spalte Aktiv bei allen markierten Zeilen um. Die oberste markierte Zeile bestimmt, ob alle aktiviert oder alle deaktiviert werden. So lässt sich zum Beispiel ein ganzes Haus für Wartungsarbeiten abschalten.
+
+## Version 2.92 (2026-11-05)
+
+Neue Funktionen:
+- PlatformIO ist jetzt der Standard: Die Installationsskripte installieren es mit, und neue Installationen benutzen es gleich (wenn es gefunden wird). Die ARDUINO IDE ist nur noch optional (Option /ide bzw. --with-arduino-ide). Bestehende Installationen behalten ihre Einstellung.
+
+## Version 2.91 (2026-11-04)
+
+Korrekturen:
+- Übersetzungen: Die Spaltenüberschriften der Datenseiten (Name, Beleuchtung/Sound, Start LedNr, LEDs, InCnt, Loc InCh, LED/ Sound Kanal) und ihre Tooltips, der Verbindungsstatus oben rechts und die Menüeinträge „Raspberry Pi herunterfahren“ und „neu starten“ erscheinen in der eingestellten Sprache.
+
+## Version 2.90 (2026-11-04)
+
+Neue Funktionen:
+- Patterngenerator: Knopf „Test Pattern“ spielt das Muster auf dem Bildschirm ab (LED-Kreise, Zeiten, PingPong, Goto-Muster mit Start). Das Senden an ein Modul ist zurückgestellt.
+
+## Version 2.89 (2026-11-04)
+
+Korrekturen:
+- Erweiterungen: Ein Makro einer Erweiterung mit dem Namen eines schon vorhandenen Makros wird nicht mehr eingetragen; das Programm meldet es einmal beim Start.
+
+## Version 2.88 (2026-11-04)
+
+Neue Funktionen:
+- Dialog „LED Farb-Animation“ (Makro LEDColorAnim) im Browser: Farbverlauf einer RGB-LED mit drei Kurven (Rot, Grün, Blau oder HSV), Punkte ziehen, Test mit der LED.
+
+Korrekturen:
+- Das Makro MultiLEDColorAnim steht nicht mehr in der Makroliste (wird neu entworfen).
+- Makroliste: Das letzte Makro der Bibliothek wurde nicht angezeigt.
+
+## Version 2.87 (2026-11-04)
+
+Korrekturen:
+- Makroauswahl: Bei doppelten Einträgen in der Makroliste (zum Beispiel durch fremde Ordner in `libraries` mit einer Datei `MobaLedLib.properties`) wird das Makro der Zelle trotzdem markiert; die Diagnosezeile von 2.86 entfällt.
+- Fehlersuche: Im Ordner `libraries` dürfen nur `MobaLedLib` und Erweiterungen stehen (Ordner wie `ServoAnim` oder `Pattern` entfernen).
+
+## Version 2.86 (2026-11-04)
+
+Korrekturen:
+- Makroauswahl: Beim Öffnen steht im Debug-Fenster eine Diagnosezeile (vorläufig, zur Suche nach der Ursache, warum ServoAnim nicht vorausgewählt wird).
+
+## Version 2.85 (2026-11-04)
+
+Korrekturen:
+- Makroauswahl: Findet die Suche über „Find Name“ das Makro der Zelle nicht, sucht das Programm über den Namen des Makros und markiert es (ServoAnim unter PatternConfig).
+
+## Version 2.84 (2026-11-04)
+
+Korrekturen:
+- Makroauswahl: Bei einem Doppelklick auf eine Zelle wird das Makro der Zelle jetzt auch dann sichtbar markiert, wenn es weit unten in der Liste steht (zum Beispiel ServoAnim unter PatternConfig).
+
+## Version 2.83 (2026-11-04)
+
+Korrekturen:
+- Servo Animation: Ohne ARDUINO fragt das Programm nur einmal nach dem Anschließen; nach „Abbrechen“ kommt die Frage nicht mehr von selbst (nur der Knopf „Starte Test“ fragt wieder).
+
+## Version 2.82 (2026-11-04)
+
+Korrekturen:
+- Servo Animation: Beim Kurventyp Individuell werden die Punkte der Kurve beim Wiederöffnen aus dem gespeicherten Makro gelesen (die Kurve war leer).
+
+## Version 2.81 (2026-11-04)
+
+Korrekturen:
+- Servo Animation: Die Kurvenpunkte lassen sich wieder ziehen, Zeit und Wert werden angezeigt (Fehler „$emit is not a function“).
+- Servo Animation: Größe und Lage des Fensters werden gemerkt und bleiben auch nach einem Klick auf „Starte Test“ erhalten.
+
+## Version 2.80 (2026-11-04)
+
+Korrekturen:
+- Servo Animation: Das Fenster ist größer, lässt sich am Titel verschieben und am Rand in der Größe ändern (Größe und Lage werden gemerkt), die Grafik wächst mit und steht in einem schmalen Fenster unter den Einstellungen.
+
+## Version 2.79 (2026-11-04)
+
+Korrekturen:
+- Mac: Update Testversion, Update und Git installieren meldeten „CERTIFICATE_VERIFY_FAILED“, wenn Python keine Zertifikate hatte (Python von python.org): Das Programm benutzt jetzt die Zertifikate von certifi oder des Systems.
+
+## Version 2.78 (2026-11-04)
+
+Neue Funktionen:
+- Dialog „Servo Animation“ (Makros ServoAnim und ServoAnim2B) im Browser: Kurve mit Grafik, Punkte ziehen, Test mit dem Servo.
+
+Korrekturen:
+- Zeile 2 (Überschriften) der Tabelle hat die Farbe RGB(26, 117, 210).
+
+## Version 2.77 (2026-11-03)
+
+Korrekturen:
+- Der Knopf „Alle Spalten“ (nur zum Testen) erscheint nur, wenn in den Programm Einstellungen „Programmgenerator versteckte Tabellen anzeigen“ eingeschaltet ist.
+- Die Symbole in der Spalte Icon sind etwas kleiner und mittig und werden nicht mehr unten abgeschnitten; die Zeile wird nicht höher.
+
+## Version 2.76 (2026-11-03)
+
+Korrekturen:
+- Werkzeugleiste des Programm Generators: Einige Titel sind umbenannt (Dialog Wizard, Setup übertragen, Zeilen löschen, Zeilen verschieben, Zeilen duplizieren, Tabelle löschen, Optionen Werkzeuge), und alle Titel sind zweizeilig, damit alle Knöpfe gleich hoch sind.
+
+## Version 2.75 (2026-11-03)
+
+Korrekturen:
+- Fenster des Arduino-Monitors: Der schnelle Bootloader zeigt eine Überschrift je Schritt, und beim Hochladen einer fertigen .hex-Datei steht nicht mehr die Meldung zum Kompilieren („Holen Sie sich einen Kaffee“).
+
+## Version 2.74 (2026-11-03)
+
+Neue Funktionen:
+- Schneller Bootloader mit PlatformIO (Optionen, Reiter Bootloader): ArduinoISP wird als fertige .hex-Datei hochgeladen, der Bootloader mit dem avrdude von PlatformIO auf den linken Arduino geschrieben.
+
+## Version 2.73 (2026-11-03)
+
+Korrekturen:
+- Prog. Installieren (DCC, Selectrix, LNet ARDUINO) mit PlatformIO: Fehler „Source … firmware.hex not found, needed by target nobuild“ behoben; die fertige Datei wird jetzt zum richtigen Zeitpunkt in den Build-Ordner kopiert.
+
+## Version 2.72 (2026-11-03)
+
+Neue Funktionen:
+- Prog. Installieren (DCC, Selectrix, LNet ARDUINO) mit PlatformIO: Die fertig übersetzte Datei (.hex) aus libraries/MobaLedLib/firmware wird hochgeladen, es wird nichts übersetzt.
+
+Korrekturen:
+- Nach dem Hochladen des rechten Arduino wird er beim nächsten LED-Upload nicht mehr erneut angeboten.
+
+## Version 2.71 (2026-11-03)
+
+Korrekturen:
+- Raspberry Pi Pico mit PlatformIO: Die benutzten Extensions stehen jetzt auch für den Pico in der Datei platformio.ini.
+
+## Version 2.70 (2026-11-03)
+
+Korrekturen:
+- Übersetzen mit PlatformIO und einer Extension (zum Beispiel P_ScheduleMLX) meldete „fatal error: P_ScheduleDuoMLX.h: No such file or directory“: Die Kopfdatei enthält jetzt nur die Header der Extensions, die das Programm benutzt.
+
+## Version 2.69 (2026-11-01)
+
+Korrekturen:
+- Werkzeugleiste: Der Text steht unter dem Symbol, und die Knöpfe sind nur so breit wie ihr Symbol.
+
+## Version 2.68 (2026-11-01)
+
+Neue Funktionen:
+- Werkzeugleiste des Programm Generators: Die Knöpfe haben Symbole ohne Text und eine Beschriftung in der eingestellten Sprache (vorher stand der deutsche Text im Bild).
+- Die Knöpfe erscheinen beim Klicken eingedrückt und bleiben es, solange der Befehl läuft; modernes Aussehen mit Hover und dunklem Modus.
+
+## Version 2.67 (2026-11-01)
+
+Korrekturen:
+- Farbwahl (Hintergrundfarbe der Zelle, Reiterfarbe, Farbfelder in Formularen): Die Farbwahl geht neben der Pipette auf und verdeckt die Knöpfe OK und Abbrechen nicht mehr.
+- Zeile kopieren berücksichtigt eine Mehrfachauswahl: Alle markierten Zeilen werden kopiert und erscheinen hinter der letzten markierten Zeile.
+- Zeile kopieren und Zeilen ausblenden wirken auf die markierte Zeile (vorher auf die Zeile darüber).
+
+## Version 2.66 (2026-11-01)
+
+Neue Funktionen:
+- Optionen, Entwicklungsumgebung: Der Knopf „PlatformIO-Zwischenspeicher löschen“ löscht den Zwischenspeicher von PlatformIO (nach Rückfrage) und erzwingt beim nächsten Übersetzen einen vollständigen Neuaufbau, zum Beispiel wenn nach einer Änderung der Bibliothek MobaLedLib noch die alte Fassung benutzt wird.
+
+## Version 2.65 (2026-11-01)
+
+Korrekturen:
+- Update: Werden mehr als 20 Dateien gelöscht (zum Beispiel viele nicht mehr benutzte Symbole), bricht das Update nicht mehr ab, sondern fragt, ob wirklich so viele Dateien gelöscht werden sollen.
+
+## Version 2.64 (2026-11-01)
+
+Neue Funktionen:
+- Optionen, Entwicklungsumgebung: Der Knopf „Git installieren“ gibt es jetzt auch unter Windows (winget oder Installationsprogramm von Git for Windows, Windows fragt um Erlaubnis) und macOS (Homebrew oder die Entwicklerwerkzeuge von Apple). PlatformIO braucht git für das Board Raspberry Pi Pico.
+
+Korrekturen:
+- Das Programm findet ein eben installiertes git ohne Neustart.
+- Der Hinweis nach dem Übersetzen ohne git nennt den Knopf für alle Betriebssysteme.
+
+## Version 2.63 (2026-11-01)
+
+Neue Funktionen:
+- Programm Generator: Die Blattreiter lassen sich einfärben (Rechtsklick, Reiterfarbe); die Schrift ist je nach Farbe weiß oder schwarz, der gewählte Reiter wird heller mit Verlauf nach Weiß.
+- Programm Generator: Kontextmenü am Blattreiter mit Umbenennen (nur eigene Blätter) und Duplizieren (Datenblätter).
+- Programm Generator: Die Reiter lassen sich mit Alt + linker Maustaste verschieben (oder im Kontextmenü nach links und rechts); Reihenfolge und Farben werden mit der Arbeitsmappe gesichert.
+
+## Version 2.62 (2026-11-01)
+
+Neue Funktionen:
+- Patterngenerator: Die Beschreibung des Blatts kommt beim Laden einer Datei .MLL_pcf aus dem Textfeld msoTextBox0, ist änderbar und wird beim Speichern wieder als msoTextBox0 in die Datei geschrieben (ein fetter Anfang bleibt, wenn er nicht geändert wird).
+
+## Version 2.61 (2026-11-01)
+
+Neue Funktionen:
+- Grafik: Die Testtasten der Tabelle gibt es auch in der Kette und in der Anlage (unter dem Symbol, mit derselben Wirkung).
+
+Korrekturen:
+- Aufrunden (ROUNDUP) liefert eine ganze Zahl (nicht 1.0 statt 1).
+- Pattern Configurator: Die Abfrage des LED Kanals nennt Punkt 3 jetzt „Optionale LED Gruppe 3“ (auf Deutsch; die Übersetzungen folgen).
+
+## Version 2.60 (2026-11-01)
+
+Neue Funktionen:
+- Grafik, Ketten: Die Größe der Kästchen lässt sich einstellen (eigene Größe, getrennt von der Anlage).
+- Grafik, Ketten: Mehrere markierte Kästchen lassen sich gemeinsam innerhalb ihrer Kette verschieben.
+- Ansicht „Beides“: Die Trennlinie zwischen Grafik und Tabelle lässt sich verschieben.
+
+## Version 2.59 (2026-10-30)
+
+Neue Funktionen:
+- Menü Hilfe: „Update Testversion …“ lädt das neueste Release auf GitHub (auch ein Pre-Release), nachdem das Programm gefragt hat, ob man wirklich eine Testversion haben möchte.
+
+## Version 2.58 (2026-10-30)
+
+Korrekturen:
+- Grafik (Kette und Anlage) und Tabelle zeigen jetzt die neuen Symbole; vorher kamen dort noch die alten kleinen Bilder.
+
+## Version 2.57 (2026-10-30)
+
+Neue Funktionen:
+- Die Grafik zeigt Symbole in hoher Auflösung (scharf auch auf hochauflösenden Bildschirmen). Wo es noch kein neues Symbol gibt, bleibt das alte.
+
+## Version 2.56 (2026-10-30)
+
+Korrekturen:
+- Optionen: Der unterste Knopf und sein Text (zum Beispiel „Git installieren“) waren abgeschnitten; jetzt sind alle sichtbar.
+- „Git installieren“ zeigt ein Hinweisfenster, dass die Installation mehrere Minuten dauern kann.
+
+## Version 2.55 (2026-10-30)
+
+Korrekturen:
+- Die Version 2.54 ließ sich nicht starten („F00 is not defined“); behoben.
+
+## Version 2.54 (2026-10-30)
+
+Neue Funktionen:
+- Linux: In den Optionen (Entwicklungsumgebung) gibt es den Knopf „Git installieren“, wenn der Git-Client fehlt; PlatformIO braucht ihn für das Board Raspberry Pi Pico.
+- Der Knopf „Hilfe“ heißt jetzt „Online Wiki“ und öffnet das Wiki in einem neuen Tab des Webbrowsers.
+
+## Version 2.53 (2026-10-30)
+
+Korrekturen:
+- Raspberry Pi Pico mit PlatformIO: Fehlt der Git-Client, erscheint eine Meldung mit den Befehlen zum Installieren (Linux: sudo apt install git); die Linux-Installation installiert git jetzt mit.
+
+## Version 2.52 (2026-10-29)
+
+Korrekturen:
+- Optionen: Auf kleinen Bildschirmen (Laptop) hat der Dialog eine Bildlaufleiste, und die Boardauswahl braucht weniger Platz, damit auch das Board Raspberry Pico sichtbar bleibt.
+
+## Version 2.51 (2026-10-29)
+
+Korrekturen:
+- Dialog „Überprüfung des USB Ports“: Ein neu angeschlossenes Gerät (zum Beispiel ein Pico) wird sofort gewählt; ein Pico oder ESP32 wird unter Linux und macOS nicht mehr jede Sekunde geöffnet.
+- Das Protokoll zeigt bei jeder Änderung die gefundenen Anschlüsse.
+
+## Version 2.50 (2026-10-29)
+
+Korrekturen:
+- Arduino Nano mit PlatformIO unter Linux: Programme mit analogen Tastern stürzten ab („powershell … AnalogScanner.zip“); die Bibliothek wird von PlatformIO geholt, mit der ARDUINO IDE jetzt mit Python heruntergeladen.
+
+## Version 2.49 (2026-10-29)
+
+Korrekturen:
+- Optionen, Reiter Bootloader (ARDUINO IDE): Der Knopf für den schnellen Bootloader stürzt nicht mehr ab; er meldet, dass der schnelle Bootloader in der Webversion noch nicht umgesetzt ist (bitte das Excel-Programm benutzen).
+- Mehrere weitere Stellen (Programm kopieren, Austausch, Import alter Daten, Simulator, House-Dialog) riefen Funktionen im falschen Modul auf; behoben.
+
+## Version 2.48 (2026-10-29)
+
+Korrekturen:
+- Raspberry Pi Pico: „Firmware installieren“ funktioniert unter Windows auch bei einem laufenden Pico (kein Abbruch mehr mit „Ein nicht vorhandenes Gerät wurde angegeben“).
+- Der Knopf „Firmware installieren“ erscheint nur, wenn im Ordner MobaLedLib/firmware eine UF2-Datei liegt.
+
+## Version 2.47 (2026-10-29)
+
+Korrekturen:
+- Anlagenansicht: „Bild laden …“ braucht kein Pillow mehr. Das Bild wird im Browser verkleinert und dann zum Programm hochgeladen.
+
+## Version 2.46 (2026-10-29)
+
+Neue Funktionen:
+- Raspberry Pi Pico: Der Knopf „Firmware installieren“ (Optionen, nur mit dem Board Pico) schreibt fertige Firmware-Dateien (.uf2) aus dem Ordner MobaLedLib/firmware auf den Pico, mit Auswahl von Firmware und Version.
+
+Korrekturen:
+- Raspberry Pi Pico: Der Hinweis „PICO im Bootmodus gefunden“ erscheint jetzt (auch unter Linux) und kann die Start-Firmware auf den Pico schreiben.
+- Die Abschlussseite „Programm beendet“, die Seite beim Herunterfahren des Raspberry Pi und die Seite für unbekannte Adressen erscheinen in der eingestellten Sprache.
+
+## Version 2.45 (2026-10-29)
+
+Neue Funktionen:
+- Grafische Ansicht: Die Größe der Kästchen lässt sich mit einem Schieber einstellen; ein Raster lässt die Kästchen einrasten.
+- Mehrere Kästchen wählen (Strg-Klick, in der Anlage Umschalt + Ziehen für einen Rahmen), gemeinsam verschieben, ausrichten und löschen.
+- Rückgängig (Knopf oder Strg+Z) für Positionen, Ausrichten und Größe der Anlagenansicht.
+
+## Version 2.44 (2026-10-28)
+
+Neue Funktionen:
+- Grafische Ansicht: Umschalt-Doppelklick auf ein Kästchen öffnet gleich den Dialog mit den Parametern des Makros (Ketten und Anlage).
+
+Korrekturen:
+- Anlagenansicht: Klick und Doppelklick auf ein Kästchen funktionieren; ein gezogenes Kästchen ist danach markiert.
+- Dialog Other: Kein Absturz mehr, wenn ein Makro aus dem Makrobaum in eine Kette gezogen wird.
+
+## Version 2.42 (2026-10-28)
+
+Korrekturen:
+- Anlagenansicht: „Bild laden ...“ öffnet jetzt den Dialog zum Auswählen des Bildes.
+
+## Version 2.41 (2026-10-28)
+
+Korrekturen:
+- Die Seite stürzte beim Start ab (Fehler in Version 2.40); behoben.
+
+## Version 2.40 (2026-10-28)
+
+Neue Funktionen:
+- Grafische Ansicht: Anlagenansicht mit Hintergrundbild. Die Kästchen lassen sich frei auf einem Foto oder Gleisplan der Anlage verteilen (Zoom mit dem Mausrad, Hintergrund ziehen verschiebt, Alles zeigen). Bild und Positionen werden mit der Arbeitsmappe gesichert.
+- Menü Datei: Anlagenansicht speichern und laden (Datei .MLL_view mit Bild und Positionen).
+
+## Version 2.39 (2026-10-28)
+
+Korrekturen:
+- Optionen: Stellt man die Entwicklungsumgebung auf PlatformIO um, erscheint ESP32 in der Boardliste sofort (vorher erst nach dem erneuten Öffnen des Dialogs).
+- PlatformIO: Meldet die Paketverwaltung beim Hochladen „UnknownPackageError“, wiederholt das Programm den Aufruf einmal und gibt bei erneutem Fehler einen Hinweis zur Diagnose.
+
+## Version 2.38 (2026-10-28)
+
+Neue Funktionen:
+- Grafische Ansicht: Kästchen lassen sich innerhalb ihrer Kette verschieben (in eine andere Kette ist es bewusst nicht möglich), auf den Papierkorb ziehen oder mit der Taste Entf löschen (mit Rückfrage). Das Kontextmenü (rechte Maustaste) bietet Dialog öffnen, Nach oben, Nach unten und Löschen.
+
+## Version 2.37 (2026-10-28)
+
+Korrekturen:
+- Grafische Ansicht: Nach dem Ablegen eines Makros läuft der ganze Dialog (wie beim Knopf Dialog); mit der Umschalt-Taste beim Loslassen nur der Dialog mit den Parametern.
+
+## Version 2.36 (2026-10-28)
+
+Neue Funktionen:
+- Grafische Ansicht: Makros aus dem Baum lassen sich mit der Maus auf die Grafik ziehen: vor oder hinter ein Kästchen, ans Ende einer Kette, in die Zone „Neue Kette“ (neuer LED Kanal) oder in die Spalte „Ohne LEDs“. Mit der Umschalt-Taste beim Loslassen läuft der ganze Dialog.
+
+## Version 2.35 (2026-10-28)
+
+Korrekturen:
+- Grafische Ansicht, Makrobaum: Der Knopf Dialog startet die geführte Eingabe des Dialogknopfs (Adresse, Typ und Testtasten, Beschreibung, dann die Makroauswahl mit dem Makro vorgewählt) statt direkt die Makroauswahl.
+
+## Version 2.34 (2026-10-28)
+
+Neue Funktionen:
+- Grafische Ansicht, Makrobaum: neuer Knopf **Dialog** am Makro. Er hängt das Makro an und durchläuft den ganzen Dialog (Makroauswahl mit dem Makro vorgewählt, dann die Parameter). Das + und der Doppelklick öffnen wie bisher nur den Dialog mit den Parametern.
+
+## Version 2.33 (2026-10-28)
+
+Korrekturen:
+- Grafische Ansicht: Der Makrobaum links war beim Öffnen der Seite leer; er wird jetzt geladen.
+
+## Version 2.32 (2026-10-28)
+
+Neue Funktionen:
+- Grafische Ansicht: links der **Makrobaum** mit Suche. Doppelklick auf ein Makro (oder das +) hängt es ans Ende der Kette des markierten Kästchens an; danach öffnet sich der gewohnte Dialog mit den Parametern, Abbrechen legt keine Zeile an.
+
+## Version 2.31 (2026-10-28)
+
+Korrekturen:
+- Grafische Ansicht: Der Doppelklick auf ein Kästchen öffnet die Makroauswahl (er wurde verschluckt).
+- Grafische Ansicht: Ein Klick auf ein Kästchen markiert die ganze Zeile in der Tabelle.
+
+## Version 2.30 (2026-10-28)
+
+Korrekturen:
+- Grafische Ansicht: Die Kästchen zeigen die LED-Nummern (auch bei mehreren LED Kanälen).
+- Grafische Ansicht: Makros mit Einzel-LEDs (C1-1, C2-1 und so weiter) hängen in der Kette und stehen nicht mehr unter „Ohne LEDs“.
+- Grafische Ansicht: Klick und Doppelklick auf ein Kästchen wirken; Tabelle und Grafik folgen der Auswahl des jeweils anderen.
+
+## Version 2.29 (2026-10-28)
+
+Neue Funktionen:
+- Programm Generator: neue **grafische Ansicht** (Knöpfe Tabelle, Grafik, Beides über der Tabelle). Die Makros erscheinen als Ketten mit Symbol, Name und LED-Nummern, je LED Kanal eine Kette; Makros ohne LEDs stehen in einer eigenen Spalte. Anklicken markiert die Zeile in der Tabelle, Doppelklick öffnet die Makroauswahl.
+- Programm Einstellungen: **Standardansicht des Programm Generators** (Tabelle, Grafik oder Beides).
+
+## Version 2.28 (2026-10-27)
+
+Neue Funktionen:
+- PlatformIO ganz ohne ARDUINO IDE: Ist PlatformIO als Entwicklungsumgebung eingestellt, sucht das Programm beim Start keine IDE und prüft keine ARDUINO Bibliotheken und Boards; die Reiter „Update“ und „Bootloader“ der Optionen entfallen dann. Der Python-Ordner ersetzt den Sketchbook-Ordner der IDE (Bibliothek MobaLedLib und Erweiterungen im Ordner libraries).
+- Beim Zurückschalten auf die ARDUINO IDE fragt das Programm, ob die Bibliotheken und Boards jetzt geprüft werden sollen.
+
+Korrekturen:
+- ESP32 und Pico sind als Board mit PlatformIO auch dann wählbar, wenn ihre Pakete in der ARDUINO IDE fehlen.
+
+## Version 2.27 (2026-10-27)
+
+Neue Funktionen:
+- Wird als Board ein Raspberry Pi Pico gewählt, aber ein Arduino Nano ist angeschlossen, fragt das Programm beim Hochladen, ob das Board auf Arduino Nano umgestellt werden soll.
+- Der Reiter „DCC Arduino“ erscheint nur noch bei einem Nano (wie im Excel-Programm); bei Pico und ESP32 ist er ausgeblendet.
+
+Korrekturen:
+- Ein/Aus-Testtaste mit Startwert: Nach dem Hochladen auf den Arduino ließ sie sich nicht mehr umschalten (blieb grün mit 1); sie schaltet jetzt immer um.
+- Programm Einstellungen: Das wirkungslose Kontrollkästchen „Pattern Configurator“ ist entfernt.
+
+## Version 2.26 (2026-10-27)
+
+Neue Funktionen:
+- Installation von PlatformIO mit den Installationsskripten (`/platformio` unter Windows, `--with-platformio` unter Linux, macOS und auf dem Raspberry Pi); auf Linux, macOS und Raspberry Pi auch einzeln mit `bash install/install_platformio.sh`. PlatformIO kommt in eine eigene Python-Umgebung; `pipx` und Eingriffe in das System sind nicht nötig.
+
+Korrekturen:
+- Die Hilfe (`-h`) von `install_linux.sh` und `install_pi.sh` zeigt nur noch die Optionen.
+
+## Version 2.25 (2026-10-27)
+
+Korrekturen:
+- Programmgenerator und Patterngenerator: Eine Zellfarbe, die nicht mehr gelten soll (zum Beispiel beim Zeilen färben), wird jetzt auch im Browser zurückgenommen; sie blieb vorher stehen.
+
+## Version 2.24 (2026-10-27)
+
+Korrekturen:
+- Programmgenerator, Zeilen färben: Ersetzt man das Macro einer gefärbten Zeile, verschwindet die Farbe sofort; ist „Ganze Zeile“ abgeschaltet, bleibt nur noch die Zelle der Bedingung gefärbt. Mehrere Bedingungen mischen ihre Farben nicht mehr.
+
+## Version 2.23 (2026-10-27)
+
+Korrekturen:
+- Programmgenerator, Zeilen färben: Die ganze Zeile wird jetzt in allen Spalten gefärbt (vorher nur Typ und Icon); wird „Ganze Zeile“ abgeschaltet, verschwindet die alte Farbe, und nur die Zelle der Bedingung (zum Beispiel Macro) bleibt gefärbt.
+
+## Version 2.22 (2026-10-27)
+
+Neue Funktionen:
+- Niederländisch, Französisch, Italienisch, Spanisch und Dänisch: Die Oberfläche ist jetzt in diesen Sprachen (Entwürfe, werden von Testern geprüft); bisher erschienen viele Texte auf Englisch.
+- Raspberry Pi: Das Programm beobachtet Unterspannung, Temperatur und freien Speicher, schreibt sie ins Protokoll und warnt in der Oberfläche, wenn das Netzteil nicht reicht.
+
+Korrekturen:
+- Raspberry Pi und Linux: Dateien mit Umlauten im Namen (zum Beispiel vorsignal_grün.png) fehlten nach dem Entpacken des ZIP; das ZIP wird jetzt mit richtigen Dateinamen gebaut.
+- Sprache: Eine vorhandene niederländische Übersetzung wird nicht mehr durch einen englischen Text verdrängt.
+
+## Version 2.21 (2026-10-27)
+
+Neue Funktionen:
+- Raspberry Pi Pico unter Linux: Vor dem Hochladen mit PlatformIO weist das Programm auf die fehlende USB-Regel hin; im Reiter „Entwicklungsumgebung“ der Optionen richtet ein Knopf sie ein (auch `install/install_pico_udev.sh`).
+- PlatformIO unter Debian, Ubuntu und Raspberry Pi OS: wird auch gefunden, wenn es mit `pipx` installiert ist (`~/.local/bin`); Installationshinweis je System.
+
+Korrekturen:
+- Linux: Die Anschlussliste enthält nicht mehr die 32 Platzhalter ttyS0 bis ttyS31, und „Unbekannte Ports anzeigen“ schaltet sich nicht mehr von selbst ein, wenn ein Arduino (zum Beispiel ttyUSB0) angeschlossen ist.
+
+## Version 2.20 (2026-10-26)
+
+Neue Funktionen:
+- Zusammengesetzte Meldungen (Update, Firewall und Zugriff aus dem Netz, Z21 Simulator, Haus-Formular, Patterngenerator, Serial Monitor) erscheinen in der gewählten Sprache (English als Entwurf).
+
+Korrekturen:
+- keine
+
+## Version 2.19 (2026-10-26)
+
+Neue Funktionen:
+- Mehrsprachigkeit vervollständigt: Die Formulare (zum Beispiel „Verteiler und Stecker Nummer“), die Optionen mit allen Reitern, Knöpfen und Beschreibungen, die Programm Einstellungen und die Meldungen erscheinen auf Englisch. Texte, die schon das Excel-Programm übersetzt hatte, erscheinen in allen Sprachen der Tabelle Languages.
+
+Korrekturen:
+- Bei Englisch blieben viele Texte deutsch: Die Tabelle Languages der Excel-Datei wurde im Web nicht benutzt.
+
+## Version 2.18 (2026-10-26)
+
+Neue Funktionen:
+- Excel-Programm 3.5.0-K-long: bis zu 2048 Eingänge (ESP32 und Pico; Arduino Nano und Uno weiter 250).
+- PlatformIO als Ersatz für die ARDUINO IDE: Reiter „Entwicklungsumgebung“ in den Optionen, mit Prüfung, ob PlatformIO installiert ist. Auch für Linux, macOS und Raspberry Pi. Raspberry Pi Pico unter Windows: einmalig den Treiber WinUSB mit Zadig installieren (Anleitung 2.16).
+- Dateien für das Excel-Programm: Gespeicherte Dateien (.MLL_pcf, .MLL_pgf) werden im Windows-Zeichensatz geschrieben (Option in den Programm Einstellungen, Standard an), damit das Excel-Programm sie lesen kann.
+- Die Beschriftungen „Installiere Korrekturversion“ und „Hilfe im Forum“ in den Optionen.
+
+Korrekturen:
+- PlatformIO: Der Pfad (PATH) wächst bei mehrmaligem Hochladen nicht mehr, die Datei platformio.ini wird mit den aktuellen Einstellungen geschrieben, und fehlt PlatformIO, erscheint eine verständliche Meldung.
+- Die Texte der Programm Einstellungen (zum Beispiel „Der Reiter Z21 Simulator wird angezeigt“) sind übersetzbar.
+- Der PlatformIO-Ordner `.pio` (mehrere hundert MB) kommt nicht mehr ins Release-ZIP; Update und Reparatur fassen ihn nicht an.
+
+## Version 2.17 (2026-10-23)
+
+Neue Funktionen:
+- keine
+
+Korrekturen:
+- Der Patterngenerator lädt wieder Dateien aus dem Excel-Programm (`.MLL_pcf` mit Umlauten im Windows-Zeichensatz). Vorher kam „'utf-8' codec can't decode byte 0xaf …“. Dateien in UTF-8 lassen sich weiter laden.
+- Beim Laden werden die Textfelder und Knöpfe der Blätter wieder erkannt und beim Speichern nicht mehr verloren.
+
+## Version 2.16 (2026-10-23)
+
+Neue Funktionen:
+- Meldungen mit eingesetzten Werten (zum Beispiel „Fehler beim Speichern: …“, „Die Datei … laden?“, „… Seite(n) gelöscht“) werden jetzt ebenfalls in der gewählten Sprache angezeigt (English als Entwurf).
+
+Korrekturen:
+- keine
+
+## Version 2.15 (2026-10-23)
+
+Neue Funktionen:
+- Die Spaltenköpfe der Tabellen (mit dem Hinweis beim Daraufzeigen) und die Namensspalte (Namen der Makros) erscheinen in der gewählten Sprache.
+
+Korrekturen:
+- keine
+
+## Version 2.14 (2026-10-23)
+
+Neue Funktionen:
+- **Mehrsprachigkeit:** Die Sprache der Oberfläche wird in den Programm Einstellungen gewählt und wirkt sofort (die Seite lädt neu). Die Texte der Oberfläche stehen auf Englisch zur Verfügung (Entwurf); Nederlands, French, Italian, Spanish und Denmark folgen. Fehlende Übersetzungen erscheinen auf Englisch.
+- Die Typen in der Tabelle (`AnAus`, `Rot`, `Grün`, `Tast`) werden in der gewählten Sprache angezeigt; gespeichert wird immer deutsch.
+- Neu: `install/UEBERSETZEN.md` (wie man mitübersetzt) und `csv/Web_Languages.csv` (der Katalog).
+
+Korrekturen:
+- Nach dem Umstellen der Sprache funktioniert die Tabelle wieder (Testtasten, Erzeugen des Programms): Das Programm verglich die deutschen Zellen mit den Begriffen der gewählten Sprache.
+
+## Version 2.13 (2026-10-23)
+
+Neue Funktionen:
+- keine
+
+Korrekturen:
+- `LEDs_AutoProg.h` und die `.cmd`-Dateien im Ordner `LEDs_AutoProg` gehören wieder zum Release. Das Programm ändert sie später selbst: Update, Reparatur und die Prüfung beim Start ersetzen sie nicht und melden eine Abweichung nicht als Fehler; fehlende Dateien werden wieder angelegt.
+
+## Version 2.12 (2026-10-23)
+
+Neue Funktionen:
+- keine
+
+Korrekturen:
+- Beim Speichern im Format MLL_PGF (Optionen → Update → Datei speichern) erscheint keine Meldung „Datei wurde geschrieben“ mehr vor der Abfrage, wohin die Datei gespeichert werden soll.
+
+## Version 2.11 (2026-10-23)
+
+Neue Funktionen:
+- Menü Tabelle vereinfacht: nur noch „Tabelle neu berechnen“ und „Tabelle reparieren (Symbole und Testtasten neu aufbauen) …“. Die Reparatur fragt vorher nach.
+
+Korrekturen:
+- keine
+
+## Version 2.10 (2026-10-23)
+
+Neue Funktionen:
+- keine
+
+Korrekturen:
+- Update, Reparatur und Prüfung beim Start fassen die vom Programm erzeugten Dateien im Ordner `LEDs_AutoProg` (`LEDs_AutoProg.h` und die `.cmd`-Dateien) nicht mehr an; sie gehören nicht mehr ins Release.
+
+## Version 2.09 (2026-10-21)
+
+Neue Funktionen:
+- keine
+
+Korrekturen:
+- Ohne Variablen in der Konfiguration steht in `LEDs_AutoProg.h` jetzt `TOTAL_VARIABLES 0` (vorher 1), und es wird keine Zeile `#define` ohne Namen mehr geschrieben.
+
+## Version 2.08 (2026-10-21)
+
+Neue Funktionen:
+- Ein Update ist „alles oder nichts“: Schlägt es fehl oder bricht es ab (Stromausfall, Sicherungsprogramm), geht das Programm automatisch zur vorherigen Version zurück und zeigt beim Start einen Hinweis.
+- Neues Reparaturskript (`repair_windows.bat`, `repair_linux.sh`, `repair_mac.command`): stellt eine beschädigte Installation aus dem Release wieder her, auch wenn das Programm nicht mehr startet und auch ohne Internet.
+- Das installierte Release wird im Datenordner aufgehoben (die letzten zwei), damit die Reparatur ohne Internet geht.
+
+Korrekturen:
+- keine
+
+## Version 2.07 (2026-10-21)
+
+Neue Funktionen:
+- Wiederherstellung: Beim Start prüft das Programm, ob alle Dateien des Releases da sind; bei einem unterbrochenen oder beschädigten Update zeigt es das in einer roten Meldung, und Hilfe → Update stellt die Dateien wieder her.
+- Das Update weist ein falsches oder unvollständiges ZIP ab (ohne etwas zu verändern); ein ZIP mit älterer Version wird nur nach roter Warnung und Rückfrage installiert; jede geschriebene Datei wird mit ihrer Prüfsumme verglichen.
+- Neue Anleitung „Wenn nichts mehr geht“ (Abschnitt 9.6).
+
+Korrekturen:
+- Die Versionsprüfung beim Start verlangt für den Z21 Simulator die richtige Mindestversion.
+
+## Version 2.06 (2026-10-21)
+
+Neue Funktionen:
+- Z21 Simulator: **Rückmeldung** der Taster und Eingänge vom Arduino an das Steuerprogramm (Rückmelder in Rocrail, iTrain …); die Statuszeile zeigt, für wie viele Programme sie läuft.
+
+Korrekturen:
+- keine
+
+## Version 2.05 (2026-10-21)
+
+Neue Funktionen:
+- Neuer Reiter **Z21 Simulator**: Das Programm gibt sich gegenüber Modellbahn-Steuerprogrammen (Rocrail, iTrain …) als Roco Z21 aus und schaltet über den Arduino die DCC-Schalter der MobaLedLib. Er erscheint mit der Option „Z21 Simulator anzeigen“ (Programm Einstellungen) sofort nach dem Speichern.
+
+Korrekturen:
+- keine
+
+## Version 2.04 (2026-10-21) - Release
+
+Neue Funktionen:
+- siehe die Versionen 1.97 bis 2.04 (Excel-Programm 3.5.0K, Knopf „Mit ARDUINO verbinden“, Version der Bibliothek, Meldungen mit Blatt und Zeile).
+
+Korrekturen:
+- siehe die Versionen 1.97 bis 2.04.
+
+## Version 2.04 (2026-10-21)
+
+Neue Funktionen:
+- keine
+
+Korrekturen:
+- In Meldungen, Hinweisen und Beschreibungen erscheint das Zeilenende nicht mehr als „|_x000D_“.
+- Die Übersetzung einer Meldung wird aus der richtigen Zeile der Tabelle Languages genommen (nicht aus einer Zeile mit gleichem Anfang).
+
+## Version 2.03 (2026-10-21)
+
+Neue Funktionen:
+- keine
+
+Korrekturen:
+- Die Fehlermeldung „Die Anzahl der verwendeten Eingangskanäle ist zu groß“ wird jetzt angezeigt (vorher brach das Programm mit einem Fehler ab).
+- Fehlermeldungen mit eingesetzten Zahlen (zum Beispiel einer Zeilennummer) brechen das Programm nicht mehr ab.
+
+## Version 2.02 (2026-10-21)
+
+Neue Funktionen:
+- keine
+
+Korrekturen:
+- Die Version der MobaLedLib wird nicht mehr ständig gelesen, sondern beim Aufbau der Seite, nach der Prüfung beim Start und nach jedem Befehl.
+- Im Menü ARDUINO entfällt „Konfiguration vom Pico laden“ (die Funktion geht bis auf weiteres nicht).
+
+## Version 2.01 (2026-10-21)
+
+Neue Funktionen:
+- Auf der Seite Programm Generator steht rechts in der Zeile der Funktionsknöpfe die Version der MobaLedLib (zum Beispiel Ver.3.5.0-K).
+- Der Knopf „Mit ARDUINO verbinden“ steht in der Kopfzeile neben „Vollbild“ und gilt für alle Reiter: rot ohne Verbindung, grün („Mit ARDUINO verbunden“) mit Verbindung.
+
+Korrekturen:
+- Die Tasten „Verbinden“ in „Servo Einstellungen“ und „Sound Test“ entfallen; nach dem Verbinden startet der offene Reiter den Direktmodus.
+
+## Version 2.00 (2026-10-21)
+
+Neue Funktionen:
+- Die Meldung „Zielvariablen werden mehrfach gesetzt“ nennt jetzt Blatt und Zeile der beiden Definitionen und steht auch im Protokoll.
+
+Korrekturen:
+- Dieselbe Zeile wird nicht mehr als doppelte Definition gemeldet, wenn ein Blatt mehrfach gelesen wird.
+- Die Frage kommt nur noch einmal je Liste, nicht für jedes eingebundene Blatt.
+
+## Version 1.99 (2026-10-21)
+
+Neue Funktionen:
+- keine
+
+Korrekturen:
+- Das Erzeugen der Header-Datei ist wieder so schnell wie vorher (in 1.98 war es mehr als zehnmal langsamer).
+- Die Frage „Die folgenden Zielvariablen werden mehrfach gesetzt“ kommt nicht mehr, wenn ein LED-Name (Name_LED_Number, Name_LED_Offset) in eingebundenen Blättern mehrfach vorkommt.
+
+## Version 1.98 (2026-10-21)
+
+Neue Funktionen:
+- Die Makros Name_LED_Number und Name_LED_Offset der neuen Excel-Datei (3.5.0K) lassen sich verwenden, auch als Folge mit mehreren LEDs; Parameter, die eine LED-Nummer oder den Namen einer LED akzeptieren, werden im Dialog geprüft.
+- Die Variable `#ChannelOffset` ist in den Makros möglich.
+- Die DCC-Adresse 0 ist erlaubt (zum Beispiel für `#InCh=0`); in der Tabelle werden die Testknöpfe einer Zeile entfernt, wenn die Adresse oder der Eingang entfällt.
+- Extensions mit der Schnittstelle V2 werden erkannt.
+- Der Raspberry Pi Pico wird mit jeder USB-Kennung der Raspberry Pi Foundation erkannt.
+
+Korrekturen:
+- Der Name einer Extension wird richtig geprüft.
+- Der Arduino-Typ wird zuverlässiger erkannt (RTS wird eingeschaltet).
+
+## Version 1.97 (2026-10-21)
+
+Neue Funktionen:
+- keine
+
+Korrekturen:
+- Die neue Excel-Datei (3.5.0K) lässt sich laden: ungültige benannte Bereiche (`#REF!`) bringen das Programm nicht mehr zum Absturz.
+- Mit der neuen Excel-Datei wird die ESP32-Erweiterung `esptool_py` wieder erkannt (Pfade der Tabelle Libraries mit Backslash).
+
+## Version 1.96 (2026-10-21) - Release
+
+Neue Funktionen:
+- siehe die Versionen 1.91 bis 1.96 (Reiter DM Servo Einstellungen, Sound Test und DCC Keyboard, Breite der Zeilennummer, ESP32 und Raspberry Pi).
+
+Korrekturen:
+- siehe die Versionen 1.91 bis 1.96.
+
+## Version 1.96 (2026-10-21)
+
+Neue Funktionen:
+- Der Reiter **DM Servo Einstellungen** (vorher Servo Test 2) erscheint nur, wenn in den Programm Einstellungen **DM Servo Einstellungen anzeigen** eingeschaltet ist (sofort nach dem Speichern, ohne Neustart).
+- Die Spalte mit den Zeilennummern im Programm Generator passt ihre Breite der größten Zeilennummer an.
+
+Korrekturen:
+- Der Reiter **Servo Test 1** heißt jetzt **Servo Einstellungen**.
+- Der Titel zeigt kein „(Prototyp)“ mehr.
+
+## Version 1.95 (2026-10-21)
+
+Neue Funktionen:
+- Neuer Reiter **Sound Test** (Adresse `/SoundTest`): MLL-Soundplatine prüfen mit Soundmodul-Adresse, LED Kanal, Impulslänge und R, G, B; Senden mit der Taste oder gleich beim Ändern der Werte.
+- Neuer Reiter **DCC Keyboard** (Adresse `/DCCKeyboard`): DCC-Schalter ausprobieren, 32 Adressen ab der DCC-Basisadresse mit roten und grünen Knöpfen.
+
+Korrekturen:
+- keine
+
+## Version 1.94 (2026-10-21)
+
+Neue Funktionen:
+- keine
+
+Korrekturen:
+- Das Blinken der LEDs bei der Auswahl des COM Ports endet jetzt mit dem Dialog. Vorher lief es weiter, öffnete den Port jede Sekunde und konnte das Hochladen auf den ESP32 (esptool) stören.
+- Bei einem Fehler zeigt das Fenster die Ausgabe des Befehls vollständig an (vorher fehlten die letzten Zeilen, zum Beispiel die Fehlermeldung von esptool).
+
+## Version 1.93 (2026-10-20)
+
+Neue Funktionen:
+- keine
+
+Korrekturen:
+- Das LNet-Programm lässt sich wieder auf den rechten Arduino laden (Fenster „LNet Lizenzbestimmungen“ mit Bestätigung; vorher Fehlermeldung).
+- Arduinos mit FTDI-Schnittstelle (FT232R, unter Linux und macOS) werden erkannt; die Meldung „Es ist kein … Arduino angeschlossen“ kommt nicht mehr, obwohl er angeschlossen ist.
+- Das Fenster der Installation von Bibliotheken und Boards beim ersten Start schließt sich nach dem Erfolg selbst.
+- Ein Absturzmeldung im Protokoll beim Blinken der Arduino-LED (Verbindung während der Prüfung getrennt) entfällt.
+
+## Version 1.92 (2026-10-20)
+
+Neue Funktionen:
+- ESP32: Das Fenster vor dem Hochladen weist darauf hin, die Taste BOOT am Board zu halten, wenn es bei „Connecting…“ stehen bleibt.
+
+Korrekturen:
+- keine
+
+## Version 1.91 (2026-10-20)
+
+Neue Funktionen:
+- Neuer Reiter **Servo Test 2** (Adresse `/ServoTest2`) für Direct Mode Servos: Servo Modul Adresse, LED Kanal, Betriebsart 1 bis 10 (Normal, Training, Max Speed, Invers, Zurücksetzen und weitere), Regler 0 bis 255, ENTER-Taste, Pos 0 und Pos 255, Fast Refresh. Das Programmieren des ATtiny kommt später.
+
+Korrekturen:
+- keine
+
+## Version 1.90 (2026-10-20) - Release
+
+Neue Funktionen:
+- siehe die Versionen 1.79 bis 1.89 (Servo Test 1, Vollbild, Adressen der Reiter, Bibliotheken beim Start).
+
+Korrekturen:
+- Raspberry Pi: Das ESP32-Paket wird nicht mehr automatisch ausgewählt, weil es sich auf Linux mit 64-Bit-ARM nicht installieren lässt. Das Programm fragte sonst bei jedem Start vergeblich danach.
+
+## Version 1.89 (2026-10-20)
+
+Neue Funktionen:
+- keine
+
+Korrekturen:
+- macOS und Linux (auch Raspberry Pi): Das Prüfen und Hochladen für den ESP32 mit der Platinenversion 1.0.4 endete mit „exec: "python": executable file not found in $PATH“. Das Programm legt beim Start einen Hilfsbefehl python an, wenn er fehlt. Nach dem Einspielen das Programm neu starten.
+
+## Version 1.88 (2026-10-20)
+
+Neue Funktionen:
+- keine
+
+Korrekturen:
+- Raspberry Pi (Linux): Die Platinen esp32:esp32 und rp2040:rp2040 wurden beim Aktualisieren der Bibliotheken nicht installiert, weil sie den falschen Paketindex bekamen.
+- Die Wiederholung des Updates lädt nur noch, was fehlt, statt jedes Mal alles neu. Bringt eine Wiederholung nichts Neues, endet das Update mit einer Meldung (statt der Rückfrage „noch mal?“), und das Programm läuft nicht mehr endlos.
+
+## Version 1.87 (2026-10-20)
+
+Neue Funktionen:
+- keine
+
+Korrekturen:
+- Servo Test 1: Beim Verlassen des Reiters, beim Schließen oder Neuladen der Seite und beim Beenden des Programms bekommt der Servo den Wert 0 und der Direktmodus wird beendet, damit er nicht weiterläuft.
+- Läuft gerade ein Ablauf (zum Beispiel Servo zurücksetzen) und man verlässt den Reiter, bricht der Ablauf ab und sendet nichts mehr.
+
+## Version 1.86 (2026-10-20)
+
+Neue Funktionen:
+- Servo Test 1: Die Taste unten rechts heißt jetzt **Verbinden** (statt Schließen) und verbindet mit dem Arduino wie ARDUINO → Verbinden.
+
+Korrekturen:
+- keine
+
+## Version 1.85 (2026-10-20)
+
+Neue Funktionen:
+- keine
+
+Korrekturen:
+- Servo Test 1 für das Smartphone: Die Beschreibung ist einzeilig und lässt sich aufklappen, „Servo Modul Auswahl“ steht in der Zeile der Felder, und die drei Tasten stehen in einer Zeile (auch beim Konfigurieren).
+
+## Version 1.84 (2026-10-20)
+
+Neue Funktionen:
+- Servo Test 1 sieht jetzt aus und arbeitet wie der neue Excel-Dialog: Auswahl von LED Nummer, Anschluss und LED Kanal, Regler mit Pfeilen, Servo Konfigurieren in drei Schritten (Minimalposition, Maximalposition, Geschwindigkeit), Einstellungen speichern in jedem Schritt, Servo zurücksetzen und Schließen.
+- Nach der Wahl eines Servos wackelt er kurz, damit man ihn erkennt. Eine Spalte mit großen Tasten, gut für das Smartphone.
+
+Korrekturen:
+- keine
+
+## Version 1.83 (2026-10-20)
+
+Neue Funktionen:
+- Neuer Reiter **Servo Test 1** (hinter Farb Test, Adresse `/ServoTest1`): Servo-Position mit dem Schieberegler, Servo STOP, Programmieren von Min/Max Position und Geschwindigkeit, Dec <<, Dec <, Inc > und Inc >> zum Halten.
+- Der Reiter ist für das Smartphone gebaut (große Tasten, Halten per Berührung). Beim Verlassen des Reiters hält das Programm den Servo an und bricht ein laufendes Programmieren ab.
+
+Korrekturen:
+- keine
+
+## Version 1.82 (2026-10-20)
+
+Neue Funktionen:
+- Reiter lassen sich direkt per Adresse aufrufen: `/ProgGenerator`, `/Patterngenerator`, `/ProgGeneratorEinstellungen`, `/Farbtest`, `/SerialMonitor`, `/ARDUINOEinstellungen` und `/ProgrammEinstellungen` (Groß- und Kleinschreibung egal).
+- Mit dem Zusatz `?vollbild=1` (zum Beispiel `/Farbtest?vollbild=1`) öffnet sich der Reiter gleich im Vollbild. Der erste Tipp auf die Seite schaltet dann auch den Browser auf Vollbild (das iPhone kennt das nicht).
+- Bei einer unbekannten Adresse zeigt das Programm die Liste der gültigen Adressen.
+
+Korrekturen:
+- keine
+
+## Version 1.81 (2026-10-20)
+
+Neue Funktionen:
+- keine
+
+Korrekturen:
+- Vollbild: Der Knopf steht jetzt einmal in der Kopfzeile neben **Beenden** (in jedem Reiter erreichbar), und Beenden bleibt im Vollbild sichtbar.
+
+## Version 1.80 (2026-10-20)
+
+Neue Funktionen:
+- Jeder Reiter hat einen Knopf **Vollbild**: Titel, Menü, Reiterleiste und der Knopf Beenden verschwinden, die Statusmeldungen bleiben. Wenn der Browser es erlaubt, geht er auch in den Vollbildmodus. Derselbe Knopf („Vollbild beenden“) oder die Taste ESC schaltet zurück.
+
+Korrekturen:
+- keine
+
+## Version 1.79 (2026-10-20)
+
+Neue Funktionen:
+- Meldungen, die das Programm beim Start nicht anzeigen konnte (zum Beispiel „ARDUINO IDE nicht gefunden“), erscheinen jetzt beim ersten Öffnen der Oberfläche im Browser.
+
+Korrekturen:
+- Fehlende ARDUINO Bibliotheken und Boards (Raspberry Pi, erster Start): Die Frage „Soll das Update ausgeführt werden?“ erscheint jetzt im Browser. Vorher wurde sie beim Start unbemerkt mit „Nein“ beantwortet, und das Protokoll meldete „Fehler 1 beim Ausführen des Update Programms“.
+- Antwortet man auf diese Frage mit „Nein“, kommt keine Fehlermeldung mehr.
+
+## Version 1.78 (2026-10-19)
+
+Neue Funktionen:
+- Windows: Das Einschalten von „Zugriff aus dem Netz erlauben“ legt gleich die Firewall-Regel an (Windows fragt nach Administratorrechten, mit „Ja“ bestätigen). Lässt die Firewall den Port schon zu, fragt es nicht.
+- Ist das Netzwerk als „Öffentlich“ eingestuft, weist das Programm darauf hin, es auf „Privat“ zu stellen.
+
+Korrekturen:
+- Die Warnung im Firewall-Bereich nennt jetzt den Schalter statt `MLL_HOST`.
+
+## Version 1.77 (2026-10-19)
+
+Neue Funktionen:
+- Programm Einstellungen: Der Schalter „Zugriff aus dem Netz erlauben“ ersetzt das Bearbeiten von `start_windows.bat`. Nach dem Einschalten (und einem Neustart über den Knopf „Jetzt neu starten“) ist die Oberfläche von anderen Rechnern im Heimnetz erreichbar.
+- Beim Einschalten fragt das Programm nach einem Passwort, wenn noch keines gesetzt ist.
+
+Korrekturen:
+- keine
+
+## Version 1.76 (2026-10-19)
+
+Neue Funktionen:
+- keine
+
+Korrekturen:
+- Patterngenerator: Nach einem Neustart ist die Zeile „Goto Aktivierung“ (Zeile 13) bei Seiten mit Goto Mode wieder da, der Doppelklick darauf öffnet die Liste.
+
+## Version 1.75 (2026-10-19)
+
+Neue Funktionen:
+- Das Programm prüft beim Start, ob alle Dateien zur Version passen. Fehlt eine neuere Datei, steht eine rote Meldung oben auf der Seite (und im Protokoll) mit dem Namen der Datei.
+
+Korrekturen:
+- keine
+
+## Version 1.74 (2026-10-19)
+
+Neue Funktionen:
+- Programm Generator: Zeilen, die man über „Aus- oder Einblenden“ versteckt hat, bleiben nach einem Neustart versteckt.
+
+Korrekturen:
+- Patterngenerator: Nach einem Neustart ist bei Seiten mit Goto Mode die Zeile „Goto Tabelle“ wieder da, die Zeilen darüber und darunter sind hoch, und die Goto-Pfeile mit den Nummern liegen an der richtigen Stelle (vorher fehlte die Zeile, und die Pfeile saßen unter den Balken).
+
+## Version 1.73 (2026-10-19)
+
+Neue Funktionen:
+- keine
+
+Korrekturen:
+- Patterngenerator: Ist die Datei `ExcelAPI/headless_sheet.py` noch eine ältere Fassung als die anderen Dateien, stürzt das Programm beim Wechsel in den Patterngenerator nicht mehr ab. Die Zeilen sind dann gleich hoch, und im Protokoll steht ein Hinweis, die Datei einzuspielen.
+
+## Version 1.72 (2026-10-19)
+
+Neue Funktionen:
+- Patterngenerator: Die Tabelle sieht aus wie im Excel-Programm: farbige Kopfzeile und LED-Nummern, schwarze Rahmen um Dauer, Goto Tabelle und die LED-Tabelle (so viele Zeilen wie LEDs), Ergebnis in Blau und Makro in Grün.
+- Patterngenerator: Bei aktivem Goto Mode sind die Zeilen über und unter der Goto Tabelle hoch wie in Excel, die Pfeile und Bögen haben Platz.
+
+Korrekturen:
+- Die Höhe von Zeilen bleibt bei ihrer Zeile, auch wenn andere Zeilen versteckt oder eingeblendet werden (vorher konnte eine hohe Zeile bei einer anderen Zeile landen).
+
+## Version 1.71 (2026-10-19)
+
+Neue Funktionen:
+- keine
+
+Korrekturen:
+- Patterngenerator: Die Goto-Pfeile sind jetzt auch bei Seiten mit einer hohen Zeile „Dauer“ (zum Beispiel `KS_Hauptsignal_Zs3_Zs1_RGB`) in voller Länge zu sehen. Vorher wurden sie dort zu kurz gezeichnet.
+
+## Version 1.70 (2026-10-19)
+
+Neue Funktionen:
+- Patterngenerator: Die Seiten zeigen ihre **Bilder** (zum Beispiel die Signale der Beispiele) und bei aktivem Goto Mode die **Goto-Pfeile** mit Nummern und E, auch die gebogenen Pfeile.
+- Patterngenerator: Neuer Knopf **Bild einfügen** (PNG oder JPG). Das Bild erscheint unter der Tabelle, bleibt nach einem Neustart erhalten und gehört beim Speichern der Seite zur ZIP-Datei. **Optionen → Bilder dieser Seite entfernen** nimmt sie weg.
+- Patterngenerator: Nach einem Neustart zeichnet jede Seite ihre Balken beim ersten Anzeigen selbst (war schon im Stand 1.69 enthalten).
+
+Korrekturen:
+- Patterngenerator: Die Bilder gehen beim Speichern und nach einem Neustart nicht mehr verloren. Ein JPG-Bild ohne PNG-Datei daneben wird beim erneuten Laden gefunden.
+
+## Version 1.69 (2026-10-18)
+
+Neue Funktionen:
+- keine
+
+Korrekturen:
+- Windows-Firewall (Programm Einstellungen): Der Bereich liest den Zustand jetzt auch ohne Administratorrechte (auf zwei Wegen). Kann er ihn nicht lesen, steht dort der Grund statt „Es gibt noch keine Regel“.
+
+## Version 1.68 (2026-10-18)
+
+Neue Funktionen:
+- keine
+
+Korrekturen:
+- Windows-Firewall (Programm Einstellungen): Der Bereich erkennt jetzt jede Regel, die den Port freigibt, auch eine von Hand angelegte, und „Freigabe entfernen“ löscht sie mit. Die Regel heißt jetzt „webMobaLedLib 8080“ (mit Port). Blockierregeln werden angezeigt.
+
+## Version 1.67 (2026-10-18)
+
+Neue Funktionen:
+- Windows: Auf der Seite Programm Einstellungen richtet der Knopf **Zugriff aus dem Netz freigeben** die Firewall-Regel ein, damit andere Rechner im Heimnetz die Oberfläche erreichen. Der Bereich zeigt, ob die Regel da ist, und warnt, wenn der Server nur auf dem eigenen Rechner lauscht oder das Netzwerk als „Öffentlich“ eingestuft ist.
+
+Korrekturen:
+- keine
+
+## Version 1.66 (2026-10-18)
+
+Neue Funktionen:
+- Windows: Beim Start mit Zugriff aus dem Netz gibt das Programm den Befehl für die Firewall-Regel aus. Die Anleitung beschreibt den Zugriff von einem anderen Rechner genauer (Kapitel 8).
+
+Korrekturen:
+- Ist `MLL_HOST` eine IP-Adresse, öffnet das Programm den Browser mit dieser Adresse (vorher `localhost`: „Seite nicht gefunden“).
+
+## Version 1.65 (2026-10-18)
+
+Neue Funktionen:
+- Patterngenerator: Auswahl der **Goto Aktivierung** (Doppelklick auf die Zelle, bei aktivem Goto Mode auch Anklicken der leeren Zelle), mit Parameterdialog für Counter, RandButton, RandomTime, RandomCount und RandomPingPong.
+- Patterngenerator: Der Export zu ProgGen funktioniert auch im Goto Mode mit mehreren Startspalten.
+
+Korrekturen:
+- keine
+
+## Version 1.64 (2026-10-18)
+
+Neue Funktionen:
+- keine
+
+Korrekturen:
+- Patterngenerator: Der Doppelklick auf Spezial Mode und RGB Modul Nr funktioniert auch auf der Seite Main.
+
+## Version 1.63 (2026-10-18)
+
+Neue Funktionen:
+- Patterngenerator: Ein Doppelklick auf **Spezial Mode** öffnet eine Liste der Spezial Modes, ein Doppelklick auf **RGB Modul Nr** eine Zahleneingabe.
+
+Korrekturen:
+- keine
+
+## Version 1.62 (2026-10-18)
+
+Neue Funktionen:
+- keine
+
+Korrekturen:
+- Patterngenerator: Bei geladenen Beispielen saßen die Balken zu tief. Sie liegen jetzt in den LED-Zeilen.
+
+## Version 1.61 (2026-10-18)
+
+Neue Funktionen:
+- keine
+
+Korrekturen:
+- Patterngenerator: Das Laden der Beispiele über Optionen brach nach dem Laden mit einer Fehlermeldung ab.
+
+## Version 1.60 (2026-10-18)
+
+Neue Funktionen:
+- Patterngenerator: Neuer Knopf **Optionen**. Beispiele laden (einzelne Sammlungen oder alle), eigene Dateien (`.MLL_pcf` oder ZIP mit Bildern) laden, Seiten speichern (Download) und Seiten löschen.
+
+Korrekturen:
+- Das Sichern der Tabellen im Datenordner bricht nicht mehr mitten in der Datei ab und beschädigt dabei nicht mehr die letzte gute Sicherung (betrifft Patterngenerator und Programmgenerator).
+
+## Version 1.59 (2026-10-18)
+
+Neue Funktionen:
+- Programm Generator: Neuer Menüpunkt **Tabelle → Proggenerator Tabelle neuberechnen**. Er rechnet alle Tabellenblätter neu (LED-Zahlen je Kanal und Start-LED-Nummern, auch bei eingebundenen Blättern) und aktualisiert Symbole und Testtasten des aktiven Blatts.
+
+Korrekturen:
+- Programm Generator: Vor dem Erzeugen der `LEDs_AutoProg.h` werden alle Blätter neu gerechnet. Veraltete LED-Zahlen in gespeicherten Blättern führen nicht mehr zu falschem `LEDS_PER_CHANNEL`.
+
+## Version 1.58 (2026-10-18)
+
+Neue Funktionen:
+- keine
+
+Korrekturen:
+- Programm Generator: In der erzeugten `LEDs_AutoProg.h` stimmen die LED-Nummern in `LED2Var_Tab` (Funktion `LED_to_Var`) jetzt mit Excel überein, auch bei eingebundenen Blättern (Include). Zeilen ohne Eintrag in der Spalte „LED Kanal“ übernehmen den Kanal der vorherigen Zeile.
+
+## Version 1.57 (2026-10-18)
+
+Neue Funktionen:
+- keine
+
+Korrekturen:
+- Programm Generator: Beim Laden einer Pico-Konfiguration steht in den neu angelegten Blättern nicht mehr die Vorlagenzeile „LED auf dem Mainboard“ (`RGB_Heartbeat`).
+
+## Version 1.56 (2026-10-17)
+
+Neue Funktionen:
+- Programm Generator: Der neue Knopf „Alle Spalten“ in der Werkzeugleiste zeigt bei Datenblättern auch die Spalten hinter Q an (zum Beispiel die LED-Zahlen der Kanäle 1 bis 9 in Zeile 1). „Spalten bis Q“ schaltet zurück.
+
+Korrekturen:
+- keine
+
+## Version 1.55 (2026-10-17)
+
+Neue Funktionen:
+- keine
+
+Korrekturen:
+- Programm Generator: Die LED-Zahl eines Blatts stimmt jetzt mit Excel überein, wenn das Blatt mit einer Zeile endet, die LEDs abzieht (zum Beispiel `Next_LED(-1)`). Das betrifft auch Blätter, die in andere Blätter eingebunden sind (Include).
+
+## Version 1.54 (2026-10-17)
+
+Neue Funktionen:
+- keine
+
+Korrekturen:
+- Programm Generator: Beim Laden einer `.MLL_pgf`-Datei steht in den neu angelegten Blättern nicht mehr die Vorlagenzeile „LED auf dem Mainboard“ (`RGB_Heartbeat`). Dadurch zählt kein Blatt mehr eine LED auf Kanal 0 zu viel.
+- Patterngenerator: Beim Import eines Makros wird die Tabelle vollständig geleert, bevor das Muster eingetragen wird.
+
+## Version 1.53 (2026-10-17)
+
+Neue Funktionen:
+- keine
+
+Korrekturen:
+- Programm Generator: Beim Laden einer `.MLL_pgf`-Datei werden die LED-Zahlen und Start-LED-Nummern aller Blätter berechnet, auch wenn Blätter mit mehreren LED-Kanälen in ein anderes Blatt eingebunden sind (Include).
+
+## Version 1.52 (2026-10-17)
+
+Neue Funktionen:
+- keine
+
+Korrekturen:
+- Programm Generator: Symbole und Testtasten einer neuen Zeile werden wieder angezeigt.
+- Programm Generator: „Symbole und Testtasten neu aufbauen (Reparatur)“ legt die Testtasten wieder an, statt sie nur zu löschen.
+
+## Version 1.51 (2026-10-17)
+
+Neue Funktionen:
+- Fehlersuche: Mit `MLL_DEBUG_SHAPES=1` schreibt das Programm Symbole und Testtasten der Tabelle ins Protokoll (Zeilen mit `SHAPES:`).
+
+Korrekturen:
+- keine
+
+## Version 1.50 (2026-10-17)
+
+Neue Funktionen:
+- keine
+
+Korrekturen:
+- Programm Generator: Die Testknöpfe in der Tabelle ändern nach einem Klick wieder ihre Farbe, und neue Knöpfe erscheinen bei neuen Zeilen (Fehler aus Version 1.49). Auch geänderte Symbole werden wieder sofort gezeichnet.
+
+## Version 1.49 (2026-10-17)
+
+Neue Funktionen:
+- Zeitmessung für die Fehlersuche: Mit `MLL_DEBUG_TIMING=1` steht im Protokoll, wie lange der Aufbau und die Aktualisierung der Tabelle und der Testtasten dauern.
+
+Korrekturen:
+- Programm Generator: Die Tabelle zeichnet sich nach einer Änderung (zum Beispiel einem Klick auf einen Testknopf) schneller neu. Der Browser bekommt nur noch die geänderten Zeilen und baut die Tabelle nicht mehr komplett neu auf. Auf langsamen Rechnern bleibt dadurch keine lange weiße Fläche mehr stehen.
+- Anleitung: Tipps für langsame Rechner (Hardwarebeschleunigung des Browsers).
+
+## Version 1.48 (2026-10-17)
+
+Neue Funktionen:
+- keine
+
+Korrekturen:
+- Patterngenerator: Der Import von ProgGen in ein neues Blatt meldet nicht mehr „Das Macro entspricht leider nicht genau dem original Macro“, das Blatt wird vollständig berechnet.
+- Patterngenerator: Nach dem Import steht wie in der Excel-Version `#InCh` im Feld „Schalter Nummer“ (die Änderung von 1.47 ist zurückgenommen).
+
+## Version 1.47 (2026-10-17)
+
+Neue Funktionen:
+- keine
+
+Korrekturen:
+- Patterngenerator: Der Import von ProgGen meldet nicht mehr „Das Macro entspricht leider nicht genau dem original Macro“, der Schalter wird auf `SI_1` gesetzt.
+
+## Version 1.46 (2026-10-17)
+
+Neue Funktionen:
+- Patterngenerator: **Export zu ProgGen** trägt das Makro in eine Zeile des Programm Generators ein (Zeile im gelben Band wählen und OK). Vorher wird geprüft, ob ein Makroname eingetragen ist, die LED-Tabelle nicht leer ist und die Dauer-Zeile stimmt.
+- Patterngenerator: **Import von ProgGen** liest ein Muster aus einer Zeile des Programm Generators in den Patterngenerator.
+- Anleitung und Checkliste für Betatester ergänzt.
+
+Korrekturen:
+- keine
+
+## Version 1.45 (2026-10-17)
+
+Neue Funktionen:
+- keine
+
+Korrekturen:
+- Patterngenerator: Bei einer Änderung bleiben der Bildlauf und die markierte Zelle erhalten (Tabelle springt nicht an den Anfang).
+
+## Version 1.44 (2026-10-17)
+
+Neue Funktionen:
+- keine
+
+Korrekturen:
+- Patterngenerator: Bei einer Änderung springt die Tabelle nicht mehr an den Anfang, die markierte Zelle bleibt stehen.
+
+## Version 1.43 (2026-10-17)
+
+Neue Funktionen:
+- Patterngenerator: Entf leert eine Zelle, Strg+C, Strg+X und Strg+V kopieren, schneiden aus und fügen ein (auch mehrere Zellen aus einer Tabellenkalkulation).
+- Patterngenerator: Kontextmenü mit Zelle bearbeiten, Kopieren, Ausschneiden, Einfügen und Löschen.
+- Anleitung: neuer Abschnitt zum Patterngenerator.
+
+Korrekturen:
+- Patterngenerator: Die Muster-Spalten sind gleich breit.
+
+## Version 1.42 (2026-10-17)
+
+Neue Funktionen:
+- keine
+
+Korrekturen:
+- Patterngenerator: Spalte hinzufügen und entfernen funktioniert in allen LED-Zeilen, die Meldung „Cursor außerhalb der Tabelle“ kommt nur noch außerhalb der Tabelle.
+- Patterngenerator: Nach dem Einfügen oder Entfernen einer Spalte bleiben keine alten Balken stehen.
+
+## Version 1.41 (2026-10-17)
+
+Neue Funktionen:
+- Patterngenerator: Lange Texte laufen wie in Excel über leere Nachbarzellen, die Beschriftungen stehen rechtsbündig.
+
+Korrekturen:
+- Patterngenerator: Die Spalten für Beschriftung und Eingabe sind jetzt breit genug zum Lesen, die Nummern der Muster-Spalten sind lesbar.
+- Patterngenerator: Die Balken der grafischen Anzeige liegen auf den richtigen Zellen und erscheinen auch beim zweiten Programmstart sofort.
+
+## Version 1.40 (2026-10-17)
+
+Neue Funktionen:
+- Patterngenerator: Die Zellen lassen sich bearbeiten (die Spalten A bis D sind gesperrt).
+- Patterngenerator: Werkzeugleiste mit Neues Blatt, Aktualisieren, Neu berechnen, Spalte hinzufügen, Spalte entfernen und dem Haken RGB LED.
+- Patterngenerator: Die grafische Anzeige (Balken über den „x“-Zellen) erscheint gleich nach dem Laden.
+- Patterngenerator: Die Beschreibung des Blatts lässt sich aufklappen.
+
+Korrekturen:
+- keine
+
+## Version 1.39 (2026-10-17)
+
+Neue Funktionen:
+- Neuer Reiter „Patterngenerator“: zeigt die Tabelle des Patterngenerators an (Vorschau, das Bearbeiten folgt in der nächsten Version).
+
+Korrekturen:
+- keine

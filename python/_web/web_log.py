@@ -1,12 +1,13 @@
-# Datei-Version: 1.06 (2026-11-11) - web_log.py
+# Datei-Version: 1.07 (2026-11-17) - web_log.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_log.py
 # Path:           _web/web_log.py
-# Version:        1.06
-# Last Update:    2026-11-11
+# Version:        1.07
+# Last Update:    2026-11-17
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
+#   1.07  2026-11-17  Kein Fehler mehr in der Ereignisschleife, wenn die Browserseite beim Kompilieren geschlossen oder neu geladen wurde (Log-Element gehoert zu einem geloeschten Client)
 #   1.06  2026-11-11  Meldungen der ARDUINO IDE zum Netzwerk (JmDNS: javax.jmdns, dns[response, Hexdump, Steuerzeichen) werden weder angezeigt noch ins Protokoll geschrieben (tausende Zeilen je Minute auf einem Raspberry Pi mit verlaengertem Rechnernamen); eine Zeile im Protokoll nennt es je Lauf (fruehere Versionen ohne Eintrag)
 # ----------------------------------------------------------------------------------------------
 """Log-Fenster fuer Kompilieren und Hochladen (Ersatz fuer ARDUINOMonitorPage).
@@ -168,7 +169,10 @@ class WebLog:
 
     def _push(self, line, classes):
         if self._log is not None:
-            self._log.push(line, classes=classes or None)
+            try:  # v1.07
+                self._log.push(line, classes=classes or None)
+            except RuntimeError:                           # v1.07: Browserseite wurde geschlossen/neu geladen ("client has been deleted")
+                self._log = None  # v1.07
 
     def _on_loop(self, fn):
         loop = self._loop or wd._bridge.get("loop")

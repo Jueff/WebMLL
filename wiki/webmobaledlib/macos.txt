@@ -1,0 +1,93 @@
+====== webMobaLedLib – Installation auf dem Mac ======
+//Seitenstand 1.02 (2026-11-10), gilt für webMobaLedLib 3.08//
+
+Diese Seite gilt für **macOS ab Version 10.13**, auch für Macs mit Apple-Chip (M1 und neuer). Für die Installation öffnest du **einmal das Terminal**. Die Schritte dafür stehen unten Schritt für Schritt.
+
+===== Das brauchst du =====
+
+  * Einen Mac mit **macOS 10.13 oder neuer** und **Internet**. Auf macOS 10.11 und 10.12 geht es nicht.
+  * **Python 3.10 oder neuer.** Das Installationsskript prüft das. Das Python, das macOS mitbringt, ist zu alt. Wie du das richtige bekommst, steht in Schritt 1.
+  * Etwa **2 GB** freien Platz.
+
+===== Schritt 1: Python (nur wenn es fehlt) =====
+
+Das Installationsskript prüft selbst, ob **Python 3.10 oder neuer** da ist. Auf dem Mac **installiert es Python nicht ohne Rückfrage**:
+
+  * Hast du den Paketmanager **Homebrew**, fragt das Skript: **„Python 3.12 jetzt mit Homebrew installieren? [j/N]“**. Tippe **j** und drücke die Enter-Taste.
+  * Hast du Homebrew nicht, meldet das Skript, dass Python fehlt, und bricht ab. Dann installierst du Python **einmal selbst** von python.org. Am einfachsten machst du das **gleich jetzt**:
+
+  - Öffne im Browser [[https://www.python.org/downloads/|python.org/downloads]].
+  - Klicke auf den gelben Knopf **Download Python 3.x** und öffne die heruntergeladene Datei.
+  - Folge dem Installationsfenster (immer //Fortfahren//, am Ende //Installieren//; dein Mac-Passwort wird abgefragt).
+  - Wenn am Ende ein Fenster mit **Install Certificates.command** aufgeht, mache dort einen Doppelklick darauf. (Der Schritt ist nur bei einer älteren Programmversion nötig, schadet aber nicht.)
+
+Hast du schon Python 3.10 oder neuer, überspringst du diesen Schritt.
+
+===== Schritt 2: Das Programm herunterladen =====
+
+Klicke auf diesen Link:
+
+[[https://github.com/haroldlinke/WebMLL/releases/latest/download/webmobaledlib.zip|webmobaledlib.zip herunterladen]]
+
+Die Datei **webmobaledlib.zip** liegt danach im Ordner //Downloads// (rund 20 MB).
+
+===== Schritt 3: Einen Ordner anlegen und die Datei entpacken =====
+
+  - Öffne den **Finder** und gehe in deinen **Benutzerordner** (das Haus-Symbol mit deinem Namen).
+  - Lege dort einen **neuen Ordner** mit dem Namen **mobaledlib** an (//Ablage → Neuer Ordner//).
+  - Ziehe die Datei **webmobaledlib.zip** aus //Downloads// in diesen Ordner.
+  - Mache einen **Doppelklick** auf die ZIP-Datei. Sie wird entpackt.
+
+Danach liegt im Ordner **mobaledlib** ein Ordner **python**.
+
+{{:bilder:anleitungen:webmobaledlib:mac_01_ordner.png?500|Der Ordner mobaledlib mit dem Ordner python}}
+
+===== Schritt 4: Die Installation starten =====
+
+Jetzt kommt das Terminal. Du tippst fast nichts, denn du ziehst die Datei einfach hinein.
+
+  - Öffne das **Terminal**: //Programme → Dienstprogramme → Terminal//.
+  - Tippe ''bash'' und danach **ein Leerzeichen**. Drücke noch **nicht** die Enter-Taste.
+  - Öffne im **Finder** den Ordner **mobaledlib → python → install**.
+  - **Ziehe** die Datei **install_mac.command** mit der Maus in das Terminal-Fenster. Der Dateiname erscheint hinter ''bash''.
+  - Drücke die **Enter-Taste**.
+
+Es erscheint viel Text. Das ist normal: Das Programm richtet alles ein. Lass das Fenster offen. Es dauert **5 bis 15 Minuten**.
+
+{{:bilder:anleitungen:webmobaledlib:mac_02_terminal.png?500|Das Terminal mit dem Befehl bash und der hineingezogenen Datei}}
+
+Am Ende steht im Fenster **„Fertig. Starten: Programm webMobaLedLib auf dem Schreibtisch doppelklicken“**. Auf dem **Schreibtisch** liegt jetzt das Programm **webMobaLedLib**.
+
+===== Schritt 5: Das Programm starten =====
+
+  - Mache einen **Doppelklick** auf **webMobaLedLib** auf dem Schreibtisch.
+  - Beim **ersten Mal** meldet der Mac vielleicht, dass das Programm von einem nicht verifizierten Entwickler stammt. Klicke dann mit der **rechten Maustaste** auf das Symbol, wähle **Öffnen** und dann noch einmal **Öffnen**. Das ist nur beim ersten Mal nötig.
+  - Nach **20 bis 60 Sekunden** öffnet sich dein Browser mit der webMobaLedLib. Öffnet er sich nicht, tippe in die Adresszeile ''localhost:8080'' ein.
+
+**Beenden:** Klicke oben rechts auf den Knopf **Beenden**.
+
+===== Schritt 6: Die Lichtmaschine anschließen =====
+
+Stecke die Lichtmaschine mit dem USB-Kabel an den Mac. Wie es dann weitergeht, steht auf der Seite [[anleitungen:webmobaledlib:erstes_programm|Dein erstes Programm]]. (Hat dein Mac nur USB-C-Anschlüsse, brauchst du einen Adapter oder ein passendes Kabel.)
+
+===== Das Programm aktualisieren =====
+
+Im Programm: Menü **Hilfe → Update webMobaLedLib …**. Starte das Programm danach neu und lade die Seite im Browser neu.
+
+Mehr dazu steht auf der Seite [[anleitungen:webmobaledlib:aktualisieren|Das Programm aktualisieren]].
+
+===== Wenn etwas nicht klappt =====
+
+^ Was passiert ^ Was hilft ^
+| Der Mac meldet, das Programm stamme von einem nicht verifizierten Entwickler | Rechtsklick auf **webMobaLedLib** → **Öffnen** → **Öffnen** (nur beim ersten Mal). |
+| Im Terminal steht „Python 3.10 oder neuer wurde nicht gefunden“ | Schritt 1 ausführen (Homebrew-Frage mit **j** beantworten oder Python von python.org installieren) und Schritt 4 noch einmal. |
+| Beim Update steht „CERTIFICATE_VERIFY_FAILED“ | Mache im Ordner **Programme → Python 3.x** einen Doppelklick auf **Install Certificates.command**. |
+| Das Programm macht nichts | Ziehe im Terminal die Datei **start_mac.command** (Ordner //install//) hinter ''bash '' und drücke Enter. Dann bleiben die Meldungen stehen. |
+| Der Browser öffnet sich nicht | Tippe ''localhost:8080'' in die Adresszeile ein. |
+| Der Mac erkennt die Lichtmaschine nicht | Probiere ein anderes USB-Kabel (ein reines Ladekabel überträgt keine Daten). |
+
+Mehr zu Problemen allgemein: [[anleitungen:webmobaledlib:fehlersuche|Fehlersuche]].
+
+===== Das Programm entfernen =====
+
+Lösche das Programm **webMobaLedLib** auf dem Schreibtisch und den Ordner **mobaledlib**. Deine Einstellungen und Tabellen liegen getrennt im Datenordner und bleiben erhalten.

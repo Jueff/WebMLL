@@ -1,0 +1,29 @@
+====== webMobaLedLib – Die Werkzeug-Reiter ======
+//Seitenstand 1.09 (2026-11-17), gilt für webMobaLedLib 3.85//
+
+Neben dem [[anleitungen:webmobaledlib:programmgenerator|Programmgenerator]] hat die webMobaLedLib weitere **Reiter** mit Werkzeugen. Mit ihnen **testest du Farben, Servos und Sound**, stellst Geräte ein und siehst, was die Lichtmaschine sendet. Du brauchst sie nicht für ein erstes Programm. Sie helfen aber, wenn du Farben aussuchen oder ein Gerät in Betrieb nehmen willst.
+
+===== Die Reiter im Überblick =====
+
+^ Reiter ^ Wofür ist er da? ^ Lichtmaschine nötig? ^
+| [[anleitungen:webmobaledlib:wz_farbtest|Farb Test]] | Farben aussuchen und gleich an einer LED ansehen | ja, um die Farbe an der LED zu sehen |
+| [[anleitungen:webmobaledlib:wz_servo|Servo Einstellungen]] | Servos der MobaLedLib-Servoplatine testen und einstellen | ja |
+| [[anleitungen:webmobaledlib:wz_dmservo|DM Servo Einstellungen]] | Servos im „Direct Mode“ einstellen (nur wenn eingeschaltet) | ja |
+| [[anleitungen:webmobaledlib:wz_sound|Sound Test]] | Das Soundmodul ausprobieren | ja |
+| [[anleitungen:webmobaledlib:wz_dcckeyboard|DCC Keyboard]] | Schalter ausprobieren, auch ohne Digitalzentrale | ja |
+| [[anleitungen:webmobaledlib:wz_z21|Z21 Simulator]] | Die MobaLedLib aus einem Modellbahnprogramm steuern (nur wenn eingeschaltet) | ja |
+| [[anleitungen:webmobaledlib:wz_monitor|Serial Monitor]] | Sehen, was die Lichtmaschine meldet, und Befehle senden | ja |
+| [[anleitungen:webmobaledlib:wz_arduino_einstellungen|ARDUINO Einstellungen]] | Pfad zur **ARDUINO IDE** und Test des Programmerzeugens (nur nötig, wenn du die ARDUINO IDE statt PlatformIO benutzt; Board und Anschluss stellst du in **Optionen Werkzeuge** ein) | nein |
+| [[anleitungen:webmobaledlib:wz_programm_einstellungen|Programm Einstellungen]] | Sprache, Schrift, Darstellung und weitere Einstellungen | nein |
+
+Die Seiten [[anleitungen:webmobaledlib:patterngenerator|Timeline Editor]] und [[anleitungen:webmobaledlib:programmgenerator|Programm Generator]] haben eigene Beschreibungen.
+
+**Im Anfänger Modus** fehlen die Reiter **Timeline Editor**, **Z21 Simulator** und **ProgGenerator Einstellungen**. Siehe [[anleitungen:webmobaledlib:modus|Anfänger Modus und Experten Modus]].
+
+===== Gemeinsam für alle Werkzeuge =====
+
+  * **Die Lichtmaschine muss ein Programm haben.** Die meisten Werkzeuge sprechen über das USB-Kabel mit der Lichtmaschine. Dafür muss auf der Lichtmaschine **schon ein MobaLedLib-Programm** laufen; bei einer **neuen** Lichtmaschine überträgst du zuerst das Programm (siehe [[anleitungen:webmobaledlib:pg_arduino|Verbinden und Übertragen]]). Die Werkzeuge **verbinden sich bei Bedarf selbst** und schalten selbst zwischen **Effektmodus** und **Direktmodus** um ([[anleitungen:webmobaledlib:pg_arduino#die_drei_arten_der_verbindung|Die drei Arten der Verbindung]]). Du musst nicht vorher auf **Mit Lichtmaschine verbinden** klicken.
+  * **Nicht gleichzeitig.** Eine Lichtmaschine kann nur mit **einem Werkzeug** zur Zeit sprechen. Wenn etwas nicht reagiert, prüfe, ob er noch von einem anderen Reiter benutzt wird.
+  * **Vollbild.** Der Knopf **Vollbild** oben rechts blendet Titel, Menü und Reiter aus und gibt der Seite den ganzen Platz. Das ist praktisch auf dem **Smartphone** oder **Tablet**, zum Beispiel direkt an der Anlage. **Esc** oder derselbe Knopf schaltet zurück.
+  * **Direkt aufrufen.** Jeder Reiter hat eine eigene Adresse, zum Beispiel ''localhost:8080/Farbtest'', ''…/ServoTest1'', ''…/SoundTest'', ''…/DCCKeyboard'', ''…/SerialMonitor''. Du kannst sie als Lesezeichen speichern.
+  * **Nicht angezeigt?** Manche Reiter erscheinen nur, wenn du sie in den [[anleitungen:webmobaledlib:wz_programm_einstellungen|Programm Einstellungen]] einschaltest (**DM Servo Einstellungen**, **Z21 Simulator**).

@@ -1,15 +1,16 @@
-# Datei-Version: 1.02 (2026-11-05) - web_dcckeyboard.py
+# Datei-Version: 1.03 (2026-11-17) - web_dcckeyboard.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_dcckeyboard.py
 # Path:           _web/web_dcckeyboard.py
-# Version:        1.02
-# Last Update:    2026-11-05
+# Version:        1.03
+# Last Update:    2026-11-17
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
 #   1.00  2026-10-21  Neu: Reiter DCC Keyboard (mlpyproggen/DCC_KeyboardPage.py ohne Tk): 32 Schalter mit rotem und gruenem Knopf, Basisadresse, Kommando @ AAA CC 01
 #   1.01  2026-10-23  Texte mit eingesetzten Werten (f-Strings) mit tr("... {name}", name=...) umgestellt, damit sie uebersetzt werden
 #   1.02  2026-11-05  Beschreibungstext der Seite wird uebersetzt (description_text)
+#   1.03  2026-11-17  Hinweis: Menue Lichtmaschine statt ARDUINO
 # ----------------------------------------------------------------------------------------------
 """Web-Version der Seite "DCC Keyboard" (mlpyproggen/DCC_KeyboardPage.py, Klasse DCCKeyboardPage, ohne Tk).
 
@@ -181,7 +182,8 @@ def build(ctrl, is_active=None):
         if not ctrl.is_connection_open():
             ok = await asyncio.get_running_loop().run_in_executor(None, model.ensure_connected)
             if not ok:
-                ui.notify("Nicht mit dem ARDUINO verbunden (ARDUINO → Verbinden).", type="warning")
+                # ui.notify("Nicht mit dem ARDUINO verbunden (ARDUINO → Verbinden).", type="warning")  # v1.03 (entfallen)
+                ui.notify("Nicht mit der Lichtmaschine verbunden (Lichtmaschine → Verbinden).", type="warning")  # v1.03
                 return
         model.send(index, channel)
 

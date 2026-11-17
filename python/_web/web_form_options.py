@@ -1,9 +1,9 @@
-# Datei-Version: 1.24 (2026-11-14) - web_form_options.py
+# Datei-Version: 1.28 (2026-11-17) - web_form_options.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_form_options.py
 # Path:           _web/web_form_options.py
-# Version:        1.24
-# Last Update:    2026-11-14
+# Version:        1.28
+# Last Update:    2026-11-17
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
@@ -14,6 +14,10 @@
 #   1.22  2026-11-13  Schreibfehler im Titel: 'Optionen und spezielle Funktionen' (vorher 'Funktionien')
 #   1.23  2026-11-13  Wechsel des Arduino-Typs (Optionen): eine bestehende serielle Verbindung wird getrennt und der gewaehlte COM Port zurueckgesetzt (_web_board_changed), damit beim naechsten Mal die Port-Erkennung startet ohne die Meldung 'Es ist kein ... angeschlossen' (Rueckmeldung des Excel-Entwicklers)
 #   1.24  2026-11-14  Reiter OTA (nur bei Board ESP32): WLAN, OTA, Hostname, Adresse, Passwort (Beitrag des Fork-Entwicklers; web_esp32_ota.settings_panel)
+#   1.28  2026-11-17  Knopf 'Board und USB Port erkennen' steht ueber 'USB Port erkennen'; Reiter 'LED Arduino' heisst 'Lichtmaschine', Reiter 'OTA' heisst 'WLAN (OTA)'
+#   1.27  2026-11-17  Knopf 'Board und USB Port erkennen': stellt das erste gefundene Board ein und ruft USB Port erkennen auf (Formular mit gefundenem Board und Anschluss, dazu die anderen Boards); Anwender kann uebernehmen oder anderen Typ waehlen
+#   1.26  2026-11-17  Erkennen ohne voreingestellten COM Port und Board: der Knopf durchsucht selbst alle seriellen Anschluesse (Classify_Port), fragt bei mehreren Geraeten nach und traegt Board und COM Port ein
+#   1.25  2026-11-17  Reiter LED ARDUINO / DCC Arduino: statt des Hakens 'Automatisch erkennen' ein Knopf 'Erkennen' (erkennt das angeschlossene Board einmalig: Nano alt/neu ueber den Bootloader, ESP32, Pico); der Eintrag 'Typ von Arduino IDE benutzen' entfaellt (Vorschlag des Excel-Entwicklers)
 # ----------------------------------------------------------------------------------------------
 """Web-Ersatz fuer proggen/UserForm_Options.py (Optionen und spezielle Funktionen).
 
@@ -199,9 +203,10 @@ async def _options_async(spec: dict, st: dict):
                 key = "L" if side == "left" else "R"
                 # with ui.column().classes("gap-0"):  # v1.20 (entfallen)
                 with ui.column().classes("gap-0 shrink-0").style("min-width: 20rem"):  # v1.20: behaelt ihre Breite, die Beschriftungen (zum Beispiel Nano Normal (old Bootloader)) brechen nicht um
-                    ui.checkbox(p["auto_text"], value=bool(vals["auto_" + key]),
+                    # ui.checkbox(p["auto_text"], value=bool(vals["auto_" + key]),  # v1.25 (entfallen: Knopf Erkennen statt Haken)
                                 # on_change=lambda e, k=key: vals.__setitem__("auto_" + k, bool(e.value)))  # v1.06 (entfallen)
-                                on_change=lambda e, k=key: (vals.__setitem__("auto_" + k, bool(e.value)), update_dcc_tab()))  # v1.06
+                                # on_change=lambda e, k=key: (vals.__setitem__("auto_" + k, bool(e.value)), update_dcc_tab()))  # v1.06  # v1.25 (entfallen)
+                    # ui.button(p["detect_text"], on_click=action("__Detect_Board_" + key)).props("outline no-caps dense").classes("q-mb-xs").tooltip(p["detect_hint"])  # v1.25: erkennt das angeschlossene Board einmalig (statt des Hakens Automatisch erkennen)  # v1.28 (entfallen: der Knopf steht jetzt ueber USB Port erkennen)
                     first = {v: t for v, t in p["radios"] if v <= 3}
                     # second = {v: t for v, t in p["radios"] if v > 3}  # v1.08 (entfallen)
                     second = board_second(p)  # v1.08
@@ -239,7 +244,7 @@ async def _options_async(spec: dict, st: dict):
                     if t.get("nano_only"):  # v1.06
                         dcc["tab"], dcc["initial"] = tab_obj, bool(t.get("visible", True))  # v1.06
                         set_tab_visible(tab_obj, dcc["initial"])  # v1.06
-                ota_tab = ui.tab("OTA")
+                ota_tab = ui.tab(tr("WLAN (OTA)"))
                 ota_tab.set_visibility(vals.get("L") == esp32_value and esp32_value is not None)
             with ui.tab_panels(tabs, value=tab_objs[0]).classes("w-full"):
                 with ui.tab_panel(ota_tab):
@@ -250,6 +255,8 @@ async def _options_async(spec: dict, st: dict):
                             # with ui.row().classes("items-start no-wrap w-full"):  # v1.20 (entfallen)
                             with ui.row().classes("items-start w-full").style("flex-wrap: wrap; gap: 1rem 2rem"):  # v1.20: auf schmalen Bildschirmen rutscht die Auswahl des Boards unter die Knoepfe
                                 with ui.column().classes("grow"):  # v1.20
+                                    _dp = spec["pages"]["left" if t["side"] == "left" else "right"]  # v1.28
+                                    ui.button(_dp["detect_text"], on_click=action("__Detect_Board_" + ("L" if t["side"] == "left" else "R"))).props("outline no-caps").classes("w-64").tooltip(_dp["detect_hint"])  # v1.28: Board und USB Port erkennen steht ueber USB Port erkennen
                                     for b in t["buttons"]:
                                         button_row(b, compact=True)  # v1.20
                                 board_group(t["side"], tab)
@@ -344,6 +351,8 @@ def make_class(Base):
             for rb, d in self.radiobuttons.items():
                 if not rb.endswith(side):
                     continue
+                if d.get("value") == 5:                                   # v1.25: 'Typ von Arduino IDE benutzen' entfaellt im Web (Vorschlag des Excel-Entwicklers)
+                    continue  # v1.25
                 # if rb.startswith("ESP32") and not M37.ESP32_Lib_Installed():  # v1.07 (entfallen)
                 # if rb.startswith("ESP32") and not M37.ESP32_Lib_Installed() and not M28pio.Is_PlatformIO():  # v1.08 (entfallen)
                     # continue  # v1.08 (entfallen)
@@ -365,10 +374,12 @@ def make_class(Base):
                          "label": tr("Schreibt eine fertige Firmware (UF2-Datei aus dem Ordner MobaLedLib/firmware) auf den Raspberry Pi Pico")})  # v1.09
             subtitle = M09.Get_Language_Str("Für andere Hauptplatine")
             auto_text = M09.Get_Language_Str("Automatisch erkennen")
-            tabs = [{"name": "LED Arduino", "kind": "arduino", "side": "left", "buttons": left}]
+            detect_text = tr("Board und USB Port erkennen")  # v1.25
+            detect_hint = tr("Sucht den angeschlossenen Arduino (Nano alt oder neu, ESP32, Pico) an allen USB Anschlüssen, stellt das erste gefundene Board ein und zeigt es mit dem USB Port an. Dort kann es übernommen oder ein anderer Typ gewählt werden.")  # v1.25
+            tabs = [{"name": tr("Lichtmaschine"), "kind": "arduino", "side": "left", "buttons": left}]
             # pages = {"left": {"radios": self._radios("_L"), "subtitle": subtitle, "auto_text": auto_text}}  # v1.08 (entfallen)
             esp32_value = next((d["value"] for rb, d in self.radiobuttons.items() if rb.startswith("ESP32") and rb.endswith("_L")), None)  # v1.08
-            pages = {"left": {"radios": self._radios("_L"), "subtitle": subtitle, "auto_text": auto_text,  # v1.08
+            pages = {"left": {"radios": self._radios("_L"), "subtitle": subtitle, "auto_text": auto_text, "detect_text": detect_text, "detect_hint": detect_hint,  # v1.08  # v1.25
                               # "esp32_value": esp32_value, "esp32_lib": bool(M37.ESP32_Lib_Installed())}}  # v1.09 (entfallen)
                               "esp32_value": esp32_value, "esp32_lib": bool(M37.ESP32_Lib_Installed()),  # v1.09
                               # "pico_values": [d["value"] for rb, d in self.radiobuttons.items() if rb.startswith("PICO") and rb.endswith("_L")]}}  # v1.11 (entfallen)
@@ -382,7 +393,7 @@ def make_class(Base):
                                  # "buttons": tab_buttons(buttons, ["__Detect_Right_Port_Button_Click", "__ProInstall_Button_Click"])})  # v1.06 (entfallen)
                                  "buttons": tab_buttons(buttons, ["__Detect_Right_Port_Button_Click", "__ProInstall_Button_Click"]),  # v1.06
                                  "nano_only": True, "visible": M02a.Get_BoardTyp() == M02.HT_AM328})  # v1.06
-                    pages["right"] = {"radios": self._radios("_R"), "subtitle": subtitle, "auto_text": auto_text}
+                    pages["right"] = {"radios": self._radios("_R"), "subtitle": subtitle, "auto_text": auto_text, "detect_text": detect_text, "detect_hint": detect_hint}  # v1.25
                     pages["left"]["nano_values"] = [v for v, _text in pages["left"]["radios"] if self._is_nano_value(v)]  # v1.06
                 files = tab_buttons(buttons, ["__Import_Button_Click", "__Save_Button_Click", "__Load_Button_Click", "__Copy_Page_Button_Click"])
                 for b in files:
@@ -480,6 +491,57 @@ def make_class(Base):
             except Exception:                                  # noqa: BLE001  # v1.23
                 logger.debug("COM Port nicht zurueckgesetzt", exc_info=True)  # v1.23
             logger.info("Optionen: Arduino-Typ links/rechts gewechselt (%s): Verbindung getrennt, COM Port zurueckgesetzt", "links" if left else "rechts")  # v1.23
+
+        def _web_detect_board(self, left):  # v1.25  # v1.26  # v1.27 (Board und USB Port erkennen)
+            """Knopf 'Board und USB Port erkennen': sucht unter allen seriellen Anschluessen nach einem Arduino. Beim ersten gefundenen Board wird dieses
+            eingestellt und 'USB Port erkennen' aufgerufen; das Formular zeigt das gefundene Board mit Anschluss und wie bisher die anderen gefundenen Boards.
+            ESP32 (CP210x) und Pico nach der Beschreibung des Anschlusses, bei einem Nano ueber den Bootloader: 57600 Baud alt, 115200 Baud neu."""
+            import re  # v1.26
+            import proggen.M07_COM_Port as M07  # v1.25
+            import proggen.M08_ARDUINO as M08  # v1.25
+            try:  # v1.25: eine bestehende Verbindung des Programms belegt den Anschluss
+                import mlpyproggen.Prog_Generator as PG  # v1.25
+                if PG.global_controller.is_connection_open():  # v1.25
+                    PG.global_controller.disconnect()  # v1.25
+            except Exception:                                  # noqa: BLE001  # v1.25
+                logger.debug("Trennen vor dem Erkennen fehlgeschlagen", exc_info=True)  # v1.25
+            cands = []  # v1.26: [(Anschluss, Typ)]
+            try:  # v1.26
+                from serial.tools import list_ports as portlist  # v1.26
+                for cp in portlist.comports(include_links=False):  # v1.26
+                    if os.name != "nt" and re.match(r"^/dev/ttyS\d+$", str(cp.device)) and str(cp.hwid).strip().lower() in ("n/a", ""):  # v1.26
+                        continue  # v1.26
+                    t = M07.Classify_Port(cp)  # v1.26
+                    if t:  # v1.26
+                        cands.append((str(cp.device), t))  # v1.26
+            except Exception:                                  # noqa: BLE001  # v1.26
+                logger.debug("Anschlussliste nicht lesbar", exc_info=True)  # v1.26
+            def _num(x):  # v1.27: wie im Formular nach der Nummer des Anschlusses sortiert
+                m = re.search(r"(\d+)$", x[0])  # v1.27
+                return (int(m.group(1)) if m else 0, x[0])  # v1.27
+            cands.sort(key=_num)  # v1.27
+            if not cands:  # v1.26
+                P01.MsgBox(tr("Es wurde kein angeschlossener Arduino gefunden. Bitte den Arduino per USB anschließen und noch einmal „Board und USB Port erkennen“ drücken."), vbCritical, tr("Board und USB Port erkennen"))  # v1.26  # v1.27
+                return  # v1.26
+            dev, typ = cands[0]  # v1.27: das erste gefundene Board
+            if typ == "ESP32":  # v1.26
+                new_board = M02.BOARD_ESP32  # v1.26
+            elif typ == "Pico":  # v1.26
+                new_board = M02.BOARD_PICO  # v1.26
+            else:  # v1.26: Nano: Bootloader ansprechen
+                baud = M07.Get_Arduino_Baudrate(dev, 115200, 0, "")  # v1.26: probiert auch die andere Baudrate
+                logger.info("Erkennen: COM Port %s, Baudrate %s", dev, baud)  # v1.26
+                if baud == 57600:  # v1.26
+                    new_board = M02.BOARD_NANO_OLD  # v1.26
+                elif baud == 115200:  # v1.26
+                    new_board = M08.Get_New_Board_Type("", 0)  # v1.26
+                else:  # v1.27: Bootloader antwortet nicht: das Formular zeigt trotzdem den Anschluss; das Board bleibt unveraendert
+                    new_board = None  # v1.27
+            if new_board:  # v1.27
+                M28pio.Change_Board_Typ(left, new_board)  # v1.25
+                logger.info("Erkennen: Board %s eingestellt (COM Port %s)", new_board, dev)  # v1.26
+            # USB Port erkennen aufrufen: zeigt das Formular mit dem gefundenen Board und Anschluss und die anderen gefundenen Boards  # v1.27
+            getattr(self, PFX + ("__Detect_LED_Port_Button_Click" if left else "__Detect_Right_Port_Button_Click"))()  # v1.27
 
         def _web_ide_libs_question(self):  # v1.07
             """Zurueck auf die ARDUINO IDE: Gibt es sie, und sollen die Bibliotheken und Boards jetzt geprueft werden (beim Start war das wegen PlatformIO entfallen)?"""  # v1.07
@@ -637,6 +699,13 @@ def make_class(Base):
                     self._web_ide_libs_question()  # v1.07
                 self._web_hidden = False
                 self._web_reshow = False
+                if handler in ("__Detect_Board_L", "__Detect_Board_R"):    # Knopf Erkennen (gibt es nur im Web)  # v1.25
+                    try:  # v1.25
+                        self._web_detect_board(handler.endswith("L"))  # v1.25
+                    except Exception as ex:                                # noqa: BLE001  # v1.25
+                        logger.exception("Optionen: Board erkennen fehlgeschlagen")  # v1.25
+                        P01.MsgBox("Aktion fehlgeschlagen: " + str(ex), vbCritical, "Optionen")  # v1.25
+                    continue  # v1.25
                 if handler == "__Check_PIO_Button_Click":                 # gibt es nur im Web (kein Knopf des Originals)  # v1.04
                     self._web_check_pio()  # v1.04
                     continue  # v1.09

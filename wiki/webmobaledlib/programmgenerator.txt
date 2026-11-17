@@ -1,0 +1,61 @@
+====== webMobaLedLib – Der Programmgenerator ======
+//Seitenstand 1.08 (2026-11-17), gilt für webMobaLedLib 3.85//
+
+Der **Programmgenerator** ist das Herz der webMobaLedLib. In einer **Tabelle** legst du fest, was auf deiner Anlage passieren soll. Daraus erzeugt das Programm das Programm für die Lichtmaschine und überträgt es.
+
+Diese Seite zeigt dir, wie das Fenster aufgebaut ist und wie du Schritt für Schritt zu einem fertigen Programm kommst. Die einzelnen Bereiche sind auf eigenen Seiten beschrieben.
+
+{{:bilder:anleitungen:webmobaledlib:pg_01_fenster.png?700|Das Fenster des Programmgenerators mit den beschrifteten Bereichen}}
+
+===== Wie das Fenster aufgebaut ist =====
+
+^ Bereich ^ Was ist das? ^
+| **Kopfzeile** | Ganz oben: der Titel mit der **Programmversion**, rechts der **Status** der Verbindung („Nicht verbunden“ oder „Verbunden“), der Knopf **Mit Lichtmaschine verbinden** (er funktioniert nur, wenn auf der Lichtmaschine schon ein MobaLedLib-Programm läuft), **Vollbild** und **Beenden**. |
+| **Menü** | **Datei**, **Tabelle**, **Lichtmaschine** und **Hilfe**. Hier laden und speichern du deine Arbeit, rechnest die Tabelle neu und verbindest die Lichtmaschine. |
+| **Reiter** | Darunter die Seiten des Programms: **Programm Generator** (diese Seite), [[anleitungen:webmobaledlib:patterngenerator|**Timeline Editor**]], **Farb Test**, **Servo Einstellungen**, **Sound Test**, **DCC Keyboard**, **Serial Monitor**, **ARDUINO Einstellungen**, **Programm Einstellungen** und weitere. |
+| **Werkzeugleiste** | Die Knöpfe mit Symbol und Beschriftung: **Dialog Wizard**, **Setup übertragen**, **Zeilen löschen** und so weiter. Rechts davon wählst du die Ansicht **Tabelle**, **Grafik** oder **Beides** und siehst die Version der MobaLedLib-Bibliothek. |
+| **Tabelle** | Die Arbeitsfläche. Jede Zeile ist ein Effekt oder ein Gerät. |
+| **Blattreiter** | Ganz unten: die **Blätter** der Tabelle (**DCC**, **Selectrix**, **CAN**, **LNet**, **Examples**, **Config**). |
+
+Mehr zu den Teilen: [[anleitungen:webmobaledlib:pg_tabelle|Die Tabelle bedienen]], [[anleitungen:webmobaledlib:pg_werkzeugleiste|Die Werkzeugleiste]], [[anleitungen:webmobaledlib:pg_grafisch|Die grafische Ansicht]].
+
+===== Die Blätter =====
+
+Die Blätter unten sind getrennte Tabellen. Sie unterscheiden sich darin, **wie die Befehle zur Lichtmaschine kommen**: über **DCC** (digitale Zentrale), **Selectrix**, **CAN** oder **LNet**. Wenn du dir nicht sicher bist, benutze das Blatt **DCC**. Auf **Examples** stehen Beispiele. **Config** ist ein Systemblatt mit Einstellungen: Du änderst dort nichts von Hand.
+
+Du kannst eigene Kopien eines Blattes anlegen (zum Beispiel für ein zweites Modul). Wie das geht, steht auf der Seite [[anleitungen:webmobaledlib:pg_tabelle#die_blattreiter|Die Tabelle bedienen]].
+
+===== Die Spalten der Tabelle =====
+
+Du füllst die Spalten nicht alle von Hand aus. Der **Dialog Wizard** führt dich durch die Eingabe und trägt die Werte ein.
+
+^ Spalte ^ Bedeutung ^
+| **Aktiv** | Ein **Haken** bedeutet: Die Zeile wird im Programm für die Lichtmaschine verwendet. Ohne Haken wird sie ignoriert. So schaltest du zum Beispiel ein ganzes Haus vorübergehend ab: Zeilen markieren und die **Leertaste** drücken (siehe [[anleitungen:webmobaledlib:pg_tabelle#zeilen_aktivieren_und_deaktivieren|Die Tabelle bedienen]]). |
+| **Adresse oder Name** | Die **Adresse** (zum Beispiel die DCC-Adresse eines Schalters) oder ein **Name** für den Auslöser. |
+| **Beschreibung** | Ein freier Text von dir, zum Beispiel „Bahnhofsgebäude Licht“. |
+| **Verteiler-Nummer / Stecker-Nummer** | Notizen, an welchem Anschluss das Gerät hängt. Sie dienen nur der Übersicht. |
+| **Icon** | Das **Symbol** des gewählten Makros. Ein Klick darauf öffnet die **Makroauswahl**. |
+| **Name** | Der Name des Makros, zum Beispiel „Belebtes Haus“. |
+| **Beleuchtung, Sound, oder andere Effekte** | Der **Aufruf des Makros** mit seinen Werten. Das Programm trägt ihn selbst ein. Von Hand sollten ihn nur Fortgeschrittene ändern. |
+| **Start LedNr, LEDs** | Die Nummer der **ersten LED** der Zeile und die **Zahl der LEDs**. Das Programm rechnet beides selbst. |
+| **InCnt, Loc InCh** | Wie viele **Eingänge** die Zeile braucht und welcher Eingang das ist. Das Programm rechnet beides selbst. |
+| **LED/ Sound Kanal** | Der **Kanal** (die LED-Kette) bzw. der Sound, den die Zeile benutzt. |
+
+Eine ausführliche Beschreibung der Spalten steht auf der Seite [[anleitungen:programmgenerator|Der Programmgenerator]]. Sie gilt für die webMobaLedLib genauso.
+
+===== In vier Schritten zum fertigen Programm =====
+
+  - **Zeile anlegen:** Klicke auf **Dialog Wizard**. Das Programm führt dich durch die Eingabe.
+  - **Makro wählen und einstellen:** Wähle in der **Makroauswahl** den Effekt (zum Beispiel „Belebtes Haus“) und stelle seine Werte ein.
+  - **Übertragen:** Klicke auf **Setup übertragen**. Das Programm erzeugt das Programm für die Lichtmaschine und lädt es auf die Lichtmaschine. ([[anleitungen:webmobaledlib:pg_arduino|Verbinden und Übertragen]])
+  - **Testen:** Probiere den Effekt an deiner Anlage aus. Die **Testtasten** in der Tabelle simulieren Schalter. Dann ändere die Tabelle, bis alles so ist, wie du es willst.
+
+===== Weitere Seiten =====
+
+  * [[anleitungen:webmobaledlib:pg_tabelle|Die Tabelle bedienen]]: Zeilen, Zellen, Blattreiter
+  * [[anleitungen:webmobaledlib:pg_werkzeugleiste|Die Werkzeugleiste]]: Was jeder Knopf macht
+  * [[anleitungen:webmobaledlib:pg_grafisch|Die grafische Ansicht]]: Die Anlage als Bild
+  * [[anleitungen:webmobaledlib:pg_speichern|Speichern und Laden]]
+  * [[anleitungen:webmobaledlib:pg_arduino|Verbinden und Übertragen]]
+  * Die anderen Reiter (Farb Test, Servo, Sound, Monitor, Einstellungen): [[anleitungen:webmobaledlib:werkzeuge|Die Werkzeug-Reiter]]
+  * Was die einzelnen Makros tun: [[anleitungen:effekte_mll|Alle Funktionen im Detail]]

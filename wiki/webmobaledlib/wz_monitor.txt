@@ -1,0 +1,19 @@
+====== webMobaLedLib – Serial Monitor ======
+//Seitenstand 1.04 (2026-11-09), gilt für webMobaLedLib 3.04//
+
+Der **Serial Monitor** zeigt, was die **Lichtmaschine** über das USB-Kabel **meldet**, und schickt ihm **Befehle**. Er ist ein Werkzeug für **Fortgeschrittene** und für die **Fehlersuche**. Für den normalen Betrieb brauchst du ihn nicht.
+
+{{:bilder:anleitungen:webmobaledlib:wz_05_monitor.png?600|Der Reiter Serial Monitor}}
+
+===== So benutzt du ihn =====
+
+  - Wähle den **Anschluss** der Lichtmaschine. **Portliste aktualisieren** liest die Liste neu, wenn du die Lichtmaschine gerade angesteckt hast.
+  - Klicke auf **Verbinden**. **Trennen** löst die Verbindung wieder.
+  - Im großen Feld erscheinen die **Meldungen der Lichtmaschine**, jede mit der **Uhrzeit**.
+  - Zum **Senden** tippst du in das Feld **Eingabe** einen Befehl für die Lichtmaschine und klickst auf **Senden**.
+  - **Anzeige leeren** löscht die Meldungen im Fenster.
+
+===== Gut zu wissen =====
+
+  * Der Monitor benutzt **dieselbe Verbindung wie die anderen Werkzeuge** und **verbindet sich bei Bedarf selbst**. **Verbinde nur an einer Stelle.** Voraussetzung: Auf der Lichtmaschine läuft **schon ein MobaLedLib-Programm**. Er arbeitet im **Effektmodus** ([[anleitungen:webmobaledlib:pg_arduino#die_drei_arten_der_verbindung|Die drei Arten der Verbindung]]).
+  * Beim **Hochladen** muss die Lichtmaschine frei sein. Trenne vorher die Verbindung, wenn das Hochladen mit einer Meldung zum Anschluss abbricht.

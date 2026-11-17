@@ -1,0 +1,96 @@
+====== webMobaLedLib – LED Farb-Animation ======
+//Seitenstand 1.02 (2026-11-09), gilt für webMobaLedLib 3.04//
+
+Mit der **LED Farb-Animation** lässt du die **Farbe einer RGB-LED** sich langsam verändern: ein sanfter Wechsel von Rot nach Blau, ein Sonnenaufgang, ein Flackern oder ein Farbwechsel für ein Aquarium oder eine Disco. Du **zeichnest den Verlauf als Kurven**, und das Programm macht daraus die Einträge für die Lichtmaschine.
+
+Zum Ausprobieren steuert das Programm die LED **direkt** an (**Direktmodus**, siehe [[anleitungen:webmobaledlib:pg_arduino#die_drei_arten_der_verbindung|Die drei Arten der Verbindung]]).
+
+Der Dialog arbeitet **fast genauso wie die [[anleitungen:webmobaledlib:servo_animation|Servo Animation]]**. Es gibt aber **drei Kurven** statt einer: eine für **Rot**, eine für **Grün** und eine für **Blau**.
+
+{{:bilder:anleitungen:webmobaledlib:led_01_dialog.png?700|Der Dialog LED Farb-Animation mit den Einstellungen links und den drei Kurven rechts}}
+
+===== Das brauchst du =====
+
+  * Eine **RGB-LED** (WS2812 oder WS2811) an der MobaLedLib.
+  * Die webMobaLedLib mit einer **Tabellenzeile** für die LED (siehe [[anleitungen:webmobaledlib:pg_tabelle|Die Tabelle bedienen]]).
+  * Zum **Ausprobieren** eine **verbundene Lichtmaschine** ([[anleitungen:webmobaledlib:pg_arduino|Verbinden und Übertragen]]). Ohne Lichtmaschine kannst du die Animation trotzdem planen.
+
+===== Den Dialog öffnen =====
+
+  - Klicke im Programmgenerator auf **Dialog Wizard** (oder auf das Symbol einer Zeile).
+  - Wähle in der **Makroauswahl** die Gruppe **PatternConfig** und darin **LED Farb-Animation**.
+  - Es öffnet sich der Dialog **LED Farb-Animation**.
+
+Das **Fenster** lässt sich **verschieben** (am Titel ziehen) und in der **Größe ändern** (am Rand unten rechts ziehen). Das Programm merkt sich Größe und Lage.
+
+===== Die Einstellungen =====
+
+^ Einstellung ^ Bedeutung ^
+| **LED Adresse** | Die Adresse (Nummer) der LED, **nur für den Test** an der Lichtmaschine. |
+| **Anschluss-Kanal** | Der Kanal, an dem die LED angeschlossen ist. |
+| **Ausführung** | **Wiederholen**: Die EIN- und die AUS-Sequenz laufen immer wieder. **PingPong**: Die EIN-Sequenz läuft vorwärts und rückwärts. **Ein/Aus**: Beim Einschalten läuft die EIN-Sequenz, beim Ausschalten die AUS-Sequenz, jeweils **einmal**. **HSV**: Statt Rot, Grün und Blau stellst du **Farbton (H)**, **Sättigung (S)** und **Helligkeit (V)** ein (siehe unten). |
+| **EIN** | Der Ablauf beim **Einschalten**: **Start (ms)** (Wartezeit, bevor es beginnt), **Dauer (ms)** (so lange dauert der Farbverlauf), **Ende (ms)** (Wartezeit am Ende). Alles in Millisekunden (1000 ms = 1 Sekunde). |
+| **AUS** | Dasselbe für das **Ausschalten**. |
+| **Farbverlauf** | Wie sich die Farbe verändert: **Linear** (gleichmäßig), **Beschleunigung** (langsam anfangen, dann schneller werden) oder **Individuell** (du zeichnest die Kurven selbst, siehe unten). |
+| **Start / Ende: Rot, Grün, Blau** (je 0 bis 255) | Die Farbe am **Anfang** und am **Ende** des Verlaufs. 0 heißt „aus“, 255 „volle Helligkeit“. Beispiel: Rot 255, Grün 0, Blau 0 ist reines Rot. |
+| **ARDUINO Überblendung AUS** | Schaltet die Überblendung zwischen den Werten in der Lichtmaschine aus. Nur zum **Testen**. |
+| **Zeitstufen** | Wie die Zwischenschritte bestimmt werden: **Automatisch**, **Fester Wert** (dann gibst du den **Stufenabstand** in ms an) oder **Individuell** (du legst die Zeit jedes Punktes selbst fest). |
+
+===== Die Kurven =====
+
+Rechts zeigt die Grafik die drei **Kurven**: **waagerecht die Zeit** in Millisekunden, **senkrecht der Wert** (die Helligkeit des jeweiligen Farbanteils). Die **gestrichelte Linie** ist das Ende der Einschaltzeit. Jede Änderung zeichnet die Kurven **sofort neu**. **Update Grafik** rechnet noch einmal und beendet einen laufenden Test.
+
+Die **Farbfläche** neben **Aktiv** zeigt die Farbe, die die LED an der gewählten Stelle bekommt. So siehst du die Farbe auch ohne Lichtmaschine.
+
+===== Mit HSV statt RGB =====
+
+Bei der **Ausführung HSV** stellst du die Farbe nicht über Rot, Grün und Blau ein, sondern so:
+
+  * **Farbton (H):** die „Farbart“ (Rot, Gelb, Grün, Blau, …) auf einem Farbkreis.
+  * **Sättigung (S):** wie kräftig die Farbe ist (niedrig = blass, hoch = leuchtend).
+  * **Helligkeit (V):** wie hell die LED ist.
+
+Die drei Kurven heißen dann **Rot(H)**, **Grün(S)** und **Blau(V)**. Das Programm rechnet die Werte in die Farbe um, die die LED bekommt. Das ist praktisch für **Regenbogen** und **Dimmen**, weil du nur einen Wert änderst. Mehr dazu auf der Seite [[anleitungen:spezial:hsv_mode|HSV Farben]].
+
+===== Eigene Kurven zeichnen (Farbverlauf Individuell) =====
+
+{{:bilder:anleitungen:webmobaledlib:led_02_kurven.png?600|Die drei Kurven Rot, Grün und Blau, die aktive Kurve ist kräftig gezeichnet}}
+
+Beim **Farbverlauf Individuell** erscheinen **Punkte** auf den Kurven. Du bearbeitest immer **eine Kurve** zur Zeit:
+
+  * Wähle bei **Aktiv** die Kurve (**Rot**, **Grün** oder **Blau**; bei HSV **H**, **S**, **V**). Die anderen beiden werden **dünn mitgezeichnet**.
+  * **Ziehe die Punkte** der aktiven Kurve mit der Maus (oder dem Finger). Der **Wert** liegt zwischen 1 und 254. Die **Zeit** kannst du nur ziehen, wenn die **Zeitstufen** auf **Individuell** stehen. **Die Zeit eines Punktes gilt für alle drei Kurven.**
+  * Der **angeklickte Punkt** wird **orange**. Seine **Zeit** und sein **Wert** stehen in den Feldern unter der Grafik. Du kannst sie dort auch **eintippen**.
+  * **Punkt einfügen** setzt einen neuen Punkt in **allen drei Kurven** (hinter dem ausgewählten). **Punkt löschen** nimmt den Punkt aus **allen drei Kurven**.
+  * Änderst du die **Dauer**, werden die Zeiten aller Punkte in allen drei Kurven mitgestreckt.
+
+===== Ausprobieren =====
+
+Ist eine **Lichtmaschine verbunden**, zeigt die **LED** die Farbe, sobald du einen Punkt **anklickst oder ziehst** oder einen **Start- oder Endwert** änderst. Dabei bekommt die LED **die Farbe aller drei Kurven an dieser Stelle**.
+
+  * **Starte Test** spielt den Farbverlauf in Schritten von 40 ms **immer wieder** ab. **Stop Test** hält ihn an.
+  * Ohne verbundene Lichtmaschine meldet das Programm das. Antwortest du auf die Frage, ob die Lichtmaschine angeschlossen werden soll, mit **Abbrechen**, fragt das Programm bis zum Neustart nicht mehr von selbst. Nur **Starte Test** fragt wieder.
+
+===== Fertig: OK =====
+
+Mit **OK** trägt das Programm das Ergebnis in die Zeile der Tabelle ein: das Makro **PatternT…** mit den Farbwerten und eine **Kommentarzeile** ''#LEDColorAnim(…)'' mit deinen Einstellungen. Mit **Abbrechen** bleibt alles, wie es war.
+
+Du kannst die Zeile **später wieder öffnen** und ändern. Das Programm liest die Einstellungen aus der Zeile ein, bei **Individuell** auch alle drei Kurven. Danach überträgst du das Programm mit **Setup übertragen** auf die Lichtmaschine.
+
+===== Ein Beispiel: sanfter Wechsel von Rot nach Blau =====
+
+  - **Ausführung** **PingPong**.
+  - **EIN:** Start 0, **Dauer** 4000 ms, Ende 0.
+  - **Farbverlauf** **Linear**.
+  - **Start:** Rot 255, Grün 0, Blau 0. **Ende:** Rot 0, Grün 0, Blau 255.
+  - Mit **Starte Test** (oder nur mit der **Farbfläche**) siehst du, wie die LED von Rot über Violett nach Blau wechselt und wieder zurück.
+
+(Die Zahlen sind nur ein **Beispiel**.)
+
+===== Wenn etwas nicht klappt =====
+
+^ Was passiert ^ Was hilft ^
+| Die LED leuchtet beim Ausprobieren nicht | Ist die **Lichtmaschine verbunden**? Stimmen **LED Adresse** und **Anschluss-Kanal**? Prüfe die Kabel ([[anleitungen:webmobaledlib:pg_arduino|Verbinden und Übertragen]]). |
+| Die Farben auf der LED sehen anders aus als auf dem Bildschirm | LEDs zeigen Farben anders als Bildschirme. Teste Farben im [[anleitungen:webmobaledlib:wz_farbtest|Farb Test]] an der LED und stelle bei Bedarf die **LED-Farbkorrektur** ein. |
+| Ein Punkt lässt sich in der Zeit nicht ziehen | Stelle die **Zeitstufen** auf **Individuell**. |
+| Die Kurven sind beim erneuten Öffnen leer | Nur bei **Individuell** liest das Programm die Punkte aus der Zeile **PatternT…**. Hast du diese Zeile von Hand geändert, kann das fehlen. Zeichne die Kurven neu. |

@@ -1,21 +1,22 @@
-# Datei-Version: 1.03 (2026-10-26) - web_firewall.py
+# Datei-Version: 1.04 (2026-11-16) - web_firewall.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_firewall.py
 # Path:           _web/web_firewall.py
-# Version:        1.03
-# Last Update:    2026-10-26
+# Version:        1.04
+# Last Update:    2026-11-16
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
 #   1.00  2026-10-18  neu: Windows-Firewall: Regel fuer den Zugriff aus dem Netz einrichten, entfernen und pruefen (Knoepfe auf der Seite Programm Einstellungen)
 #   1.01  2026-10-18  Status nach Wirkung (Port, eingehend, zulassen, aktiv) statt nach dem Namen der Regel, Name mit Port, Entfernen und Einrichten ersetzen alle Regeln webMobaLedLib*, Blockierregeln und Netzwerkprofil in einem PowerShell-Aufruf; netsh entfaellt
 #   1.02  2026-10-18  Status lesen ohne Administratorrechte auf zwei Wegen (Get-NetFirewall*-Cmdlets und HNetCfg.FwPolicy2), Fehler werden gemeldet statt als keine Regel gewertet, Protokoll, BOM
+#   1.04  2026-11-16  Name der Regel jetzt "webMLL Server <Port>" (passend zu "webMLL OTA 32323"); Regeln mit dem alten Namen "webMobaLedLib*" werden weiter erkannt, ersetzt und entfernt
 #   1.03  2026-10-26  Zusammengesetzte Meldungen (Verkettungen und f-Strings) mit tr(...) uebersetzbar gemacht
 # ----------------------------------------------------------------------------------------------
 """Windows-Firewall fuer den Zugriff auf die Oberflaeche von anderen Rechnern im Netz.
 
 Ohne Regel verwirft Windows eingehende Verbindungen auf den Port (der Browser des anderen Rechners meldet einen Ladefehler, curl "timed out").
-Die Regel heisst "webMobaLedLib <Port>", gilt fuer den TCP-Port des Servers und nur fuer Privatnetzwerke. Einrichten und Entfernen brauchen
+Die Regel heisst "webMLL Server <Port>" (bis 3.65: "webMobaLedLib <Port>"), gilt fuer den TCP-Port des Servers und nur fuer Privatnetzwerke. Einrichten und Entfernen brauchen
 Administratorrechte: Der Aufruf von netsh geht ueber ShellExecute mit "runas", Windows fragt dann selbst (Benutzerkontensteuerung). Lesen
 (Pruefen, ob die Regel da ist) geht ohne Administratorrechte.
 """
@@ -33,7 +34,9 @@ except ImportError:                                   # aeltere Installation ohn
 
 logger = logging.getLogger(__name__)
 
-RULE_PREFIX = "webMobaLedLib"           # Namen der Regeln dieses Programms: "webMobaLedLib 8080" (frueher "webMobaLedLib"); auch von Hand angelegte mit diesem Anfang  # v1.01
+RULE_PREFIX = "webMLL Server"           # v1.04 (vorher "webMobaLedLib")
+LEGACY_PREFIXES = ("webMobaLedLib",)    # v1.04 alte Regelnamen, werden weiter erkannt, ersetzt und entfernt
+# Namen der Regeln dieses Programms: "webMLL Server 8080"; auch von Hand angelegte mit diesem Anfang  # v1.01
 
 
 def supported() -> bool:
@@ -98,7 +101,7 @@ def parse_status(text: str, port: int = 8080) -> dict:  # v1.02
         if key in seen:  # v1.02
             return  # v1.02
         seen.add(key)  # v1.02
-        result["rules" if kind == "R" else "blocks"].append({"name": name, "profile": profile, "ours": name.lower().startswith(RULE_PREFIX.lower())})  # v1.02
+        result["rules" if kind == "R" else "blocks"].append({"name": name, "profile": profile, "ours": name.lower().startswith(tuple(x.lower() for x in (RULE_PREFIX,) + LEGACY_PREFIXES))})  # v1.02
     for line in text.replace("\ufeff", "").splitlines():  # v1.02
         if "\t" in line:  # v1.02
             parts = line.split("\t")                                           # nicht strip(): ein leeres letztes Feld (kein Programm) endet mit dem Tabulator  # v1.02
@@ -178,17 +181,21 @@ def _powershell(command: str) -> tuple:  # v1.01
     return _elevated("powershell.exe", f'-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -Command "{command}"')  # v1.01
 
 
+def _remove_cmd() -> str:  # v1.04
+    return "; ".join(f"Remove-NetFirewallRule -DisplayName '{x}*' -ErrorAction SilentlyContinue" for x in (RULE_PREFIX,) + LEGACY_PREFIXES)
+
+
 def add_rule(port: int) -> tuple:
-    """Regel einrichten. Alle Regeln, deren Name mit webMobaLedLib beginnt (auch die alte "webMobaLedLib" und von Hand angelegte), werden zuerst geloescht:
+    """Regel einrichten. Alle Regeln, deren Name mit webMLL Server oder dem alten webMobaLedLib beginnt (auch von Hand angelegte), werden zuerst geloescht:
     keine doppelten Regeln, auch nicht fuer einen anderen Port"""
     port = int(port)
-    return _powershell(f"Remove-NetFirewallRule -DisplayName '{RULE_PREFIX}*' -ErrorAction SilentlyContinue; "  # v1.01
+    return _powershell(_remove_cmd() + "; "  # v1.04
                        f"New-NetFirewallRule -DisplayName '{rule_name(port)}' -Direction Inbound -Protocol TCP -LocalPort {port} -Action Allow -Profile Private | Out-Null")  # v1.01
 
 
 def remove_rule() -> tuple:
-    """Alle Regeln entfernen, deren Name mit webMobaLedLib beginnt. Andere Regeln (zum Beispiel die von Windows fuer Python angelegte) bleiben."""  # v1.01
-    return _powershell(f"Remove-NetFirewallRule -DisplayName '{RULE_PREFIX}*' -ErrorAction SilentlyContinue")  # v1.01
+    """Alle Regeln entfernen, deren Name mit webMLL Server oder dem alten webMobaLedLib beginnt. Andere Regeln (zum Beispiel die von Windows fuer Python angelegte) bleiben."""  # v1.01
+    return _powershell(_remove_cmd())  # v1.04
 
 
 def hint_other_system() -> str:

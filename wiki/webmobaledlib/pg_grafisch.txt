@@ -1,0 +1,86 @@
+====== webMobaLedLib – Die grafische Ansicht ======
+//Seitenstand 1.03 (2026-11-15), gilt für webMobaLedLib 3.46//
+
+Neben der Tabelle zeigt die webMobaLedLib deine Zeilen auch **als Bild**. Du siehst auf einen Blick, welches Gerät an welcher LED-Kette hängt, und kannst Effekte **mit der Maus** anlegen und verschieben. Das gab es in der Excel-Version nicht.
+
+===== Die Ansicht wählen =====
+
+Über der Tabelle stehen drei Knöpfe:
+
+  * **Tabelle:** nur die Tabelle (Standard).
+  * **Grafik:** nur das Bild.
+  * **Beides:** das Bild oben, die Tabelle unten. Die **Trennlinie** dazwischen ziehst du mit der Maus oder dem Finger. Ein **Doppelklick** auf die Trennlinie stellt sie zurück.
+
+Welche Ansicht beim Start gilt, stellst du im Reiter **Programm Einstellungen** ein (**Standardansicht des Programm Generators**).
+
+===== Ketten =====
+
+{{:bilder:anleitungen:webmobaledlib:pg_06_grafik_ketten.png?700|Die Grafik: Ketten mit Kästchen und der Makrobaum links}}
+
+Jede Zeile mit LEDs ist ein **Kästchen** mit dem Symbol des Makros, dem Namen und den LED-Nummern (zum Beispiel „LED 4 bis 7“). Die Kästchen einer **LED-Kette** hängen in einer Linie hintereinander. Makros ohne LEDs (zum Beispiel Sound) stehen in einer eigenen Spalte **Ohne LEDs**.
+
+  * **Anklicken** markiert die Zeile in der Tabelle. Umgekehrt markiert die Auswahl in der Tabelle das Kästchen.
+  * **Doppelklick** auf ein Kästchen öffnet die **Makroauswahl** dieser Zeile.
+  * Ein Kästchen lässt sich mit der Maus **verschieben**, aber nur **innerhalb seiner Kette**: vor oder hinter ein anderes Kästchen. Die LED-Nummern ändern sich dabei von selbst.
+  * Mit der **rechten Maustaste** auf ein Kästchen kommst du zum Menü: **Dialog öffnen**, **Nach oben**, **Nach unten**, **Löschen**.
+  * **Löschen:** Ziehe das Kästchen auf den **Papierkorb** (er erscheint rechts, solange du ziehst) oder drücke die Taste **Entf**. Das Programm fragt vorher nach.
+
+===== Alle Zeilen in den Ketten =====
+
+Normalerweise stehen Zeilen **ohne LEDs** (Sound, Logik, Eingänge) in einer eigenen Spalte **Ohne LEDs**. Mit dem Kontrollkästchen **Alle Zeilen** in der Kopfzeile der Ansicht **Ketten** (seit 3.21) kommen **alle aktiven Zeilen** in der **Reihenfolge der Tabelle** in die Ketten:
+
+  * Zeilen ohne LEDs haben einen **gestrichelten Rand** und den Text **Ohne LEDs**.
+  * Bei **mehreren Kanälen** steht eine Zeile ohne LEDs in der Kette der **nachfolgenden** Zeile mit LEDs, direkt vor ihr (solche Makros gehören meist zu ihr). Zeilen hinter der letzten Zeile mit LEDs stehen am Ende von deren Kette.
+  * **Inaktive** Zeilen (Spalte Aktiv leer) und mit dem Filter **ausgeblendete** Zeilen fehlen in dieser Ansicht.
+  * Der Schalter gilt **für das Blatt** (er wird mit dem Programm gesichert). In der Ansicht **Anlage** gibt es ihn nicht.
+  * **Verschieben** geht weiter nur innerhalb der Kette. Würde dabei eine Zeile in eine **andere Kette** wechseln (weil sie an der nachfolgenden Zeile hängt), lehnt das Programm den Zug mit einer Meldung ab.
+
+===== Verteiler und Stecker =====
+
+Mit einem **Verteiler** teilst du eine LED-Kette auf mehrere **Stecker** auf. Die Kette bleibt dabei vollständig erhalten: Nur das Signal der letzten LED an einem Stecker wird zum Verteiler zurückgeführt und dort an den nächsten Stecker weitergegeben. Ein Verteiler gehört zu **einem Kanal**; die erste LED am ersten Stecker legt den Kanal fest. Die Nummern der LEDs ändern sich durch den Verteiler nicht.
+
+Die Angaben stehen in der Tabelle in den Spalten **Verteiler-Nr.** und **Stecker-Nr.** (Dialog Wizard oder Doppelklick auf die Spalte). Sie sind **reiner Kommentar**: Das Programm prüft sie nicht und erzeugt daraus keinen Code. Die Grafik zeigt sie nur an. In der Ansicht **Ketten** gilt (seit 3.45):
+
+  * Um die Kästchen eines Verteilers liegt ein **Rechteck** mit der Überschrift **Verteiler V01**. Darin hat jeder **Stecker** ein eigenes Feld mit der Überschrift **Stecker 1**.
+  * Die Stecker stehen in der **Reihenfolge der Tabelle**, nicht nach der Steckernummer. Stehen die Zeilen mit den Steckern 1, 3 und 2 untereinander, zeichnet die Grafik die Felder in dieser Reihenfolge. Zwischen zwei Steckern steht der Hinweis **Signal zurück zum Verteiler** (bei nebeneinander stehenden Steckern ein Pfeil).
+  * Zeilen **ohne Verteilernummer** zwischen Zeilen desselben Verteilers liegen im Rechteck und im Feld des Steckers davor. Das Rechteck reicht immer von der ersten bis zur letzten Zeile des Verteilers.
+  * Kästchen im Rechteck bedienen sich wie alle anderen: anklicken, Doppelklick, verschieben, Menü mit der rechten Maustaste.
+
+**Woran erkennt das Programm einen Verteiler?** Eine Verteilernummer besteht aus dem Buchstaben **V** (groß oder klein) und **nur Ziffern**: `V1`, `V01`, `V12`. Die Schreibweise wird auf Großbuchstaben vereinheitlicht (`v01` wird `V01`). Das Feld **Stecker-Nr.** ist ein Text; dort darf auch etwas anderes als eine Zahl stehen.
+
+**ID-Zeilen:** Steht in der Spalte Verteiler-Nr. etwas anderes als eine solche Nummer (zum Beispiel der Typ `IRM-60.1`) und in der Spalte Stecker-Nr. etwa eine Sicherung (`F1 (F1,25)`), gilt die Zeile als **ID-Zeile** des Verteilers. Ihr Text (Beschreibung, Typ, Sicherung) steht als **Beschriftung unter der Überschrift** des Rechtecks. Es gilt die **nächste ID-Zeile oberhalb** der ersten Zeile des Verteilers, auch wenn die ID-Zeile selbst inaktiv ist. Bezeichnungen wie `VT1`, `Verteiler A` oder `V01a` erkennt das Programm **nicht** als Verteilernummer, es behandelt sie wie eine ID-Zeile.
+
+In der Kopfzeile der Ansicht **Ketten** gibt es zwei Kontrollkästchen (seit 3.46, beide gelten **für das Blatt** und werden mit dem Programm gesichert; vorgegeben sind beide **an**):
+
+  * **Verteiler:** Ohne Haken zeichnet die Grafik die Ketten wie ohne Verteiler, ohne Rechtecke und Felder.
+  * **Stecker nebeneinander:** Mit Haken stehen die Stecker eines Verteilers **nebeneinander**, ohne Haken **untereinander**. Der Haken lässt sich nur bedienen, wenn **Verteiler** an ist.
+
+In der Ansicht **Anlage** gibt es keine Rechtecke und diese Kontrollkästchen nicht.
+
+===== Neue Effekte aus dem Makrobaum =====
+
+Links neben der Grafik steht die Liste **aller Makros**, nach Gruppen sortiert. Das Feld darüber **sucht** in Name, Gruppe und Beschreibung.
+
+  * **Doppelklick** oder **+** hängt ein Makro **ans Ende der Kette** an und öffnet den Dialog mit den Werten.
+  * Du kannst ein Makro auch **mit der Maus auf die Grafik ziehen**. Die Stelle, an der du es loslässt, bestimmt, wo es landet: vor oder hinter einem Kästchen, am Ende einer Kette, in der Zone **Neue Kette** (ein neuer LED-Kanal) oder in der Spalte **Ohne LEDs**. Eine **blaue Markierung** zeigt die Stelle schon beim Ziehen.
+  * Nach dem Loslassen läuft der **ganze Dialog**. **Abbrechen** legt keine Zeile an. Wenn du beim Loslassen die **Umschalttaste** hältst, läuft nur der Dialog mit den Werten.
+
+===== Die Anlage als Bild =====
+
+{{:bilder:anleitungen:webmobaledlib:pg_07_grafik_anlage.png?700|Die Anlagenansicht: Kästchen auf einem Foto der Anlage}}
+
+Über der Grafik schaltest du mit **Ketten | Anlage** die Darstellung um. In der **Anlage** liegen die Kästchen **frei auf einem Bild** deiner Anlage, zum Beispiel einem Foto oder einem Gleisplan. Du ziehst jedes Kästchen dorthin, wo das Gerät auf der Anlage steht.
+
+  * **Bild laden …:** Wähle ein Bild (PNG, JPG, GIF oder WebP). Es wird im Browser verkleinert und dann übernommen.
+  * Das **Mausrad** zoomt, den **Hintergrund ziehen** verschiebt die Fläche. **Alles zeigen** passt das Bild ins Fenster.
+  * Der **Schieber „Größe“** stellt die Größe der Kästchen ein. **Raster** lässt die Kästchen beim Loslassen einrasten.
+  * **Mehrere Kästchen:** **Strg-Klick** (am Mac **Cmd-Klick**) nimmt ein Kästchen in die Auswahl auf. Mit **Umschalt + Ziehen** auf dem Hintergrund ziehst du einen Auswahlrahmen auf. Ziehst du ein gewähltes Kästchen, bewegen sich **alle gewählten** mit. Mit der rechten Maustaste kannst du sie **ausrichten** (links, rechts, oben, unten, mittig, gleichmäßig verteilen).
+  * **Rückgängig:** Der Knopf **↶** oder **Strg + Z** macht die letzten Änderungen der Positionen, des Ausrichtens und der Größe rückgängig (bis zu 30 Schritte).
+  * Die **Testtasten** der Tabelle stehen auch unter den Kästchen. Damit schaltest du Effekte direkt am Bild ein und aus.
+
+Das Bild und die Positionen werden mit deiner Arbeit **gespeichert**. Zum Weitergeben gibt es im Menü **Datei** die Einträge **ProgrammGenerator: Anlagenansicht speichern …** und **… laden …** (siehe [[anleitungen:webmobaledlib:pg_speichern|Speichern und Laden]]).
+
+===== Gut zu wissen =====
+
+  * Änderungen an der **Tabelle** (Zeilen einfügen, verschieben, löschen) lassen sich mit dem Rückgängig-Knopf der Grafik **nicht** zurücknehmen. Er gilt nur für die Positionen in der Grafik.
+  * Die Positionen hängen an der **Zeile** (dem Makroaufruf). Wenn du den Aufruf änderst, bekommt die Zeile einen neuen automatischen Platz.

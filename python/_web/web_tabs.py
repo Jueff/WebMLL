@@ -1,9 +1,9 @@
-# Datei-Version: 1.19 (2026-11-16) - web_tabs.py
+# Datei-Version: 1.21 (2026-11-17) - web_tabs.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_tabs.py
 # Path:           _web/web_tabs.py
-# Version:        1.16
-# Last Update:    2026-11-16
+# Version:        1.21
+# Last Update:    2026-11-17
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
@@ -27,6 +27,8 @@
 #   1.17  2026-11-15  Anfaenger Modus blendet zusaetzlich Servo Einstellungen, Sound Test, DCC Keyboard, Serial Monitor und ARDUINO Einstellungen aus
 #   1.18  2026-11-15  Neue Option Simulator anzeigen (Spezialeinstellungen)
 #   1.19  2026-11-16  Hinweis der Option Simulator anzeigen: Knopf Setup simulieren statt der Auswahl
+#   1.20  2026-11-17  Hinweis der Option Bootloader des Nano beim Pruefen erkennen: Knopf Erkennen statt Haken Automatisch erkennen
+#   1.21  2026-11-17  Hinweis der Option NanoBootloaderDetection: Knopf 'Board und USB Port erkennen'
 # ----------------------------------------------------------------------------------------------
 """Adressen der Reiter: Ein Reiter laesst sich direkt aufrufen, zum Beispiel http://localhost:8080/Farbtest. Mit dem Zusatz ?vollbild=1 oeffnet er sich gleich im Vollbild
 (Titel, Menue und Reiterleiste ausgeblendet, siehe web_fullscreen). Die Startseite / bleibt wie sie ist (Programm Generator).
@@ -93,7 +95,7 @@ PARAM_ADDITIONS = {"ColoredRowsBold": ({"ParName": "ColoredRowsBold", "Cnt": "1"
                  # "IPUploadTimeout"),  # v1.13  # v1.14 (entfallen)
                  "NanoBootloaderDetection": ({"ParName": "NanoBootloaderDetection", "Cnt": "1", "Type": "Checkbutton", "ConfigName": "NanoBootloaderDetection", "ParamLabelWidth": "25", "Min": "0", "Max": "255", "Default": "1",  # v1.14: Vorgabe an
                                        "Input Text": "Bootloader des Nano beim Prüfen erkennen",  # v1.13
-                                       "Hint": "Mit Haken (Vorgabe) spricht das Programm beim Prüfen des angeschlossenen Nano (Optionen Werkzeuge: Haken „Automatisch erkennen“ und „USB Port erkennen“) den Bootloader an und stellt „Nano Normal (old Bootloader)“ oder „Nano (neue Version)“ passend ein. Ohne Haken prüft das Programm nur, ob sich der Anschluss öffnen lässt, und lässt Ihre Einstellung unverändert."},  # v1.14
+                                       "Hint": "Mit Haken (Vorgabe) spricht das Programm beim Prüfen des angeschlossenen Nano (Optionen Werkzeuge: Knopf „Board und USB Port erkennen“) den Bootloader an und stellt „Nano Normal (old Bootloader)“ oder „Nano (neue Version)“ passend ein. Ohne Haken prüft das Programm nur, ob sich der Anschluss öffnen lässt, und lässt Ihre Einstellung unverändert."},  # v1.14
                                       "IPUploadTimeout"),  # v1.13
                  "ShowSimulator": ({"ParName": "ShowSimulator", "Cnt": "1", "Type": "Checkbutton", "ConfigName": "ShowSimulator", "ParamLabelWidth": "25", "Min": "0", "Max": "255", "Default": "",  # v1.18
                                     "Input Text": "Simulator anzeigen",  # v1.18

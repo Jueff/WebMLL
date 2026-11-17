@@ -1,0 +1,35 @@
+====== webMobaLedLib – Speichern und Laden ======
+//Seitenstand 1.01 (2026-11-05), gilt für webMobaLedLib 2.96//
+
+Das Programm speichert deine Arbeit **automatisch**. Zusätzlich kannst du sie als **Datei** sichern, weitergeben und wieder laden.
+
+===== Automatisch gespeichert =====
+
+  * Beim **Beenden** (Knopf **Beenden** oder Menü //Datei → Beenden …//) fragt das Programm: **Speichern und beenden**, **Beenden ohne Speichern** oder **Abbrechen**. Wähle normalerweise **Speichern und beenden**: Dann sind deine Tabellen und Einstellungen beim nächsten Start wieder da.
+  * Zwischendurch macht das Programm eine **Zwischensicherung**, wenn du etwas geändert hast und eine Weile nicht weiterarbeitest. Oben rechts im Menü steht dann „Zwischengespeichert <Uhrzeit>“. Wurde das Programm einmal **nicht normal beendet** (Absturz, Stromausfall), fragt es beim nächsten Start, ob die Zwischensicherung wiederhergestellt werden soll.
+  * Mit //Datei → Jetzt zwischenspeichern// löst du die Zwischensicherung selbst aus.
+
+Deine Daten liegen im **Datenordner** des Programms, getrennt von den Programmdateien. Sie bleiben bei einem Update erhalten.
+
+===== Das Menü „Datei“ =====
+
+{{:bilder:anleitungen:webmobaledlib:pg_08_dateimenue.png?400|Das Menü Datei}}
+
+^ Eintrag ^ Wirkung ^
+| **ProgrammGenerator: PGF-Datei speichern** | Speichert die **Tabelle** als Datei mit der Endung **.MLL_pgf**. Die Datei landet im Download-Ordner des Rechners, an dem du sitzt. Mit ihr gibst du dein Programm weiter oder machst eine Sicherung. |
+| **ProgrammGenerator: PGF-Datei lesen** | Lädt eine solche Datei in die Tabelle. Das Programm fragt vorher nach, denn die Tabelle wird ersetzt. Du kannst die Datei auch **auf die Tabelle ziehen**. |
+| **ProgrammGenerator-Workbook speichern als** | Speichert die **ganze Arbeitsmappe** (alle Blätter und Einstellungen). |
+| **ProgrammGenerator-Workbook von Datei lesen** | Lädt eine solche Arbeitsmappe. |
+| **ProgrammGenerator: Anlagenansicht speichern …** | Speichert die [[anleitungen:webmobaledlib:pg_grafisch|grafische Anlagenansicht]] (Bild und Positionen) als Datei **<Blatt>.MLL_view**. |
+| **ProgrammGenerator: Anlagenansicht laden …** | Lädt eine solche Datei. |
+| **Beenden …** | Beendet das Programm. Das Programm fragt, ob es vorher speichern soll (siehe oben). |
+
+**Tipp:** Speichere vor einem größeren Umbau eine **PGF-Datei**. Dann kannst du jederzeit zum alten Stand zurück.
+
+===== Beispiele =====
+
+Auf dem Blatt **Examples** (Blattreiter unten) stehen **Beispiele** zum Ausprobieren. Du kannst sie als Vorlage für eigene Programme nehmen.
+
+===== Eine Datei aus der Excel-Version laden =====
+
+Dateien des Excel-Programmgenerators mit der Endung **.MLL_pgf** lassen sich in der webMobaLedLib laden, auch von älteren Versionen. Nutze dafür **PGF-Datei lesen**.

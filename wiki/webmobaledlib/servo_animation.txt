@@ -1,0 +1,92 @@
+====== webMobaLedLib – Servo Animation ======
+//Seitenstand 1.05 (2026-11-09), gilt für webMobaLedLib 3.04//
+
+Mit der **Servo Animation** bestimmst du, **wie sich ein Servo bewegt**: wie schnell, mit welcher Beschleunigung, mit Pausen und mit eigenen Zwischenstellungen. So lässt du ein Tor sanft aufgehen, eine Schranke langsam senken oder einen Baum mit ein paar Rucklern umstürzen. Du **zeichnest den Bewegungsablauf als Kurve**, und das Programm macht daraus die Einträge für die Lichtmaschine.
+
+Zum Ausprobieren steuert das Programm den Servo **direkt** an (**Direktmodus**, siehe [[anleitungen:webmobaledlib:pg_arduino#die_drei_arten_der_verbindung|Die drei Arten der Verbindung]]).
+
+{{:bilder:anleitungen:webmobaledlib:servo_01_dialog.png?700|Der Dialog Servo Animation mit den Einstellungen links und der Kurve rechts}}
+
+===== Das brauchst du =====
+
+  * Einen **Servo**, entweder an der **Servoplatine** der MobaLedLib (Servo 1, 2 oder 3) oder als **Direct-Mode-Servo** (mit ATtiny, „Servo DM“).
+  * Die webMobaLedLib mit einer **Tabellenzeile** für den Servo (siehe [[anleitungen:webmobaledlib:pg_tabelle|Die Tabelle bedienen]]).
+  * Zum **Ausprobieren** eine **verbundene Lichtmaschine** ([[anleitungen:webmobaledlib:pg_arduino|Verbinden und Übertragen]]). Ohne Lichtmaschine kannst du die Animation trotzdem planen.
+
+Welche **Endstellungen** dein Servo verträgt, stellst du vorher im Reiter [[anleitungen:webmobaledlib:wz_servo|Servo Einstellungen]] ein.
+
+===== Den Dialog öffnen =====
+
+  - Klicke im Programmgenerator auf **Dialog Wizard** (oder auf das Symbol einer Zeile).
+  - Wähle in der **Makroauswahl** die Gruppe **PatternConfig** und darin **Servo Animation**. Für einen Servo, den du mit **zwei Tastern** bedienst, wähle **Servo Animation mit 2 Button**.
+  - Es öffnet sich der Dialog **Servo Animation**.
+
+Das **Fenster** lässt sich **verschieben** (am Titel ziehen) und in der **Größe ändern** (am Rand unten rechts ziehen). Das Programm merkt sich Größe und Lage. Wenn das Fenster schmal ist, steht die Kurve **unter** den Einstellungen.
+
+===== Die Einstellungen =====
+
+^ Einstellung ^ Bedeutung ^
+| **Servo Adresse** | Die Adresse des Servos (Nummer der LED), nur **für den Test** an der Lichtmaschine. |
+| **Anschluss-Kanal** | Der Kanal, an dem der Servo angeschlossen ist. |
+| **Servotyp** | **Servo DM**: Servo mit Direct Mode. **Servo1 (Rot)**, **Servo2 (Grün)**, **Servo3 (Blau)**: Servo mit WS2811 am roten, grünen oder blauen Anschluss. |
+| **Ausführung** | **Wiederholen**: Die EIN- und die AUS-Sequenz laufen immer wieder. **PingPong**: Die EIN-Sequenz läuft vorwärts und rückwärts (der AUS-Teil entfällt). **Ein/Aus**: Beim Einschalten läuft die EIN-Sequenz, beim Ausschalten die AUS-Sequenz, jeweils **einmal**. |
+| **EIN-Schaltparameter** | Der Ablauf beim **Einschalten**: **Startpause** (Wartezeit, bevor die Bewegung beginnt), **Dauer EIN** (so lange dauert die Bewegung), **Endepause** (Wartezeit am Ende). Alles in Millisekunden (1000 ms = 1 Sekunde). |
+| **AUS-Schaltparameter** | Dasselbe für das **Ausschalten** (**Startpause**, **Dauer AUS**, **Endepause**). |
+| **Kurventyp** | **Linear**: gleichmäßige Bewegung. **Beschleunigung**: langsam anfangen, dann schneller werden. **Individuell**: du zeichnest die Kurve selbst (siehe unten). |
+| **Anfangswert** (0 bis 255) und **Endwert** (1 bis 254) | Die Stellung des Servos am Anfang und am Ende der Bewegung. |
+| **ARDUINO Überblendung AUS** | Schaltet die Überblendung zwischen den Werten in der Lichtmaschine aus. Nur zum **Testen**. |
+| **Zeitstufen** | Wie die Zwischenschritte der Bewegung bestimmt werden: **Automatisch**, **Fester Wert** (dann gibst du den **Stufenabstand** in ms an, das ist der Abstand zwischen zwei Werten, die an den Servo gehen) oder **Individuell** (du legst die Zeit jedes Punktes selbst fest). |
+
+===== Die Kurve =====
+
+Rechts zeigt die Grafik **Kurvenverlauf** die berechnete Bewegung: **waagerecht die Zeit** in Millisekunden, **senkrecht der Wert** (die Stellung des Servos). Die **gestrichelte Linie** ist das Ende der Einschaltzeit. Jede Änderung zeichnet die Kurve **sofort neu**. **Update Grafik** rechnet noch einmal und beendet einen laufenden Test.
+
+Wenn du mit der Maus über die Grafik fährst, zeigen **Zeit** und **Wert** über der Grafik, wo der Zeiger steht.
+
+===== Eine eigene Kurve zeichnen (Kurventyp Individuell) =====
+
+{{:bilder:anleitungen:webmobaledlib:servo_02_kurve_individuell.png?600|Eine individuelle Kurve mit ziehbaren Punkten}}
+
+Beim **Kurventyp Individuell** erscheinen **grüne Punkte** auf der Kurve:
+
+  * **Ziehe einen Punkt** mit der Maus (oder dem Finger), um die Kurve zu verändern. Der **Wert** liegt dabei zwischen 1 und 254. Die **Zeit** eines Punktes kannst du nur ziehen, wenn die **Zeitstufen** auf **Individuell** stehen. Der erste und der letzte Punkt behalten ihre Zeit, und ein Punkt kann höchstens bis zu seinen Nachbarpunkten wandern.
+  * Der **angeklickte Punkt** wird **orange**. Seine **Zeit** und sein **Wert** stehen in den Feldern unter der Grafik. Du kannst sie dort auch **eintippen**.
+  * **Punkt einfügen** setzt einen neuen Punkt hinter den ausgewählten (in der Mitte zum nächsten).
+  * **Punkt löschen** entfernt den ausgewählten Punkt. Der erste und der letzte Punkt bleiben.
+  * Änderst du die **Dauer**, werden die Zeiten aller Punkte mitgestreckt.
+
+===== Ausprobieren =====
+
+Ist eine **Lichtmaschine verbunden**, bewegt sich der **Servo**, sobald du einen Punkt **anklickst oder ziehst** oder den **Anfangs- oder Endwert** änderst. So siehst du sofort, wie die Stellung aussieht.
+
+  * **Starte Test** spielt die Kurve in Schritten von 40 ms **immer wieder** ab. Ein **roter Strich** in der Grafik zeigt, wo die Bewegung gerade ist. **Stop Test** hält sie an.
+  * Ohne verbundene Lichtmaschine meldet das Programm das. Antwortest du auf die Frage, ob die Lichtmaschine angeschlossen werden soll, mit **Abbrechen**, **fragt das Programm beim Ziehen und Anklicken nicht mehr von selbst** (bis zum Neustart des Programms). Nur der Knopf **Starte Test** fragt wieder, denn dort willst du ausdrücklich testen.
+  * Wenn du den Dialog schließt, beendet das Programm den Testbetrieb am Servo.
+
+===== Fertig: OK =====
+
+Mit **OK** trägt das Programm das Ergebnis in die Zeile der Tabelle ein. Es besteht aus dem eigentlichen Makro **PatternT…** und einer **Kommentarzeile** ''#ServoAnim(…)'' mit deinen Einstellungen. Mit **Abbrechen** bleibt alles, wie es war.
+
+Du kannst die Zeile **später wieder öffnen** und ändern: Das Programm liest die Einstellungen aus der Zeile wieder ein, bei einer **individuellen Kurve** auch die Punkte. Danach überträgst du das Programm mit **Setup übertragen** auf die Lichtmaschine ([[anleitungen:webmobaledlib:pg_arduino|Verbinden und Übertragen]]).
+
+===== Ein Beispiel: ein Tor, das sanft aufgeht =====
+
+  - Servotyp **Servo1 (Rot)**, **Ausführung** **Ein/Aus**.
+  - **EIN:** Startpause 0, **Dauer EIN** 3000 ms, Endepause 0. **AUS:** Startpause 0, **Dauer AUS** 3000 ms, Endepause 0.
+  - **Kurventyp** **Beschleunigung**, **Anfangswert** 30, **Endwert** 200.
+  - Mit **Starte Test** siehst du, wie das Tor langsam anfängt und dann schneller wird. Passen die Werte nicht, ändere **Anfangswert** und **Endwert** (und prüfe vorher die Endstellungen im Reiter **Servo Einstellungen**).
+
+(Die Zahlen sind nur ein **Beispiel**. Dein Servo braucht je nach Aufbau andere Werte.)
+
+===== Wenn etwas nicht klappt =====
+
+^ Was passiert ^ Was hilft ^
+| Der Servo bewegt sich beim Ausprobieren nicht | Läuft auf der **Lichtmaschine** schon ein MobaLedLib-Programm? (Siehe [[anleitungen:webmobaledlib:pg_arduino|Verbinden und Übertragen]]; das Programm verbindet sich zum Ausprobieren selbst.) Stimmen **Servo Adresse**, **Anschluss-Kanal** und **Servotyp**? |
+| Der Servo schlägt an oder summt am Anschlag | Die **Grenzen** des Servos stimmen nicht. Stelle sie im Reiter [[anleitungen:webmobaledlib:wz_servo|Servo Einstellungen]] ein, und nimm dann **Anfangswert** und **Endwert** etwas **innerhalb** der Grenzen. |
+| Die Kurve ist beim erneuten Öffnen leer | Nur bei einer **individuellen Kurve** liest das Programm die Punkte aus der Zeile **PatternT…** der Tabelle. Hast du diese Zeile von Hand geändert, kann die Kurve fehlen. Zeichne sie neu. |
+| Ein Punkt lässt sich in der Zeit nicht ziehen | Stelle die **Zeitstufen** auf **Individuell**. |
+| Der Dialog ist zu groß oder zu klein | Ziehe am **Rand unten rechts**, um die Größe zu ändern. Am **Titel** verschiebst du das Fenster. |
+
+===== Verwandt =====
+
+Für die **Farbe einer LED** gibt es denselben Dialog mit drei Kurven: [[anleitungen:webmobaledlib:led_farbanimation|LED Farb-Animation]].

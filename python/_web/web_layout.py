@@ -1,9 +1,9 @@
-# Datei-Version: 1.13 (2026-11-15) - web_layout.py
+# Datei-Version: 1.17 (2026-11-17) - web_layout.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_layout.py
 # Path:           _web/web_layout.py
-# Version:        1.12
-# Last Update:    2026-11-14
+# Version:        1.17
+# Last Update:    2026-11-17
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
@@ -12,6 +12,10 @@
 #   1.11  2026-11-14  Kompaktes Layout: Suchleiste so hoch (22 px) und so gross beschriftet (12 px) wie die Werkzeugleistenknoepfe
 #   1.12  2026-11-14  Suchfeld: Loeschkreuz (Marginal) mittig
 #   1.13  2026-11-15  Doppelklick auf Name und Beleuchtung ist im Anfaenger Modus immer eingeschaltet
+#   1.14  2026-11-17  Suche (mll-find) im normalen Layout zweizeilig: oben Suchfeld und Pfeile, darunter Wort und Alle; im kompakten Layout bleibt sie einzeilig
+#   1.15  2026-11-17  Suche im normalen Layout: Trefferzaehler unter den Pfeilen (zwei Spalten); kompakt bleibt es eine Zeile (display: contents und order)
+#   1.16  2026-11-17  Suche (mll-find): Hintergrund, Rand und Ecken wie die Werkzeugleistenknoepfe, im normalen Layout so hoch wie die Knoepfe
+#   1.17  2026-11-17  Version der MobaLedLib (mll-libver) unter dem Knopf Beenden; im kompakten Layout ausgeblendet
 # ----------------------------------------------------------------------------------------------
 """Kompaktes Layout fuer kleine Bildschirme (Programm Einstellungen -> Darstellung).
 
@@ -82,6 +86,20 @@ CSS = """
 .mll-compact .mll-toolbar { gap: 3px !important; }
 .mll-compact .mll-tool { min-height: 22px; padding: 0 7px; border: 1px solid #b7c0cc; border-radius: 3px; background: #f4f6f9; }
 /* Suchleiste (v1.11): im kompakten Layout so hoch und so gross beschriftet wie die Werkzeugleistenknoepfe (22 px, Schrift 12 px) */
+/* Suche: normal zwei Spalten (links Suchfeld und darunter Wort/Alle, rechts Pfeile und darunter der Zaehler), kompakt eine Zeile  v1.15 */
+/* v1.16: Flaeche, Rand und Ecken wie die Knoepfe der Werkzeugleiste (.mll-tool), normal so hoch wie die Knoepfe (stretch) und der Inhalt mittig */
+.mll-find { background: linear-gradient(#ffffff, #eef2f6) !important; border: 1px solid #cfd8dc !important; border-radius: 8px !important; align-self: stretch; box-sizing: border-box; }
+.body--dark .mll-find { background: linear-gradient(#455a64, #37474f) !important; border-color: #546e7a !important; }
+.mll-compact .mll-find { align-self: auto; }
+.mll-compact .mll-libver { display: none !important; }  /* v1.17: Version der MobaLedLib unter Beenden braucht Hoehe, im kompakten Layout nicht angezeigt */
+.mll-find { flex-direction: row !important; align-items: center !important; gap: 4px !important; padding-top: 2px !important; padding-bottom: 2px !important; }
+.mll-find-checks { padding-left: 4px; }
+.mll-compact .mll-find { align-items: center !important; padding-top: 0 !important; padding-bottom: 0 !important; }
+.mll-compact .mll-find-left, .mll-compact .mll-find-right, .mll-compact .mll-find-checks, .mll-compact .mll-find-arrows { display: contents !important; }
+.mll-compact .mll-find-input { order: 1; }
+.mll-compact .mll-find-btn { order: 2; }
+.mll-compact .mll-find-count { order: 3; }
+.mll-compact .mll-find-chk { order: 4; }
 .mll-compact .mll-find { min-height: 22px; padding: 0 5px !important; gap: 2px !important; }
 .mll-compact .mll-find .q-field--dense .q-field__control, .mll-compact .mll-find .q-field--dense .q-field__marginal { height: 20px; min-height: 20px; }
 .mll-compact .mll-find .q-field__native, .mll-compact .mll-find .q-field__input { font-size: 12px !important; min-height: 20px; padding: 0 4px; }

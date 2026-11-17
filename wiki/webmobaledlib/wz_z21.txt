@@ -1,0 +1,37 @@
+====== webMobaLedLib – Z21 Simulator ======
+//Seitenstand 1.05 (2026-11-17), gilt für webMobaLedLib 3.85//
+
+Der **Z21 Simulator** gibt sich gegenüber **Modellbahn-Steuerprogrammen** als **Roco Z21** aus. Programme wie **Rocrail**, **iTrain**, **TrainController** oder **WinDigiPet** und die **Z21-Apps** schicken ihre Weichen- und Lokbefehle dann an die webMobaLedLib. Sie gibt sie als Schaltbefehl an die Lichtmaschine weiter. So bedienst du die **Schalter der MobaLedLib direkt aus deinem Steuerprogramm**.
+
+**Der Reiter ist normalerweise ausgeblendet.** Schalte ihn in den [[anleitungen:webmobaledlib:wz_programm_einstellungen|Programm Einstellungen]] mit dem Haken **Z21 Simulator anzeigen** ein. Nach dem Speichern erscheint er sofort.
+
+===== So benutzt du ihn =====
+
+  - **Voraussetzung:** Auf der Lichtmaschine läuft **schon ein MobaLedLib-Programm** (bei einer **neuen** Lichtmaschine zuerst [[anleitungen:webmobaledlib:pg_arduino|übertragen]]). Du musst nicht vorher auf **Mit Lichtmaschine verbinden** klicken: Das Werkzeug **verbindet sich bei Bedarf selbst**. Es arbeitet im **Effektmodus** ([[anleitungen:webmobaledlib:pg_arduino#die_drei_arten_der_verbindung|Die drei Arten der Verbindung]]). Der Simulator startet auch ohne Verbindung, aber dann kommt nichts an der Lichtmaschine an.
+  - Klicke auf **Start Simulator**.
+  - Die Seite zeigt die **IP-Adresse** und den **Port 21105** (UDP). Trage beides in deinem Steuerprogramm als Z21 ein. Läuft das Steuerprogramm auf **demselben Rechner**, genügt ''127.0.0.1''.
+  - Im Fenster darunter steht jedes ankommende Paket mit Uhrzeit, Absender und dem Befehl, der an die Lichtmaschine geht.
+  - **Stop Simulator** beendet ihn. **Zeige Taster-Adressen** zeigt die Eingangskanäle aus dem zuletzt erzeugten Programm.
+
+Der Simulator **läuft weiter**, wenn du den Reiter wechselst oder die Seite neu lädst. Er endet erst mit **Stop** oder mit dem Beenden des Programms.
+
+===== Adressen =====
+
+Die Z21 zählt Adressen **ab 0**, die MobaLedLib **ab 1**. Der Simulator rechnet das um. Du trägst im Programmgenerator die Adresse so ein, wie sie die MobaLedLib kennt.
+
+===== Firewall und Netz =====
+
+Das Steuerprogramm muss den **UDP-Port 21105** erreichen.
+
+  * **Windows:** Beim ersten Start fragt Windows, ob Python Verbindungen zulassen darf. Erlaube **Private Netzwerke**.
+  * **Linux** mit //ufw//: Im Terminal ''sudo ufw allow 21105/udp''.
+  * **Raspberry Pi:** Der Port ist normalerweise frei. Der Simulator kann dauerhaft auf dem Pi laufen.
+  * Ist der Port **schon belegt** (andere Z21-Software, ein zweiter Simulator), erscheint eine Meldung.
+
+===== Rückmeldungen =====
+
+Meldet das Steuerprogramm die **Rückmeldung (R-Bus)** an, fragt der Simulator die Lichtmaschine regelmäßig nach dem Stand der **Taster und Eingänge** und meldet **Änderungen** an das Steuerprogramm. Das tun zum Beispiel Rocrail und iTrain. Im Fenster erscheint nur eine Zeile, wenn sich etwas ändert.
+
+**Noch nicht umgesetzt:** die **Port-Liste** (bis zu drei Lichtmaschinen mit eigenen Adressbereichen). Es wird die eine Lichtmaschine benutzt, die mit dem Programm verbunden ist.
+
+Mehr zur Ansteuerung: [[anleitungen:allgemein:ansteuerung_mll_ueber_software|Ansteuerung der MobaLedLib]].

@@ -1,9 +1,9 @@
-# Datei-Version: 1.06 (2026-11-14) - headless_gridmodel.py
+# Datei-Version: 1.07 (2026-11-17) - headless_gridmodel.py
 # ----------------------------------------------------------------------------------------------
 # Name:           headless_gridmodel.py
 # Path:           headless/headless_gridmodel.py
-# Version:        1.06
-# Last Update:    2026-11-14
+# Version:        1.07
+# Last Update:    2026-11-17
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
@@ -13,6 +13,7 @@
 #   1.04  2026-10-23  build_grid: Parameter display_cells (einzelne Zellen uebersetzt anzeigen)
 #   1.05  2026-11-04  Zeile 2 (Ueberschriften) der Datenblaetter: Hintergrund RGB(26, 117, 210) = #1A75D2 statt reinem Blau #0000FF
 #   1.06  2026-11-14  Zellen mit Hintergrundfarbe: passende Schriftfarbe (contrast_color), Parameter bold_colored: fette Schrift
+#   1.07  2026-11-17  Datenblaetter: Zeile 1 (Konfiguration) ist wie Zeile 2 nicht von Hand aenderbar (_ro fuer alle Kopfzeilen)
 # ----------------------------------------------------------------------------------------------
 """Uebersetzt ein HeadlessSheet in Spalten- und Zeilendaten fuer AG Grid (ohne NiceGUI-Import,
 daher einzeln testbar)."""
@@ -194,6 +195,8 @@ def build_grid(sheet, icons: dict | None = None, no_edit_cols: set | None = None
             d["_tt"] = tt
             if header_rows:  # v1.01  nur die Kopfzeilen eines Datenblatts sperren, nicht jede Zeile mit einem Tooltip
                 d["_ro"] = True  # v1.01 (eingerueckt)  Kopfzeile mit Tooltips nicht editierbar (sonst gehen sie verloren)
+        if header_rows and r in header_rows:  # v1.07: Zeile 1 (Konfiguration, vom Programm gesetzt) und Zeile 2 sind nie von Hand aenderbar (Zeile 1 hat keine Tooltips und war bisher editierbar)
+            d["_ro"] = True  # v1.07
         return d
 
     rows = []
