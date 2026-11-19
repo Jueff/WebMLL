@@ -1,14 +1,15 @@
-# Datei-Version: 1.01 (2026-10-21) - M06_Write_Header_LED2Var.py
+# Datei-Version: 1.02 (2026-11-19) - M06_Write_Header_LED2Var.py
 # ----------------------------------------------------------------------------------------------
 # Name:           M06_Write_Header_LED2Var.py
 # Path:           proggen/M06_Write_Header_LED2Var.py
-# Version:        1.01
-# Last Update:    2026-10-21
+# Version:        1.02
+# Last Update:    2026-11-19
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
 #   1.00  2026-10-12  Stand der Umstellung (nicht erfasst)
 #   1.01  2026-10-21  Neu: Add_LED_Name_Entry (Makros Name_LED_Number und Name_LED_Offset), LED_Names_Tab (Version K des Excel-Programms)
+#   1.02  2026-11-19  Konfiguration getrennt von der Firmware (M42_Dyn_Config): LED2Var_Tab zwischen //MLLDYN_BEGIN und //MLLDYN_END nur fuer CONFIG_ONLY
 # ----------------------------------------------------------------------------------------------
 # -*- coding: utf-8 -*-
 #
@@ -85,6 +86,8 @@ import proggen.M28_Diverse as M28
 import proggen.M30_Tools as M30
 import proggen.M31_Sound as M31
 import proggen.M37_Inst_Libraries as M37
+import proggen.M42_Dyn_Config as M42
+import headless.headless_dyn_config as DC
 import proggen.M60_CheckColors as M60
 import proggen.M70_Exp_Libraries as M70
 import proggen.M80_Create_Multiplexer as M80
@@ -196,16 +199,24 @@ def Write_Header_File_LED2Var(fp):
         VBFiles.writeText(fp, '      } __attribute__ ((packed)) LED2Var_Tab_T;', '\n')
         # 05.11.20: Added: __attribute__ ((packed)) to be able to use it on oa 32 Bit platform
         VBFiles.writeText(fp, '', '\n')
-        VBFiles.writeText(fp, '#ifdef CONFIG_ONLY', '\n')
-        # 17.04.22 Juergen: add Simulator Led2Var feature
-        VBFiles.writeText(fp, '  const LED2Var_Tab_T LED2Var_Tab[] __attribute__ ((section (".MLLL2VConfig"))) =', '\n')
-        VBFiles.writeText(fp, '#else', '\n')
-        VBFiles.writeText(fp, '  const PROGMEM LED2Var_Tab_T LED2Var_Tab[] =', '\n')
-        VBFiles.writeText(fp, '#endif', '\n')
+        if M42.Active():  # v1.02: Konfiguration getrennt von der Firmware: die Tabelle gibt es nur fuer das Uebersetzen der Konfiguration
+            VBFiles.writeText(fp, DC.MARK_BEGIN, '\n')  # v1.02
+            VBFiles.writeText(fp, '#ifdef CONFIG_ONLY', '\n')  # v1.02
+            VBFiles.writeText(fp, '  const LED2Var_Tab_T LED2Var_Tab[] __attribute__ ((section (".MLLL2VConfig"))) =', '\n')  # v1.02
+        else:  # v1.02
+            VBFiles.writeText(fp, '#ifdef CONFIG_ONLY', '\n')
+            # 17.04.22 Juergen: add Simulator Led2Var feature
+            VBFiles.writeText(fp, '  const LED2Var_Tab_T LED2Var_Tab[] __attribute__ ((section (".MLLL2VConfig"))) =', '\n')
+            VBFiles.writeText(fp, '#else', '\n')
+            VBFiles.writeText(fp, '  const PROGMEM LED2Var_Tab_T LED2Var_Tab[] =', '\n')
+            VBFiles.writeText(fp, '#endif', '\n')
         VBFiles.writeText(fp, '      {', '\n')
         VBFiles.writeText(fp, '        // Var name           LED_Nr LED Offset   Typ                Compare value', '\n')
         VBFiles.writeText(fp, M30.DelLast(LED2Var_Tab,2), '\n')
         VBFiles.writeText(fp, '      };', '\n')
+        if M42.Active():  # v1.02
+            VBFiles.writeText(fp, '#endif', '\n')  # v1.02
+            VBFiles.writeText(fp, DC.MARK_END, '\n')  # v1.02
         VBFiles.writeText(fp, '', '\n')
         VBFiles.writeText(fp, '', '\n')
     _fn_return_value = True

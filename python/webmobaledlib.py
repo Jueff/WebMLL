@@ -1,8 +1,8 @@
-# Datei-Version: 4.35 (2026-11-19) - webmobaledlib.py
+# Datei-Version: 4.36 (2026-11-19) - webmobaledlib.py
 # ----------------------------------------------------------------------------------------------
 # Name:           webmobaledlib.py
 # Path:           webmobaledlib.py
-# Version:        4.35
+# Version:        4.36
 # Last Update:    2026-11-19
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
@@ -286,6 +286,7 @@
 #   4.20  2026-11-19  Kopfbereich (Issue 22): Reiterhoehe 36 px griff nicht (Screenshot: Reiter noch ca. 50 px hoch); jetzt mit !important und auch fuer .q-tab__content, Menuetasten ebenfalls !important
 #   4.21  2026-11-19  Erweiterungen: platformio.ini zeigt auf den Ordner der Erweiterung statt auf MobaLedLib.properties, mit symlink:// (M38_Extensions 1.07; Issue 6, Juergen)
 #   4.22  2026-11-19  Erweiterungen: Name und Beschreibung aus libraries.json anzeigen (headless_extensions 1.03, web_form_options 1.38; Issue 6, Juergen)
+#   4.36  2026-11-19  (Pull Request 33 von Juergen, Issue 31)    ESP32/Pico: Konfiguration getrennt von der Firmware, Programm nur bei Aenderungen hochladen (Einstellung serial_cfg; headless_dyn_config 1.00, M42_Dyn_Config 1.01, M06_Write_Header 1.11, M06_Write_Header_LED2Var 1.02, M08_ARDUINO 1.26, web_form_options 1.39, LEDs_AutoProg/MLLDynConfig.h)
 #   4.23  2026-11-19  Kontextmenue in der Tabelle: Ist das Browserfenster niedriger als das Menue (seit 4.02 mit Rueckgaengig/Wiederholen laenger), lag der Anfang ausserhalb des Fensters; JS_MENU_FIT haelt jedes Quasar-Menue im sichtbaren Bereich (Rueckmeldung Harold, 4.22)
 #   4.24  2026-11-19  Datei -> Einstellungen sichern / uebernehmen (Issue 29): ZIP mit Programm Einstellungen, Farbtest, Palette, Erweiterungen und ESP32 OTA, optional mit den Tabellen; Uebernahme beim naechsten Start (web_settings_transfer 1.00)
 #   4.25  2026-11-19  Log-Fenster: Schliessen erst nach dem Vorgang, Vorgang abbrechen nur waehrend er laeuft (Issue 28); Bilder Nano/Pico getauscht, Bildsuche ohne Gross-/Kleinschreibung (Issue 27); Liste der nicht benoetigten Dateien (Issue 26)
@@ -1371,7 +1372,7 @@ def font_scales(ctrl) -> dict:
 # VERSION = "3.60 (2026-11-16)"  # v3.60 (entfallen)
 # VERSION = "3.61 (2026-11-16)"  # v3.61 (entfallen)
 # VERSION = "3.62 (2026-11-16)"  # v3.62 (entfallen)
-VERSION = "4.35 (2026-11-19)"  # v3.64  # v4.26  # v4.27  # v4.28  # v4.29  # v4.30  # v4.31  # v4.32  # v4.33  # v4.34  # v4.35
+VERSION = "4.36 (2026-11-19)"  # v3.64  # v4.26  # v4.27  # v4.28  # v4.29  # v4.30  # v4.31  # v4.32  # v4.33  # v4.34  # v4.35  # v4.36
 # VERSION = "4.09 (2026-11-19)"  # v3.64 (entfallen)
 # VERSION = "4.08 (2026-11-19)"  # v3.64 (entfallen)
 # VERSION = "4.07 (2026-11-19)"  # v3.64 (entfallen)

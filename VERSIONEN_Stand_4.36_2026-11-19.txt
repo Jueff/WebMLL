@@ -1,0 +1,150 @@
+Datei-Version: 1.03 (2026-11-19) - VERSIONEN_Stand_4.36_2026-11-19.txt
+
+webMobaLedLib, Release-Stand 2026-11-19 (webmobaledlib.py Version 4.36) - Versionen der von Claude gelieferten Dateien im Ordner python
+
+arduino_prefs.py                     1.02
+fast_paths.py                        1.01
+no_tk.py                             1.01
+pi_check.py                          1.05
+recover.py                           1.00
+release_tools.py                     1.09
+repair.py                            1.04
+test_headless_contract.py            1.01
+userdata.py                          1.03
+webmobaledlib.py                     4.36
+_web/__init__.py                     1.00
+_web/mll_graph.js                    1.16
+_web/mll_servocurve.js               1.03
+_web/mll_tabs.js                     1.00
+_web/web_access.py                   1.13
+_web/web_auth.py                     1.05
+_web/web_colorcheck.py               1.07
+_web/web_dcckeyboard.py              1.03
+_web/web_dialogs.py                  1.10
+_web/web_esp32_ota.py                1.06
+_web/web_firewall.py                 1.04
+_web/web_form_comport.py             1.08
+_web/web_form_exchange.py            1.02
+_web/web_form_firmware.py            1.03
+_web/web_form_firmware_download.py   1.02
+_web/web_form_house.py               1.07
+_web/web_house_tips.py            1.00
+_web/web_form_ledcoloranim.py        1.00
+_web/web_form_options.py             1.39
+_web/web_form_other.py               1.07
+_web/web_form_select.py              1.01
+_web/web_form_servoanim.py           1.04
+_web/web_fullscreen.py               1.02
+_web/web_graph.py                    1.16
+_web/web_i18n.py                     1.11
+_web/web_instance.py                 1.00
+_web/web_layout.py                   1.20
+_web/web_log.py                      1.10
+_web/web_logging.py                  1.05
+_web/web_macro_tree.py               1.12
+_web/web_network.py                  1.01
+_web/web_params.py                   1.12
+_web/web_password.py                 1.02
+_web/web_pattern_test.py             1.01
+_web/web_pattgen.py                  1.24
+_web/web_pi_status.py                1.00
+_web/web_serial.py                   1.12
+_web/web_serial_page.py              1.01
+_web/web_servotest.py                2.08
+_web/web_servotest2.py               1.02
+_web/web_settings_transfer.py        1.00
+_web/web_sheet_tabs.py               1.05
+_web/web_simulator.py                1.00
+_web/web_soundtest.py                1.02
+_web/web_tabs.py                     1.25
+_web/web_toolbar.py                  1.03
+_web/web_update.py                   1.16
+_web/web_viewswitch.py               1.00
+_web/web_z21.py                      1.04
+ExcelAPI/headless_sheet.py           1.02
+ExcelAPI/XLA_Application.py          1.23
+headless/__init__.py                 1.00
+headless/headless_app_controller.py  1.10
+headless/headless_controller.py      1.01
+headless/headless_esp32_ota.py       1.10
+headless/headless_extensions.py      1.03
+headless/headless_firmware_dl.py     1.00
+headless/headless_git.py             1.01
+headless/headless_graph.py           1.07
+headless/headless_graph_layout.py    1.06
+headless/headless_graph_ops.py       1.08
+headless/headless_gridmodel.py       1.07
+headless/headless_hex_upload.py      1.01
+headless/headless_isp.py             1.00
+headless/headless_ledcoloranim.py    1.00
+headless/headless_pattern_test.py    1.00
+headless/headless_pattgen.py         1.22
+headless/headless_pico.py            1.02
+headless/headless_pio_cache.py       1.00
+headless/headless_proggen.py         1.11
+headless/headless_search.py          1.01
+headless/headless_servoanim.py       1.02
+headless/headless_shutdown.py        1.00
+headless/headless_smoke.py           1.01
+headless/headless_ssl.py             1.00
+headless/headless_start.py           1.03
+headless/headless_startup.py         1.01
+install/align_icon_names.py          1.00
+install/check_project_writes.py      1.00
+install/find_mobaledlib.py           1.01
+install/make_icons.py                1.03
+install/make_legacy_names.py         1.00
+install/make_web_icons.py            1.01
+mlpyproggen/DefaultConstants.py      1.01
+mlpyproggen/Pattern_Generator.py     1.01
+mlpyproggen/Prog_Generator.py        1.10
+pattgen/M08_Load_Sheet_Data.py       1.02
+pattgen/M17_Import_a_Dec_Macro.py    1.02
+pi/esp32_index_check.py              1.00
+proggen/clsExtension.py              1.01
+proggen/DieseArbeitsmappe.py         1.04
+proggen/F00_mainbuttons.py           1.02
+proggen/M02_Public.py                1.05
+proggen/M02a_Public.py               1.02
+proggen/M03_Dialog.py                1.03
+proggen/M06_Write_Header.py          1.11
+proggen/M06_Write_Header_LED2Var.py  1.02
+proggen/M06_Write_Header_SW.py       1.09
+proggen/M07_COM_Port.py              1.12
+proggen/M07_COM_Port_New.py          1.04
+proggen/M08_ARDUINO.py               1.26
+proggen/M08_Fast_ARDUINO.py          1.01
+proggen/M08_Install_FastBootLoader.py 1.03
+proggen/M09_Language.py              1.07
+proggen/M10_Par_Description.py       1.02
+proggen/M12_Copy_Prog.py             1.01
+proggen/M17_Import_old_Data.py       1.03
+proggen/M18_Save_Load.py             1.05
+proggen/M18a_Load_PicoConfig.py      1.01
+proggen/M20_PageEvents_a_Functions.py 1.12
+proggen/M28_Diverse.py               1.03
+proggen/M30_Tools.py                 1.02
+proggen/M32_DCC.py                   1.04
+proggen/M37_Inst_Libraries.py        1.06
+proggen/M38_Extensions.py            1.07
+proggen/M39_Simulator.py             1.11
+proggen/M50_Exchange.py              1.02
+proggen/M70_Exp_Libraries.py         1.01
+proggen/Userform_House.py            1.01
+proggen/UserForm_Options.py          1.06
+proggen/Userform_Other.py            1.03
+vb2py/vbclasses.py                   1.04
+vb2py/vbfunctions.py                 1.01
+
+csv/Web_Languages.csv (Katalog der Oberflaeche, 6 Sprachen)
+extensions_known.json (Liste der bekannten Erweiterungen, neu seit 3.96)
+images/LED_image.png, PICO_image.png, ESP32_image.png (Bilder der Boards; seit 4.25 richtig zugeordnet)
+
+headless/headless_dyn_config.py      1.00
+proggen/M42_Dyn_Config.py            1.01
+test_dyn_config.py                   1.01
+LEDs_AutoProg/MLLDynConfig.h         PR 33
+
+PDF (install_manual/): ANLEITUNG_Installation.pdf = Version 4.36, BETATEST_Checkliste.pdf = Version 3.18
+Ausserhalb des Ordners python: zip_erstellen.bat Version 1.11 (liegt neben dem Ordner python, ROOT_IN_ZIP=1), START_HIER.txt und START_HIER.md (die .txt kommt in den obersten Ordner des ZIP, die .md ist fuer GitHub), RELEASE_Ablauf.md, HOC_intern.md, HOC_Anwender.md (Stand 4.33), DATEIEN_IM_PAKET_Issue26.md (Liste der Dateien, die nicht ins Paket muessen)
+Neu seit 3.93 (Versionen 3.94 bis 4.36): Aenderungen in webmobaledlib.py, ExcelAPI, _web (web_tabs, web_params, web_form_options, web_serial, web_form_*, web_layout, web_log u.a.; neu: web_settings_transfer), headless (neu: headless_extensions; headless_esp32_ota mit Ausgabe zeilenweise und Abbrechen), proggen (M06_Write_Header_SW, M07_COM_Port, M08_ARDUINO, M38_Extensions u.a.), mlpyproggen/Prog_Generator.py, install (neue Symbole, Anleitung, Checkliste), csv/Web_Languages.csv, libraries (P_ScheduleMLX, P_ScheduleDuoMLX), images

@@ -1,9 +1,9 @@
-# Datei-Version: 1.10 (2026-11-18) - M06_Write_Header.py
+# Datei-Version: 1.11 (2026-11-19) - M06_Write_Header.py
 # ----------------------------------------------------------------------------------------------
 # Name:           M06_Write_Header.py
 # Path:           proggen/M06_Write_Header.py
-# Version:        1.10
-# Last Update:    2026-11-18
+# Version:        1.11
+# Last Update:    2026-11-19
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
@@ -17,6 +17,7 @@
 #   1.08  2026-11-15  Simulator-Betriebsart ueber M39.Get_Sim_Mode (Auswahl Kein/Nur/Mit Simulator)
 #   1.09  2026-11-17  Fehlermeldung der House-Zeiten verweist auf die Programm Einstellungen statt auf die Seite Config (die Werte stehen dort)
 #   1.10  2026-11-18  Firmware-Defines aus den ESP-Einstellungen erzeugen (Beitrag von moosbewohner, Pull Request 11)
+#   1.11  2026-11-19  Konfiguration getrennt von der Firmware (ESP32/Pico, Option serial_cfg, M42_Dyn_Config): MLL_DYNAMIC_CONFIG, Tabellen zwischen //MLLDYN_BEGIN und //MLLDYN_END nur fuer CONFIG_ONLY (die Zeilen sind mit '# v1.07' markiert), Finalize mit Rueckfall auf die klassische Kopfdatei; die Startwerte (Set_Start_Values) gehen als Tabelle Start_Values_Tab in die Konfigurationsdatei
 # ----------------------------------------------------------------------------------------------
 # -*- coding: utf-8 -*-
 #
@@ -97,6 +98,8 @@ import proggen.M30_Tools as M30
 import proggen.M37_Inst_Libraries as M37
 import proggen.M38_Extensions as M38
 import proggen.M39_Simulator as M39
+import proggen.M42_Dyn_Config as M42  # v1.07
+import headless.headless_dyn_config as DC  # v1.07
 #import proggen.M60_CheckColors as M60
 #import proggen.M70_Exp_Libraries as M70
 import proggen.M80_Create_Multiplexer as M80
@@ -1509,6 +1512,7 @@ def Write_Header_File_and_Upload_to_Arduino(CreateFilesOnly=False, LEDsInUse=Non
     except:
         pass
     Debug.Print("Write_Header - Filename:"+Name)
+    DynMode = M42.Decide(CreateFilesOnly, HeaderOnly)                                                          # v1.07: ESP32/Pico: Konfiguration getrennt von der Firmware
     Ext_AddrTxt=DelTailingEmptyLines(Ext_AddrTxt)
     Store_ValuesTxt=DelTailingEmptyLines(Store_ValuesTxt)
     # 01.05.20: Jürgen
@@ -1533,6 +1537,10 @@ def Write_Header_File_and_Upload_to_Arduino(CreateFilesOnly=False, LEDsInUse=Non
     VBFiles.writeText(fp, '#ifndef __LEDS_AUTOPROG_H__', '\n')
     VBFiles.writeText(fp, '#define __LEDS_AUTOPROG_H__', '\n')
     VBFiles.writeText(fp, '', '\n')
+    if DynMode:  # v1.07
+        VBFiles.writeText(fp, '#define MLL_DYNAMIC_CONFIG            // The data tables are not part of the firmware. They are loaded from the file system (see MLLDynConfig.h)', '\n')  # v1.07
+        VBFiles.writeText(fp, '#define MLL_FIRMWARE_SIG "' + DC.SIG_PLACEHOLDER + '"', '\n')  # v1.07
+        VBFiles.writeText(fp, '', '\n')  # v1.07
     VBFiles.writeText(fp, '#ifndef CONFIG_ONLY', '\n')
     # 04.03.22 Juergen: add Simulator feature
     VBFiles.writeText(fp, '#ifndef ARDUINO_RASPBERRY_PI_PICO', '\n')
@@ -1666,15 +1674,23 @@ def Write_Header_File_and_Upload_to_Arduino(CreateFilesOnly=False, LEDsInUse=Non
         # 05.11.20: Added: __attribute__ ((packed)) to be able to use it on oa 32 Bit platform
         VBFiles.writeText(fp, '', '\n')
         VBFiles.writeText(fp, '// Definition of external adresses', '\n')
-        VBFiles.writeText(fp, '#ifdef CONFIG_ONLY', '\n')
-        # 04.03.22 Juergen: add Simulator feature
-        VBFiles.writeText(fp, 'const Ext_Addr_T Ext_Addr[] __attribute__ ((section (".MLLAddressConfig"))) =', '\n')
-        VBFiles.writeText(fp, '#else', '\n')
-        VBFiles.writeText(fp, 'const PROGMEM Ext_Addr_T Ext_Addr[] =', '\n')
-        VBFiles.writeText(fp, '#endif', '\n')
+        if DynMode:  # v1.07: die Tabelle gibt es nur fuer das Uebersetzen der Konfiguration
+            VBFiles.writeText(fp, DC.MARK_BEGIN, '\n')  # v1.07
+            VBFiles.writeText(fp, '#ifdef CONFIG_ONLY', '\n')  # v1.07
+            VBFiles.writeText(fp, 'const Ext_Addr_T Ext_Addr[] __attribute__ ((section (".MLLAddressConfig"))) =', '\n')  # v1.07
+        else:  # v1.07
+            VBFiles.writeText(fp, '#ifdef CONFIG_ONLY', '\n')
+            # 04.03.22 Juergen: add Simulator feature
+            VBFiles.writeText(fp, 'const Ext_Addr_T Ext_Addr[] __attribute__ ((section (".MLLAddressConfig"))) =', '\n')
+            VBFiles.writeText(fp, '#else', '\n')
+            VBFiles.writeText(fp, 'const PROGMEM Ext_Addr_T Ext_Addr[] =', '\n')
+            VBFiles.writeText(fp, '#endif', '\n')
         VBFiles.writeText(fp, '         { // Addr & Typ    InCnt', '\n')
         VBFiles.writeText(fp, Ext_AddrTxt)
         VBFiles.writeText(fp, '         };', '\n')
+        if DynMode:  # v1.07
+            VBFiles.writeText(fp, '#endif', '\n')  # v1.07
+            VBFiles.writeText(fp, DC.MARK_END, '\n')  # v1.07
         VBFiles.writeText(fp, '', '\n')
         VBFiles.writeText(fp, '', '\n')
     # Ext_AddrTxt_Used
@@ -1705,10 +1721,6 @@ def Write_Header_File_and_Upload_to_Arduino(CreateFilesOnly=False, LEDsInUse=Non
     VBFiles.writeText(fp, DayAndNightTimer, '\n')
     # 07.10.20:
     VBFiles.writeText(fp, '', '\n')
-    VBFiles.writeText(fp, '//*******************************************************************', '\n')
-    VBFiles.writeText(fp, '// *** Configuration array which defines the behavior of the LEDs ***', '\n')
-    VBFiles.writeText(fp, 'MobaLedLib_Configuration()', '\n')
-    VBFiles.writeText(fp, '  {', '\n')
     import re
     # Browser cell editing can collapse the ESP32 display block onto one line.
     display_block = (r"(?m)^([ \t]*)#ifdef[ \t]+ESP32[ \t]+"
@@ -1719,25 +1731,48 @@ def Write_Header_File_and_Upload_to_Arduino(CreateFilesOnly=False, LEDsInUse=Non
     ConfigTxt = re.sub(display_block,
                        r"\1#ifdef ESP32\n\1#define USE_ESP32_EXTENSIONS\n\1#define USE_UI\n"
                        r"\1#define UI_MLLTime \2\n\1#endif", ConfigTxt)
-    VBFiles.writeText(fp, ConfigTxt, '\n')
     options = getattr(P01.ActiveSheet, "esp32_options", None)  # v1.10
-    if options:  # v1.10
-        VBFiles.writeText(fp, '#ifdef ESP32', '\n')  # v1.10
-        mode = options.get("oled", 0)  # v1.10
-        if type(mode) is int and 1 <= mode <= 5:  # v1.10
-            for symbol in ("USE_ESP32_EXTENSIONS", "USE_UI"):  # v1.10
-                VBFiles.writeText(fp, f'#ifndef {symbol}\n#define {symbol}\n#endif', '\n')  # v1.10
-            VBFiles.writeText(fp, f'#undef UI_MLLTime\n#define UI_MLLTime {mode}', '\n')  # v1.10
-        for key, symbol, define in (  # v1.10
-            ("ldr", "READ_LDR", "READ_LDR"),  # v1.10
-            ("store_status", "ENABLE_STORE_STATUS", "ENABLE_STORE_STATUS()"),  # v1.10
-        ):  # v1.10
-            if options.get(key) is True:  # v1.10
-                VBFiles.writeText(fp, f'#ifndef {symbol}\n#define {define}\n#endif', '\n')  # v1.10
-        VBFiles.writeText(fp, '#endif', '\n')  # v1.10
+
+    def write_esp32_options():  # v1.07 (vorher direkt im Ablauf, unveraendert)
+        if options:  # v1.10
+            VBFiles.writeText(fp, '#ifdef ESP32', '\n')  # v1.10
+            mode = options.get("oled", 0)  # v1.10
+            if type(mode) is int and 1 <= mode <= 5:  # v1.10
+                for symbol in ("USE_ESP32_EXTENSIONS", "USE_UI"):  # v1.10
+                    VBFiles.writeText(fp, f'#ifndef {symbol}\n#define {symbol}\n#endif', '\n')  # v1.10
+                VBFiles.writeText(fp, f'#undef UI_MLLTime\n#define UI_MLLTime {mode}', '\n')  # v1.10
+            for key, symbol, define in (  # v1.10
+                ("ldr", "READ_LDR", "READ_LDR"),  # v1.10
+                ("store_status", "ENABLE_STORE_STATUS", "ENABLE_STORE_STATUS()"),  # v1.10
+            ):  # v1.10
+                if options.get(key) is True:  # v1.10
+                    VBFiles.writeText(fp, f'#ifndef {symbol}\n#define {define}\n#endif', '\n')  # v1.10
+            VBFiles.writeText(fp, '#endif', '\n')  # v1.10
+
+    if DynMode:  # v1.07: die Firmware sieht nur die Praeprozessor-Zeilen der Konfiguration, die Makros stehen im Zweig CONFIG_ONLY
+        VBFiles.writeText(fp, '// Preprocessor settings from the configuration', '\n')  # v1.07
+        for cfgline in ConfigTxt.splitlines():  # v1.07
+            if re.match(r'\s*#\s*(if|ifdef|ifndef|elif|else|endif|define|undef|include)\b', cfgline):  # v1.07
+                VBFiles.writeText(fp, cfgline, '\n')  # v1.07
+        write_esp32_options()  # v1.07
+        VBFiles.writeText(fp, '', '\n')  # v1.07
+        VBFiles.writeText(fp, DC.MARK_BEGIN, '\n')  # v1.07
+        VBFiles.writeText(fp, '#ifdef CONFIG_ONLY', '\n')  # v1.07
+        VBFiles.writeText(fp, 'enum { MLL_CNT_BEGIN = __COUNTER__ };            // The RAM size is the number of __COUNTER__ steps used by the macros / 2', '\n')  # v1.07
+    VBFiles.writeText(fp, '//*******************************************************************', '\n')
+    VBFiles.writeText(fp, '// *** Configuration array which defines the behavior of the LEDs ***', '\n')
+    VBFiles.writeText(fp, 'MobaLedLib_Configuration()', '\n')
+    VBFiles.writeText(fp, '  {', '\n')
+    VBFiles.writeText(fp, ConfigTxt, '\n')
+    if not DynMode:  # v1.07
+        write_esp32_options()  # v1.07
     VBFiles.writeText(fp, '  EndCfg // End of the configuration', '\n')
     VBFiles.writeText(fp, '  };', '\n')
     VBFiles.writeText(fp, '//*******************************************************************', '\n')
+    if DynMode:  # v1.07
+        VBFiles.writeText(fp, 'const uint16_t MLL_ConfigRamSize __attribute__ ((section (".MLLRamSize"))) = (__COUNTER__ - MLL_CNT_BEGIN - 1) / 2;', '\n')  # v1.07
+        VBFiles.writeText(fp, '#endif', '\n')  # v1.07
+        VBFiles.writeText(fp, DC.MARK_END, '\n')  # v1.07
     VBFiles.writeText(fp, '', '\n')
     VBFiles.writeText(fp, '#ifndef COPYLED_OFF', '\n')
     # 23.05.23:
@@ -1749,11 +1784,24 @@ def Write_Header_File_and_Upload_to_Arduino(CreateFilesOnly=False, LEDsInUse=Non
     VBFiles.writeText(fp, '#endif', '\n')
     VBFiles.writeText(fp, '', '\n')
     VBFiles.writeText(fp, '//---------------------------------------------', '\n')
-    VBFiles.writeText(fp, 'void Set_Start_Values(MobaLedLib_C &MobaLedLib)', '\n')
-    VBFiles.writeText(fp, '//---------------------------------------------', '\n')
-    VBFiles.writeText(fp, '{', '\n')
-    VBFiles.writeText(fp, Start_Values)
-    VBFiles.writeText(fp, '}', '\n')
+    if DynMode:  # v1.07: die Startwerte gehen als Tabelle in die Konfigurationsdatei, die Firmware setzt sie mit MllDynSetStartValues()
+        VBFiles.writeText(fp, DC.MARK_BEGIN, '\n')  # v1.07
+        VBFiles.writeText(fp, '#ifdef CONFIG_ONLY', '\n')  # v1.07
+        import re  # v1.07
+        StartList = re.findall(r'Set_Input\(\s*(\d+)\s*,\s*(\d+)\s*\)', Start_Values)  # v1.07
+        if len(StartList) > 0:  # v1.07
+            VBFiles.writeText(fp, '#define MLL_HAS_START_VALUES', '\n')  # v1.07
+            VBFiles.writeText(fp, 'typedef struct { uint16_t Channel; uint8_t Value; } __attribute__ ((packed)) Start_Value_T;', '\n')  # v1.07
+            VBFiles.writeText(fp, 'const Start_Value_T Start_Values_Tab[] __attribute__ ((section (".MLLStartConfig"))) =', '\n')  # v1.07
+            VBFiles.writeText(fp, '         {' + ', '.join('{' + c + ', ' + v + '}' for c, v in StartList) + '};', '\n')  # v1.07
+        VBFiles.writeText(fp, '#endif', '\n')  # v1.07
+        VBFiles.writeText(fp, DC.MARK_END, '\n')  # v1.07
+    else:  # v1.07
+        VBFiles.writeText(fp, 'void Set_Start_Values(MobaLedLib_C &MobaLedLib)', '\n')
+        VBFiles.writeText(fp, '//---------------------------------------------', '\n')
+        VBFiles.writeText(fp, '{', '\n')
+        VBFiles.writeText(fp, Start_Values)
+        VBFiles.writeText(fp, '}', '\n')
     VBFiles.writeText(fp, '', '\n')
     #begin change 01.05.20: Jürgen
     if Store_ValuesTxt_Used():
@@ -1781,10 +1829,20 @@ def Write_Header_File_and_Upload_to_Arduino(CreateFilesOnly=False, LEDsInUse=Non
         VBFiles.writeText(fp, '    } __attribute__ ((packed)) Store_Channel_T;', '\n')
         # 05.11.20: Added: __attribute__ ((packed)) to be able to use it on oa 32 Bit platform
         VBFiles.writeText(fp, '', '\n')
-        VBFiles.writeText(fp, '// Definition of channels and counters that need to store state in EEProm' + vbCrLf + 'const PROGMEM Store_Channel_T Store_Values[] =' + vbCrLf + '         { // Mode + InCnt , Channel', '\n')
+        if DynMode:  # v1.07
+            VBFiles.writeText(fp, '// Definition of channels and counters that need to store state in EEProm', '\n')  # v1.07
+            VBFiles.writeText(fp, '#define MLL_HAS_STORE_VALUES', '\n')  # v1.07
+            VBFiles.writeText(fp, DC.MARK_BEGIN, '\n')  # v1.07
+            VBFiles.writeText(fp, '#ifdef CONFIG_ONLY', '\n')  # v1.07
+            VBFiles.writeText(fp, 'const Store_Channel_T Store_Values[] __attribute__ ((section (".MLLStoreConfig"))) =' + vbCrLf + '         { // Mode + InCnt , Channel', '\n')  # v1.07
+        else:  # v1.07
+            VBFiles.writeText(fp, '// Definition of channels and counters that need to store state in EEProm' + vbCrLf + 'const PROGMEM Store_Channel_T Store_Values[] =' + vbCrLf + '         { // Mode + InCnt , Channel', '\n')
         # 21.12.22 replace vbcr with vbcrlf
         VBFiles.writeText(fp, Store_ValuesTxt)
         VBFiles.writeText(fp, '         };', '\n')
+        if DynMode:  # v1.07
+            VBFiles.writeText(fp, '#endif', '\n')  # v1.07
+            VBFiles.writeText(fp, DC.MARK_END, '\n')  # v1.07
         VBFiles.writeText(fp, '', '\n')
     else:
         VBFiles.writeText(fp, '', '\n')
@@ -1837,6 +1895,10 @@ def Write_Header_File_and_Upload_to_Arduino(CreateFilesOnly=False, LEDsInUse=Non
     
     if HeaderOnly:
         return True
+
+    if DynMode and not M42.Finalize(Name):  # v1.07: Konfigurationsdatei und Signatur; sonst die Kopfdatei klassisch (mit allen Tabellen) neu schreiben
+        M42.Disable_Once("die Konfigurationsdatei konnte nicht erzeugt werden")  # v1.07
+        return Create_HeaderFile(CreateFilesOnly, HeaderOnly=HeaderOnly)  # v1.07
 
     if False: #type(comport) == str and InStr(comport, 'IP:') > 0:
         M06cfg.create_MLLconfig_and_upload_to_PICO(P01.Cells(M02.SH_VARS_ROW, M25.COMPort_COL), ConfigTxt, LEDsInUse)
