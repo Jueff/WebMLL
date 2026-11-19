@@ -1,5 +1,5 @@
 # webMobaLedLib – Installation und Betrieb
-*Datei-Version: 4.22 (2026-11-19), gilt für webMobaLedLib 4.22*
+*Datei-Version: 4.35 (2026-11-19), gilt für webMobaLedLib 4.35*
 
 Windows · macOS · Linux-Desktop · Raspberry Pi
 
@@ -432,9 +432,75 @@ Ist unter **Optionen Werkzeuge** ein **ESP32** als LED-Zentrale gewählt, ersche
 - **Rückfrage beim Öffnen (seit 3.98):** Benutzt eine Datei eine **ausgeschaltete** Erweiterung, fragt das Programm, ob es sie einschalten soll (einmal je Erweiterung und Sitzung); ohne sie fehlen die Zeilen in der erzeugten Datei.
 - **Wiki:** eigene Seite `erweiterungen` (siehe Wiki-Paket 3.98).
 
-### 2.9k Neu seit 3.93 (3.94 bis 4.22)
+### 2.9k Neu seit 3.93 (3.94 bis 4.35)
 
 Kurzfassung der Änderungen seit dem letzten Release, neueste Version zuerst (ausführlich in `HOC_Anwender.md`):
+
+**Version 4.35**
+
+*Korrekturen:*
+- Nach einem Fehler beim Verbinden blieb die Meldung „Es läuft noch ein Vorgang“ bestehen und blockierte alle Eingaben; behoben.
+
+**Version 4.34**
+
+*Neue Funktionen:*
+- Im Dialog der Raumeffekte (Haus) und der Straßenbeleuchtung erscheinen wieder die Tooltips wie im Excel-Programm, an den Effekt-Knöpfen und an den Feldern.
+
+**Version 4.33**
+
+*Neue Funktionen:*
+- Beim Übertragen auf den ESP32 (Minimale Firmware, WLAN, USB) erscheint die Ausgabe des Kompilierens sofort im Protokoll-Fenster, und „Vorgang abbrechen“ beendet das Kompilieren oder den Upload.
+
+**Version 4.32**
+
+*Korrekturen:*
+- „Setup übertragen“ stürzte bei Zeilen mit Zielvariablen in einer Liste (zum Beispiel Counter) ab; behoben.
+
+**Version 4.31**
+
+*Korrekturen:*
+- „Setup übertragen“ blieb bei bestimmten Zeilen (zum Beispiel Counter mit leerem Ausgang) ohne Meldung stehen; behoben.
+
+**Version 4.30**
+
+*Korrekturen:*
+- Hilfe bei der Fehlersuche: Hängt ein Befehl länger als 25 Sekunden, schreibt das Programm den Zustand in die Datei hang_dump.txt im Datenordner.
+
+**Version 4.29**
+
+*Korrekturen:*
+- Minimale Firmware per USB nimmt nichts mehr aus der Tabelle (nur Heartbeat-LED) und hängt nicht mehr bei Makros mit ungültigen Pins.
+
+**Version 4.28**
+
+*Korrekturen:*
+- Minimale Firmware per USB: Hilfe bei der Fehlersuche (Datei hang_dump.txt im Datenordner), wenn der Vorgang hängt.
+
+**Version 4.27**
+
+*Korrekturen:*
+- Minimale Firmware per USB (Reiter OTA): „Schließen“ im Fenster funktioniert wieder, sobald der Upload fertig ist.
+
+**Version 4.26**
+
+*Korrekturen:*
+- Nach „Board und USB Port erkennen“ verbindet das Programm wieder von selbst; vorher kam beim Schließen der Optionen ein Fehler.
+
+**Version 4.25**
+
+*Korrekturen:*
+- Fenster beim Übertragen: „Schließen“ erst nach dem Ende, „Vorgang abbrechen“ nur während der Vorgang läuft.
+- Bei der Überprüfung des USB Ports erscheinen die Bilder von Nano und Pico wieder an der richtigen Stelle, auch unter Linux.
+
+**Version 4.24**
+
+*Neue Funktionen:*
+- Datei → Einstellungen sichern … und Einstellungen übernehmen …: Die Einstellungen (Programm Einstellungen, Farbtest, Palette, Erweiterungen, ESP32 OTA) lassen sich in einer ZIP-Datei auf einen anderen PC bringen. Passwort, Zugriff aus dem Netz und USB-Anschluss bleiben auf dem jeweiligen PC.
+
+**Version 4.23**
+
+*Korrekturen:*
+- Das Kontextmenü der Tabelle liegt bei einem niedrigen, nicht maximierten Browserfenster nicht mehr teilweise außerhalb des Fensters.
 
 **Version 4.22**
 

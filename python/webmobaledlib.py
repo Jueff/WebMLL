@@ -1,8 +1,8 @@
-# Datei-Version: 4.22 (2026-11-19) - webmobaledlib.py
+# Datei-Version: 4.35 (2026-11-19) - webmobaledlib.py
 # ----------------------------------------------------------------------------------------------
 # Name:           webmobaledlib.py
 # Path:           webmobaledlib.py
-# Version:        4.22
+# Version:        4.35
 # Last Update:    2026-11-19
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
@@ -286,6 +286,19 @@
 #   4.20  2026-11-19  Kopfbereich (Issue 22): Reiterhoehe 36 px griff nicht (Screenshot: Reiter noch ca. 50 px hoch); jetzt mit !important und auch fuer .q-tab__content, Menuetasten ebenfalls !important
 #   4.21  2026-11-19  Erweiterungen: platformio.ini zeigt auf den Ordner der Erweiterung statt auf MobaLedLib.properties, mit symlink:// (M38_Extensions 1.07; Issue 6, Juergen)
 #   4.22  2026-11-19  Erweiterungen: Name und Beschreibung aus libraries.json anzeigen (headless_extensions 1.03, web_form_options 1.38; Issue 6, Juergen)
+#   4.23  2026-11-19  Kontextmenue in der Tabelle: Ist das Browserfenster niedriger als das Menue (seit 4.02 mit Rueckgaengig/Wiederholen laenger), lag der Anfang ausserhalb des Fensters; JS_MENU_FIT haelt jedes Quasar-Menue im sichtbaren Bereich (Rueckmeldung Harold, 4.22)
+#   4.24  2026-11-19  Datei -> Einstellungen sichern / uebernehmen (Issue 29): ZIP mit Programm Einstellungen, Farbtest, Palette, Erweiterungen und ESP32 OTA, optional mit den Tabellen; Uebernahme beim naechsten Start (web_settings_transfer 1.00)
+#   4.25  2026-11-19  Log-Fenster: Schliessen erst nach dem Vorgang, Vorgang abbrechen nur waehrend er laeuft (Issue 28); Bilder Nano/Pico getauscht, Bildsuche ohne Gross-/Kleinschreibung (Issue 27); Liste der nicht benoetigten Dateien (Issue 26)
+#   4.35  2026-11-19  Nach einem Fehler in run_in_worker (z.B. fehlender Browserbezug beim automatischen Verbinden) blieb der Vorgang dauerhaft als laufend markiert: alle Befehle zeigten 'Es laeuft noch ein Vorgang' (Rueckmeldung GerdR, 4.22)
+#   4.34  2026-11-19  Tooltips wie im Excel-Programm an den Raumeffekten (Haus- und Strassenbeleuchtungsmakro) und den Feldern des Dialogs (web_form_house 1.07, neu web_house_tips 1.00)
+#   4.33  2026-11-19  ESP32-Build (PlatformIO, Arduino Builder) und USB-Upload: Ausgabe erscheint zeilenweise im Protokoll-Fenster; Vorgang abbrechen beendet den Build/Upload (headless_esp32_ota 1.10, web_log 1.10)
+#   4.32  2026-11-19  Setup uebertragen stuerzte mit einer Counter-Zeile mit Zielvariable ab (NameError 'proggen' in M06_Write_Header_SW.Add_VarArgCnt_to_DstVars, M06_Write_Header_SW 1.09)
+#   4.31  2026-11-19  Endlosschleife in M06_Write_Header_SW.Get_Matching_Arg (Argumente '...' / 'OutList', z.B. Counter-Zeile) behoben: Setup uebertragen blieb ohne Meldung stehen (M06_Write_Header_SW 1.08)
+#   4.30  2026-11-19  Diagnose gegen Haenger bei Befehlen (Setup uebertragen mit Makro Set_SwitchA_InpLst(1) auf dem ESP32): steht ein Befehl nach 25 s noch, schreibt faulthandler den Stand aller Threads (mit Befehlsname) an hang_dump.txt im Datenordner an (keine Funktionsaenderung)
+#   4.29  2026-11-19  Minimale Firmware per USB: nimmt keine Daten mehr aus der Tabelle (Create_HeaderFile entfaellt): nur Heartbeat-LED, kein Haengen mehr bei Makros mit ungueltigen Pins; die eigene LEDs_AutoProg.h bleibt unveraendert
+#   4.28  2026-11-19  Minimale Firmware per USB: Diagnose gegen das Haengen in der Programmzeilenanalyse: nach 25 s schreibt faulthandler den Stand aller Threads in hang_dump.txt im Datenordner (keine Funktionsaenderung)
+#   4.27  2026-11-19  Minimale Firmware per USB (Reiter OTA): Schliessen im Log-Fenster blieb nach dem Upload gesperrt, weil das Formular noch als beschaeftigt galt; jetzt zaehlt das Ende des Uploads (minimal_state done_id, weblog.run_id)
+#   4.26  2026-11-19  Fehler 'The current slot cannot be determined' beim Automatisch verbinden nach Board und USB Port erkennen: auto_connect_after_detect laeuft im Browserbezug der Seite (web_form_options 1.39)
 #   4.16  2026-11-19  Kopfbereich: weniger Platz zwischen Titel, Menue und Reitern (CSS, leere Zwischenspeicher-Zeile ausgeblendet; Issue 22)
 #   4.15  2026-11-19  Inkrementelles Speichern (Issue 21): Strg+Umschalt+S und Menue Datei: Workbook als <Name>_0001.json ... sichern, Sicherungsdatei oeffnen (Liste), Sicherungsort aendern
 #   4.14  2026-11-19  Verbinden beim Starten (Issue 20): letzte Verbindung wiederherstellen oder genau eine Lichtmaschine (Nano, ESP32, Pico) suchen, im Hintergrund; nach Setup uebertragen mit der hochgeladenen Lichtmaschine verbinden (WLAN ueber WLAN); Pfeilmenue am Knopf (trennen, neu verbinden, Board wechseln) und im Menue Lichtmaschine; Einstellung AutoConnect (web_tabs 1.24, web_params 1.11, web_serial 1.12, M08 1.24)
@@ -660,6 +673,11 @@ def start_backend():
     ARGS = {"loaddatafile": "True", "logfilename": LOGFILE}        # wie COMMAND_LINE_ARG_DICT im Original
     if LOG_INFO["level_explicit"]:
         ARGS["logging_level"] = LOG_INFO["level"]
+    try:  # v4.24: bereitgelegte Einstellungen von einem anderen PC uebernehmen, BEVOR die Konfiguration geladen wird
+        from _web import web_settings_transfer as _wst  # v4.24
+        _wst.apply_pending(userdata.data_dir())  # v4.24
+    except Exception:  # noqa: BLE001  # v4.24
+        logger.exception("Uebernahme der Einstellungen fehlgeschlagen")  # v4.24
     ctrl = HeadlessAppController(mainfile_dir=here, command_line_args=ARGS, data_dir=userdata.data_dir())
     logger.info("MLL Proggenerator %s, Datenordner %s", getattr(ctrl, "ProgVersion", "?"), userdata.data_dir())
     logger.info("Tk: %s", "echtes unsichtbares Wurzelfenster (MLL_TK_ROOT=1)" if globals().get("_hidden_root") is not None else "Ersatz no_tk (kein Tk noetig)")
@@ -1060,6 +1078,29 @@ window.mllFind = window.mllFind || {};
 # Tastenkombination fuers inkrementelle Speichern (Issue 21): einstellbar in den Programm Einstellungen (IncrSaveKey), Vorgabe Strg+Umschalt+S.
 # window.mllIncrKey = {ctrl, shift, alt, key} wird vom Server gesetzt (Seitenaufbau und nach jeder Aenderung der Einstellung).
 # Die Tastenkombination kann vom Betriebssystem oder von einem Programm (zum Beispiel Greenshot) belegt sein: dann eine andere einstellen.  # v4.17
+# v4.23: Quasar-Menues (Kontextmenue der Tabelle u.a.) im sichtbaren Bereich halten. Ist das Menue hoeher als das Fenster oder beginnt es ueber dem
+# oberen Rand (nicht maximierter Browser), wird es auf Fensterhoehe begrenzt (blaettert dann mit der Maus) und an den oberen Rand geschoben.
+JS_MENU_FIT = """
+(function () {
+  function fit(m) {
+    try {
+      var r = m.getBoundingClientRect(), vh = window.innerHeight, pad = 8;
+      if (!r.height) return;
+      if (r.height > vh - 2 * pad) { m.style.maxHeight = (vh - 2 * pad) + 'px'; m.style.overflowY = 'auto'; r = m.getBoundingClientRect(); }
+      if (r.top < pad) { m.style.top = pad + 'px'; }
+      else if (r.bottom > vh - pad) { m.style.top = Math.max(pad, vh - pad - r.height) + 'px'; }
+    } catch (e) { }
+  }
+  function scan(n) {
+    if (n.nodeType !== 1) return;
+    var menus = n.classList && n.classList.contains('q-menu') ? [n] : (n.querySelectorAll ? n.querySelectorAll('.q-menu') : []);
+    Array.prototype.forEach.call(menus, function (m) { [30, 150, 400].forEach(function (ms) { setTimeout(function () { fit(m); }, ms); }); });
+  }
+  new MutationObserver(function (list) { list.forEach(function (rec) { rec.addedNodes.forEach(scan); }); })
+    .observe(document.documentElement, { childList: true, subtree: true });
+})();
+"""
+
 JS_INCR_SAVE = """
 window.mllIncrKey = window.mllIncrKey || null;
 (function () {
@@ -1330,7 +1371,7 @@ def font_scales(ctrl) -> dict:
 # VERSION = "3.60 (2026-11-16)"  # v3.60 (entfallen)
 # VERSION = "3.61 (2026-11-16)"  # v3.61 (entfallen)
 # VERSION = "3.62 (2026-11-16)"  # v3.62 (entfallen)
-VERSION = "4.22 (2026-11-19)"  # v3.64  # v4.22
+VERSION = "4.35 (2026-11-19)"  # v3.64  # v4.26  # v4.27  # v4.28  # v4.29  # v4.30  # v4.31  # v4.32  # v4.33  # v4.34  # v4.35
 # VERSION = "4.09 (2026-11-19)"  # v3.64 (entfallen)
 # VERSION = "4.08 (2026-11-19)"  # v3.64 (entfallen)
 # VERSION = "4.07 (2026-11-19)"  # v3.64 (entfallen)
@@ -1954,6 +1995,7 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
     ui.add_head_html("<script>" + JS_COPY_HELPER + "</script>")
     ui.add_head_html("<script>" + JS_FIND + "</script>")  # v3.28
     ui.add_head_html("<script>" + JS_INCR_SAVE + "</script>")  # v4.15
+    ui.add_head_html("<script>" + JS_MENU_FIT + "</script>")  # v4.23
     ui.add_css(CSS_GRID)
     from _web import web_layout                        # kompaktes Layout fuer kleine Bildschirme (Programm Einstellungen)
     # ui.add_head_html(web_layout.head_html(web_layout.get_mode(ctrl)))  # v4.08 (entfallen)
@@ -2342,11 +2384,27 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
     STATUS_TTL = 10.0                                             # Sekunden, die eine Meldung nach der letzten Aenderung stehen bleibt
     STATUS_COLORS = {"green": "#2e7d32", "red": "#c62828", "orange": "#ef6c00", "blue": "#1565c0", "darkgreen": "#1b5e20"}
 
+    def minimal_done():  # v4.27
+        """True, wenn der letzte Lauf im Log-Fenster der Upload der Minimalen Firmware war und der beendet ist (das Formular OTA haelt busy weiter)."""
+        try:
+            return minimal_state.get("done_id") == ctrl.weblog.run_id
+        except NameError:  # minimal_state entsteht erst weiter unten im Seitenaufbau
+            return False
+
     def refresh_status():
         """Alte Meldungen ausblenden: Waehrend ein Befehl laeuft bleibt die Meldung stehen, danach noch STATUS_TTL Sekunden."""
         now = time.monotonic()
         if state["busy"]:
             state["status_active"] = now
+        try:  # v4.25: Log-Fenster: Schliessen erst nach dem Vorgang, Vorgang abbrechen nur waehrend er laeuft (Issue 28)
+            try:  # v4.25
+                other = bool(minimal_state["running"])  # v4.25: Minimale Firmware per USB laeuft nicht ueber busy
+            except NameError:  # v4.25: minimal_state entsteht erst weiter unten im Seitenaufbau
+                other = False  # v4.25
+            ctrl.weblog.set_running((state["busy"] or other) and not minimal_done())  # v4.25  # v4.27
+            # ctrl.weblog.set_running(state["busy"] or other)  # v4.25 (entfallen v4.27)
+        except Exception:  # noqa: BLE001  # v4.25
+            logger.debug("Log-Fenster: Zustand nicht gesetzt", exc_info=True)  # v4.25
         ref = max(getattr(ctrl, "statusmessage_time", 0.0), state.get("status_active", 0.0))
         text = ctrl.statusmessage_text if now - ref < STATUS_TTL else ""
         color = STATUS_COLORS.get(str(getattr(ctrl, "statusmessage_fg", "")).lower(), "#616161")
@@ -4180,8 +4238,8 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
         """fn im Worker-Thread ausfuehren. Dialoge (MsgBox/InputBox) erscheinen waehrenddessen im
         Browser, der Worker wartet auf die Antwort. Waehrenddessen sind weitere Befehle gesperrt."""
         state["busy"] = True
-        web_dialogs.set_bridge(asyncio.get_running_loop(), context.client)
-        try:
+        try:  # v4.35: set_bridge innerhalb try, sonst blieb busy bei einem Fehler (kein Browserbezug) dauerhaft gesetzt: "Es laeuft noch ein Vorgang"
+            web_dialogs.set_bridge(asyncio.get_running_loop(), context.client)  # v4.35 (stand vor try)
             return await run.io_bound(fn)
         finally:
             web_dialogs.clear_bridge()
@@ -4823,6 +4881,31 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
         ui.on("mll_incr_save", on_incr_save_event)  # v4.15: Strg+Umschalt+S
 
     # ------------------------------------------------------------------ Toolbar-Aktionen
+    def hang_watch_start(label):  # v4.30
+        """Diagnose: steht der Vorgang nach 25 s noch, schreibt faulthandler den Stand aller Threads an hang_dump.txt im Datenordner."""
+        try:
+            import faulthandler
+            path = os.path.join(userdata.data_dir(), "hang_dump.txt")
+            if os.path.isfile(path) and os.path.getsize(path) > 1000000:
+                os.remove(path)
+            dump = open(path, "a", encoding="utf-8")
+            dump.write("\n===== %s: Befehl '%s' (nach 25 s noch aktiv) =====\n" % (time.strftime("%Y-%m-%d %H:%M:%S"), label))
+            dump.flush()
+            faulthandler.dump_traceback_later(25, repeat=False, file=dump)
+            return dump
+        except Exception:  # noqa: BLE001
+            logger.debug("hang_dump.txt nicht angelegt", exc_info=True)
+            return None
+
+    def hang_watch_stop(dump):  # v4.30
+        try:
+            import faulthandler
+            faulthandler.cancel_dump_traceback_later()
+            if dump is not None:
+                dump.close()
+        except Exception:  # noqa: BLE001
+            pass
+
     def run_command(func, label, live=True):
         async def handler():
             if state["busy"]:
@@ -4854,6 +4937,7 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
                 profiler = cProfile.Profile() if os.environ.get("MLL_PROFILE") == "1" else None
                 if profiler:
                     profiler.enable()
+                hang_dump = hang_watch_start(label)  # v4.30
                 try:
                     if any(p.default is p.empty and p.kind in (p.POSITIONAL_ONLY, p.POSITIONAL_OR_KEYWORD)
                            for p in inspect.signature(func).parameters.values()):
@@ -4863,6 +4947,7 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
                 except SystemExit:              # M30.EndProg() ruft sys.exit(0): darf den Server nicht beenden
                     raise RuntimeError("Das Makro wurde mit EndProg beendet (siehe Meldungen davor)") from None
                 finally:
+                    hang_watch_stop(hang_dump)  # v4.30
                     try:
                         sync_shapes(ws)         # geaenderte Zeilen -> Shapes nachfuehren, geloeschte Zeilen -> Shapes entfernen
                     except Exception:           # noqa: BLE001
@@ -5562,6 +5647,86 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
         else:  # v4.15
             ui.notify(tr("Das Speichern ist fehlgeschlagen. Siehe Protokoll."), type="negative")  # v4.15
 
+    def settings_table_prefix():  # v4.24: Namensanfang der Tabellen-Sicherungen im Datenordner
+        return userdata.flat(ctrl.tempworkbookFilname)  # v4.24
+
+    async def export_settings():  # v4.24
+        """Datei -> Einstellungen sichern: ZIP mit den Einstellungen des Anwenders zum Speichern anbieten (Issue 29)"""  # v4.24
+        from _web import web_settings_transfer as wst  # v4.24
+        with ui.dialog().props("persistent") as dlg, ui.card().classes("w-[620px] max-w-full"):  # v4.24
+            ui.label(tr("Einstellungen sichern")).classes("text-h6")  # v4.24
+            ui.label(tr("Sichert die Programm Einstellungen, Farbtest und Palette, die Erweiterungen und die ESP32 OTA Daten in einer ZIP-Datei, zum Beispiel um sie auf einem anderen PC zu übernehmen. Passwort, Zugriff aus dem Netz, USB-Anschluss und Protokolle gehören zum PC und sind nicht enthalten.")).classes("text-caption")  # v4.24
+            ui.label(tr("Die Tabellen sind nicht enthalten: Sie kommen mit Datei → ProgrammGenerator-Workbook speichern als und von Datei lesen auf den anderen PC.")).classes("text-caption")  # v4.24
+
+            def make():  # v4.24
+                try:  # v4.24
+                    try:  # v4.24
+                        sync_all_sheets()  # v4.24: Tabellen vor dem Sichern in den Datenordner schreiben
+                        if state.get("colorcheck") is not None:  # v4.24
+                            state["colorcheck"].save_config()  # v4.24
+                        ctrl.SaveConfigData()  # v4.24: Konfiguration in den Datenordner schreiben
+                    except Exception:  # noqa: BLE001  # v4.24
+                        logger.debug("Einstellungen vor dem Sichern nicht geschrieben", exc_info=True)  # v4.24
+                    data, files = wst.export_zip(userdata.data_dir(), VERSION, settings_table_prefix(), False)  # v4.24 (Tabellen nur ueber das Workbook: die Sicherung im Datenordner entsteht erst beim Beenden)
+                except Exception as ex:  # noqa: BLE001  # v4.24
+                    logger.exception("Einstellungen sichern")  # v4.24
+                    ui.notify(str(ex), type="negative")  # v4.24
+                    return  # v4.24
+                name = "webMobaLedLib_Einstellungen_%s.zip" % time.strftime("%Y-%m-%d_%H%M")  # v4.24
+                ui.download(data, name)  # v4.24
+                ui.notify(tr("Einstellungen gesichert: {anzahl} Dateien in {name}", anzahl=len(files), name=name), type="positive")  # v4.24
+                dlg.close()  # v4.24
+            with ui.row().classes("justify-end w-full"):  # v4.24
+                ui.button("Abbrechen (A)", on_click=dlg.close).props("flat data-key=A").classes("mll-cancel")  # v4.24
+                ui.button(tr("ZIP-Datei erstellen"), on_click=make).classes("mll-default")  # v4.24
+        dlg.open()  # v4.24
+
+    async def import_settings():  # v4.24
+        """Datei -> Einstellungen uebernehmen: ZIP waehlen, pruefen, fuer den naechsten Start bereitlegen und neu starten (Issue 29)"""  # v4.24
+        from _web import web_settings_transfer as wst  # v4.24
+        box = {"data": None, "info": None}  # v4.24
+        with ui.dialog().props("persistent") as dlg, ui.card().classes("w-[640px] max-w-full"):  # v4.24
+            ui.label(tr("Einstellungen übernehmen")).classes("text-h6")  # v4.24
+            info_label = ui.label("").classes("text-body2")  # v4.24
+            tables_cb = ui.checkbox(tr("Tabellen aus der ZIP-Datei ebenfalls übernehmen (ersetzt die Tabellen dieses PCs)"), value=False)  # v4.24
+            tables_cb.set_visibility(False)  # v4.24
+            hint = ui.label(tr("Die vorhandenen Einstellungen werden vorher gesichert. USB-Anschluss und Fensterlage dieses PCs bleiben. Das Programm wird danach neu gestartet.")).classes("text-caption")  # v4.24
+            hint.set_visibility(False)  # v4.24
+
+            async def on_up(e):  # v4.24
+                try:  # v4.24
+                    _name, data = await web_dialogs._read_upload(e)  # v4.24
+                    data = bytes(data) if isinstance(data, (bytes, bytearray)) else str(data).encode("utf-8")  # v4.24
+                    info = wst.inspect_zip(data, settings_table_prefix())  # v4.24
+                except ValueError as ex:  # v4.24
+                    ui.notify(str(ex), type="negative")  # v4.24
+                    return  # v4.24
+                box["data"], box["info"] = data, info  # v4.24
+                info_label.set_text(tr("Gesichert am {datum} auf {rechner} mit webMobaLedLib {version}, {anzahl} Dateien.",  # v4.24
+                                       datum=info.get("date", "?"), rechner=info.get("computer", "?"), version=info.get("version", "?"), anzahl=info.get("count", 0)))  # v4.24
+                tables_cb.set_visibility(bool(info.get("tables")))  # v4.24
+                hint.set_visibility(True)  # v4.24
+                go_btn.enable()  # v4.24
+            ui.upload(on_upload=on_up, auto_upload=True, max_files=1, label=tr("ZIP-Datei der Einstellungen hierher ziehen oder zum Auswählen klicken")).classes("w-full").props('accept=".zip"')  # v4.24
+
+            async def go():  # v4.24
+                if not box["data"]:  # v4.24
+                    return  # v4.24
+                try:  # v4.24
+                    count = await run.io_bound(wst.stage_import, box["data"], userdata.data_dir(), bool(tables_cb.value))  # v4.24
+                except Exception as ex:  # noqa: BLE001  # v4.24
+                    logger.exception("Einstellungen uebernehmen")  # v4.24
+                    ui.notify(str(ex), type="negative")  # v4.24
+                    return  # v4.24
+                dlg.close()  # v4.24
+                ui.notify(tr("Die Einstellungen sind bereit: {anzahl} Dateien. Das Programm wird neu gestartet.", anzahl=count), type="positive")  # v4.24
+                await restart_program()  # v4.24
+            with ui.row().classes("justify-end w-full"):  # v4.24
+                ui.button("Abbrechen (A)", on_click=dlg.close).props("flat data-key=A").classes("mll-cancel")  # v4.24
+                go_btn = ui.button(tr("Übernehmen und neu starten"), on_click=go).classes("mll-default")  # v4.24
+                go_btn.disable()  # v4.24
+        dlg.open()  # v4.24
+
     async def open_backup():  # v4.15
         """Datei -> Sicherungsdatei oeffnen: Liste der Sicherungen im Ordner (neueste zuerst), eine auswaehlen und als Workbook lesen"""  # v4.15
         cur = {**incr_default_target(), **{k: v for k, v in incr_config().items() if v}}  # v4.15
@@ -5643,7 +5808,7 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
         port = str(ctrl.getConfigData("serportname") or "").strip()
         return port == "" or port.upper() in ("NO DEVICE", "COM?")
 
-    async def auto_connect_after_detect():  # v4.04
+    async def auto_connect_after_detect(client=None):  # v4.04  # v4.26: client = Seite des Befehls
         """Nach 'Board und USB Port erkennen' (Lichtmaschine): gleich per USB verbinden. Wird gestartet, wenn das Optionsfenster geschlossen ist."""
         for _ in range(200):                           # der Befehl Optionen laeuft noch kurz weiter (busy): bis 20 s warten
             if not state["busy"]:
@@ -5652,8 +5817,14 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
         if state["busy"] or ctrl.is_connection_open() or usb_port_missing():
             return
         logger.info("Automatisch verbinden nach Board und USB Port erkennen")
-        await _connect_usb_command()
-        after_connect()
+        # await _connect_usb_command()  # v4.26 (entfallen: lief ohne Browserbezug, "slot stack for this task is empty")
+        # after_connect()  # v4.26 (entfallen)
+        if client is None:  # v4.26
+            logger.warning("Automatisch verbinden: kein Browserbezug")  # v4.26
+            return  # v4.26
+        with client:  # v4.26: im Bezug der Seite (context.client, ui.notify)
+            await _connect_usb_command()  # v4.26
+            after_connect()  # v4.26
 
     web_dialogs._bridge["auto_connect"] = auto_connect_after_detect  # v4.04
 
@@ -5973,8 +6144,8 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
             header = None
             saved = None
             try:
-                if not ota_header.Create_HeaderFile(HeaderOnly=True):
-                    raise ValueError(tr("Die Projektkonfiguration konnte nicht erzeugt werden."))
+                # if not ota_header.Create_HeaderFile(HeaderOnly=True):  # v4.29 (entfallen: die Minimale Firmware nimmt keine Daten aus der Tabelle)
+                    # raise ValueError(tr("Die Projektkonfiguration konnte nicht erzeugt werden."))  # v4.29 (entfallen)
                 sketch = os.path.join(ota_arduino.GetWorkbookPath(), M02.Ino_Dir_LED)
                 header = os.path.join(sketch, "LEDs_AutoProg.h")
                 if os.path.isfile(header):
@@ -6027,12 +6198,30 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
         ws = state["ws"]
 
         def work():
-            ws.Activate()
-            transfer()
+            # ws.Activate()  # v4.28 (entfallen: jetzt mit Diagnose)
+            # transfer()  # v4.28 (entfallen)
+            import faulthandler  # v4.28
+            dump = None  # v4.28
+            try:  # v4.28: Diagnose: steht der Vorgang nach 25 s noch, wird der Stand aller Threads in hang_dump.txt geschrieben
+                dump = open(os.path.join(userdata.data_dir(), "hang_dump.txt"), "w", encoding="utf-8")  # v4.28
+                faulthandler.dump_traceback_later(25, repeat=False, file=dump)  # v4.28
+            except Exception:  # noqa: BLE001  # v4.28
+                logger.debug("hang_dump.txt nicht angelegt", exc_info=True)  # v4.28
+            try:  # v4.28
+                ws.Activate()  # v4.28
+                transfer()  # v4.28
+            finally:  # v4.28
+                try:  # v4.28
+                    faulthandler.cancel_dump_traceback_later()  # v4.28
+                    if dump is not None:  # v4.28
+                        dump.close()  # v4.28
+                except Exception:  # noqa: BLE001  # v4.28
+                    pass  # v4.28
         try:
             await run.io_bound(work)
         finally:
             minimal_state["running"] = False
+            minimal_state["done_id"] = ctrl.weblog.run_id  # v4.27: Lauf im Log-Fenster ist zu Ende, auch wenn das Formular noch busy ist
 
     web_esp32_ota.minimal_firmware_handler = minimal_firmware  # v3.39
 
@@ -6045,6 +6234,8 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
             ("Inkrementell speichern", incremental_save),  # v4.15  # v4.17 (ohne Tastenkombination: sie ist einstellbar)
             ("Sicherungsdatei öffnen …", open_backup),  # v4.15
             ("Sicherungsort ändern …", change_incr_target),  # v4.15
+            ("Einstellungen sichern …", export_settings),  # v4.24
+            ("Einstellungen übernehmen …", import_settings),  # v4.24
             None,
             ("ProgrammGenerator: PGF-Datei lesen", run_command(lambda: M18.Load_Data_from_File(), "PGF lesen", live=False)),
             ("ProgrammGenerator: PGF-Datei speichern", run_command(lambda: M18.Save_Data_to_File(), "PGF speichern")),

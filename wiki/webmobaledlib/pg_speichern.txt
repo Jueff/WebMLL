@@ -1,5 +1,5 @@
 ====== webMobaLedLib – Speichern und Laden ======
-//Seitenstand 1.03 (2026-11-19), gilt für webMobaLedLib 4.17//
+//Seitenstand 1.04 (2026-11-19), gilt für webMobaLedLib 4.24//
 
 Das Programm speichert deine Arbeit **automatisch**. Zusätzlich kannst du sie als **Datei** sichern, weitergeben und wieder laden.
 
@@ -23,6 +23,8 @@ Deine Daten liegen im **Datenordner** des Programms, getrennt von den Programmda
 | **Inkrementell speichern** | Sichert die **ganze Arbeitsmappe** als neue Datei mit fortlaufender Nummer, siehe unten. Die Tastenkombination (Vorgabe **Strg+Umschalt+S**) stellst du in den Programm Einstellungen ein. |
 | **Sicherungsdatei öffnen …** | Zeigt die Sicherungen des Sicherungsordners (neueste zuerst) und lädt die gewählte. |
 | **Sicherungsort ändern …** | Ändert Ordner und Namen der Sicherungsdateien. |
+| **Einstellungen sichern …** | Packt die Einstellungen in eine ZIP-Datei, zum Beispiel für einen anderen PC, siehe unten. |
+| **Einstellungen übernehmen …** | Liest eine solche ZIP-Datei ein, siehe unten. |
 | **ProgrammGenerator: Anlagenansicht speichern …** | Speichert die [[anleitungen:webmobaledlib:pg_grafisch|grafische Anlagenansicht]] (Bild und Positionen) als Datei **<Blatt>.MLL_view**. |
 | **ProgrammGenerator: Anlagenansicht laden …** | Lädt eine solche Datei. |
 | **Beenden …** | Beendet das Programm. Das Programm fragt, ob es vorher speichern soll (siehe oben). |
@@ -41,6 +43,23 @@ Zum **Zurückholen** wählst du //Datei → Sicherungsdatei öffnen …//. Das P
 **Tastenkombination ändern:** Die Vorgabe **Strg+Umschalt+S** kann vom Betriebssystem oder von einem anderen Programm belegt sein, zum Beispiel von einem Screenshot-Programm wie //Greenshot//. Dann stellst du in den **Programm Einstellungen** unter **Allgemeine Einstellungen** bei **Tastenkombination: Inkrementell speichern** eine andere ein, zum Beispiel **Strg+Alt+S** oder **Strg+F9**. Die Kombination muss **Strg** oder **Alt** oder eine **F-Taste** enthalten. Sie gilt gleich nach dem Speichern der Einstellungen. Der Menüpunkt geht immer, auch ohne Tastenkombination.
 
 **Tipp:** Speichere vor einem größeren Umbau eine **PGF-Datei**. Dann kannst du jederzeit zum alten Stand zurück.
+
+===== Einstellungen auf einen anderen PC übernehmen (seit 4.24) =====
+
+Du hast webMobaLedLib auf zwei PCs, zum Beispiel im Büro und an der Anlage? Die **Tabellen** nimmst du wie bisher mit //Datei → ProgrammGenerator-Workbook speichern als// und //von Datei lesen// mit. Die **Einstellungen** des Programms stehen nicht in der Arbeitsmappe. Dafür gibt es zwei Menüpunkte:
+
+  - **Auf dem ersten PC:** //Datei → Einstellungen sichern …// und **ZIP-Datei erstellen** wählen. Der Browser speichert die Datei //webMobaLedLib_Einstellungen_…zip//.
+  - Die Datei auf den anderen PC bringen (USB-Stick, Netzlaufwerk, E-Mail).
+  - **Auf dem anderen PC:** //Datei → Einstellungen übernehmen …//, die ZIP-Datei auswählen und **Übernehmen und neu starten** wählen.
+
+**Was enthalten ist:** die Programm Einstellungen, Farbtest und Palette, die Erweiterungen und die ESP32 OTA Daten.
+
+**Was nicht enthalten ist:** das Passwort und der Zugriff aus dem Netz, die Protokolle und der **USB-Anschluss**. Sie gehören zum jeweiligen PC. Wähle den USB-Anschluss und das Board am anderen PC einmal neu, am einfachsten mit //Board und USB Port erkennen//.
+
+**Gut zu wissen:**
+  * Die vorhandenen Einstellungen des anderen PCs werden vorher gesichert (die letzten drei Sicherungen bleiben im Datenordner, Ordner //settings_backup_…//).
+  * Beide PCs sollten dieselbe webMobaLedLib-Version haben.
+  * Die Übernahme geschieht beim Neustart. Die Fensterlage des anderen PCs bleibt.
 
 ===== Beispiele =====
 
