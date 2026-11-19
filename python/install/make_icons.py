@@ -1,7 +1,8 @@
-# Datei-Version: 1.02 (2026-10-15) - make_icons.py
+# Datei-Version: 1.03 (2026-11-19) - make_icons.py
 """Erzeugt die Programmsymbole der Web-Oberflaeche als PNG, Windows-ICO und macOS-ICNS.
 
-Vorlage ist das Symbol des originalen ProgrammGenerators (mobaledlib_source.png: Ring aus bunten LEDs, Tabelle, Stift). Es wird
+Seit 1.03: Liegt mobaledlib_icon.png (neues Symbol, 19.11.2026) neben dieser Datei, wird es unveraendert verwendet (ohne Weltkugel in der Ecke).
+Sonst gilt: Vorlage ist das Symbol des originalen ProgrammGenerators (mobaledlib_source.png: Ring aus bunten LEDs, Tabelle, Stift). Es wird
 auf Kreisform freigestellt (transparenter Hintergrund) und bekommt unten rechts ein kleines blaues Weltkugel-Zeichen als Hinweis
 auf die Web-Oberflaeche, damit es sich vom Symbol der Tk-Version unterscheiden laesst. Ohne mobaledlib_source.png wird ein einfaches
 Symbol gezeichnet.
@@ -86,7 +87,29 @@ def with_badge(img: Image.Image) -> Image.Image:
     return Image.alpha_composite(img, big.resize((S, S), Image.LANCZOS))
 
 
+def main_new(target: str, icon: str) -> None:  # v1.03
+    """Neues Symbol (Ring aus LEDs, Weltkugel, Stift, Zahnrad; Dateien mobaledlib_icon.png und mobaledlib_icon_full.png): Es hat schon den Hinweis auf die Web-Oberflaeche, daher keine Weltkugel in der Ecke."""  # v1.03
+    os.makedirs(target, exist_ok=True)  # v1.03
+    base = Image.open(icon).convert("RGBA").resize((S, S), Image.LANCZOS)  # v1.03
+    full_path = os.path.join(HERE, "mobaledlib_icon_full.png")  # v1.03: bis an den Rand (fuer das kleine Symbol im Browserreiter)  # v1.03
+    full = Image.open(full_path).convert("RGBA").resize((S, S), Image.LANCZOS) if os.path.isfile(full_path) else base  # v1.03
+    base.save(os.path.join(target, "mobaledlib_plain.png"))  # v1.03
+    base.save(os.path.join(target, "mobaledlib.png"))  # v1.03
+    full.resize((64, 64), Image.LANCZOS).save(os.path.join(target, "favicon.png"))  # v1.03
+    base.save(os.path.join(target, "mobaledlib.ico"),  # v1.03
+              sizes=[(16, 16), (24, 24), (32, 32), (48, 48), (64, 64), (128, 128), (256, 256)])  # v1.03
+    try:  # v1.03
+        base.save(os.path.join(target, "mobaledlib.icns"))  # v1.03  macOS
+    except Exception as ex:                                      # noqa: BLE001  (Pillow ohne ICNS-Schreiber)  # v1.03
+        print("ICNS nicht erzeugt:", ex)  # v1.03
+    print("Symbole erzeugt in", target, "(Vorlage: mobaledlib_icon.png)")  # v1.03
+
+
 def main(target: str, plain: bool) -> None:
+    new_icon = os.path.join(HERE, "mobaledlib_icon.png")  # v1.03
+    if os.path.isfile(new_icon):  # v1.03
+        main_new(target, new_icon)  # v1.03
+        return  # v1.03
     os.makedirs(target, exist_ok=True)
     source = os.path.join(HERE, "mobaledlib_source.png")
     base = from_source(source) if os.path.isfile(source) else drawn()

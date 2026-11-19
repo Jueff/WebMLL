@@ -1,0 +1,24 @@
+====== webMobaLedLib – ARDUINO Einstellungen ======
+//Seitenstand 1.05 (2026-11-17), gilt für webMobaLedLib 3.85//
+
+**Mit PlatformIO (Standard) brauchst du diese Seite nicht.** Der Reiter **ARDUINO Einstellungen** ist nur für die **ARDUINO IDE** da, die Programmierumgebung der Arduino-Welt. Du brauchst ihn nur, wenn du die ARDUINO IDE **statt PlatformIO** benutzt (siehe [[anleitungen:webmobaledlib:arduino_ide|Zusätzlich: Arduino IDE]]).
+
+**Board und USB-Anschluss** deiner Lichtmaschine stellst du **nicht hier** ein, sondern im Programmgenerator: Werkzeugleiste **Optionen Werkzeuge**, Reiter **Lichtmaschine**. Wie das geht, steht auf der Seite [[anleitungen:webmobaledlib:pg_arduino|Verbinden und Übertragen]] und im [[anleitungen:webmobaledlib:erstes_programm|ersten Programm]].
+
+{{:bilder:anleitungen:webmobaledlib:wz_06_arduino_einstellungen.png?600|Der Reiter ARDUINO Einstellungen}}
+
+===== Was die Seite enthält =====
+
+^ Einstellung ^ Bedeutung ^
+| **Test ARDUINO Programm Creation** | Zeigt nach **jedem Schritt** beim Erzeugen des Programms für die Lichtmaschine eine Meldung, und du kannst den Vorgang anhalten. Das ist ein Werkzeug für die Fehlersuche. Normalerweise bleibt der Haken **aus**. |
+| **Individuellen Pfad zur ARDUINO IDE verwenden** | Mit dem Haken benutzt das Programm den Pfad aus dem Feld darunter. Ohne Haken sucht es die ARDUINO IDE selbst. |
+| **Pfad zur ARDUINO IDE auswählen** | Das Feld für den Pfad der Startdatei der ARDUINO IDE **auf dem Rechner, auf dem das Programm läuft**, zum Beispiel ''/home/name/arduino-1.8.19/arduino''. Ein Dateiauswahlfenster gibt es nicht, weil der Browser die Dateien dieses Rechners nicht sieht. Unter Windows findet das Programm die IDE selbst; der Pfad wird nur benutzt, wenn der Haken gesetzt ist. |
+| **IDE suchen** | Sucht die ARDUINO IDE auf dem Rechner (bis zu 12 Sekunden) und zeigt die Treffer. Ein Klick auf einen Treffer trägt den Pfad ein. Unter dem Feld steht, ob die Datei vorhanden ist und welche **Version** sie hat. Das Programm braucht die **IDE 1.8.x** („Legacy“), nicht die IDE 2.x. |
+| **Individuellen Pfad zu ARDUINO Resourcen (libraries, examples) verwenden (nur MAC)** | Nur für den Mac: der Pfad zu den Bibliotheken und Beispielen der ARDUINO IDE, wenn sie nicht am Standardort liegen. |
+| **Pfad zu ARDUINO Resourcen auswählen** | Das Feld für diesen Pfad (nur Mac). |
+
+Mit **Geänderte Einstellungen übernehmen** speicherst du deine Änderungen.
+
+===== Wenn die ARDUINO IDE nicht gefunden wird =====
+
+Klicke auf **IDE suchen**. Findet das Programm sie nicht: Lade die **ARDUINO IDE 1.8.19** („Legacy IDE“) von arduino.cc, entpacke sie (am besten nach ''~/arduino-1.8.19'') oder trage den Pfad von Hand ein. Mit **PlatformIO** brauchst du das alles nicht.

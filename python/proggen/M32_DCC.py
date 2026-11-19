@@ -1,15 +1,17 @@
-# Datei-Version: 1.02 (2026-11-14) - M32_DCC.py
+# Datei-Version: 1.04 (2026-11-15) - M32_DCC.py
 # ----------------------------------------------------------------------------------------------
 # Name:           M32_DCC.py
 # Path:           proggen/M32_DCC.py
-# Version:        1.02
-# Last Update:    2026-11-14
+# Version:        1.04
+# Last Update:    2026-11-15
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
 #   1.00  2026-10-12  Stand der Umstellung (nicht erfasst)
 #   1.01  2026-10-21  SendDCCAccessoryCommand: Adresse 0 ist erlaubt (Addr < 0 statt Addr < 1; Version K des Excel-Programms)
 #   1.02  2026-11-14  Testtasten nutzen eine bestehende WLAN-Verbindung; send_command_to_ARDUINO liefert den Erfolg (Beitrag des Fork-Entwicklers)
+#   1.03  2026-11-15  Testtasten bei aktivem Simulator ohne ARDUINO: keine Rueckfrage zum Verbinden mehr (IsSimulatorActive() wurde nicht aufgerufen, port_is_busy statt not port_is_available)
+#   1.04  2026-11-15  Simulator aktiv, ARDUINO nicht erreichbar: Verbindungsabfrage nur einmal je eingetragenem Anschluss, danach wirken die Testtasten nur auf den Simulator (neue Abfrage nach erfolgreicher Verbindung)
 # ----------------------------------------------------------------------------------------------
 # -*- coding: utf-8 -*-
 #
@@ -150,6 +152,8 @@ def DCCSend():
 # VB2PY (UntranslatedCode) Argument Passing Semantics / Decorators not supported: Addr - ByVal 
 # VB2PY (UntranslatedCode) Argument Passing Semantics / Decorators not supported: Direction - ByVal 
 #-------------------------------------------------------------------------------------------------
+_sim_declined_port = None  # v1.04 Anschluss, fuer den bei aktivem Simulator die Verbindung schon abgelehnt wurde
+
 def SendDCCAccessoryCommand(Addr, Direction, IsSwitch):
 #-------------------------------------------------------------------------------------------------
     _fn_return_value = False
@@ -169,10 +173,21 @@ def SendDCCAccessoryCommand(Addr, Direction, IsSwitch):
     #if M39.IsSimulatorActive and P01.val(M07.ComPortPage().Cells(M02.SH_VARS_ROW, M25.COMPort_COL)) <= 0:
     controller = PG.global_controller
     wlan_connected = getattr(controller, 'ARDUINO_IP', False) and controller.is_connection_open()
-    if not wlan_connected and M39.IsSimulatorActive and F00.port_is_busy(M07.ComPortPage().Cells(M02.SH_VARS_ROW, M25.COMPort_COL)):
+    # if not wlan_connected and M39.IsSimulatorActive and F00.port_is_busy(M07.ComPortPage().Cells(M02.SH_VARS_ROW, M25.COMPort_COL)):  # v1.03 (entfallen)
+    global _sim_declined_port  # v1.04
+    _port_value = str(M07.ComPortPage().Cells(M02.SH_VARS_ROW, M25.COMPort_COL))  # v1.04
+    _sim_active = bool(M39.IsSimulatorActive())  # v1.04
+    if _sim_active and controller.is_connection_open():  # v1.04 verbunden: Abfrage wieder zulassen
+        _sim_declined_port = None  # v1.04
+    if _sim_active and not wlan_connected and _sim_declined_port == _port_value:  # v1.04 Verbindung wurde schon einmal abgelehnt/gescheitert: nur Simulator
+        return True  # v1.04
+    if not wlan_connected and M39.IsSimulatorActive() and not F00.port_is_available(M07.ComPortPage().Cells(M02.SH_VARS_ROW, M25.COMPort_COL)):  # v1.03 wie VBA: Simulator aktiv und kein Port gewaehlt -> nicht verbinden
         _fn_return_value = True
         return _fn_return_value
     if not wlan_connected and not M07.Check_USB_Port_with_Dialog(M25.COMPort_COL):
+        if _sim_active:  # v1.04 Simulator aktiv: nur einmal fragen
+            _sim_declined_port = _port_value  # v1.04
+            _fn_return_value = True  # v1.04
         return _fn_return_value
         # 04.05.20: Added exit (Prior Check_USB_Port_with_Dialog ends the program in case of an error)
     # if ( Addr < 1 or Addr > 9999 ) :  # v1.01 (entfallen)
@@ -183,6 +198,9 @@ def SendDCCAccessoryCommand(Addr, Direction, IsSwitch):
     Output_Buffer = '@' + Left(str(Addr) + '   ', 4) + ' ' + Left(str(Direction) + ' ', 2) + ' 01' + Chr(10)
     #fn_return_value = M07.SendMLLCommand(ComPort, Output_Buffer, UseHardwareHandshake, M02.DEBUG_DCCSEND)
     if not send_command_to_ARDUINO(Output_Buffer, comport=ComPort):
+        if _sim_active:  # v1.04 Simulator aktiv: nur einmal fragen, danach nur Simulator
+            _sim_declined_port = _port_value  # v1.04
+            return True  # v1.04
         return False
     fn_return_value=True
     # 29.04.20: Incremented length to be able to use 4 digits 1000-9999

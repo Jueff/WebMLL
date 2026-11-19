@@ -1,15 +1,16 @@
-# Datei-Version: 1.02 (2026-11-05) - Userform_Other.py
+# Datei-Version: 1.03 (2026-11-16) - Userform_Other.py
 # ----------------------------------------------------------------------------------------------
 # Name:           Userform_Other.py
 # Path:           proggen/Userform_Other.py
-# Version:        1.02
-# Last Update:    2026-11-05
+# Version:        1.03
+# Last Update:    2026-11-16
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
 #   1.00  2026-10-12  Stand der Umstellung (nicht erfasst)
 #   1.01  2026-10-21  Version K des Excel-Programms: Parametertypen LED#OrName und LEDName (Check_Variable_Name), Option pf=<Praefix> (ValToParVal, ParValToVal, Prefix)
 #   1.02  2026-11-05  Check_Par_with_ErrMsg: Parametertyp RGB und RGB2 liefert den geprueften Farbwert zurueck (vorher True/False: im Makro stand 'True, True, True, True' statt der Farben); bei Fehler None (Korrektur des Entwicklers, im Programm 2.95); Check_RGB_List: die Fehlermeldung bei ungueltigen Farbwerten nennt jetzt den Parameter (vorher Abbruch mit NameError: Controls)
+#   1.03  2026-11-16  Check_Time_String: Zeitangaben mit Nachkommastellen (0.5 Sek, 0.8 Sec) wurden mit P01.val auf ganze Zahlen abgeschnitten (0.5 -> 0, Meldung 'zu klein'); jetzt float, Ergebnis in ms gerundet; Fehler von Check_Limit_to_MinMax/Check_Time_String (None) wurden nicht erkannt: die Eingabe wurde trotz Meldung uebernommen; Komma als Dezimalzeichen wird akzeptiert und im Makro als Punkt geschrieben
 # ----------------------------------------------------------------------------------------------
 # -*- coding: utf-8 -*-
 #
@@ -296,9 +297,9 @@ class UserForm_Other():
         ValidRangeTxt = vbCr + M09.Get_Language_Str('Bitte einen Zeit zwischen ') + self.MinA(ParNr - 1) + M09.Get_Language_Str(' ms und ') + self.MaxA(ParNr - 1) + M09.Get_Language_Str(' ms eingeben.' + vbCr + 'Die Zeitangabe kann auch eine der folgenden Einheit enthalten:' + vbCr + ' Min, Sec, ms ' + vbCr + 'Achtung: Zwischen Zahl und Einheit muss ein Leerzeichen stehen.' + vbCr + 'Beispiel: 3 Sec')
         with_1 = self.Controls['Par' + str(ParNr)]
         if type(with_1) == str:
-            Parts = Split(with_1, ' ')
+            Parts = Split(Trim(Replace(with_1, ',', '.')), ' ')  # v1.03 Komma als Dezimalzeichen
         else:
-            Parts = Split(with_1.Value, ' ')
+            Parts = Split(Trim(Replace(with_1.Value, ',', '.')), ' ')  # v1.03
         ValidUnits = " Min Sek sek Sec sec Ms ms "
         Err = UBound(Parts) != 1
         if not Err:
@@ -311,15 +312,15 @@ class UserForm_Other():
         else:
             select_0 = LCase(Parts(1))
             if (select_0 == 'min'):
-                value = P01.val(Parts(0)) * 60 * 1000
+                value = int(float(Parts(0)) * 60 * 1000 + 0.5)  # v1.03 (P01.val schnitt 0.5 auf 0 ab)
             elif (select_0 == 'sec') or (select_0 == 'sek'):
-                value = P01.val(Parts(0)) * 1000
+                value = int(float(Parts(0)) * 1000 + 0.5)  # v1.03
             elif (select_0 == 'ms'):
-                value = P01.val(Parts(0))
+                value = int(float(Parts(0)) + 0.5)  # v1.03
             else:
                 P01.MsgBox('Internal error: Unknown unit \'' + Parts(1) + '\' in Check_Time_String()', vbCritical, 'Internal error')
                 M30.EndProg()
-            if self.Check_Limit_to_MinMax(ParNr, value) == False:
+            if not self.Check_Limit_to_MinMax(ParNr, value):  # v1.03 (liefert bei einem Fehler None, nicht False)
                 return fn_return_value
         fn_return_value = True
         return fn_return_value
@@ -371,16 +372,17 @@ class UserForm_Other():
         VarLabel = paramName
         select_1 = self.TypA(ParNr - 1)
         if (select_1 == ''):
-            if self.Check_Limit_to_MinMax(ParNr, value) == False:
+            if not self.Check_Limit_to_MinMax(ParNr, value):  # v1.03 (liefert bei einem Fehler None, nicht False)
                 return fn_return_value
         elif (select_1 == 'Time'):
             if IsNumeric(value):
                 value = Int(value)
-                if self.Check_Limit_to_MinMax(ParNr, value) == False:
+                if not self.Check_Limit_to_MinMax(ParNr, value):  # v1.03 (liefert bei einem Fehler None, nicht False)
                     return fn_return_value
             else:
-                if self.Check_Time_String(ParNr) == False:
+                if not self.Check_Time_String(ParNr):  # v1.03 (liefert bei einem Fehler None)
                     return fn_return_value
+                value = Replace(Trim(value), ',', '.')  # v1.03 im Makro steht der Punkt als Dezimalzeichen
             #**HLI value = Replace(value, ',', '.') - int cannot be chnaged like a string
         elif (select_1 == 'Var'):
             ShowErr = ( value == '' )

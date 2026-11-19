@@ -1,15 +1,18 @@
-# Datei-Version: 1.13 (2026-11-12) - web_update.py
+# Datei-Version: 1.16 (2026-11-18) - web_update.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_update.py
 # Path:           _web/web_update.py
-# Version:        1.13
-# Last Update:    2026-11-12
+# Version:        1.16
+# Last Update:    2026-11-18
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
 #   1.11  2026-11-08  Das Update loescht keine Datei mehr, die das neue Release in anderer Schreibweise enthaelt und die auf diesem Rechner dieselbe Datei ist (Windows und macOS: ampel.png und Ampel.png sind eine Datei); vorher fehlten danach die neu geschriebenen Dateien (Symbole), das Programm meldete sie als fehlend (fruehere Versionen ohne Eintrag)
 #   1.12  2026-11-09  Testversion: Die Liste der Releases von GitHub (release_entries, available_releases, release_choices) fuer die Auswahl der Version im Dialog; newest_release liest die Antwort ueber _fetch_releases_json
 #   1.13  2026-11-12  Update Testversion: Releases, deren Tag oder Name mit 'test' beginnt (zum Beispiel test1: Tests des Entwicklers), stehen am Ende der Liste (hoechstens 5), werden nie vorgewaehlt und tragen den Zusatz 'Entwicklertest'; pick_release nimmt sie nur, wenn es nichts anderes gibt
+#   1.14  2026-11-17  version_key: Bei Tags wie 'V3.5.0L3-3.85' (Version der MobaLedLib vor der webMobaLedLib-Version) wird die webMobaLedLib-Version genommen; vorher stand bei neueren Releases faelschlich 'aeltere Version'
+#   1.15  2026-11-18  Ein ZIP darf neben dem Ordner python die Datei START_HIER.txt enthalten (wird ignoriert); vorher: 'Das ZIP enthaelt nicht den Ordner python mit webmobaledlib.py'
+#   1.16  2026-11-18  Update Testversion: eigener Link (https) zu einer ZIP-Datei oder ZIP-Datei vom Rechner (check_custom_url, save_upload); wird wie webmobaledlib.zip behandelt
 # ----------------------------------------------------------------------------------------------
 """Update der Web-Oberflaeche aus dem neuesten Release auf GitHub (Menue Hilfe -> Update webmobaledlib).
 
@@ -60,6 +63,7 @@ logger = logging.getLogger(__name__)
 DEFAULT_URL = "https://github.com/haroldlinke/WebMLL/releases/latest/download/webmobaledlib.zip"
 API_URL = "https://api.github.com/repos/haroldlinke/WebMLL/releases"        # Liste aller Releases, auch der Pre-Releases (releases/latest liefert nur das letzte normale)  # v1.09
 ASSET_NAME = "webmobaledlib.zip"  # v1.09
+ROOT_FILES = ("START_HIER.txt",)  # v1.15: Dateien im obersten Ordner des ZIP, die das Update ignoriert
 MAX_ZIP_BYTES = 80 * 1024 * 1024               # Grenzen gegen kaputte oder boesartige ZIP-Dateien
 MAX_UNPACKED_BYTES = 300 * 1024 * 1024
 MAX_FILE_BYTES = 60 * 1024 * 1024
@@ -246,6 +250,26 @@ def download(url: str, dest: str, progress=None, timeout: float = 30.0) -> str:
     return dest
 
 
+# ------------------------------------------------------------------ Eigene Quelle: Link oder ZIP-Datei vom Rechner  # v1.16
+def check_custom_url(url: str) -> str:  # v1.16
+    """Eigener Link zu einer ZIP-Datei: Leerzeichen am Rand weg, nur https:// ist erlaubt. Rueckgabe: die Adresse."""  # v1.16
+    url = (url or "").strip()  # v1.16
+    if not url.lower().startswith("https://") or len(url) < 12 or any(c.isspace() for c in url):  # v1.16
+        raise UpdateError(tr("Die Adresse muss mit https:// beginnen (ohne Leerzeichen)."))  # v1.16
+    return url  # v1.16
+
+
+def save_upload(data: bytes, dest: str) -> str:  # v1.16
+    """ZIP-Datei, die der Anwender im Browser ausgewaehlt hat, nach dest schreiben (Groesse und ZIP-Kennung werden geprueft)."""  # v1.16
+    if len(data) > MAX_ZIP_BYTES:  # v1.16
+        raise UpdateError(tr('Das ZIP ist mit {groesse} MB ungewoehnlich gross (Grenze {grenze} MB).', groesse=len(data) // 1048576, grenze=MAX_ZIP_BYTES // 1048576))  # v1.16
+    with open(dest, "wb") as out:  # v1.16
+        out.write(data)  # v1.16
+    if not zipfile.is_zipfile(dest):  # v1.16
+        raise UpdateError(tr("Die gewählte Datei ist kein ZIP."))  # v1.16
+    return dest  # v1.16
+
+
 # ------------------------------------------------------------------ Testversion: das neueste Release (Pre-Release oder normal)
 def api_url() -> str:  # v1.09
     return os.environ.get("MLL_UPDATE_API_URL", "").strip() or API_URL  # v1.09
@@ -336,8 +360,14 @@ def available_releases(timeout: float = 30.0, limit: int = 15) -> list:  # v1.12
 
 def version_key(text) -> tuple:  # v1.12
     """Versionsnummer aus einem Text wie 'v3.04', '3.04 (2026-11-09)' oder 'webMobaLedLib 3.04' als (3, 4); () ohne Nummer"""  # v1.12
-    m = re.search(r"(\d+)\.(\d+)", str(text or ""))  # v1.12
-    return (int(m.group(1)), int(m.group(2))) if m else ()  # v1.12
+    # m = re.search(r"(\d+)\.(\d+)", str(text or ""))  # v1.12 (entfallen: bei 'V3.5.0L3-3.85' kam die Version der MobaLedLib (3.5) statt 3.85)
+    # return (int(m.group(1)), int(m.group(2))) if m else ()  # v1.12 (entfallen)
+    text = str(text or "")  # v1.14
+    found = re.findall(r"(?<![\d.])(\d+)\.(\d+)(?![\d.])", text)  # v1.14: Zahlenpaare ohne dritten Teil (3.5.0 zaehlt nicht); das letzte ist die webMobaLedLib-Version
+    if not found:  # v1.14
+        found = re.findall(r"(\d+)\.(\d+)", text)  # v1.14: wie bisher
+        found = found[:1]  # v1.14
+    return (int(found[-1][0]), int(found[-1][1])) if found else ()  # v1.14
 
 
 def release_choices(entries: list, installed_version: str) -> list:  # v1.12
@@ -396,7 +426,10 @@ def open_release(zip_path: str) -> Release:
                 # raise UpdateError(f"Eine Datei im ZIP ist zu gross: {info.filename}")  # v1.08 (entfallen)
                 raise UpdateError(tr('Eine Datei im ZIP ist zu gross: {datei}', datei=info.filename))  # v1.08
             names[_clean_name(info.filename)] = info.filename
-        prefix = "python/" if all(n.startswith("python/") for n in names) else ""
+        for root_file in ROOT_FILES:  # v1.15: START_HIER.txt liegt im obersten Ordner des ZIP (neben python) und gehoert nicht zur Installation
+            names.pop(root_file, None)  # v1.15
+        # prefix = "python/" if all(n.startswith("python/") for n in names) else ""  # v1.15 (entfallen)
+        prefix = "python/" if all(n.startswith("python/") for n in names) else ""  # v1.15
         for clean, original in names.items():
             relpath = clean[len(prefix):]
             if not relpath:

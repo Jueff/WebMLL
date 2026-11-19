@@ -1,9 +1,9 @@
-# Datei-Version: 1.03 (2026-11-05) - web_z21.py
+# Datei-Version: 1.04 (2026-11-17) - web_z21.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_z21.py
 # Path:           _web/web_z21.py
-# Version:        1.03
-# Last Update:    2026-11-05
+# Version:        1.04
+# Last Update:    2026-11-17
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
@@ -11,6 +11,7 @@
 #   1.01  2026-10-21  Phase 2: Rueckmeldung (RMBUS) vom Arduino an die Z21-Clients (Zuhoerer fuer die Zeilen JSON:{RMBUS}, zyklische Abfrage ?*, notifyZ21_RMBUS_DATA), LAN_RMBUS_GETDATA antwortet dem Anfragenden, Status mit der Zahl der Clients
 #   1.02  2026-10-26  Zusammengesetzte Meldungen (Verkettungen und f-Strings) mit tr(...) uebersetzbar gemacht
 #   1.03  2026-11-05  Beschreibungstext der Seite wird uebersetzt (description_text)
+#   1.04  2026-11-17  Hinweistext: 'Mit Lichtmaschine verbinden' statt 'Mit ARDUINO verbinden'
 # ----------------------------------------------------------------------------------------------
 """Web-Version der Seite "Z21 Simulator" (mlpyproggen/Z21MonitorPage.py, Klasse Z21MonitorPage, ohne Tk).
 
@@ -521,7 +522,8 @@ class Z21Simulator:
             logger.warning("Verbinden mit dem ARDUINO fehlgeschlagen", exc_info=True)
             connected = False
         if not connected:
-            self.emit("Hinweis: keine Verbindung zum ARDUINO. Die Befehle werden erst gesendet, wenn „Mit ARDUINO verbinden“ (Kopfzeile) gelungen ist.")
+            # self.emit("Hinweis: keine Verbindung zum ARDUINO. Die Befehle werden erst gesendet, wenn „Mit ARDUINO verbinden“ (Kopfzeile) gelungen ist.")  # v3.83 (entfallen)
+            self.emit("Hinweis: keine Verbindung zur Lichtmaschine. Die Befehle werden erst gesendet, wenn „Mit Lichtmaschine verbinden“ (Kopfzeile) gelungen ist.")  # v3.83
         self.stop_event = threading.Event()
         self.thread = threading.Thread(target=self._loop, args=(sock, self.stop_event), daemon=True, name="Z21Simulator")
         self.thread.start()

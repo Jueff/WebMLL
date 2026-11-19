@@ -1,9 +1,9 @@
-# Datei-Version: 1.24 (2026-11-14) - web_form_options.py
+# Datei-Version: 1.38 (2026-11-19) - web_form_options.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_form_options.py
 # Path:           _web/web_form_options.py
-# Version:        1.24
-# Last Update:    2026-11-14
+# Version:        1.38
+# Last Update:    2026-11-19
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
@@ -14,6 +14,20 @@
 #   1.22  2026-11-13  Schreibfehler im Titel: 'Optionen und spezielle Funktionen' (vorher 'Funktionien')
 #   1.23  2026-11-13  Wechsel des Arduino-Typs (Optionen): eine bestehende serielle Verbindung wird getrennt und der gewaehlte COM Port zurueckgesetzt (_web_board_changed), damit beim naechsten Mal die Port-Erkennung startet ohne die Meldung 'Es ist kein ... angeschlossen' (Rueckmeldung des Excel-Entwicklers)
 #   1.24  2026-11-14  Reiter OTA (nur bei Board ESP32): WLAN, OTA, Hostname, Adresse, Passwort (Beitrag des Fork-Entwicklers; web_esp32_ota.settings_panel)
+#   1.28  2026-11-17  Knopf 'Board und USB Port erkennen' steht ueber 'USB Port erkennen'; Reiter 'LED Arduino' heisst 'Lichtmaschine', Reiter 'OTA' heisst 'WLAN (OTA)'
+#   1.29  2026-11-18  Reiter Dateien: Knopf Importieren v. altem Prog. ist aktiv und zeigt eine Anleitung (Daten ueber eine MLL_pgf-Datei uebernehmen); Knopf Kopiere von Seite zu Seite entfaellt (ersetzt durch Seite duplizieren)
+#   1.27  2026-11-17  Knopf 'Board und USB Port erkennen': stellt das erste gefundene Board ein und ruft USB Port erkennen auf (Formular mit gefundenem Board und Anschluss, dazu die anderen Boards); Anwender kann uebernehmen oder anderen Typ waehlen
+#   1.26  2026-11-17  Erkennen ohne voreingestellten COM Port und Board: der Knopf durchsucht selbst alle seriellen Anschluesse (Classify_Port), fragt bei mehreren Geraeten nach und traegt Board und COM Port ein
+#   1.25  2026-11-17  Reiter LED ARDUINO / DCC Arduino: statt des Hakens 'Automatisch erkennen' ein Knopf 'Erkennen' (erkennt das angeschlossene Board einmalig: Nano alt/neu ueber den Bootloader, ESP32, Pico); der Eintrag 'Typ von Arduino IDE benutzen' entfaellt (Vorschlag des Excel-Entwicklers)
+#   1.30  2026-11-18  ESP Einstellungen je Blatt mit OLED-Vorschau, Reiternamen aus NiceGUI-Props (Beitrag von moosbewohner, Pull Request 11)
+#   1.31  2026-11-18  Neuer Reiter Erweiterungen: bekannte MobaLedLib Extensions (MLX) mit Haken aktiv/inaktiv, Laden beim Einschalten (headless_extensions)
+#   1.32  2026-11-18  Reiter Erweiterungen: eigene Erweiterungen (Eingabe Name, Name@=Version, Name=Adresse oder Adresse) mit Haken, Entfernen und Hinweis auf fremden Code
+#   1.33  2026-11-18  Reiter des Optionenfensters: Beschriftung bricht um (zweizeilig) und die Reiter teilen die Breite, damit alle sichtbar sind (vorher Pfeile zum Blaettern, Reiter Erweiterungen verdeckt)
+#   1.34  2026-11-18  Korrektur Issue 13: Board und USB Port erkennen nimmt nicht mehr blind den ersten Anschluss. Der Anschluss der anderen Seite (Lichtmaschine oder LNet/DCC-Arduino) wird ausgelassen, der eigene gespeicherte Anschluss hat Vorrang
+#   1.35  2026-11-18  Korrektur Issue 13 (nach Protokoll): Board und USB Port erkennen setzt auch die Auswahl des Formulars (rb_res), sonst ueberschrieb 'USB Port erkennen' das erkannte Board wieder mit der alten Auswahl; nach dem Erkennen oeffnet das Fenster wieder auf dem Reiter der Seite (nicht auf Lichtmaschine)
+#   1.36  2026-11-18  Board und USB Port erkennen (Lichtmaschine): nach dem Schliessen des Fensters verbindet das Programm automatisch (Hook wd._bridge['auto_connect'] aus webmobaledlib 4.04)
+#   1.37  2026-11-19  Board und USB Port erkennen: Nano neu oder Full mit Firmware-Version und Signatur des Bootloaders (Issue 14)
+#   1.38  2026-11-19  Erweiterungen: Name und Beschreibung aus libraries.json der Extension anzeigen, wenn vorhanden (Wunsch Juergen, Issue 6)
 # ----------------------------------------------------------------------------------------------
 """Web-Ersatz fuer proggen/UserForm_Options.py (Optionen und spezielle Funktionen).
 
@@ -105,6 +119,8 @@ def tab_buttons(buttons: dict, handlers: list[str], frame_hint: str | None = Non
 
 
 # ------------------------------------------------------------------ Dialog (Event-Loop)
+_TAB = {"name": None, "keep": False}  # v1.35: zuletzt gewaehlter Reiter; keep: beim naechsten Oeffnen wieder dort beginnen (nach Board erkennen)
+
 async def _options_async(spec: dict, st: dict):
     from nicegui import ui
     from _web.web_esp32_ota import settings_panel
@@ -113,6 +129,9 @@ async def _options_async(spec: dict, st: dict):
     with wd._bridge["client"]:
         # with ui.dialog().props("persistent") as dlg, ui.card().classes("w-[900px] max-w-full"):  # v1.12 (entfallen)
         # with ui.dialog().props("persistent") as dlg, ui.card().classes("w-[900px] max-w-full").style("max-height: 96vh; overflow-y: auto"):    # auf kleinen Bildschirmen (Laptop) scrollen, sonst fehlen die unteren Boards (Pico)  # v1.14 (entfallen)
+        ui.add_css(".mll-opttabs .q-tab { flex: 1 1 auto; min-width: 0; padding: 0 6px; }"                                     # v1.33
+                   ".mll-opttabs .q-tab__label { white-space: normal; text-align: center; line-height: 1.15; font-size: 0.78rem; overflow-wrap: anywhere; }"  # v1.33
+                   ".mll-opttabs .q-tabs__content { flex-wrap: nowrap; }")  # v1.33: lange Beschriftungen zweizeilig, alle Reiter sichtbar (ESP Einstellungen, Erweiterungen)
         ui.add_css(".mll-optcard > * { flex-shrink: 0; }")       # die Karte ist eine Spalte (flex): ohne das schrumpfen die Reiter und schneiden die unteren Knoepfe und Texte ab  # v1.14
         with ui.dialog().props("persistent") as dlg, ui.card().classes("w-[900px] max-w-full mll-optcard").style("max-height: 96vh; overflow-y: auto"):    # auf kleinen Bildschirmen (Laptop) scrollen, sonst fehlen die unteren Boards (Pico)  # v1.14
             ui.label(spec["title"]).classes("text-h6")
@@ -122,6 +141,168 @@ async def _options_async(spec: dict, st: dict):
 
             def action(handler):
                 return lambda: dlg.submit(("action", handler, collect()))
+
+            # The options are committed by the same OK/action flow as the board selection.  # v1.30
+            esp_settings = dict(vals.get("esp32_options") or {})  # v1.30
+            modes = {  # v1.30
+                0: tr("Aus"), 1: tr("MLL-Zeit"), 2: tr("LDR-Wert"),  # v1.30
+                3: tr("MLL-Zeit und LDR-Wert"), 4: tr("WLAN, IP, LDR und Zeit"),  # v1.30
+                5: tr("WLAN, IP und Hostname"),  # v1.30
+            }  # v1.30
+
+            def esp_panel():  # v1.30
+                with ui.row().classes("items-start gap-6"):  # v1.30
+                    with ui.column():  # v1.30
+                        mode = ui.select(modes, value=esp_settings.get("oled", 0), label=tr("OLED-Anzeige")).classes("w-64")  # v1.30
+                        ldr = ui.checkbox(tr("Fotowiderstand aktivieren"), value=esp_settings.get("ldr", False))  # v1.30
+                        store = ui.checkbox(tr("Zustände werden gespeichert"), value=esp_settings.get("store_status", False))  # v1.30
+                    with ui.column().classes("items-center gap-1"):  # v1.30
+                        ui.label(tr("OLED-Vorschau")).classes("text-caption")  # v1.30
+                        display = ui.label().style(  # v1.30
+                            "width:256px; height:128px; max-width:100%; padding:8px; "  # v1.30
+                            "background:#0c151b; color:#8edaff; white-space:pre; overflow:hidden; "  # v1.30
+                            "text-align:center; font: 15px/27px monospace; border-radius:8px"  # v1.30
+                        )  # v1.30
+
+                frame = 0  # v1.30
+
+                def preview():  # v1.30
+                    minutes = 18 * 60 + frame % 60  # v1.30
+                    clock = f"{minutes // 60:02d}:{minutes % 60:02d}"  # v1.30
+                    sensor = f"LDR: {110 + frame % 30}" if ldr.value else "LDR: aus"  # v1.30
+                    hostname = vals["esp32_hostname"]  # v1.30
+                    # The firmware uses a smaller font when a long hostname needs two lines.  # v1.30
+                    split = 18 if len(hostname) <= 36 else 32  # v1.30
+                    host_lines = [hostname[:split], hostname[split:]]  # v1.30
+                    connected = vals["esp32_wifi"] and frame % 12 >= 2  # v1.30
+                    status = "WLAN verbunden" if connected else (  # v1.30
+                        "WLAN getrennt" if vals["esp32_wifi"] else "WLAN deaktiviert"  # v1.30
+                    )  # v1.30
+                    address = "192.168.1.42" if connected else "IP: -"  # v1.30
+                    lines = {  # v1.30
+                        0: [], 1: ["MobaLedLib", "Zeit", clock],  # v1.30
+                        2: ["MobaLedLib", "LDR SunSet", sensor],  # v1.30
+                        3: ["MobaLedLib", f"PM {clock}", sensor],  # v1.30
+                        4: [status, address, sensor, f"MLL-Zeit: {clock}"],  # v1.30
+                        5: [status, address, *host_lines],  # v1.30
+                    }  # v1.30
+                    display.style("font-size: 11px" if mode.value == 5 and split == 32 else "font-size: 15px")  # v1.30
+                    display.set_text("\n".join(lines[mode.value]))  # v1.30
+
+                def tick():  # v1.30
+                    nonlocal frame  # v1.30
+                    # if tabs.value == esp_tab.name:  # v1.30 (entfallen: ui.tab hat kein Attribut name)
+                    if tabs.value == esp_tab.props["name"]:  # v1.30
+                        frame += 1  # v1.30
+                        preview()  # v1.30
+
+                def update(_event):  # v1.30
+                    vals["esp32_options"] = {"oled": mode.value, "ldr": ldr.value, "store_status": store.value}  # v1.30
+                    preview()  # v1.30
+
+                for control in (mode, ldr, store):  # v1.30
+                    control.on_value_change(update)  # v1.30
+                preview()  # v1.30
+                ui.timer(1, tick)  # v1.30
+
+            def ext_panel():  # v1.31  # v1.32
+                import headless.headless_extensions as HE  # v1.31
+                from nicegui import run  # v1.31
+                ui.label(tr("MobaLedLib Extensions (MLX) erweitern die Makros um zusätzliche Funktionen. Sie sind optional, manche brauchen Zusatzhardware. Eine eingeschaltete Erweiterung erscheint in der Makroauswahl in der Gruppe „Erweiterungen“.")).classes("text-grey-8").style("white-space: pre-line")  # v1.31
+                state = {"busy": False}  # v1.31
+                holder = ui.column().classes("w-full gap-1")  # v1.32
+
+                def status_text(ent):  # v1.31
+                    st_ = HE.status(ent)  # v1.31
+                    return {"bundled": tr("im Programmpaket"), "loaded": tr("geladen"), "missing": tr("noch nicht geladen")}[st_]  # v1.31
+
+                async def confirm_foreign_code(spec):  # v1.32
+                    with ui.dialog().props("persistent") as dlg, ui.card().classes("w-[520px] max-w-full"):  # v1.32
+                        ui.label(tr("Fremden Code einbinden?")).classes("text-h6")  # v1.32
+                        ui.label(tr("Die Erweiterung {spec} wird aus dem Internet geladen. Ihr Code wird beim Übersetzen in Ihr Programm eingebunden und auf dem Arduino ausgeführt. Fügen Sie nur Erweiterungen aus Quellen hinzu, denen Sie vertrauen.", spec=spec)).style("white-space: pre-line")  # v1.32
+                        with ui.row().classes("justify-end w-full"):  # v1.32
+                            ui.button(tr("Abbrechen"), on_click=lambda: dlg.submit(False)).props("flat")  # v1.32
+                            ui.button(tr("Hinzufügen"), on_click=lambda: dlg.submit(True)).props("color=primary")  # v1.32
+                    dlg.open()  # v1.32
+                    answer = await dlg  # v1.32
+                    dlg.delete()  # v1.32
+                    return bool(answer)  # v1.32
+
+                def render():  # v1.32: die Liste neu aufbauen (nach Hinzufügen oder Entfernen)
+                    holder.clear()  # v1.32
+                    with holder:  # v1.32
+                        for group, title in (("standard", tr("Standard (vorab eingeschaltet)")), ("optional", tr("Optional (vorab ausgeschaltet)")), ("custom", tr("Eigene Erweiterungen"))):  # v1.32
+                            entries = [e_ for e_ in HE.all_entries() if e_.get("group") == group]  # v1.32
+                            if not entries:  # v1.32
+                                continue  # v1.32
+                            ui.label(title).classes("text-subtitle2 q-mt-sm")  # v1.31
+                            for ent in entries:  # v1.31
+                                with ui.row().classes("items-start no-wrap w-full"):  # v1.31
+                                    lib_info = HE.library_info(ent)  # v1.38: Name und Beschreibung aus libraries.json, wenn vorhanden
+                                    # box = ui.checkbox(ent["name"], value=HE.is_enabled(ent["id"])).classes("w-72")  # v1.31  # v1.38 (entfallen)
+                                    box = ui.checkbox(lib_info.get("name") or ent["name"], value=HE.is_enabled(ent["id"])).classes("w-72")  # v1.38
+                                    with ui.column().classes("gap-0 grow"):  # v1.31
+                                        info = ui.label(status_text(ent)).classes("text-caption")  # v1.31
+                                        # ui.label(ent.get("description", "")).classes("text-caption text-grey-8")  # v1.31  # v1.38 (entfallen)
+                                        ui.label(lib_info.get("description") or ent.get("description", "")).classes("text-caption text-grey-8")  # v1.38
+                                        if ent.get("hardware"):  # v1.31
+                                            ui.label(tr("Braucht Zusatzhardware: {hardware}", hardware=ent["hardware"])).classes("text-caption text-orange-9")  # v1.31
+                                    if group == "custom":  # v1.32
+                                        def remove(ent=ent):  # v1.32
+                                            HE.remove_custom(ent["id"])  # v1.32
+                                            vals["ext_changed"] = True  # v1.32
+                                            render()  # v1.32
+                                        ui.button(tr("Entfernen"), on_click=remove).props("flat dense no-caps color=negative")  # v1.32
+
+                                async def toggled(event, ent=ent, box=box, info=info):  # v1.31
+                                    if state["busy"]:  # v1.31
+                                        return  # v1.31
+                                    if event.value and HE.status(ent) == "missing":  # v1.31: erst laden, dann einschalten
+                                        state["busy"] = True  # v1.31
+                                        info.set_text(tr("wird geladen …"))  # v1.31
+                                        try:  # v1.31
+                                            await run.io_bound(HE.download, ent)  # v1.31
+                                        except HE.ExtensionError as ex:  # v1.31
+                                            ui.notify(tr("Die Erweiterung {name} konnte nicht geladen werden: {fehler}", name=ent["id"], fehler=ex), type="negative")  # v1.31
+                                            state["busy"] = False  # v1.32
+                                            box.set_value(False)  # v1.31
+                                            info.set_text(status_text(ent))  # v1.31
+                                            return  # v1.31
+                                        state["busy"] = False  # v1.31
+                                    HE.set_enabled(ent["id"], bool(event.value))  # v1.31
+                                    info.set_text(status_text(ent))  # v1.31
+                                    vals["ext_changed"] = True  # v1.31
+                                box.on_value_change(toggled)  # v1.31
+                        ui.label(tr("Eigene Erweiterung hinzufügen")).classes("text-subtitle2 q-mt-md")  # v1.32
+                        with ui.row().classes("items-center no-wrap w-full"):  # v1.32
+                            spec_input = ui.input(placeholder="MeineNeueExtensionMLX=https://github.com/…").props("outlined dense clearable").classes("grow")  # v1.32
+
+                            async def add():  # v1.32
+                                if state["busy"]:  # v1.32
+                                    return  # v1.32
+                                try:  # v1.32
+                                    parsed = HE.parse_spec(spec_input.value)  # v1.32
+                                except HE.ExtensionError as ex:  # v1.32
+                                    ui.notify(tr(str(ex)), type="negative")  # v1.32
+                                    return  # v1.32
+                                if parsed["kind"] == "url" and not HE.warned():  # v1.32: beim ersten Hinzufügen einer Adresse
+                                    if not await confirm_foreign_code(parsed["spec"]):  # v1.32
+                                        return  # v1.32
+                                    HE.set_warned()  # v1.32
+                                state["busy"] = True  # v1.32
+                                ui.notify(tr("wird geladen …"))  # v1.32
+                                try:  # v1.32
+                                    await run.io_bound(HE.add_custom, parsed["spec"])  # v1.32
+                                except HE.ExtensionError as ex:  # v1.32
+                                    state["busy"] = False  # v1.32
+                                    ui.notify(tr("Die Erweiterung {name} konnte nicht geladen werden: {fehler}", name=parsed["id"], fehler=ex), type="negative")  # v1.32
+                                    return  # v1.32
+                                state["busy"] = False  # v1.32
+                                vals["ext_changed"] = True  # v1.32
+                                render()  # v1.32
+                            ui.button(tr("Hinzufügen"), on_click=add).props("outline no-caps")  # v1.32
+                        ui.label(tr("Eine Zeile: Name (aktuelle Version aus der PlatformIO-Registry), Name@=1.1.0 (genau diese Version), Name=https://github.com/Besitzer/Repo (Code aus dem Repository, nach # ein Tag oder Zweig) oder nur die Adresse.")).classes("text-caption text-grey-8")  # v1.32
+                render()  # v1.32
 
             pico_rows = []                                             # Knoepfe nur fuer den Pico (Firmware installieren)  # v1.09
             pico_values = list(spec["pages"]["left"].get("pico_values") or [])  # v1.09
@@ -199,9 +380,10 @@ async def _options_async(spec: dict, st: dict):
                 key = "L" if side == "left" else "R"
                 # with ui.column().classes("gap-0"):  # v1.20 (entfallen)
                 with ui.column().classes("gap-0 shrink-0").style("min-width: 20rem"):  # v1.20: behaelt ihre Breite, die Beschriftungen (zum Beispiel Nano Normal (old Bootloader)) brechen nicht um
-                    ui.checkbox(p["auto_text"], value=bool(vals["auto_" + key]),
+                    # ui.checkbox(p["auto_text"], value=bool(vals["auto_" + key]),  # v1.25 (entfallen: Knopf Erkennen statt Haken)
                                 # on_change=lambda e, k=key: vals.__setitem__("auto_" + k, bool(e.value)))  # v1.06 (entfallen)
-                                on_change=lambda e, k=key: (vals.__setitem__("auto_" + k, bool(e.value)), update_dcc_tab()))  # v1.06
+                                # on_change=lambda e, k=key: (vals.__setitem__("auto_" + k, bool(e.value)), update_dcc_tab()))  # v1.06  # v1.25 (entfallen)
+                    # ui.button(p["detect_text"], on_click=action("__Detect_Board_" + key)).props("outline no-caps dense").classes("q-mb-xs").tooltip(p["detect_hint"])  # v1.25: erkennt das angeschlossene Board einmalig (statt des Hakens Automatisch erkennen)  # v1.28 (entfallen: der Knopf steht jetzt ueber USB Port erkennen)
                     first = {v: t for v, t in p["radios"] if v <= 3}
                     # second = {v: t for v, t in p["radios"] if v > 3}  # v1.08 (entfallen)
                     second = board_second(p)  # v1.08
@@ -213,6 +395,7 @@ async def _options_async(spec: dict, st: dict):
                         vals[k] = e.value
                         update_pico_buttons()
                         ota_tab.set_visibility(vals.get("L") == esp32_value and esp32_value is not None)  # v1.09
+                        esp_tab.set_visibility(vals.get("L") == esp32_value and esp32_value is not None)  # v1.30
                         update_dcc_tab()  # v1.06
                         other = g["b"] if which == "a" else g["a"]
                         if other is not None:
@@ -230,7 +413,8 @@ async def _options_async(spec: dict, st: dict):
                     boards.append((p, g))  # v1.08
 
             esp32_value = spec["pages"]["left"].get("esp32_value")
-            with ui.tabs().classes("w-full") as tabs:
+            # with ui.tabs().classes("w-full") as tabs:  # v1.33 (entfallen)
+            with ui.tabs().classes("w-full mll-opttabs") as tabs:  # v1.33
                 tab_objs = [ui.tab(t["name"]) for t in spec["tabs"]]
                 for t, tab_obj in zip(spec["tabs"], tab_objs):  # v1.06
                     if t.get("ide_only"):  # v1.07
@@ -239,17 +423,30 @@ async def _options_async(spec: dict, st: dict):
                     if t.get("nano_only"):  # v1.06
                         dcc["tab"], dcc["initial"] = tab_obj, bool(t.get("visible", True))  # v1.06
                         set_tab_visible(tab_obj, dcc["initial"])  # v1.06
-                ota_tab = ui.tab("OTA")
+                esp_tab = ui.tab(tr("ESP Einstellungen"))  # v1.30
+                esp_tab.set_visibility(vals.get("L") == esp32_value and esp32_value is not None)  # v1.30
+                ota_tab = ui.tab(tr("WLAN (OTA)"))
+                ext_tab = ui.tab(tr("Erweiterungen"))  # v1.31
                 ota_tab.set_visibility(vals.get("L") == esp32_value and esp32_value is not None)
-            with ui.tab_panels(tabs, value=tab_objs[0]).classes("w-full"):
+            # with ui.tab_panels(tabs, value=tab_objs[0]).classes("w-full"):  # v1.35 (entfallen)
+            start_tab = next((t_ for t_ in tab_objs if _TAB["keep"] and t_.props["name"] == _TAB["name"]), tab_objs[0])  # v1.35
+            _TAB["keep"] = False  # v1.35
+            tabs.on_value_change(lambda e: _TAB.__setitem__("name", e.value))  # v1.35
+            with ui.tab_panels(tabs, value=start_tab).classes("w-full"):  # v1.35
+                with ui.tab_panel(esp_tab):  # v1.30
+                    esp_panel()  # v1.30
                 with ui.tab_panel(ota_tab):
                     settings_panel()
+                with ui.tab_panel(ext_tab):  # v1.31
+                    ext_panel()  # v1.31
                 for t, tab in zip(spec["tabs"], tab_objs):
                     with ui.tab_panel(tab):
                         if t["kind"] == "arduino":
                             # with ui.row().classes("items-start no-wrap w-full"):  # v1.20 (entfallen)
                             with ui.row().classes("items-start w-full").style("flex-wrap: wrap; gap: 1rem 2rem"):  # v1.20: auf schmalen Bildschirmen rutscht die Auswahl des Boards unter die Knoepfe
                                 with ui.column().classes("grow"):  # v1.20
+                                    _dp = spec["pages"]["left" if t["side"] == "left" else "right"]  # v1.28
+                                    ui.button(_dp["detect_text"], on_click=action("__Detect_Board_" + ("L" if t["side"] == "left" else "R"))).props("outline no-caps").classes("w-64").tooltip(_dp["detect_hint"])  # v1.28: Board und USB Port erkennen steht ueber USB Port erkennen
                                     for b in t["buttons"]:
                                         button_row(b, compact=True)  # v1.20
                                 board_group(t["side"], tab)
@@ -300,11 +497,21 @@ def make_class(Base):
                 self._web_reshow = True
                 return
             self._web_running = True
+            self._web_auto_connect = False  # v1.36
             try:
                 self._web_loop(first_page_only)
             finally:
                 self._web_running = False
                 self.IsActive = False
+                if getattr(self, "_web_auto_connect", False):  # v1.36: Anschluss der Lichtmaschine erkannt: danach gleich verbinden
+                    self._web_auto_connect = False  # v1.36
+                    hook, loop = wd._bridge.get("auto_connect"), wd._bridge.get("loop")  # v1.36
+                    if hook is not None and loop is not None:  # v1.36
+                        try:  # v1.36
+                            import asyncio  # v1.36
+                            asyncio.run_coroutine_threadsafe(hook(), loop)  # v1.36: nicht warten: der Befehl Optionen ist erst nach diesem Aufruf fertig
+                        except Exception:                          # noqa: BLE001  # v1.36
+                            logger.warning("Automatisches Verbinden nicht gestartet", exc_info=True)  # v1.36
 
         # --------------------------------------------------------------
         def _web_prepare(self, first_page_only):
@@ -325,7 +532,12 @@ def make_class(Base):
             setattr(self, PFX + "__Disable_Set_Arduino_Typ", False)
             self.control_to_radiobutton()
             import proggen.M28_Diverse as M28  # v1.04
-            return {"L": self.rb_res["_L"].get() or None, "R": self.rb_res["_R"].get() or None,
+            # return {"L": self.rb_res["_L"].get() or None, "R": self.rb_res["_R"].get() or None,  # v1.30 (entfallen)
+            from headless.headless_esp32_ota import load_settings  # v1.30
+            wlan = load_settings(P01.ActiveSheet)  # v1.30
+            return {"esp32_options": dict(getattr(P01.ActiveSheet, "esp32_options", None) or {}),  # v1.30
+                    "esp32_hostname": wlan["hostname"], "esp32_wifi": wlan["wifi"],  # v1.30
+                    "L": self.rb_res["_L"].get() or None, "R": self.rb_res["_R"].get() or None,  # v1.30
                     "auto_L": bool(self.Autodetect_Typ_L_CheckBox_var.get()),
                     # "auto_R": bool(self.Autodetect_Typ_R_CheckBox_var.get())}  # v1.04 (entfallen)
                     "auto_R": bool(self.Autodetect_Typ_R_CheckBox_var.get()),  # v1.04
@@ -344,6 +556,8 @@ def make_class(Base):
             for rb, d in self.radiobuttons.items():
                 if not rb.endswith(side):
                     continue
+                if d.get("value") == 5:                                   # v1.25: 'Typ von Arduino IDE benutzen' entfaellt im Web (Vorschlag des Excel-Entwicklers)
+                    continue  # v1.25
                 # if rb.startswith("ESP32") and not M37.ESP32_Lib_Installed():  # v1.07 (entfallen)
                 # if rb.startswith("ESP32") and not M37.ESP32_Lib_Installed() and not M28pio.Is_PlatformIO():  # v1.08 (entfallen)
                     # continue  # v1.08 (entfallen)
@@ -365,10 +579,12 @@ def make_class(Base):
                          "label": tr("Schreibt eine fertige Firmware (UF2-Datei aus dem Ordner MobaLedLib/firmware) auf den Raspberry Pi Pico")})  # v1.09
             subtitle = M09.Get_Language_Str("Für andere Hauptplatine")
             auto_text = M09.Get_Language_Str("Automatisch erkennen")
-            tabs = [{"name": "LED Arduino", "kind": "arduino", "side": "left", "buttons": left}]
+            detect_text = tr("Board und USB Port erkennen")  # v1.25
+            detect_hint = tr("Sucht den angeschlossenen Arduino (Nano alt oder neu, ESP32, Pico) an allen USB Anschlüssen, stellt das erste gefundene Board ein und zeigt es mit dem USB Port an. Dort kann es übernommen oder ein anderer Typ gewählt werden.")  # v1.25
+            tabs = [{"name": tr("Lichtmaschine"), "kind": "arduino", "side": "left", "buttons": left}]
             # pages = {"left": {"radios": self._radios("_L"), "subtitle": subtitle, "auto_text": auto_text}}  # v1.08 (entfallen)
             esp32_value = next((d["value"] for rb, d in self.radiobuttons.items() if rb.startswith("ESP32") and rb.endswith("_L")), None)  # v1.08
-            pages = {"left": {"radios": self._radios("_L"), "subtitle": subtitle, "auto_text": auto_text,  # v1.08
+            pages = {"left": {"radios": self._radios("_L"), "subtitle": subtitle, "auto_text": auto_text, "detect_text": detect_text, "detect_hint": detect_hint,  # v1.08  # v1.25
                               # "esp32_value": esp32_value, "esp32_lib": bool(M37.ESP32_Lib_Installed())}}  # v1.09 (entfallen)
                               "esp32_value": esp32_value, "esp32_lib": bool(M37.ESP32_Lib_Installed()),  # v1.09
                               # "pico_values": [d["value"] for rb, d in self.radiobuttons.items() if rb.startswith("PICO") and rb.endswith("_L")]}}  # v1.11 (entfallen)
@@ -382,12 +598,15 @@ def make_class(Base):
                                  # "buttons": tab_buttons(buttons, ["__Detect_Right_Port_Button_Click", "__ProInstall_Button_Click"])})  # v1.06 (entfallen)
                                  "buttons": tab_buttons(buttons, ["__Detect_Right_Port_Button_Click", "__ProInstall_Button_Click"]),  # v1.06
                                  "nano_only": True, "visible": M02a.Get_BoardTyp() == M02.HT_AM328})  # v1.06
-                    pages["right"] = {"radios": self._radios("_R"), "subtitle": subtitle, "auto_text": auto_text}
+                    pages["right"] = {"radios": self._radios("_R"), "subtitle": subtitle, "auto_text": auto_text, "detect_text": detect_text, "detect_hint": detect_hint}  # v1.25
                     pages["left"]["nano_values"] = [v for v, _text in pages["left"]["radios"] if self._is_nano_value(v)]  # v1.06
                 files = tab_buttons(buttons, ["__Import_Button_Click", "__Save_Button_Click", "__Load_Button_Click", "__Copy_Page_Button_Click"])
+                files = [b for b in files if b["handler"] != "__Copy_Page_Button_Click"]  # v1.29: ersetzt durch Seite duplizieren
                 for b in files:
                     if b["handler"][2:] in {h[2:] for h in NOT_IN_WEB}:
                         b["disabled"] = True
+                    if b["handler"] == "__Import_Button_Click":  # v1.29
+                        b["disabled"] = False  # v1.29
                 tabs.append({"name": M09.Get_Language_Str("Dateien"), "kind": "list", "buttons": files,
                              "texts": ["Speichern lädt die Datei über den Browser herunter, Laden öffnet einen Upload-Dialog."]})
                 # Der Knopf des Originals "Update pyMobaLedLib" (__Update_pyMobaLedLib_Button_Click) fehlt hier absichtlich: Er laedt master.zip des
@@ -443,6 +662,14 @@ def make_class(Base):
 
         def _web_apply(self, vals, initial):
             """Aenderungen von Autodetect und Board wie die Klick-Handler des Originals ausfuehren."""
+            if vals.get("ext_changed"):  # v1.31: Erweiterungen ein- oder ausgeschaltet: die Makros neu einlesen
+                try:  # v1.31
+                    import proggen.M38_Extensions as M38  # v1.31
+                    M38.Load_Extensions()  # v1.31
+                except Exception:                                      # noqa: BLE001  # v1.31
+                    logger.exception("Optionen: Erweiterungen konnten nicht neu eingelesen werden")  # v1.31
+            if vals["esp32_options"] != initial["esp32_options"]:  # v1.30
+                P01.ActiveSheet.esp32_options = dict(vals["esp32_options"])  # v1.30
             self.rb_res["_L"].set(vals["L"] or 0)
             self.rb_res["_R"].set(vals["R"] or 0)
             self.Autodetect_Typ_L_CheckBox_var.set(1 if vals["auto_L"] else 0)
@@ -481,6 +708,88 @@ def make_class(Base):
                 logger.debug("COM Port nicht zurueckgesetzt", exc_info=True)  # v1.23
             logger.info("Optionen: Arduino-Typ links/rechts gewechselt (%s): Verbindung getrennt, COM Port zurueckgesetzt", "links" if left else "rechts")  # v1.23
 
+        def _web_detect_board(self, left):  # v1.25  # v1.26  # v1.27 (Board und USB Port erkennen)
+            """Knopf 'Board und USB Port erkennen': sucht unter allen seriellen Anschluessen nach einem Arduino. Beim ersten gefundenen Board wird dieses
+            eingestellt und 'USB Port erkennen' aufgerufen; das Formular zeigt das gefundene Board mit Anschluss und wie bisher die anderen gefundenen Boards.
+            ESP32 (CP210x) und Pico nach der Beschreibung des Anschlusses, bei einem Nano ueber den Bootloader: 57600 Baud alt, 115200 Baud neu."""
+            import re  # v1.26
+            import proggen.M07_COM_Port as M07  # v1.25
+            import proggen.M08_ARDUINO as M08  # v1.25
+            try:  # v1.25: eine bestehende Verbindung des Programms belegt den Anschluss
+                import mlpyproggen.Prog_Generator as PG  # v1.25
+                if PG.global_controller.is_connection_open():  # v1.25
+                    PG.global_controller.disconnect()  # v1.25
+            except Exception:                                  # noqa: BLE001  # v1.25
+                logger.debug("Trennen vor dem Erkennen fehlgeschlagen", exc_info=True)  # v1.25
+            cands = []  # v1.26: [(Anschluss, Typ)]
+            try:  # v1.26
+                from serial.tools import list_ports as portlist  # v1.26
+                for cp in portlist.comports(include_links=False):  # v1.26
+                    if os.name != "nt" and re.match(r"^/dev/ttyS\d+$", str(cp.device)) and str(cp.hwid).strip().lower() in ("n/a", ""):  # v1.26
+                        continue  # v1.26
+                    t = M07.Classify_Port(cp)  # v1.26
+                    if t:  # v1.26
+                        cands.append((str(cp.device), t))  # v1.26
+            except Exception:                                  # noqa: BLE001  # v1.26
+                logger.debug("Anschlussliste nicht lesbar", exc_info=True)  # v1.26
+            def _num(x):  # v1.27: wie im Formular nach der Nummer des Anschlusses sortiert
+                m = re.search(r"(\d+)$", x[0])  # v1.27
+                return (int(m.group(1)) if m else 0, x[0])  # v1.27
+            cands.sort(key=_num)  # v1.27
+            if not cands:  # v1.26
+                P01.MsgBox(tr("Es wurde kein angeschlossener Arduino gefunden. Bitte den Arduino per USB anschließen und noch einmal „Board und USB Port erkennen“ drücken."), vbCritical, tr("Board und USB Port erkennen"))  # v1.26  # v1.27
+                return  # v1.26
+            # dev, typ = cands[0]  # v1.27 (entfallen v1.34: bei zwei Arduinos (Lichtmaschine und LNet/DCC) wurde so der Anschluss der anderen Seite genommen und dessen Board eingestellt)
+            def _stored_port(col):  # v1.34: gespeicherter Anschluss einer Seite als Geraetename, "" wenn keiner
+                try:  # v1.34
+                    raw = str(P01.Cells(M02.SH_VARS_ROW, col)).strip().lstrip("*").strip()  # v1.34
+                except Exception:                              # noqa: BLE001  # v1.34
+                    return ""  # v1.34
+                if raw.isdigit():  # v1.34: Nummer: unter Windows COM<n>
+                    return ("COM" + raw) if os.name == "nt" else ""  # v1.34
+                return raw if raw.upper() not in ("COM?", "NO DEVICE") and not raw.upper().startswith("IP:") else ""  # v1.34
+            own_port = _stored_port(M25.COMPort_COL if left else M25.COMPrtR_COL)  # v1.34
+            other_port = _stored_port(M25.COMPrtR_COL if left else M25.COMPort_COL)  # v1.34
+            logger.info("Erkennen: Seite %s, eigener Anschluss '%s', Anschluss der anderen Seite '%s', gefunden %s", "Lichtmaschine" if left else "LNet/DCC", own_port, other_port, cands)  # v1.34
+            rest = [c for c in cands if not (other_port and c[0].upper() == other_port.upper())]  # v1.34: den Anschluss der anderen Seite auslassen
+            if rest:  # v1.34
+                cands = rest  # v1.34
+            own = [c for c in cands if own_port and c[0].upper() == own_port.upper()]  # v1.34: der gespeicherte eigene Anschluss hat Vorrang
+            dev, typ = (own or cands)[0]  # v1.34
+            if typ == "ESP32":  # v1.26
+                new_board = M02.BOARD_ESP32  # v1.26
+            elif typ == "Pico":  # v1.26
+                new_board = M02.BOARD_PICO  # v1.26
+            else:  # v1.26: Nano: Bootloader ansprechen
+                baud = M07.Get_Arduino_Baudrate(dev, 115200, 0, "")  # v1.26: probiert auch die andere Baudrate
+                logger.info("Erkennen: COM Port %s, Baudrate %s", dev, baud)  # v1.26
+                if baud == 57600:  # v1.26
+                    new_board = M02.BOARD_NANO_OLD  # v1.26
+                elif baud == 115200:  # v1.26
+                    # new_board = M08.Get_New_Board_Type("", 0)  # v1.26 (entfallen v1.37: ohne Firmware-Version wurde nie Nano Full erkannt, Issue 14)
+                    _fw, _sig = M07.Get_Last_Detect_Info()  # v1.37
+                    logger.info("Erkennen: Bootloader-Firmware '%s', Signatur 0x%06X", _fw, _sig)  # v1.37
+                    new_board = M08.Get_New_Board_Type(_fw, _sig)  # v1.37
+                else:  # v1.27: Bootloader antwortet nicht: das Formular zeigt trotzdem den Anschluss; das Board bleibt unveraendert
+                    new_board = None  # v1.27
+            if new_board:  # v1.27
+                M28pio.Change_Board_Typ(left, new_board)  # v1.25
+                try:  # v1.35: auch die Auswahl des Formulars setzen. Sonst liest USB Port erkennen die alte Auswahl und ueberschreibt das erkannte Board (Issue 13)
+                    idx = list(self.boardlist).index(new_board)  # v1.35
+                    self.rb_res["_L" if left else "_R"].set(idx)  # v1.35
+                except (ValueError, KeyError, AttributeError):  # v1.35
+                    logger.warning("Erkennen: Board %s steht nicht in der Boardliste", new_board)  # v1.35
+                logger.info("Erkennen: Board %s eingestellt (COM Port %s)", new_board, dev)  # v1.26
+            # USB Port erkennen aufrufen: zeigt das Formular mit dem gefundenen Board und Anschluss und die anderen gefundenen Boards  # v1.27
+            getattr(self, PFX + ("__Detect_LED_Port_Button_Click" if left else "__Detect_Right_Port_Button_Click"))()  # v1.27
+            if left:  # v1.36: wurde ein Anschluss eingetragen, nach dem Schliessen des Fensters verbinden
+                try:  # v1.36
+                    import mlpyproggen.Prog_Generator as PG  # v1.36
+                    port = str(PG.global_controller.getConfigData("serportname") or "").strip()  # v1.36
+                    self._web_auto_connect = port != "" and port.upper() not in ("NO DEVICE", "COM?")  # v1.36
+                except Exception:                              # noqa: BLE001  # v1.36
+                    logger.debug("Anschluss nach dem Erkennen nicht gelesen", exc_info=True)  # v1.36
+
         def _web_ide_libs_question(self):  # v1.07
             """Zurueck auf die ARDUINO IDE: Gibt es sie, und sollen die Bibliotheken und Boards jetzt geprueft werden (beim Start war das wegen PlatformIO entfallen)?"""  # v1.07
             import proggen.M08_ARDUINO as M08  # v1.07
@@ -502,6 +811,14 @@ def make_class(Base):
                 return  # v1.04
             version = M08.PIO_Version(pio)  # v1.04
             P01.MsgBox((version or tr("PlatformIO ist vorhanden, antwortet aber nicht.")) + "\n" + pio, ns["vbInformation"] if version else vbCritical, "PlatformIO")  # v1.04
+
+        def _web_import_info(self):  # v1.29
+            """Knopf Importieren v. altem Prog.: erklaert, wie Daten des Excel-Programms ueber eine MLL_pgf-Datei uebernommen werden"""  # v1.29
+            P01.MsgBox(tr("So übernimmst du die Daten des alten Excel-Programms:") + "\n\n"  # v1.29
+                       + tr("1. Öffne im alten Programm Optionen und spezielle Funktionen, Reiter Dateien, und klicke auf Speichern in Datei. Speichere die Daten (alle Seiten oder die Seiten, die du brauchst) als Datei mit der Endung MLL_pgf.") + "\n"  # v1.29
+                       + tr("2. Öffne hier das Menü Datei und wähle ProgrammGenerator: PGF-Datei lesen. Du kannst die Datei auch auf die Tabelle ziehen.") + "\n"  # v1.29
+                       + tr("3. Prüfe danach die Tabelle, zum Beispiel die Spalten Verteiler-Nr. und Aktiv.") + "\n\n"  # v1.29
+                       + tr("Mehr dazu in der Online-Anleitung (Hilfe, Online Wiki), Seite Häufige Fragen."), ns["vbInformation"], tr("Importieren v. altem Prog."))  # v1.29
 
         def _web_pico_udev(self):  # v1.05
             """Knopf USB-Zugriff fuer den Pico einrichten (Linux): udev-Regel mit pkexec einrichten (install/install_pico_udev.sh)"""  # v1.05
@@ -637,6 +954,14 @@ def make_class(Base):
                     self._web_ide_libs_question()  # v1.07
                 self._web_hidden = False
                 self._web_reshow = False
+                if handler in ("__Detect_Board_L", "__Detect_Board_R"):    # Knopf Erkennen (gibt es nur im Web)  # v1.25
+                    _TAB["keep"] = True  # v1.35: danach auf dem Reiter dieser Seite weitermachen
+                    try:  # v1.25
+                        self._web_detect_board(handler.endswith("L"))  # v1.25
+                    except Exception as ex:                                # noqa: BLE001  # v1.25
+                        logger.exception("Optionen: Board erkennen fehlgeschlagen")  # v1.25
+                        P01.MsgBox("Aktion fehlgeschlagen: " + str(ex), vbCritical, "Optionen")  # v1.25
+                    continue  # v1.25
                 if handler == "__Check_PIO_Button_Click":                 # gibt es nur im Web (kein Knopf des Originals)  # v1.04
                     self._web_check_pio()  # v1.04
                     continue  # v1.09
@@ -649,6 +974,9 @@ def make_class(Base):
                 if handler == "__Install_Git_Button_Click":               # gibt es nur im Web, nur unter Linux, nur wenn git fehlt  # v1.13
                     self._web_install_git()  # v1.13
                     continue  # v1.13
+                if handler == "__Import_Button_Click":                    # v1.29: Anleitung statt Import aus der Excel-Datei
+                    self._web_import_info()  # v1.29
+                    continue  # v1.29
                 if handler == "__Pico_Udev_Button_Click":                 # gibt es nur im Web, nur unter Linux  # v1.05
                     self._web_pico_udev()  # v1.05
                     continue  # v1.04

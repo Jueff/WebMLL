@@ -1,0 +1,129 @@
+====== webMobaLedLib – Installation auf dem Raspberry Pi ======
+//Seitenstand 1.03 (2026-11-16), gilt für webMobaLedLib 3.57//
+
+Auf dem Raspberry Pi läuft die webMobaLedLib als **Dauerdienst**: Sie startet beim Hochfahren des Pi von selbst. Du kannst sie am Pi selbst bedienen oder von jedem anderen Computer, Tablet oder Smartphone im Heimnetz aus, auch ohne Bildschirm am Pi. Das ist ideal, wenn der Pi mit der Lichtmaschine fest an der Modellbahn bleibt.
+
+Für die Installation öffnest du **einmal das Terminal**. Die Schritte dafür stehen unten Schritt für Schritt.
+
+===== Das brauchst du =====
+
+  * Einen **Raspberry Pi 4 oder 5** (ein Pi 3 geht auch, braucht aber deutlich länger beim Übertragen). Empfohlen sind **4 GB Arbeitsspeicher**, mindestens 2 GB.
+  * Eine **SD-Karte** (mindestens 16 GB) mit dem Betriebssystem **Raspberry Pi OS, 64 Bit, mit Desktop** (Version „Trixie“ oder „Bookworm“).
+  * Ein **gutes Netzteil** (für den Pi 4 und 5 das offizielle). Ein zu schwaches Netzteil lässt den Pi hängen.
+  * **Internet** (WLAN oder Kabel).
+  * Die Lichtmaschine mit **USB-Kabel**.
+
+===== Schritt 1: Das Betriebssystem auf die SD-Karte schreiben =====
+
+Das machst du am besten auf einem anderen Computer mit dem Programm **Raspberry Pi Imager** ([[https://www.raspberrypi.com/software/|raspberrypi.com/software]]).
+
+  - Wähle im Imager deinen Pi, als Betriebssystem **Raspberry Pi OS (64-bit)** und deine SD-Karte.
+  - Stelle in den **Einstellungen** einen **Benutzernamen**, ein **Passwort** und dein **WLAN** ein und schalte **SSH** ein.
+  - Schreibe die Karte, stecke sie in den Pi und starte ihn.
+
+===== Schritt 2: Das Programm herunterladen =====
+
+Mache die folgenden Schritte **am Raspberry Pi**, im Browser des Pi (Chromium):
+
+[[https://github.com/haroldlinke/WebMLL/releases/latest/download/webmobaledlib.zip|webmobaledlib.zip herunterladen]]
+
+Die Datei **webmobaledlib.zip** liegt danach im Ordner //Downloads//.
+
+===== Schritt 3: Einen Ordner anlegen und die Datei entpacken =====
+
+  - Öffne den **Dateimanager** und gehe in deinen **persönlichen Ordner** (Home).
+  - Lege dort einen **neuen Ordner** mit dem Namen **mobaledlib** an.
+  - Kopiere die Datei **webmobaledlib.zip** aus //Downloads// in diesen Ordner.
+  - Klicke mit der rechten Maustaste auf die Datei und wähle **Hier entpacken**.
+
+Danach liegt im Ordner **mobaledlib** ein Ordner **python**.
+
+===== Schritt 4: Die Installation starten =====
+
+  - Öffne im Dateimanager den Ordner **mobaledlib → python → pi**.
+  - Öffne dort das **Terminal**: Klicke in den Ordner und drücke die Taste **F4** (oder wähle //Werkzeuge → Terminal öffnen//).
+  - Tippe ein (oder kopiere die Zeile und füge sie mit **Strg + Umschalt + V** ein) und drücke die **Enter-Taste**:
+
+<code>
+sudo bash install_pi.sh
+</code>
+
+  - Das Skript **installiert Python 3 (mit venv und pip) und die übrigen nötigen Pakete selbst**. Dafür fragt das Terminal vielleicht nach deinem **Passwort**. Beim Tippen erscheinen **keine Zeichen**, das ist normal. Tippe es trotzdem und drücke Enter.
+
+Es erscheint viel Text, das ist normal. Es dauert **10 bis 20 Minuten**. Lass das Fenster offen.
+
+**Tipp:** Wenn du den Befehl nicht kopieren willst, tippe ''sudo bash install_p'' und drücke die **Tab-Taste**. Das Terminal schreibt den Dateinamen dann selbst zu Ende.
+
+{{:bilder:anleitungen:webmobaledlib:pi_01_terminal.png?500|Das Terminal mit dem Befehl sudo bash install_pi.sh}}
+
+Am Ende steht, dass die Installation fertig ist. Auf dem **Desktop** liegt jetzt das Symbol **webMobaLedLib**.
+
+===== Schritt 5: Das Programm öffnen =====
+
+**Am Pi selbst:** Mache einen **Doppelklick** auf das Symbol **webMobaLedLib**. Nach **20 bis 60 Sekunden** öffnet sich die Oberfläche in einem eigenen Fenster. Fragt der Pi beim ersten Mal, ob die Datei ausgeführt werden soll, wähle **Ausführen**. Am Pi selbst brauchst du kein Passwort.
+
+**Von einem anderen Computer im Heimnetz:** Öffne dort einen Browser und tippe in die Adresszeile ein:
+
+<code>
+http://raspberrypi.local:8080
+</code>
+
+(Statt ''raspberrypi'' schreibst du den Rechnernamen, den du im Imager gewählt hast.) Es erscheint ein Anmeldefenster: Benutzer **mobaledlib**, Passwort **mobaledlib**. **Ändere das Passwort**, sobald du angemeldet bist: im Programm unter //Programm Einstellungen//.
+
+{{:bilder:anleitungen:webmobaledlib:pi_02_programm.png?600|Die webMobaLedLib auf dem Raspberry Pi}}
+
+===== Schritt 6: Die Lichtmaschine anschließen =====
+
+Stecke die Lichtmaschine mit dem USB-Kabel an den Pi. Wie es dann weitergeht, steht auf der Seite [[anleitungen:webmobaledlib:erstes_programm|Dein erstes Programm]].
+
+===== https einrichten (optional) =====
+
+Das Programm spricht nur **http**. Im Heimnetz reicht das. Der Browser gibt bei http-Adressen aber keinen Zugriff auf die **Zwischenablage** frei, und das Passwort wird unverschlüsselt übertragen. Seit Version 3.57 kopiert das Programm deshalb innerhalb der Seite: Kopieren und Einfügen zwischen den Blättern geht auch über http. Text aus anderen Programmen lässt sich über http nicht einfügen.
+
+**Schnell, nur für Edge am PC:** Öffne in Edge ''edge://flags/#unsafely-treat-insecure-origin-as-secure'', trage die Adresse (zum Beispiel ''http://raspberrypi.local:8080'') ein, stelle auf **Enabled** und starte Edge neu.
+
+**https mit Caddy:** Gib im Terminal des Pi ein (''raspberrypi.local'' durch den Rechnernamen des Pi ersetzen):
+
+<code>
+sudo apt install caddy
+sudo tee /etc/caddy/Caddyfile <<'CADDY'
+raspberrypi.local {
+    tls internal
+    reverse_proxy 127.0.0.1:8080
+}
+CADDY
+sudo systemctl restart caddy
+</code>
+
+Danach öffnest du ''https://raspberrypi.local''. Der Browser zeigt zuerst eine **Zertifikatswarnung**, weil er die ausstellende Stelle nicht kennt („Erweitert → Weiter“). Damit sie ganz verschwindet, kopierst du ''/var/lib/caddy/.local/share/caddy/pki/authorities/local/root.crt'' vom Pi auf den PC und installierst es dort unter **Vertrauenswürdige Stammzertifizierungsstellen**.
+
+Wenn das Programm nur noch über https erreichbar sein soll, setze in ''/etc/mobaledlib-web.env'' die Zeile ''MLL_HOST=127.0.0.1'' und starte den Dienst neu (''sudo systemctl restart mobaledlib-web''). Das Symbol am Pi selbst funktioniert weiter. Die ausführliche Beschreibung steht in der Anleitung, Abschnitt 8.1.
+
+===== Den Raspberry Pi richtig ausschalten =====
+
+Ziehe **nie einfach den Stecker**. Dabei kann die SD-Karte kaputtgehen. Wähle im Programm das Menü **Datei → Raspberry Pi herunterfahren …** und bestätige. **Warte, bis die grüne LED am Pi nicht mehr blinkt** (etwa 10 Sekunden). Danach darfst du den Strom trennen.
+
+Der Knopf **Beenden** beendet nur das Programm. Der Pi läuft weiter, und das Programm startet danach von selbst neu.
+
+===== Das Programm aktualisieren =====
+
+Im Programm: Menü **Hilfe → Update webMobaLedLib …**. Starte das Programm danach neu und lade die Seite im Browser mit **Strg + F5** neu.
+
+Mehr dazu steht auf der Seite [[anleitungen:webmobaledlib:aktualisieren|Das Programm aktualisieren]].
+
+===== Wenn etwas nicht klappt =====
+
+^ Was passiert ^ Was hilft ^
+| Das Symbol meldet „Der Dienst konnte nicht gestartet werden“ | Öffne im Ordner **pi** ein Terminal und gib ''sudo bash install_pi.sh --no-check'' noch einmal ein. |
+| Das Symbol reagiert nicht | Öffne ein Terminal und gib ''~/mobaledlib/python/pi/start_mobaledlib.sh'' ein. Dann bleiben die Meldungen stehen. |
+| Die Seite lädt nicht | Warte beim ersten Start eine Minute. Prüfe, ob du ''localhost:8080'' bzw. die Adresse mit ''**:8080**'' am Ende eingegeben hast. |
+| ''raspberrypi.local'' wird nicht gefunden | Das geht nicht in jedem Netz (Gastnetz, manche Router, Android). Nimm statt des Namens die **IP-Adresse** des Pi (steht in deinem Router) und hänge ''**:8080**'' an. |
+| Das Anmeldefenster nimmt das Passwort nicht | Benutzer **mobaledlib**, Passwort **mobaledlib**, außer du hast es geändert. |
+| Der Pi hängt sich auf oder startet neu | Meist ist das **Netzteil zu schwach**. Nimm das offizielle Netzteil. Schließe nicht zu viele Verbraucher am Pi an. |
+| Kein Anschluss zur Auswahl | Prüfe das USB-Kabel (Daten, nicht nur Laden) und stecke die Lichtmaschine neu an. |
+
+Mehr zu Problemen allgemein: [[anleitungen:webmobaledlib:fehlersuche|Fehlersuche]].
+
+===== Das Programm entfernen =====
+
+Öffne im Ordner **pi** ein Terminal und gib ''sudo bash uninstall_pi.sh'' ein. Danach kannst du den Ordner **mobaledlib** löschen.

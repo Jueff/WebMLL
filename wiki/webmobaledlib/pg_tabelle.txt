@@ -1,0 +1,79 @@
+====== webMobaLedLib – Die Tabelle bedienen ======
+//Seitenstand 1.06 (2026-11-18), gilt für webMobaLedLib 3.93//
+
+In der Tabelle des [[anleitungen:webmobaledlib:programmgenerator|Programmgenerators]] steht jede Zeile für einen Effekt oder ein Gerät. Auf dieser Seite steht, wie du die Tabelle bedienst.
+
+===== Eine neue Zeile anlegen =====
+
+Der einfachste Weg ist der Knopf **Dialog Wizard** in der Werkzeugleiste. Er führt dich durch alle Angaben: Adresse, Typ, Beschreibung, Verteiler, danach die **Makroauswahl** und die **Werte** des Makros. Zum Schluss steht die fertige Zeile in der Tabelle.
+
+Du kannst auch **direkt auf das Symbol** in der Spalte **Icon** einer Zeile klicken. Dann öffnet sich nur die Makroauswahl für diese Zeile.
+
+===== Die Makroauswahl =====
+
+{{:bilder:anleitungen:webmobaledlib:pg_02_makroauswahl.png?600|Die Makroauswahl mit der Liste der Makros}}
+
+In der Makroauswahl stehen **alle Makros**, nach Gruppen sortiert (zum Beispiel //Licht//, //Signale//, //Servo//). Zu jedem gibt es eine Beschreibung. Wähle ein Makro aus und bestätige mit **OK**. Danach fragt das Programm die Werte des Makros ab, zum Beispiel Farbe, Helligkeit oder Zeiten. Für manche Makros gibt es einen eigenen Dialog, zum Beispiel für die [[anleitungen:webmobaledlib:servo_animation|Servo Animation]].
+
+===== Zellen ändern =====
+
+  * **F2** oder **Enter** auf der markierten Zelle, oder ein **Doppelklick**, öffnet die Zelle zum Bearbeiten. Das geht schneller als der Dialog, wenn du nur einen Wert ändern willst, zum Beispiel in der Spalte //Beleuchtung, Sound, oder andere Effekte//.
+  * **Aktiv:** Klicke in das Kästchen der Spalte **Aktiv**, um den **Haken** zu setzen oder zu entfernen. Nur Zeilen **mit Haken** kommen ins Programm für die Lichtmaschine.
+  * Der **Doppelklick** bearbeitet standardmäßig die Zelle. Wenn er stattdessen die **Makroauswahl** öffnen soll (wie im Excel-Programm), schalte das im Reiter **Programm Einstellungen** ein: Karte **Bedienung der Tabelle**, Haken **„Doppelklick auf Name und Beleuchtung öffnet die Makroauswahl“**, dann **Speichern**.
+
+===== Das Kontextmenü (rechte Maustaste) =====
+
+Mit der **rechten Maustaste** (auf dem Tablet: lange drücken) auf eine Zelle erscheint das Menü:
+
+^ Eintrag ^ Wirkung ^
+| Zelle bearbeiten (F2) | Wie F2 |
+| Kopieren (Strg + C), Ausschneiden (Strg + X), Einfügen (Strg + V) | Wie in anderen Programmen |
+| Als Zeilen einfügen | Fügt kopierte Zeilen als neue Zeilen ein |
+| Löschen (Entf) | Löscht den Inhalt |
+| Nach unten ausfüllen (Strg + D) | Kopiert die oberste markierte Zelle in die markierten Zeilen darunter; bei einer Zelle die Zelle darüber |
+| Reihe fortsetzen | Wie Nach unten ausfüllen, aber die Zahl am Ende zählt weiter (1, 2, 3 oder V1, V2, V3) |
+| Farbe setzen, Farbe entfernen | Färbt die Zelle ein oder entfernt die Farbe |
+
+===== Mehrere Zeilen auf einmal =====
+
+Klicke auf die **Zeilennummer**, um eine Zeile zu markieren. Mit der **Umschalttaste** markierst du einen Bereich, mit der **Strg-Taste** (am Mac **Cmd**) einzelne Zeilen. Du kannst auch mit der Maus einen Bereich von Zellen über mehrere Zeilen aufziehen.
+
+Die Knöpfe **Zeilen duplizieren**, **Zeilen löschen**, **Zeilen verschieben** und **Aus- oder Einblenden** wirken auf **alle markierten Zeilen**. Die Kopien beim Duplizieren stehen hinter der letzten markierten Zeile. Was jeder Knopf macht, steht auf der Seite [[anleitungen:webmobaledlib:pg_werkzeugleiste|Die Werkzeugleiste]].
+
+===== Zeilen aktivieren und deaktivieren =====
+
+Nur Zeilen mit einem **Haken** in der Spalte **Aktiv** kommen ins Programm für die Lichtmaschine. So schaltest du **ein ganzes Haus** für Wartungsarbeiten oder eine Erweiterung vorübergehend ab, ohne die Zeilen zu löschen:
+
+  - Markiere die Zeilen (über die **Zeilennummern**, mit der **Umschalttaste** einen Bereich).
+  - Drücke die **Leertaste**. Alternativ: **Rechtsklick → Zeilen aktivieren/deaktivieren** (praktisch auf Tablet und Smartphone, wo es keine Leertaste gibt).
+  - **Die oberste markierte Zeile bestimmt:** Hat sie einen Haken, verschwindet er bei **allen** markierten Zeilen. Hat sie keinen, bekommen **alle** einen, auch wenn einige schon einen hatten.
+  - Noch einmal die Leertaste stellt den vorigen Zustand wieder her. Leere und ausgeblendete Zeilen bleiben unverändert.
+  - Danach nummeriert das Programm die LEDs neu. Das geht auch bei vielen Zeilen schnell, weil es nur einmal rechnet.
+
+Die Leertaste wirkt nur, wenn du **keine Zelle bearbeitest** und kein Fenster offen ist. Beim Bearbeiten tippt sie wie gewohnt ein Leerzeichen.
+
+===== Die Testtasten =====
+
+In der Zeile eines Schalters siehst du **farbige Tasten**. Das sind die **Testtasten**: Mit ihnen schaltest du den Effekt direkt an der verbundenen Lichtmaschine (im **Effektmodus**, siehe [[anleitungen:webmobaledlib:pg_arduino#die_drei_arten_der_verbindung|Die drei Arten der Verbindung]]) ein und aus, ohne dass eine Zentrale oder ein echter Schalter nötig ist. Dafür muss die Lichtmaschine **verbunden** sein (siehe [[anleitungen:webmobaledlib:pg_arduino|Verbinden und Übertragen]]).
+
+===== Die Blattreiter =====
+
+{{:bilder:anleitungen:webmobaledlib:pg_05_blattreiter.png?500|Die Blattreiter am unteren Rand der Tabelle}}
+
+Die **Blattreiter** ganz unten wählst du mit einem Klick. Mit der **rechten Maustaste** auf einen Reiter (auf dem Tablet: lange drücken) erscheint ein Menü:
+
+  * **Reiterfarbe:** Gibt dem Reiter eine Farbe. Die Schrift wird automatisch weiß oder schwarz, damit sie lesbar bleibt.
+  * **Umbenennen …:** Das geht nur bei **eigenen Blättern** (Kopien). Die Blätter **DCC**, **Selectrix**, **CAN** und **LNet** und die Systemblätter heißen immer gleich, weil das Programm sie am Namen erkennt. Der Name darf höchstens 31 Zeichen haben und nicht die Zeichen ''[ ] : * ? / \'' enthalten.
+  * **Duplizieren …:** Legt eine **Kopie** eines Datenblatts an (mit Zellen, Symbolen, Testtasten und Farbe). Das Programm schlägt einen freien Namen vor, zum Beispiel //DCC_1//.
+  * **Nach links verschieben**, **Nach rechts verschieben:** Ändert die Reihenfolge der Reiter.
+
+Du kannst Reiter auch **ziehen**: Halte die **Alt-Taste** gedrückt und ziehe den Reiter mit der linken Maustaste an eine andere Stelle. Die Reihenfolge wird gespeichert.
+
+Die Knöpfe **Neue Tabelle** und **Tabelle löschen** in der Werkzeugleiste legen ein neues Blatt an bzw. leeren das Blatt.
+
+===== Wenn die Tabelle nicht stimmt =====
+
+Im Menü **Tabelle** gibt es zwei Befehle:
+
+  * **Tabelle neu berechnen:** Rechnet alle Blätter neu, also die LED-Zahlen und Start-LED-Nummern. Das Programm macht das vor dem Übertragen ohnehin. Nötig ist es zum Beispiel, wenn du eine Tabelle aus einer älteren Version geladen hast.
+  * **Tabelle reparieren (Symbole und Testtasten neu aufbauen) …:** Hilft, wenn **Symbole oder Testtasten fehlen** oder an der falschen Zeile stehen. Das Programm fragt vorher nach.

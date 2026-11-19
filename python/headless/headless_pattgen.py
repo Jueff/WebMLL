@@ -1,9 +1,9 @@
-# Datei-Version: 1.21 (2026-11-14) - headless_pattgen.py
+# Datei-Version: 1.22 (2026-11-15) - headless_pattgen.py
 # ----------------------------------------------------------------------------------------------
 # Name:           headless_pattgen.py
 # Path:           headless/headless_pattgen.py
-# Version:        1.21
-# Last Update:    2026-11-14
+# Version:        1.22
+# Last Update:    2026-11-15
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
@@ -30,6 +30,7 @@
 #   1.19  2026-11-01  eine einzeilige Ueberschrift mit Farbe ist nie die Beschreibung
 #   1.20  2026-11-01  Format {Attrib}: die zweite Zahl ist das ENDE (nicht die Laenge), das Format bleibt bei gleichem Anfang des Textes
 #   1.21  2026-11-14  RGB-Modus je Blatt aus PCF-Dateien merken, set_led_color, set_step_color, PCF-ZIP mit Bildern (Beitrag des Fork-Entwicklers)
+#   1.22  2026-11-15  Reiter und Texte "Patterngenerator" heissen jetzt "Timeline Editor"
 # ----------------------------------------------------------------------------------------------
 """Tk-freier Ersatz fuer Pattern_GeneratorPage: baut die Arbeitsmappe "PatternWorkbook" des Patterngenerators.
 
@@ -428,9 +429,9 @@ class HeadlessPatternGeneratorPage:
         self.controller = controller
         self.Application = controller.ExcelApplication
         self.tabClassName = "PatternConfiguratorPage"
-        self.tabname = "Patterngenerator"             # der Name wird nicht uebersetzt
-        self.title = "Patterngenerator"
-        controller.set_statusmessage("Erstelle Patterngenerator Seite ...", fg="green")
+        self.tabname = "Timeline Editor"             # der Name wird nicht uebersetzt  # v1.22
+        self.title = "Timeline Editor"  # v1.22
+        controller.set_statusmessage("Erstelle Timeline Editor Seite ...", fg="green")  # v1.22
         PGP.set_global_controller(controller)
         PGP.dialog_parent = None                      # Tk-Elternfenster fuer Dialoge gibt es nicht
 

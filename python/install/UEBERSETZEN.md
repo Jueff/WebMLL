@@ -1,9 +1,9 @@
-Datei-Version: 1.04 (2026-10-27) - UEBERSETZEN.md
+Datei-Version: 1.05 (2026-11-15), gilt für webMobaLedLib 3.43 - UEBERSETZEN.md
 Gilt für webMobaLedLib 2.22
 
 # Übersetzen der Web-Oberfläche
 
-Die Texte der Oberfläche (Menüs, Knöpfe, Meldungen, Hinweise) stehen in der Datei **`python/csv/Web_Languages.csv`**. Die Meldungen des Programm Generators und des Patterngenerators
+Die Texte der Oberfläche (Menüs, Knöpfe, Meldungen, Hinweise) stehen in der Datei **`python/csv/Web_Languages.csv`**. Die Meldungen des Programm Generators und des Timeline Editors
 (zum Beispiel die Fragen beim Erzeugen eines Programms) kommen weiter aus dem Tabellenblatt **Languages** der Excel-Datei; die Parameter-Texte der Makros aus **Par_Description**.
 
 ## Wo die Texte stehen

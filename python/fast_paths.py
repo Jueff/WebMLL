@@ -1,4 +1,5 @@
-# Datei-Version: 1.00 (2026-10-12) - fast_paths.py
+# Datei-Version: 1.01 (2026-11-16) - fast_paths.py
+# History: 1.01 2026-11-16 Makrosuche: Eintraege mit '// ' (// Next_LED(, // Reserve LEDs( usw.) werden gefunden, bisher wurde das Praefix vor der Suche entfernt (Tabelle reparieren setzte alle auf Muster Pattern_Configurator)
 """Beschleunigung einzelner, oft aufgerufener Funktionen des uebersetzten VBA-Codes (nur Python-Seite).
 
 Der uebersetzte Code bleibt unveraendert (er wird mit dem VBA-Master verglichen); hier werden zur Laufzeit
@@ -16,7 +17,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def normalize_macro_name(p_str) -> str:
+def normalize_macro_name(p_str, keep_prefix: bool = False) -> str:  # v1.01
     """Aufbereitung des Suchbegriffs wie im Original."""
     p_str = str(p_str)
     p_str = p_str.replace("HouseT(", "House(")
@@ -25,7 +26,7 @@ def normalize_macro_name(p_str) -> str:
     p_str = p_str.replace("\n", " ")
     if "(" in p_str:
         p_str = p_str.split("(")[0] + "("
-        if p_str[:3] == "// ":
+        if p_str[:3] == "// " and not keep_prefix:  # v1.01
             p_str = p_str[3:]
     return p_str
 
@@ -51,7 +52,10 @@ def make_fast_find(get_sheet, first_row: int, find_col: int, last_used_row_in):
         if cache["key"] != key:
             cache["map"] = build(sheet)
             cache["key"] = key
-        return cache["map"].get(normalize_macro_name(p_str), 0)
+        row = cache["map"].get(normalize_macro_name(p_str, True), 0)  # v1.01  zuerst mit '// ' (Eintraege wie '// Next_LED(' in Lib_Macros)
+        if row == 0:  # v1.01
+            row = cache["map"].get(normalize_macro_name(p_str), 0)  # wie bisher: ohne '// '
+        return row
 
     return find
 

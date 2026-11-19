@@ -1,9 +1,9 @@
-# Datei-Version: 1.03 (2026-11-14) - web_esp32_ota.py
+# Datei-Version: 1.06 (2026-11-18) - web_esp32_ota.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_esp32_ota.py
 # Path:           _web/web_esp32_ota.py
-# Version:        1.03
-# Last Update:    2026-11-14
+# Version:        1.06
+# Last Update:    2026-11-18
 # Author:         Harold Linke (Beitrag des Fork-Entwicklers, uebernommen in 3.37)
 # Licence:        LGPL V2.1
 # History of Change:
@@ -11,6 +11,9 @@
 #   1.01  2026-11-14  Firewall-Hinweis bei "No response from device" (Port 32323)
 #   1.02  2026-11-14  Reiter OTA: Knopf "Minimale Firmware per USB hochladen" (schaltet WLAN und OTA ein, ruft minimal_firmware_handler)
 #   1.03  2026-11-14  Knopf umbenannt (Minimale WLAN Firmware per USB hochladen), Reihenfolge: speichern, minimale Firmware, WLAN einrichten, testen
+#   1.05  2026-11-16  Firewall-Hinweis: Regelname "webMLL OTA 32323" (einheitlich mit "webMLL Server 8080")
+#   1.06  2026-11-18  Neu ask_password(): fehlt auf einem Rechner das OTA-Passwort (Arbeitsmappe mit OTA von einem anderen PC), wird danach gefragt
+#   1.04  2026-11-15  Knopf Hilfe im Reiter OTA: oeffnet die Wiki-Seite ESP32 per WLAN und OTA
 # ----------------------------------------------------------------------------------------------
 from subprocess import TimeoutExpired
 
@@ -22,8 +25,9 @@ from headless import headless_esp32_ota
 from _web import web_dialogs
 
 _upload_running = False
+HELP_URL = "https://wiki.mobaledlib.de/anleitungen/webmobaledlib/ota"  # v1.04: Wiki-Seite zu OTA
 minimal_firmware_handler = None  # v1.02: Funktion der Hauptseite (webmobaledlib.py), baut und laedt die minimale Firmware
-HINT_FIREWALL = 'Der ESP32 hat sich nicht zurückgemeldet. Meist blockiert eine Firewall die Rückverbindung: Eingehend TCP-Port {port} zulassen (Windows-Firewall: PowerShell als Administrator, New-NetFirewallRule -DisplayName "MLL OTA" -Direction Inbound -Protocol TCP -LocalPort {port} -Action Allow; andere Firewalls, z. B. ESET: Regel eingehend, TCP, lokaler Port {port}, Zulassen).'  # v1.01
+HINT_FIREWALL = 'Der ESP32 hat sich nicht zurückgemeldet. Meist blockiert eine Firewall die Rückverbindung: Eingehend TCP-Port {port} zulassen (Windows-Firewall: PowerShell als Administrator, New-NetFirewallRule -DisplayName "webMLL OTA 32323" -Direction Inbound -Protocol TCP -LocalPort {port} -Action Allow; andere Firewalls, z. B. ESET: Regel eingehend, TCP, lokaler Port {port}, Zulassen).'  # v1.01
 
 
 def target_address(settings):
@@ -127,6 +131,30 @@ async def ask_target(address="", *, allow_usb=False, connect=False, saved_passwo
     return answer
 
 
+async def ask_password(allow_no_ota=True):  # v1.06
+    """Das OTA-Passwort fehlt auf diesem Rechner. Antwort: Passwort (Text), "" = ohne OTA uebertragen, None = abbrechen."""  # v1.06
+    with ui.dialog().props("persistent") as dialog, ui.card().classes("w-[480px] max-w-full"):  # v1.06
+        ui.label("OTA-Passwort fehlt").classes("text-h6")  # v1.06
+        ui.label("In dieser Arbeitsmappe ist OTA eingeschaltet, auf diesem Rechner ist aber noch kein OTA-Passwort gespeichert. "  # v1.06
+                 "Das Passwort wird in die Firmware eingebaut und nur auf diesem Rechner gespeichert.").classes("text-caption")  # v1.06
+        password = ui.input("OTA-Passwort (1 bis 64 Zeichen)", password=True).classes("w-full")  # v1.06
+
+        def accept():  # v1.06
+            import re  # v1.06
+            if not re.fullmatch(r"[!-~]{1,64}", password.value or ""):  # v1.06
+                ui.notify("Das OTA-Passwort muss 1 bis 64 druckbare ASCII-Zeichen haben.", type="warning")  # v1.06
+                return  # v1.06
+            dialog.submit(password.value)  # v1.06
+        with ui.row():  # v1.06
+            ui.button("Speichern und weiter", on_click=accept).props("color=primary")  # v1.06
+            if allow_no_ota:  # v1.06
+                ui.button("Ohne OTA übertragen", on_click=lambda: dialog.submit("")).props("outline")  # v1.06
+            ui.button("Abbrechen", on_click=lambda: dialog.submit(None)).props("flat")  # v1.06
+    answer = await dialog  # v1.06
+    web_dialogs.safe_delete(dialog)  # v1.06
+    return answer  # v1.06
+
+
 def settings_panel():
     import hmac
     from _web.web_serial import TcpPort
@@ -203,6 +231,7 @@ def settings_panel():
         ui.button("Minimale WLAN Firmware per USB hochladen", on_click=minimal).props("outline")
         ui.button("WLAN über USB einrichten", on_click=setup_usb).props("outline")
         ui.button("Verbindung testen", on_click=check).props("outline")
+        ui.button("Hilfe", on_click=lambda: ui.navigate.to(HELP_URL, new_tab=True)).props("flat icon=help")  # v1.04
 
 
 def open_usb_wifi(controller, on_address):

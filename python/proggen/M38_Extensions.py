@@ -1,9 +1,9 @@
-# Datei-Version: 1.03 (2026-11-04) - M38_Extensions.py
+# Datei-Version: 1.07 (2026-11-19) - M38_Extensions.py
 # ----------------------------------------------------------------------------------------------
 # Name:           M38_Extensions.py
 # Path:           proggen/M38_Extensions.py
-# Version:        1.03
-# Last Update:    2026-11-04
+# Version:        1.07
+# Last Update:    2026-11-19
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
@@ -11,6 +11,10 @@
 #   1.01  2026-10-21  Extensions-Schnittstelle V2: MinimumMobaLedLibVersion aus der JSON-Datei, #define USE_EXTENSIONS_V2 ab Mindestversion 3.5.0 (Version K des Excel-Programms)
 #   1.02  2026-11-03  Header: #include nur der benutzten Extensions (wie im VBA-Original), nicht aller installierten; unter PlatformIO fehlten die nicht benutzten in platformio.ini: fatal error P_ScheduleDuoMLX.h
 #   1.03  2026-11-04  Extensions: Makros mit dem Namen eines schon vorhandenen Makros (eingebaut oder einer anderen Erweiterung) werden abgewiesen, mit Meldung (vorher standen sie doppelt in der Liste)
+#   1.04  2026-11-18  Extensions ein-/ausschaltbar (headless_extensions): ausgeschaltete bekannte Extensions werden nicht geladen, eingeschaltete aus dem Cache (Datenordner) kommen zu libraries dazu
+#   1.05  2026-11-18  MobaLedLib.properties wird tolerant gelesen (HE.load_properties): Dateien der Extensions mit Schluesseln ohne Anfuehrungszeichen oder fehlendem Komma (wie im Excel-Programm) werden akzeptiert
+#   1.06  2026-11-18  platformio.ini: Erweiterungen koennen Bibliotheken mit fester Version vorgeben (lib_deps in extensions_known.json), z.B. IRremote 4.x fuer InfraredMLX (mit IRremote 5.0 uebersetzt der Pico nicht, Issue 6)
+#   1.07  2026-11-19  platformio.ini: Pfad der Erweiterung ist der Ordner, nicht die Datei MobaLedLib.properties (unter Windows griff das Entfernen mit '/' nicht; Rueckmeldung Juergen, Issue 6); Einbindung mit symlink:// wie bei MobaLedLib, wo Verknuepfungen erlaubt sind
 # ----------------------------------------------------------------------------------------------
 # -*- coding: utf-8 -*-
 #
@@ -78,7 +82,9 @@ import proggen.M60_CheckColors as M60
 import proggen.M70_Exp_Libraries as M70
 import proggen.M80_Create_Multiplexer as M80
 import proggen.clsExtension as clsext
+import headless.headless_extensions as HE  # v1.04
 import logging as _logging  # v1.03
+import os  # v1.06
 
 import mlpyproggen.Prog_Generator as PG
 
@@ -352,6 +358,9 @@ def __CollectExtensions():
                 if os.path.isfile(M02.Sketchbook_Path + '/libraries/' + DirName + '/MobaLedLib.properties'):
                         Libs.Add(M02.Sketchbook_Path + '/libraries/' + DirName + '/MobaLedLib.properties')
         DirName = Dir()
+    for CachedProps in HE.cached_properties():  # v1.04: eingeschaltete Extensions, die nicht im Paket liegen, sondern im Datenordner
+        if CachedProps not in Libs:  # v1.04
+            Libs.Add(CachedProps)  # v1.04
                     
     # workbookpath =  M08.GetWorkbookPath()
     # DirName = Dir(workbookpath + '/libraries/*', vbDirectory)
@@ -369,13 +378,20 @@ def __CollectExtensions():
             LibName = DirName
             JSONData = {}
             # VB2PY (UntranslatedCode) On Error Resume Next
-            JSONData = M33.ParseJSONFile(LibName)
+            # JSONData = M33.ParseJSONFile(LibName)  # v1.05 (entfallen)
+            JSONData = HE.load_properties(LibName)  # v1.05: tolerant (Extensions sind oft kein strenges JSON)
+            if JSONData is None:  # v1.05
+                JSONData = M33.ParseJSONFile(LibName)  # v1.05
             # VB2PY (UntranslatedCode) On Error GoTo 0
+            # if JSONData != {} and not HE.is_enabled(JSONData.get('id')):  # v1.04 (entfallen v1.05: die Id in der Datei ist nicht der Name des Ordners, z.B. AddressLearnExtension im Ordner AddressLearnMLX)
+            if JSONData != {} and not HE.is_enabled(os.path.basename(os.path.dirname(LibName))):  # v1.05: ausgeschaltete bekannte Extension (Schluessel = Ordnername)
+                continue  # v1.04
             if JSONData != {}:
                 Extension = clsext.clsExtension()
                 Extension.Platforms = JSONData.get('platforms', [])
                 Extension.Name = JSONData.get('id')
-                Extension.Path = Replace(LibName, '/MobaLedLib.properties', '')
+                # Extension.Path = Replace(LibName, '/MobaLedLib.properties', '')  # v1.07 (entfallen: unter Windows mit '\\' im Pfad blieb die Datei im Pfad stehen)
+                Extension.Path = os.path.dirname(LibName) if os.path.basename(LibName) == 'MobaLedLib.properties' else LibName  # v1.07: Ordner der Erweiterung
                 Extension.Includes = JSONData.get('includes')
                 Extension.MacroIncludes = JSONData.get('macroIncludes')
                 Extension.MinimumMobaLedLibVersion = JSONData.get('minimumMobaLedLibVersion', '')                # Version K: Extensions-Schnittstelle V2  # v1.01
@@ -653,7 +669,18 @@ def Write_PIO_Extension(fp):
 
     #for Index in vbForRange(0, len(__ExtensionsActive) - 1
     for Index in __ExtensionsActive.keys():
-        VBFiles.writeText(fp, '    ' + __ExtensionsActive[Index].Name + '=file://' + M08.GetShortPath(__ExtensionsActive[Index].Path), '\n')
+        # VBFiles.writeText(fp, '    ' + __ExtensionsActive[Index].Name + '=file://' + M08.GetShortPath(__ExtensionsActive[Index].Path), '\n')  # v1.07 (entfallen)
+        VBFiles.writeText(fp, '    ' + __ExtensionsActive[Index].Name + '=' + M08.Lib_Link_Scheme() + '://' + M08.GetShortPath(__ExtensionsActive[Index].Path), '\n')  # v1.07: symlink:// (eine Quelle, keine Kopie in .pio), sonst file://
+    written = set()  # v1.06
+    for Index in __ExtensionsActive.keys():  # v1.06: Bibliotheken mit fester Version (lib_deps der Erweiterung in extensions_known.json); sonst holt PlatformIO die neueste, deren Schnittstelle nicht passt
+        try:  # v1.06
+            known_entry = HE.entry(os.path.basename(str(__ExtensionsActive[Index].Path).rstrip("/\\"))) or {}  # v1.06
+        except Exception:                                  # noqa: BLE001  # v1.06
+            known_entry = {}  # v1.06
+        for dep in known_entry.get("lib_deps", []) or []:  # v1.06
+            if dep not in written:  # v1.06
+                written.add(dep)  # v1.06
+                VBFiles.writeText(fp, '    ' + dep, '\n')  # v1.06
     fn_return_value = True
     return fn_return_value
 

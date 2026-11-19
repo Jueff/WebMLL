@@ -1,0 +1,86 @@
+====== webMobaLedLib – Installation unter Windows ======
+//Seitenstand 1.02 (2026-11-10), gilt für webMobaLedLib 3.08//
+
+Diese Seite gilt für **Windows 10 und Windows 11**. Du brauchst keine Eingabeaufforderung: Die Installation startest du mit einem Doppelklick.
+
+===== Das brauchst du =====
+
+  * Einen Computer mit Windows 10 oder 11 und **Internet**.
+  * Etwa **2 GB** freien Platz.
+  * Ein Benutzerkonto, das Programme installieren darf. Windows fragt zwischendurch nach der Erlaubnis.
+
+===== Schritt 1: Das Programm herunterladen =====
+
+Klicke auf diesen Link:
+
+[[https://github.com/haroldlinke/WebMLL/releases/latest/download/webmobaledlib.zip|webmobaledlib.zip herunterladen]]
+
+Dein Browser lädt die Datei **webmobaledlib.zip** in den Ordner //Downloads//. Sie ist rund 20 MB groß.
+
+{{:bilder:anleitungen:webmobaledlib:win_01_download.png?500|Die heruntergeladene Datei im Ordner Downloads}}
+
+===== Schritt 2: Einen Ordner anlegen und die Datei entpacken =====
+
+  - Öffne den **Explorer** und gehe in deinen **Benutzerordner** (zum Beispiel ''C:\Benutzer\DeinName'' oder ''C:\Users\DeinName'').
+  - Lege dort einen **neuen Ordner** mit dem Namen **mobaledlib** an (Rechtsklick → //Neu// → //Ordner//).
+  - Kopiere die Datei **webmobaledlib.zip** aus //Downloads// in diesen Ordner.
+  - Klicke mit der **rechten Maustaste** auf die Datei und wähle **Alle extrahieren …**.
+  - Im Fenster steht ein Zielpfad. **Lösche am Ende des Pfades das angehängte ''\webmobaledlib''**, sodass der Pfad bei ''…\mobaledlib'' endet. Klicke dann auf **Extrahieren**.
+
+Danach liegt im Ordner **mobaledlib** ein Ordner **python**.
+
+{{:bilder:anleitungen:webmobaledlib:win_02_extrahieren.png?500|Das Fenster Alle extrahieren mit dem richtigen Zielpfad}}
+
+**Wichtig:** Der Pfad zum Ordner darf kein Hochkomma (') und kein &-Zeichen enthalten. Sonst kann das Symbol auf dem Desktop nicht angelegt werden.
+
+===== Schritt 3: Die Installation starten =====
+
+  - Öffne im Ordner **mobaledlib** den Ordner **python** und darin den Ordner **install**.
+  - Mache einen **Doppelklick** auf die Datei **install_windows.bat**.
+  - Windows meldet vielleicht **„Der Computer wurde durch Windows geschützt“**. Klicke auf **Weitere Informationen** und dann auf **Trotzdem ausführen**.
+  - Es öffnet sich ein **schwarzes Fenster**, in dem Text erscheint. Das ist normal: Das Programm richtet alles ein. Lass das Fenster offen. Es dauert **5 bis 15 Minuten**.
+  - Fragt Windows nach der Erlaubnis (blauer Kasten), klicke auf **Ja**.
+
+{{:bilder:anleitungen:webmobaledlib:win_03_installation.png?500|Das Installationsfenster während der Installation}}
+
+**Python:** Die webMobaLedLib braucht //Python//, ein Hilfsprogramm (Version 3.10 oder neuer). Du musst dich nicht darum kümmern: Das Installationsfenster **prüft selbst, ob es da ist**. Fehlt es, fragt es **„Python 3.12 jetzt mit winget installieren [J,N]?“**. Tippe **J** und drücke die Enter-Taste. Windows fragt nach der Erlaubnis (**Ja**), dann macht die Installation von allein weiter. Nur wenn das Fenster danach meldet, Python sei noch nicht bekannt, **schließe es, starte den Computer neu** und mache einen Doppelklick auf **install_windows.bat** noch einmal. Hat dein Windows kein //winget// (ältere Windows-10-Versionen), sagt das Fenster, dass du Python 3.12 von [[https://www.python.org/downloads/windows/|python.org]] installieren sollst (mit dem Haken „Add python.exe to PATH“). Danach startest du **install_windows.bat** noch einmal.
+
+Am Ende steht im Fenster **„Fertig. Starten: Desktop-Symbol webMobaLedLib“**. Drücke eine Taste, das Fenster schließt sich. Auf dem **Desktop** liegt jetzt das Symbol **webMobaLedLib**.
+
+===== Schritt 4: Das Programm starten =====
+
+  - Mache einen **Doppelklick** auf das Symbol **webMobaLedLib** auf dem Desktop.
+  - Es öffnet sich ein **kleines schwarzes Fenster**. **Schließe es nicht**, es gehört zum Programm.
+  - Nach **20 bis 60 Sekunden** öffnet sich dein Browser mit der webMobaLedLib. Öffnet er sich nicht, tippe in die Adresszeile des Browsers ein: ''localhost:8080''
+
+{{:bilder:anleitungen:webmobaledlib:win_04_programm.png?600|Die webMobaLedLib im Browser}}
+
+**Beenden:** Klicke oben rechts auf den Knopf **Beenden**. Das schwarze Fenster schließt sich dabei von selbst.
+
+===== Schritt 5: Die Lichtmaschine anschließen =====
+
+Stecke die Lichtmaschine mit dem USB-Kabel an den Computer. Windows richtet ihn selbst ein. Wie es dann weitergeht, steht auf der Seite [[anleitungen:webmobaledlib:erstes_programm|Dein erstes Programm]].
+
+===== Das Programm aktualisieren =====
+
+Im Programm: Menü **Hilfe → Update webMobaLedLib …**. Das Programm zeigt, was neu ist, und aktualisiert sich nach deiner Bestätigung. Beende vorher nichts von Hand. Starte das Programm nach dem Update neu und lade die Seite im Browser mit **Strg + F5** neu.
+
+Mehr dazu steht auf der Seite [[anleitungen:webmobaledlib:aktualisieren|Das Programm aktualisieren]].
+
+===== Wenn etwas nicht klappt =====
+
+^ Was passiert ^ Was hilft ^
+| „Der Computer wurde durch Windows geschützt“ | **Weitere Informationen → Trotzdem ausführen** |
+| „Python wurde nicht gefunden“ oder „…ist in diesem Fenster noch nicht bekannt“ | Den **Computer neu starten** und **install_windows.bat** noch einmal doppelklicken. Ohne //winget//: Python 3.12 von [[https://www.python.org/downloads/windows/|python.org]] installieren (Haken „Add python.exe to PATH“). |
+| Das Symbol fehlt auf dem Desktop | Im Ordner **install** die Datei **start_windows.bat** mit der rechten Maustaste anklicken → //Senden an// → //Desktop (Verknüpfung erstellen)//. Prüfe auch, ob der Ordnerpfad ein ' oder & enthält. |
+| Der Browser öffnet sich nicht | Tippe in die Adresszeile eines Browsers ''localhost:8080'' ein. |
+| „Port 8080 ist belegt“ | Das Programm läuft schon. Mache einen Doppelklick auf das Symbol: Es öffnet nur den Browser. |
+| Das schwarze Fenster geht sofort wieder zu | Öffne im Ordner **install** eine Eingabeaufforderung (in die Adressleiste des Explorers **cmd** tippen, Enter) und gib ''start_windows.bat'' ein. Dann bleibt die Fehlermeldung stehen. |
+| Windows erkennt die Lichtmaschine nicht | Probiere ein anderes USB-Kabel (ein reines Ladekabel überträgt keine Daten). Bei Nachbauten mit dem Chip **CH340** hilft der [[https://www.wch-ic.com/downloads/CH341SER_EXE.html|CH340-Treiber]]. |
+| Bei der Installation erscheint ein Fehler mit //pip// | Prüfe die Internetverbindung und starte **install_windows.bat** noch einmal. |
+
+Mehr zu Problemen allgemein: [[anleitungen:webmobaledlib:fehlersuche|Fehlersuche]].
+
+===== Das Programm entfernen =====
+
+Lösche das Symbol auf dem Desktop und den Ordner **mobaledlib**. Deine Einstellungen und gespeicherten Tabellen liegen getrennt im Datenordner des Programms und bleiben erhalten.

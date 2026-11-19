@@ -1,0 +1,51 @@
+====== webMobaLedLib – Speichern und Laden ======
+//Seitenstand 1.03 (2026-11-19), gilt für webMobaLedLib 4.17//
+
+Das Programm speichert deine Arbeit **automatisch**. Zusätzlich kannst du sie als **Datei** sichern, weitergeben und wieder laden.
+
+===== Automatisch gespeichert =====
+
+  * Beim **Beenden** (Knopf **Beenden** oder Menü //Datei → Beenden …//) fragt das Programm: **Speichern und beenden**, **Beenden ohne Speichern** oder **Abbrechen**. Wähle normalerweise **Speichern und beenden**: Dann sind deine Tabellen und Einstellungen beim nächsten Start wieder da.
+  * Zwischendurch macht das Programm eine **Zwischensicherung**, wenn du etwas geändert hast und eine Weile nicht weiterarbeitest. Oben rechts im Menü steht dann „Zwischengespeichert <Uhrzeit>“. Wurde das Programm einmal **nicht normal beendet** (Absturz, Stromausfall), fragt es beim nächsten Start, ob die Zwischensicherung wiederhergestellt werden soll.
+  * Mit //Datei → Jetzt zwischenspeichern// löst du die Zwischensicherung selbst aus.
+
+Deine Daten liegen im **Datenordner** des Programms, getrennt von den Programmdateien. Sie bleiben bei einem Update erhalten.
+
+===== Das Menü „Datei“ =====
+
+{{:bilder:anleitungen:webmobaledlib:pg_08_dateimenue.png?400|Das Menü Datei}}
+
+^ Eintrag ^ Wirkung ^
+| **ProgrammGenerator: PGF-Datei speichern** | Speichert die **Tabelle** als Datei mit der Endung **.MLL_pgf**. Die Datei landet im Download-Ordner des Rechners, an dem du sitzt. Mit ihr gibst du dein Programm weiter oder machst eine Sicherung. |
+| **ProgrammGenerator: PGF-Datei lesen** | Lädt eine solche Datei in die Tabelle. Das Programm fragt vorher nach, denn die Tabelle wird ersetzt. Du kannst die Datei auch **auf die Tabelle ziehen**. |
+| **ProgrammGenerator-Workbook speichern als** | Speichert die **ganze Arbeitsmappe** (alle Blätter und Einstellungen). |
+| **ProgrammGenerator-Workbook von Datei lesen** | Lädt eine solche Arbeitsmappe. |
+| **Inkrementell speichern** | Sichert die **ganze Arbeitsmappe** als neue Datei mit fortlaufender Nummer, siehe unten. Die Tastenkombination (Vorgabe **Strg+Umschalt+S**) stellst du in den Programm Einstellungen ein. |
+| **Sicherungsdatei öffnen …** | Zeigt die Sicherungen des Sicherungsordners (neueste zuerst) und lädt die gewählte. |
+| **Sicherungsort ändern …** | Ändert Ordner und Namen der Sicherungsdateien. |
+| **ProgrammGenerator: Anlagenansicht speichern …** | Speichert die [[anleitungen:webmobaledlib:pg_grafisch|grafische Anlagenansicht]] (Bild und Positionen) als Datei **<Blatt>.MLL_view**. |
+| **ProgrammGenerator: Anlagenansicht laden …** | Lädt eine solche Datei. |
+| **Beenden …** | Beendet das Programm. Das Programm fragt, ob es vorher speichern soll (siehe oben). |
+
+===== Inkrementell speichern (seit 4.15) =====
+
+Bei **großen Projekten** lohnt es sich, öfter einen Stand **festzuhalten**, zu dem du später zurückkehren kannst. Dafür gibt es das **inkrementelle Speichern**:
+
+  - Drücke die **Tastenkombination** (Vorgabe **Strg+Umschalt+S**) oder wähle //Datei → Inkrementell speichern//.
+  - **Beim ersten Mal** fragt das Programm nach dem **Ordner** und dem **Namen** der Sicherungsdatei. Vorgeschlagen wird der Ordner //Sicherungen// im Datenordner und der Name deiner Arbeitsmappe. Der Ordner liegt auf dem Rechner, auf dem das Programm läuft.
+  - Das Programm sichert die **ganze Arbeitsmappe** (alle Blätter und Einstellungen) als **<Name>_0001.json**. Eine kurze Meldung nennt den Dateinamen.
+  - **Bei jedem weiteren Speichern** wird die Nummer um eins größer (**_0002**, **_0003** …). Eine ältere Sicherung wird nie überschrieben. Die nächste Nummer ist immer die höchste im Ordner vorhandene plus eins, auch nach einem Neustart.
+
+Zum **Zurückholen** wählst du //Datei → Sicherungsdatei öffnen …//. Das Programm zeigt die Sicherungen im Ordner mit **Datum und Uhrzeit**, die neueste zuerst. Klicke eine an und dann auf **Öffnen** (oder doppelklicke sie). Dabei wird die aktuelle Arbeitsmappe **ersetzt**, ungesicherte Änderungen gehen verloren. Mit dem Feld **Ordner** schaust du in einen anderen Ordner. Ort und Name änderst du mit //Datei → Sicherungsort ändern …//.
+
+**Tastenkombination ändern:** Die Vorgabe **Strg+Umschalt+S** kann vom Betriebssystem oder von einem anderen Programm belegt sein, zum Beispiel von einem Screenshot-Programm wie //Greenshot//. Dann stellst du in den **Programm Einstellungen** unter **Allgemeine Einstellungen** bei **Tastenkombination: Inkrementell speichern** eine andere ein, zum Beispiel **Strg+Alt+S** oder **Strg+F9**. Die Kombination muss **Strg** oder **Alt** oder eine **F-Taste** enthalten. Sie gilt gleich nach dem Speichern der Einstellungen. Der Menüpunkt geht immer, auch ohne Tastenkombination.
+
+**Tipp:** Speichere vor einem größeren Umbau eine **PGF-Datei**. Dann kannst du jederzeit zum alten Stand zurück.
+
+===== Beispiele =====
+
+Auf dem Blatt **Examples** (Blattreiter unten) stehen **Beispiele** zum Ausprobieren. Du kannst sie als Vorlage für eigene Programme nehmen.
+
+===== Eine Datei aus der Excel-Version laden =====
+
+Dateien des Excel-Programmgenerators mit der Endung **.MLL_pgf** lassen sich in der webMobaLedLib laden, auch von älteren Versionen. Nutze dafür **PGF-Datei lesen**.

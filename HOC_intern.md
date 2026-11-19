@@ -1,0 +1,5197 @@
+Datei-Version: 1.10 (2026-11-18) - HOC_intern.md
+Stand: webMobaLedLib 4.22
+
+# webMobaLedLib: History of Change (intern, ausführlich)
+
+Gilt ab Version 1.39. Frühere Versionen sind nicht erfasst. Basis der Versionsnummer ist `VERSION` in `webmobaledlib.py`.
+Pro Version: was sich geändert hat und die Tabelle der geänderten Dateien (Datei, Version, Änderung). Neueste Version oben.
+Pfade beziehen sich auf den Ordner `python`.
+
+---
+
+## 2.12 (2026-10-23) - Release-Stand
+
+Release-Stand 2.12 auf Wunsch des Entwicklers („Release bauen“). **Neu im Ablauf:** Es gibt kein von mir gebautes `webmobaledlib.zip` mehr (Ursache des Vorfalls 2 war ein ZIP mit altem Stand: ich kenne die Hilfsdateien, die Excel-Datei und die csv-Dateien des Entwicklers nicht). Das GitHub-Release baut nur `zip_erstellen.bat` (1.04) aus dem vollständigen Ordner `python`, mit Prüfliste und Prüfung. Das frühere `webmobaledlib.zip` (Stand 2.04, nur gelieferte Dateien) liegt als `archiv/webmobaledlib_Dateien_Stand_2.04.zip`.
+
+| Datei (Ordner `/mnt/user-data/outputs`) | Inhalt |
+|---|---|
+| `webmobaledlib_Dateien_Stand_2.12.zip` | **alle** von mir gelieferten Dateien (113, im Ordner `python`) zum Einspielen in den Ordner `python` des Entwicklers; **kein** Update-ZIP |
+| `ANLEITUNG_Installation.pdf` | Anleitung 2.68, 27 Seiten |
+| `BETATEST_Checkliste.pdf` | Checkliste 1.39, 8 Seiten |
+| `RELEASE_Hinweise_2.12.md` | Hinweise für GitHub (Anhänge: das mit `zip_erstellen.bat` gebaute ZIP und beide PDF) |
+| `VERSIONEN_Stand_2.12_2026-10-23.txt` | Versionen der 105 gelieferten Dateien mit Versionsangabe |
+| `RELEASE_Ablauf.md` | Ablauf für den Entwickler (2.12) |
+| `archiv/` | frühere Release-Hinweise, Versionslisten und ZIP (nichts gelöscht) |
+
+**Geprüft:** Dateipaket: `testzip` in Ordnung, alle 113 Dateien gleich dem Ordner `headless`, keine `__pycache__`, alle `.py` kompilieren, Versionsprüfung „alles passt“ (50 Einträge), 11 Dateien ausführbar (`.sh`, `.command`). **Nachbau des Entwickler-Ablaufs mit seinem echten Paket (1678 Dateien, Stand 2.05):** meine 113 Dateien darübergelegt, Prüfliste, ZIP gepackt, `release_tools check --previous <sein ZIP>`: **in Ordnung** (Version 2.12, 1678 Dateien, 6 neue, 0 fehlende, ZIP 16,6 MB). Alle 15 Prüfreihen laufen (17, 26, 15, 70, 28, 19, 43, 26, 16, 27, 8, 8, 8, 5, 9 Prüfungen). **Nicht geprüft:** `zip_erstellen.bat` und die Reparaturskripte unter Windows, ein abgebrochenes Update unter Windows, das Verhalten mit Acronis, der Download von GitHub.
+
+## 4.22 (2026-11-19)
+
+Issue 6 (Wunsch Jürgen): Der Reiter Erweiterungen zeigt Name und Beschreibung aus der `libraries.json` (auch `library.json`) der Erweiterung, wenn die Datei vorhanden ist und die Angaben enthält; sonst die Angaben aus `extensions_known.json`. Nur die Quell-URL in die `platformio.ini` zu schreiben, ist nicht vorgesehen: Das Programm muss die Erweiterung ohnehin lokal lesen (Makros), darum bleibt es beim Cache und `symlink://`, außer Jürgen nennt einen triftigen Grund. Im Browser nicht geprüft; `library_info` mit einer Probedatei geprüft.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.22 | Versionsnummer |
+| `headless/headless_extensions.py` | 1.03 | `library_info` |
+| `_web/web_form_options.py` | 1.38 | Anzeige von Name und Beschreibung |
+| `install/BETATEST_Checkliste.md` | 3.11 | Punkte 275 und 276 |
+| `wiki/webmobaledlib/erweiterungen.txt` | 1.01 | Hinweis zur libraries.json |
+
+## 4.21 (2026-11-19)
+
+Issue 6 (Jürgen, Test-MLX): Kompilieren mit einer neu importierten Erweiterung (DummyMLX) scheiterte, weil in der `platformio.ini` `Name=file://…\DummyMLX\MobaLedLib.properties` stand statt des Ordners. Ursache: `Extension.Path = Replace(LibName, '/MobaLedLib.properties', '')` greift unter Windows nicht, weil der Pfad Rückwärtsstriche hat. Jetzt `os.path.dirname`. Dazu wie bei MobaLedLib `symlink://` (eine Quelle, keine Kopie in `.pio`), wo Verknüpfungen erlaubt sind (`M08.Lib_Link_Scheme`), sonst `file://`. Nicht auf Windows geprüft. Zur IRremote-Meldung (zweites Feedback): keine Änderung nötig, Jürgen trägt die Version in der Erweiterung ein.
+
+Offen (Wünsche, noch nicht umgesetzt): Quell-URL direkt in `lib_deps` (PlatformIO lädt selbst); Name und Beschreibung aus `libraries.json` anzeigen.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.21 | Versionsnummer |
+| `proggen/M38_Extensions.py` | 1.07 | Pfad der Erweiterung ist der Ordner, `symlink://` |
+
+## 4.20 (2026-11-19)
+
+Rückmeldung Harold: mit 4.19 keine Verbesserung. Der Screenshot zeigt: Titel zu Menü ist etwas enger, aber die Reiter sind weiter ca. 50 px hoch (Text mittig, Unterstrich 25 px darunter); die 36 px aus 4.19 griffen also nicht. Jetzt Höhe 32 px mit `!important` auch für `.q-tab__content`, Menütasten mit `!important`. Im Browser nicht geprüft.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.20 | CSS der Reiter und Menütasten |
+
+## 4.19 (2026-11-19)
+
+Rückmeldung Harold (Issue 22, Screenshot mit 4.18): Der Abstand im Kopfbereich ist noch zu groß. Vermutete Ursache: Menütasten (36 px), Reiter (48 px) und der Titel (Zeilenhöhe 32 px) sind höher als nötig, und der Standardabstand von NiceGUI kann den Zeilenabstand überstimmen. Jetzt: Zeilenabstand 0 mit `!important`, Menütasten 28 px, Titel Zeilenhöhe 1,3, Reiter 36 px (nur normales Layout, das kompakte bleibt unverändert). Im Browser nicht geprüft.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.19 | CSS des Kopfbereichs |
+
+## 4.18 (2026-11-19)
+
+Rückmeldung Harold: Im Tooltip des Knopfs „Mit Lichtmaschine verbinden“ stand noch „ARDUINO → Verbinden“ und „Menü ARDUINO → Trennen“; das Menü heißt seit 3.83 Lichtmaschine. Text korrigiert. Im Wiki hieß es in ota.txt noch „Menü ARDUINO“. Zum Abstand der Kopfzeilen (Issue 22): Der Screenshot zeigt Version 4.15, die Änderung steckt erst ab 4.16.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.18 | Tooltip des Verbinden-Knopfs |
+| `wiki/webmobaledlib/ota.txt` | 1.04 | Menü Lichtmaschine statt ARDUINO |
+
+## 4.17 (2026-11-19)
+
+Issue 21 (Harold): Strg+Umschalt+S ist bei Harold durch ein Screenshot-Programm (Greenshot) belegt; der Anwender muss die Tastenkombination selbst festlegen können. Neue Einstellung `IncrSaveKey` (Allgemeine Einstellungen, Textfeld, Vorgabe „Strg+Umschalt+S“, leer = Vorgabe). `parse_shortcut` versteht Strg/Ctrl/Cmd, Umschalt/Shift, Alt und ein Zeichen oder F1 bis F24 und verlangt Strg, Alt oder eine F-Taste (sonst würde das Tippen ausgelöst); ungültige Angaben ergeben einen Hinweis und keine Tastenkombination. `refresh_status` (0,5-s-Takt) meldet die Einstellung bei Änderung per `window.mllIncrKey` an den Browser, die Änderung gilt also gleich nach dem Speichern der Einstellungen. Das Menü heißt jetzt „Inkrementell speichern“ ohne Kombination (sie ist einstellbar). Bekannte Grenze: Umschalt plus Ziffer liefert im Browser ein anderes Zeichen und wird nicht erkannt. Im Browser nicht geprüft.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.17 | `parse_shortcut`, `JS_INCR_SAVE` dynamisch, Meldung an den Browser in `refresh_status` |
+| `_web/web_tabs.py` | 1.25 | Einstellung `IncrSaveKey` |
+| `_web/web_params.py` | 1.12 | `IncrSaveKey` in den Allgemeinen Einstellungen |
+| `csv/Web_Languages.csv` | – | neue und geänderte Texte |
+| `wiki/webmobaledlib/pg_speichern.txt` | 1.03 | Tastenkombination ändern |
+| `wiki/webmobaledlib/wz_programm_einstellungen.txt` | 1.14 | Zeile Tastenkombination: Inkrementell speichern |
+
+## 4.16 (2026-11-19)
+
+Issue 22 (Harold, Wunsch Prio 4): weniger Platz im Kopfbereich zwischen Titel, Menü und Reitern. Ursache: NiceGUIs Standardabstand von 1 rem zwischen den Zeilen der Seite, dazu die leere Zeile `autosave_label` und bei schmalem Fenster der Zeilenumbruch des Menüs in der Kopfzeile. Korrektur nur im Kopfbereich (Rest der Seite unverändert): `.mll-header` bekommt `row-gap: 4px` und im normalen Layout `margin-bottom: -8px` (Abstand zu den Reitern 16 px auf 8 px); `autosave_label` ist unsichtbar, solange kein Text da ist. Keine Einstellung (Entscheidung Harold). Im Browser nicht geprüft.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.16 | CSS `.mll-header`, `autosave_label` ausgeblendet ohne Text |
+
+## 4.15 (2026-11-19)
+
+Issue 21 (Harold): Inkrementelles Speichern. Nur kompiliert, im Browser nicht ausprobiert.
+
+- **Speichern:** Strg+Umschalt+S (JS `JS_INCR_SAVE`, Ereignis `mll_incr_save`; Strg+Alt+S entfällt, Entscheidung Harold) und Menü Datei → „Inkrementell speichern (Strg+Umschalt+S)“ rufen `incremental_save`: `sync_all_sheets()` und `wb.Save(filename=<Ordner>/<Name>_<NNNN>.json)` (Format wie „Workbook speichern als“), Nummer = höchste im Ordner vorhandene + 1 (vierstellig, danach mehr Stellen), keine Überschreibung, Meldung „Gesichert: …“.
+- **Erstes Speichern:** Dialog nach Ordner und Basisname (Vorgabe: `<Datenordner>/Sicherungen`, Name der Workbook-Datei). Gespeichert je Workbook-Datei in der Konfiguration (`IncrementalSave`, JSON). Menü „Sicherungsort ändern …“ öffnet denselben Dialog.
+- **Sicherungsdatei öffnen …:** Dialog mit Ordnerfeld und Tabelle der Dateien `<Name>_<NNNN>.json` (neueste zuerst, Zeitpunkt, Größe), Doppelklick oder „Öffnen“ lädt per `wb.Load(filename=…)` (der Dateiname des Workbooks bleibt, `keep_filename=False`). Der gewählte Ordner wird der neue Sicherungsordner. Ein Dateimanager des Servers lässt sich aus dem Browser nicht öffnen; die Liste ersetzt das (mit Harold geklärt).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.15 | `incremental_save`, `open_backup`, `change_incr_target`, `JS_INCR_SAVE`, Menü Datei |
+| `csv/Web_Languages.csv` | – | neue Texte (7 Sprachen, nicht gegengelesen) |
+| `wiki/webmobaledlib/pg_speichern.txt` | 1.02 | Abschnitt Inkrementell speichern, Menüeinträge |
+
+## 4.14 (2026-11-19)
+
+Issue 20 (Harold, Wunsch aus dem Forum): Verbinden mit der Lichtmaschine für Anfänger logischer machen. Alle Punkte bis auf den Test mit echter Hardware sind umgesetzt; geprüft wurde nur, dass alles kompiliert und `quiet` bei `_msg` greift.
+
+- **Start (Punkt 1 und 2):** Timer 2 s nach dem Seitenaufbau, einmal je Programmlauf (`_AUTOCONNECT`), Verbindung in `run.io_bound` (eigener Thread, die Tabellen werden parallel geladen; es wird höchstens 5 s auf einen laufenden Befehl gewartet). Merker `LastConnected` (Konfiguration): wird in `refresh_status` beim Übergang zu „verbunden“ auf 1 gesetzt, beim Trennen über Knopf-Pfeil oder Menü auf 0 (Beenden ändert ihn nicht). War die letzte Verbindung aktiv und gibt es WLAN-Ziel oder den Anschluss, wird verbunden (mit WLAN-Ziel zuerst WLAN, dann USB). Sonst (oder wenn das scheitert) Suche über `Classify_Port` (Nano, ESP32, Pico): der gespeicherte eigene Anschluss hat Vorrang, der Anschluss der Seite LNet/DCC wird ausgelassen, bei mehreren Treffern wird nicht geraten. Gefundener Pico bekommt DTR (`dtr_override`). Bei Erfolg wird der Anschluss in `serportname` gemerkt. Alles ohne Dialog (`quiet` in `web_serial`), ein belegter Anschluss führt nur zu einem Protokolleintrag.
+- **Nach dem Hochladen (Punkt 3):** `M08.Last_Upload` {ok, host} wird bei Nano/Pico-Upload (nur echter Upload, nicht `CreateFilesOnly`) und beim ESP32-Setup (USB: host leer, WLAN: Adresse) gesetzt. `transfer_setup` ruft danach `connect_after_upload`: WLAN: 6 s warten, bis zu 5 Versuche im Abstand von 3 s; USB: 2 s warten, 2 Versuche. Meldung bei Erfolg und Hinweis bei Misserfolg.
+- **Einstellung:** `AutoConnect` (Allgemeine Einstellungen, Vorgabe an) schaltet Start-Verbindung und Verbinden nach dem Hochladen ab; der Knopf bleibt.
+- **Bedienung:** Der Knopf „Mit Lichtmaschine verbinden“ hat einen Pfeil mit Menü (Verbindung trennen, Neu verbinden, Board wechseln …). Dieselben Punkte stehen im Menü Lichtmaschine (Trennen, Neu verbinden, Board wechseln …).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.14 | `startup_autoconnect`, `connect_after_upload`, `_silent_connect`, `_search_lichtmaschine`, Pfeilmenü, Menü Lichtmaschine |
+| `_web/web_serial.py` | 1.12 | `quiet`, `dtr_override` |
+| `_web/web_tabs.py` | 1.24 | Einstellung `AutoConnect`, `is_auto_connect` |
+| `_web/web_params.py` | 1.11 | `AutoConnect` in den Allgemeinen Einstellungen |
+| `proggen/M08_ARDUINO.py` | 1.24 | `Last_Upload` |
+| `csv/Web_Languages.csv` | – | neue Texte (7 Sprachen, nicht gegengelesen) |
+| `wiki/webmobaledlib/pg_arduino.txt` | 1.14 | Abschnitt Automatisch verbinden, Pfeilmenü, Menü Lichtmaschine |
+| `wiki/webmobaledlib/wz_programm_einstellungen.txt` | 1.13 | Einstellung Automatisch mit der Lichtmaschine verbinden |
+| `wiki/webmobaledlib/erstes_programm.txt` | 1.12 | Hinweis auf automatisches Verbinden |
+
+## 4.13 (2026-11-19)
+
+Issue 14 (Jueff): „Board und USB Port erkennen“ setzte bei einem Nano mit neuem Bootloader (115200 Baud) immer „Nano neu“, „Nano Full“ (Firmware 108.1, oder 4.4 beim ATmega328PB) wurde nie erkannt. Ursache: In der Python-Umsetzung gibt es die VBA-ByRef-Parameter von `Get_Arduino_Baudrate` nicht; `FirmwareVer` blieb leer und `DeviceSignature` 0 (`Get_New_Board_Type("", 0)`), die Firmware-Version wurde nie gelesen. Korrektur: `_DetectArduino_once` liest nach dem Sync Signatur und `STK_GET_PARAMETER` SW_MAJOR/SW_MINOR und legt sie in `_LAST_INFO` ab (`Get_Last_Detect_Info()`); `Get_New_Board_Type` bekommt jetzt diese Werte, im Knopf Board erkennen und in `Check_If_Arduino_could_be_programmed_and_set_Board_type`. Dadurch kennt `GetCPUTypeFromSignature` nun auch die echte Signatur (wie im Excel-Original). Nicht mit echter Hardware getestet; die Protokollzeile `Bootloader-Firmware …, Signatur …` zeigt die gelesenen Werte.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `proggen/M07_COM_Port.py` | 1.12 | `_LAST_INFO`, `Get_Last_Detect_Info`, Firmware-Version und Signatur auslesen |
+| `proggen/M08_ARDUINO.py` | 1.23 | Untertyp mit Firmware-Version und Signatur |
+| `_web/web_form_options.py` | 1.37 | Board erkennen mit Firmware-Version und Signatur |
+| `webmobaledlib.py` | 4.13 | Version |
+
+## 4.12 (2026-11-19)
+
+Issue 15 (Jueff): „Vorgang abbrechen“ im Log-Fenster beendete nur die Shell (`shell=True`, `proc.terminate()`), `arduino-cli`/`avrdude`/`pio` liefen weiter und hielten den COM-Port bis zum Ablauf der Upload-Timeouts. Korrektur: Prozess startet in eigener Prozessgruppe (POSIX `start_new_session`), `_kill_tree` beendet den ganzen Baum (Windows `taskkill /F /T`, POSIX `killpg` SIGTERM, nach 3 s SIGKILL). `userbreak` wird vor dem Beenden gesetzt. Geprüft unter Linux mit Shell + zwei `sleep`-Kindern (alle beendet); Windows `taskkill` nicht getestet.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `mlpyproggen/Prog_Generator.py` | 1.10 | `_spawn_kwargs`, `_kill_tree`; `terminate_process` und beide Popen-Aufrufe |
+| `webmobaledlib.py` | 4.12 | Version |
+
+## 4.11 (2026-11-19)
+
+Issue 16 (Jueff): Nach „Verwerfen“ im Dialog „Zwischengespeicherter Stand gefunden“ reagierte der Klick auf die Spalte Aktiv nicht, nach einem Blattwechsel ging er. Ursache laut Protokoll: `Worksheet_SelectionChange` schaltete den Haken, aber `ActiveCell().Offset(0,1).Activate()` arbeitete mit einem veralteten `ActiveSheet` (Zeile 16, Spalte 7, 8, 9 … statt der geklickten Zelle). Der Blattwechsel ruft `ws.Activate()`, der Start nicht. Korrektur: `fire_selection_event` ruft vor dem Ereignis `ws.Activate()`, und der Zweig Verwerfen aktiviert das Blatt neu.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.11 | `ws.Activate()` im Auswahl-Ereignis und nach Verwerfen |
+
+## 4.10 (2026-11-19)
+
+Neue Programmsymbole von Harold (`Icon_webMLL.zip`: `Icon_Outline_webMLL.png/.ico`, `Icon_webMLL.png`, `favicon_io/`). Verwendung: `install/mobaledlib_icon.png` (Outline-Fassung mit Rand, 512 px) und `install/mobaledlib_icon_full.png` (bis an den Rand, für das kleine Symbol im Browserreiter) sind die Vorlagen. `install/make_icons.py` 1.03 erzeugt daraus unverändert (ohne die frühere Weltkugel in der Ecke) `mobaledlib.png`, `mobaledlib_plain.png`, `favicon.png` (64 px), `mobaledlib.ico` (16 bis 256 px, aus dem 512-px-PNG; die mitgelieferte ICO hat nur 256 px) und `mobaledlib.icns`; ohne `mobaledlib_icon.png` gilt das alte Verfahren. Die fertigen Dateien liegen im Paket. Die Verknüpfung auf dem Desktop wird nur vom Installer angelegt: für das neue Symbol `install_windows.bat` bzw. `install_linux.sh` noch einmal ausführen. Ein Test auf Windows, Linux, macOS steht aus. Die übrigen Dateien aus `favicon_io` (Apple-Touch, Android, Manifest) werden bisher nicht benutzt.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `install/mobaledlib_icon.png`, `install/mobaledlib_icon_full.png` | – | neu (Vorlagen) |
+| `install/mobaledlib.png`, `mobaledlib_plain.png`, `mobaledlib.ico`, `mobaledlib.icns`, `favicon.png` | – | neues Symbol |
+| `install/make_icons.py` | 1.03 | nimmt die neuen Vorlagen |
+| `install/ANLEITUNG_Installation.md` | 4.10 | Abschnitt Programmsymbol |
+| `webmobaledlib.py` | 4.10 | Version |
+
+## 4.09 (2026-11-19)
+
+PR 18 (moosbewohner, Commit 19628f68; Meldung eines Testers): WLAN aktiv, OTA aus: `prepare_ota_sketch` schrieb `#include <Arduino.h>` und `<WiFi.h>` nur bei `ota=True` in den Sketch-Anfang; `ESP32WifiUsb.h` fand dadurch `WiFi` und `WL_CONNECTED` nicht. Jetzt stehen beide Includes im Präfix unabhängig vom OTA-Schalter (nur die `extern`-Deklarationen bleiben bei OTA). Aus dem PR nur diese Datei übernommen. Mit dem früheren Fehler „OTA-Passwort“ (4.03) hat das nichts zu tun. Nicht auf Hardware getestet.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `headless/headless_esp32_ota.py` | 1.09 | Includes Arduino.h und WiFi.h immer |
+| `webmobaledlib.py` | 4.09 | Version, Verweis headless_esp32_ota 1.09 |
+| `install/BETATEST_Checkliste.md` | 3.03 | Punkt 263 |
+
+## 4.08 (2026-11-19)
+
+Issue 12 (Tester, 15"-Display: zu viel Platz vor und nach den Einträgen; Spaltenbreiten der ersten Seite auf die anderen Seiten übertragen) und PR 19 (moosbewohner, Commit 88c823b5). Aus dem PR nur die Dateien dieses Commits übernommen (der übrige PR-Inhalt ist schon in unserem Stand, weitere Dateien im PR sind ältere Fassungen).
+
+1. `_web/web_sheet_tabs.py` 1.05: Reiter-Kontextmenü „Spaltenbreiten übertragen …“ (nur für Datenblätter); `copy_column_widths(source, targets, columns)` setzt die Breiten (`tksheet.column_width`), verschiebt die Shapes rechts davon (`moveShapesHorizontal`) und markiert das Blatt als geändert; zweistufiger Dialog (Spalten, dann Zielseiten).
+2. `_web/web_layout.py` 1.20: Einstellung `WebOuterMargin` (0–200 px, Vorgabe 16 px) steuert über die CSS-Variable `--mll-outer-margin` das Padding links/rechts der AG-Grid-Zellen und Kopfzellen (außer Zeilennummern); wirkt sofort beim Ändern.
+3. `webmobaledlib.py` 4.08: Callback `tab_copy_widths`, `head_html(..., margin)`.
+
+Spaltennummern im Dialog sind Buchstaben (A, B, …). Übertragen wird nur auf Datenblätter, die Spaltenzahl der Zielblätter begrenzt die Auswahl. Nicht im Browser getestet.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.08 | Callback, Zellabstand beim Start |
+| `_web/web_sheet_tabs.py` | 1.05 | Kontextmenü und Dialog Spaltenbreiten übertragen |
+| `_web/web_layout.py` | 1.20 | Einstellung Zellinnenabstand |
+| `csv/Web_Languages.csv` | – | 8 Zeilen aus dem PR |
+| `install/ANLEITUNG_Installation.md`, `install/BETATEST_Checkliste.md` | 4.08 / 3.02 | Abschnitt, Punkte 261–262 |
+
+## 4.07 (2026-11-19)
+
+Fehler (Harold): Tabellen DCC, Selectrix … versteckt, Arbeitsmappe gespeichert, Programm neu installiert, Arbeitsmappe geladen: Die eigenen Tabellen erscheinen, danach DCC als Reiter; „Tabellen verstecken“ meldet DCC als versteckt. Die Speicherung (`HiddenSheets` in XLA_Application 1.22, `apply_sheet_layout`) ist in Ordnung. Ursache: Nach dem Neustart/Laden ist das Startblatt DCC das aktive Blatt, und `visible_sheet_names()` hängt „das aktive Blatt ist immer sichtbar“ an die Liste. Korrektur: `rebuild_sheet_tabs()` wählt zuerst das erste sichtbare Blatt, wenn das aktive `user_hidden` ist (Schutz gegen Rekursion über `tabs_guard["fixing"]`; Config und programmintern ausgeblendete Blätter zählen nicht). Nicht im Browser getestet.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.07 | aktives verstecktes Blatt durch erstes sichtbares ersetzen |
+| `install/BETATEST_Checkliste.md` | 3.01 | Punkt 260 |
+
+## 4.06 (2026-11-18)
+
+PR 9 (moosbewohner), letzter Commit 768c37c5 („ESP32-Fotowiderstand über Blatteinstellung initialisieren“): Das Häkchen „Fotowiderstand aktivieren“ setzte `READ_LDR` (M06_Write_Header), ließ aber `Read_LDR` in M06_Write_Header_SW (Initialisierung des ADC-Scanners, `Read_LDR.h`) aus, weil `Init_HeaderFile_Generation_SW(firstRun)` den Wert auf False setzte. Jetzt: `Read_LDR = Board ESP32 und esp32_options["ldr"] is True`. Übernommen in unseren Stand (die übrigen Dateien der PR sind schon enthalten: ESP-Einstellungen, OLED-Vorschau). Hardwaretest offen.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `proggen/M06_Write_Header_SW.py` | 1.07 | `Read_LDR` aus der ESP-Blatteinstellung |
+| `webmobaledlib.py` | 4.06 | Version, Verweis M06_Write_Header_SW 1.07 |
+
+## 4.05 (2026-11-18)
+
+Issue 6 (Theo, Raspberry Pi 400, Pico, InfraredMLX, `DCC_PICO_RC5.MLL_pgf`): Setup übertragen bricht nach dem Kompilieren ab. Protokoll: `InfraredMLX.h:69: error: no matching function for call to 'IRrecv::begin(uint16_t&, bool)'`. Ursache: Die Erweiterung (`library.properties`, Bibliothek `IRReceiverExtension`) fordert `IRremote` ohne Version; PlatformIO löste das zu `z3t0/IRremote@5.0.0` auf (zwei weitere Treffer: arduino-irremote 4.7.1, arminjo 4.4.1). In 5.0 gibt es `begin(pin, bool)` nicht mehr (nur `begin(pin)` und `begin(pin, feedbackPin, bool)`). In Excel (Arduino IDE) liegt eine ältere Bibliothek, deshalb dort kein Fehler.
+
+Korrektur: neues optionales Feld `lib_deps` je Eintrag in `extensions_known.json`; `M38.Write_PIO_Extension` schreibt diese Zeilen (einmal je Eintrag) nach den `file://`-Zeilen in `[env] lib_deps`. Für InfraredMLX: `arduino-irremote/IRremote@^4.4.1`. **Nicht getestet** (Sandbox ohne PlatformIO/Netz): Theo soll es prüfen. Lässt sich 4.7 nicht übersetzen, auf `arminjo/IRremote@4.4.1` festlegen. Eigene Erweiterungen (Liste „eigene“) haben das Feld noch nicht.
+
+Nebenpunkte aus der Rückmeldung: „keine Aufforderung zum Speichern oder Neustarten“ nach dem Auswählen von infraredMLX ist so gewollt (Erweiterungen wirken sofort, die Makros erscheinen in der Auswahl).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.05 | Version, Verweis M38 1.06 |
+| `proggen/M38_Extensions.py` | 1.06 | `lib_deps` der Erweiterung in platformio.ini |
+| `extensions_known.json` | – | InfraredMLX: `lib_deps` IRremote ^4.4.1 |
+| `install/BETATEST_Checkliste.md` | 3.00 | Punkt 259 |
+
+## 4.04 (2026-11-18)
+
+Rückmeldung eines Testers: Beim Start rot „Mit Lichtmaschine verbinden“, obwohl der Arduino angeschlossen ist. Klick: Hinweis, Optionen/Werkzeuge zu öffnen. Nach „USB Port erkennen“ besteht weiterhin keine Verbindung, die Schaltfläche bleibt rot. Wunsch: Dialog gleich öffnen, danach automatisch verbinden.
+
+1. `connect_arduino` (webmobaledlib.py): ist `serportname` leer/„NO DEVICE“/„COM?“ und kein ESP32-WLAN-Ziel eingetragen, kommt ein Hinweis und `M20.Option_Dialog()` wird geöffnet (Reiter Lichtmaschine ist der erste Reiter) statt der Meldung „Es ist kein Port ausgewählt“.
+2. `WebOptions._web_detect_board(left=True)` (web_form_options 1.36) merkt sich, dass ein Anschluss eingetragen wurde (`serportname` gesetzt); `Show()` startet nach dem Schließen den Hook `wd._bridge["auto_connect"]` (ohne zu warten, denn der Befehl Optionen ist noch busy). Der Hook `auto_connect_after_detect` wartet bis zu 20 s auf „nicht busy“ und verbindet per USB (`_connect_usb_command`), dann `after_connect()`. Nur für die Seite Lichtmaschine, nicht für LNet/DCC; kein automatisches Verbinden beim Programmstart (Arduino-Reset, belegte Anschlüsse).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.04 | Hinweis und Optionen bei fehlendem Anschluss; Hook zum automatischen Verbinden |
+| `_web/web_form_options.py` | 1.36 | merkt erkannten Anschluss, startet Hook nach dem Schließen |
+| `csv/Web_Languages.csv` | – | 1 neue Zeile (ungeprüfte Übersetzungen) |
+| `install/BETATEST_Checkliste.md` | 2.99 | Punkt 258 |
+
+## 4.03 (2026-11-18)
+
+Fehler (Harold, neuer PC): Arbeitsmappe vom Test-PC (OTA aktiviert) geladen, „Setup übertragen“ mit Knopf USB: Abbruch „Das OTA-Passwort muss 1 bis 64 druckbare ASCII-Zeichen haben.“ (Protokoll: `prepare_ota_sketch`, ValueError). Ursache: `esp32_wlan` (wifi, ota, hostname) liegt im Blatt, das Passwort aber je Rechner in `esp32-ota.json` (`passwords`). Auf dem neuen Rechner ist ota=True mit leerem Passwort; auch USB baut die Firmware mit OTA. Korrektur: `transfer_setup` fragt in diesem Fall über `web_esp32_ota.ask_password()` (Speichern und weiter / Ohne OTA übertragen (nur bei USB) / Abbrechen); „ohne OTA“ gilt nur für diese Übertragung, die Einstellungen bleiben.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.03 | Abfrage des fehlenden OTA-Passworts in `transfer_setup` |
+| `_web/web_esp32_ota.py` | 1.06 | neu `ask_password()` |
+| `csv/Web_Languages.csv` | – | 6 neue Zeilen (ungeprüfte Übersetzungen) |
+
+## 4.02 (2026-11-18)
+
+Rückmeldung Jan (3.93): Es fehlt Rückgängig; nach „Beenden ohne Speichern“ war das Tabellenblatt samt Änderungen weg. (Seine Meldung zu Strg+C/Strg+V wartet auf Angaben: Browser, Betriebssystem, Adresse, Protokoll; Verdacht: Clipboard-API nur auf localhost/https.)
+
+1. **Rückgängig/Wiederholen:** `undo_stacks` (Blattname → ws, undo, redo; max. 50). `write_cells(items, label, record)` liest vor dem Schreiben die alten Texte aus `ws.tksheet.data`, nach dem Schreiben die neuen (`undo_record`, nur echte Änderungen) und gibt True/False zurück; `on_cell_changed` zeichnet die Direkteingabe auf. `op_undo_redo` schreibt mit `record=False` und aktualisiert Symbole (`refresh_icons_after_paste`). Zeilenzahl wird je Eintrag gemerkt; weicht sie ab (Zeilen eingefügt/gelöscht, Paste als Zeilen), wird der Verlauf verworfen. Anderes Blatt-Objekt (Laden) setzt den Verlauf zurück. Nicht erfasst: Aktiv-Haken (Leertaste), Farben, Zeilenstruktur. Tasten in `JS_CELL_KEYDOWN` (Strg+Z, Strg+Y, Strg+Umschalt+Z, Ereignis `mll_cell_op` undo/redo); Menüeinträge am Kontextmenü, Beschriftung in `on_ctx`. Die Anlagenansicht hat ihr eigenes Strg+Z (v2.45), unabhängig.
+2. **Verworfener Stand:** `close_session(save=False)` ruft `keep_discarded_state()`: hat sich das Blatt seit der letzten Sicherung geändert, wird neu nach `<Arbeitsmappe>.discarded.json` gesichert, sonst die Zwischensicherung dorthin verschoben. `offer_recovery` → `offer_discarded()` (nur wenn keine Zwischensicherung da ist, sonst wird der verworfene Stand gelöscht) fragt einmal und löscht die Datei danach in jedem Fall.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.02 | Rückgängig/Wiederholen, verworfener Stand |
+| `csv/Web_Languages.csv` | – | 10 neue Zeilen (Texte Rückgängig, Verlauf, Verworfene Änderungen); Übersetzungen von mir, ungeprüft |
+| `install/ANLEITUNG_Installation.md` | 4.02 | Abschnitte Rückgängig, Beenden ohne Speichern |
+| `install/BETATEST_Checkliste.md` | 2.98 | Punkte 255–257 |
+
+## 4.01 (2026-11-18)
+
+Issue 13, Auswertung des Protokolls von Theo (Linux, nur ein FT232-Nano `/dev/ttyUSB0` angeschlossen): Die Ursache aus 4.00 (falscher Anschluss bei zwei Arduinos) war nicht die Ursache.
+- Ablauf im Protokoll: Erkennen auf der Seite des LNet-Arduinos meldet „Bootloader antwortet mit 115200 Baud“, setzt das Board auf Nano neu (`Change_Board_Typ`), ruft dann `__Detect_Right_Port_Button_Click` auf. Dieser liest die Auswahl aus `rb_res["_R"]` (alte Auswahl aus dem Formular, Nano alt) und schreibt sie mit `Change_Board` zurück. Ergebnis: rechts bleibt „alt“ (`R=1`), der Upload der LNet-Firmware lief mit `-e nano_old` und scheiterte mit „not in sync“. Erst nach Umstellen von Hand (`R=2`) klappte es.
+- Zweiter Befund: Nach dem Erkennen öffnet das Fenster wieder auf dem ersten Reiter (Lichtmaschine, dort `L=2` = neu). Das wirkt wie ein Sprung zur anderen Seite.
+- Korrektur `web_form_options` 1.35: `_web_detect_board` setzt zusätzlich `rb_res` (`boardlist.index(new_board)`); `_TAB` merkt den zuletzt gewählten Reiter, `keep` stellt ihn nach dem Erkennen wieder ein.
+- Die Änderung aus 4.00 (Anschluss der anderen Seite auslassen) bleibt; sie hilft bei zwei gleichzeitig angeschlossenen Arduinos.
+
+## 4.00 (2026-11-18)
+
+Issue 13 (Theo): LNet-Arduino (alter Bootloader) wird mit „Board und USB Port erkennen“ nicht richtig erkannt, die Anzeige springt auf die Lichtmaschine (neuer Bootloader).
+- Ursache (aus dem Code abgeleitet, das Protokoll aus dem Issue war hier nicht abrufbar): `_web_detect_board(left)` nahm immer `cands[0]`, den ersten gefundenen Anschluss, unabhängig von der Seite. Bei zwei Nanos war das oft der Anschluss der Lichtmaschine. Dessen Bootloader (115200, neu) wurde dann für die LNet-Seite eingestellt, und „USB Port erkennen“ blieb bei diesem Board.
+- Korrektur `web_form_options` 1.34: gespeicherte Anschlüsse beider Seiten lesen (`COMPort_COL`, `COMPrtR_COL`), den der anderen Seite auslassen, den eigenen gespeicherten bevorzugen. Das Protokoll nennt Seite, beide Anschlüsse und die Kandidatenliste (`Erkennen: Seite …`).
+- Offen: Ist für die andere Seite noch kein Anschluss gespeichert und sind zwei Nanos angeschlossen, wird weiter der erste (niedrigste Nummer) genommen; das Formular zeigt die anderen gefundenen Boards.
+
+## 3.99 (2026-11-18)
+
+- `web_form_options` 1.33: Klasse `mll-opttabs` für die Reiter des Optionenfensters. CSS: `.q-tab` mit `flex: 1 1 auto; min-width: 0`, Beschriftung `white-space: normal`, kleinere Schrift (0.78rem), `.q-tabs__content` ohne Umbruch. Damit teilen die bis zu 9 Reiter die Breite, lange Namen brechen um und Quasar zeigt keine Blätterpfeile mehr. Nicht im Browser geprüft (kein NiceGUI in der Entwicklungsumgebung); bei sehr langen Wörtern (Entwicklungsumgebung) bricht `overflow-wrap: anywhere` notfalls im Wort um.
+
+## 3.98 (2026-11-18)
+
+Issue 6 (MLX), Phase 2 und 3.
+- `headless_extensions` 1.02: `parse_spec` (Name, Name@=Version, Name=https://…, https://… mit `#ref`; keine Leerzeichen oder Sonderzeichen), `add_custom` (laden, `MobaLedLib.properties` lesen, in `extensions.json` unter `custom` speichern, einschalten), `remove_custom`, `all_entries`, `warned`/`set_warned`, `type_names`, `find_disabled_used`. Download: GitHub `…/archive/<ref|HEAD>.zip` oder direkte ZIP-Adresse (nur https); Registry-Pakete über `pio pkg install --global --storage-dir … --library Name@=Version` (nicht getestet, PlatformIO-Optionen unbestätigt). Schlüssel ist der Ordnername.
+- `extensions_known.json`: neues Feld `types` (Konstruktornamen), damit auch nicht geladene Erweiterungen in einer Datei erkannt werden.
+- `web_form_options` 1.32: Gruppe „Eigene Erweiterungen“ mit Haken und „Entfernen“, Eingabefeld mit „Hinzufügen“, Hinweisdialog (einmalig), Hilfetext zur Syntax.
+- `webmobaledlib.py` 3.98: `offer_extensions` prüft die Zellen aller Blätter auf `EX.<Typ>(` einer ausgeschalteten Erweiterung und fragt (je Sitzung einmal je Erweiterung); aufgerufen 3 s nach dem Seitenaufbau und nach jedem Befehl (Laden einer Datei). Bei „Einschalten“: nötigenfalls laden, Haken setzen, `M38.Load_Extensions()`.
+- Wiki: neue Seite `erweiterungen` 1.00, `pg_werkzeugleiste` Reiterliste ergänzt.
+- 9 neue CSV-Zeilen.
+- Offen: Aktualisieren einer eigenen Erweiterung geht nur über Entfernen und neu Hinzufügen; keine Versionsprüfung der Mindestversion der MobaLedLib.
+
+## 3.97 (2026-11-18)
+
+Fehler aus dem Protokoll von Harold: „JSON Error … Expecting property name enclosed in double quotes“ für AddressLearnMLX, FireplaceMLX, InfraredMLX.
+- Ursache: Ihre `MobaLedLib.properties` ist kein strenges JSON (Schlüssel ohne Anführungszeichen, Komma vor `"macroIncludes"` fehlt). `M33.ParseJSONFile` (json.load) lehnt das ab; der VBA-Leser des Excel-Programms nahm es an.
+- `headless_extensions` 1.01: `load_properties` liest tolerant (Schlüssel quoten, fehlende Kommas ergänzen, Kommas vor `]`/`}` und Kommentare entfernen, Zeichenketten bleiben unverändert). `M38_Extensions` 1.05 nutzt sie, `M33.ParseJSONFile` nur als Rückfall.
+- Zweiter Fund: Die Id in der Datei (`AddressLearnExtension`) ist nicht der Ordnername (`AddressLearnMLX`). Die Haken hängen deshalb am Ordnernamen. Bei ausgeschalteten Erweiterungen hätte die Prüfung über die Id nie gegriffen. `Name=file://…` in `lib_deps` nutzt weiter die Id aus der Datei (wie im Excel-Programm).
+
+## 3.96 (2026-11-18)
+
+Issue 6 (MLX), Phase 1 nach den Antworten von Jürgen: nur PlatformIO, keine Arduino-IDE-Unterstützung, Schlüssel ist die Id aus MobaLedLib.properties.
+- Neu `headless/headless_extensions.py` 1.00: liest `extensions_known.json` (Paket-Wurzel; 5 Einträge, Gruppe standard/optional, bundled), Haken in `extensions.json` im Datenordner (unbekannte Extensions sind immer aktiv), `download` lädt `<url>/archive/HEAD.zip` nach `Datenordner/extensions/<Id>` (Größengrenze, Schutz gegen Pfade außerhalb, prüft MobaLedLib.properties).
+- `M38_Extensions` 1.04: `__CollectExtensions` fügt eingeschaltete Extensions aus dem Cache hinzu und überspringt ausgeschaltete bekannte; `Write_PIO_Extension` unverändert (`Name=file://Pfad`, gilt auch für den Cache).
+- `web_form_options` 1.31: Reiter „Erweiterungen“ (Haken, Status, Hardware-Hinweis, Download beim Einschalten); nach Änderung `M38.Load_Extensions()` in `_web_apply`.
+- `libraries/P_ScheduleMLX` und `libraries/P_ScheduleDuoMLX` im Paket (aus dem Stand 3.95 des Entwicklers übernommen).
+- Kein Schnappschuss der Properties für die optionalen Extensions: Sie werden erst beim Einschalten geladen, vorher braucht man ihre Makros nicht. Offen: Phase 2 (eigene Liste mit Adresse, Id aus den Properties), Phase 3 (Rückfrage beim Öffnen einer Datei mit ausgeschalteter Extension).
+- 10 neue CSV-Zeilen.
+
+## 3.95 (2026-11-18)
+
+- Update Testversion mit freier Quelle: `choose_release` bietet zusätzlich „Eigener Link zu einer ZIP-Datei …“ (nur https, `wu.check_custom_url`) und „ZIP-Datei auf diesem Rechner auswählen …“ (`ui.upload`, `wu.save_upload` schreibt nach `zip_path_of_update()`); Rückgabe-Eintrag mit `custom=True`, `file=True/False`. Danach derselbe Ablauf wie sonst: `open_release`/`prepare` (Ordner python, release_manifest.json, Prüfsummen), Plan, Rücksprung-Warnung, Rückfrage. Kein GitHub nötig (Fehler wird angezeigt, Auswahl bleibt möglich). Kopfzeile „Eigene Quelle: …“. `web_update` 1.16, 12 neue CSV-Zeilen.
+
+## 3.94 (2026-11-18)
+
+Pull Request 11 von moosbewohner (enthält die Pull Requests 9 und 10), von Hand integriert, weil die Branches auf einem älteren Stand lagen und Versionsnummern kollidierten. Nicht übernommen: `release_manifest.json` (wird von `release_tools.py` erzeugt) sowie die Einträge in README und HOC der Pull Requests.
+- ESP Einstellungen je Blatt (`esp32_options`: oled, ldr, store_status), gespeichert in `Esp32Options` der Arbeitsmappe, beim Duplizieren kopiert. Reiter nur bei Board ESP32.
+- M06 erzeugt aus den Einstellungen Defines hinter den Tabellen-Defines; UI_MLLTime 0 bis 5.
+- OLED-Modus 5 in `U8G2UserInterface.h` (WLAN, IP, Hostname).
+- ESP32-Setup-Upload nach `M08_ARDUINO.Compile_and_Upload_ESP32_Setup`; `transfer_setup` in `webmobaledlib.py` ruft sie auf.
+- Korrektur gegenüber dem Pull Request 11: `esp_tab.name` gibt es bei `ui.tab` nicht; wie im Pull Request 9 `esp_tab.props["name"]` (sonst Fehler im Timer der OLED-Vorschau).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 3.94 | `duplicate_sheet`, `workbook_signature`, `transfer_setup` ruft M08 auf |
+| `_web/web_form_options.py` | 1.30 | Reiter ESP Einstellungen mit OLED-Vorschau |
+| `proggen/M06_Write_Header.py` | 1.10 | Firmware-Defines aus den ESP-Einstellungen, UI_MLLTime 0 bis 5 |
+| `proggen/M08_ARDUINO.py` | 1.22 | `Compile_and_Upload_ESP32_Setup` |
+| `ExcelAPI/XLA_Application.py` | 1.23 | `Esp32Options` sichern und laden |
+| `LEDs_AutoProg/U8G2UserInterface.h` | – | OLED-Modus 5 |
+| `LEDs_AutoProg/ESP32Extensions.h` | – | Kommentar der Modi |
+| `csv/Web_Languages.csv` | – | 12 neue Zeilen |
+
+## 3.93 (2026-11-18)
+
+Rückmeldung eines Einsteigers im Forum:
+- Online-Wiki-Knopf öffnet `https://wiki.mobaledlib.de/anleitungen/webmobaledlib/einfuehrung` (im Wiki heißt die Startseite so) (`HELP_WIKI_URL`, M20 1.12; die Werkzeugleiste nutzt dieselbe Konstante).
+- „Nach unten ausfüllen“ (Strg+D und Kontextmenü) und „Reihe fortsetzen“ (Kontextmenü): `op_fill`, `series_value`, Ereignis `filldown` in `JS_CELL_KEYDOWN`/`on_cell_op`. Mehrere Zeilen markiert: oberste Zeile ist die Quelle; sonst die Zeile darüber. Schreiben über `write_cells` (nur nicht gesperrte Spalten). Das Ziehen am Ausfüllkästchen gibt es in AG Grid nur in der Enterprise-Fassung.
+- Verteilernummer: reine Zahl gilt wie V+Zahl (`is_vt_number`, neu `vt_key` in headless_graph 1.07; V1 und 1 sind derselbe Verteiler).
+- Optionen/Dateien: „Importieren v. altem Prog.“ ist aktiv und zeigt eine Anleitung (`_web_import_info`, MLL_pgf-Weg); „Kopiere von Seite zu Seite“ entfällt (Web-Liste und `UserForm_Options`, ersetzt durch Seite duplizieren). Direkter Excel-Import (Variante b) nur bei Bedarf später.
+- Wiki: neue Seite `faq`; `start.txt` heißt im Paket `einfuehrung.txt`, Änderungen an `start`, `pg_tabelle`, `pg_grafisch`, `seiten_update`; neue Datei `START_HIER.txt` für die Wurzel des Release-Pakets.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `proggen/M20_PageEvents_a_Functions.py` | 1.12 | `HELP_WIKI_URL` |
+| `headless/headless_graph.py` | 1.07 | `vt_key`, reine Zahl als Verteiler |
+| `webmobaledlib.py` | 3.93 | `op_fill`, Strg+D, Kontextmenü, `REQUIRED_FILES` |
+| `release_tools.py` | 1.09 | `zip` nimmt weitere Dateien für die ZIP-Wurzel (START_HIER.txt), `check` erlaubt sie |
+| `zip_erstellen.bat` | 1.10 | START_HIER.txt im obersten Ordner des ZIP, wenn `ROOT_IN_ZIP=1` (für 3.93 0: Update-Code bis 3.92 weist solche ZIP ab) |
+| `_web/web_update.py` | 1.15 | ignoriert START_HIER.txt im obersten Ordner des ZIP |
+| `repair.py` | 1.04 | wie `web_update` |
+| `_web/web_form_options.py` | 1.29 | Importieren-Knopf aktiv mit Anleitung, Kopieren-Knopf entfernt |
+| `proggen/UserForm_Options.py` | 1.06 | Kopieren-Knopf auskommentiert |
+| `csv/Web_Languages.csv` | – | 8 neue Zeilen (Übersetzungen ungeprüft) |
+
+## 3.92 (2026-11-18)
+
+Der Reiter „ProgGenerator Einstellungen“ heißt jetzt „Tabelle Färben“ (Adresse `/ProgGeneratorEinstellungen` bleibt). Zwei neue Haken auf der Seite, vor den Bedingungen:
+- „Automatisch einfärben“ (`AutoColorRows`): Nach jeder Zelländerung (Eingabe im Grid und Einfügen/Löschen über das Kontextmenü, `write_cells`) wird das Blatt mit `page.RowFormat_Button_click()` komplett nach den Bedingungen gefärbt (`auto_color_rows`, nur Datenblätter, Blatt wird vorher aktiviert). Ohne Haken wie bisher: Knopf oder „Speichern und … färben“. Aufwand wächst mit der Blattgröße, weil das ganze Blatt neu gefärbt wird.
+- „Zeilen Färben Button verstecken“ (`HideColorButton`): blendet den Knopf in der Werkzeugleiste aus (`apply_beginner_buttons`, wirkt nach dem Speichern der Seite sofort); im Anfänger Modus fehlt der Knopf weiterhin.
+Beide Optionen sind Web-Optionen (`PARAM_ADDITIONS`, Seite `ProgGenConfigPage`).
+Nicht geändert: Wiki, Installationsanleitung und Checkliste nennen noch den alten Reiternamen (beim Release-Stand anpassen).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_tabs.py` | 1.23 | Reitername, Optionen `AutoColorRows`, `HideColorButton` in `ProgGenConfigPage` |
+| `webmobaledlib.py` | 3.92 | `auto_color_rows`, Knopf ausblenden, Reiterbeschriftung, `REQUIRED_FILES` |
+| `csv/Web_Languages.csv` | – | 5 neue Zeilen (Übersetzungen ungeprüft) |
+
+## 3.91 (2026-11-17)
+
+Die Seite Config wird durch Einstellungen in den Programm Einstellungen ersetzt (Konzept mit Harold Linke abgestimmt). Neun Werte: `MinTime_House`, `MaxTime_House`, `DCC_Offset` (Gruppe „Programm Generator“) und `SimLedsX`, `SimLedsY`, `SimLedSize`, `SimPosX`, `SimPosY`, `SimOffset` (neue Gruppe „Simulatoreinstellungen“, nur im Experten Modus; die Option „Simulator anzeigen“ steht jetzt am Anfang dieser Gruppe). Alle anderen Zeilen der Seite Config bleiben auf dem Standardwert im Blatt.
+
+- Ablage: je Installation (ConfigData), nicht mehr je Arbeitsmappe. `M28.Get_String_Config_Var`, `Get_Num_Config_Var_Range` und `Set_String_Config_Var` lesen und schreiben diese neun Namen in den Programm Einstellungen (`SETTINGS_VARS`); alle anderen kommen weiter aus dem Blatt. Leer heißt Vorgabe (House 50/150 s, DCC-Offset 0, Simulator 8/8/24/800/200/0). Die Fensterposition, die das Programm selbst zurückschreibt, landet ebenfalls dort.
+- Übernahme: `M28.Migrate_Config_to_Settings` kopiert beim ersten Start einmalig Werte, die auf der Seite Config von der Vorgabe abweichen (Flag `ConfigMigrated`).
+- Das Blatt Config ist versteckt und nur mit „versteckte Tabellen anzeigen“ sichtbar (`visible_sheet_names`).
+- Der Simulator im Browser (Linux) liest dieselben Werte (x, y, Größe, Start-LED über `M39.sim_params`); die Fensterposition gilt nur für das Fenster unter Windows.
+- Fehlermeldung bei Min > Max der House-Zeiten verweist auf die Programm Einstellungen (`M06`); der Text hat keine Übersetzung im Blatt Languages mehr (fällt auf Deutsch zurück).
+- Nicht geprüft: Anzeige der neuen Gruppe im Browser, Übernahme der alten Werte mit einem echten Projekt.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `proggen/M28_Diverse.py` | 1.03 | `SETTINGS_VARS`, Zugriff auf die Programm Einstellungen, `Migrate_Config_to_Settings` |
+| `proggen/M06_Write_Header.py` | 1.09 | Fehlermeldung House-Zeiten ohne Wechsel auf die Seite Config |
+| `_web/web_tabs.py` | 1.22 | neun neue Optionen |
+| `_web/web_params.py` | 1.10 | Gruppe Simulatoreinstellungen, `EXPERT_GROUPS`, `apply_beginner` |
+| `webmobaledlib.py` | 3.91 | Config versteckt, Übernahme beim Start, Anfänger Modus nach dem Speichern, `REQUIRED_FILES` |
+| `csv/Web_Languages.csv` | – | 20 neue Zeilen (Übersetzungen ungeprüft) |
+
+## 3.90 (2026-11-17)
+
+Anwenderwunsch: Tabellen (DCC, Selectrix, Config …) ausblenden. Umsetzung als Variante 2 (je Tabelle): Kontextmenü am Reiter „Tabelle verstecken“ und „Versteckte Tabellen …“ (Dialog mit Haken, Einblenden). Der Zustand `user_hidden` ist unabhängig von `Visible` (das Programm blendet damit seine eigenen Blätter aus) und von „versteckte Tabellen anzeigen“; er wird mit der Arbeitsmappe gesichert (`HiddenSheets`, je Projekt) und beim Laden angewandt. Mindestens eine Tabelle bleibt sichtbar; wird die aktive versteckt, wird die nächste sichtbare gewählt. Das aktive Blatt ist immer sichtbar (auch wenn es beim Start als letztes Blatt gemerkt war).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `ExcelAPI/XLA_Application.py` | 1.22 | `HiddenSheets` sichern und laden (`user_hidden`) |
+| `_web/web_sheet_tabs.py` | 1.03 | Kontextmenü „Tabelle verstecken“, „Versteckte Tabellen …“, `show_hidden_dialog` |
+| `webmobaledlib.py` | 3.90 | `visible_sheet_names`, `tab_hide`, `tab_show_hidden`, Callbacks, REQUIRED_FILES |
+| `csv/Web_Languages.csv` | – | 7 neue Zeilen |
+
+## 3.89 (2026-11-17)
+
+Pull Request #7 (moosbewohner, „Schalter Anordnung nur in Spalte E“) übernommen und angepasst: Die Testtasten einer Zeile stehen alle in der Spalte Typ, hinter dem Typtext, an derselben Stelle (vorher je Taste in der zugehörigen Spalte, rechtsbündig). Abweichung vom PR (Entscheidung Harold Linke): Der Typtext wird nicht auf 64 Pixel gekürzt; die Textbreite richtet sich nach dem längsten Typtext der Zeilen mit Tasten (`cellRendererParams.labelWidth`), die Spalte Typ wird so breit, dass Text und Tasten Platz haben. Nicht übernommen: README-Absatz und `release_manifest.json` (wird beim Release erzeugt). Der PR baute auf 3.86 auf, die Änderung wurde von Hand in den Stand 3.88 eingebaut.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 3.89 | Zellendarstellung (`cell_renderer_js`), Testtasten in Spalte Typ und Spaltenbreite in `show()`, Version |
+
+## 3.88 (2026-11-17)
+
+Fehlermeldung vom Tester (3.86): Beim Beenden mit „Ja, speichern“ erschien „Fehler beim Speichern: 'CApplication' object has no attribute 'OnKey'“, und die Farbeinstellungen (ProgGenerator Einstellungen) wirkten nicht auf die Tabellen.
+
+1. Ursache Beenden: `Evt_Workbook_BeforeClose` ruft seit 1.20 das Ereignis tatsächlich auf; `pattgen/DieseArbeitsmappe.Workbook_BeforeClose` ruft `Application.OnKey('{Return}', '')` auf, und `CApplication` hatte keine Methode `OnKey`. Das Arbeitsmappen-Sichern lief vorher durch, der Abbruch kam danach. Neu: `CApplication.OnKey` (ohne Wirkung, wie Excel-Tastenbelegung im Web nicht nötig).
+2. Ursache Farben: Die Zeilenfarben (`RowFormatInput`) wurden nur beim Ändern einer Zelle oder mit dem Knopf „Zeilen Färben“ angewandt. Nach „Geänderte Einstellungen übernehmen“ geschah nichts. Neu: `after_progcfg_save` ruft `page.RowFormat_Button_click()` (= `apply_formatting` des aktiven Blattes) und baut die Tabelle neu auf. Das Blatt wird vorher aktiviert (wie bei `run_command`), Fehler erscheinen als Meldung und im Log, im Log steht „Zeilenfarben angewandt: Blatt …, n Bedingungen“. Andere Blätter werden beim Ändern wie bisher gefärbt, oder mit „Zeilen Färben“.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `ExcelAPI/XLA_Application.py` | 1.21 | `CApplication.OnKey` |
+| `webmobaledlib.py` | 3.88 | Version, `color_sheets`, zwei Speichern-Knöpfe in ProgGenerator Einstellungen, REQUIRED_FILES |
+| `webmobaledlib.py` | 3.88 | Logfile anzeigen: Knopf „Die letzten 3 Logdateien herunterladen“ (ZIP aus .log, .log.1, .log.2 in einem Temp-Ordner, `offer_download`) |
+| `_web/web_params.py` | 1.09 | `build_settings_page(save_buttons=…)`: mehrere Speichern-Knöpfe mit eigener Nacharbeit |
+| `csv/Web_Languages.csv` | – | Zeilen „Speichern und aktuelle Seite färben“, „Speichern und ALLE Seiten färben“ |
+
+## 3.87 (2026-11-17)
+
+Bild der Pico-Zentrale ersetzt: animiertes GIF (2 Bilder à 600 ms, 300 × 291) in ein animiertes PNG (APNG) mit dem alten Namen `images/PICO_image.png` umgewandelt (wie bei `ESP32_image.png`). `PICOWL_image.png` bleibt unverändert.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `images/PICO_image.png` | – | neues Bild (APNG) |
+| `webmobaledlib.py` | 3.87 | Version |
+
+## 3.86 (2026-11-17)
+
+Fehler im Dialog „Update Testversion“: Beim Tag `V3.5.0L3-3.85` las `web_update.version_key` mit `re.search` die erste Zahlengruppe (3.5, die Version der MobaLedLib) statt der webMobaLedLib-Version 3.85; 3.5 ist kleiner als die installierte 3.65, deshalb stand „ältere Version“ beim neuesten Release. Jetzt zählen nur Zahlenpaare ohne dritten Teil (`3.5.0` zählt nicht), und das letzte Paar ist die Version. Die Versionsvergleiche im Update selbst (`release_tools.version_key`, Prüfliste) waren nicht betroffen.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_update.py` | 1.14 | `version_key` |
+| `webmobaledlib.py` | 3.86 | Version, `REQUIRED_FILES` |
+
+## 3.85 (2026-11-17)
+
+Bild der ESP32-Zentrale ersetzt. Die neue Vorlage war ein animiertes GIF (12 Bilder, 300 × 279, Anzeige „WIFI connected“). Weil das Programm den Dateinamen `images/ESP32_image.png` aus dem Zentralentyp bildet (`web_form_comport`), wurde sie in ein animiertes PNG (APNG) mit gleichem Namen umgewandelt; Animation, Zeiten (200 ms) und Transparenz bleiben erhalten.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `images/ESP32_image.png` | – | neues Bild (APNG) |
+| `webmobaledlib.py` | 3.85 | Version |
+
+## 3.84 (2026-11-17)
+
+Das Menü „ARDUINO“ heißt „Lichtmaschine“ (Schlüssel in `MENU` geändert, Titel über `tr`). Angepasst: Hinweistext des Verbinden-Knopfs, Meldung im DCC-Keyboard (`web_dcckeyboard`), Texte in `Web_Languages.csv`, Anleitung und Checkliste.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 3.84 | Menü, Version, `REQUIRED_FILES` |
+| `_web/web_dcckeyboard.py` | 1.03 | Hinweistext |
+| `csv/Web_Languages.csv` | – | Meldungen |
+| `install/ANLEITUNG_Installation.md` | 3.91 | Menüname |
+| `install/BETATEST_Checkliste.md` | 2.87 | Menüname |
+
+## 3.83 (2026-11-17)
+
+Wünsche des Entwicklers: Der Knopf „Board und USB Port erkennen“ steht im Reiter über „USB Port erkennen“ (Knopf aus `board_group` in die linke Spalte des Reiters verlegt). Der Reiter „LED Arduino“ heißt „Lichtmaschine“, der Reiter „OTA“ heißt „WLAN (OTA)“ (beide über `tr`, in allen Sprachen gleich; Lichtmaschine bleibt wie in den übrigen Texten unübersetzt). Der Knopf der Kopfzeile „Mit ARDUINO verbinden“ heißt „Mit Lichtmaschine verbinden“ bzw. „Mit Lichtmaschine verbunden“ (Text jetzt über `tr`), ebenso sein Hinweistext und die Meldung in `web_z21`. In `Web_Languages.csv` heißt es in allen Hinweisen „Reiter Lichtmaschine“; der Verweis auf den Reiter OTA wurde angepasst. Anleitung und Checkliste folgen.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_form_options.py` | 1.28 | Knopfreihenfolge, Reiternamen Lichtmaschine und WLAN (OTA) |
+| `_web/web_z21.py` | 1.04 | Hinweistext Mit Lichtmaschine verbinden |
+| `webmobaledlib.py` | 3.83 | Version, `REQUIRED_FILES`, Knopf der Kopfzeile |
+| `csv/Web_Languages.csv` | – | neue Namen, angepasste Meldungen |
+| `install/ANLEITUNG_Installation.md` | 3.90 | Namen |
+| `install/BETATEST_Checkliste.md` | 2.86 | Namen, Punkt 230 |
+
+## 3.82 (2026-11-17)
+
+Vorschlag des Entwicklers: Der Knopf heißt „Board und USB Port erkennen“. `_web_detect_board` sucht (wie 3.81) alle Anschlüsse ab, stellt beim ersten gefundenen Board (nach Nummer sortiert) das Board ein (ESP32/Pico nach Beschreibung, Nano über die Baudrate des Bootloaders; antwortet der Bootloader nicht, bleibt das Board unverändert) und ruft dann den Handler „USB Port erkennen“ (`__Detect_LED_Port_Button_Click` bzw. `__Detect_Right_Port_Button_Click`) auf. Dessen Formular zeigt das gefundene Board mit Anschluss und wie bisher die anderen gefundenen Boards; der Anwender übernimmt oder wählt einen anderen Typ. Die Rückfrage je Gerät aus 3.81 entfällt (Text aus der CSV entfernt). Zusätzlich wertet `M08.Check_If_Arduino_could_be_programmed_and_set_Board_type` das gespeicherte Flag „AutoDet“ nicht mehr aus (`AutoDetect = False`, das Flag wird nur noch aus den BuildOptions entfernt).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_form_options.py` | 1.27 | Knopf „Board und USB Port erkennen“ ruft USB Port erkennen auf |
+| `_web/web_tabs.py` | 1.21 | Hinweistext NanoBootloaderDetection |
+| `proggen/M08_ARDUINO.py` | 1.21 | Flag AutoDet beim Hochladen nicht mehr ausgewertet |
+| `csv/Web_Languages.csv` | – | Knopftext, Hinweis, Meldung „kein Arduino“; Rückfrage entfernt |
+| `webmobaledlib.py` | 3.82 | Version, `REQUIRED_FILES` |
+| `install/BETATEST_Checkliste.md` | 2.85 | Punkt 230 |
+
+## 3.81 (2026-11-17)
+
+Korrektur zu 3.80: Der Knopf „Erkennen“ verlangte einen eingestellten COM Port, der wiederum den Boardtyp voraussetzt (Schleife). `_web_detect_board` braucht jetzt weder Port noch Boardtyp: Es trennt eine bestehende Verbindung, listet mit `serial.tools.list_ports.comports` alle Anschlüsse (Linux-ttyS-Platzhalter übersprungen) und ordnet sie mit `M07.Classify_Port` (Pico, ESP32, Nano) zu. Bei mehreren Geräten wird je Gerät gefragt („Gerät am COM Port … verwenden?“). Nano: `Get_Arduino_Baudrate(dev, 115200)` (probiert auch 57600): 57600 → alt, 115200 → neu. Dann werden COM Port (Zahl bei „COMn“, sonst Gerätepfad) und Board eingetragen (`Change_Board_Typ` setzt den Port zurück, deshalb wird er danach nochmals geschrieben). Kein Gerät: Hinweis zum Anschließen.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_form_options.py` | 1.26 | `_web_detect_board` ohne voreingestellten Port |
+| `csv/Web_Languages.csv` | – | Hinweis, „kein Arduino gefunden“, Rückfrage bei mehreren Geräten |
+| `webmobaledlib.py` | 3.81 | Version, `REQUIRED_FILES` |
+| `install/BETATEST_Checkliste.md` | 2.84 | Punkt 230 |
+
+## 3.80 (2026-11-17)
+
+Vorschlag des Excel-Entwicklers zur Boardauswahl (Optionen Werkzeuge, Reiter LED ARDUINO und DCC Arduino): „Automatisch erkennen“ wirkt im Web anders als in Excel (dort wurde nur der Typ eines Nano erkannt, im Web zusätzlich ESP32). Statt des Hakens gibt es einen Knopf „Erkennen“, der das angeschlossene Board einmalig erkennt; „Typ von Arduino IDE benutzen“ entfällt.
+
+Knopf „Erkennen“ (`_web_detect_board`): liest den COM Port der Seite (ohne Port: Hinweis „USB Port erkennen“), trennt eine bestehende Verbindung, prüft die Beschreibung des Anschlusses (Silicon Labs CP210x → ESP32, Pico) und fragt sonst den Bootloader des Nano ab (57600 Baud → alt, 115200 Baud → neu). Das Board wird mit `M28.Change_Board_Typ` eingestellt, der COM Port bleibt. Die Einstellung „Bootloader des Nano beim Prüfen erkennen“ gilt dabei nicht (ausdrücklicher Knopfdruck). Nicht geändert: Das Hochladen wertet ein in der Datei gespeichertes „AutoDet“ weiter aus (ältere Dateien); der Dialog setzt es nicht mehr. Der Radioknopf mit Wert 5 wird im Web nicht mehr angeboten (das Original `UserForm_Options.py` bleibt unverändert). Nano „Full memory“ wird nicht erkannt (die Firmwareversion steht in Python nicht zur Verfügung, wie bisher). Neue Texte in `Web_Languages.csv` (alle sieben Sprachen, Übersetzungen von mir, bitte von Muttersprachlern prüfen lassen); der Hinweis der Option „Bootloader des Nano beim Prüfen erkennen“ nennt jetzt den Knopf (nur Deutsch und Englisch angepasst). Nicht mit Hardware getestet.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_form_options.py` | 1.25 | Knopf Erkennen, Radioknopf 5 entfällt, `_web_detect_board` |
+| `_web/web_tabs.py` | 1.20 | Hinweistext der Option |
+| `csv/Web_Languages.csv` | – | 7 neue Texte, ein Hinweistext geändert |
+| `webmobaledlib.py` | 3.80 | Version, `REQUIRED_FILES` |
+| `install/BETATEST_Checkliste.md` | 2.83 | Punkt 230 |
+
+## 3.79 (2026-11-17)
+
+Drei Knopfsymbole des Programm Generators wurden vom Gestalter überarbeitet und ersetzt (gleiche Größe 214 × 164, gleiche Dateinamen, daher keine Codeänderung).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `images_btn/Btn_Send_to_ARDUINO.png` | – | neues Symbol (Haus mit Pfeil) für Setup übertragen |
+| `images_btn/Btn_Simulate.png` | – | neues Symbol (Würfel mit Pfeil) für Setup simulieren |
+| `images_btn/Btn_Options.png` | – | neues Symbol (Zahnräder) für Optionen Werkzeuge |
+| `webmobaledlib.py` | 3.79 | Version |
+
+## 3.78 (2026-11-17)
+
+Die Version der MobaLedLib (`Ver.3.5.0-L4`) steht nicht mehr in der Knopfzeile des Programm Generators, sondern in der Kopfzeile unter dem Knopf Beenden (eine Spalte `mll-quitcol` mit Beenden und `lib_version_label`). Mit PlatformIO als Entwicklungsumgebung (`M28.Is_PlatformIO()`) wird sie ausgeblendet, weil sie dort nicht stimmt; `update_lib_version()` prüft das bei jedem Aufruf (nach jedem Befehl, also auch nach dem Umschalten der Entwicklungsumgebung). Im kompakten Layout wird sie nicht angezeigt (die Kopfzeile ist dort einzeilig). Nicht im Browser angesehen.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 3.78 | Version unter Beenden, bei PlatformIO ausgeblendet |
+| `_web/web_layout.py` | 1.17 | im kompakten Layout ausgeblendet |
+| `install/BETATEST_Checkliste.md` | 2.82 | Punkt 229 |
+
+## 3.77 (2026-11-17)
+
+Suche: Hintergrund (Verlauf weiß nach hellgrau), Rand und Ecken (8 px) wie die Knöpfe der Werkzeugleiste (`.mll-tool`), dunkles Layout ebenso. Im normalen Layout `align-self: stretch`, damit die Suche so hoch ist wie die Knöpfe in derselben Zeile; Inhalt mittig. Die Regeln mit `!important`, weil das Element Rand und Hintergrund noch inline setzt. Im kompakten Layout bleibt die Höhe wie bisher (nur die Farbe angepasst). Nicht im Browser angesehen.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_layout.py` | 1.16 | CSS für `.mll-find` |
+| `webmobaledlib.py` | 3.77 | Version, `REQUIRED_FILES` |
+| `install/BETATEST_Checkliste.md` | 2.81 | Punkt 228 ergänzt |
+
+## 3.76 (2026-11-17)
+
+Suche im normalen Layout: der Trefferzähler steht unter den Pfeilen. Aufbau: zwei Spalten (`mll-find-left`: Suchfeld, darunter Wort und Alle; `mll-find-right`: Pfeile, darunter der Zähler). Im kompakten Layout sind die Zwischenebenen `display: contents`, die Reihenfolge Suchfeld, Pfeile, Zähler, Wort, Alle kommt über `order`. Die CSS-Regeln wurden mit einer Testseite in Chromium geprüft (normal und kompakt); in der echten Oberfläche noch nicht.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 3.76 | Suche in zwei Spalten |
+| `_web/web_layout.py` | 1.15 | CSS dazu |
+| `install/BETATEST_Checkliste.md` | 2.80 | Punkt 228 angepasst |
+
+## 3.75 (2026-11-17)
+
+Die Suche im Programm Generator nahm als einzelne Zeile viel Breite ein. Im normalen Layout ist sie jetzt zweizeilig: oben Suchfeld, Pfeile und Trefferzahl, darunter Wort und Alle. Im kompakten Layout (Programm Einstellungen, Darstellung; auch „Automatisch“ bei niedrigem Fenster) bleibt sie einzeilig. Umsetzung: die Elemente liegen in zwei Zeilen (`mll-find-top`, `mll-find-bottom`) in `mll-find`; die Richtung schaltet reines CSS (normal Spalte, `mll-compact` Zeile), ohne Neuaufbau der Seite. Nicht im Browser angesehen, nur Syntax geprüft.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 3.75 | Suchleiste in zwei Zeilen gegliedert, `REQUIRED_FILES` |
+| `_web/web_layout.py` | 1.14 | CSS: normal zweizeilig, kompakt einzeilig; Kopfversion bereinigt (Datei-Version und Version waren verschieden) |
+| `install/BETATEST_Checkliste.md` | 2.79 | Punkt 228 |
+
+## 3.74 (2026-11-17)
+
+Der Knopf Dialog hat in der Spalte Typ einer Zeile ohne Adresse jetzt dieselbe Funktion wie der Doppelklick (3.73): `Dialog_Guided_Input` wählt die Adress-Zelle und ruft sich erneut auf.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `proggen/M03_Dialog.py` | 1.03 | Typ-Spalte ohne Adresse: Adress-Dialog |
+| `webmobaledlib.py` | 3.74 | Version, `REQUIRED_FILES` |
+| `install/BETATEST_Checkliste.md` | 2.78 | Punkt 227 erweitert |
+
+## 3.73 (2026-11-17)
+
+Doppelklick auf die Spalte Typ in einer Zeile ohne Adresse: `Select_Typ_by_Dialog` kehrt ohne Adresse sofort zurück, daher passierte nichts. Jetzt wird in `on_dblmacro` ohne Adresse die Zelle der Adress-Spalte gewählt und der Dialog (`F00.Dialog_Button_Click`) gestartet. Bei einer leeren Zeile läuft damit die geführte Eingabe, bei einer Zeile mit Daten ohne Adresse der Adress-Dialog.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 3.73 | `on_dblmacro`: Typ ohne Adresse startet den Adress-Dialog |
+
+## 3.72 (2026-11-17)
+
+Entscheidungen der Community zur Bedienung der Tabelle: (1) Dialog Wizard in den Spalten A bis C einer Datenzeile startet den Dialog der Adress-Spalte statt der Meldung „Kein Dialog vorhanden“. (2) Spalte B (Aktiv): Doppelklick darf die Zelle nicht zum Bearbeiten öffnen und zählt wie ein Einzelklick. (3) Zeile 1 ist nicht von Hand änderbar. (4) Spalten ab LED Nr (in der DCC-Tabelle ab M) sind schreibgeschützt.
+
+Ursache zu (3): `_ro` wurde nur für Zeilen mit Tooltips gesetzt; Zeile 1 hat keine und war deshalb editierbar. Zu (2): Der Haken wird beim Klick über Worksheet_SelectionChange umgeschaltet; ein Doppelklick schaltete zweimal (kein Ergebnis) und öffnete den Editor. Jetzt ist die Spalte nicht editierbar, und ein zweiter Klick auf dieselbe Zelle innerhalb von 0,5 s wird ignoriert. Zu (4): Die Spalten werden über `M25.LED_Nr__Col` bestimmt (Selectrix verschoben); Makros schreiben weiter wie bisher, nur die Handeingabe wird abgewiesen (zusätzlich serverseitig in `on_cell_changed`, Protokoll „abgelehnt“). Einfügen und Löschen über Zeilennummer (ganze Zeilen) bleiben unverändert.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 3.72 | `readonly_columns()`, `no_edit_cols`, Schutz in `on_cell_changed`, Entprellung des Doppelklicks auf Aktiv |
+| `proggen/M03_Dialog.py` | 1.02 | `Dialog_Guided_Input`: Spalten vor der Adress-Spalte starten den Adress-Dialog |
+| `headless/headless_gridmodel.py` | 1.07 | `_ro` für alle Kopfzeilen (Zeile 1 und 2) |
+| `install/BETATEST_Checkliste.md` | 2.76 | Punkte 223 bis 226 |
+
+## 3.71 (2026-11-17)
+
+Pull Request 5 von moosbewohner („Zeilenumbruch beseitigt und Spalte E wieder änderbar“, Basis 3.65) per 3-Wege-Merge (Basis 3.65, unser Stand 3.70, PR) übernommen; keine Konflikte. Der PR enthält außerdem Änderungen an `README.md` und `release_manifest.json`; beide werden nicht übernommen (die Prüfliste wird beim Release neu erzeugt, die README pflegen wir separat). Die Funktion `Select_Typ_by_Dialog` stimmt nach dem Merge im Syntaxbaum mit der des PR überein.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 3.71 | Tabellenzeilen einzeilig (`white-space: nowrap`, feste Zeilenhöhe, `_lines` und `resetRowHeights` entfallen); Doppelklick auf die Spalte Typ öffnet die Typauswahl (`typeCol` in `window.mllDbl`, `on_dblmacro`) |
+| `proggen/M20_PageEvents_a_Functions.py` | 1.11 | `Select_Typ_by_Dialog`: Adressspannen „5 - 8“, danach Adresse, Testtasten, Startwert aktualisieren, `EnableEvents` per `finally` |
+| `install/BETATEST_Checkliste.md` | 2.75 | Punkt 222 |
+
+## 3.70 (2026-11-17)
+
+Meldung: Nach „Verwerfen“ im Dialog „Zwischengespeicherter Stand gefunden“ ließ sich Spalte 2 (Haken) nicht bedienen. Im Protokoll (3.65) ist keine Auswahl „Verwerfen“ und kein verworfener Klick zu sehen; die Ursache ist nicht gesichert. Vorsorglich: Spaltennummern nach Verwerfen neu einlesen, Protokolleinträge für Auswahl und ignorierte Klicks (Programm beschäftigt). Gefunden: `M18_Save_Load` setzte `Col_from_Sheet` nur lokal. Außerdem Fehlerflut „client has been deleted“ im Protokoll, wenn die Browserseite beim Kompilieren neu geladen wird.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 3.70 | Protokoll der Auswahl im Wiederherstellungsdialog; nach Verwerfen `M25.Col_from_Sheet` zurücksetzen; Protokoll bei ignoriertem Klick |
+| `proggen/M18_Save_Load.py` | 1.05 | `M25.Col_from_Sheet` wirklich zurücksetzen |
+| `_web/web_log.py` | 1.07 | `RuntimeError` bei gelöschtem Client abfangen |
+| `install/BETATEST_Checkliste.md` | 2.74 | Punkt 221 |
+
+## 3.69 (2026-11-16)
+
+Meldung eines Anwenders: Der Farbtest steuert nur LEDs bis Nummer 19 an. Die Grenze kommt aus `get_maxLEDcnt()`: Summe der LEDs je Kanal aus der Startmeldung der Lichtmaschine; ohne auswertbare Startmeldung gilt der gespeicherte Wert `maxLEDcount` oder 20 (also höchste Nummer 19). Im Protokoll fehlten die Antworten der Lichtmaschine; die Ursache ließ sich daher nicht klären. Jetzt protokolliert das Programm die empfangenen Zeilen und die Auswertung der Startmeldung.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_serial.py` | 1.11 | Empfangene Zeilen (DEBUG), Startmeldung mit LEDs je Kanal, Summe, Version (INFO) |
+| `_web/web_colorcheck.py` | 1.07 | Protokolleintrag, wenn LED-Nummer oder Anzahl begrenzt wird |
+| `webmobaledlib.py` | 3.69 | Version |
+
+## 3.68 (2026-11-16)
+
+Fehler 3.42: Die Spalte der Tasten passte sich nicht an die Tastenzahl an; zusätzliche Tasten lagen in der nächsten Spalte und ließen sich nicht bedienen. Im Excel-Original vergrößert `Update_TestButtons` die Spalte (`1 + PixelOffset + ButtonCount * Height`); beim Portieren war dieser Block auskommentiert (`#*HL`). Jetzt wird die Spaltenbreite in Pixeln (`tksheet.column_width`) angehoben und die Shapes rechts davon mit `moveShapesHorizontal` verschoben (wie beim Ziehen der Spaltenbreite). Die Breite wird beim nächsten `show()` an den Browser gesendet.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `proggen/M20_PageEvents_a_Functions.py` | 1.10 | Spalte der Tasten automatisch verbreitern |
+| `install/BETATEST_Checkliste.md` | 2.73 | Punkt 220 |
+| `webmobaledlib.py` | 3.68 | Version, REQUIRED_FILES |
+
+## 3.67 (2026-11-16)
+
+Fehler 3.65: In den Parameterdialogen von Blink3 (Pausenzeit, Aktive Zeit) und AndreaskrLT_RGB (Dauer Lampentest, Einschaltzeit) wurde die vorgeschlagene Eingabe „0.5 Sek“ mit „Der Parameter ist zu klein, Minimal 1“ abgelehnt. Ursache: `Check_Time_String` rechnete mit `P01.val`, das auf ganze Zahlen abschneidet (0.5 → 0, daher 0 ms). Bei Parametern mit Minimum 0 (RandWelding, MonoFlop) fiel das nicht auf, bei Minimum 1 schon. Zweiter Fehler: `Check_Limit_to_MinMax` und `Check_Time_String` liefern bei einem Fehler `None`, die Aufrufer prüften `== False`; ein Wert außerhalb des Bereichs wurde nach der Meldung trotzdem übernommen.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `proggen/Userform_Other.py` | 1.03 | float statt `P01.val`, Rundung auf ms, Komma als Dezimalzeichen (im Makro Punkt), `not` statt `== False` |
+| `install/BETATEST_Checkliste.md` | 2.72 | Punkt 219 |
+| `webmobaledlib.py` | 3.67 | Version, REQUIRED_FILES |
+
+## 3.66 (2026-11-16)
+
+Vorschlag eines Anwenders: einheitliche Namen der Firewall-Regeln. Die Regel für den Server heißt jetzt `webMLL Server 8080` (bisher `webMobaLedLib 8080`), die in der Beschreibung genannte Regel für OTA `webMLL OTA 32323` (bisher `MLL OTA`). Regeln mit dem alten Namen `webMobaLedLib*` werden weiter erkannt, beim Einrichten ersetzt und beim Entfernen gelöscht. Die OTA-Regel legt das Programm nicht an; sie steht nur in Anleitung, Wiki und im Hinweistext.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_firewall.py` | 1.04 | `RULE_PREFIX = "webMLL Server"`, `LEGACY_PREFIXES`, Einrichten/Entfernen/Erkennen für beide Namen |
+| `_web/web_esp32_ota.py` | 1.05 | Hinweistext mit `webMLL OTA 32323` |
+| `csv/Web_Languages.csv` | – | derselbe Hinweistext in allen Sprachen |
+| `install/ANLEITUNG_Installation.md` | 3.89 | Regelnamen |
+| `install/BETATEST_Checkliste.md` | 2.71 | Regelname in Punkt 41 |
+| Wiki `wz_netzwerk` 1.04, `ota` 1.02 | – | Regelnamen |
+| `webmobaledlib.py` | 3.66 | Version, REQUIRED_FILES |
+
+## 3.65 (2026-11-16)
+
+Tabelle reparieren setzte bei allen Zeilen mit `// ...` (Next_LED, Reserve LEDs, Set_LEDNr, Set_Switch*_InpLst, Set_LED_OutpPinLst ...) den Namen „Muster Pattern_Configurator“ samt Pattern-Symbol. Ursache: `Find_Macro_in_Lib_Macros_Sheet` (Original und `fast_paths`) entfernt vor der Suche das Präfix `// `, die Einträge in Lib_Macros (Spalte FindN) tragen es aber (`// Next_LED(`). Die Zeile wurde nie gefunden; `FindMacro_and_Add_Icon_and_Name` nahm dann den Ersatzweg für `//`. Nachprüfung mit `csv/Lib_Macros.csv`: vorher keine der 13 `//`-Zeilen gefunden, jetzt alle.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `fast_paths.py` | 1.01 | Suche zuerst mit `// `-Präfix, danach wie bisher ohne |
+| `webmobaledlib.py` | 3.65 | Version, `fast_paths.py` in REQUIRED_FILES |
+
+## 3.64 (2026-11-16)
+
+Log „Kompilieren für ESP32 geht nicht“: Der Compiler meldet `LEDs_AutoProg.h:834: 'r' was not declared in this scope`. In der Headerdatei steht in Zeile 834 nur ein einzelnes `r` (Kommentar „Single LED Connector überspringen“). Das `r` stammt aus der Tabelle des Anwenders (Zelle der Makrospalte, vermutlich versehentlich getippt); es ist kein Makro der Bibliothek und kein Fehler des Boards. Die Folgefehler (`Macros.h:667`, `}` in Zeile 873) entstehen daraus.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `proggen/M06_Write_Header_SW.py` | 1.06 | `_Is_Stray_Token`: Zeile aus nur einem kurzen Bezeichner (≤3 Zeichen, nicht nur Großbuchstaben, ohne Klammer) in der Makrospalte wird vor dem Kompilieren mit Blatt und Zeile gemeldet; Zelle wird markiert |
+| `webmobaledlib.py` | 3.64 | Version |
+
+## 3.63 (2026-11-16)
+
+Raspberry Pi (PlatformIO, kein ARDUINO IDE): Das Bauen von `libMobaLedLibWrapper.so` scheiterte mit „MobaLedLib.h:41: fatal error: FastLED.h: No such file or directory“. Die Stub-Datei `simulator_linux/Arduino-stub/FastLED.h` war dort nicht wirksam (vermutlich nicht angekommen; Dateinamen `FastLED.h` und `FASTLed.h` unterscheiden sich nur in der Schreibweise).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `simulator_linux/build_simulator_linux.sh` | 1.01 | erzeugt `FastLED.h` und `FASTLed.h` selbst in einem Hilfsordner (`-I`), prüft die Dateien von `Arduino-stub` und meldet fehlende mit Namen (Exit 4); getestet mit entferntem `FastLED.h`/`FASTLed.h` unter x86_64 |
+| `webmobaledlib.py` | 3.63 | Version |
+
+## 3.62 (2026-11-16)
+
+Raspberry Pi: Beim Übersetzen für den Simulator kam „The FastLED library must be installed …“ (die Zeile `#include <FastLED.h>` aus `LEDs_AutoProg.h`, nur ohne `CONFIG_ONLY`). Vermutung: Die mitgelieferte `Configuration/Configuration.cpp` bindet mit Windows-Pfaden (`..\LEDs_AutoProg\...`) ein.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `proggen/M39_Simulator.py` | 1.11 | `__Create_Compile_Script_Linux` schreibt `Configuration/Configuration_linux.cpp` (`#define CONFIG_ONLY`, `<Arduino.h>`, optional `MP3.h`, `LEDs_AutoProg.h` mit Schrägstrichen, dieselbe `main` wie die Windows-Datei) und übersetzt diese |
+| `webmobaledlib.py` | 3.62 | Version, `REQUIRED_FILES` |
+
+Nicht auf dem Pi nachgestellt; ob die Ursache so stimmt, zeigt der nächste Lauf.
+
+## 3.61 (2026-11-16)
+
+Auf dem Raspberry Pi (arm64) gibt es keine fertige `libMobaLedLibWrapper.so`; sie wird beim ersten Mal gebaut (`_so_file`). Fehlschläge wurden nur per Debug.Print gemeldet, die Meldung war „Der Simulator ist nicht verfügbar“ ohne Grund.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `proggen/M39_Simulator.py` | 1.10 | `_so_file` prüft Skript, Bibliothek `libraries/MobaLedLib/src/MobaLedLib.cpp` und `g++` und merkt den Grund (`_sim_problem`); er steht im Log-Fenster und in einer Meldung (nur deutsch) |
+| `webmobaledlib.py` | 3.61 | Version, `REQUIRED_FILES` |
+
+## 3.60 (2026-11-16)
+
+Fehler: Bei „Setup simulieren“ blieb das Fenster „Kompilieren und Hochladen“ mit der Kopfzeile „Preparation of Program Started“ stehen und wurde nicht beendet. Ursache: Das Fenster schließt sich nur, wenn die letzte Ausgabe mit dem Merkmal „OK“ gemeldet wurde (`WebLog.last_result`); der Simulatorweg (`M39.UploadToSimulator`) schrieb nichts ins Log.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `proggen/M39_Simulator.py` | 1.09 | `_Log`: Fortschritt „Konfiguration wird für den Simulator übersetzt …“ und Ergebnis (OK: das Fenster schließt sich nach einigen Sekunden; Fehler: bleibt offen, auch wenn der Simulator nicht verfügbar ist) |
+| `csv/Web_Languages.csv` | – | 4 neue Texte in sechs Sprachen |
+| `webmobaledlib.py` | 3.60 | Version, `REQUIRED_FILES` |
+
+## 3.59 (2026-11-16)
+
+Auf Vorschlag aus dem Forum: Die Auswahl Kein/Nur/Mit Simulator war zu groß. Stattdessen ein Knopf **Setup simulieren** neben **Setup übertragen**; er entspricht „Setup übertragen“ mit „Nur Simulator“.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 3.59 | Auswahlfeld (`sim_row`, `sim_select`, `on_sim_mode`) entfernt (als Kommentar stehen geblieben); neuer Knopf `Btn_Simulate.png` in `toolbar_buttons`; `simulate_setup` setzt `M39.Set_Sim_Override(3)` für den Lauf von `upload_to_ARDUINO_Button_click` und hebt es danach auf (`finally`); `apply_sim_select` blendet den Knopf mit der Option Simulator anzeigen ein oder aus |
+| `proggen/M39_Simulator.py` | 1.08 | `Set_Sim_Override`; `Get_Sim_Mode` mit der Option Simulator anzeigen: Override, sonst 0 (die gespeicherte Auswahl `SimModeWeb` wird ignoriert, damit ein früher gewählter Wert nicht unsichtbar weiterwirkt) |
+| `_web/web_tabs.py` | 1.19 | Hinweis der Option Simulator anzeigen |
+| `images_btn/Btn_Simulate.png`, `images_btn/Btn_Send_to_ARDUINO.png` | – | neue Symbole (Würfel mit Pfeil, Haus mit Pfeil) |
+| `csv/Web_Languages.csv` | – | 3 neue Texte (Knopf, Tooltip, Hinweis), 4 entfernt (Kein/Nur/Mit Simulator, Tooltip der Auswahl) |
+| `install/ANLEITUNG_Installation.md` (und PDF) | 3.86 | Abschnitt 2.14a |
+| `install/BETATEST_Checkliste.md` (und PDF) | 2.68 | Punkte 211–214 |
+| Wiki | – | `simulator` 1.01, `pg_arduino` 1.12, `wz_programm_einstellungen` 1.11, `seiten_update` |
+
+Folgen: Der Simulator öffnet sich nicht mehr beim Programmstart (`Sim_Autostart` liefert ohne gespeicherte Auswahl False). Die Umschalttaste kehrt weiter die Betriebsart um (Shift beim Klick auf Setup simulieren = zur Lichtmaschine).
+
+## 3.58 (2026-11-16)
+
+Fehlermeldung eines Raspberry-Pi-Anwenders (ARDUINO IDE, kein PlatformIO): „Ungültige Arduino Pin Nummer: Der Pin '27' ist nicht gültig im Set_LED_OutpPinLst(27 32 16 14 18 19 23 0)“. Die Pins sind ESP32-Pins und in `Platform_Parameters.csv` für ESP32 erlaubt; abgelehnt werden sie, weil `M02a.Get_BoardTyp()` AM328 liefert (die Build-Optionen der Zentrale enthalten kein `esp32`). Im Protokoll zeigt der Optionsdialog immer `L: 5` (Typ von Arduino IDE) und beim Öffnen die Meldung „Unbekanntes Board“ mit der ESP32-Option: Der Dialog wählt ESP32 nur, wenn `M37.ESP32_Lib_Installed()` oder PlatformIO gilt. Wo genau die Build-Option verloren geht, ist aus dem Protokoll nicht eindeutig (Verdacht: Port-Erkennung oder Optionsdialog); nicht nachgestellt.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `proggen/M06_Write_Header_SW.py` | 1.05 | `_Board_Hint`: Die Pinmeldung nennt die eingestellte Zentrale und die Zentrale(n), zu denen der Pin passt; WARNING im Protokoll mit den Build-Optionen der Zentrale |
+| `proggen/UserForm_Options.py` | 1.05 | ESP32 eingetragen, Paket der IDE fehlt und kein PlatformIO: eigene Meldung „ESP32-Paket fehlt“ statt „Unbekannte Board Option“ |
+| `csv/Web_Languages.csv` | – | 5 neue Texte in sechs Sprachen (1333 Einträge) |
+| `webmobaledlib.py` | 3.58 | Version, `REQUIRED_FILES` |
+
+## 3.57 (2026-11-16)
+
+Fehler: Beim Zugriff über `http://<raspi>:Port` (Edge vom PC) gibt es `navigator.clipboard` nicht (nur in sicheren Kontexten), Einfügen meldete „Browser verweigert Zugriff“.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 3.57 | `CLIP_JS` (`window.mllClipSet`/`mllClipGet`): merkt den kopierten Text in der Seite (und `sessionStorage`), schreibt zusätzlich in die System-Zwischenablage (sicherer Kontext oder `execCommand('copy')`); Einfügen liest die System-Zwischenablage, sonst den gemerkten Text. Tastenkürzel und Kontextmenü umgestellt |
+| `_web/web_pattgen.py` | 1.24 | dieselbe Umstellung im Timeline Editor |
+
+| `install/ANLEITUNG_Installation.md` (und PDF) | 3.85 | neuer Abschnitt 8.1 „https für den Raspberry Pi“ (Caddy mit `tls internal`, Edge-Flag als schnelle Lösung, `MLL_HOST=127.0.0.1`); Verweis im Absatz „Sicherheit“ |
+| `install/BETATEST_Checkliste.md` (und PDF) | 2.67 | Punkt 216 |
+| Wiki `raspberrypi` | 1.03 | Abschnitt „https einrichten (optional)“ |
+
+Entscheidung: https direkt im Programm (ssl_certfile) wurde nicht gebaut (Risiko: Zertifikatswarnung, Ablauf, Start schlägt bei Fehler fehl; Nutzen gering).
+
+Grenze: Text aus anderen Programmen lässt sich über http nicht einfügen (Browser-Vorgabe); mit https oder `localhost` geht es.
+
+## 3.56 (2026-11-15)
+
+Auswahl **Kein Simulator / Nur Simulator / Mit Simulator** über der Tabelle (Feld im Stil des Suchfelds). Sichtbar nur mit der neuen Option „Simulator anzeigen“ (Programm Einstellungen, Spezialeinstellungen). Mit der Option gilt die Auswahl statt `SimAutostart` der Konfigurationsseite (die wird dann ignoriert). Werte: Kein = 0, Nur = 3, Mit = 2 (wie `SimAutostart`); gespeichert als `SimModeWeb`. Wahl „Kein“ schließt den Simulator, „Nur“ und „Mit“ öffnen ihn (sofern die Konfiguration schon übersetzt ist, sonst öffnet er sich bei „Zum Arduino schicken“). Beim Programmstart öffnet sich der Simulator bei „Nur“ und „Mit“. Die Umschalttaste ist für die Web-Oberfläche nicht nötig. Nicht auf Windows und nicht im Browser geprüft.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 3.56 | Feld `sim_select` in der Werkzeugleiste, `apply_sim_select`, Versionsprüfung |
+| `proggen/M39_Simulator.py` | 1.07 | `Sim_Select_Enabled`, `Get_Sim_Mode`, `Set_Sim_Mode`, `Sim_Autostart` |
+| `proggen/M06_Write_Header.py` | 1.08 | Betriebsart über `M39.Get_Sim_Mode()` |
+| `proggen/M08_ARDUINO.py` | 1.20 | Betriebsart über `M39.Get_Sim_Mode()` |
+| `proggen/F00_mainbuttons.py` | 1.02 | Start über `M39.Sim_Autostart()` |
+| `proggen/DieseArbeitsmappe.py` | 1.04 | Start über `M39.Sim_Autostart()` |
+| `_web/web_tabs.py` | 1.18 | Option `ShowSimulator` |
+| `csv/Web_Languages.csv` | - | 6 neue Texte |
+
+---
+
+## 3.55 (2026-11-15)
+
+LED-Simulator unter Linux. Grundlage: Quelltext von `MobaLedLibWrapper` (MobaLedLib_Docu, Tools/MobaLedLib.Win, J. Winkler, LGPL). Die Simulation (Bibliothek MobaLedLib mit Arduino-Attrappen) ist unverändert; das Win32-Fenster entfällt, die Farben holt Python und zeichnet sie im Browser. Dieselbe Schnittstelle wie die Windows-DLL (Version 1.01.00), zusätzlich `GetLedColors`.
+
+Geprüft (hier, Linux x86_64): Bibliothek baut; Laden von `LEDConfig.bin`/`AddressConfig.bin`, `SetInput`, `SendToSimulator`, Farben, Öffnen/Schließen über `M39`; Erzeugen und Ablauf des Übersetzungsskripts mit Attrappen für die AVR-Werkzeuge. **Nicht geprüft:** Übersetzen mit den echten AVR-Werkzeugen (PlatformIO), die Anzeige im Browser, ARM (Raspberry Pi).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 3.55 | VERSION; `web_simulator.attach()` in `build_page` |
+| `proggen/M39_Simulator.py` | 1.06 | Linux: lädt `Configuration/linux_<arch>/libMobaLedLibWrapper.so` (baut sie bei Bedarf mit g++), `sim_frame()` für die Anzeige, `build_linux.sh` (avr-g++ aus PlatformIO `toolchain-atmelavr` + `framework-arduino-avr`, sonst Arduino IDE oder Suchpfad; auch `MLL_AVR_BIN`, `MLL_AVR_PLATFORM`), Meldung mit den letzten Zeilen bei Fehlern |
+| `_web/web_simulator.py` | 1.00 | Neu: schwebendes Feld mit Canvas, Zeitgeber 100 ms, Schalter LED-Nummern und S-Verdrahtung |
+| `simulator_linux/` | 1.00 | Neu: `wrapper_linux.cpp`, `Arduino-stub/` (für Linux angepasst), `build_simulator_linux.sh` (baut aus `libraries/MobaLedLib/src`) |
+| `Configuration/linux_x64/libMobaLedLibWrapper.so` | - | Fertig gebaute Bibliothek (x86_64) |
+
+---
+
+## 3.54 (2026-11-15)
+
+1. Simulator aktiv, im Blatt steht ein alter Anschluss, ARDUINO nicht angeschlossen: Die Verbindungsabfrage kam bei jeder Testtaste. Jetzt einmal je eingetragenem Anschluss; danach wirken die Testtasten nur auf den Simulator, bis eine Verbindung besteht (dann gilt die Abfrage wieder).
+2. Das Simulatorfenster blieb beim Beenden stehen (in Excel schließt es mit Excel). Jetzt schließt es beim Beenden (`atexit` und `Workbook_BeforeClose`). Nicht auf Windows getestet.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 3.54 | VERSION |
+| `proggen/M32_DCC.py` | 1.04 | `_sim_declined_port`: Abfrage nur einmal, danach `True` (nur Simulator) |
+| `proggen/M39_Simulator.py` | 1.05 | `atexit`-Handler schließt das Fenster nach `OpenSimulator` |
+| `proggen/DieseArbeitsmappe.py` | 1.03 | `Workbook_BeforeClose` schließt den Simulator |
+| `ExcelAPI/XLA_Application.py` | 1.20 | `Evt_Workbook_BeforeClose` ruft das Ereignis tatsächlich auf (vorher nur nachgeschlagen) |
+
+---
+
+## 3.53 (2026-11-15)
+
+Simulator (Option 2 oder 3) ohne angeschlossenen ARDUINO: Jede Testtaste fragte nach der Verbindung. In `SendDCCAccessoryCommand` war `M39.IsSimulatorActive` ohne Klammern (immer wahr) und `port_is_busy` statt „kein Port verfügbar“ (VBA: `val(Port) <= 0`). Nicht auf Windows getestet.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 3.53 | VERSION |
+| `proggen/M32_DCC.py` | 1.03 | `IsSimulatorActive()` wird aufgerufen; Bedingung `not port_is_available(...)`: bei aktivem Simulator ohne Port kein Verbinden, die Taste wirkt nur auf den Simulator |
+
+---
+
+## 3.52 (2026-11-15)
+
+`shift_pressed` in `Create_HeaderFile` wurde nie wahr: Die Knopfleiste bindet keine Umschalt-Variante (`shift_command` auskommentiert), und `GetAsyncKeyState` wertete `shift_key` nur mit geladenem `keyboard`-Modul aus. Zusätzlich war die Bedingung für `SimAutostart=3` gegenüber dem VBA umgekehrt. Nicht auf Windows getestet.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 3.52 | VERSION |
+| `mlpyproggen/Prog_Generator.py` | 1.09 | Jeder Knopf der Leiste merkt den Zustand der Umschalttaste beim Drücken (`P01.shift_key`) |
+| `ExcelAPI/XLA_Application.py` | 1.19 | `GetAsyncKeyState(VK_SHIFT)` liefert `shift_key` auch ohne `keyboard`-Modul |
+| `proggen/M06_Write_Header.py` | 1.07 | `VK_SHIFT` (statt `__VK_SHIFT`), Wert als bool; Option 3: Simulator nur ohne Umschalttaste (wie VBA) |
+
+---
+
+## 3.51 (2026-11-15)
+
+Programmstart mit `SimAutostart=1`, aber ohne bereits übersetzte Simulator-Dateien: `LEDConfig.bin` fehlte, `__LoadFile` schloss den nie geöffneten Kanal (KeyError) und lieferte `None` statt eines Paares. Nicht auf Windows getestet.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 3.51 | VERSION |
+| `proggen/M39_Simulator.py` | 1.04 | `__LoadConfiguration` prüft die drei Dateien vorher und liefert `False`; `OpenSimulator` beendet sich dann ruhig; `__LoadFile` schließt nicht geöffnete Kanäle nicht mehr |
+
+---
+
+## 3.50 (2026-11-15)
+
+Fehler beim Start im Simulator: `VBFiles.openFile` übergab auch bei Binärdateien (`rb`) `newline` und `encoding`, Python lehnt das ab (Fehler beim Öffnen von `LEDConfig.bin`). Nicht auf Windows getestet.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 3.50 | VERSION, Versionsprüfung |
+| `vb2py/vbclasses.py` | 1.04 | `openFile`: Binärmodus ohne `newline`/`encoding` |
+
+---
+
+## 3.49 (2026-11-15)
+
+Simulator (Windows, `MobaLedLibWrapper.dll`): `proggen/M39_Simulator.py` an den neueren VBA-Code angepasst. Nicht getestet (DLL nur unter Windows).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 3.49 | VERSION |
+| `proggen/M39_Simulator.py` | 1.03 | `CreateEx` (Config + L2VConfig.bin) statt `Create`; Wrapper-Version 101 statt 100; `SimLedsY` ab 1; Compile-Skript erzeugt zusätzlich `L2VConfig.bin` (`.MLLL2VConfig`); `IsLEDWindowVisible()` wird aufgerufen (vorher immer wahr); `RECT._fields_` (vorher `__fields__`, Fensterposition wurde nie gelesen); `"silent"`-Prüfung im Skript; leere Datei = 1 Nullbyte wie VBA |
+
+---
+
+## 3.48 (2026-11-15)
+
+Werkzeugleiste: 12 überarbeitete Symbole im Ordner `images_btn` (Dateinamen und Größe unverändert, kein Code geändert). Unverändert blieben `View_table`, `View_rail`, `View_both` und `Btn_Delete_Row`.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 3.48 | VERSION |
+| `images_btn/` | - | `Btn_Color_Row.png`, `Btn_Copy_Row.png`, `Btn_Delete_Table.png`, `Btn_Dialog.png`, `Btn_Help.png`, `Btn_Hide_Unhide.png`, `Btn_Insert_Row.png`, `Btn_Move_Row.png`, `Btn_New_Table.png`, `Btn_Options.png`, `Btn_Send_to_ARDUINO.png`, `Btn_Unhide_all.png` |
+
+---
+
+## 3.47 (2026-11-15)
+
+Linux-Server ohne Bildschirm: `install/install_linux.sh --server` (Anwendervorschlag: eigenes Installationsskript mit Webfreigabe und Passwort). Das Skript fragt das Passwort zweimal ab (oder `--password PW` bzw. `MLL_SERVER_PASSWORD`; ohne Eingabemöglichkeit und ohne Passwort bricht es ab, nie das Standardpasswort), prüft es mit `web_password.validate_new`, speichert es mit `web_password.set_password` (nur verschlüsselt, Datenordner des Installierenden = Datenordner des Dienstes) und richtet den Dienst `mobaledlib-web` ein (`/etc/mobaledlib-web.env` mit `MLL_HOST=0.0.0.0`, `MLL_PORT`, `MLL_USER`; Einheit wie `pi/mobaledlib-web.service`, aber `User` = Installierender, `xvfb-run` falls vorhanden; `xvfb` wird auf apt-Systemen mitinstalliert). Kein Symbol, kein Menüeintrag. Die Firewall wird nicht verändert (Hinweis am Ende). Optionen `--port N`, `--no-service`; die Optionen `--password`, `--port`, `--no-service` ohne `--server` werden abgelehnt. In der Sandbox geprüft: Passwortabfrage und -prüfung, Fehlerfälle, erzeugte Einheit (ohne systemd, `sudo` und `systemctl` ersetzt); der echte Dienst ist nicht getestet.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 3.47 | VERSION |
+| `install/install_linux.sh` | 1.09 | Option `--server` mit `--password`, `--port`, `--no-service` |
+| `install/ANLEITUNG_Installation.md` | 3.83 | Abschnitt 5.1 Server ohne Bildschirm |
+| `install/BETATEST_Checkliste.md` | 2.65 | Punkt 210 |
+| Wiki | linux 1.03, wz_netzwerk 1.03, seiten_update 1.02 | Server ohne Bildschirm |
+
+---
+
+## 3.46 (2026-11-15)
+
+Grafik, Ansicht Ketten: Haken **Verteiler** (aus = Kette wie bisher) und **Stecker nebeneinander** (Stecker im Rechteck nebeneinander mit Pfeil) in der Kopfzeile, je Blatt in `layout["vt"]` und `layout["vt_side"]` (Vorgabe an), mit der Arbeitsmappe gesichert (wie `all_rows`).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 3.46 | Aktionen `vt`, `vt_side`, Modell `vt_on`/`vt_side` |
+| `headless/headless_graph_layout.py` | 1.06 | `vt`, `vt_side` im Layout |
+| `_web/web_graph.py` | 1.16 | zwei Haken in der Kopfzeile |
+| `_web/mll_graph.js` | 1.16 | `vt_on`, `vt_side` (Klasse `side`) |
+| `csv/Web_Languages.csv` | - | 4 Zeilen |
+| `install/ANLEITUNG_Installation.md` | 3.82 | Haken beschrieben |
+| `install/BETATEST_Checkliste.md` | 2.64 | Punkt 209 |
+
+---
+
+## 3.45 (2026-11-15)
+
+Grafik, Ansicht Ketten: **Verteiler**. Je Verteilernummer (Spalte Verteiler-Nr., V##) ein Rechteck mit je einem Feld je Stecker (Spalte Stecker-Nr.). Festlegungen: Reihenfolge der Stecker = Reihenfolge der Tabelle; Zeilen ohne Nummer zwischen Zeilen desselben Verteilers liegen im Rechteck (`fill_vt_gaps`, erben den Stecker davor, ein Rechteck von der ersten bis zur letzten Zeile); ID-Zeilen (Text statt V## in Verteiler-Nr., z.B. IRM-60.1 / F1 (F1,25)) beschriften das Rechteck des darunter folgenden Verteilers (nächste ID-Zeile oberhalb der ersten Zeile des Verteilers, auch wenn die ID-Zeile inaktiv ist); keine Prüfung auf mehrere Kanäle; kein Rechteck in der Anlagenansicht. Die LED-Nummerierung bleibt unverändert.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 3.45 | VERSION, REQUIRED |
+| `headless/headless_graph.py` | 1.06 | Knoten `vt`/`plug`, `fill_vt_gaps`, `model["vtinfo"]` |
+| `_web/web_graph.py` | 1.15 | `vtinfo`, `vt_texts` im Modell der Ansicht |
+| `_web/mll_graph.js` | 1.15 | Rechteck und Stecker-Felder in `chainHtml` |
+| `csv/Web_Languages.csv` | - | 3 Zeilen (Verteiler, Stecker, Signal zurück) |
+| `install/ANLEITUNG_Installation.md` | 3.81 | Verteiler in der Grafik |
+| `install/BETATEST_Checkliste.md` | 2.63 | Punkt 208 |
+
+---
+
+## 3.44 (2026-11-15)
+
+1. Anfänger Modus: Der Doppelklick auf Name und Beleuchtung (Makroauswahl) ist immer eingeschaltet (`get_dblclick` prüft `BeginnerMode`; der gespeicherte Schalter bleibt unverändert).
+2. Anfänger Modus: zusätzlich ausgeblendet werden die Reiter Servo Einstellungen (`servo1`), Sound Test, DCC Keyboard, Serial Monitor, ARDUINO Einstellungen (`BEGINNER_HIDDEN_TABS`). DM Servo Einstellungen hängt weiter an seiner Option.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 3.44 | VERSION, REQUIRED |
+| `_web/web_tabs.py` | 1.17 | `BEGINNER_HIDDEN_TABS` erweitert, Hinweistext |
+| `_web/web_layout.py` | 1.13 | `get_dblclick` im Anfänger Modus immer wahr |
+| `csv/Web_Languages.csv` | - | Hinweistext Anfänger Modus (7 Sprachen) |
+| `install/ANLEITUNG_Installation.md` | 3.80 | Anfänger Modus |
+| `install/BETATEST_Checkliste.md` | 2.62 | Punkt 207 |
+
+---
+
+## 3.43 (2026-11-15)
+
+1. Der Reiter und alle sichtbaren Texte **Patterngenerator** heißen jetzt **Timeline Editor** (Reiter, Formular „Anschließend zurück zum Timeline Editor“, Meldungen, Hinweistexte, Katalog in allen Sprachen, Anleitung, Checkliste, Wiki-Seiten). Die Adresse `/TimelineEditor` ist neu, `/Patterngenerator` bleibt gültig (`TAB_URLS`). Dateinamen, Klassennamen (`HeadlessPatternGeneratorPage`), Code-Kommentare, Protokolltexte und die Wiki-Seitenkennung `patterngenerator` bleiben unverändert; ältere Einträge dieser Datei behalten den alten Namen.
+2. Reiter OTA: Knopf **Hilfe** (öffnet `https://wiki.mobaledlib.de/anleitungen/webmobaledlib/ota` in einem neuen Tab).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 3.43 | Reiter-Beschriftung und Fehlertext Timeline Editor, REQUIRED |
+| `_web/web_tabs.py` | 1.16 | `TAB_URLS` (TimelineEditor + alte Adresse), Titel, Hinweistext |
+| `_web/web_form_exchange.py` | 1.02 | Texte Timeline Editor |
+| `headless/headless_pattgen.py` | 1.22 | `tabname`, `title`, Statusmeldung |
+| `_web/web_esp32_ota.py` | 1.04 | Knopf Hilfe (`HELP_URL`) |
+| `csv/Web_Languages.csv` | - | 5 Zeilen: Name Timeline Editor in allen Sprachen |
+| `install/ANLEITUNG_Installation.md` | 3.79 | Name, Adresse |
+| `install/BETATEST_Checkliste.md` | 2.61 | Name, Punkt 206 |
+| `install/UEBERSETZEN.md` | +0.01 | Name |
+
+---
+
+## 3.42 (2026-11-14)
+
+Automatisches Verbinden (Reiter Farb Test, Servo, Sound, Direktmodus, DCC-Tastatur u. a.): `HeadlessSerial.connect(port=None, wlan=None)` versucht ohne Anschlussangabe zuerst die für das aktive Blatt eingetragene ESP32-WLAN-Verbindung (`wifi_target_provider` liefert Adresse und Passwort, wenn Board ESP32, WLAN und OTA an, Adresse/Hostname und Passwort gesetzt sind), danach USB. `wlan=False` erzwingt USB; der Knopf „Mit ARDUINO verbinden“ fragt weiter WLAN oder USB und verbindet bei „USB“ nur per USB. Ist der ESP32 nicht erreichbar, dauert der WLAN-Versuch bis zu 5 s, dann folgt USB.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_serial.py` | 1.10 | `connect(wlan=...)`, `wifi_target_provider`; `connect_if_not_connected` versucht WLAN auch mit Anschlussangabe (Testtasten schlugen mit „Fehler beim Öffnen des Ports“ fehl, weil M32_DCC den USB-Port übergibt) |
+| `webmobaledlib.py` | 3.42 | Provider `wifi_target`, `_connect_usb_command`, REQUIRED |
+
+---
+
+## 3.41 (2026-11-14)
+
+Reiter OTA: Knopf umbenannt in „Minimale WLAN Firmware per USB hochladen“, Reihenfolge der Knöpfe: 1. OTA-Einstellungen speichern, 2. Minimale WLAN Firmware per USB hochladen, 3. WLAN über USB einrichten, 4. Verbindung testen (`web_esp32_ota.py` 1.03, `Web_Languages.csv`).
+
+
+Fehler: Der Knopf „Minimale Firmware per USB hochladen“ meldete immer „Es läuft noch ein Vorgang – bitte warten“. Ursache: Das Formular ARDUINO Einstellungen läuft selbst über `run_command` und hält `state["busy"]`; der Knopf rief `run_command` erneut auf. Jetzt eigener Ablauf (`run.io_bound` mit eigener Sperre `minimal_state`). Die Meldung „OTA-Einstellungen gespeichert“ beim Klick ist beabsichtigt (der Knopf speichert zuerst) und stört nicht.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 3.41 | `minimal_firmware` ohne `run_command` |
+
+---
+
+## 3.40 (2026-11-14)
+
+WLAN-Einstellungen des ESP32 gehören jetzt zum Blatt (jedes Blatt kann ein anderes Board meinen). Blatt-Attribut `esp32_wlan` (wifi, ota, hostname, address), gesichert in der Arbeitsmappe unter `Esp32Wlan` (wie `TabColors`); „Blatt kopieren“ übernimmt die Werte. Das Passwort steht nie in der Arbeitsmappe, sondern lokal in `esp32-ota.json` unter `passwords` je Hostname. Blätter ohne eigene Werte übernehmen die alten Einstellungen der Installation als Vorgabe (Adresse nicht). Das alte Einzelpasswort wird dem damaligen Hostnamen zugeordnet.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `headless/headless_esp32_ota.py` | 1.08 | `sheet_provider`, `load_settings`/`save_settings` je Blatt, Passwörter je Hostname |
+| `ExcelAPI/XLA_Application.py` | 1.18 | `Esp32Wlan` sichern (SaveWorkbook) und laden (apply_sheet_layout) |
+| `webmobaledlib.py` | 3.40 | Provider = aktives Blatt, Kopie übernimmt Werte, REQUIRED |
+
+---
+
+## 3.39 (2026-11-14)
+
+Reiter OTA: Knopf „Minimale Firmware per USB hochladen“. Er schaltet WLAN und OTA ein (Passwort nötig), speichert die Einstellungen, ersetzt für den Build die `LEDs_AutoProg.h` durch eine minimale Konfiguration (DCC-Adresse 100, `RGB_Heartbeat(0)`, 1 WS2812 an Pin 27), kompiliert und lädt per USB. Danach wird die eigene `LEDs_AutoProg.h` wiederhergestellt. Anschließend „WLAN über USB einrichten“. Nicht auf Hardware geprüft.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `headless/headless_esp32_ota.py` | 1.07 | `minimal_header()` (Vorlage aus einer erzeugten Header-Datei, gekürzt) |
+| `_web/web_esp32_ota.py` | 1.02 | Knopf, `minimal_firmware_handler` |
+| `webmobaledlib.py` | 3.39 | `minimal_firmware()` (Build mit temporärer Header-Datei, USB-Upload, Wiederherstellung), VERSION, REQUIRED |
+| `csv/Web_Languages.csv` | - | 6 neue Texte |
+
+---
+
+## 3.38 (2026-11-14)
+
+OTA-Upload per WLAN: Der ESP32 verbindet sich nach der Anmeldung zum PC zurück; eine Firewall (Windows, ESET) blockierte das („No response from device“, vom Tester bestätigt). Der Rückkanal nutzt jetzt den festen Port 32323, bei dem Fehler erscheint ein übersetzter Hinweis mit der nötigen Regel (eingehend TCP 32323).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `headless/headless_esp32_ota.py` | 1.06 | `HOST_PORT` 32323 (`-P`), Debug `-d`, `NO_RESPONSE` |
+| `_web/web_esp32_ota.py` | 1.01 | `HINT_FIREWALL` im Upload-Dialog |
+| `webmobaledlib.py` | 3.38 | Hinweis im Setup-Protokoll, VERSION, REQUIRED |
+| `csv/Web_Languages.csv` | - | Firewall-Hinweis in 6 Sprachen |
+| `install/ANLEITUNG_Installation.md` | 3.77 | Abschnitt 9.2a |
+
+---
+
+## 3.37 (2026-11-14)
+
+Übernahme der Änderungen eines anderen Entwicklers (Fork): ESP32 per WLAN verbinden, Setup per WLAN (OTA) oder USB übertragen, Firmware hochladen, Reiter OTA in den ARDUINO-Einstellungen, WLAN über USB einrichten (Scan/Verbinden, Befehle `!MLLWIFI SCAN` und `!MLLWIFI JOIN`), mehrzeilige Konfigurationsspalte, DCC-Adressspannen, Verbesserungen im Patterngenerator (RGB-Haken, LED-Farbe, Rampen, Goto-Pfeile, Bilder). Dazu: Hotfix für `wifi_usb` (ESP32 wird vor dem Befehl per RTS neu gestartet, der Start wird mitgelesen, Befehl wird wiederholt, Diagnose in Protokoll und Fehlermeldung), Dialogtexte übersetzbar, USB-Upload auch unter Linux/Mac, ungültiger Hostname („label too long“) wird als Fehler gemeldet.
+
+**Wichtig:** Die WLAN-Funktionen brauchen die neue Firmware (`LEDs_AutoProg/*`, Paket *Firmware_ESP32_OTA*). Die alte Firmware (WiFiManager, Ausgabe `*wm:`) kennt `!MLLWIFI` nicht. Nicht auf Hardware durch den Entwickler der Übernahme geprüft. Bekanntes Risiko: Das OTA-Passwort steht im Klartext in `esp32-ota.json` (Benutzerordner).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `headless/headless_esp32_ota.py` | 1.04 | neu: Build (PlatformIO/Arduino), OTA-Upload, USB-Upload (Windows, Linux, Mac), `wifi_usb` mit RTS-Neustart und Diagnose |
+| `_web/web_esp32_ota.py` | 1.00 | neu: Dialoge (Hochladen, Ziel, Reiter OTA, WLAN über USB); Texte mit `tr()`; `UnicodeError` beim Test abgefangen |
+| `_web/web_serial.py` | 1.08 | `connect_esp32` (HMAC-Anmeldung, Port 2323); `TcpPort`: ungültiger Hostname als `OSError` |
+| `_web/web_form_options.py` | 1.24 | Reiter OTA (nur ESP32) |
+| `_web/web_pattern_test.py` | 1.01 | Farben über NiceGUI-Elemente statt JavaScript |
+| `_web/web_pattgen.py` | 1.23 | RGB-Haken, LED-Farbe, Rampen, Goto-Pfeile, Bilder |
+| `headless/headless_pattgen.py` | 1.21 | RGB-Modus je Blatt, Schrittfarbe, PCF-ZIP mit Bildern |
+| `pattgen/M08_Load_Sheet_Data.py` | 1.02 | Bilder auch in `Bilder`/`images` |
+| `proggen/M06_Write_Header.py` | 1.06 | `HeaderOnly`, Display-Block |
+| `proggen/M08_ARDUINO.py` | 1.19 | `Write_PIO_Project` |
+| `proggen/M20_PageEvents_a_Functions.py` | 1.09 | DCC-Adressspannen |
+| `proggen/M32_DCC.py` | 1.02 | Testtasten über bestehende WLAN-Verbindung |
+| `csv/Web_Languages.csv` | - | 68 neue/ergänzte Texte in 6 Sprachen |
+| `LEDs_AutoProg/*` | - | Firmware: ESP32DeviceConnection.h, ESP32Extensions.h, ESP32WifiUsb.h, U8G2UserInterface.h, LEDs_AutoProg.ino |
+| `webmobaledlib.py` | 3.37 | VERSION, REQUIRED-Tabelle (neue Module) |
+
+---
+
+## 3.36 (2026-11-14)
+
+Port-Auswahl: Die Einträge in „Andere Typen“ sind anklickbar. Klick → Rückfrage → Zentralentyp wechseln (Build-Optionen links) und Anschluss wählen. Variante: zuletzt benutzte des Typs (bis zum Neustart gemerkt, WLAN-Varianten ausgenommen), sonst Nano 328 neu / ESP32 / Pico. „Abbrechen“ stellt die beim Öffnen gelesenen Build-Optionen wieder her. Eine offene Verbindung wird getrennt wie beim Wechsel in den Optionen.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_form_comport.py` | 1.07 | Knöpfe für Andere Typen, Rückfrage, `_switch_type`, Wiederherstellung bei Abbrechen |
+| `proggen/M07_COM_Port.py` | 1.11 | `Other_Type_Port_List` (Liste statt Text) |
+| `csv/Web_Languages.csv` | - | Text „Zentrale auf %1 umstellen und %2 verwenden?“, Ja/Nein vervollständigt |
+| `webmobaledlib.py` | 3.36 | VERSION, REQUIRED-Tabelle |
+
+---
+
+## 3.35 (2026-11-14)
+
+COM-Port-Auswahl nach Zentralentyp (Rückmeldung des Excel-Entwicklers mit vier Zentralen: COM3 ESP32, COM5/COM15 Pico, COM16 Nano). Ursache: In `EnumComPorts` standen die Bedingungen „Silicon Labs CP210x“ und „CP2102 USB to UART“ ohne Bezug zum Board; der ESP32 erschien deshalb in der Nano- und der Pico-Liste (beim Pico sogar vorgewählt).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `proggen/M07_COM_Port.py` | 1.10 | CP210x/CP2102 (und VID 10C4) nur noch bei Board ESP32; Pico nur über Pico-Kennungen; neu `Classify_Port` und `Other_Type_Ports` ("COM3(ESP32), COM5(Pico)") |
+| `_web/web_form_comport.py` | 1.06 | Zeile „Andere Typen: …“ unter der Portliste wie in Excel (Text aus Languages.csv) |
+| `webmobaledlib.py` | 3.35 | VERSION, REQUIRED-Tabelle |
+
+Risiko: Ein Pico hinter einer CP210x-Brücke oder ein ESP32 mit CH340 erscheint nur noch mit „Unbekannte Ports anzeigen“.
+
+---
+
+## 3.34 (2026-11-14)
+
+Suche über alle Blätter, zweiter Anlauf: Die verzögerte Wiederholung (3.33) brachte nichts, weil nach einem Blattwechsel `mllRestore` bis zu 1,5 s lang die zuletzt gemerkte Bildlaufposition des Blatts erzwingt und das Scrollen zum Treffer wieder überschrieb („blinkt zweimal, springt zurück“). Jetzt setzt `find_goto` vor dem Blattwechsel `window.mllSkipRestore = true` (Rückfall nach 3 s auf false); `mllRestore` bricht dann sofort ab und merkt sich die aktuelle Position. Die verzögerten Scrollaufrufe aus 3.33 bleiben, weil der Browser die Zeilen erst nach dem Blattwechsel aufbaut.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 3.34 | `mllSkipRestore` in `SCROLL_JS`, gesetzt vor dem Blattwechsel der Suche |
+
+## 3.33 (2026-11-14)
+
+Suche über alle Blätter: Beim ersten Treffer auf einem anderen Blatt wurde nicht zur Zeile gescrollt, weil `focus_cell` sofort nach `activate` lief, der Browser die Zeilen des neuen Blatts aber erst danach aufbaut und die Bildlaufposition wiederherstellt. Nach einem Blattwechsel wird das Scrollen und Markieren nach 0,3 s und 0,8 s wiederholt (`loop.call_later`, nur solange der Treffer noch der aktuelle ist).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 3.33 | verzögerte Wiederholung des Scrollens nach Blattwechsel |
+
+## 3.32 (2026-11-14)
+
+Suchfeld: Das Löschkreuz saß im normalen Layout zu tief (Marginal-Bereich ohne feste Höhe). Jetzt `height/min-height: 28px` und `align-items: center` für `.q-field__marginal` (normales und kompaktes Layout).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_layout.py` | 1.12 | Löschkreuz mittig (kompakt) |
+| `webmobaledlib.py` | 3.32 | Löschkreuz mittig (normal), benötigte Version web_layout |
+
+## 3.31 (2026-11-14)
+
+**Suchleiste im kompakten Layout (Rückmeldung Tester):** Höhe und Schriftgröße wie die Werkzeugleistenknöpfe (22 px, Schrift 12 px): Eingabefeld, Pfeilknöpfe, Zähler und Haken in `web_layout` (CSS `.mll-compact .mll-find ...`). Im normalen Layout Schrift 14 px, Feldhöhe 28 px.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_layout.py` | 1.11 | CSS Suchleiste im kompakten Layout |
+| `webmobaledlib.py` | 3.31 | CSS Suchleiste, benötigte Version web_layout |
+
+## 3.30 (2026-11-14)
+
+**Kompaktes Layout (Rückmeldung Tester):** Die Suchleiste war zu breit, und Tabelle/Grafik/Beides standen in einer eigenen Zeile.
+- `toolbar_slot` ist jetzt `display: contents`: die Werkzeugleistenknöpfe fließen in die Zeile der Werkzeugleiste, Tabelle/Grafik/Beides folgen direkt hinter „Zeilen Färben“ (spart eine Zeile).
+- Suchleiste schmaler: Eingabefeld 130 px, Zähler 40 px, kleinere Schrift, Beschriftungen **Wort** und **Alle** (Hinweis beim Darüberfahren: Ganzes Wort, Alle Blätter). Neue Katalogtexte „Wort“ und „Alle“ in 6 Sprachen.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 3.30 | Werkzeugleiste, kompakte Suchleiste |
+| `csv/Web_Languages.csv` | – | Texte „Wort“, „Alle“ |
+| `install/ANLEITUNG_Installation.md` | 3.76 | Beschriftung der Haken |
+
+## 3.29 (2026-11-14)
+
+**Rückmeldung zur Suche (Tester):**
+- Die Kopfzeilen (Zeile 1 und 2 der Datenblätter) werden nicht mehr durchsucht (`first_row = M02.FirstDat_Row - 1` in `find_in_sheet` und `find_in_sheets`).
+- Das Suchfeld mit Pfeilen, Zähler und den Haken steht jetzt in einem **gemeinsamen Rahmen** mit leicht abgesetztem Hintergrund; Zähler schmaler, dadurch kleinerer Abstand.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `headless/headless_search.py` | 1.01 | Parameter `first_row` |
+| `webmobaledlib.py` | 3.29 | Kopfzeilen ausgenommen, Rahmen um die Suche |
+| `install/ANLEITUNG_Installation.md` | 3.75 | Hinweis |
+
+## 3.28 (2026-11-14)
+
+**Suche über die ganze Tabelle** (Punkt 2 des Testers Win11, Konzept vom Anwender freigegeben). Die Browser-Suche (Strg+F) findet nur gezeichnete Zeilen; die neue Suche läuft im Server auf dem Datenmodell des Blatts.
+- Suchfeld in der Werkzeugleiste (nur auf Datenblättern) mit Knöpfen Voriger/Nächster Treffer, Trefferzähler („3 / 7“), Haken **Ganzes Wort** und **Alle Blätter**. Strg+F setzt den Cursor ins Suchfeld (nur wenn es sichtbar ist, sonst bleibt die Browser-Suche), Eingabetaste = nächster, Umschalt+Eingabetaste = voriger Treffer, Esc beendet die Suche und entfernt die Markierung.
+- Reine Textsuche, Groß-/Kleinschreibung egal; durchsucht alle Spalten (auch Filterspalte), **auch inaktive Zeilen**; ausgeblendete Zeilen nicht (nicht anzeigbar); bei Kopfzellen nur der Text vor dem „§“. Ganzes Wort: ID.1 findet ID.1, aber nicht ID.12 und nicht ID.1.2.
+- Alle Blätter: nur Datenblätter; bei einem Treffer auf einem anderen Blatt wechselt das Programm dorthin (`activate`). Nach einem Blattwechsel werden die Treffer des neuen Blatts markiert (`find_hooks["marks"]`).
+- Springen: `focus_cell` (ensureIndexVisible + setFocusedCell), bei Grafikansicht folgt die Grafik. Markierung: `window.mllFind` {„Zeile:Feld“: 1 Treffer gelb, 2 aktueller Treffer orange}, ausgewertet in `JS_CELL_STYLE`.
+- Begrenzung: höchstens 20000 Treffer (Anzeige „20000+“). Kein Ersetzen, keine Trefferliste (Vorgabe des Anwenders).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `headless/headless_search.py` | 1.00 | neu: `find_in_sheet`, `find_in_sheets`, `next_index`, `first_index_from` |
+| `webmobaledlib.py` | 3.28 | Suchleiste, Markierung, Strg+F, Ereignis `mll_find` |
+| `csv/Web_Languages.csv` | – | 6 neue Texte in 6 Sprachen |
+| `install/ANLEITUNG_Installation.md` | 3.74 | Abschnitt Suche |
+| `install/BETATEST_Checkliste.md` | 2.53 | Punkte 191 bis 194 |
+
+**Tests** (`test_search.py`, 28 Prüfungen): Suche weit außerhalb des sichtbaren Bereichs, Teilwort und Ganzes Wort, inaktive und ausgeblendete Zeilen, Tooltip-Text, alle Blätter nur Datenblätter, Reihenfolge, Umlauf, Begrenzung, Geschwindigkeit (3000 Zeilen unter 0,5 s), Einbau, Stil-Skript der Markierung (mit Node geprüft).
+
+## 3.27 (2026-11-14)
+
+**Rückmeldungen Tester Win11 (Punkte 3 und 4):**
+- Zeilen färben: Die Schriftfarbe passt automatisch zur Hintergrundfarbe (schwarz auf hell, weiß auf dunkel; Helligkeit nach 0,299 R + 0,587 G + 0,114 B, Grenze 140), wenn keine eigene Schriftfarbe gesetzt ist (`contrast_color`). Neue Option **Schrift in eingefärbten Zeilen fett** (`ColoredRowsBold`, Programm Einstellungen, Gruppe Programm Generator, Vorgabe aus) → `build_grid(bold_colored=...)`.
+- Testschalter unten abgeschnitten: `.mll-tb` als `inline-flex`, zentriert, `box-sizing: border-box`; der Halter der Tasten ebenfalls `inline-flex` mit `align-items: center`.
+- Punkt 2 (Suche über die ganze Tabelle) ist als eigene Version vorgesehen.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `headless/headless_gridmodel.py` | 1.06 | `contrast_color`, `bold_colored` |
+| `_web/web_tabs.py` | 1.15 | Option `ColoredRowsBold` |
+| `_web/web_params.py` | 1.08 | Option in der Gruppe Programm Generator |
+| `csv/Web_Languages.csv` | – | Text und Hinweis der Option in 6 Sprachen |
+| `webmobaledlib.py` | 3.27 | Option an `build_grid`, CSS der Testschalter |
+| `install/ANLEITUNG_Installation.md` | 3.73 | Hinweis |
+| `install/BETATEST_Checkliste.md` | 2.52 | Punkte 189, 190 |
+
+## 3.26 (2026-11-14)
+
+**Fehler Tester Win11:** Nach dem PGF-Import stand bei den Funktionen Pins LED Bus definieren, LED Nummer definieren, NextLED und Reserve LED der Name „Pico Config“ (und ein falsches Symbol). Ursache: Testrest in `M09_Language.__Display_Name` (Zeilen 939/940, Zweig für Konfigurationen mit `//`). Beide Zeilen auskommentiert (Hinweis des Testers).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `proggen/M09_Language.py` | 1.07 | Testrest entfernt |
+| `webmobaledlib.py` | 3.26 | Version, benötigte Dateiversion |
+
+## 3.25 (2026-11-14)
+
+**Seiten mit Direktmodus verbinden selbst** (Punkt aus den Rückmeldungen des Excel-Entwicklers, vom Anwender bestätigt). Beim Öffnen der Reiter Farb Test, Servo Test, DM Servo Test und Sound Test verbindet das Programm mit dem Arduino, wenn noch keine Verbindung besteht (`on_tab`, `_connect_command` ohne `after_connect`, danach startet `tab_selected` den Direktmodus). Bei laufendem Vorgang (`state["busy"]`) oder bestehender Verbindung geschieht nichts. Misslingt das Verbinden, erscheint die übliche Meldung des Verbindens; die Seite bleibt benutzbar. Das Ausgrauen der Seiten entfällt.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 3.25 | automatisches Verbinden in `on_tab` |
+| `install/ANLEITUNG_Installation.md` | 3.72 | Hinweis |
+| `install/BETATEST_Checkliste.md` | 2.51 | Punkt 188 |
+
+## 3.24 (2026-11-14)
+
+**Rückmeldungen des Entwicklers des Excel-Programms** (Punkte 1 bis 9 vom Anwender freigegeben). Umgesetzt:
+
+1. Grafik: inaktive Zeilen (Kästchen „Aktiv“ aus) nie anzeigen, auch in der normalen Ansicht (`_row_active` für beide Ansichten).
+2. Verbinden ohne Reset: `serial.Serial()` unverbunden anlegen, Eigenschaften setzen, `dtr = rts = False` (außer Pico, `M02a.Get_BoardTyp() == HT_PICO`), dann `open()`.
+3. Neustart öffnet das zuletzt benutzte Blatt (`LastSheet` in den Einstellungen).
+4. Testtasten: Sperre `tb_lock`, bei laufendem Vorgang Meldung „Es läuft noch ein Vorgang – bitte warten.“ statt Warteschlange.
+5. Beenden: `safe_shutdown()` = `force_close_serial` + `start_exit_watchdog` (8 s, `os._exit(0)`) + Beenden von NiceGUI.
+6. Typwechsel in den Optionen trennt die Verbindung und setzt den COM Port der Seite zurück (`_web_board_changed`).
+7. Tippfehler „Optionen und spezielle Funktionen“ (Dialog und Katalog).
+8. Beschriftete Dialogknöpfe: `web_msgbox_labelled(text, art, titel, {code: beschriftung})`, als `X02.MsgBoxLabelled` eingehängt. Dialog „Fehler bei der Überprüfung des angeschlossenen Arduino“: **Suchen / Weiter / Abbrechen** mit angepasstem Text in 6 Sprachen; ohne Web-Brücke bleibt die Excel-Fassung Ja / Nein / Abbrechen.
+9. Einheitliche Reihenfolge: bestätigen links, Abbrechen rechts (CSS `.q-card .mll-cancel { order: 99 }` in `web_layout`, plus Umstellung der Dialoge Firmware installieren/herunterladen, Passwort, Namen ändern, Farbpalette).
+
+**Nicht umgesetzt (offen):** LED-Kanal im Servo-Dialog (braucht Beispiel), COM-Port-Auswahl nach Zentralentyp (Beispiel mit Board und angebotenen Ports nötig), Titelliste „LED-Arduino / Kommunikations-Arduino“ (Bildschirmfoto nötig), Ausgrauen/Autoverbinden der Seiten Farbe, Servo, Sound, DM-Servo (Entscheidung nötig), Config-Blatt-Einstellungen im Config-Dialog (Excel-Seite), Element „Verteiler“ in der Grafik (Entscheidung zu den Excel-Spalten).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_serial.py` | 1.06 | `_open_serial`, `_board_needs_dtr` |
+| `_web/web_form_options.py` | 1.23 | `_web_board_changed`, Titel |
+| `proggen/UserForm_Options.py` | 1.04 | Titel |
+| `headless/headless_graph.py` | 1.05 | inaktive Zeilen in beiden Ansichten ausgeblendet |
+| `headless/headless_shutdown.py` | 1.00 | neu: `force_close_serial`, `start_exit_watchdog` |
+| `_web/web_dialogs.py` | 1.10 | `web_msgbox_labelled`, `X02.MsgBoxLabelled` |
+| `_web/web_layout.py` | 1.10 | CSS Reihenfolge der Knöpfe |
+| `_web/web_access.py` | 1.13 | Knopfreihenfolge |
+| `_web/web_colorcheck.py` | 1.06 | Reihenfolge Ja, Nein, Abbrechen |
+| `_web/web_form_firmware.py` | 1.03 | Installieren links |
+| `_web/web_form_firmware_download.py` | 1.02 | Herunterladen links |
+| `proggen/M08_ARDUINO.py` | 1.18 | Dialog Suchen / Weiter / Abbrechen |
+| `csv/Web_Languages.csv` | – | neue Texte in 6 Sprachen, Abbrechen vollständig |
+| `webmobaledlib.py` | 3.24 | Version, benötigte Dateien, Blatt merken, Testtasten-Sperre, `safe_shutdown` |
+| `install/ANLEITUNG_Installation.md` | 3.71 | neue Hinweise |
+| `install/BETATEST_Checkliste.md` | 2.50 | Punkte 179 bis 187 |
+
+**Tests** (`test_324.py`, 44 Prüfungen): DTR/RTS aus beim Nano, an beim Pico, Fehlerfall; Beenden-Funktionen (Zählung, doppelte Verbindung, Fehler beim Schließen, Watchdog); `web_msgbox_labelled` mit und ohne Brücke; Knopfreihenfolge im Quelltext aller Dialoge; Katalog (6 Sprachen, Platzhalter `#2#`); Versionstabelle gegen die Dateiversionen; Blatt merken, Testtasten-Sperre.
+
+## 3.23 (2026-11-12)
+
+**„Test ARDUINO Programm Creation“ wirkt sofort** (Rückmeldung des Entwicklers zu 3.22: „Wenn ich die Option einschalte bei 3.22 werden keine Fragen gestellt beim Kompilieren und Hochladen, es läuft normal durch.“). **Ursache:** `HeadlessAppController._init_from_config` las `ARDUINOTest` **einmal beim Start** (`self.ARDUINOTest = g("ARDUINOTest")`, wie `ShowHiddentables`, `MaxLEDcnt` und `IPUploadTimeout`); die Seite ARDUINO Einstellungen schreibt nur in `ParamData`/`ConfigData`, der gemerkte Wert blieb unverändert, die Fragen aus 3.22 (`M06_Write_Header`, `M08_ARDUINO`) erschienen deshalb erst nach einem **Neustart** des Programms. Der Tester mit Version 2.77 hatte die Einstellung vor einem Neustart eingeschaltet, deshalb fiel es bei ihm sofort auf. **Umsetzung:** `headless/headless_app_controller.py` **1.10**: `ARDUINOTest` ist eine **Eigenschaft** und liest bei jedem Zugriff `getConfigData("ARDUINOTest")`; Wahrheitswert wie bei den anderen Einstellungen (`1`, `true`, `ja`, `yes`, `an`, `ein`, `on`; auch der **Text** „False“ oder „0“ ist aus: vorher wäre der Text „False“ wahr gewesen); eine Zuweisung (zum Beispiel aus älterem Code) bleibt erlaubt und wird ignoriert. `show_hiddentables` (wird in `webmobaledlib.py` nach dem Speichern gesetzt), `maxLEDcnt` und `IPUploadTimeout` bleiben unverändert. **Offen, nicht angefasst:** `IPUploadTimeout` wird zusätzlich beim Start nach `PG.IPUploadTimeout` kopiert (`headless_proggen.py` Zeile 114); eine Änderung dieser Einstellung wirkt deshalb weiter erst nach einem Neustart (nicht gemeldet; bei Bedarf gleiche Behandlung).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `headless/headless_app_controller.py` | 1.10 | `ARDUINOTest` als Eigenschaft |
+| `webmobaledlib.py` | 3.23 | Version, benötigte Dateien |
+| `install/ANLEITUNG_Installation.md` | 3.70 | ein Satz |
+| `install/BETATEST_Checkliste.md` | 2.49 | Punkt 178: ohne Neustart |
+
+**Tests** (`test_arduinotest.py`, jetzt 18): mit dem **echten** Controller-Objekt: Standard aus; sofort an und sofort aus nach einer Änderung; Wahrheitswerte (`'False'`, `'0'`, leer, `None` aus; `'ja'`, `'1'`, `'true'`, `True` an); die Zuweisung ist wirkungslos; der **ganze Ablauf ohne Neustart** (vor dem Einschalten keine Frage, danach kommt „Erzeugen der Headerdatei wird gestartet“). **Nicht geprüft:** im Browser (Speichern der Seite ARDUINO Einstellungen und anschließend Setup übertragen: Checkliste 178).
+
+## 3.22 (2026-11-12)
+
+**Blockierender Fehler eines Testers: „Headerfileerstellung wird abgebrochen“ unter Windows 11** (Protokoll `Log.txt`, Version 2.77 vom 2026-11-03, Python 3.12.3, nicegui 4.0.0, COM3; der Tester hatte „Setup übertragen“ gewählt). **Ursache aus dem Protokoll:** Zeile `WARNING no_tk: tkinter.messagebox.askyesno ohne Display: ARDUINOTest - Erzeugen der Headerdatei wird gestartet`, danach `set_statusmessage: Headerfileerstellung abgebrochen - Die Headerdatei wurde nicht geschrieben`. Im Reiter **ARDUINO Einstellungen** (Seite `ARDUINOConfigPage`, **oberster Haken**; **nicht** in den Programm Einstellungen, so stand es zuerst irrtümlich in diesem Eintrag, in der Anleitung 3.68, der Checkliste 2.47 und im Wiki 3.22 und wurde nach der Rückfrage des Entwicklers berichtigt) ist **„Test ARDUINO Programm Creation“** (`ARDUINOTest`, Hinweis „After each step of the ARDUINO Program Creation a message is shown and the task can be stopped“) **eingeschaltet**. Dann fragt `M06_Write_Header.Create_HeaderFile` (und `Write_Header_File_and_Upload_to_Arduino`) mit `tk.messagebox.askyesno`; die Web-Oberfläche hat **kein Tk** (`no_tk` meldet „ohne Display“ und antwortet **Nein**), also bricht die Erzeugung ab. **Dasselbe** galt für die beiden Fragen in `M08_ARDUINO` („Kompilieren und Hochladen (Ja) / Nur Kompilieren (Nein) / Abbrechen“ und „Use ARDUINO IDE / use ARDUINO Builder“): Dort lieferte `askyesnocancel` ohne Tk `None`, also **Abbrechen**.
+
+**Umsetzung:** Alle vier Fragen verwenden jetzt `P01.MsgBox(…, vbQuestion + vbYesNo bzw. vbYesNoCancel, 'ARDUINOTest')` (in der Web-Oberfläche der echte Dialog, in der Tk-Fassung wie bisher das Tk-Fenster): `proggen/M06_Write_Header.py` **1.05** (zwei Stellen), `proggen/M08_ARDUINO.py` **1.17** (zwei Stellen); `Nein` bricht beim Header wie vorher mit der Meldung ab, `Abbrechen` beim Kompilieren/der Entwicklungsumgebung gibt `False` zurück, `Ja`/`Nein` setzen `execute_upload` bzw. `useARDUINO_IDE`. Der Testmodus ist ein **Werkzeug für Entwickler**; er bleibt in den Einstellungen sichtbar (Übersetzung vorhanden).
+
+**Warum es erst jetzt auffiel:** Die Einstellung steht standardmäßig **aus** (`DefaultConstants`: `"ARDUINOTest": False`); der Tester hat sie wohl beim Durchsehen der Einstellungen angehakt. **Sofort-Hilfe** für ältere Versionen: im Reiter **ARDUINO Einstellungen** den Haken wegnehmen und **Speichern** drücken. **Weitere `tk.messagebox`-Aufrufe** (Seiten der Tk-Fassung wie `ARDUINOConfigPage`, `ColorCheckPage`, `ConfigurationPage`; Firmware-Update des ATtiny in `UserForm_Options`) werden von der Web-Oberfläche nicht benutzt (eigene Seiten) und blieben unverändert.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `proggen/M06_Write_Header.py` | 1.05 | zwei Fragen als Web-Dialog |
+| `proggen/M08_ARDUINO.py` | 1.17 | zwei Fragen als Web-Dialog |
+| `webmobaledlib.py` | 3.22 | Version, benötigte Dateien |
+| `install/ANLEITUNG_Installation.md` | 3.68 | Zeile in Abschnitt 9.1 |
+| `install/BETATEST_Checkliste.md` | 2.47 | Punkt 178 |
+
+**Tests** (`test_arduinotest.py`, 14, mit den **echten** Funktionen): `Create_HeaderFile` und `Write_Header_File_and_Upload_to_Arduino` mit eingeschaltetem Testmodus: Nein → Abbruch mit der Meldung, die Frage als Web-Dialog (`vbQuestion + vbYesNo`, Titel `ARDUINOTest`); Ja → weiter; Testmodus aus → keine Frage; die beiden Fragen in `M08_ARDUINO` (Blöcke aus dem Quelltext ausgeführt): Ja, Nein und Abbrechen; kein aktives `tk.messagebox` mehr in den beiden Dateien. **Nicht geprüft:** im Browser (Aussehen der Fenster, Reihenfolge der vier Fragen im echten Ablauf): Checkliste 178.
+
+## 3.21 (2026-11-12)
+
+**Grafik, Ansicht Ketten: Schalter „Alle Zeilen“** (Wunsch aus dem Kreis der Anwender, vom Entwickler weitergegeben: Alle aktiven Tabellenzeilen sollen optional, unabhängig davon, ob sie eine LED-Nummer haben, in derselben Reihenfolge wie in der Tabelle in die Ketten; bei mehreren Kanälen in den Kanal der nachfolgenden LED, da diese Makros häufig zu ihr gehören). Die drei Annahmen aus meinem Vorschlag hat der Entwickler bestätigt: (1) Zeilen hinter der letzten Zeile mit LEDs in die Kette der **letzten** Zeile mit LEDs, ohne Zeile mit LEDs bleiben alle in „Ohne LEDs“; (2) **aktiv** wie beim Erzeugen des Programms (Spalte Aktiv nicht leer, Zeile nicht ausgeblendet), inaktive Zeilen fehlen im neuen Modus auch mit LEDs; (3) **Anlage** unverändert. Bisher (Konzept vom 28.10.2026): Zeilen ohne LEDs gehören zu keiner Kette und stehen in einer eigenen Spalte „Ohne LEDs“.
+
+**Umsetzung:**
+- `headless/headless_graph.py` **1.04:** `build_model(…, all_rows=False)`: mit `all_rows` fallen Zeilen mit leerer Spalte **Aktiv** (`M02.Enable_Col`) und ausgeblendete Zeilen (`ws.is_row_hidden`) weg; Zeilen ohne LEDs (kein `leds`, keine Einzel-LEDs) warten in `pending`, bis die nächste Zeile mit LEDs kommt, und werden mit **deren Kanal** direkt vor ihr in die Kette gelegt; was am Ende noch wartet, kommt ans Ende der Kette der letzten Zeile mit LEDs (`last_channel`), und ohne Zeile mit LEDs in `other`. Jeder Knoten hat `noled`, das Modell `all_rows`. Der Kanal eines Knotens ohne LEDs ist der seiner Kette (nicht der Inhalt seiner Zelle LED Kanal). Ohne `all_rows` ist das Verhalten **unverändert** (auch ohne Prüfung der Spalte Aktiv).
+- `headless/headless_graph_layout.py` **1.05:** `all_rows` im Layout des Blatts (`new_layout`, `get_layout`, `clean_layout`/`export_json`/`import_json`): je Blatt, mit der Arbeitsmappe und in der Datei `.MLL_view`; Voreinstellung aus.
+- `headless/headless_graph_ops.py` **1.08:** Das Verschieben in `all_rows` darf **keine andere Zeile in eine andere Kette werfen**: `chain_assignment` (die Regel als Funktion), `all_nodes`, `would_change_chains`; `plan_move(…, why=None)` und `plan_move_many` lehnen einen solchen Zug ab (Grund `kette`), neu `plan_move_ex` liefert `(move_to, grund)`; `target_channel` nimmt in `all_rows` auch einen markierten Knoten ohne LEDs. **Warum:** Die Kette einer Zeile ohne LEDs hängt an der nachfolgenden Zeile mit LEDs; würde man ein Kästchen mit LEDs vor die Zeile ziehen, die vor ihm steht, hinge sie danach an der nächsten Kette. Verschoben wird weiter nur **innerhalb** der Kette (Entscheidung vom 28.10.).
+- `_web/web_graph.py` **1.14:** Kontrollkästchen **Alle Zeilen** (Hinweis) in der Kopfzeile, nur in der Ansicht Ketten sichtbar; `set_plant_controls(…, all_rows)` setzt es ohne Ereignis; `view_model`: `all_rows`, `noled` (nur im neuen Modus, die Liste „Ohne LEDs“ bleibt wie bisher) und der Text „Ohne LEDs“ als LED-Zeile der Knoten ohne LEDs. `_web/mll_graph.js` **1.14:** Klasse `mll-g-noled` (gestrichelter Rand, hellerer Hintergrund; ausgewählt blau wie bisher).
+- `webmobaledlib.py` **3.21:** `graph_all_rows(ws)` (nur in der Ansicht Ketten) für `refresh_graph` und `move_many`; Aktion `all_rows` im Layout-Handler (speichert im Layout, `layout_changed`, zeichnet neu); `on_graph_cmd` benutzt `plan_move_ex` und meldet abgelehnte Züge mit einer Warnung (auch beim gemeinsamen Verschieben mehrerer Kästchen). Katalog 1223 Einträge (3 neu: Beschriftung, Hinweis, Meldung; sechs Sprachen).
+
+**Bekannte Grenze:** Ein **neues Makro ohne LEDs**, das aus dem Baum auf eine Kette gezogen wird, bekommt eine Zeile an der Ablagestelle; sein LED Kanal wird wie bisher geschrieben, **zählt aber nicht** (die Kette einer Zeile ohne LEDs ist die der nachfolgenden Zeile mit LEDs): Es kann in der Kette der **folgenden** Zeile erscheinen statt dort, wo man es abgelegt hat (zum Beispiel beim Ablegen am Ende einer Kette, auf die in der Tabelle eine andere folgt). Das folgt aus der Regel; nicht geändert.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `headless/headless_graph.py` | 1.04 | `all_rows`, `noled` |
+| `headless/headless_graph_layout.py` | 1.05 | `all_rows` je Blatt |
+| `headless/headless_graph_ops.py` | 1.08 | Prüfung gegen Kettenwechsel, `plan_move_ex` |
+| `_web/web_graph.py` | 1.14 | Kontrollkästchen, `view_model` |
+| `_web/mll_graph.js` | 1.14 | Knoten ohne LEDs gestrichelt |
+| `webmobaledlib.py` | 3.21 | Anbindung, Meldungen |
+| `csv/Web_Languages.csv` | - | 1223 Einträge (3 neu) |
+| `install/ANLEITUNG_Installation.md` | 3.67 | Beschreibung |
+| `install/BETATEST_Checkliste.md` | 2.46 | Punkt 177 |
+
+**Tests** (`test_graph_allrows.py`, 31, mit einem nachgebauten Blatt: echte Funktion `build_model`): altes Verhalten unverändert; ein Kanal (Reihenfolge, Kanal, LEDs, `noled`); mehrere Kanäle (S1 → Kette von B, S2 → Kette von C, S3 am Ende der Kette von C); Zeile vor der ersten LED-Zeile; keine LED-Zeile; **inaktive und ausgeblendete Zeilen fehlen** (auch mit LEDs), im alten Modus nicht geprüft; Zeilen ohne Makro; Einzel-LEDs; `chain_assignment`; `target_channel`; Verschieben abgelehnt/erlaubt (einzeln und mehrere), alter Modus ohne Prüfung; Layout (Standard, altes Layout, Sichern und Laden, Unsinn); `view_model`; Quelltext von `mll_graph.js`, `web_graph.py` und `webmobaledlib.py`; Übersetzungen. **Nicht geprüft:** das Aussehen im Browser (gestrichelter Rand, Kopfzeile mit dem Kontrollkästchen), Ziehen und Verschieben mit der Maus, das Sichern und Laden mit echter Arbeitsmappe: Checkliste 177.
+
+## 3.20 (2026-11-12)
+
+**Neue Symbole für die Knöpfe Tabelle, Grafik, Beides** (der Entwickler hat `View_table.png`, `View_rail.png` und `View_both.png` geliefert: 213 oder 214 × 164 Pixel, RGBA, grau, mit dem kleinen Laptop mit Zeiger, also dieselbe Größe und derselbe Stil wie die Symbole der Werkzeugleiste in `images_btn`). **Bisher** waren die drei Knöpfe ein reiner Text-Umschalter (`ui.toggle`, `webmobaledlib.py`, `view_toggle`), es gab also keine Symbole, die ersetzt wurden.
+
+**Umsetzung:** (1) Die drei Dateien liegen unter ihren Namen in `images_btn/` (nicht in `icons/`: Sie haben das Seitenverhältnis der Werkzeugleiste und brauchen keine 64/200-Pixel-Fassung, `make_web_icons.py` fasst sie nicht an). (2) Neu `_web/web_viewswitch.py` 1.00: `ViewSwitch` baut **drei Knöpfe wie die der Werkzeugleiste** (`web_toolbar.build_tool_button`: Symbol oben, übersetzter Text darunter, Klasse `mll-tool`, eingedrückt beim Klicken) und bietet dieselben Aufrufe wie der alte Umschalter: `value`, `set_value(view)` (ruft `on_change` bei **jeder** Änderung auf, auch durch das Programm; der Aufrufer sperrt wie bisher mit `graph_state["guard"]`), `set_visibility`. Gleiche oder unbekannte Ansicht tut nichts. Der Knopf der gewählten Ansicht hat die Klasse `mll-view-on` und `aria-pressed=true`. Je Knopf ein eigener Hinweis (`TOOLTIPS`: „Nur die Tabelle anzeigen“, „Nur die Grafik anzeigen (Ketten der Makros)“, „Grafik und Tabelle zusammen anzeigen“); der alte lange Hinweis des Umschalters entfällt. Fehlt ein Symbol, zeigt der Knopf nur den Text. (3) `web_layout.py` 1.09: **gelb hinterlegt** (`#fff176`, Rand `#f9a825`, Hover `#ffee58`, schwarze fette Schrift, auch im dunklen Modus), wie die Markierung im Baum „Firmware herunterladen“ (3.18). (4) `webmobaledlib.py` 3.20: `view_toggle = web_viewswitch.ViewSwitch(…, lambda view: set_view(view))` (die Lambda, weil `set_view` weiter unten definiert wird; `os.path.join(here, "images_btn")`, denn die Variable `icon_dir` ist an dieser Stelle noch nicht belegt); `apply_icon_size` (Einstellung **PGIconSize**) nimmt `view_toggle.images` und `view_toggle.labels` mit, die Symbole und Texte der drei Knöpfe wachsen und schrumpfen mit den anderen. Katalog 1220 Einträge (3 neu: die drei Hinweise in sechs Sprachen; „Tabelle“, „Grafik“, „Beides“ standen schon drin).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `images_btn/View_table.png`, `View_rail.png`, `View_both.png` | - | neu: Symbole |
+| `_web/web_viewswitch.py` | 1.00 | neu: Umschalter mit Bildknöpfen |
+| `_web/web_layout.py` | 1.09 | gelb hinterlegt |
+| `webmobaledlib.py` | 3.20 | ViewSwitch statt `ui.toggle`, `apply_icon_size` |
+| `csv/Web_Languages.csv` | - | 1220 Einträge (3 neu) |
+| `install/ANLEITUNG_Installation.md` | 3.66 | Beschreibung der Knöpfe |
+| `install/BETATEST_Checkliste.md` | 2.45 | Punkt 176 |
+
+**Tests** (`test_viewswitch.py`, 21, mit nachgebauter Oberfläche ohne Browser): drei Knöpfe in der Reihenfolge mit den richtigen Symbolen, Texten und Hinweisen; Klasse `mll-tool` und Reihe `mll-viewswitch`; Anfangsmarkierung; Klick (einmal `on_change`, Markierung wandert, nicht „eingedrückt“); Klick auf die gewählte Ansicht; `set_value` durch das Programm; unbekannte und gleiche Ansicht; `set_visibility`; unbekannter Anfangswert; fehlende Symbole (nur Text); die drei Dateien (Größe, RGBA, nicht leer, verschieden, Zuordnung); CSS; Übersetzungen; Quelltext von `webmobaledlib.py`. **Nicht geprüft:** das Aussehen im Browser (Höhe der Knöpfe neben den anderen, kompaktes Layout, Smartphone, dunkler Modus): Checkliste 176. **Wiki:** `pg_werkzeugleiste` und `pg_grafisch` nennen die Knöpfe nur mit Namen (Bilder fehlen im Wiki); Text unverändert, die Bildschirmfotos müssten Sie neu machen.
+
+## 3.19 (2026-11-12)
+
+**Knopf „Firmware laden“ heißt „Firmware herunterladen“** (Wunsch des Entwicklers; im Excel-Programm heißt er „Firmware laden“, der Titel des Dialogs „Firmware Herunterladen“). `_web/web_form_options.py` 1.21 (`fw_texts`) und `_web/web_form_firmware.py` 1.02 (Rückfalltext, Beschreibung der Funktion) verwenden den Text **„Firmware herunterladen“**; `csv/Web_Languages.csv` (1217 Einträge, 1 neu) enthält ihn in sechs Sprachen mit den Übersetzungen des Dialogtitels aus der Sprachtabelle des Excel-Programms (EN Download firmware, NL Firmware downloaden, FR Télécharger le micrologiciel, IT Scarica il firmware, ES Descargar firmware, DA Download firmware). Anleitung 3.65, Checkliste 2.44 und das Wiki (`pg_werkzeugleiste`, `fehlersuche`) nennen den neuen Namen; ältere Einträge dieser Datei behalten den alten.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_form_options.py` | 1.21 | Text des Knopfes |
+| `_web/web_form_firmware.py` | 1.02 | Text des Knopfes |
+| `csv/Web_Languages.csv` | - | 1217 Einträge (1 neu) |
+| `webmobaledlib.py` | 3.19 | Version, benötigte Dateien |
+| `install/ANLEITUNG_Installation.md` | 3.65 | Name des Knopfes |
+| `install/BETATEST_Checkliste.md` | 2.44 | Name des Knopfes |
+
+**Tests** (`test_firmware_dl.py`, jetzt 72): der Text im Quelltext (kein „Firmware laden“ mehr in den beiden Dateien) und die Übersetzung in sechs Sprachen.
+
+## 3.18 (2026-11-12)
+
+**Firmware herunterladen: Markierung des ausgewählten Eintrags** (Rückmeldung des Entwicklers: „Die Markierung der ausgewählten Version ist fast nicht zu sehen (Schriftfarbe wechselt nur von Schwarz zu grau). Ist gelb hinterlegen möglich?“). Der Standard von Quasar (`QTree`) färbt den ausgewählten Knoten nur mit der Hauptfarbe der Oberfläche, die hier hellgrau-blau ist. **Umsetzung (`_web/web_form_firmware_download.py` 1.01):** `TREE_CSS` (per `ui.add_css`, nur für den Baum mit der Klasse `mll-fwtree`): `.q-tree__node--selected` mit Hintergrund **#fff176** (Gelb), schwarze Schrift (auch für die Kinder des Knotens), **fett**, Balken links (4 px, #f9a825) und abgerundeten Ecken; etwas Innenabstand für die Knoten. Die Auswahl mit Auswahlfeldern im Dialog „Firmware installieren“ (Liste der Firmware mit Auswahlknöpfen und Menü für die Version) ist **nicht** geändert (ein gefüllter Auswahlknopf ist dort deutlich zu sehen); falls auch dort gewünscht, ist es dieselbe Art Änderung.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_form_firmware_download.py` | 1.01 | Markierung gelb |
+| `webmobaledlib.py` | 3.18 | Version |
+| `install/ANLEITUNG_Installation.md` | 3.64 | ein Satz |
+| `install/BETATEST_Checkliste.md` | 2.43 | Punkt 175 |
+
+**Tests** (`test_firmware_dl.py`, jetzt 65): die CSS-Regeln (gelb, schwarz, fett, Balken, nur für `.mll-fwtree`), die Klasse am Baum und das Einfügen des CSS vor dem Aufbau. **Nicht geprüft:** das Aussehen im Browser (Checkliste 175).
+
+## 3.17 (2026-11-12)
+
+**Optionen, Reiter LED ARDUINO: Layout** (Rückmeldung des Entwicklers mit Bildschirmfoto: „Der Kommentar zu dem Button Firmware installieren braucht zu viel Platz und die wichtigen Eingabefelder sind zusammengequetscht.“). **Ursache:** Der Reiter ist eine Zeile ohne Umbruch (`no-wrap`): links die Knöpfe, jeder in einer eigenen Zeile mit dem Kommentar **neben** dem Knopf, rechts die Auswahl des Boards. Der lange Kommentar zu „Firmware installieren“ (seit 3.14/3.15 bei jedem Board sichtbar, vorher nur beim Pico) machte die linke Spalte breit, die Auswahl rechts schrumpfte auf ihre kleinste Breite und brach die Beschriftungen um („Nano Normal (old / Bootloader)“, „Automatisch / erkennen“).
+
+**Umsetzung (`_web/web_form_options.py` 1.20):** `button_row(b, compact=False)`: im Reiter LED ARDUINO (`compact=True`) steht der Kommentar **unter** dem Knopf (kleine graue Schrift, `text-caption`, 16 rem breit wie der Knopf); alle anderen Reiter rufen `button_row(b)` unverändert auf (Kommentar neben dem Knopf, dort ist Platz). Die Zeile des Reiters darf umbrechen (`flex-wrap: wrap`, Abstand 1 rem 2 rem), die Spalte der Knöpfe wächst (`grow`), und die Auswahl des Boards (`board_group`) hat `shrink-0` und `min-width: 20rem`: Die Beschriftungen brechen nicht mehr um, und auf **schmalen Bildschirmen** (Smartphone, iPad hochkant) rutscht die Auswahl unter die Knöpfe, statt abgeschnitten zu werden. Die Breiten passen in den Dialog (900 px): 16 rem + 20 rem + 2 rem Abstand = 608 px.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_form_options.py` | 1.20 | Kommentar unter dem Knopf, Auswahl des Boards mit fester Breite |
+| `webmobaledlib.py` | 3.17 | Version, benötigte Dateien |
+| `install/BETATEST_Checkliste.md` | 2.42 | Punkt 174 |
+
+**Tests** (`test_options_layout.py`, 7, am Quelltext, ohne Browser): `button_row` mit `compact`, Aufbau im kompakten Zweig (Spalte, kleine Schrift, 16 rem), unveränderter Zweig der anderen Reiter, Aufruf mit `compact=True` nur im Reiter LED ARDUINO, `flex-wrap` und `grow`, `shrink-0` und `min-width: 20rem`, Breiten im Dialog. **Nicht geprüft:** das Aussehen im Browser (NiceGUI und ein Browser sind in der Arbeitsumgebung nicht vorhanden): Checkliste 174.
+
+## 3.16 (2026-11-12)
+
+**Bibliothek 3.5.0-L3 und die restlichen Teile aus dem Excel-Programm 3.5.0L3** (der Entwickler hat die Bibliothek `MobaLedLib.zip` geliefert und „bitte auch die fehlenden Teile umsetzen“ gesagt).
+
+**Die Bibliothek:** Vergleich der hochgeladenen Bibliothek (889 Einträge, 810 Dateien) mit `libraries/MobaLedLib` des Programmordners (76 Dateien, eine **Auswahl**: `src`, `extras/ArduinoISP`, ein Beispiel, die fertigen `.hex`-Dateien in `firmware`): **alle 66 gemeinsamen Dateien sind identisch (ohne Zeilenenden), nur `library.properties` unterscheidet sich** (`version=3.5.0-L` → `3.5.0-L3`). Der C++-Quelltext hat sich von L zu L3 also **nicht** geändert (die Änderungen von L2/L3 betreffen das Excel-Programm). Übernommen: `libraries/MobaLedLib/library.properties` (3.5.0-L3) und die kleinen Dateien `LICENSE` (26 KB), `README.md` (21 KB, von Jürgen für L3 angepasst), `keywords.txt` (8 KB). **Nicht** übernommen: die 744 weiteren Dateien (Beispiele, Dokumente, `extras` mit Excel-Mappen, Platinen und Bildern): Die Auswahl im Programmordner bleibt klein; die `firmware/*.hex`, `examples/platformio.ini` und `examples/23_A.DCC_Interface/*.h` des Programmordners fehlen in der hochgeladenen Bibliothek und **bleiben** (das Programm braucht sie für „Fertige Firmware hochladen“ und den schnellen Bootloader).
+
+**Umgesetzt:**
+1. `proggen/M02_Public.py` **1.05:** `Test_Suffix = 'L3'` (die alte Zeile `'L'` steht als Kommentar); `Prog_Version` ist damit „Ver. 3.5.0L3“.
+2. `proggen/M08_ARDUINO.py` **1.16:** (a) **`symlink://`** statt `file://` für die Bibliothek in der `platformio.ini` (Excel 3.5.0L3; PlatformIO verknüpft statt zu kopieren: schneller, und eine geänderte Bibliotheksdatei gilt sofort; das behebt auch das Problem „PlatformIO benutzt noch die alte Kopie“). **Zusatz gegenüber Excel:** `Lib_Link_Scheme()` prüft einmal je Programmlauf, ob dieser Rechner symbolische Verknüpfungen anlegen darf (`os.symlink` in einem temporären Ordner); nur dann `symlink://`, sonst weiter `file://` (Windows ohne Entwicklermodus: Fehler 1314). Entscheidung im Protokoll („platformio.ini: Bibliothek MobaLedLib wird mit … eingebunden“). Der Pfad bleibt relativ zum Programmordner (`libraries/MobaLedLib@3.5.0-L3`, der Teil hinter `@` ist die Versionsangabe, wie im Excel-Programm). (b) **`Write_PIO_Extension` einmal** im Abschnitt `[env]` hinter der Zeile `MobaLedLib=…` statt in `[env:esp32]`, `[env:nano_new]`, `[env:nano_old]`, `[env:nano_full]` und (seit 1.08, nur mit aktiven Erweiterungen) `[env:pico]`: Alle Abschnitte erben `lib_deps` aus `[env]`; der Pico hat kein eigenes `lib_deps` mehr. Das ist die Behebung von „fehlender Erweiterungspfad in der platformio.ini bei der PICO Plattform“ aus der Revisionshistorie L3. (c) **Eigener Fehler der Übersetzung behoben:** `WriteGenButtonReleaseDefine` addierte Text und Zahl (`'#define … ' + GenOption - 1`): TypeError bei `GEN_BUTTON_RELEASE_COM` 2 oder 3 (bei 0, 1 und ungültig nicht erreicht, deshalb nie aufgefallen); jetzt `str(int(GenOption) - 1)`.
+
+**Nicht umgesetzt, offen:** Die Einstellung **„Taster Loslassen simulieren“** (`GEN_BUTTON_RELEASE_COM`, Excel-Konfigurationstabelle `Config`, Zeile 7, Wert 0; Hinweis „Nach der Änderung dieser Einstellung muss das DCC Arduino Programm neu installiert werden!“; seit 2023 im Excel-Programm, die Bibliothek unterstützt sie: `DCCInterface.cpp`): In `csv/Config.csv` und `csv/Named_Ranges.csv` fehlen die Zeile und der Name (die neue Zeile verschiebt alle folgenden Zeilen der Tabelle `Config`, deshalb ist ein Eintrag von Hand riskant), und in der Web-Oberfläche gibt es keine Einstellung dafür; das Programm schreibt deshalb immer `GEN_OFF`. Die Tabelle `Config` der Arbeitsmappe enthält außerdem **lokale Werte des Entwicklers** (zum Beispiel „PlatformIO Build verwenden“ = 0) und wurde deshalb nicht übernommen. Vorschlag: eigene Einstellung in „Programm Einstellungen → Spezialeinstellungen“ (Auswahl aus, 1 und 2 mit Hinweis), die `GEN_BUTTON_RELEASE_COM` schreibt; braucht eine Entscheidung zur Bedeutung der Werte (laut Code: 0 oder 1 = aus, 2 = 1, 3 = 2).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `proggen/M02_Public.py` | 1.05 | Test-Suffix L3 |
+| `proggen/M08_ARDUINO.py` | 1.16 | symlink:// (mit Rückfall), Erweiterungen einmal in [env], GEN_BUTTON_RELEASE_COM |
+| `libraries/MobaLedLib/library.properties` | 3.5.0-L3 | Version der Bibliothek |
+| `libraries/MobaLedLib/LICENSE`, `README.md`, `keywords.txt` | - | neu aus der Bibliothek 3.5.0-L3 |
+| `webmobaledlib.py` | 3.16 | Version, benötigte Dateien |
+| `install/ANLEITUNG_Installation.md` | 3.63 | PlatformIO, Bibliothek, Pico |
+| `install/BETATEST_Checkliste.md` | 2.41 | Punkte 172 und 173 |
+
+**Tests** (`test_pio_ini_316.py`, 17): die `platformio.ini` wird mit der echten Funktion `__Create_PIO_Build` (Attrappen für Erweiterungen und Arbeitsmappe) erzeugt und geprüft: `MobaLedLib=symlink://libraries/MobaLedLib@3.5.0-L3`, danach die Erweiterungen, im Abschnitt `[env]`; **jede Erweiterung genau einmal in der Datei**; `[env:pico]` ohne eigenes `lib_deps` und mit `lib_ignore`; `esp32`, `nano_new`, `nano_old`, `nano_full` mit `lib_deps = ${env.lib_deps}`, aber ohne Erweiterungen; Aufbau von `[env]` wie im Excel-Programm; `file://` ohne Verknüpfungen und ohne Erweiterungen (genau fünf `lib_deps =`-Zeilen); ohne Test-Suffix; Abbruch beim Fehler im Schreiben der Erweiterungen; `Lib_Link_Scheme` (Linux: `symlink`, Fehler 1314 wie Windows ohne Entwicklermodus: `file`, Ergebnis wird gemerkt, keine Reste in `/tmp`); `Test_Suffix` `L3`, „Ver. 3.5.0L3“ und `library.properties` stimmen überein; der Ordner `libraries/MobaLedLib` mit `src` liegt im Programmordner; **der Quelltext `src` (Dateien) ist mit der hochgeladenen Bibliothek gleich**; `WriteGenButtonReleaseDefine` mit -1, 0, 1, 2, 3, 4. Alle früheren Tests laufen weiter. **Nicht geprüft:** ein echter Build mit PlatformIO (symlink unter Windows, Linux, macOS; Pico mit Erweiterung): Checkliste 172 und 173.
+
+## 3.15 (2026-11-12)
+
+**Firmware herunterladen** (Excel-Programm 3.5.0L2/L3: `M34_FirmwareDownload`, `UserForm_FirmwareDownload`, `UserForm_Worker`, `btnDownload` in `Select_Firmware_Form`; der Entwickler hat die echte `index.json` geliefert und „umsetzen“ gesagt). Struktur der Liste (geprüft an der echten Datei): JSON-Feld; der erste Eintrag `{"_comment": ...}` hat kein `name` und wird übersprungen; je Eintrag `name`, `version`, `license`, `platform` (`MLL512V1`), je Sprache `DE`/`EN`/`NL` mit `short` und `detail`, `zip_path` (relativ zu `.../MobaLedLib_Docu/master/firmware/`, zum Beispiel `512v1/Pico2x3-Tiny-V1.0.zip`), `desc_filename`. Inhalt der echten Datei: Plattform `MLL512V1` mit `Blink` 1.0, `Pico2x3-Tiny` 1.0/0.7/0.5/0.1, `PicoServo-Tiny` 1.0/0.8, `PicoSound-Tiny` 1.0/0.4 (in der Datei nicht nach Versionen geordnet; Sortierung wie `Sorted_Versions_Desc`).
+
+**Neue Dateien:**
+- `headless/headless_firmware_dl.py` 1.00 (Logik ohne Oberfläche): `parse_index` (Plattform → Name → Versionen absteigend, `_comment` übersprungen), `localized` (Sprache der Oberfläche → EN → erste Sprache → leer, wie `Get_Localized_Value`), `language_code` (0 DE, 2 NL, 3 FR, 4 IT, 5 ES, 6 DA, sonst EN, wie `Get_UI_Language`), `compare_version` (wie `Compare_Version`), `fetch_index` (`?nocache=Zeitstempel`, 30 s, höchstens 2 MB), `download_url`, `target_file`, `download_file` (temporäre `.part`-Datei, vorhandene Datei bleibt bei einem Fehler, höchstens 64 MB, leere Datei = Fehler), `unzip_safe`, `install_entry` (temporäre Datei → Ordner kopieren → entpacken → ZIP löschen; bei einem Fehler im Entpacken bleibt die ZIP-Datei liegen, wie im Original), `FirmwareError(kind, detail, path)`.
+- `_web/web_form_firmware_download.py` 1.00: `DownloadFlow` (Ablauf mit den Meldungen und Texten des Originals, ohne Browser prüfbar), `build_nodes`, `translated_texts`, `firmware_download_async` (Warte-Dialog wie `UserForm_Worker`, Baum `ui.tree` Plattform → Name → Version, Kurz- und Langtext, **Herunterladen**/**Abbrechen**).
+**Geänderte Dateien:** `_web/web_form_firmware.py` 1.01 (Knopf **Firmware laden** (Text der Sprachtabelle), der Dialog öffnet auch ohne Firmware-Dateien mit Hinweis und gesperrtem **Installieren**, nach dem Herunterladen Ordner neu einlesen und die Firmware vorwählen; die alte Fassung steht als Kommentar), `_web/web_form_options.py` 1.19 (`_web_pico_firmware`: kein Abbruch mehr bei leerer Liste; übersetzt die Texte im **Worker-Thread** (`M09.Get_Language_Str`) und übergibt `download`, `rescan`, `fw_texts`), `csv/Web_Languages.csv` (1216 Einträge, **8 neu**: Texte des Excel-Programms, die in dessen Sprachtabelle noch fehlen: ungültiges Format, keine Download-Datei, Verzeichnis existiert nicht, nicht gespeichert, nicht entpackt, „heruntergeladen nach:“, Datei leer, kann nicht überschrieben werden; alle anderen Texte (Titel, Warte-Texte, Fehlermeldungen, Hinweistext, Knöpfe) kommen aus `Languages.csv`).
+
+**Abweichungen vom Excel-Original (Absicht):** (1) `urllib`/`zipfile` statt PowerShell (`Invoke-WebRequest`, `Expand-Archive`): läuft auch unter Linux und macOS. (2) **Sicherheit:** nur `https`; absolute Adressen nur von `github.com`/`githubusercontent.com` (Excel erlaubt jede `http`-Adresse); beim Entpacken keine Pfade außerhalb des Ordners, keine Verknüpfungen, höchstens 500 Dateien und 128 MB; Download höchstens 64 MB. (3) Der Baum ist ein `ui.tree` (Quasar), der Name zeigt Kurztext der neuesten Version; Doppelklick auf einen Knoten startet den Download **nicht** (nur der Knopf). (4) Die ZIP-Datei wird, wie im Original, zuerst in den Firmware-Ordner kopiert und nach dem Entpacken gelöscht (die Frage „Datei existiert bereits … überschreiben?“ betrifft daher die ZIP-Datei, die nur nach einem Fehler beim Entpacken bleibt).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `headless/headless_firmware_dl.py` | 1.00 | neu: Liste, Download, sicheres Entpacken |
+| `_web/web_form_firmware_download.py` | 1.00 | neu: Dialog Firmware Herunterladen |
+| `_web/web_form_firmware.py` | 1.01 | Knopf Firmware laden, leere Liste, Vorwahl |
+| `_web/web_form_options.py` | 1.19 | Anbindung, kein Abbruch bei leerer Liste |
+| `csv/Web_Languages.csv` | - | 1216 Einträge (8 neu) |
+| `webmobaledlib.py` | 3.15 | Version, benötigte Dateien |
+| `install/ANLEITUNG_Installation.md` | 3.62 | Abschnitt Firmware herunterladen |
+| `install/BETATEST_Checkliste.md` | 2.40 | Punkt 171 |
+
+**Tests** (`test_firmware_dl.py`, 63, mit **nachgebautem Server** und der **echten** `index.json`): Ordnung und Inhalt der Liste (neun Einträge, Versionen absteigend, `_comment` übersprungen); Sprachen und Rückfall; `download_url` (relativ, kodiert; `http`, fremde Server wie `evilgithub.com` und `github.com.evil.org`, `ftp`, `..`, absolut, Laufwerk, NUL abgelehnt); `fetch_index` (Adresse mit `nocache`, Kennung, Zeitgrenze, 404, Namensauflösung, Zeitüberschreitung, zu große Antwort); `download_file` (200 000 Byte, `.part` entfernt, leer und zu groß: Fehler und vorhandene Datei bleibt); `unzip_safe` (Dateien und Ordner, Überschreiben, abgelehnt: `..`, absolut, Laufwerk, versteckter `..`, Verknüpfung, zu groß, kaputt, **jeweils ohne dass etwas entpackt wird**); Gesamtablauf mit einer echten ZIP-Datei (uf2 und desc) und **die vorhandene Auswahl (`scan_firmware`) findet die Firmware mit Name, Version und Texten**; kaputte ZIP-Datei bleibt liegen; fünf Fehlerfälle; der Ablauf des Dialogs mit den Meldungen des Originals (Liste nicht ladbar, falsche Liste, leere Liste, Ordner anlegen, Warte-Texte mit Name und Version, Datei existiert (Ja/Nein), sechs Fehlerarten); Baum; `translated_texts`; Quelltext der Auswahl und des Handlers; **alle Texte stehen in der Sprachtabelle des Excel-Programms oder im Katalog**; die acht neuen Texte in sechs Sprachen mit erhaltenem `#1#`. **Nicht geprüft:** der Dialog im Browser (Baum, Warte-Dialog, verschachtelte Dialoge); gegen das echte GitHub; das Schreiben der heruntergeladenen Firmware auf einen echten Pico (Checkliste 171).
+
+## 3.14 (2026-11-12)
+
+**Übernahme der Änderungen der neuen Excel-Version 3.5.0L3** (Arbeitsmappe `Prog_Generator_MobaLedLib_1.xlsm` des Entwicklers; Änderungen laut Revisionshistorie: L (26.10.): Servo-Dialog mit Tasten Hoch/Runter und Bild hoch/runter, bis zu 2000 Variablen für ESP32 und PICO, Google-Übersetzung repariert; L2 (05.11.): Firmware-Download; L3 (09.11.): Firmware-Download ohne Auswahl des Pico, **Nano Every (4809) entfernt**, fehlender Erweiterungspfad in der `platformio.ini` beim PICO behoben, Readme und Startseitentexte). Der Entwickler hat „umsetzen“ gesagt (Vorschlag: 1 bis 4 und 6, der Firmware-Download als eigene Version danach) und festgelegt, dass die **Test-Erweiterungen HLMakro und HL_Test*** nicht übernommen werden.
+
+**Vorgehen:** VBA der neuen Mappe mit `vbaextract.py` ausgelesen (106 Module) und mit dem Stand K aus `vba_vergleich_C1_K.zip` (`quelltext_neu`) verglichen (ohne Groß-/Kleinschreibung und Leerraum: 42 Module mit Änderung, davon die meisten nur der Kopf `VB_Base`; echte Änderungen in `UserForm_ServoPos`, `M09_Translate`, `M08_Arduino`, `M07_COM_Port(_New)`, `Select_COM_Port_UserForm`, `UserForm_Options`, `Select_Firmware_Form`, `M08_Fast_Arduino`, `M02_Public`, `M28_Diverse`; neu: `M34_FirmwareDownload`, `UserForm_FirmwareDownload`, `UserForm_Worker`).
+
+**Umgesetzt:**
+1. **Nano Every entfernt** (`M02_Public` 1.04: `BOARD_NANO_EVERY`; `UserForm_Options` 1.03; `M28_Diverse` 1.02: `Get_Old_Board`; `M08_Fast_ARDUINO` 1.01 (neuer Kopf): CPU-Typ und Block für ATmega4809 im Skript des schnellen Bootloaders; `M08_ARDUINO` 1.15: Zeile „CPU type“, Gerätesignatur 0x1E9651 und Sonderfall der automatischen Umstellung; `M07_COM_Port` 1.09: Sonderweg des Nano Every in `_DetectArduino_once` (von mir in 3.10 eingebaut) entfällt; `DetectArduino_old` der Übersetzung bleibt als toter Code). Im Dialog war der Every ohnehin nicht wählbar.
+2. **Board-Typ als Parameter der Anschlussliste** (wie im Excel-Programm): `EnumComPorts(Show_Unknown, ResNames, PrintDebug=True, BoardType=None)`, `Check_If_Port_is_Available(PortNr, BoardType=None)`, `Check_If_Port_is_Available_And_Get_Name(PortNr, BoardType=None)`, `_Accept_Unknown_Ports(BoardType)` (Vorgabe: Board-Typ des Blatts). `M08_ARDUINO` übergibt `M02a.Get_BoardTyp()` ausdrücklich (wie Excel). **Bewusst kleiner als das Original:** `Detect_Com_Port(…, BoardType, DefaultComPort)`, `Show_USB_Port_Dialog(…, BoardType)` und `Update_SpinButton(BoardType, …)` sind **nicht** erweitert (der Firmware-Knopf der Web-Version findet den Pico über `headless_pico.flash_uf2` selbst, braucht also keinen eigenen Anschlussdialog; die Erweiterung gehört zum Firmware-Download).
+3. **Knopf „Firmware installieren“ für alle Boards** (`web_form_options` 1.18): `pico_only` entfällt, der Ordner `MobaLedLib/firmware` wird bei Bedarf angelegt (`CreateFolder Get_FirmwareDir()` im Original).
+4. **Servo Test: Tastatur** (`web_servotest` 2.08, `handle_servo_key`, `KEY_ARROWS`): Pfeil hoch = `>` (plus1), Pfeil runter = `<` (minus1), Bild hoch = `>>` (plus2), Bild runter = `<<` (minus2) wie KeyCode 38/40/33/34 im Excel-Dialog; nur bei aktiven Pfeiltasten (Minimal- und Maximalposition einstellen), keine zweite Taste während eine gehalten wird, nichts mit Umschalt/Strg/Alt/Meta, keine Wiederholung; `ui.keyboard(repeating=False, ignore=["input","select","textarea"])`; ein Skript verhindert das Scrollen der Seite, solange die Pfeiltasten aktiv sind (Flag in `refresh()`). Mit dem Regler (Zustand Einstellen) bedient sich der Regler selbst (Quasar). **Nicht übernommen:** die Zeile „reset selected servo“ in `UserForm_ServoPos` (`SendValue …, 0` beim Öffnen), weil das Web-Modell beim Betreten bereits den Servo wählt und beim Verlassen 0 sendet.
+5. **Tabellen aus der Arbeitsmappe** (Hilfsprogramm `xlsm_nach_csv.py`, nicht im Release; schreibt im Format des Ordners `csv`: UTF-8 mit BOM, `;`, CRLF, Anführungszeichen nur wo nötig; `_x000D_` → Zeichen): `csv/Languages.csv` 1175 Zeilen (vorher 1061; 155 Zeilen geändert, zum Beispiel Rechtschreibung, Texte mit dem Platzhalter `#2#` für den Namen des Arduino wie im Programm, Firmware-Meldungen), `csv/Lib_Macros.csv` 376 Zeilen (vorher 359; 17 neue Makros, 107 geänderte; **ohne** die 11 Zeilen der Erweiterungen `EX.*`: die 9 Test-Makros HLMakro, HLMakro2, HLtest, HL_test, HL_Test1, HL_test7, HL_TestMacro, HL_Testmacro2, HL_TestMacro_a und die zwei Konstruktoren der Schedule-Erweiterung `EX.P_ScheduleDuoExtension`, `EX.P_ScheduleExtension`), `csv/Par_Description.csv` 199 (vorher 156), `csv/Platform_Parameters.csv` 136 (vorher 127; **ESP32 und PICO: MaxLed 16384, MaxInput 2000**). Die alte csv stammte offensichtlich aus einer früheren Version (Makros wie `Name_LED_Number`, die der Python-Code seit K unterstützt, fehlten in der Tabelle). Die neuen Makros stehen im Quelltext der mitgelieferten Bibliothek `MobaLedLib` 3.5.0-L (`src/MobaLedLib.h`: `SingleLedSignal`, `CopyNLEDs`, `CopyLEDEx`, `RGB_Ring`, `Signal2`, `InCh_to_LocalVar`, `Bin_InCh_to_TmpVar1`, `RGB_Heartbeat_Color_Switch`); `Name_LED_Number`, `Name_LED_Offset` und `include` behandelt das Programm selbst. **Nicht übernommen** (Benutzerdaten oder Arbeitskopie des Entwicklers): `Config` (die Werte der Mappe sind lokale Einstellungen, zum Beispiel „PlatformIO Build verwenden“ = 0), `Examples` (98 statt 121 Zeilen), `DCC`, `CAN`, `Selectrix`, `LNet`.
+
+**Nicht übernommen, offen:** (a) **Firmware-Download** aus dem Internet (`M34_FirmwareDownload`: Index `…/MobaLedLib_Docu/master/firmware/index.json` mit `platform`, `name`, `version`, `zip_path`, `short`, `detail` mehrsprachig; Baumdialog Plattform → Name → Version; Download in den Firmware-Ordner, ZIP entpacken und löschen; Schaltfläche `btnDownload` im Firmware-Auswahldialog, danach Auswahl der Datei): als eigene Version; (b) **Bibliothek `MobaLedLib@3.5.0-L3`** samt `Test_Suffix` `L3` in `M02_Public` und **`symlink://` statt `file://`** für die Bibliothek in der `platformio.ini` (`M08_ARDUINO` Zeile 734; in der Web-Version steht `file://libraries/MobaLedLib@3.5.0[-Suffix]`): braucht die neue Bibliothek aus dem Excel-Release und einen echten Build (Symlinks unter Windows); (c) `Write_PIO_Extension` auch beim PICO (Verschiebung im Original; in der Web-Version noch nicht verglichen); (d) `M09_Translate` (Google-Übersetzung nur im Excel) und Baumklassen: gibt es im Web nicht; (e) die in `Config` neue Einstellung „Taster Loslassen simulieren“ (nur Excel-Seite geprüft).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `proggen/M02_Public.py` | 1.04 | `BOARD_NANO_EVERY` entfällt |
+| `proggen/UserForm_Options.py` | 1.03 | Nano Every entfällt |
+| `proggen/M28_Diverse.py` | 1.02 | Nano Every entfällt |
+| `proggen/M08_Fast_ARDUINO.py` | 1.01 | Block für ATmega4809 entfällt (neuer Kopf) |
+| `proggen/M08_ARDUINO.py` | 1.15 | Nano Every entfällt, Board-Typ bei der Anschlussprüfung |
+| `proggen/M07_COM_Port.py` | 1.09 | Board-Typ als Parameter, Nano-Every-Weg entfällt |
+| `_web/web_servotest.py` | 2.08 | Tastatur (Pfeil, Bild) |
+| `_web/web_form_options.py` | 1.18 | Firmware installieren für alle Boards |
+| `webmobaledlib.py` | 3.14 | Version, benötigte Dateien |
+| `csv/Languages.csv`, `Lib_Macros.csv`, `Par_Description.csv`, `Platform_Parameters.csv` | - | aus der Arbeitsmappe 3.5.0L3 |
+| `install/ANLEITUNG_Installation.md` | 3.61 | Abschnitt 9.1 und Zusammenfassung |
+| `install/BETATEST_Checkliste.md` | 2.39 | Punkte 167 bis 170 |
+
+**Tests:** `test_servo_keys.py` (19: alle vier Tasten, Loslassen, zweite Taste, Wiederholung, inaktive Pfeiltasten, Umschalt/Strg/Alt/Meta, andere Tasten, `busy`, Quelltext), `test_tables_314.py` (18: Format der vier Dateien (Lesen und Schreiben ergibt dieselben Bytes), keine `_x000D_`, Zeilen- und Spaltenzahlen, neue Texte, keine `EX.*`- und HL-Zeilen, neue Makros, Makros im Quelltext der Bibliothek, `MaxLed`/`MaxInput`, neue Parameter, keine aktive Zeile mit Nano Every, Firmware-Knopf ohne `pico_only`), `test_detect_310.py` (38; der Nano-Every-Test ersetzt: kein Sonderweg, `BOARD_NANO_EVERY` nicht mehr vorhanden). Alle früheren Tests laufen weiter (Erkennung 13 und 14, Meldung beim Hochladen 17, Übersetzungen, Einstellungsgruppen, Anfänger Modus, erster Start, Update-Auswahl und so weiter). `test_circular_import.py` meldet beim **ersten** Punkt („Nachstellung: alte Module“) einen Fehler: Der Prüfbaum enthält die behobenen Module schon, der Punkt ist veraltet, nicht von dieser Version verursacht. **Nicht geprüft:** mit der neuen Tabelle im Browser (Makro-Auswahl, Übersetzen eines Blattes mit den neuen Makros: Checkliste 170); Servo-Tasten im Browser und mit Servo (Checkliste 167); der Firmware-Knopf mit Hardware (168).
+
+## 3.13 (2026-11-12)
+
+**Die Bootloader-Prüfung ist jetzt Standard** (Entwickler: „Die neue Erkennung funktioniert gut. Sie sollte standardmäßig eingeschaltet sein. Wenn ein Anwender explizit möchte, kann er sie in den Optionen ausschalten.“ Rückmeldung zu 3.12: Der alte Nano wird auf dem Raspberry Pi erkannt.)
+
+**Umsetzung:** `proggen/M07_COM_Port.py` **1.08:** `Detect_Bootloader_Enabled()` liefert **an**, wenn die Einstellung **nie gespeichert** wurde, **leer** ist oder das Lesen fehlschlägt; **aus** nur bei `0`, `false`, `False`, `nein`, `aus`, `off` (die Seite der Einstellungen speichert Wahrheitswerte `True`/`False`). `_web/web_tabs.py` **1.14:** `Default` der Einstellung `"1"` (die Seite zeigt den Haken auch dann gesetzt, wenn noch nichts gespeichert ist: `ui.checkbox(…, value=default != "")`). **Neuer Name** der Einstellung: `NanoBootloaderDetection` (vorher `DetectBootloader`). Grund: Die Seite der Programm Einstellungen **schreibt beim Speichern alle Einstellungen**, also auch den unveränderten Wert `False` der Vorgabe „aus“ aus 3.10 bis 3.12; unter dem alten Namen wäre die Prüfung bei jedem, der die Seite einmal gespeichert hat, ausgeschaltet geblieben. Der alte Name wird nirgends mehr gelesen. Die Beschriftung („Bootloader des Nano beim Prüfen erkennen“) bleibt; der Hinweistext ist neu (Katalog 1208 Einträge, 1 neu, 6 Sprachen): „Mit Haken (Vorgabe) … Ohne Haken prüft das Programm nur, ob sich der Anschluss öffnen lässt, und lässt Ihre Einstellung unverändert.“ Anleitung 3.60 (Zeile der Einstellung neu geschrieben), Checkliste 2.38 (Punkt 166), Wiki `wz_programm_einstellungen`, `erstes_programm`, `pg_arduino`, `fehlersuche`.
+
+**Auswirkung für alle Anwender:** Mit dem Haken **„Automatisch erkennen“** (Optionen Werkzeuge, ab Neuinstallation gesetzt) wird das Board nach **USB Port erkennen** jetzt tatsächlich nach dem Bootloader eingestellt (**alt** oder **neu**; zuvor stellte die Prüfung jeden Nano auf „neue Version“ um), und ein **UNO** wird, wie im Excel-Programm, zum Nano mit dem passenden Bootloader umgestellt (mit Hinweis „Das Programm hat den Bootloader … geprüft und das Board automatisch auf … gestellt.“, wie im Protokoll von 2026-11-11 17:21). Wer die Umstellung nicht möchte, nimmt den Haken „Automatisch erkennen“ **oder** die neue Einstellung weg. **Risiko:** Auf Nanos, die weder bei 57600 noch bei 115200 antworten, kommt „nicht als LED Arduino erkannt“ nach etwa 6 Sekunden (mit **Nein** geht es mit der gewählten Einstellung weiter). Nanos mit der Option „Full memory“ (eigene Bootloader) wurden in den Tests nicht geprüft.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `proggen/M07_COM_Port.py` | 1.08 | Vorgabe an, neuer Name |
+| `_web/web_tabs.py` | 1.14 | Default 1, neuer Name |
+| `webmobaledlib.py` | 3.13 | Version, benötigte Dateien |
+| `csv/Web_Languages.csv` | - | 1208 Einträge (1 neu) |
+| `install/ANLEITUNG_Installation.md` | 3.60 | Zeile der Einstellung |
+| `install/BETATEST_Checkliste.md` | 2.38 | Punkt 166 |
+
+**Tests:** `test_detect_310.py` (38), `test_detect_311.py` (13) und `test_detect_312.py` (14) angepasst: Die Einstellung wird ausdrücklich ausgeschaltet, wo der Kurzweg geprüft wird (vorher: kein Eintrag = aus); neu: **kein Eintrag, leer und `None` sind an**, `1/ja/true/True` an, **`0/false/False/nein/aus/off` aus**; die Einstellung hat `Default` `"1"` und den neuen Namen, hinter `IPUploadTimeout`, in den Spezialeinstellungen; ohne Eintrag läuft die Prüfung (Sync gesendet, alter Bootloader mit Signatur erkannt). Alle bestanden, ebenso die Tests zur Meldung beim Hochladen (17). **Nicht geprüft:** mit echter Hardware außer den Rückmeldungen des Entwicklers zu 3.12 (Raspberry Pi); **Windows** mit der Vorgabe an und die Seite der Einstellungen im Browser (Haken wird beim Speichern und nach dem Neustart richtig behalten, Checkliste 166).
+
+## 3.12 (2026-11-12)
+
+**1. Bootloader-Prüfung: Synchronisation wie avrdude** (Auswertung von `bootloader_test.py` mit dem alten Nano auf dem Raspberry Pi, siehe 3.11; der Entwickler hat „umsetzen“ gesagt) und **2. Update Testversion: Entwicklertests am Ende der Liste** (Wunsch des Entwicklers: Er hat auf GitHub ein Pre-Release `test1` angelegt, um das Programm auf seinen vier Geräten zu verteilen und das Update zu prüfen; es stand an erster Stelle der Liste, andere Tester hätten es aus Versehen installieren können).
+
+**1. Umsetzung (`proggen/M07_COM_Port.py` 1.07):** Ursache aus dem Test des Entwicklers: Der **erste** Sync direkt nach dem Loslassen von DTR geht verloren (A: Versuch 1 ohne, Versuch 2 mit Antwort nach 0,41 s; B und D mit 1 s bzw. 150 ms Wartezeit im ersten Versuch); das Programm sendete einmal und wartete 2 s (10 Lesevorgänge à 0,2 s) ohne neu zu senden, der **alte Bootloader** war dann schon im Sketch. **Jetzt:** nach dem DTR-Puls `SYNC_START_DELAY` = 0,15 s warten, `ser.reset_input_buffer()` (Ausgabe des Sketches verwerfen), dann bis zu `SYNC_ATTEMPTS` = 10 mal GET_SYNC senden mit **einem** Lesevorgang (`__transact(…, Reads=1)`, neuer Parameter, Vorgabe 10 wie bisher für `getdeviceinformation`) und `SYNC_RETRY_PAUSE` = 0,1 s Pause (etwa 0,3 s je Versuch, höchstens etwa 3 s je Baudrate); „Give up after 10 trials“; `Bootloader antwortet mit … Baud (Versuch n)`. Gilt nur für die **optionale Bootloader-Prüfung** (Einstellung `DetectBootloader` an); Kurzweg und Nano Every unverändert. `DETECT_LOOPS_BOOTLOADER` bleibt 2.
+
+**2. Umsetzung (`_web/web_update.py` 1.13):** `is_test_release(tag, name)` (Tag oder Name beginnt mit „test“, ohne Beachtung der Groß-/Kleinschreibung und eines vorangestellten „v“; unabhängig vom Pre-Release-Kennzeichen); `release_entries` liefert **zuerst** die normalen Releases (höchstens `limit` = 15, neueste zuerst), **danach** höchstens `TEST_RELEASES_MAX` = 5 Tests des Entwicklers (neueste zuerst); `release_choices`: Zusatz **„Entwicklertest“**, ein Test ist nie „neueste Version“, „installiert“ oder „älter“ (neues Feld `test`); die **Vorauswahl** (Index 0) ist damit das neueste normale Release; gibt es nur Tests, stehen sie in der Liste (nichts geht verloren, keine Bezeichnung „neueste“). `pick_release` (ältere Funktion) nimmt Tests nur, wenn es nichts anderes gibt. Das normale **Update webMobaLedLib** bietet ohnehin nie ein Pre-Release an. Katalog 1207 Einträge (1 neu: „Entwicklertest“, 6 Sprachen).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `proggen/M07_COM_Port.py` | 1.07 | Wartezeit, Puffer leeren, Sync bis zu 10-mal neu senden |
+| `_web/web_update.py` | 1.13 | Entwicklertests am Ende der Liste |
+| `webmobaledlib.py` | 3.12 | Version, benötigte Dateien |
+| `csv/Web_Languages.csv` | - | 1207 Einträge (1 neu) |
+| `install/ANLEITUNG_Installation.md` | 3.59 | Abschnitt 7.1a, Zeile der Einstellung |
+| `install/BETATEST_Checkliste.md` | 2.37 | Punkte 164 und 165 |
+
+**Tests:** `test_detect_312.py` (13, mit **virtueller Zeit** und einem nachgebauten Nano, dessen Bootloader erst 0,1 s nach dem Loslassen von DTR bereit und nur 1,2 s erreichbar ist): erkannt im ersten Versuch; erster Sync geht verloren: erkannt im zweiten; erst nach 0,5 s bereit; Fenster nur 0,8 s; 115200 Baud beim alten Bootloader: nach genau zehn Syncs „0“; ohne Bootloader höchstens etwa 4 s je Baudrate; 50 Byte Sketch-Ausgabe im Puffer werden verworfen; neuer und alter Bootloader über `Get_Arduino_Baudrate` in unter 8 s; nichts antwortet: 0 in höchstens etwa 8 s (Protokoll des Pi vorher: 24 s); `__transact` mit `Reads`; Kurzweg ohne Einstellung ohne Sync. `test_update_testrel.py` (14): Reihenfolge mit `test1`, `Test-2`, Name „vTest 3“; `is_test_release`; Begrenzung 15 + 5; nur ein Test; Auswahl und Vorauswahl; `pick_release`; „Entwicklertest“ in sechs Sprachen. Die Tests zu 3.10 und 3.11 (38, 13) und zur Auswahl der Version (26) laufen weiter (zwei Erwartungen in `test_detect_311` angepasst: zehn statt drei Syncs, ein Lesevorgang). **Nicht geprüft:** mit echter Hardware (ob der alte Nano auf dem Pi jetzt erkannt wird: Checkliste 164); gegen das echte GitHub und im Browser (Checkliste 165).
+
+## 3.11 (2026-11-11)
+
+**Bootloader-Prüfung: Wartezeit verkürzen und Protokoll für die Fehlersuche** (Rückmeldung zu 3.10: Windows erkennt beide Nanos, Raspberry Pi nur den neuen Bootloader; der alte Nano wird nach etwa 24 s als „nicht erkannt“ gemeldet). Der Entwickler hat „umsetzen“ für die Punkte 1, 2 und 4 gesagt; Punkt 3 (Zeiten nach dem Zurücksetzen anpassen) wartet auf das Ergebnis von `bootloader_test.py`.
+
+**Umsetzung (`proggen/M07_COM_Port.py` 1.06):**
+1. **Wartezeit:** `Get_Arduino_Baudrate` macht bei eingeschalteter Bootloader-Prüfung nur `DETECT_LOOPS_BOOTLOADER = 2` Durchläufe (je Baudrate einer, Start 57600: erst 57600, dann 115200) statt 8: Die Prüfung endet bei „nicht erkannt“ nach etwa 6 statt 24 Sekunden (Protokoll 17:22: 57600-Versuch 4,1 s, 115200-Versuch 1,7 s). Ohne die Einstellung unverändert (Kurzweg; im Test mit einer Ersatzfunktion ohne Antwort sind es weiter 8 Durchläufe). **Risiko:** Die Kommentare im Excel-Original sagen, dass die Baudrate manchmal nicht erkannt wird, wenn mit der falschen begonnen wird, und prüften deshalb vier Mal je Baudrate. Falls die Erkennung dadurch bei einzelnen Nanos schlechter wird, kann `DETECT_LOOPS_BOOTLOADER` ohne weitere Änderung erhöht werden.
+2. **Protokoll:** `__transact` schreibt bei jeder Synchronisation eine Debug-Zeile `M07.transact: gesendet 30 20, Antwort 14 10 (Lesevorgang 1 von 10, 0,45 s)` oder `… keine passende Antwort; erste empfangene Bytes: … (10 Lesevorgänge, 2,01 s)` (die Zeile mit den empfangenen Bytes war auskommentiert); `_DetectArduino_once` schreibt vor dem Synchronisieren `… Baud, vor dem Synchronisieren n Byte(s) im Empfangspuffer`. Damit lässt sich ein Fall wie der alte Nano auf dem Pi ohne Hilfsprogramm auswerten.
+4. **Dokumentation:** Anleitung 3.58 (Zeile der Einstellung: erste Tests, Raspberry Pi erkennt den alten Bootloader noch nicht zuverlässig), Checkliste 2.36 (Punkt 163), Wiki `wz_programm_einstellungen` und `fehlersuche`.
+
+**Ergebnis von `bootloader_test.py` mit dem alten Nano 1 auf dem Raspberry Pi 4B (`/dev/ttyUSB0`, Python 3.13.5, pyserial 3.5; Datei `testresult.txt`):** **57600 Baud:** A (wie das Programm) **JA** nach 0,41 s im **zweiten** Versuch (`14 10`, Signatur `1e 95 0f`); B (Puls, 1 s warten) **JA** im ersten Versuch (0,01 s); D (wie avrdude: Puls, 50 ms, 100 ms warten) **JA** im ersten Versuch (0,12 s); C (nur Öffnen) **nein**, 22 Byte im Puffer. **115200 Baud:** in A, B, D **nein**, die Antwort `4c 45` („LE“) ist die Ausgabe des Sketches auf dem Nano (läuft mit 115200 Baud, der alte Bootloader hört nur mit 57600); C **nein**, 51 Byte im Puffer. **Folgerungen:** (1) Der alte Bootloader **antwortet** auf dem Pi, mit 57600 Baud. (2) Das Öffnen allein setzt den Nano **nicht** zurück (C: der Sketch läuft weiter und sendet), der DTR-Puls ist der einzige Reset (Hypothese „zweiter Reset durch das Öffnen“ widerlegt). (3) Die erste Synchronisation **unmittelbar** nach dem Loslassen von DTR geht verloren (A: Versuch 1 ohne Antwort, Versuch 2 ok); mit 50 bis 150 ms Wartezeit (B, D) klappt Versuch 1. (4) Das Programm sendet pro Versuch **einmal** GET_SYNC und wartet dann bis zu 2 s (10 Lesevorgänge à 0,2 s), ohne neu zu senden (`__transact`): Ist der erste Versuch verloren, ist der alte Bootloader (kurzes Zeitfenster nach dem Reset) nach den 2 s schon im Sketch, die weiteren Versuche (2. und 3.) laufen ins Leere: Das erklärt „Give up after 3 trials“ mit Zeiten von 4,1 s je 57600-Durchlauf. **Vorschlag (nicht gebaut, auf „umsetzen“ des Entwicklers wartend):** nach dem DTR-Puls 150 ms warten und den Empfangspuffer leeren; GET_SYNC bis zu 10-mal im Abstand von etwa 0,3 s neu senden (wie avrdude und das Hilfsprogramm), statt dreimal 2 s zu warten.
+
+**Hilfsprogramm** `bootloader_test.py` 1.00 (nicht Teil des Releases): liest nur (GET_SYNC, Signatur), probiert 57600 und 115200 Baud mit vier Arten des Zurücksetzens (A wie das Programm, B Puls und 1 s warten, C nur Öffnen, D wie avrdude) und druckt eine Tabelle. Mit nachgebauten Bootloadern erprobt, nicht mit Hardware.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `proggen/M07_COM_Port.py` | 1.06 | ein Durchlauf je Baudrate, Protokoll der Bytes |
+| `webmobaledlib.py` | 3.11 | Version, benötigte Dateien |
+| `install/ANLEITUNG_Installation.md` | 3.58 | Zeile der Einstellung |
+| `install/BETATEST_Checkliste.md` | 2.36 | Punkt 163 |
+| `bootloader_test.py` | 1.00 | Hilfsprogramm (neu, nicht im Release) |
+
+**Tests** (`test_detect_311.py`, 13): zwei Durchläufe bei „nichts antwortet“ (Reihenfolge der Baudraten); acht ohne die Einstellung; alter und neuer Bootloader werden weiter erkannt (1 oder 2 Verbindungen); Protokollzeilen mit Antwort, ohne Antwort, mit falscher Antwort (`00 01`) und mit Bytes im Puffer; keine `transact`-Zeilen im Kurzweg. Die 38 Tests von 3.10 laufen weiter. **Nicht geprüft:** mit echter Hardware; die Ursache, warum der alte Nano auf dem Pi nicht antwortet, ist offen (Hypothesen: Zeit nach dem DTR-Puls, zweiter Reset durch das Öffnen unter Linux, Bytes im Puffer).
+
+## 3.10 (2026-11-11)
+
+**Prüfung des angeschlossenen Nano: Windows-Meldung, Raspberry-Pi-Meldungen, „Automatisch erkennen“** (Hinweise des Entwicklers mit einem alten Nano unter Windows und auf dem Raspberry Pi, zwei Protokolle, ein Raspberry-Pi-Tester mit „Full Memory“-Nanos). Der Entwickler hat nach der Auswertung der Protokolle „umsetzen“ mit dem Plan **A bis G und einer schaltbaren Bootloader-Prüfung** gesagt.
+
+**Befunde aus den Protokollen (alle in `proggen/M07_COM_Port.py`, `DetectArduino`):**
+1. **Windows, COM9 (CH340, „Nano Normal (old Bootloader)“):** `could not open port 'COM9': PermissionError(13, 'Zugriff verweigert')` beim **ersten** Öffnen mit 57600 Baud, **1 ms nach dem Schließen** der vorherigen Verbindung. Kurz davor lief der Blink-Zeitgeber des Auswahlfensters (`__Blink_Arduino_LED`, alle 1000 ms, 50 Baud) und der Versand von `#L …` an die LED über **dieselbe gemeinsame Verbindung** `PG.global_controller.arduino`. Der Kurzweg von `DetectArduino` **schloss die Verbindung nicht** (das VBA-Original schloss das Handle am Ende); der Treiber gab sie erst später frei.
+2. **Raspberry Pi, `/dev/ttyACM0`:** `AttributeError: 'NoneType' object has no attribute 'dtr'` (Zeile 910): eine andere Stelle setzte `PG.global_controller.arduino` zwischen `open()` und `dtr = True` auf `None`; Ergebnis -3, Meldung **„wird bereits von einem anderen Programm benutzt“**. Die frühere Korrektur 1.01 (`ser`) deckte die späteren Zeilen nicht ab. **Alle negativen Werte (-1, -2, -3) hatten denselben Text.**
+3. **Raspberry Pi, `/dev/ttyUSB0`:** `EnumComPorts:'USB Serial' '/dev/ttyUSB0'`: Beschreibung „USB Serial“ (Produktzeichenkette des CH340 unter Linux) steht nicht in der Liste der bekannten Beschreibungen (CH340, Arduino, USB Serial Port, USB2.0-Ser, FT232 …): Der Anschluss erscheint erst mit „Unbekannte Ports anzeigen“, und die Prüfung (`Check_If_Port_is_Available(_And_Get_Name)` benutzt dieselbe gefilterte Liste) meldete „kein LED Arduino angeschlossen“, obwohl er steckte.
+4. **Die Bootloader-Erkennung war gegenüber der VBA-Fassung verdreht:** Das Original (`DetectArduino_old`) nimmt den Kurzweg („115200 in Ordnung“) **nur beim „Arduino NANO Every“** und spricht sonst den Bootloader an (STK500-Sync); die Python-Fassung hatte `if not(… 'Arduino NANO Every')`, also das Gegenteil. Folge: Bei normalen Nanos meldete die Erkennung immer „115200“, `Get_Arduino_Baudrate` landete bei der **neuen** Bootloader-Einstellung, und die Automatik stellte ein „old“ auf „neue Version“ um (so beim Raspberry-Pi-Tester Frank mit seinem Nano, der wirklich den neuen Bootloader hat: Protokoll `L:1` → `L:2`, Befehl `cpu=atmega328`). Beim Nano mit **altem** Bootloader hätte das Umstellen das Hochladen scheitern lassen (`stk500_getsync … not in sync`, das war der erste Lauf im Protokoll von Frank).
+5. **`getdeviceinformation` gab immer `False` zurück** (auch bei gültiger Antwort des Bootloaders): Eine echte Prüfung hätte nie „erkannt“ gemeldet.
+6. **IDE-Rauschen:** `javax.jmdns … Bad domain name: possible circular name detected`, `dns[response …`, Hexdumps: über 1000 Zeilen je Minute in **allen** Läufen (auch mit „Automatisch erkennen“ an), weil die Java-Bibliothek der IDE im Netz nach Boards sucht und der mDNS-Name des Pi (`RaspiMLL-fritz-box-fritz-box-…`) durch Namenskonflikte mit der FRITZ!Box verlängert war.
+7. Kosmetik: „LED Arduino **Arduino**“ in Titeln und Texten des Auswahlfensters (`SetArduName('LED Arduino')` hängt selbst „Arduino“ an).
+
+**Umsetzung:**
+- `proggen/M07_COM_Port.py` **1.05:** `DetectArduino` ist jetzt ein Rahmen um `_DetectArduino_once`: **Sperre** (`_DETECT_LOCK`, RLock) gegen gleichzeitige Aufrufe; bis zu **drei Versuche** mit 0,4 s Pause bei -1/-2/-3 (beim Blinken mit 50 Baud nur einer); `_DetectArduino_once` arbeitet nach dem Zuweisen **nur noch mit der lokalen Verbindung `ser`** und schließt sie in jedem Fall (`finally`); unter Windows 0,3 s Pause nach dem Schließen einer bestehenden Verbindung. **Nano Every:** Kurzweg wie im Original. **Andere Boards:** mit der neuen Einstellung `DetectBootloader` **aus** (Vorgabe): Kurzweg „Anschluss lässt sich öffnen → 1“ (die Wahl des Benutzers bleibt, `Get_Arduino_Baudrate` liefert die Startbaudrate); **an:** STK500-Sync bei 57600 und 115200 Baud, **Erfolg = Antwort INSYNC+OK** (die Geräte-Signatur ist nur eine Zugabe, wie in der Tk-Fassung); `getdeviceinformation` liefert jetzt `True`, wenn der Bootloader antwortet. Liste der Anschlüsse (`EnumComPorts`): zusätzlich **Hersteller-Kennung** (`NANO_LIKE_VIDS`: CH340/CH341, FTDI, Arduino) für Nano (nicht ESP32/Pico); `Check_If_Port_is_Available(_And_Get_Name)`: ein gewählter Anschluss gilt bei einem **Nano** auch mit unbekannter Beschreibung (**nicht** bei ESP32 und Pico: Die Frage „Board stimmt nicht mit dem Anschluss überein“ aus 1.04 bleibt möglich).
+- `proggen/M08_ARDUINO.py` **1.14:** eigene Meldung für **-2/-3** („lässt sich nicht ansprechen (Fehlercode …)“), -1 behält „von einem anderen Programm benutzt“; das Board wird nur noch **automatisch umgestellt**, wenn `DetectBootloader` an ist oder der Anschluss ein ESP32 (CP210x) ist, **mit Hinweis** („Das Programm hat den Bootloader am COM Port … geprüft und das Board automatisch auf … gestellt.“); Hochladen: neue Meldung **„Hochladen: Keine Antwort“** (`Upload_Failed_Not_In_Sync`: `stk500_getsync`, `programmer is not responding`), die Meldung „Prüfung fehlgeschlagen“ nennt jetzt **beide** Bootloader-Einstellungen (nicht mehr nur „old“).
+- `proggen/M07_COM_Port_New.py` **1.04:** `SetArduName('LED')`. `_web/web_log.py` **1.06:** `is_ide_network_noise`: Zeilen mit `javax.jmdns`, `dns[response`, `dns[query`, `Picked up JAVA_TOOL_OPTIONS`, Hexdump eines DNS-Pakets oder Steuerzeichen werden **weder angezeigt noch protokolliert** (eine Zeile je Lauf nennt es); sie fehlen auch in `WebLog.lines`, damit die Auswertung der Upload-Ausgabe nicht gestört wird. `_web/web_tabs.py` **1.13:** neue Einstellung **„Bootloader des Nano beim Prüfen erkennen“** (`DetectBootloader`, Kontrollkästchen, Vorgabe aus) hinter `IPUploadTimeout`, erscheint in den **Spezialeinstellungen**.
+- Katalog **1206** Einträge (8 neu, 6 Sprachen): Einstellung (Beschriftung und Hinweis), Meldung -2/-3, Hinweis nach der automatischen Umstellung (Text und Titel), Meldung und Titel „Keine Antwort“, geänderte Meldung „Prüfung fehlgeschlagen“. `M09.Get_Language_Str` fällt auf den Katalog zurück, deshalb gilt das auch für die zusammengesetzten Meldungen mit Platzhaltern `#1#`, `#2#`, `#3#`.
+- Anleitung **3.57** (Abschnitt 9.1: sechs neue Zeilen), Checkliste **2.35** (Punkt 162), Wiki: `fehlersuche`, `pg_arduino`, `erstes_programm`, `wz_programm_einstellungen`.
+
+**Rückmeldung des Entwicklers zur Einstellung „Bootloader des Nano beim Prüfen erkennen“ (an), zwei Nanos (Nano 1 alter, Nano 2 neuer Bootloader), Protokoll `webmobaledlib__24_.log` (2026-11-11, 17:21 bis 17:27):** **Windows:** beide Nanos richtig erkannt, der richtige Typ eingestellt. **Raspberry Pi:** Nano 2 (neuer Bootloader) richtig (Protokoll: `Bootloader antwortet mit 115200 Baud`, nach 0,45 s; Hinweis „Board automatisch gestellt“). **Nano 1 (alter Bootloader, `/dev/ttyUSB0`, „USB Serial“):** Der Anschluss wird erkannt, aber **kein** Versuch der Bootloader-Prüfung antwortet: Die Prüfung wechselt viermal zwischen 115200 und 57600 Baud (`Give up after 3 trials` je Versuch; die 57600-Versuche dauern 4,1 s, die 115200-Versuche 1,7 s), nach etwa **24 s** kommt „Das Gerät am COM Port wurde nicht als LED Arduino erkannt“. Ursache offen: Das Protokoll enthält die gelesenen Bytes nicht (`logging.debug("transact: …")` ist auskommentiert). Hypothesen: Zeit nach dem DTR-Puls (der alte Bootloader startet langsamer; unter Linux setzt schon das Öffnen den Nano zurück, unser Puls ist ein zweiter Reset), Bytes im Puffer, Treiber. **Nächster Schritt:** `bootloader_test.py` (Hilfsprogramm, nur Lesen) auf dem Pi mit beiden Nanos laufen lassen; danach Wartezeit/Puffer anpassen.
+
+**Auswirkung auf bestehende Installationen:** Mit der Vorgabe (**aus**) stellt die Automatik das Board **nicht mehr** um (vorher: immer „neue Version“). Wer „old“ falsch gewählt hatte und sich auf die Korrektur verließ (zum Beispiel der Raspberry-Pi-Tester mit dem neuen Bootloader), bekommt jetzt beim Hochladen „Keine Antwort“ und muss die Einstellung ändern (die Meldung nennt es). Wer einen **alten** Bootloader hat, braucht kein „Nein“ mehr zu klicken.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `proggen/M07_COM_Port.py` | 1.05 | `DetectArduino` (Sperre, Schließen, Wiederholen, Bootloader-Prüfung), Liste der Anschlüsse, `getdeviceinformation` |
+| `proggen/M07_COM_Port_New.py` | 1.04 | `SetArduName('LED')` |
+| `proggen/M08_ARDUINO.py` | 1.14 | Meldungen -2/-3, Board nur mit Einstellung, „Keine Antwort“ |
+| `_web/web_log.py` | 1.06 | IDE-Netzwerkmeldungen ausblenden |
+| `_web/web_tabs.py` | 1.13 | Einstellung `DetectBootloader` |
+| `webmobaledlib.py` | 3.10 | Version, benötigte Dateien |
+| `csv/Web_Languages.csv` | - | 1206 Einträge (8 neu) |
+| `install/ANLEITUNG_Installation.md` | 3.57 | Abschnitt 9.1 |
+| `install/BETATEST_Checkliste.md` | 2.35 | Punkt 162 |
+
+**Tests** (`test_detect_310.py`, 38, mit nachgebauter serieller Schnittstelle und nachgebautem Bootloader): Kurzweg schließt die Verbindung; die Wahl des Benutzers bleibt; Nano Every; Bootloader-Prüfung bei altem, neuem und fehlendem Bootloader; `getdeviceinformation`; **Wiederholen** bei „Zugriff verweigert“; Pause unter Windows; **gleichzeitiges Setzen der Verbindung auf `None`** (kein `AttributeError`); **vier gleichzeitige Prüfungen** (nie mehr als eine offene Verbindung); Liste der Anschlüsse (VID, unbekannter Hersteller, `ttyS0`, Pico); `Check_If_Port_is_Available`; „Keine Antwort“ mit den **echten Zeilen** des Raspberry-Pi-Testers; **über 1000 echte JmDNS-Zeilen** aus den Protokollen werden erkannt, keine avrdude- und IDE-Zeile fälschlich; `WebLog`; die Einstellung; alle neuen Texte in sechs Sprachen mit erhaltenen Platzhaltern. Die früheren Tests (Prüfung beim Hochladen, erster Start, Meldung ohne IDE, Tooltips, Übersetzungen, Einstellungsgruppen, Anfänger Modus) laufen weiter. **Nicht geprüft:** mit **echter Hardware** (CH340 unter Windows und Linux, Nano mit altem und neuem Bootloader, „Full Memory“-Nanos); ob die Vorgabe später auf „an“ gestellt werden kann, hängt an den Rückmeldungen der Tester (Checkliste 162).
+
+## 3.09 (2026-11-10)
+
+**Hochladen mit der ARDUINO IDE: nur die Prüfung scheitert** (Raspberry-Pi-4B-Tester; Protokoll: ARDUINO IDE 1.8.19, Board „Nano (neue Version)“ = `arduino:avr:nano:cpu=atmega328`; Meldung „Es ist ein Fehler aufgetreten ;-(“; „Das Programm ist aber geladen, die Prüfung scheint fehlzuschlagen“).
+
+**Analyse des Protokolls:** Das Übersetzen gelingt (Sketch 72 % des Programmspeichers, 28 % des Arbeitsspeichers). Nach „Hochladen…“ meldet die IDE nur `avrdude: stk500_paged_load(): (a) protocol error, expect=0x10, resp=0x4c`, `stk500_cmd(): programmer is out of sync`, `avr_read(): error reading address 0x0000`, `read operation not supported for memory "flash"` und `failed to read all of flash memory`. Das ist das **Zurücklesen des Speichers** (avrdude vergleicht nach dem Schreiben); **kein** `stk500_paged_write` (Schreiben) und kein `stk500_getsync` (Verbinden). Das Programm ist also geschrieben. **Mögliche Ursachen (nicht bestätigt):** ein Nano-Nachbau mit **altem Bootloader** (57600 Baud) bei gewähltem „Nano (neue Version)“ (115200 Baud): das Standardrezept lautet „Nano Normal (old Bootloader)“; ein schlechtes USB-Kabel oder ein wackelnder Anschluss; zu schwache Stromversorgung am Computer (LEDs am USB-Anschluss); ein Nachbau-USB-Chip. Ein Lauf mit „old Bootloader“ steht beim Tester aus.
+
+**Umsetzung (`proggen/M08_ARDUINO.py` 1.13):** `Upload_Failed_Only_in_Verify(Lines)` erkennt, dass die Ausgabe des Laufs **nur** Lesefehler enthält (`stk500_paged_load`, `failed to read all of flash memory`, `read operation not supported for memory "flash"`) und **keine** Fehler vor oder beim Schreiben (`stk500_getsync`, `stk500_paged_write`, `can't open device`, `programmer is not responding`, `ser_open()`). Im Fehlerzweig von `Compile_and_Upload_Prog_to_Arduino` liest sie `ARDUINOMonitorPage.lines` (die Ausgabe des Laufs; `WebLog.lines`, bei Tk leer) und zeigt dann die neue Meldung **„Hochladen: Prüfung fehlgeschlagen“** („Das Programm wurde auf die Lichtmaschine geschrieben, aber die anschließende Prüfung … fehlgeschlagen. … Blinkt die Heartbeat LED? … Hilfen: Nano Normal (old Bootloader); anderes USB-Kabel und anderer Anschluss; LEDs nicht über den USB-Anschluss versorgen. …“) und schreibt eine Warnung ins Protokoll (`webmobaledlib.arduino`). **Alle anderen Fehler** bleiben bei der bisherigen Meldung (die alte Zeile steht unverändert im `else`-Zweig). Der Rückgabewert (`False`, `M30.EndProg()`) ist unverändert. Katalog 1198 Einträge (2 neu: Titel und Meldung in sechs Sprachen). Anleitung 3.56 (Abschnitt 9.1, neue Zeile), Checkliste 2.34 (Punkt 161), Wiki `fehlersuche` 1.01 und `pg_arduino` 1.07 (je eine Zeile).
+
+**Nicht umgesetzt (Vorschlag bleibt offen):** die Option „Nach dem Hochladen prüfen“ (`--pref upload.verify=false` für die IDE): nicht ausprobiert und nimmt eine Sicherheit weg; erst bauen, wenn der Test mit „old Bootloader“ nicht hilft.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `proggen/M08_ARDUINO.py` | 1.13 | Erkennung „nur Prüfung gescheitert“ und neue Meldung |
+| `webmobaledlib.py` | 3.09 | Version, benötigte Dateien |
+| `csv/Web_Languages.csv` | - | 1198 Einträge (2 neu) |
+| `install/ANLEITUNG_Installation.md` | 3.56 | Abschnitt 9.1 |
+| `install/BETATEST_Checkliste.md` | 2.34 | Punkt 161 |
+
+**Tests** (`test_upload_verify_msg.py`, 17): das **echte Protokoll des Testers** (als Texte und als Paare wie in `WebLog.lines`) wird erkannt; einzelne Lesemarke genügt; mit `stk500_getsync`, `stk500_paged_write`, `can't open device`, `programmer is not responding` davor: **nicht** erkannt; erfolgreiches Hochladen, leere Ausgabe, `None`, Compilerfehler: kein Treffer; der Fehlerzweig im Quelltext (`ast`: genau eine Abfrage, `else` mit der alten Meldung); Titel und Meldung aus dem **Quelltext** in allen sechs Sprachen übersetzt (mit `clean_text` wie im Dialog), Deutsch unverändert. Die Tests zur Meldung ohne IDE (23), zum ersten Start (7) und zu den Tooltips (13) laufen weiter. **Nicht geprüft:** mit einer echten ARDUINO IDE und einem Nano; im Browser (Aussehen der Meldung); ob die Ursache der Bootloader ist.
+
+## 3.08 (2026-11-10)
+
+**Tooltips der Symbolleiste** (Hinweise eines Testers zu den Mouseover-Texten der Programmgenerator-Knöpfe): (1) „ARDUINO aufrufen“ → „Konfiguration zur Lichtmaschine übertragen“ (Knopf **Setup übertragen**); (2) „Zeileeinfügen“: fehlendes Leerzeichen; (3) **Tabelle löschen**: Warnung „ACHTUNG: Gesamte Tabelle wird gelöscht!“.
+
+**Ursachen und Umsetzung (`webmobaledlib.py` 3.08, `toolbar_buttons()`):** (1) Der Tooltip von `Btn_Send_to_ARDUINO.png` stammte noch aus der Tk-Fassung („ARDUINO aufrufen“) und beschrieb den Knopf nicht; jetzt **„Konfiguration zur Lichtmaschine übertragen“** (der Tester schrieb „LichtMaschine“; im Projekt heißt das Produkt **Lichtmaschine**). (2) Der Tooltip von `Btn_Insert_Row.png` war derselbe Text wie die Knopfbeschriftung mit **Zeilenumbruch** (`"Zeile\neinfügen"`); der Browser fasst den Umbruch in einem Tooltip nicht als Leerzeichen zusammen: Es erschien „Zeileeinfügen“. Jetzt **„Zeile einfügen“**; der Test prüft, dass **kein** Tooltip der Leiste einen Zeilenumbruch enthält. (3) Der Tooltip von `Btn_Delete_Table.png` lautet jetzt **„Tabelle löschen. ACHTUNG: Gesamte Tabelle wird gelöscht!“** (ein Satz in einer Zeile, damit er im Tooltip lesbar bleibt; das Programm fragt weiterhin vor dem Löschen nach). Katalog 1196 Einträge (2 neu, 6 Sprachen; „Zeile einfügen“ war seit 3.03 da). Wiki `pg_werkzeugleiste` 1.05: Zeile **Tabelle löschen** nennt die Warnung.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 3.08 | drei Tooltips |
+| `csv/Web_Languages.csv` | - | 1196 Einträge (2 neu) |
+| `install/BETATEST_Checkliste.md` | 2.33 | Punkt 160 |
+
+**Tests** (`test_toolbar_tooltips.py`, 13): Die drei Texte; **kein Zeilenumbruch** in einem der 13 Tooltips; alle 13 Tooltips in **allen sechs Sprachen übersetzt** (Deutsch unverändert); die niederländischen Texte der drei Änderungen. **Nicht geprüft:** im Browser und auf dem Tablet (lange Berührung).
+
+## 3.07 (2026-11-10)
+
+**Formular Haus: Schalter „Einfügen/Ersetzen“ übersetzen** (offene Stelle aus 3.06, vom Entwickler angefordert).
+
+**Problem:** `ui.toggle(["Einfügen", "Ersetzen"])` in `web_form_house.py` zeigt, was ein Klick auf einen Raumtyp tut: **einen Raum einfügen** oder den markierten Raum **ersetzen**. Der Übersetzer erfasst `ui.toggle` nicht (Text blieb deutsch). Das deutsche Wort „Einfügen“ steht im Katalog schon als **Plakken/Paste** (Kontextmenü, Strg+V); der Katalog hat je Text **eine** Übersetzung. „Ersetzen“ fehlte ganz.
+
+**Umsetzung:** `_web/web_i18n.py` 1.11: neue Funktion `tr_ctx(text, context, **values)` für gleiche deutsche Wörter mit verschiedener Bedeutung: Gesucht wird zuerst der Katalogeintrag `Text [Kontext]` (hier `Einfügen [Raum]`: Insert / Invoegen / Insérer / Inserisci / Insertar / Indsæt), sonst gilt `tr(text)`; auf Deutsch (und ohne Eintrag) bleibt der Text unverändert, der Kontext erscheint **nie**. `_web/web_form_house.py` 1.06: `ui.toggle({"Einfügen": tr_ctx("Einfügen", "Raum"), "Ersetzen": tr("Ersetzen")}, value="Einfügen")`: Die Schlüssel (Werte) bleiben die deutschen Texte, deshalb vergleicht der Rest (`edit_mode.value == "Ersetzen"`) und der gespeicherte Zustand unverändert; angezeigt wird die Übersetzung. Katalog 1194 Einträge (2 neu: `Einfügen [Raum]`, `Ersetzen`). Die Hilfe für Übersetzer: Wer ein weiteres mehrdeutiges Wort findet, legt `Text [Kontext]` im Katalog an und ruft im Code `tr_ctx(text, "Kontext")` auf.
+
+**Fehler beim Prüfen gefunden und behoben:** `tr_ctx` hätte bei Texten **mit Platzhaltern** und ohne Eintrag mit Kontext den Kontext angezeigt (`tr(key, **values)` formatiert den Schlüssel selbst und meldet dann „anders als der Schlüssel“). Jetzt wird ohne Werte geprüft, ob der Eintrag mit Kontext existiert.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_i18n.py` | 1.11 | `tr_ctx` |
+| `_web/web_form_house.py` | 1.06 | Schalter übersetzt |
+| `csv/Web_Languages.csv` | - | 1194 Einträge (2 neu) |
+| `webmobaledlib.py` | 3.07 | Version, benötigte Dateien |
+| `install/BETATEST_Checkliste.md` | 2.32 | Punkt 159 |
+
+**Tests** (`test_tr_ctx.py`, 13): Deutsch unverändert; je Sprache (EN, NL, FR, IT, ES, DA) „Einfügen“ mit Kontext = Insert/Invoegen/…, „Ersetzen“ = Replace/Vervangen/…, „Einfügen“ ohne Kontext (Zwischenablage) bleibt Paste/Plakken/…; ohne Eintrag mit Kontext gilt die normale Übersetzung; Platzhalter; das **echte Wörterbuch** aus dem Quelltext des Schalters (aus `web_form_house.py` mit `ast` herausgenommen und in Deutsch, Niederländisch und Französisch ausgewertet); der Vergleich `edit_mode.value == "Ersetzen"` und der Startwert. Die früheren Übersetzungstests laufen weiter. **Nicht geprüft:** im Browser.
+
+## 3.06 (2026-11-10)
+
+**Übersetzung: Kontextmenü in der Zeilennummernspalte** (niederländischer Tester: „Bei dem Kontextmenü in der Zeilennummernspalte fehlt die Übersetzung“).
+
+**Ursache:** Das Kontextmenü (ein Menü für Zeilennummer und Zellen) baut seine Einträge mit `menu_row(label, shortcut)` aus `ui.item_label(...)`. Der Übersetzer (`web_i18n.ELEMENT_TEXTS`) kannte `item_label` nicht: Alle Einträge und Kürzel standen deutsch (zusätzlich fehlten im Katalog „Zelle bearbeiten“, „Kopieren“, „Ausschneiden“, „Einfügen“, „Farbe setzen“, „Farbe entfernen“ und die Kürzel „Strg+C“, „Strg+X“, „Strg+V“, „Entf“; der Hinweis zum Einfügen von Zeilen über eine Zelle und die Meldung zur verweigerten Zwischenablage). Dasselbe galt für das Menü des Patterngenerators (`web_pattgen.menu_row`).
+
+**Umsetzung:** `_web/web_i18n.py` 1.10: `"item_label": ((0,), ("text",))` in `ELEMENT_TEXTS`. Katalog 1192 Einträge (11 neu, 6 Sprachen): die sechs Einträge, die Kürzel (**Ctrl+C**, **Ctrl+X**, **Ctrl+V**, **Del** bzw. Suppr, Canc, Supr, Slet), der Hinweis und die Meldung. `webmobaledlib.py` 3.06: Der Text der `alert`-Meldung im Einfüge-Skript (`PASTE_JS`) kommt aus `tr(...)` und `json.dumps(...)` statt einer festen deutschen Zeichenkette.
+
+**Zur Bedeutung von „Einfügen“:** Im Katalog steht „Einfügen“ als **Plakken/Paste** (Strg+V). Im Formular **Haus** gibt es einen Schalter „Einfügen/Ersetzen“ (`ui.toggle`, Bedeutung: **Eintrag einfügen oder ersetzen**); der Übersetzer erfasst `ui.toggle` nicht, der Schalter bleibt also deutsch (wie bisher). Er sollte mit einem eigenen Text übersetzt werden, sobald jemand ihn meldet (gleicher deutscher Text mit anderer Bedeutung ist im Katalog nicht möglich: Schlüssel ist der Text).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_i18n.py` | 1.10 | `item_label` wird übersetzt |
+| `webmobaledlib.py` | 3.06 | Meldung zur Zwischenablage übersetzt, Version |
+| `csv/Web_Languages.csv` | - | 1192 Einträge (11 neu) |
+| `install/BETATEST_Checkliste.md` | 2.31 | Punkt 158 |
+
+**Tests** (`test_ctx_menu_i18n.py`, 13): Alle Einträge, Kürzel, Hinweis und Meldung in **allen sechs Sprachen** übersetzt, Deutsch unverändert; die **echte** Funktion `menu_row` (aus `webmobaledlib.py` und aus `web_pattgen.py`, mit nachgebauten Elementen) liefert in Niederländisch „Kopiëren, Ctrl+C, Verwijderen, Del, Cel bewerken, F2, Kleur instellen“, in Deutsch Unverändertes; Quelltext (`alert`); `ELEMENT_TEXTS`. Die früheren Übersetzungstests laufen weiter. **Nicht geprüft:** im Browser. **Offen:** weitere Elementtypen, die der Übersetzer nicht erfasst: `ui.toggle` (Haus: Einfügen/Ersetzen), `ui.radio` mit festen deutschen Texten, `ui.upload` und `ui.color_input` (ihre Beschriftungen kommen in den gefundenen Stellen schon aus `tr`).
+
+## 3.05 (2026-11-10)
+
+**iPad am Raspberry Pi: Verbindung bricht ab** (Fehlermeldung eines Raspberry-Pi-Testers: „Mit dem iPad funktioniert die Verbindung zum Raspi nicht stabil. Die webMLL startet im Browser, aber sobald ich eine andere Tabelle auswähle, geht die Verbindung verloren. Bei Chrome das Gleiche, bei Firefox bekomme ich gar keine Verbindung, da blockt irgendwas. Es kommt keine Maske zur Benutzeranmeldung.“).
+
+**Ursache (vom Tester bestätigt: **ohne Passwortschutz läuft die Verbindung auf dem iPad stabil**; der Mechanismus ist aus dem Quelltext abgeleitet, nicht auf einem iPad nachgestellt):** Auf dem Pi ist die Oberfläche mit **HTTP Basic** geschützt (`_web/web_auth.py`, `BasicAuthMiddleware`). Die Middleware prüft **auch die WebSocket-Verbindung** der Oberfläche und schließt sie mit dem Code **1008**, wenn der Kopf `Authorization` fehlt. **WebKit** (Safari und alle Browser auf iOS und iPadOS, auch Chrome und Firefox, weil Apple dort nur WebKit erlaubt) sendet die zwischengespeicherte Anmeldung **nicht** beim Aufbau einer WebSocket-Verbindung mit; PC-Browser (Chrome, Edge, Firefox) tun es. Die Seite lädt (Seitenaufrufe und die Ersatzverbindung per Abfragen tragen die Anmeldung), bleibt aber ohne WebSocket auf der Ersatzverbindung und bricht bei größeren Antworten, zum Beispiel beim **Wechsel des Blatts**, mit „Connection lost“ ab. Am Pi selbst (localhost ohne Passwort) und am PC im Heimnetz tritt es nicht auf; deshalb haben die früheren Tester es nicht gesehen. **Firefox ohne Verbindung und ohne Anmeldemaske:** passt zu der iOS-Berechtigung **Lokales Netzwerk** (Einstellungen → Datenschutz & Sicherheit → Lokales Netzwerk); ohne sie erreicht eine App Geräte im Heimnetz nicht, es kommt nicht einmal die Anmeldung. Das ist keine Fehlerursache im Programm (Hinweis in der Anleitung). **Offen:** Ob 3.05 (Sitzungs-Cookie) das Problem **mit** Passwort behebt, ist noch nicht getestet; falls nicht, wäre die Alternative eine eigene Anmeldeseite mit Cookie statt HTTP Basic.
+
+**Umsetzung (`_web/web_auth.py` 1.05):** Nach einer Anmeldung per HTTP Basic setzt die Middleware bei Seitenaufrufen ein **Sitzungs-Cookie** `mllsession` (`Path=/`, `HttpOnly`, `SameSite=Lax`, `Max-Age=86400`); Wert: HMAC-SHA256 aus Benutzername und `web_password.state_id()` mit einem **nur im Speicher** gehaltenen Schlüssel (`secrets.token_bytes(32)`): Nach einem Neustart des Programms oder einer Passwortänderung gilt das Cookie nicht mehr. Cookies sendet WebKit auch beim Aufbau der WebSocket-Verbindung mit. Die Middleware nimmt eine Anfrage an, wenn **Cookie oder Anmeldung** stimmt (Cookie zuerst: kein langsamer Hash); Zugriffe von localhost und ohne eingerichtetes Passwort unverändert. Abgewiesene WebSocket-Verbindungen schreibt sie **einmal je Adresse** ins Protokoll („WebSocket-Verbindung von … abgewiesen: weder Anmeldung noch Sitzungs-Cookie“): Falls es die Ursache nicht ist, zeigt das Protokoll, was beim Tester wirklich passiert (sonst fehlt der Eintrag, und die Ursache liegt woanders). Anleitung 3.54 (Abschnitt 8), Checkliste 2.30 (Punkt 157), Wiki `wz_netzwerk` 1.02.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_auth.py` | 1.05 | Sitzungs-Cookie, Protokoll der abgewiesenen Verbindungen |
+| `webmobaledlib.py` | 3.05 | Version, benötigte Dateien |
+| `install/ANLEITUNG_Installation.md` | 3.54 | Abschnitt 8: iPad und iPhone |
+| `install/BETATEST_Checkliste.md` | 2.30 | Punkt 157 |
+
+**Tests** (`test_web_auth_cookie.py`, 14, mit der echten Middleware und einer Ersatzanwendung): Anmeldung per HTTP Basic liefert die Seite und das Cookie (HttpOnly, SameSite=Lax, Path=/); WebSocket **nur mit dem Cookie** (so verhält sich Safari) wird angenommen; ohne Anmeldung und Cookie, mit falschem oder gefälschtem Cookie und mit dem Cookie nach einer **Passwortänderung** abgewiesen (1008); das Cookie zwischen anderen Cookies; Seitenaufruf nur mit Cookie ohne erneutes Setzen; 401 ohne Anmeldung und bei falschem Passwort; WebSocket mit Anmeldung im Kopf (PC-Browser) wie bisher; localhost und ohne Passwortschutz unverändert; Protokoll einmal je Adresse; Token. **Nicht geprüft:** auf einem **iPad** oder **iPhone** (ob es die Ursache war und ob das Cookie dort ankommt: Checkliste 157), mit dem echten NiceGUI.
+
+## 3.04 (2026-11-09)
+
+**Update Testversion: Die Version aussuchen** (Entwickler: „Beim Update einer Testversion wäre es gut, wenn der Tester die zu ladende Version aussuchen könnte“). Vorher lud **Hilfe → Update Testversion …** immer das neueste Release (`wu.newest_release`).
+
+**Entscheidungen (mit dem Entwickler abgestimmt):** (1) Die Liste zeigt **die letzten 15 Releases**, alle Arten gemischt (normal und Pre-Release); die **neueste ist vorgewählt** (ein Klick wie bisher). (2) **Ältere Versionen sind wählbar**; die Rückgangsprüfung des Update-Programms bleibt und verlangt die zusätzliche Bestätigung (Plan mit `plan.downgrade`, rote Warnung, Knopf „Trotzdem auf Version … zurückgehen“, Abbrechen als Vorgabe). (3) Das normale **Update webMobaLedLib …** bleibt unverändert (nur das letzte fertige Release).
+
+**Umsetzung:** `_web/web_update.py` 1.12: `_fetch_releases_json` (aus `newest_release` herausgelöst, dieselben Fehlermeldungen: 403 und 429 = Grenze von 60 Abfragen je Stunde, Netzfehler, unerwartete Antwort); `release_entries(releases, limit=15)` (ohne Entwürfe, nur mit Anhang `webmobaledlib.zip` und einer `https`-Adresse, neuestes zuerst nach `published_at`); `available_releases` (`UpdateError`, wenn es keines gibt); `version_key` (Nummer aus „v3.04“, „3.04 (2026-11-09)“ usw. als Zahlenpaar, damit 3.10 über 3.9 liegt); `release_choices(entries, installed_version)` (Beschriftung „Name  -  Pre-Release/Release, Datum“ plus „neueste Version“, „installiert“ oder „ältere Version“, in der eingestellten Sprache). `webmobaledlib.py` 3.04: `choose_release(releases)` im Update-Dialog (Auswahlliste im Bereich der Dateiliste, Knöpfe „Abbrechen“ und „Version laden“, wartet über ein `asyncio`-Future auf die Entscheidung, klappt den Bereich danach wieder ein); `check()` holt für die Testversion die Liste, lässt auswählen und bricht bei Abbrechen ab; der Rest (Download, Prüfung, Plan, Rückfragen, Aktualisieren) ist unverändert. Rückfrage „Wollen Sie wirklich eine Testversion installieren?“ nennt jetzt „eine Version von GitHub, die Sie gleich auswählen“ statt „das neueste Release“. Katalog 1181 Einträge (7 neu, 6 Sprachen). Anleitung 3.53 (Abschnitt 7.1a), Checkliste 2.29 (Punkt 156).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_update.py` | 1.12 | Liste der Releases, Auswahlhilfen |
+| `webmobaledlib.py` | 3.04 | Auswahl im Update-Dialog, Version, benötigte Dateien |
+| `csv/Web_Languages.csv` | - | 1181 Einträge (7 neu) |
+| `install/ANLEITUNG_Installation.md` | 3.53 | Abschnitt 7.1a |
+| `install/BETATEST_Checkliste.md` | 2.29 | Punkt 156 |
+
+**Tests** (`test_update_choose.py`, 26): Liste (Entwurf, Eintrag ohne Anhang, `http`-Adresse, Unsinn, Reihenfolge, Begrenzung, leere Antwort); `version_key` (auch 3.10 gegen 3.9); Markierungen bei installierter Version 3.03 (nur das erste „neueste“, „installiert“, „älter“) und ohne bekannte installierte Version; Zusätze auf Niederländisch; GitHub-Abfrage mit Ersatz für `urlopen` (Liste, 403, kein Netz, unerwartete Antwort, nur Entwürfe, `newest_release` unverändert); die **echte Funktion** `choose_release` (aus `webmobaledlib.py` mit Ersatzobjekten ausgeführt): Vorauswahl und ein Klick laden das neueste, anderer Eintrag, Abbrechen liefert `None`, Bereich wird eingeklappt; Quelltextprüfungen; neue Texte in allen sechs Sprachen. Die Tests zum Update (7, 11) und zu den Übersetzungen (19) laufen weiter. **Nicht geprüft:** im Browser (Aussehen der Auswahlliste im Dialog, Reaktion der Knöpfe) und gegen das echte GitHub.
+
+## 3.03 (2026-11-09)
+
+**Übersetzungen: Fehler des niederländischen Testers** (Duits_Nederlands_v3_00.zip, Version 3.00, Raspberry Pi; Entwickler: „Bei der letzten Datei zeigt der ausgeklappte Text niederländisch, der zugeklappte ist aber auf Deutsch“). Sechs Bildschirmfotos, sieben Fundstellen mit ihren Ursachen:
+
+| Fundstelle | Ursache | Behebung |
+|---|---|---|
+| Tooltip der Spaltenüberschrift **Name** (Blatt DCC: „Dieses Spalte enthält einen verständlichen Namen …“) und weitere | `M09_Language.__Header_Cells` setzt den Text der Überschrift (nach 2.91 über den Text), den Tooltip (nach dem `§`) aber nur über die Adresse der Tabelle Languages; für die später eingefügten Spalten (Name, LED/ Sound Kanal) und für alle Spalten des Blatts LNet gibt es dort keinen Eintrag | `M09_Language` 1.06: `__Tip_From_Catalog` sucht den Tooltip ohne Eintrag im Katalog (Text mit einfachen Leerzeichen); 14 Texte (6 Sprachen) neu: 2 auf allen Blättern, 12 auf LNet und Selectrix. Alle **61** Tooltips der vier Blätter sind in allen sechs Sprachen übersetzt (vorher 20 deutsch), in Deutsch unverändert |
+| Tooltip des Knopfs **Verbergen/weergeven** („Zeile verstecken/einblenden“) | Text fehlte im Katalog; es fehlten insgesamt 10 Tooltips der Symbolleiste (ARDUINO aufrufen, Alle versteckten Zeilen einblenden, Dialog aufrufen, Hilfe aufrufen, Optionen anzeigen, Zeile kopieren, löschen, verschieben, verstecken/einblenden, einfügen) | Katalog (10 neue Texte) |
+| Oben rechts **„Zwischengespeichert 17:09:39“** | `autosave_label.set_text("Zwischengespeichert " + Zeit)`: der zusammengesetzte Text steht nicht im Katalog | `webmobaledlib.py` 3.03: `tr("Zwischengespeichert") + " " + Zeit`, neuer Katalogtext |
+| Reiter Programma-instellingen: **Titel „Einstellungen“** (und ohne Foto: „DCC-Keyboard“, „Sound-Test“, „MobaLedLib LED-Servotester“) | Titel aus MacroDef nicht im Katalog | Katalog (4 neue Texte) |
+| **Compacte weergave**: „Aus (normales Layout)“; **Standardweergave**: „Tabelle“ | `ui.select` übersetzte nur die Beschriftung (`label`), nicht die Einträge | `web_i18n` 1.09: `_translate_options`: Einträge eines Auswahlfelds werden übersetzt; bei einer Liste von Texten wird `{Text: übersetzter Text}` daraus (der gespeicherte **Wert bleibt der ursprüngliche Text**); Liste der Sprachen (Auto, Deutsch, English) und Zahlen oder Ports bleiben unverändert; Katalog (2 Texte: Aus/Ein) |
+| Seriële monitor: **„Nicht Verbunden“** | `web_serial._set_connect_status` übersetzte den Status nicht (großes V: ein anderer Text als oben rechts) | `web_serial` 1.05: `_set_connect_status` ruft `tr` auf; „Verbunden <Port> - DIRECT/EFFECT Mode“ über `tr("Verbunden")`; Katalog (Nicht Verbunden, Verbunden) |
+| **Servo-instellingen zugeklappt** („Wählen sie zuerst die Adresse des Servos.“) | `refresh_description` nimmt `model.description.split("\n")[0]` des **deutschen** Texts; der Katalog kennt nur den ganzen Text (aufgeklappt übersetzt) | `web_servotest` 2.07: erst `tr(...)`, dann die erste Zeile (wie `web_servotest2` seit 2.94) |
+
+**Fehler beim Prüfen gefunden und vor der Auslieferung behoben:** Meine neue Konstante in `web_i18n` hieß zuerst `LANGUAGE_NAMES` und hätte die vorhandene gleichnamige Liste der Sprachen überschrieben (`use_language` wäre für die Sprachen 3 bis 6 ungültig geworden); der Test für Französisch bis Dänisch hat es gezeigt; sie heißt jetzt `LANGUAGE_LIST_ENTRIES`.
+
+**Zum Tippfehler im deutschen Ausgangstext:** Der Tooltip der Spalte Name beginnt mit „Dieses Spalte“ (richtig: „Diese Spalte“). Er steht im Arbeitsblatt (Kopfzeile des Blatts, Text nach dem `§`) und ist hier unverändert als Katalogschlüssel übernommen; im Katalog steht die korrekte Übersetzung. Soll der deutsche Text korrigiert werden, muss der Schlüssel im Katalog zugleich geändert werden.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `proggen/M09_Language.py` | 1.06 | Tooltips der Kopfzeilen aus dem Katalog |
+| `_web/web_i18n.py` | 1.09 | Einträge der Auswahlfelder übersetzen |
+| `_web/web_serial.py` | 1.05 | Verbindungsstatus übersetzen |
+| `_web/web_servotest.py` | 2.07 | zugeklappte Beschreibung übersetzen |
+| `webmobaledlib.py` | 3.03 | Zwischengespeichert-Etikett, benötigte Dateien |
+| `csv/Web_Languages.csv` | - | 1174 Einträge (34 neu) |
+| `install/BETATEST_Checkliste.md` | 2.28 | Punkt 155 |
+
+**Tests** (`test_nl_303.py`, 19): Alle 33 Texte in allen sechs Sprachen; Deutsch unverändert; die Beispiele aus den Fotos (Zeile verstecken/einblenden, Zwischengespeichert, Nicht Verbunden, Einstellungen); die zugeklappte Servo-Beschreibung; Auswahlfelder (Wörterbuch, Liste, `options=`, Sprachenliste, Ports und Zahlen, Deutsch); Serial-Status mit der echten Klasse; Quelltextprüfungen; die **echte Arbeitsmappe** (Blätter DCC, Selectrix, CAN, LNet) mit allen 61 Tooltips in allen Sprachen. Die Tests zu den Übersetzungen (15), Einstellungsgruppen (11) und Anfänger Modus (26) laufen weiter. **Nicht geprüft:** im Browser (Auswahlfelder mit übersetzten Einträgen: Speichern und Neustart), und weitere deutsche Reste, die der Tester noch nicht gemeldet hat (die Prüfung aller Texte der Oberfläche bleibt offen; das Werkzeug dafür war das Zählen mit dem echten Übersetzer).
+
+## 3.02 (2026-11-08)
+
+**Meldung „Die ARDUINO IDE wurde nicht gefunden“ nach dem Programmstart** (Entwickler: „Die Meldung kam nach Programmstart und nicht bei der Installation.“ Raspberry Pi 4, komplette Neuinstallation mit PlatformIO als Standard). Die Korrektur in 3.01 betraf die Ausgabe der Installationsskripte, nicht diese Meldung; die Ausgaben bleiben richtig.
+
+**Ursache (nachgestellt):** Der erste Start einer Neuinstallation läuft so: `HeadlessProgGeneratorPage.__init__` bestimmt `new_install` (keine gespeicherte Tabelle), öffnet die Arbeitsmappe (`Workbooks.Open`), und **erst danach** ruft es `new_install_defaults(controller)` auf, das `Use_PlatformIO` (wenn PlatformIO gefunden wird) und `BeginnerMode` setzt. `Workbooks.Open` führt aber `Evt_Workbook_Open` aus (`DieseArbeitsmappe.Workbook_Open`), und dort steht die Prüfung `pio_mode = M28.Is_PlatformIO()`; ist sie falsch, wird `M08.Find_ArduinoExe()` aufgerufen und bei leerem Ergebnis die **Meldung** „Die ARDUINO IDE wurde nicht gefunden …“ gezeigt (und `M38.Load_Extensions()` übersprungen). Beim ersten Start war `Use_PlatformIO` an dieser Stelle noch nicht gesetzt: Die Meldung kam einmal, danach (gespeicherter Wert) nie wieder, und die Erweiterungen wurden erst beim zweiten Start geladen. Mit einem Test, der PlatformIO als vorhanden und die IDE als fehlend vorgibt, erscheint die Meldung beim ersten Start genau einmal.
+
+**Umsetzung:** `headless/headless_proggen.py` 1.11: Vor `Workbooks.Open` wird `ExcelAPI.XLA_Application.first_start_hook` auf `new_install_defaults(controller)` gesetzt (nur bei einer Neuinstallation). `proggen/DieseArbeitsmappe.py` 1.02: `Workbook_Open` ruft den Haken **direkt nach `Set_Config_Default_Values_at_Program_Start()` und vor `Is_PlatformIO()`** auf (und löscht ihn). Hat `Workbook_Open` ihn nicht aufgerufen, holt `headless_proggen` ihn nach dem Öffnen nach. Ergebnis: Beim ersten Start sind `Use_PlatformIO` und `BeginnerMode` schon gesetzt, wenn die IDE geprüft wird: keine Meldung, die Erweiterungen werden sofort geladen. Ohne PlatformIO und ohne IDE kommt die Meldung weiter (einmal). Anleitung unverändert, Checkliste 2.27 (Punkt 154).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `headless/headless_proggen.py` | 1.11 | `first_start_hook` vor dem Öffnen setzen, nachholen |
+| `proggen/DieseArbeitsmappe.py` | 1.02 | Haken in `Workbook_Open` vor der Prüfung der IDE |
+| `webmobaledlib.py` | 3.02 | Version, benötigte Dateien |
+| `install/BETATEST_Checkliste.md` | 2.27 | Punkt 154 |
+
+**Tests** (`test_first_start_message.py`, 7; echter Start des Programms mit frischem Datenordner und nachgestellten Funden): PlatformIO ohne IDE: keine Meldung, PlatformIO und Anfänger Modus eingestellt; weder PlatformIO noch IDE: Meldung einmal, Anfänger Modus an; PlatformIO mit IDE: keine Meldung; IDE ohne PlatformIO: keine Meldung, die IDE bleibt; Quelltextprüfung der Reihenfolge. Die Tests `test_new_install_defaults` (4) und `test_beginner_mode` (26) laufen weiter. **Nicht geprüft:** auf einem echten Raspberry Pi.
+
+## 3.01 (2026-11-08)
+
+**Meldung „keine ARDUINO IDE gefunden“ trotz PlatformIO** (Entwickler: „Komplette Neuinstallation mit PlatformIO als Standard auf einem Raspberry Pi 4 funktioniert. Aber es kommt die Meldung, dass keine ARDUINO-IDE gefunden wurde. Diese Meldung sollte nicht mehr kommen, wenn PlatformIO vorhanden ist.“).
+
+**Ursachen (alle bei der Umstellung auf PlatformIO als Standard in 2.92 nicht angefasst):** (1) `pi/install_pi.sh`: Der Zweig „keine IDE“ (`Keine ARDUINO IDE gefunden. Installieren mit …`) lief immer, wenn die IDE fehlte; ebenso der Hinweis „Die ARDUINO-Bibliothek MobaLedLib fehlt evtl. noch“. (2) `install_linux.sh` und `install_mac.command`: dasselbe (Linux: Zweig „keine IDE“; macOS: der „Hinweis: Fuer das Kompilieren und Hochladen werden die ARDUINO IDE 1.8.19 … benoetigt“ am Ende). Unter Windows kommt die Meldung nur mit `/libs` (ausdrücklich verlangt) und der Hinweis am Ende war schon PlatformIO-gerecht. (3) `pi_check.py` (Test der Installation, am Ende von `install_pi.sh`): `HINWEIS ARDUINO IDE nicht gefunden (Pfad: leer) …` und `~/.arduino15/preferences.txt fehlt` auch mit PlatformIO. (4) `headless_app_controller.find_arduino_ide`: Wer nach `startcmd_filename` fragt (zum Beispiel `pi_check.py`), löst die Suche aus; ohne IDE steht dann eine **Warnung** im Protokoll. Das Programm selbst prüft die IDE im PlatformIO-Modus nicht (`DieseArbeitsmappe`, `F00_mainbuttons`: `M28.Is_PlatformIO()` zuerst).
+
+**Umsetzung:** `install_linux.sh` 1.08, `install_mac.command` 1.12, `pi/install_pi.sh` 1.12: Die Meldungen zur IDE und zur Bibliothek kommen nur noch, wenn PlatformIO **nicht** installiert wird (`elif [ "$WITH_PIO" != "1" ]`; mit `--no-platformio` also weiter). `pi_check.py` 1.05: `report_development_environment(...)`: mit PlatformIO eine Zeile `OK PlatformIO ist die Entwicklungsumgebung: <pio>` (oder `HINWEIS`, wenn PlatformIO eingestellt, aber nicht gefunden ist: `bash install/install_platformio.sh`), keine Meldung zur IDE und zur Einstellungsdatei der IDE; ohne PlatformIO wie bisher, jetzt mit dem Verweis auf PlatformIO; die Suche nach der IDE wird im PlatformIO-Modus nicht angestoßen. `headless/headless_app_controller.py` 1.09 (hatte noch keinen Kopf: ergänzt): `platformio_available()` (Befehl `pio` im Suchpfad oder `~/.platformio/penv/bin/pio` bzw. `Scripts\pio.exe`, `MLL_PIO_HOME`); mit PlatformIO nur eine **Info** statt der Warnung. Anleitung 3.52 (Abschnitt 2.2), Checkliste 2.26 (Punkt 153).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `pi/install_pi.sh` | 1.12 | keine IDE- und Bibliotheksmeldung mit PlatformIO |
+| `install/install_linux.sh` | 1.08 | keine IDE-Meldung mit PlatformIO |
+| `install/install_mac.command` | 1.12 | kein IDE-Hinweis mit PlatformIO |
+| `pi_check.py` | 1.05 | meldet PlatformIO statt „IDE nicht gefunden“ |
+| `headless/headless_app_controller.py` | 1.09 | Info statt Warnung mit PlatformIO |
+| `webmobaledlib.py` | 3.01 | Version |
+| `install/ANLEITUNG_Installation.md` | 3.52 | Abschnitt 2.2 |
+| `install/BETATEST_Checkliste.md` | 2.26 | Punkt 153 |
+
+**Tests** (`test_pio_no_ide_message.py`, 23): Die **echten Zweige** der drei Skripte werden mit Bash ausgeführt (Linux, macOS, Raspberry Pi: ohne IDE mit und ohne PlatformIO, mit vorhandener IDE, mit `--with-arduino-ide`, Bibliothekshinweis; `bash -n`); `report_development_environment` in allen fünf Fällen; `platformio_available` und das Protokoll des Controllers (Warnung ohne, Info mit PlatformIO). **Nicht geprüft:** auf einem echten Raspberry Pi (die Ausgabe des Skripts, der Dienst), unter macOS und Linux im Ganzen.
+
+## 3.00 (2026-11-08)
+
+**Update von 2.77 auf 2.99 unter Windows schlägt fehl** (Meldung des Update-Programms: „Das Update ist fehlgeschlagen (icons_gross/Ampel.png: nach dem Schreiben nicht lesbar ([Errno 2] No such file or directory …)). Der vorherige Stand wurde automatisch wiederhergestellt (932 Dateien), es ist nichts verändert“; das Update war einmal von Acronis unterbrochen worden und lief nach „Fehler ignorieren“ weiter).
+
+**Ursache:** Das Update führt der **Update-Code der installierten Version** aus (hier 2.77), nicht der des neuen Release. In dieser Version läuft `apply` so: neue und geänderte Dateien schreiben, dann `plan.delete` löschen, dann `_verify` (Prüfsumme, Syntax) der geschriebenen Dateien. `plan.delete` enthält alle Dateien der installierten Version, die das neue Release nicht (mit genau diesem Namen) kennt. Die neu gelieferten Symbole unterscheiden sich in 56 Namen nur in der Schreibweise (`ampel.png` alt, `Ampel.png` neu); unter Windows und macOS ist das dieselbe Datei: Das Löschen des „alten Namens“ entfernt die gerade geschriebene Datei, `_verify` findet sie nicht mehr: **Fehler, Wiederherstellung des alten Standes**. Der Fehler von 2.98 (`web_update` 1.11, löscht solche Dateien nicht mehr) hilft hier nicht: Der **neue** Update-Code läuft erst nach diesem Update. Die Unterbrechung durch Acronis hat damit nichts zu tun (die Fehlerursache lässt sich ohne Acronis nachstellen). Jeder Anwender auf Windows oder macOS, der aus einer Version bis 2.97 aktualisiert, träfe diesen Fehler bei jedem Release mit den neuen Symbolen (Release-Blocker).
+
+**Umsetzung (das Release enthält die alten Schreibweisen zusätzlich):** Wenn das neue Release auch den **alten Namen** kennt, löscht ihn der alte Update-Code nicht. `release_tools.py` 1.08: `read_legacy_names(root)` liest `install/legacy_names.txt` (Zeilen `alter Name = neuer Name`, nur Namen, die sich in der Schreibweise unterscheiden); `build_manifest` nimmt jeden alten Namen als zusätzlichen Eintrag mit **Prüfsumme und Größe der neuen Datei** auf (nur wenn der alte Name nicht schon im Ordner steht); `build_zip` schreibt für jeden einen zusätzlichen ZIP-Eintrag mit dem **Inhalt der neuen Datei**. Der alte Update-Code schreibt unter Windows beide Einträge in dieselbe Datei (gleicher Inhalt: `_verify` besteht), unter Linux liegen beide Dateien im Ordner (der alte Name wird nicht benutzt). Der neue Update-Code (1.11) löscht nichts, was nur in der Schreibweise abweicht, und das nächste Release ohne die Einträge räumt unter Linux die alten Namen weg. `install/legacy_names.txt` 1.00 (neu): die 56 Paare (28 `icons`, 28 `icons_gross`) aus den Releases 2.56, 2.77, 2.85, 2.90, 2.96. `install/make_legacy_names.py` 1.00 (neu): erzeugt und ergänzt die Liste aus alten Release-ZIPs und dem aktuellen Ordner (`--ordner`, `--nur-anzeigen`; Einträge, deren neue Datei es nicht mehr gibt, entfallen). `RELEASE_Ablauf.md` 1.02: neuer Abschnitt, Reihenfolge `align_icon_names.py`, `make_web_icons.py`, `make_legacy_names.py`, ZIP bauen. Anleitung 3.51 (Abschnitt 7): Hinweis zum Update aus älteren Versionen und zum Notbehelf (ZIP von Hand entpacken). Die Versionsnummer springt auf **3.00** (der Update-Code kann damit zum ersten Mal ein Release erwarten, das alte Schreibweisen enthält).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `release_tools.py` | 1.08 | alte Schreibweisen in Prüfliste und ZIP |
+| `install/legacy_names.txt` | 1.00 | neu: 56 Paare |
+| `install/make_legacy_names.py` | 1.00 | neu: Liste erzeugen und ergänzen |
+| `webmobaledlib.py` | 3.00 | Version |
+| `install/ANLEITUNG_Installation.md` | 3.51 | Abschnitt 7: Update aus älteren Versionen |
+| `install/BETATEST_Checkliste.md` | 2.25 | Punkt 152 |
+| `RELEASE_Ablauf.md` (außerhalb von python) | 1.02 | Abschnitt alte Schreibweisen |
+
+**Tests** (`test_legacy_names.py`, 11, mit dem **hochgeladenen Paket** 13ef08, einer Installation 2.96 und der Logik des alten Update-Codes auf einem **nachgebauten Dateisystem ohne Beachtung der Schreibweise**): Liste lesen (Kommentar, falsche Zeilen, Rückwärtsstriche); Prüfliste und ZIP mit 56 zusätzlichen Einträgen (gleiche Prüfsumme, gleicher Inhalt, `verify_zip` besteht); **Nachstellung des Fehlers:** alter Update-Code und ZIP ohne die alten Namen: 56 Dateien in der Löschliste; mit den alten Namen: nichts; `make_legacy_names` (anzeigen, schreiben, zweiter Lauf, Hilfetext). **Nicht geprüft:** ein echtes Update 2.77 → 3.00 auf Windows (das Dateisystem ist nachgebaut), und ob ein Zip-Programm unter Windows beim Entpacken von Hand zwei Einträge mit nur anders geschriebenem Namen anders behandelt (die Anleitung nennt den Notbehelf mit dem Entpacken).
+
+## 2.99 (2026-11-08)
+
+**Start bricht mit einem Ringimport ab** (Fehlerinstallation des Entwicklers, Ausgabe im Terminal: `start_backend()` → `ctrl.create_excel_application()` → `import ExcelAPI.XLA_Application` (Zeile 99: `from .P01_Worksheetcalc import Calc_Worksheet`) → `P01_Worksheetcalc` Zeile 37 `import pattgen.M30_Tools` → `pattgen.M09_Language` → `M08_Load_Sheet_Data` → `M03_Analog_Trend` → `M02_Main` → `M35_Mouse_Scroll` → `mlpyproggen.Pattern_Generator` Zeile 64 `from ExcelAPI.P01_Worksheetcalc import Calc_Worksheet` → „cannot import name 'Calc_Worksheet' from partially initialized module 'ExcelAPI.P01_Worksheetcalc'“).
+
+**Ursache (nachgestellt):** Der Kreis `XLA_Application` → `P01_Worksheetcalc` → `pattgen` … → `Pattern_Generator` → `P01_Worksheetcalc` lässt sich nur auflösen, wenn `Pattern_Generator` **vor** dem Import in Zeile 99 geladen ist. Das geschieht normalerweise, weil `XLA_Application` vorher (Zeile 92) `.XLF_FormGenerator` importiert und diese Kette über `proggen.M09_Language`, `M07_COM_Port_New`, `Prog_Generator`, `M03_Dialog`, `pgcommon.G00_common` bis `pattgen.M30_Tools` und `Pattern_Generator` reicht (dort ist `P01_Worksheetcalc` noch nicht im Spiel). **Scheitert dieser Import mit einem ImportError, wird er verschluckt** (`except ImportError: generate_controls = None`, gedacht für Systeme ohne Tk); danach läuft Zeile 99 durch den Kreis in der falschen Reihenfolge und bricht mit der Meldung ab. Die Fehlermeldung nennt also **nicht die Ursache**. Nachgestellt: Wenn der Import von `XLF_FormGenerator` beim ersten Mal mit einem ImportError scheitert, entsteht mit den bisherigen Modulen **genau diese Meldung**; auf den Systemen, auf denen der Import gelingt, tritt der Fehler nie auf (Testsystem des Entwicklers, mein Sandkasten).
+
+**Umsetzung:** (1) `mlpyproggen/Pattern_Generator.py` 1.01: `Calc_Worksheet` wird erst in `wscalculationcallback` importiert (die einzige Stelle, die es braucht), nicht beim Laden des Moduls: Der Kreis ist aufgelöst, der Start hängt nicht mehr von der Ladereihenfolge ab. (2) `ExcelAPI/XLA_Application.py` 1.17: Das Scheitern des Imports von `.headless_sheet` und `.XLF_FormGenerator` wird mit `logger.warning(..., exc_info=True)` ins Protokoll geschrieben („XLF_FormGenerator nicht geladen: …“ mit der wirklichen Fehlermeldung); vorher blieb sie unsichtbar. **Die eigentliche Ursache auf der Fehlerinstallation ist damit noch nicht bekannt:** Sie steht nach dem nächsten Start im Protokoll. Möglich sind ein fehlendes oder defektes Modul in der Kette (zum Beispiel nach einem halben Update; vergleiche die „32 fehlenden Dateien“ von 2.98) oder ein Importfehler, der nur auf diesem System auftritt.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `mlpyproggen/Pattern_Generator.py` | 1.01 | Calc_Worksheet erst bei der Benutzung importieren |
+| `ExcelAPI/XLA_Application.py` | 1.17 | gescheiterte Importe ins Protokoll |
+| `webmobaledlib.py` | 2.99 | Version |
+| `install/BETATEST_Checkliste.md` | 2.24 | Punkt 151 ergänzt |
+
+**Tests** (`test_circular_import.py`, 5, mit Kopien des ganzen Programmordners): **Nachstellung** (Import des Formulargenerators scheitert einmal): mit den alten Modulen bricht `start_backend()` mit der Meldung der Fehlerinstallation ab; mit Pattern_Generator 1.01 und XLA_Application 1.17 startet dasselbe; die Ursache steht im Protokoll („XLF_FormGenerator nicht geladen: Testfehler …“); der Normalfall startet ohne Warnung; Quelltextprüfung. **Nicht geprüft:** auf der Fehlerinstallation selbst (die wirkliche Ursache des ersten Fehlers) und auf einem Windows-Rechner.
+
+## 2.98 (2026-11-08)
+
+**Update unter Windows: danach fehlen Dateien** (Fehlerbericht eines Testers nach dem Update unter Windows: „cannot import name Calc_Worksheet from partially initialized module ExcelAPI.P01_Worksheetcalc (most likely due to a circular import)“; Entwickler: „Auf meinem Testsystem gibt es auch keinen Fehler. Außerdem werden nach dem Update 32 Dateien als fehlend angegeben.“, dazu das gebaute Paket `webmobaledlib_13ef08.zip`, Version 2.97).
+
+**Untersuchung des Pakets:** Es ist in sich stimmig (`release_manifest.json`: 2359 Dateien, alle im ZIP, alle Größen stimmen; die Prüfungen des Programms, `check_file_versions()` und `installation_problems()`, liefern für das entpackte Paket 0 Meldungen). Der Start (`start_backend()`) läuft in der Testumgebung mit dem entpackten Paket und auch nach einem simulierten Update (Installation 2.96 → Paket, `web_update.make_plan` und `apply`) ohne Fehler.
+
+**Ursache der „fehlenden“ Dateien (gefunden):** Das Update löscht nach dem Schreiben alle Dateien, die in der Prüfliste der installierten Version stehen und im neuen Release fehlen (`plan.delete`). Seit den neu gelieferten Symbolen unterscheiden sich 56 Dateinamen (28 in `icons`, 28 in `icons_gross`) **nur in der Schreibweise** (`InfoB.png` alt, `infoB.png` neu, ebenso `Bluelight`/`BlueLight`, `Mono…`, `Pin…`, `ampel`/`Ampel` und weitere). Unter **Linux** sind das zwei Dateien (die alte wird zu Recht gelöscht). Unter **Windows und macOS** (Schreibweise egal) ist es **dieselbe Datei**: Das Update überschreibt sie mit dem neuen Inhalt und **löscht dann den „alten Namen“, also die gerade geschriebene Datei**. Danach meldet `installation_problems()` die Datei als fehlend. Die Zahl hängt von der Vorversion ab (beim Stand 2.85 des Entwicklers 28 Symbole, bei den Releases 2.77 bis 2.96 56 Symbole in der Prüfliste; der Tester meldet 32).
+
+**Umsetzung (`_web/web_update.py` 1.11, die Datei hatte noch keinen Kopf: ergänzt):** `same_file_other_spelling(project_dir, relpath, release_lower)`: Das Release enthält dieselbe Datei in anderer Schreibweise **und** beide Namen sind auf diesem Rechner dieselbe Datei (`os.path.samefile`): Dann wird sie **nicht gelöscht**; `make_plan` nimmt sie nicht in `plan.delete` auf. Die Datei wird, wie bei jeder geänderten Datei, mit dem neuen Inhalt überschrieben (sie ist in `plan.changed`, nicht in `plan.new`). Unter Linux bleibt alles wie vorher. Eine Datei ohne Gegenstück unter anderer Schreibweise wird weiter gelöscht. **Reparatur auf einem schon beschädigten System:** noch einmal **Hilfe → Update**: Die fehlenden Dateien sind dann „neu“ und werden geschrieben; da die Prüfliste der installierten Version jetzt die neuen Namen enthält, löscht nichts mehr.
+
+**Nicht gefunden:** Der **Ringimport** (`ExcelAPI.XLA_Application` ↔ `ExcelAPI.P01_Worksheetcalc`) ließ sich nicht nachstellen. Er tritt nur auf, wenn **vor** `ExcelAPI.XLA_Application` ein Modul geladen wird, das `ExcelAPI.P01_Worksheetcalc` (zum Beispiel über `mlpyproggen.Pattern_Generator` oder `proggen.M09_Language`) zuerst einbindet; in keiner seit 2.90 geänderten Datei kommt ein solcher früher Import hinzu. Für die Fehlersuche werden der ganze Fehlertext mit den Zeilen davor und die alte und neue Programmversion gebraucht (Checkliste Punkt 151). Möglich, aber nicht belegt: Folge eines halben Updates oder einer Datei, die sich nicht nur durch die Schreibweise unterscheidet (die Symbole sind die einzigen Dateien mit dieser Eigenschaft in den verglichenen Vorversionen 2.56, 2.77, 2.85, 2.90, 2.96).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_update.py` | 1.11 | keine Löschung von Dateien in anderer Schreibweise, die dieselbe Datei sind |
+| `webmobaledlib.py` | 2.98 | Version, benötigte Dateien |
+| `install/BETATEST_Checkliste.md` | 2.23 | Punkt 151 |
+
+**Tests** (`test_update_case.py`, 7, mit dem **hochgeladenen Paket** und einer Installation 2.96): normales Dateisystem (Linux): 56 Dateien werden gelöscht wie bisher; **nachgebautes Dateisystem ohne Beachtung der Schreibweise** (Windows, macOS): keine Datei wird gelöscht, die Symbole kommen als „geändert“ (nicht „neu“) in den Plan; eine wirklich entfernte Datei wird weiter gelöscht; die Hilfsfunktion in den drei Fällen. **Nicht geprüft:** auf einem echten Windows- oder macOS-Rechner (dort entscheidet das Dateisystem, die Logik ist nachgebaut), und der Ringimport.
+
+## 2.97 (2026-11-06)
+
+**Symbole: Schreibweise der Dateinamen angleichen** (Entwickler: „Der Ersteller der Icons hat teilweise andere Schreibweisen für die Dateinamen verwendet, z. B. ampel.png anstatt Ampel.png. Unter Windows kein Problem, aber unter Linux und Mac werden die Icons nicht gefunden und beim Update gelöscht.“ Gewünscht: „ein einfaches Script, das die Dateinamen, die von dem Ersteller geliefert werden, an die originalen Dateinamen angleicht“; mein erster Vorschlag, im Programm überall ohne Beachtung der Schreibweise zu suchen, ging in die falsche Richtung und ist verworfen).
+
+**Befund:** Die Makrotabelle (`csv/Lib_Macros*.csv`, Spalte „Picture Names“ = `SM_Pic_N_COL`) nennt die Symbole ohne Endung (`infoB`, `Candle`, `pinGrey`); das Programm sucht `icons/<Name>.png` mit dieser Schreibweise (`web_macro_tree._icon_url`, `collect_icons`, statische Pfade `/mll_icons`, `/mll_icons_gross`). In den gelieferten 122 Symbolen weichen **26** Namen in der Schreibweise ab: `ampel.png`, `candle.png`, `manipulation.png`, `neon.png`, `pattern.png` (klein statt groß), `InfoB.png` bis `InfoY.png`, `MonoC.png` bis `MonoY.png`, `PinB.png` bis `PinY.png` und `PinGrey.png` (groß statt klein), `Bluelight.png` und `Bluelight2.png` (statt `BlueLight`). Die Makrotabelle selbst ist einheitlich (kein Symbol steht dort in mehreren Schreibweisen).
+
+**Umsetzung:** `install/align_icon_names.py` 1.00 (neu, keine Zusatzpakete, auch ohne Pillow): Die richtigen Schreibweisen kommen aus (a) der Makrotabelle (Spalte „Picture Names“ wird über die Kopfzeile gefunden, sonst die 14. Spalte; bei mehreren Schreibweisen gilt die häufigere und es gibt eine Warnung) und (b) den Dateien im Ordner `icons` (für Symbole ohne Eintrag in der Makrotabelle, zum Beispiel `Ampel.png`). Jede gelieferte Datei wird ohne Beachtung der Schreibweise verglichen und bei Abweichung **umbenannt** (in zwei Schritten über einen Zwischennamen, damit es auch auf Windows und macOS klappt; die Endung wird klein: `.PNG` → `.png`). Neue Symbole ohne Gegenstück bleiben und werden gemeldet; zwei gelieferte Dateien, die sich nur in der Schreibweise unterscheiden, sind ein **Konflikt** und bleiben. Der Bericht nennt außerdem alte Dateien in `icons/` und `icons_gross/`, die sich nur in der Schreibweise von der richtigen unterscheiden (unter Linux und macOS lägen sonst zwei Dateien; `make_web_icons.py` überschreibt nur gleichnamige): Mit `--aufraeumen` werden sie gelöscht. `--nur-anzeigen` ändert nichts, `--alle` zeigt die vollständige Liste der erwarteten, aber weder gelieferten noch in `icons/` vorhandenen Symbole. `install/make_web_icons.py` 1.01: nur ein Hinweis im Kopf. `RELEASE_Ablauf.md` 1.01: neuer Abschnitt „Symbole erzeugen“.
+
+**Aufruf (im Ordner python):** `python install/align_icon_names.py <Ordner mit den gelieferten Symbolen> --nur-anzeigen`, dann ohne `--nur-anzeigen` (mit `--aufraeumen`), danach wie bisher `python install/make_web_icons.py <Ordner> .`
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `install/align_icon_names.py` | 1.00 | neu: Schreibweise der Symbolnamen angleichen |
+| `install/make_web_icons.py` | 1.01 | Hinweis im Kopf |
+| `webmobaledlib.py` | 2.97 | Version |
+| `RELEASE_Ablauf.md` (außerhalb von python) | 1.01 | Abschnitt Symbole erzeugen |
+
+**Tests** (`test_align_icons.py`, 15): synthetisch (Umbenennen nach Ordner icons und Makrotabelle, Vorrang der Makrotabelle, Endung `.PNG`, Spalte mit `|`, neue Symbole, Konflikt, versteckte und fremde Dateien, `--nur-anzeigen`, `--aufraeumen`, zweiter Lauf, Hilfetext, mehrere Schreibweisen in der Makrotabelle) und mit den **echten Daten** (122 gelieferte Symbole und die Makrotabellen: 26 werden umbenannt, danach stimmt jeder Name exakt, der zweite Lauf meldet 0). **Nicht geprüft:** auf Linux oder macOS selbst (dort zählt die Schreibweise; die Wirkung folgt aus der Logik, nicht aus einem Lauf), und ob beim **Update** die alten, falsch geschriebenen Dateien in der installierten `icons/` entfernt werden (das Löschen beim Update stammt aus der Prüfliste des Releases; mit richtigen Namen im Paket gibt es keine Dateien mehr, die sich nur in der Schreibweise unterscheiden).
+
+## 2.96 (2026-11-05)
+
+**Anfänger Modus** (Entwickler: „Beim ersten Aufruf ist der Anfänger Modus aktiv. In den Programmeinstellungen kann man zum Experten Modus umschalten. Im Anfänger Modus werden einige Funktionen nicht gezeigt: die Reiter Pattern Configurator, Z21-Simulator, ProgGenerator Einstellungen, Zeilen Färben ist erstmal nicht verfügbar, und einige Makros werden im Makrotree nicht angezeigt; welche, ist in Diskussion.“).
+
+**Entscheidungen:** (1) Der Modus ist die Einstellung `BeginnerMode` (Haken **Anfänger Modus**, Checkbutton, `PARAM_ADDITIONS`) als **erste** Einstellung der **Allgemeinen Einstellungen**. (2) **Neuinstallation** = noch keine gespeicherte Tabelle im Datenordner (wie bei `Use_PlatformIO`): `new_install_defaults(controller)` setzt `BeginnerMode = 1` und speichert die Konfiguration. **Bestehende Installationen** haben keinen Eintrag und bleiben im **Experten Modus** (`is_beginner_mode`: leer oder Fehler = nein). (3) Die Makros stehen in einer **Liste** (`csv/Beginner_Hidden_Macros.csv`), die ohne Programmänderung gepflegt wird; sie ist zunächst leer.
+
+**Umsetzung:**
+- `_web/web_tabs.py` 1.12: `BEGINNER_PARAM`, `BEGINNER_HIDDEN_TABS = ("patt", "progcfg", "z21")`, `is_beginner_mode(ctrl)`; `tab_enabled` liefert für diese Reiter im Anfänger Modus `False` (auch wenn die Option für Z21 an ist); die Einstellung kommt mit `PARAM_ADDITIONS` (nach „Sprache“) in die Seite.
+- `webmobaledlib.py` 2.96: Die Reiter `patt` und `progcfg` werden wie `servo2` und `z21` in `optional_tabs` geführt (`apply_optional_tabs` blendet sie nach dem Speichern der Einstellungen sofort ein oder aus; ist der aktive Reiter betroffen, wird der Programm Generator gewählt). Der Knopf **Zeilen Färben** (`Btn_Color_Row.png`) wird mit `apply_beginner_buttons()` beim Aufbau und nach dem Speichern ein- oder ausgeblendet. Die Adresse eines ausgeblendeten Reiters (`/Patterngenerator`, `/ProgGeneratorEinstellungen`, `/Z21Simulator`) öffnet den Programm Generator mit einem Hinweis, der den Modus nennt (sonst die alte Meldung zur Option). `web_macro_tree.set_beginner_check(lambda: is_beginner_mode(ctrl))`.
+- `_web/web_macro_tree.py` 1.12: `collect_macro_rows()` (Quelle für die Makroauswahl **und** die Grafik) liefert im Anfänger Modus nur Makros, die nicht in der Liste stehen (`load_hidden_rules`, `hidden_for_beginner`, `filter_beginner`); neues Feld `group_raw` (die deutsche Gruppe der Tabelle, Anfang genügt: `Servo` trifft `Servo | Animation`, aber nicht `Servoplatine`). Die Liste wird bei jedem Öffnen gelesen (kein Neustart); fehlt die Datei oder ist sie leer, wird nichts ausgeblendet; bei einem Fehler bleibt alles sichtbar.
+- `headless/headless_proggen.py` 1.10: `new_install_defaults(controller)`.
+- `csv/Beginner_Hidden_Macros.csv` (neu, 1.00): Aufbau im Kopf der Datei; leer.
+- Katalog 1140 Einträge (3 neu: Anfänger Modus, Hinweis, Meldung zum Reiter).
+
+**Offen (Entwickler):** welche Makros im Anfänger Modus fehlen. Dafür eine Auswahlliste aller Makros (`Makroliste_Anfaenger_Auswahl.csv`, Spalten Gruppe, Name, Kurzbeschreibung, Für Anfänger ja/nein); aus der ausgefüllten Liste wird die Datei `Beginner_Hidden_Macros.csv` erzeugt. Nicht umgesetzt (nicht gewünscht): die Spezialeinstellungen im Anfänger Modus ausblenden.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_tabs.py` | 1.12 | Modus, Reiter, Einstellung |
+| `_web/web_params.py` | 1.07 | Anfänger Modus als erste Einstellung |
+| `_web/web_macro_tree.py` | 1.12 | Liste und Filter für die Makros |
+| `headless/headless_proggen.py` | 1.10 | Neuinstallation startet als Anfänger |
+| `csv/Beginner_Hidden_Macros.csv` | 1.00 | neu: Liste der Makros (leer) |
+| `csv/Web_Languages.csv` | - | 1140 Einträge (3 neu) |
+| `webmobaledlib.py` | 2.96 | Reiter, Knopf, Hinweis, Makroliste anbinden |
+| `install/ANLEITUNG_Installation.md` | 3.50 | Anfänger Modus und Experten Modus |
+| `install/BETATEST_Checkliste.md` | 2.22 | Punkt 150 |
+
+**Tests** (`test_beginner_mode.py`, 26): Reiter in beiden Modi (auch mit den Optionen für Z21 und DM Servo; Fehler beim Lesen = Experte), die Einstellung in der Seite (nach „Sprache“, Haken) und ihre Stelle unter der Überschrift Allgemeine Einstellungen; die Liste (Makro- und Gruppenzeilen, Kommentare, Kopfzeile, falsche Zeilen, ohne Datei); Filter (Gruppe mit Untergruppen, nur ganze Ebenen, info passend); `collect_macro_rows` mit einem **nachgebauten Blatt Lib_Macros** (Experte: alle; Anfänger mit Liste: ohne die Treffer; zurück zum Experten sofort alle; Fehler beim Abfragen: alles sichtbar); `new_install_defaults(controller)`; Quelltextprüfung des Hauptprogramms (Reiter, Knopf, Hinweis, Makroliste). **Nicht geprüft:** im Browser (ob die Reiter und der Knopf sofort verschwinden, ob die Seite Programm Einstellungen den Haken an der richtigen Stelle zeigt und speichert, ob der Makrobaum in der Grafik die gefilterte Liste zeigt), auf einer echten Neuinstallation.
+
+## 2.95 (2026-11-05)
+
+**Korrektur des Entwicklers zu einer Fehlermeldung** („Der Makro PushButton_RGB_0_3 wurde falsch erzeugt: `PushButton_RGB_0_3(#LED, #InCh, Licht1, 1, 0, 1, 0, 30 Sek, True, True, True, True)`. Richtig ist: `PushButton_RGB_0_3(#LED, #InCh, test1, 1, 0, 1, 0, 30 Sek, 10, 0, 0, 0, 127, 0, 0, 0, 0, 0, 0, 127, 0, 0, 0, 0, 127, 127, 0, 0, 0)`. Der Fehler liegt im Userform_Other.“). Der Entwickler schickte `Userform_Other_1.py` und `web_form_other.py` mit seinen Korrekturen (mit 2.94 markiert, in der Datei zusammen mit dem Stand 2.94); sie sind unverändert übernommen und hier mit der Dateiversion markiert.
+
+**Ursache 1 (`proggen/Userform_Other.py`):** `Check_Par_with_ErrMsg` gibt den geprüften Wert zurück (`Create_Result`: `val = self.Check_Par_with_ErrMsg(Nr, val)`, bei `None` bricht das Formular ab). Im Zweig der Parametertypen `RGB` und `RGB2` stand `fn_return_value = ( value != '' )`: Das ist die Übersetzung der Excel-Funktion, die einen Wahrheitswert liefert und den Wert über ByRef zurückgibt. Das Python-Ergebnis war deshalb `True` statt `10, 0, 0`; im Makro stand „True, True, True, True“ statt der vier Farbblöcke. **Korrektur des Entwicklers:** ein leerer Wert wird zu `None` (Fehler), sonst wird der geprüfte Wert zurückgegeben (`Check_RGB_List` liefert bei einem Fehler `None`).
+
+**Ursache 2 (`_web/web_form_other.py`):** Die Prüfung „Wert steht in der Auswahlliste, sonst Rückfall auf den Standardwert mit Meldung“ galt für die Typen `List` **und** `Mode`. Parameter vom Typ `Mode` (zum Beispiel `OptCtrPar`: Flags oder Zahl) haben aber keine feste Liste. **Korrektur des Entwicklers:** Die Prüfung gilt nur für `List`.
+
+**Zusätzlich gefunden (beim Prüfen):** In `Check_RGB_List` stand in der Fehlermeldung bei ungültigen Farbwerten `Controls('LabelPar' + ParNr)` (Rest der Excel-Übersetzung): Das gibt es in Python nicht, und `'LabelPar' + ParNr` mischt Text und Zahl. Bei Buchstaben, Werten über 255 oder zu vielen Punkten brach das Formular mit einem Programmfehler (`NameError`) ab, statt die Meldung zu zeigen. Die Meldung nennt jetzt den Parameter (`self.ParName[ParNr - 1]`).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `proggen/Userform_Other.py` | 1.02 | RGB und RGB2 liefern den Farbwert; Fehlermeldung bei ungültigen Farben |
+| `_web/web_form_other.py` | 1.07 | Auswahlprüfung nur für List |
+| `webmobaledlib.py` | 2.95 | Version, benötigte Dateien |
+| `install/BETATEST_Checkliste.md` | 2.21 | Punkt 149 |
+
+**Tests** (`test_other_rgb.py`, 10): Mit der **echten Formularklasse** (`UserForm_Other` ohne Tk-Aufbau, mit Ersatz für die Eingabefelder) und den Werten des Fehlerberichts entsteht genau das richtige Makro; keine Meldung; kein „True“; `Check_Par_with_ErrMsg` liefert `10, 0, 0` und die sechs Werte von RGB2; Fehlerfälle (zu wenige Werte, Wert über 255, leeres Feld, Buchstaben) zeigen **eine** Meldung mit dem Parameternamen und erzeugen kein Makro; Quelltextprüfung für `web_form_other`. **Nicht geprüft:** das Formular im Browser (ob die Auswahlprüfung der Typen `List` unverändert funktioniert, ob weitere Parametertypen `Mode`-ähnlich betroffen sind, ob die Meldung im Dialog richtig aussieht).
+
+## 2.94 (2026-11-05)
+
+**Niederländischer Tester: Übersetzungen und Seite Programm Einstellungen** (Seiten Programm Einstellungen, ARDUINO Einstellungen und Farb Test nicht mehrsprachig; bei allen Seiten der Beschreibungstext deutsch; Programm Einstellungen unübersichtlich: die alten Einstellungen wie die neuen gruppieren, mit Überschrift: Allgemeine Einstellungen (Sprache, Darstellung auf kleinen Bildschirmen, Schriftgröße, Icon Größe), Programm Generator (Standardansicht, versteckte Tabellen anzeigen, Bedienung der Tabelle), Farbtest-Einstellungen (Farbauswahl, LED-Farbkorrektur); Check for Updates hat keine Funktion und entfällt; Spezialeinstellungen: der Rest).
+
+**Ursachen der deutschen Texte:** (1) Der Beschreibungstext einer Seite steht in MacroDef (`Ausführliche Beschreibung`, mit Wagenrücklauf `\r` im Text) und kam nie in eine Sprachtabelle; der Übersetzer sucht den **genauen** Text im Katalog. (2) Bei den Einstellungsseiten fehlten 16 Beschriftungen und Hinweise (und die Gruppen sind neu); der Farb Test hatte rund 30 Texte (Farbtemperatur, aktuelle Farbe, LED Adresse, Led Kanal, Anzahl, Alle LED aus, Blinken Ein/Aus, die Pfeil-Hinweise, die Rückfrage beim Beenden, Meldungen) nicht im Katalog.
+
+**Umsetzung:**
+- `web_i18n.py` 1.08: `description_text(text, fallback)` entfernt `\r`, fasst mehr als eine Leerzeile zusammen, schneidet den Rand ab und übersetzt den Text (`tr`). Der Katalog enthält den bereinigten Text mit seinen Zeilenumbrüchen. Das gilt für `web_params` (Einstellungsseiten), `web_colorcheck`, `web_dcckeyboard`, `web_soundtest`, `web_z21` und `web_servotest2` (zugeklappt zeigt der Reiter die **erste Zeile der übersetzten Beschreibung**, deshalb wird vor dem Aufteilen übersetzt).
+- `web_params.py` 1.06: `SETTINGS_GROUPS` (für `ConfigurationPage`): fünf Gruppen, jede mit Überschrift (`text-h6`, blaue Linie), die Parameter einer Gruppe in der Reihenfolge der Gruppe; `@layout`, `@table` und `@network` sind Plätze für die Zusatzkarten (Darstellung auf kleinen Bildschirmen, Bedienung der Tabelle, Zugriff aus dem Netz mit Passwort); die Gruppe mit `None` (**Spezialeinstellungen**) nimmt alle Parameter, die in keiner Gruppe stehen (auch künftige). Seiten ohne Eintrag (ProgGenerator Einstellungen, ARDUINO Einstellungen) bleiben unverändert; ein Zusatzobjekt ohne `slots()` baut wie früher am Ende.
+- `web_access.py` 1.12: `slots()`, `build_layout()`, `build_table()`, `build_network()`; `build()` baut weiter alle drei hintereinander.
+- `web_tabs.py` 1.11: `PARAM_REMOVALS` nimmt auch `CheckVersion` heraus (der gespeicherte Wert bleibt unverändert).
+- Katalog `csv/Web_Languages.csv`: 1137 Einträge (rund 76 neu: 8 Beschreibungen, Gruppen, Einstellungen, Hinweise, ProgGenerator-Einstellungen, Farb Test, Servo, Sound, Z21, DCC).
+
+**Gruppierung:** Allgemeine Einstellungen: Sprache, Darstellung auf kleinen Bildschirmen, Schriftgröße anpassen, ProgGen/PattGen DefaultFont, Icon Größe; Programm Generator: Standardansicht, Programmgenerator versteckte Tabellen anzeigen, Bedienung der Tabelle; Farb Test Einstellungen: Farbauswahl, LED-Farbkorrektur; Zugriff aus dem Netz: Zugriff aus dem Netz erlauben, Zugriff über das Netz (Passwort); Spezialeinstellungen: DM Servo Einstellungen anzeigen, Z21 Simulator anzeigen, IP Upload Timeout, RMBUS-Interval, Dateien für das Excel-Programm speichern.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_i18n.py` | 1.08 | description_text |
+| `_web/web_params.py` | 1.06 | Gruppen, Beschreibung übersetzt (hatte noch keinen Kopf: ergänzt) |
+| `_web/web_access.py` | 1.12 | Zusatzkarten einzeln, Plätze |
+| `_web/web_tabs.py` | 1.11 | Check for Updates entfällt |
+| `_web/web_colorcheck.py` | 1.05 | Beschreibung übersetzt (hatte noch keinen Kopf: ergänzt) |
+| `_web/web_dcckeyboard.py`, `_web/web_soundtest.py`, `_web/web_servotest2.py`, `_web/web_z21.py` | 1.02, 1.02, 1.02, 1.03 | Beschreibung übersetzt |
+| `csv/Web_Languages.csv` | - | 1137 Einträge |
+| `webmobaledlib.py` | 2.94 | Version, benötigte Dateien (neu web_colorcheck) |
+| `install/ANLEITUNG_Installation.md` | 3.49 | Aufbau der Seite Programm Einstellungen |
+| `install/BETATEST_Checkliste.md` | 2.20 | Punkt 148 |
+
+**Tests:** `test_settings_groups.py` (11: mit dem echten MacroDef und einem aufzeichnenden Ersatz für die Oberfläche: fünf Gruppen in der Reihenfolge, jede Einstellung in ihrer Gruppe, die drei Zusatzkarten an ihren Plätzen, Check for Updates und Patterngenerator anzeigen fehlen, ARDUINO Einstellungen ohne Gruppen, Beschreibung ohne Wagenrücklauf, Zusatz ohne Plätze wie früher), `test_translations_294.py` (15: in allen sechs Sprachen sind die Beschreibungen der acht Seiten übersetzt und haben die Zeilenumbrüche des Deutschen, und die Gruppen, Einstellungen und Farb-Test-Texte sind übersetzt; Deutsch bleibt unverändert). Zusätzlich ein Prüflauf über alle Beschriftungen der drei Einstellungsseiten und die festen Texte der Werkzeug-Seiten (nur Sprachennamen und Fachwörter wie „Spinbox“ bleiben). **Nicht geprüft:** im Browser (Aussehen der Gruppen, ob alles am richtigen Platz steht, die Übersetzung in Servo Einstellungen 1); die Sprachennamen in der Auswahl bleiben unübersetzt (Deutsch, English, Nederlands …) damit man seine Sprache findet.
+
+## 2.93 (2026-11-05)
+
+**Zeilen aktivieren und deaktivieren mit der Leertaste** (Idee eines Testers: In Excel zog man das leere Feld in Spalte A und den Haken in Spalte B nach unten; im Browser geht das nicht. „Was man machen könnte: Umschalten per Leertaste, bei markierten Zeilen steuert die Leertaste den Haken, maßgeblich der Haken der ersten Zeile. Das ist in der Praxis essenziell, zum Beispiel ein ganzes Haus für Wartung oder Erweiterung abschalten.“).
+
+**Wie der Haken gespeichert wird:** Die Spalte Aktiv enthält `*` (`M02.Hook_CHAR = xlhookchar = ord("*")`; im Excel-Programm war es das Wingdings-Zeichen); das Gitter zeigt `*` als ✓ (`valueFormatter`). Aktiv ist, was nicht leer ist (`Cells(r, Enable_Col) != ''`). Ein Klick auf die Zelle schaltet nur einzeln um (`Global_Worksheet_SelectionChange`: setzt `*` oder leert, ruft `Update_Start_LedNr()`).
+
+**Umsetzung (`webmobaledlib.py` 2.93):**
+- `JS_SPACE_KEY`: ein `keydown`-Hörer auf Dokumentebene in der **Capture-Phase** (wie `JS_DBLCLICK`): Er reagiert nur, wenn der Fokus auf einer **Zelle** liegt (`.ag-cell`, nicht beim Bearbeiten, nicht in Eingabefeldern, bei **keinem offenen Dialog**), die Taste die **Leertaste ohne Strg, Cmd oder Alt** ist und das Ereignis noch nicht abgefangen wurde. Er hält die Taste an (`stopPropagation`, `stopImmediatePropagation`, `preventDefault`), damit **AG Grid die Zeile nicht selbst ab- oder auswählt** (`rowSelection: multiple` schaltet sonst mit der Leertaste die Auswahl um; außerdem scrollt der Browser sonst), und meldet `mll_space` mit Zeile und Spalte (auch die Zeilennummer-Zelle `_rn` zählt).
+- `plan_active_toggle(rows, active_of, has_content, hook)` (rein, Modulebene): **maßgeblich ist die oberste markierte Zeile mit Inhalt**; hat sie einen Haken, wird er überall entfernt, sonst überall gesetzt; geschrieben werden nur Zeilen, die sich ändern; ganz leere Zeilen bleiben unverändert.
+- `apply_active_toggle(ws, rows, ec, value, X02, M20, M25)` (Modulebene, mit den Modulen als Argumenten, damit es sich prüfen lässt): schreibt **ohne Ereignisse** (`EnableEvents = False`; jedes `Worksheet_Change` rechnete sonst die LED-Nummern neu, bei einem Haus mit 50 Zeilen 50-mal), stellt die Ereignisse im `finally` wieder an und ruft **einmal** `Make_sure_that_Col_Variables_match` und `Update_Start_LedNr()` (wie `Global_Worksheet_SelectionChange`).
+- `op_toggle_active(r)`: die markierten Zeilen wie bei den anderen Einträgen (`ctx_rows`: die markierten Zeilen, wenn die angeklickte dabei ist, sonst nur diese), nur **Datenblätter** (`enable_column`; das Blatt **Libraries** nicht, dort schaltet der Klick auf Select), nur **ab der ersten Datenzeile** und nur **sichtbare** Zeilen (`displayed_rows`); danach `show(ws)`. Schreibt im Arbeitsthread (`run_in_worker`), Fehler als Meldung.
+- Kontextmenü: Eintrag **Zeilen aktivieren/deaktivieren** (Kürzel **Leertaste**) nach „Löschen“, mit `ctx_ok()`.
+- Katalog 1065 Einträge (2 neu: der Eintrag und „Leertaste“).
+
+**Abweichungen von Excel:** Es gibt keine Auswahl-Regel „ausgeblendete Zeilen“ im Excel-Original; hier bleiben versteckte Zeilen unverändert (das Ausblenden ist eine Funktion der Tabelle, kein Zustand von Aktiv). Es gibt weiter **kein Rückgängig** für Tabellenzeilen; ein zweiter Druck stellt den Zustand wieder her (für Zeilen, die vorher verschieden waren, nur nach der Regel der obersten Zeile, nicht je Zeile).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 2.93 | Leertaste und Kontextmenü: Aktiv umschalten |
+| `csv/Web_Languages.csv` | - | 1065 Einträge (2 neu) |
+| `install/ANLEITUNG_Installation.md` | 3.48 | Abschnitt 2.9b |
+| `install/BETATEST_Checkliste.md` | 2.19 | Punkt 147 |
+
+**Tests** (`test_active_toggle.py`, 16): Regel der obersten Zeile (alle mit Haken → entfernen; erste ohne → setzen, auch mit gemischten Zeilen; unsortierte und doppelte Angaben), einzelne Zeile, leere Zeilen, Haken in anderer Schreibweise; `apply_active_toggle` mit Ersatzobjekten (Reihenfolge: Blatt aktivieren, Schreiben ohne Ereignisse in Spalte ec+1, Ereignisse wieder an, **eine** Neuberechnung; bei Fehler Ereignisse trotzdem wieder an); der JavaScript-Teil mit **node** (Capture-Phase, Leertaste auf Zelle und Zeilennummer, nichts beim Bearbeiten, in Eingabefeldern, bei offenem Dialog, bei anderen Tasten und mit Strg/Cmd/Alt, bei schon abgefangenem Ereignis, bei ungültiger Zeile oder Spalte); Quelltext (Einbindung, Kontextmenü, Einschränkungen). **Nicht geprüft:** im Browser (ob AG Grid die Taste wirklich nicht mehr selbst auswertet; das Tabellenbild nach dem Umschalten; die Geschwindigkeit bei vielen Zeilen); bitte Punkt 147 der Checkliste.
+
+## 2.92 (2026-11-05)
+
+**PlatformIO als Standard** (Vorbereitung des Wiki-Kapitels zur webMobaLedLib: „Die Basis Installation sollte mit PlatformIO sein und ARDUINO-IDE nur noch als Zusatzmöglichkeit“). Ein Anfänger kann dem Skript keine Option mitgeben; die Wiki-Seiten lassen ihn nur doppelklicken bzw. den Befehl ohne Option eingeben.
+
+- **Installationsskripte:** `install/install_windows.bat` 1.10 (Standard `WITHPIO=1`, neu `/nopio`), `install/install_linux.sh` 1.07 (`WITH_PIO=1`, neu `--no-platformio`), `install/install_mac.command` 1.11 (dto.), `pi/install_pi.sh` 1.11 (dto., neu im Overlay). Die bisherigen Optionen `/platformio`, `--with-platformio` gelten weiter (ohne Wirkung). Die Meldung am Ende des Windows-Skripts nennt PlatformIO und die IDE als Zusatz.
+- **Standard der Entwicklungsumgebung:** Die Datei `csv/Config.csv` (Zeile `Use_PlatformIO`) wird **nicht gelesen** (`Filenamex`; das Blatt Config kommt aus der Arbeitsmappe `csv/Prog_Generator_MobaLedLib.xlsm` bzw. aus der gespeicherten Tabelle des Benutzers). Deshalb setzt `headless/headless_proggen.py` 1.09 beim **ersten Start einer Neuinstallation** (die gespeicherte Tabelle im Datenordner fehlt noch, geprüft vor `Workbooks.Open`) mit `new_install_defaults()` den Wert `Use_PlatformIO` auf 1, **aber nur, wenn PlatformIO gefunden wird** (`M08.Find_PIO()`; die Skripte installieren es vorher). Ohne PlatformIO bleibt die ARDUINO IDE die Entwicklungsumgebung (kein Fehler beim Hochladen). Bestehende Installationen (Tabelle vorhanden) behalten ihre Einstellung. Mit PlatformIO entfallen beim Start die Suche nach der IDE und die Prüfung der Bibliotheken (Anleitung 2.16).
+- Anleitung 3.47: Schnellstart und Tabellen der Optionen. Checkliste 2.18: Punkt 146. Test: `test_new_install_defaults.py` (4 Prüfungen mit Ersatzobjekten).
+- **Nicht geprüft:** Die Skripte konnten im Sandkasten nicht ausgeführt werden (kein Windows, macOS, Linux-Desktop oder Raspberry Pi, kein Internet); geprüft sind nur die Schreibweise (`bash -n` für die drei Shell-Skripte) und die Änderungen selbst. Bitte die Neuinstallation auf allen vier Systemen testen (Checkliste 146). Offene Frage: Fehlt auf Windows bei der Installation ohne die IDE der USB-Treiber für Arduino-Nachbauten (CH340)? Die IDE-Installation brachte ihn mit; Windows 10 und 11 holen ihn meist selbst (Windows Update). Die Wiki-Seiten nennen den Treiber unter „Wenn etwas nicht klappt“.
+- **Wiki:** Seiten für Einführung, Installation je System, Arduino IDE als Zusatz, erstes Programm und Begriffe (`wiki/…`, DokuWiki-Schreibweise, Datei `LIESMICH_Wiki.md`).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `install/install_windows.bat` | 1.10 | PlatformIO Standard, `/nopio` |
+| `install/install_linux.sh` | 1.07 | PlatformIO Standard, `--no-platformio` |
+| `install/install_mac.command` | 1.11 | PlatformIO Standard, `--no-platformio` |
+| `pi/install_pi.sh` | 1.11 | PlatformIO Standard, `--no-platformio` |
+| `headless/headless_proggen.py` | 1.09 | erster Start einer Neuinstallation: PlatformIO einstellen, wenn gefunden |
+| `webmobaledlib.py` | 2.92 | Version |
+| `install/ANLEITUNG_Installation.md` | 3.47 | Schnellstart, Optionen |
+| `install/BETATEST_Checkliste.md` | 2.18 | Punkt 146 |
+
+## 2.91 (2026-11-04)
+
+**Niederländischer Tester: nicht übersetzte Stellen** (Bildschirmfoto Raspberry Pi, Version 2.87, Sprache Niederländisch; rot umrandet: der Verbindungsstatus oben rechts „Nicht verbunden“, die Menüeinträge „Raspberry Pi herunterfahren ...“ und „Raspberry Pi neu starten ...“, die Überschriften der Spalten K bis Q der Seite DCC und der Tooltip der Spalte „Beleuchtung, Sound ...“).
+
+**Ursachen:**
+1. **Spaltenüberschriften und Tooltips (die Hauptsache):** `M09_Language.__Header_Cells` ordnete die Übersetzungen der Tabelle Languages (Typ `Cell_DCC`, `Comment_DCC`, Param `J2`, `K2` ...) über die **Adresse** der Zelle zu. Diese Adressen stammen aus dem Excel-Programm (Spalten D bis N); im Web-Programm sind die Spalten **Icon (J) und Name (K)** eingefügt, die Überschriften stehen um zwei Spalten weiter rechts (L bis P) und **Q** (LED/ Sound Kanal) ist neu: Der Text in `J2` war jetzt „Icon“, passte nicht zum Eintrag „Beleuchtung, Sound ...“ und die Zelle wurde übersprungen. Nur die Spalten vor der Einfügung (Adresse bis Typ, Verteiler, Stecker) wurden übersetzt. Dasselbe galt für die Tooltips (stehen hinter `§` im Text der Zelle).
+2. **Verbindungsstatus:** `headless_app_controller.connectstatus_text = "Nicht verbunden"`, `web_serial` schreibt „Nicht Verbunden“ und „Verbunden COM5 - EFFECT Mode“ (mit dem Port) auf Deutsch; die Anzeige übersetzte nur exakte Katalogtexte, und die fehlten.
+3. **Menü:** „Raspberry Pi herunterfahren ...“ und „Raspberry Pi neu starten ...“ standen nicht im Katalog (sie werden mit `MENU["Datei"] += ...` angefügt, das Prüfwerkzeug sieht sie nicht).
+
+**Umsetzung:**
+- `proggen/M09_Language.py` 1.05: `__Find_Header_Pos`: die Überschrift wird über ihren **Text** gefunden (zuerst an der Adresse der Tabelle Languages, sonst die erste Zelle der Zeile mit diesem Text, jede Zelle nur einmal); der Tooltip kommt weiter aus der Zeile `Comment_...` derselben Adresse. Das funktioniert mit und ohne die eingefügten Spalten (altes Layout geprüft). Eine vom Anwender geänderte Überschrift bleibt. Überschriften **ohne** Eintrag in der Tabelle Languages (Name, LED/ Sound Kanal, Icon) kommen aus dem Katalog der Web-Oberfläche (`catalog_text`, Text ohne Zeilenumbrüche). **Die Tabelle Languages selbst bleibt unverändert** (sie gehört zum Excel-Programm, dessen Adressen stimmen dort).
+- `webmobaledlib.py` 2.91: `translate_connect_status`: „Nicht verbunden“ und „Nicht Verbunden“ → `tr("Nicht verbunden")`, `Verbunden <Port> - EFFECT|DIRECT Mode` → `tr("Verbunden {port} - … Mode", port=…)`, sonst `tr(Text)`; die Anzeige oben rechts benutzt sie (`conn_label`).
+- Katalog `csv/Web_Languages.csv` (1063 Einträge, 9 neu): Name, Icon, LED/ Sound Kanal, die beiden Menüeinträge, Nicht verbunden, Nicht verbunden - Fehler, Verbunden {port} - EFFECT Mode, Verbunden {port} - DIRECT Mode.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `proggen/M09_Language.py` | 1.05 | Überschriften über den Text finden, Katalog für Spalten ohne Eintrag |
+| `webmobaledlib.py` | 2.91 | Verbindungsstatus übersetzen, benötigte Dateien |
+| `csv/Web_Languages.csv` | - | 1063 Einträge (9 neu) |
+| `install/ANLEITUNG_Installation.md` | 3.46 | nur Kopf |
+| `install/BETATEST_Checkliste.md` | 2.17 | Punkt 145 |
+
+**Tests:** Überschriften (6): ein Blatt mit den Spalten Icon und Name und den Texten der Datei `DCC.csv`: Niederländisch (K bis Q: Naam, Verlichting, geluid of andere effecten, Start LedNr, LEDs, InCnt, Loc InCh, LED/ Geluidskanaal; H, I, Aktiv, Adresse), Tooltip der Spalte L auf Niederländisch, eine umbenannte Überschrift bleibt, **altes Layout ohne Icon und Name** wie bisher, Französisch und Dänisch; Status (8): Niederländisch, English, Deutsch (Schreibweise Nicht Verbunden), Port mit Pfad, Menü, Katalog vollständig in sechs Sprachen. **Nicht geprüft:** im Browser mit dem Raspberry Pi; ob weitere Stellen deutsch bleiben, wissen wir erst aus weiteren Bildschirmfotos. **Beobachtung:** Die Tabelle Languages hat für die Spalten L bis P (früher J bis N) Tooltips; für Icon, Name und LED/ Sound Kanal gibt es keine (nur die Überschrift wird übersetzt).
+
+## 2.90 (2026-11-04)
+
+**Patterngenerator: Test Pattern** (Entwickler: „Test Pattern bitte umsetzen. Senden an ein Modul zurückgestellt bis Tester gefunden, der es benötigt.“).
+
+**Original:** `Test_Leds_M99O01` (Knopf `button_testen_cmd` in `Pattern_Generator.py`, `M80.Button_Pressed` → `Button_Pressed_Handling`, Zweig `Test`) ruft `Display_Pattern_LED`. Es werden **keine Daten an einen ARDUINO gesendet**: Das Makro der Seite (`Macro_Range`, nach dem ersten `)` ab `PatternT…(`) wird mit `Decode_Pattern_String_to_Struct` zerlegt, `Display_Pattern_LED` berechnet je LED und Muster die Farbe (`Get_RGB_Value`: Helligkeit; bei RGB drei Kanäle je LED, sonst Grundfarbe aus der Zelle in Spalte E der LED-Tabelle mal Helligkeit), `Display_Leds` und `Display_Leds_with_StartNr` zeigen die Kreise der Reihe nach (Zeit je Muster `Duration((n-1) mod Anzahl)`, `DelayTimer`), mit PingPong und bei Goto-Mustern (`Calc_StartPatternNumber`, `Calc_PatternNumber`, Auswahl des Starts im Formular `Select_GotoNr_Form`). „Senden an ein Modul“ (`Send2Module_Button`, ATtiny, `M55_PWM_Data_Send`) ist ein eigener Knopf und **zurückgestellt**.
+
+**Umsetzung:**
+- `headless/headless_pattern_test.py` 1.00: `build_test_data(page, ws)` (im Arbeitsthread, `page.activated()`): Zerlegung mit den Funktionen des Originals, Farben je LED und Muster (`colors` je Muster), Zeiten in ms (`Convert_TimeStr_to_ms`), `pingpong`, `goto`, `goto_list`; `PatternPlayer`: `start(nr)`, `advance()`, `duration_ms()` (mindestens 40 ms), Wiederholen, PingPong (1, 2, 3, 2, 1, 2 …), Goto (`start_step`, `next_goto`, `start_count`).
+- `_web/web_pattern_test.py` 1.00: Fenster „Test Pattern“: ein Kreis je LED (Name darunter), „Muster n von N“, bei Goto-Mustern die Knöpfe Anfang, Start 1 … n, Stop/Start, Schließen; der Ablauf ist eine Aufgabe in der Ereignisschleife (`asyncio`), die Farben setzt eine JavaScript-Zeile je Muster; ein neu gestarteter Ablauf überschreibt Zustand und Knopf nicht durch einen beendeten alten.
+- `_web/web_pattgen.py` 1.22: Knopf **Test Pattern** (vor „Neues Blatt“), `on_test`: Daten im Arbeitsthread (`action(..., refresh="never")`), ohne Muster Hinweis, sonst Fenster.
+- Katalog 1054 Einträge (9 neu). `webmobaledlib.py` 2.90.
+
+**Abweichungen vom Excel-Programm:** (a) Die Wartezeit je Muster ist die volle Zeit (das Excel-Programm zog 0,5 s Rechenzeit ab: `average_processingtime`; bei Zeiten unter 0,5 s wartete es gar nicht), mindestens 40 ms; (b) die LED-Kreise stehen im Fenster, nicht über dem eingefügten Bild in der Tabelle (die Verschiebe-Formulare `UserForm_Move_Shapes` und der Edit Mode gibt es nicht); (c) das Markieren des laufenden Musters in der Tabelle (gelbe Zelle in der LED-Nummern-Zeile) gibt es nicht; (d) bei Goto-Mustern ohne passende Startmarke beginnt der Ablauf am Anfang (das Original liefert ein Muster hinter dem Ende); (e) das Multiplexer-Blatt (Test_Leds_MxxOyy) gibt es nicht.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `headless/headless_pattern_test.py` | 1.00 | neu: Daten und Ablauf |
+| `_web/web_pattern_test.py` | 1.00 | neu: Fenster |
+| `_web/web_pattgen.py` | 1.22 | Knopf Test Pattern |
+| `csv/Web_Languages.csv` | - | 1054 Einträge (9 neu) |
+| `webmobaledlib.py` | 2.90 | Version, benötigte Dateien |
+| `install/ANLEITUNG_Installation.md` | 3.45 | Test Pattern |
+| `install/BETATEST_Checkliste.md` | 2.16 | Punkt 144 |
+
+**Tests** (Prüfgerüst mit Ersatz für Tk neu aufgebaut): `test_pattern_test.py` (18, mit dem Patterngenerator und geladenen Beispielblättern: Daten, Farben, RGB, Goto; der **Ablauf gegen `Calc_PatternNumber` und `Calc_StartPatternNumber` des Originals** für alle Muster und Startmarken der Goto-Beispiele), `test_pattern_test_web.py` (13: das Fenster mit nachgebautem NiceGUI: Wiederholen, PingPong, Stop/Start, Goto mit Ende und Start, viele Neustarts, kein Rest nach dem Schließen), `test_pattern_test_button.py` (4). **Nicht gelaufen:** die gesamte frühere Prüfreihe (die Testdateien sind verloren), der Start im Browser.
+
+## 2.89 (2026-11-04)
+
+**Erweiterungs-Scanner: Makros mit schon vorhandenem Namen abweisen** (Entwickler: „Soll er Makros einer Erweiterung mit dem Namen eines eingebauten Makros mit Meldung abweisen? Ja, bitte.“). Hintergrund 2.87: Ordner in `libraries` mit `MobaLedLib.properties` (ServoAnim, LEDColorAnim, …) wurden als Erweiterungen eingelesen und verdoppelten die eingebauten Makros in der Liste.
+
+**Umsetzung:** `proggen/M38_Extensions.py` 1.03, `Load_Extensions`: Vor dem Eintragen der Makros einer Erweiterung werden die **Namen und Suchnamen** der Zeilen gesammelt, die schon in `Lib_Macros` stehen (`__ExistingMacroNames`; klein geschrieben verglichen; Wert `''` = eingebaut, sonst `Erweiterung <Name>`). Jedes Makro einer Erweiterung wird mit `__MacroConflict` geprüft (**Name oder Suchname** schon vorhanden): dann wird es **nicht eingetragen** (`continue`, die Zeile wird nicht verbraucht), sonst mit `__RegisterMacro` vermerkt (so wird auch eine **zweite Erweiterung mit demselben Makronamen** abgewiesen; die Meldung nennt die erste). `__ReportSkippedMacros`: Eintrag im Protokoll (`warning`) und **eine** Meldung (`P01.MsgBox`) mit allen abgewiesenen Makros und dem Hinweis, die Erweiterung umzubenennen oder zu entfernen; **jede Meldung nur einmal je Programmlauf** (`_ReportedConflicts`). Konstruktoren (`EX.<Typ>`) sind nicht betroffen. Texte auf Deutsch mit Übersetzung (Katalog 1045 Einträge, 3 neu). `webmobaledlib.py` 2.89 (Version, benötigte Dateien).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `proggen/M38_Extensions.py` | 1.03 | doppelte Makros abweisen, Meldung |
+| `csv/Web_Languages.csv` | - | 1045 Einträge (3 neu) |
+| `webmobaledlib.py` | 2.89 | Version, benötigte Dateien |
+| `install/ANLEITUNG_Installation.md` | 3.44 | Fehlersuche: Meldung bei doppelten Makros |
+| `install/BETATEST_Checkliste.md` | 2.15 | Punkt 143 |
+
+**Tests:** 8 Prüfungen mit einer nachgebauten Makrotabelle und nachgebauten Erweiterungen (die frühere Testumgebung im Sandkasten war verloren gegangen; neu mit einem Ersatz für Tk aufgebaut): Neu/ServoAnim/const (andere Schreibweise) → nur das neue wird eingetragen; die Meldung nennt beide; zwei Erweiterungen mit gleichem Namen; Makro ohne Konflikt wie bisher (Name, Suchname, Typ `EX.Macro.<Id>`, Gruppe Erweiterungen); gleicher Suchname bei anderem Namen wird abgewiesen, verschiedene nicht; keine zweite Meldung beim zweiten Laden; ohne eingebaute Makros wird alles eingetragen. **Nicht gelaufen:** die gesamte Prüfreihe (die Testdateien sind mit der alten Testumgebung verloren; der letzte vollständige Lauf war 2.88) und der Start des echten Programms mit einer Erweiterung im Ordner `libraries`.
+
+## 2.88 (2026-11-04)
+
+**LED Farb-Animation im Browser; MultiLEDColorAnim aus der Liste** (Entwickler: „Der Makro LEDColorAnim ist sehr ähnlich wie der ServoAnim und das meiste kann übernommen werden. Bitte umsetzen. Der Makro MultiLedColorAnim wird zurückgestellt, da er nochmal komplett redesigned werden muss. Er sollte aus der Liste entfernt werden.“).
+
+**Original:** `proggen/Userform_LEDColorAnim.py` (410 Zeilen, `UserForm_LEDColorAnim(UA.UserForm_Animation)` mit `no_of_curves=3`); Aufruf in `M09_Select_Macro` (`D16.UserForm_LEDColorAnim(PG.global_controller).Show_With_Existing_Data(…)`). Unterschiede zu ServoAnim: **drei Kurven** (`curve_points_ary`, `active_curve`), Start- und Endwerte je Farbe, **18 statt 16 Einstellungen** (Parameterliste ohne Servotyp und Überblendung; die Überblendung beeinflusst nur das vorangestellte `A`), Ausführung **HSV** (`PM_HSV`, `runtype_hsv = 3`; H, S, V 0 bis 255 werden mit `hsv_to_LEDcolor` in R, G, B umgerechnet), eigenes `generate_pattern_data` (je Punkt R, G, B ohne die Steuerwerte des Servos), `get_led_value_and_send_to_ARDUINO` mit Farben, Auswahl der aktiven Kurve (`Active_Curve_ListBox`), Zeitpunkte aller Kurven gleich (`synch_timepoints_between_curves`). Die Funktionen `add_jump`, `delete_jump`, `check_for_jump` werden nirgends benutzt und sind nicht übernommen.
+
+**Umsetzung:**
+- `headless/headless_ledcoloranim.py` 1.00: `LEDColorAnim(SM.ServoAnim)`: `curves` (drei Listen), `active` (`curve_points` ist die aktive Kurve), `calculate_complete_curve` für alle drei, `build_macro`, `load_macro` und `curves_from_macro` (auch die gespeicherte Form ohne `$Kanal`; Zeilenende `\n`, `\r\n`, `\r`), Punkte bearbeiten (Zeit für alle Kurven, Wert nur für die aktive), `values_at`, `led_color` (HSV umgerechnet), `hsv_to_led_color`. **Gegen das Tk-Original geprüft** (`test_ledcoloranim.py`, 13 Prüfungen): bei 400 zufälligen Einstellungen (Wiederholen, PingPong, Ein/Aus, HSV; Linear, Beschleunigung; Zeitstufen; Pausen; Überblendung) sind das **Makro und alle drei Kurven Zeichen für Zeichen gleich**; ebenso 150 Kurven Individuell; 300 zufällige HSV-Farben wie `hsv_to_LEDcolor`. **Abweichungen vom Original:** (a) Bei geänderter Dauer werden die Zeiten der Kurve Individuell für **alle drei Kurven** gleich gestreckt (das Original aktualisiert `last_t_ein`/`last_t_aus` schon nach der ersten Kurve, streckt also nur sie; die Ausgabe benutzt nur ihre Zeiten, deshalb ist das Makro gleich). (b) Beim Senden an die LED gilt 0 für Grün und Blau (das Original ersetzt 0 durch den Startwert: `if led_g_value:`). (c) Die Überblendung wird beim Einlesen am fehlenden `A` erkannt (nicht in der Kommentarzeile).
+- `headless/headless_servoanim.py` 1.02: Parameterliste und Vorgaben als Klassenwerte (`PARAM_NAMES`, `DEFAULTS`), damit die Unterklasse sie ersetzen kann (Servo-Tests unverändert bestanden).
+- `_web/mll_servocurve.js` 1.03: mehrere Kurven (`spec.curves`: Punkte, Farbe, aktiv): die aktive wird dick gezeichnet, die anderen dünn und halb durchsichtig; Punkte hat und zieht nur die aktive (Rückfall auf eine Kurve ohne `curves`).
+- `_web/web_form_servoanim.py` 1.04: `harvest(Base, attr)` (die LED Farb-Animation hat die flache `Main_Menu_Form_RSC`).
+- `_web/web_form_ledcoloranim.py` 1.00: Dialog wie bei ServoAnim (Texte aus dem Original, Fenster, globales Ereignis `mll_servo`, Test, Absage der ARDUINO-Verbindung gemeinsam mit dem Servo-Dialog) mit Start- und Endwert je Farbe, **Auswahl der aktiven Kurve**, **Farbfläche** (zeigt die gesendete Farbe), Meldungen `#L … r g b 01` (`servo_message`). `install()` ersetzt `D16.UserForm_LEDColorAnim`. Texte in sechs Sprachen (Katalog 1042, 18 neu).
+- **MultiLEDColorAnim aus der Liste:** die Zeilen sind aus `csv/Lib_Macros_ext.csv` (zwei, die Datei hatte sie doppelt) und `csv/Lib_Macros_ext2.csv` entfernt; der Zweig in `M09_Select_Macro` bleibt unbenutzt im Quelltext.
+- **Fund dabei:** `web_macro_tree.collect_macro_rows` ließ die **letzte Zeile** der Bibliothek aus (`range(…, LastUsedRow)`; `LastUsedRow` ist die letzte benutzte Zeile). Das fiel nie auf, weil die letzte Zeile die doppelte MultiLEDColorAnim-Zeile war; ohne sie wäre LEDColorAnim verschwunden. `_web/web_macro_tree.py` 1.11: `range(…, LastUsedRow + 1)`. (Das Tk-Original `SelectMacrosTreeForm` hat dieselbe Schleife; dort ohne Folgen für uns.)
+- `webmobaledlib.py` 2.88: `web_form_ledcoloranim.install()`, benötigte Dateien.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `headless/headless_ledcoloranim.py` | 1.00 | neu: Rechnung der LED Farb-Animation |
+| `headless/headless_servoanim.py` | 1.02 | Parameterliste als Klassenwert |
+| `_web/web_form_ledcoloranim.py` | 1.00 | neu: Dialog im Browser |
+| `_web/web_form_servoanim.py` | 1.04 | `harvest` mit Name der Fensterbeschreibung |
+| `_web/mll_servocurve.js` | 1.03 | mehrere Kurven |
+| `_web/web_macro_tree.py` | 1.11 | letzte Zeile der Liste |
+| `csv/Lib_Macros_ext.csv`, `csv/Lib_Macros_ext2.csv` | - | MultiLEDColorAnim entfernt |
+| `csv/Web_Languages.csv` | - | 1042 Einträge (18 neu) |
+| `webmobaledlib.py` | 2.88 | Einbau, Version, benötigte Dateien |
+| `install/ANLEITUNG_Installation.md` | 3.43 | Abschnitt 2.9g |
+| `install/BETATEST_Checkliste.md` | 2.14 | Punkte 141, 142 |
+
+**Tests:** `test_ledcoloranim.py` (13, Vergleich mit dem Tk-Original), `test_ledcoloranim_web.py` (35: der ganze Dialog mit nachgebautem NiceGUI und ARDUINO: Vorgaben, OK, Abbrechen, Änderungen, PingPong, HSV, Ueberblendung, Individuell mit aktiver Kurve, Anklicken, Ziehen, Farbe senden, Einfügen und Löschen, Rundlauf Speichern - Öffnen - Speichern, Test, ohne ARDUINO, Fenster, Fabrik), `test_servocurve_js.py` jetzt 25 (mehrere Kurven), `test_tree_preselect.py` jetzt 21 (LEDColorAnim in der Liste, MultiLEDColorAnim nicht, letzte Zeile, Vorauswahl). **Nicht geprüft:** im Browser und mit einer echten RGB-LED; ob `tkcolorpicker` und die eigene HSV-Umrechnung gleiche Farben liefern, ist an 300 Zufallsfarben gezeigt.
+
+## 2.87 (2026-11-04)
+
+**Makroauswahl, ServoAnim: Ursache gefunden** (Rückmeldung des Anwenders: Diagnose „Vorauswahl Zeile 383 … Zeile 383 steht nicht als Makro im Baum (Blätter: 300)“, 356 Einträge statt 354; „Ich hatte angefangen eine neue Möglichkeit zu implementieren, wie die zusätzlichen Makros definiert werden können, ähnlich wie Extensions. Deshalb gab es im Ordner `libraries` Ordner mit dem Namen ServoAnim mit einer Datei `MobaLedLib.properties`. Das hat bis jetzt nicht gestört. Da aber jetzt in demselben Ordner `libraries` auch die Extensions liegen, gibt es anscheinend Probleme. Ich habe die Ordner ServoAnim, LEDColorAnim, MultiLEDColorAnim, Pattern und ServoAnim2B aus dem `libraries`-Ordner gelöscht und schon funktioniert es.“).
+
+**Ursache:** `M38_Extensions` liest **jeden** Ordner in `libraries` mit einer Datei `MobaLedLib.properties` als Erweiterung (Zeilen 292 bis 318) und fügt die dort beschriebenen Makros der Liste (`Lib_Macros`) hinzu. Die fünf Ordner (in seinem Paket enthalten: `libraries/ServoAnim`, `LEDColorAnim`, `MultiLEDColorAnim`, `Pattern`, `ServoAnim2B`, jeweils mit `MobaLedLib.properties`, `"id": "ServoAnim"` usw.) beschrieben **dieselben Makros** wie `Lib_Macros_ext.csv`: Die Liste hatte sie doppelt (Suche über „Find Name“ liefert die **erste** Zeile, im Baum bleibt nur die **letzte** mit gleichem Namen in der Gruppe: `build_macro_dict` überschreibt); die Zeile der Suche stand im Baum nicht, nichts wurde vorausgewählt, und die Gruppe zeigte eine andere Beschreibung. In meiner Sandbox mit der mitgelieferten Bibliothek (ohne diese Ordner) war alles in Ordnung, deshalb war es dort nicht nachzustellen.
+
+**Umsetzung (Absicherung, die Ursache ist durch Löschen der Ordner behoben):** `_web/web_macro_tree.py` 1.10: `leaf_rows_of(items)` bestimmt die Zeilen, die im Baum wirklich als Makro stehen; die Vorauswahl nimmt nur solche Zeilen (steht die gefundene Zeile nicht im Baum, wird über den Namen die im Baum stehende Zeile gesucht, bei doppelten Einträgen die letzte). Die **Diagnose von 2.86 ist entfernt** (die Zeilen stehen als Kommentar im Quelltext). Der Rückfall mit der Meldung („Makroauswahl: Suchtext … ergab über ‚Find Name‘ die Zeile …“) bleibt für Fälle, in denen die Spalte „Find Name“ nichts oder Falsches liefert. `webmobaledlib.py` 2.87.
+
+**Hinweis für die Pakete:** Das Paket des Anwenders (2.85) enthielt die fünf Ordner; sie gehören nicht in `libraries` (Anleitung, Fehlersuche 9.1; Checkliste 140). **Nicht geändert:** Der Erweiterungs-Scanner selbst (Makros einer Erweiterung mit demselben Namen wie ein eingebautes Makro werden nicht abgewiesen); offen, ob das gewünscht ist (zum Beispiel Meldung oder Vorrang für die eingebaute Zeile).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_macro_tree.py` | 1.10 | Vorauswahl nur auf Zeilen im Baum, Diagnose entfernt |
+| `webmobaledlib.py` | 2.87 | Version, benötigte Dateien |
+| `install/ANLEITUNG_Installation.md` | 3.42 | Fehlersuche: Ordner in `libraries` |
+| `install/BETATEST_Checkliste.md` | 2.13 | Punkt 140 |
+
+**Tests:** `test_tree_preselect.py` jetzt 18: doppelte Zeile (ServoAnim in 389 und 600): im Baum steht nur 600, `leaf_rows_of`, `find_row_by_name` mit den Blättern, die Vorauswahl ist 600 statt der ersten Zeile 389; Normalfall ohne Meldung.
+
+## 2.86 (2026-11-04)
+
+**Makroauswahl bei ServoAnim: Diagnose** (der Anwender schickte sein komplettes Paket 2.85 „vielleicht hilft das weiter“; das Problem besteht offenbar weiter).
+
+**Untersuchung mit dem Paket des Anwenders** (ausgepackt und mit dem Prüfgerüst gestartet, ohne meine Dateien darüber zu kopieren): Alle Dateien der Bibliothek sind **gleich** (`Lib_Macros.csv`, `Lib_Macros_ext.csv`, `Lib_Macros_ext2.csv` gleiche Prüfsumme; die `.xlsm` unterscheidet sich in der Größe, ihr Blatt `Lib_Macros` hat aber wie meine 387 Zeilen und keine Zeilen für PatternConfig; diese kommen aus `Lib_Macros_ext.csv` und werden beim Laden angehängt). Mit seinen Dateien: 354 Einträge, PatternConfig mit den Zeilen 388 (`Pattern`), 389 (`ServoAnim`), 390 (`ServoAnim2B`, Gruppe `*PatternConfig`), 391, 392; die Gruppe zeigt die Beschreibung „individuelles Pattern“; `Find_Macro_in_Lib_Macros_Sheet` und der Rückfall über den Namen ergeben **389**; Blatt im Baum. **Sein Bild zeigt dagegen** die Beschreibung der Servo Animation bei PatternConfig, also eine **andere Reihenfolge oder Auswahl der Zeilen zur Laufzeit** (das erste Makro der Gruppe ist ServoAnim, `Pattern` fehlt oder steht woanders). Das lässt sich aus den Dateien nicht erklären; es hängt vom Zustand im laufenden Programm ab (Sprache der Spalten, geladene Tabelle, Reihenfolge).
+
+**Umsetzung:** `_web/web_macro_tree.py` 1.08: **vorläufige Diagnosezeile** beim Öffnen der Makroauswahl (nur wenn die Zelle Text enthält) im Debug-Fenster: „Makroauswahl (Diagnose): Zellinhalt N Zeichen, erste Zeile '…', Suchtext '…' -> Vorauswahl Zeile Z (Name 'ServoAnim', Gruppe 'PatternConfig'), Einträge 354“; und beim Aufbau des Baums, wenn die Zeile dort nicht als Makro steht („Zeile Z steht nicht als Makro im Baum (Blätter: n)“). `webmobaledlib.py` 2.86. **Die Diagnose wird entfernt, sobald die Ursache gefunden ist.**
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_macro_tree.py` | 1.08 | vorläufige Diagnosezeilen |
+| `webmobaledlib.py` | 2.86 | Version, benötigte Dateien |
+| `install/ANLEITUNG_Installation.md` | 3.41 | nur Kopf |
+| `install/BETATEST_Checkliste.md` | 2.12 | Punkt 140 |
+
+**Tests:** `test_tree_preselect.py` 15 (angepasst: die Diagnosezeile im Normalfall mit Zeile 389, Name ServoAnim, Gruppe PatternConfig und der ersten Zeile der Zelle).
+
+## 2.85 (2026-11-04)
+
+**Makroauswahl, ServoAnim: „Funktioniert immer noch nicht. Nach Doppelklick auf den Makro“** (Bild: Auswahl des Makros mit nur der ersten Gruppe „Licht“ aufgeklappt, nichts markiert; die Gruppe **PatternConfig** zeigt die Beschreibung **„Mit dieser Funktion kann eine Servo Animation erzeugt werden“**).
+
+**Folgerung:** Es lag **nicht** am Scrollen (2.84): Der Baum ist vollständig sichtbar, aber es wurde **kein Ziel gefunden** (`rebuild` ohne Treffer klappt nur den ersten Knoten auf: `tree.expand([nodes[0]["id"]])`). Außerdem: Die Gruppe zeigt die Beschreibung des **ersten Makros** der Gruppe (`build_macro_dict`); bei der Bibliothek in der Sandbox ist das „Individuelle Pattern“ (Zeile 388), beim Anwender die Servo Animation: **seine Bibliothek unterscheidet sich** (das Makro `Pattern` fehlt oder steht in einer anderen Gruppe), und die Suche über die Spalte „Find Name“ (`Find_Macro_in_Lib_Macros_Sheet`) ergibt dort offenbar nichts oder eine andere Zeile. In der Sandbox mit der mitgelieferten Bibliothek war die Vorauswahl richtig (Zeile 389); das 2.84-Ergebnis war ein anderes Problem (Scrollen), das trotzdem richtig bleibt.
+
+**Umsetzung:** `_web/web_macro_tree.py` 1.07: `find_row_by_name(text, items)`: der **Name des Makros** aus dem Zellinhalt (`// #ServoAnim(…` und `// Activation: Binary #ServoAnim(…` → `ServoAnim`; `House(#LED, 4)` → `House`) wird mit der Spalte **Name** der Bibliothek verglichen, ausgeblendete Gruppen (`*`) zählen nicht. **Rückfall in `web_select_macro_treeview`:** ergibt die Suche über „Find Name“ nichts oder eine Zeile, die **im Baum nicht steht**, wird die Zeile über den Namen bestimmt, und es steht eine **Meldung im Debug-Fenster**: „Makroauswahl: Suchtext '…' ergab über 'Find Name' die Zeile N (im Baum / nicht im Baum), über den Namen die Zeile M“. Im Normalfall (Treffer im Baum) keine Meldung. `webmobaledlib.py` 2.85 (Version, benötigte Dateien).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_macro_tree.py` | 1.07 | Rückfall über den Namen, Meldung |
+| `webmobaledlib.py` | 2.85 | Version, benötigte Dateien |
+| `install/ANLEITUNG_Installation.md` | 3.40 | Satz zur Suche |
+| `install/BETATEST_Checkliste.md` | 2.11 | Punkt 140 |
+
+**Tests:** `test_tree_preselect.py` jetzt 15: `find_row_by_name` (ServoAnim, Aktivierung, House, ServoAnim2B, unbekannt, leer), Normalfall ohne Meldung, **Suche ohne Treffer → Rückfall 389 mit Meldung**, Suche ergibt die ausgeblendete Zeile 390 → 389, Zelle mit ServoAnim2B → keine falsche Vorauswahl, House, leere Zelle. **Offen:** Ob das beim Anwender die Ursache ist, ist eine Annahme (seine Bibliothek habe ich nicht); die Meldung im Debug-Fenster zeigt es. Steht nach dem Doppelklick **keine** Meldung und es ist trotzdem nichts markiert, liegt es woanders (zum Beispiel am Setzen der Auswahl im Baum selbst).
+
+## 2.84 (2026-11-04)
+
+**Makroauswahl: „Beim Öffnen der Makroauswahl durch Doppelklick auf eine Zelle mit dem ServoAnim Makro ist der Makro in der Makroauswahl nicht aktiviert“** (Zelle `// #ServoAnim(0,2,500,20,220,2500,2500,0,0,0,0,2,1,0,0,1)` + Zeile `APatternT8(…)`; „Bei den anderen Makros funktioniert die Vorauswahl (außer bei den Makros unter PatternConfig wie ServoAnim)“).
+
+**Untersuchung:** Der Doppelklick (`Proc_DoubleClick` → `M09SM.SelectMacros()`) übergibt den **ganzen mehrzeiligen Zellinhalt** an die Web-Makroauswahl (`web_select_macro_treeview`); `Find_Macro_in_Lib_Macros_Sheet` findet **Zeile 389 (ServoAnim)**; die Zeile ist ein **Blatt** des Baums (Gruppe PatternConfig); das Auswählen im Baum (`tree.expand`, `tree.select`) geschah also. **Ursache:** Die Auswahl **scrollt nicht** zum markierten Eintrag (nur die Pfeiltasten tun das, in `select_node`). PatternConfig steht **am Ende der langen Liste** (Zeilen 388 bis 392 von etwa 392 in Lib_Macros) und liegt unterhalb des sichtbaren Bereichs (`scroll_area`, 46 vh); bei Makros weiter oben ist die Markierung sichtbar. Wahrscheinlich ist das auch der Grund bei den Makros, bei denen die Vorauswahl funktioniert: sie stehen weiter oben. **Ausnahme:** `ServoAnim2B` steht in der Gruppe `*PatternConfig` (ausgeblendet, auch im Tk-Original: `CreateMacroTree` überspringt Schlüssel mit `*`), es gibt keinen Eintrag, der sich markieren lässt.
+
+**Umsetzung:** `_web/web_macro_tree.py` 1.06: nach dem Auswählen in `rebuild` (nur ohne Filtertext) `ui.run_javascript(SCROLL_JS)`: bis zu vier Versuche bei 100, 300, 700 und 1500 ms (der Baum steht beim ersten Aufbau noch nicht im Browser, der Dialog öffnet sich erst danach), der erste, der `.q-tree__node--selected` findet, ruft `scrollIntoView({block: 'center'})` auf und beendet die Versuche (ein späteres Scrollen des Anwenders wird nicht gestört). `webmobaledlib.py` 2.84 (Version, benötigte Dateien).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_macro_tree.py` | 1.06 | markiertes Makro in den sichtbaren Bereich scrollen |
+| `webmobaledlib.py` | 2.84 | Version, benötigte Dateien |
+| `install/ANLEITUNG_Installation.md` | 3.39 | Absatz Makroauswahl |
+| `install/BETATEST_Checkliste.md` | 2.10 | Punkt 140 |
+
+**Tests:** `test_tree_preselect.py` (8): die **ganze Kette mit dem Zellinhalt des Anwenders** (echte Tabellenzeile, `SelectMacros()` übergibt den mehrzeiligen Text, die Vorauswahl ist Zeile 389); die Makroauswahl mit der echten Makrobibliothek und einem Ersatz für NiceGUI: der Knoten „Servo Animation“ ist ausgewählt und seine Gruppe aufgeklappt, **das Scrollen wird ausgelöst** (vier Versuche, Mitte), ohne Vorauswahl und bei der ausgeblendeten Zeile 390 nicht, nicht beim Tippen im Filterfeld, OK liefert Zeile 389. **Nicht geprüft:** im Browser (ob das Scrollen den markierten Eintrag trifft; die Annahme „liegt unterhalb des sichtbaren Bereichs“ konnte ich nicht sehen).
+
+## 2.83 (2026-11-04)
+
+**Servo Animation: Frage nach dem ARDUINO bei jedem Schritt** („Beim Verschieben eines Punktes versucht das Programm den Wert an den ARDUINO zu senden. Wenn keiner angeschlossen ist, wird bei jedem Schritt gefragt, ob man den ARDUINO anschließen möchte. Wenn man ‚Abbrechen‘ sagt, sollte diese Frage in dieser Session nicht mehr kommen.“)
+
+**Ursache:** `_ensure_direct()` rief bei jedem Senden (Anklicken, jedes Ziehen-Ereignis alle 80 ms, Ändern von Anfangs- und Endwert) `controller.connect_if_not_connected()` auf, solange keine Verbindung stand; das Programm fragt dort nach dem Anschließen. Dazu liefen mehrere Aufrufe **gleichzeitig** (die Ereignisse kommen, während die Frage noch offen ist), also mehrere Fragen.
+
+**Umsetzung:** `_web/web_form_servoanim.py` 1.03: `_declined` (Modulvariable, gilt bis zum Neustart des Programms, auch für neu geöffnete Dialoge): Nach einer Absage oder wenn keine Verbindung zustande kommt, wird **nicht mehr von selbst gefragt**; `st['connecting']` verhindert gleichzeitige Versuche (hier genügt ein Versuch, die übrigen Ereignisse werden übergangen). **Nur der Knopf Starte Test** fragt wieder (`_ensure_direct(explicit=True)`): der Anwender will ausdrücklich testen; gelingt die Verbindung, wird `_declined` aufgehoben und es wird wieder normal gesendet. Eine Ausnahme beim Verbinden zählt wie eine Absage.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_form_servoanim.py` | 1.03 | `_declined`, kein gleichzeitiges Fragen, nur Starte Test fragt wieder |
+| `webmobaledlib.py` | 2.83 | Version, benötigte Dateien |
+| `install/ANLEITUNG_Installation.md` | 3.38 | Absatz zur Frage |
+| `install/BETATEST_Checkliste.md` | 2.09 | Punkt 138 ergänzt |
+
+**Tests:** `test_servoanim_web.py` jetzt 52 (ein Ersatz-ARDUINO ohne Verbindung zählt die Versuche): Anklicken fragt einmal; danach 6 Ziehschritte, Anklicken und Ändern des Anfangswerts ohne weitere Frage (und ohne Senden, ohne Meldung); die Absage gilt auch für einen **neuen Dialog**; **Starte Test** fragt wieder (Meldung „kein Arduino verbunden“, danach wieder keine Frage von selbst); bei Verbindung ist die Absage aufgehoben und das Ziehen sendet wieder; **8 gleichzeitige Ereignisse bei offener Frage ergeben einen Versuch**. **Nicht geprüft:** das echte Fenster der Verbindungsfrage im Browser (der Ersatz-ARDUINO liefert „nicht verbunden“).
+
+## 2.82 (2026-11-04)
+
+**Servo Animation, Kurventyp Individuell: „Die Punktwerte werden nicht gespeichert, beim Wiederöffnen ist die Kurve leer“** (Linear und Beschleunigung gehen).
+
+**Ursache:** Gespeichert wurde das Makro richtig (die Zeile `PatternT…` enthält alle Punkte), aber **beim Wiederöffnen nicht gelesen**: `M09_Select_Macro` teilt das Ergebnis mit `Split(Res, '$')`; die Tabelle (Spalte Config) bekommt nur `Parts(1)`, also die Kommentarzeile `// #ServoAnim(…)` und die Zeile `PatternT…` **ohne `$Kanal` am Ende** (die Zeile endet mit `)`). `headless_servoanim.curve_points_from_macro` (1.00) erwartete die Zeile mit `)$Kanal` (so, wie `build_macro` sie erzeugt); bei der gespeicherten Form schlug `int('93)')` fehl, die Ausnahme wurde gefangen und die Kurve blieb leer. Parameter (Kommentarzeile) kamen richtig zurück, deshalb gingen Linear und Beschleunigung. Die Rundlauftests von 2.78 benutzten den Text von `build_macro` mit `$Kanal` und konnten das nicht zeigen (das Tk-Original schneidet mit `[:-1]` das `)` ab, ist also für die gespeicherte Form geschrieben).
+
+**Umsetzung:** `headless/headless_servoanim.py` 1.01: `curve_points_from_macro` entfernt am Ende der Zeile `)$Kanal` **oder** das einzelne `)`; das Zeilenende darf `\n`, `\r\n` oder `\r` sein (die Tabelle kann das als Zeilenwechsel speichern), leere Zeilen werden übersprungen. `webmobaledlib.py` 2.82 (Version, benötigte Dateien).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `headless/headless_servoanim.py` | 1.01 | Kurvenpunkte auch aus der gespeicherten Form lesen |
+| `webmobaledlib.py` | 2.82 | Version, benötigte Dateien |
+| `install/ANLEITUNG_Installation.md` | 3.37 | Satz zum Wiedereinlesen |
+| `install/BETATEST_Checkliste.md` | 2.08 | Punkt 138 ergänzt |
+
+**Tests:** `test_servoanim.py` jetzt 22: **360 Fälle in der gespeicherten Form** (`text.split('$')[1]`, Zeilenende `\n`, `\r\n`, `\r`, alle Ausführungen und Servotypen, bearbeitete Punkte): die Kurve wird gelesen, noch einmal erzeugt ergibt dasselbe Makro; einfaches Beispiel; Randfälle ohne Fehler. **Die vorige Fassung liest daraus 0 Punkte, die neue 11** (gegengeprüft). `test_servoanim_web.py` jetzt 44: der Dialog mit dem gespeicherten Makro zeigt die Punkte (editY, Werte wie gespeichert), OK ohne Änderung ergibt dasselbe Makro. **Nicht geprüft:** im Browser mit der echten Tabelle (wie die Zelle den Zeilenwechsel speichert, ist durch die drei Zeilenenden abgedeckt).
+
+## 2.81 (2026-11-04)
+
+**Servo Animation: Punkte nicht ziehbar, Fenstergröße nicht gemerkt** (Beobachtungen zu 2.80: „Bei Klick auf einen Kurvenpunkt wird er orange, aber er lässt sich nicht verschieben und die Werte werden unten auch nicht angezeigt. Im Debugfenster: `Browser-Fehler: Uncaught TypeError: getElement(...).$emit is not a function`. Die Fenstergröße wird nicht gespeichert, bei jedem Öffnen ist das Fenster wieder auf Standardgröße. Starte Test funktioniert, aber beim Klick auf den Button geht das Fenster wieder auf die Standardgröße.“)
+
+**Ursache 1 (Punkte):** `mll_servocurve.js` meldete `select`, `drag` und `move` mit `getElement(<Element>).$emit('mll_servo', …)`. In der benutzten NiceGUI-Fassung gibt `getElement(id)` kein Objekt mit `$emit` zurück: `TypeError`. Die Hervorhebung (orange) geschah vor der Meldung im Browser und blieb deshalb sichtbar; **die Ausnahme brach den Zeiger-Handler ab**, bevor das Ziehen eingerichtet wurde, und der Server bekam nichts. (Mein Test baute `getElement(...).$emit` nach und konnte den Fehler daher nicht zeigen; der Rest des Programms benutzt überall das globale `emitEvent` mit `ui.on`, wie `mll_tb` und `mll_graph`.) **Behoben:** `emit()` benutzt `emitEvent('mll_servo', msg)` (globales Ereignis), der Rückfall `getElement(...).$emit` nur, wenn es ihn gibt; **ein Fehler bei der Meldung bricht das Ziehen nicht mehr ab** (`try`/`catch`). Server: `web_form_servoanim.py` 1.02 richtet `ui.on('mll_servo', _dispatch)` **einmal je Seite** ein (`_registered`); `_dispatch` gibt das Ereignis an den offenen Dialog weiter (`_active['handle']`, nach dem Schließen leer); das Hilfselement am Dialog entfällt.
+
+**Ursache 2 (Fenstergröße), nicht sicher:** `mllWindow.setup` (1.01) merkte die Größe über einen `ResizeObserver` **bei jeder Größenänderung**, auch beim Aufbau und wenn die Seite den Stil der Karte auf die Vorgabe zurücksetzt (Klick auf „Starte Test“ ändert Elemente des Fensters); dann überschrieb die Vorgabegröße die gemerkte. Warum die Seite die Größe zurücksetzt, ist im Sandkasten nicht zu sehen (die Karte wird von der Seite mit `style` und `resize: both` geführt; Vue setzt den `style`-Wert der Karte bei einer Aktualisierung neu). **Behoben unabhängig von der Ursache:** `mll_servocurve.js` 1.02: Gemerkt wird **nur nach einer Bedienung durch den Anwender** (Loslassen nach dem Ziehen am Titel, oder am Rand unten rechts der Karte: `pointerdown` auf der Karte in den unteren rechten 30 Pixeln, `pointerup`). Ein **`MutationObserver`** auf dem `style`-Attribut der Karte stellt **Größe und Lage sofort wieder her**, wenn sie sich ohne Bedienung ändern (ohne Endlosschleife, nicht während der Anwender am Rand zieht). Ohne gemerkte Größe (erstes Öffnen) bleibt die Vorgabe.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/mll_servocurve.js` | 1.02 | `emitEvent`, Meldung ohne Abbruch, Größe nur nach Bedienung, `MutationObserver` |
+| `_web/web_form_servoanim.py` | 1.02 | `ui.on('mll_servo')` einmal je Seite, `_dispatch` |
+| `webmobaledlib.py` | 2.81 | Version, benötigte Dateien |
+| `install/ANLEITUNG_Installation.md` | 3.36 | Satz zum Merken |
+| `install/BETATEST_Checkliste.md` | 2.07 | Punkt 138 |
+
+**Tests:** `test_servocurve_js.py` jetzt 19: Meldungen mit `emitEvent` (und: ohne `emitEvent` und ohne `$emit` am Element **kein Fehler**, Rückfall auf `$emit`, `emitEvent` hat Vorrang), das Fenster mit **Zurücksetzen durch die Seite** (Größe und Lage kommen zurück), Größe nur nach Ziehen am Rand und Loslassen, kein Eingriff während des Ziehens, Druck außerhalb der Ecke zählt nicht, Wiederherstellen beim zweiten Öffnen. `test_servoanim_web.py` jetzt 41: das globale Ereignis ist eingerichtet (einmal), der Dialog ist Empfänger, danach leer. **Nicht geprüft:** im Browser; ob der Klick auf „Starte Test“ den Stil der Karte wirklich zurücksetzt und der `MutationObserver` das ausgleicht (die Ursache ist nur vermutet), und ob die Größe nach dem Neuladen zurückkommt.
+
+## 2.80 (2026-11-04)
+
+**Servo Animation (2.78): „Das Fenster ist zu klein und das Eingabefeld für den Kurvenverlauf ist auch zu klein. Das Fenster sollte in der Größe und Position veränderbar sein.“** (Rückmeldung mit Bild: schmales Browserfenster, die Grafik rechts abgeschnitten, waagerechte Bildlaufleiste.)
+
+**Ursache:** (a) Die Karte hatte `width: min(1180px, 97vw)`, aber das **zweispaltige Layout** (`no-wrap`, Spalten mit 360 und 320 Pixel Mindestbreite) brauchte mehr als ein schmales Fenster hat: die Grafik wurde abgeschnitten. (b) Die Grafik hatte `max-width: 560px` im SVG und die Größe der Spalte war fest. (c) Quasar begrenzt Dialoginhalte auf 560 Pixel; es gab keine Möglichkeit, Größe und Lage zu ändern.
+
+**Umsetzung:**
+- `_web/web_form_servoanim.py` 1.01: `CARD_STYLE`: `width: min(1280px, 98vw); height: min(860px, 96vh); min-width: 460px; min-height: 340px; max-width: 100vw !important; max-height: 100vh !important; resize: both; overflow: auto` (die Größe lässt sich am Rand unten rechts ändern, das Fenster scrollt, die Begrenzung auf 560 Pixel ist aufgehoben). Die Zeile mit Einstellungen und Grafik **bricht um** (`flex-wrap: wrap`): Einstellungen `flex: 1 1 400px` (höchstens 520), Grafik `flex: 2 1 460px`; Zahlenfelder `flex: 1 1 110px` (mindestens 100), die Zeilen der Felder brechen um (die Beschriftungen sind weniger abgeschnitten). Der **Titel ist der Griff zum Verschieben** (`header`), zwei einmalige Zeitgeber (0,3 und 1 s nach dem Aufbau) rufen `mllWindow.setup('c<Karte>', 'c<Titel>', 'mll_servo_win')` auf und zeichnen die Grafik noch einmal (der Dialog steht erst nach dem Öffnen im Browser).
+- `_web/mll_servocurve.js` 1.01: Die Grafik hat kein `max-width` mehr (`width: 100%`, `height: auto`, `viewBox` 560 × 300: sie wächst mit der Spalte, das Ziehen rechnet mit der tatsächlichen Breite). Neu **`mllWindow`**: `setup(cardId, handleId, key)` – Ziehen am Titel (Zeiger-Ereignisse, also Maus und Finger; Knöpfe und Felder im Titel starten es nicht), `clampShift` (ein Stück von 80 Pixel bleibt sichtbar, der Titel nie über dem oberen Rand), `clampSize` (460 × 340 bis Browserfenster), **Größe und Lage werden in `localStorage` (`mll_servo_win`) gemerkt** (Größe über einen `ResizeObserver`, 300 ms nach der letzten Änderung) und beim nächsten Öffnen wiederhergestellt; ein zweiter Aufruf für dasselbe Fenster richtet nichts doppelt ein.
+- `webmobaledlib.py` 2.80 (Version, benötigte Dateien).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_form_servoanim.py` | 1.01 | Fenstergröße, Umbruch, Griff, `window_setup` |
+| `_web/mll_servocurve.js` | 1.01 | Grafik skaliert, `mllWindow` |
+| `webmobaledlib.py` | 2.80 | Version, benötigte Dateien |
+| `install/ANLEITUNG_Installation.md` | 3.35 | Absatz Fenster |
+| `install/BETATEST_Checkliste.md` | 2.06 | Punkt 138 ergänzt |
+
+**Tests:** `test_servocurve_js.py` jetzt 16 (Node mit nachgebautem DOM: Ziehen am Titel, Begrenzung, Knopf im Titel, Größe über `ResizeObserver` gemerkt, Wiederherstellen mit neuen Elementen und gleichem Schlüssel, kein doppeltes `setup`, Größengrenzen), `test_servoanim_web.py` jetzt 39 (Fensterstil, Umbruch der Zeilen, flexible Spalten und Zahlenfelder, die beiden Zeitgeber rufen `mllWindow.setup` mit den richtigen Kennungen und zeichnen die Grafik noch einmal). **Nicht geprüft:** im Browser (ob `resize: both` an einer Quasar-Karte am Rand unten rechts greift; ob die Verschiebung mit `transform` die zentrierte Lage des Quasar-Dialogs richtig verschiebt; Finger auf dem Tablet).
+
+## 2.79 (2026-11-04)
+
+**Mac: „Update Testversion“ scheitert mit `CERTIFICATE_VERIFY_FAILED`** (Meldung eines Mac-Anwenders, Apple M1, macOS 26.6.2, installiert Version 2.59: „Die Liste der Releases konnte nicht gelesen werden: `<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1010)>`“).
+
+**Ursache:** Python von python.org auf dem Mac bringt keine Zertifikate mit (erst `Install Certificates.command` legt sie an); `ssl.get_default_verify_paths()` zeigt auf eine Datei, die es nicht gibt. Jeder Zugriff mit `urllib` auf https scheitert (`web_update` Liste und Download, `headless_git` Installer, Bibliotheken `M37`, `M70`). `requests` ist nicht betroffen (benutzt `certifi`).
+
+**Umsetzung:** Neues Modul `headless/headless_ssl.py` 1.00: `install()` prüft mit `default_store_present()`, ob Python seinen Zertifikatsspeicher findet (Datei oder nicht leerer Ordner, auch `SSL_CERT_FILE`). **Nur wenn nicht**, wird `ssl._create_default_https_context` auf eine Zertifikatsdatei gesetzt: zuerst `certifi.where()` (mit requests und NiceGUI da), sonst `/etc/ssl/cert.pem` (macOS), `/etc/ssl/certs/ca-certificates.crt` (Debian), `/etc/pki/tls/certs/ca-bundle.crt`. Dazu wird `urllib.request._opener` zurückgesetzt: **ab Python 3.12 baut `urlopen` sein Standardverfahren beim ersten Aufruf und behält dessen Zertifikate** (`HTTPSHandler.__init__`), eine spätere Änderung von `ssl._create_default_https_context` wirkt sonst nicht (im Test gefunden). Die Prüfung bleibt voll (`CERT_REQUIRED`, `check_hostname`). Wo Python seine Zertifikate findet (Windows, Linux, Homebrew), bleibt alles wie es ist, auch Firmenzertifikate im System. `webmobaledlib.py` 2.79 ruft `headless_ssl.install()` gleich nach dem Anlegen des Protokolls auf (vor jedem Netzzugriff, in `try`), benötigte Dateien: `headless/headless_ssl.py`.
+
+**Für den Mac-Anwender mit 2.59** (kann nicht über das Programm aktualisieren): einmal `Install Certificates.command` des Python-Ordners ausführen oder mit `SSL_CERT_FILE=$(python3 -c "import certifi; print(certifi.where())")` starten; danach das Update über das Programm; ab 2.79 nicht mehr nötig (Anleitung 9.1).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `headless/headless_ssl.py` | 1.00 | neu: Zertifikate für https, wenn Python keine findet |
+| `webmobaledlib.py` | 2.79 | ruft `install()` beim Start auf, benötigte Dateien |
+| `install/ANLEITUNG_Installation.md` | 3.34 | Fehlersuche 9.1 (Mac, Zertifikate) |
+| `install/BETATEST_Checkliste.md` | 2.05 | Punkt 139 |
+
+**Tests:** `test_ssl.py` (11): die Entscheidung (Datei, Ordner, leerer Ordner, `SSL_CERT_FILE`), die Wahl der Datei (certifi, System), kein Eingriff, wenn Python seine Zertifikate findet; **der Fehler wird mit einem echten lokalen HTTPS-Server nachgestellt** (eigene Zertifizierungsstelle mit `openssl`, Client ohne Zertifikate: genau `CERTIFICATE_VERIFY_FAILED … unable to get local issuer certificate`) und **nach `install()` klappt derselbe `urlopen`-Aufruf**; die Prüfung bleibt scharf. **Nicht geprüft:** ein echter Mac (nur die Bedingung, die der Fehler zeigt, ist nachgestellt).
+
+## 2.78 (2026-11-04)
+
+**Zwei Punkte des Entwicklers:** (1) „ProgrammGenerator Tabelle Farbe der Zeile 2 ändern von Blau nach R=26, G=117, B=210“. (2) „Servoanim Macro implementieren. Der Macro wird im Modul Userform_ServoAnim.py definiert.“
+
+**Zu 1:** `headless/headless_gridmodel.py` 1.05: `HEAD_STYLE[1]` (Zeile 2 der Datenblätter mit Überschriften) `backgroundColor` `#1A75D2` statt `#0000FF`; weiße fette Schrift bleibt (Kontrastverhältnis 4,65, WCAG AA). Nicht geändert: die gelbe Schrift auf `#0000FF` für Bedingungen der Zeilenfarbe (`M20`, `Prog_Generator.py` Tk, `web_pattgen` Ergebniszeile): andere Funktionen, nicht die Überschriftenzeile.
+
+**Zu 2: Dialog Servo Animation im Browser** (die Tk-Klasse `UserForm_ServoAnim` zeigte in der Webversion nichts an; HOC 2.49: „Noch nicht umgesetzte Formulare“). Aufruf: `M09_Select_Macro` `PattConf` → `D15.UserForm_ServoAnim(PG.global_controller).Show_With_Existing_Data(MacroName, Config-Zelle, Act_Channel, Def_Channel, use_NButtons)` und `Userform_Res`. Wie bei House (`web_form_house.py`) wird die Klasse durch eine Fabrik ersetzt (`install()`, `D15.UserForm_ServoAnim`); der Hauptthread behält das Tk-Original.
+- **`headless/headless_servoanim.py` 1.00** (Rechnung, ohne Tk und Browser): 16 Parameter in der Reihenfolge der Kommentarzeile `#ServoAnim(…)` (RunType, CurveType, Abstand, Anfangswert, Endwert, DauerEin, DauerAus, Pausen, TimeStepType, ServoType, Ueberblendung, Kanal, Adresse); Kurven (`calculate_linear_curve`, `…_accell_curve`, `…_pause_curve`, `calculate_curve`, `calculate_complete_curve` mit Streckung der Zeiten bei Kurventyp Individuell), `delta_timepoints_count`, `build_macro` (Aktivierung Binary oder N_Buttons, `A`-Vorsatz bei Überblendung ≠ 1, `PatternT<n>(#LED,28|27+Typ,…)`, Zeitabstände, Werte, bei Ein/Aus die Werte für die Aktivierung), `load_macro` und `curve_points_from_macro`, Punkte bearbeiten (`move_point`, `insert_point`, `delete_point`, `timepoints_editable`), `value_at` und `servo_message_values` für den Test. **Gegen das Original geprüft** (`test_servoanim.py`): die Tk-Klasse mit nachgebauten Bedienelementen erzeugt bei 400 zufälligen Einstellungen (alle Kurventypen Linear und Beschleunigung, Ausführungen, Zeitstufen, Servotypen, Pausen, Überblendung, Kanäle, ServoAnim und ServoAnim2B) **genau dasselbe Makro**; ebenso 150 Kurven vom Typ Individuell (Punkte bearbeitet, Dauer geändert). Dabei gefunden und übernommen: Der **Ausschaltteil überspringt seinen ersten Punkt** (`skip_first=True`; mein erster Entwurf hatte einen Punkt zu viel). **Abweichungen vom Original:** (a) Abstand 0 oder Dauer 1 ms lässt das Original **endlos schleifen** (`time_distance = int(duration / 2.0)` ergibt 0); die Webversion rechnet mit mindestens 1 ms; (b) das Original kann bei Kurventyp Individuell die Zeile `PatternT` **ohne Ein/Aus** nicht wieder einlesen (`int('93)$')` wirft `ValueError`; es schneidet nur ein Zeichen ab); `curve_points_from_macro` schneidet `)$Kanal` richtig ab.
+- **`_web/mll_servocurve.js` 1.00:** Grafik „Kurvenverlauf“ (SVG): Achsen, Raster (je acht Teile), Kurve, Punkte (grün = ziehbar, grau = nicht, orange = ausgewählt), gestrichelte Linie am Ende der Einschaltzeit, roter Testcursor; `render(id, spec)`, `setCursor(id, t)`, Ziehen mit Zeiger-Ereignissen (Maus und Finger, `touch-action: none`), Hervorhebung **sofort im Browser** (ein Neuzeichnen durch den Server beim Auswählen würde das Ziehen abbrechen), Meldungen `select`, `drag` (höchstens alle 80 ms) und `move` per `getElement(<Element>).$emit('mll_servo', …)`.
+- **`_web/web_form_servoanim.py` 1.00:** `harvest` liest Beschriftungen und Listen aus dem Quelltext des Originals (ast), `_servoanim_async` baut den Dialog (NiceGUI): Rahmen Adresse/Kanal, Servotyp, Ausführung, EIN, AUS (bei PingPong verborgen), Kurven (Typ, Anfangs- und Endwert, Überblendung), Zeitstufen (Abstand nur gesperrt bei Automatisch), die Grafik, Zeit und Wert des Punkts, Felder, Einfügen und Löschen des Punkts, Hilfe, Update Grafik, Starte/Stop Test (`ui.timer` 40 ms), Abbrechen, OK. OK mit weniger als zwei Punkten: Hinweis statt Makro. Test: `controller.connect_if_not_connected`, `ARDUINO_begin_direct_mode`, `send_to_ARDUINO('#L …')` wie `_update_servos` (Version 1: `#L<2 Stellen>`, Version 2: `#L <4 Stellen>`, Kanalversatz `get_lednum_offset_for_channel`), beim Schließen `ARDUINO_end_direct_mode`. Mehrzeilige Texte (die drei Absätze der Beschreibung) werden zeilenweise übersetzt.
+- **Katalog** 1024 Einträge (49 neu): fast alle Texte des Dialogs (sie standen weder im Blatt Languages noch im Katalog) und die neuen Texte des Web-Dialogs in sechs Sprachen. Unübersetzt bleiben nur Zeilen, die der Web-Dialog nicht anzeigt (Name, Kurzbeschreibung, Rahmen Animation-Beschreibung).
+- `webmobaledlib.py` 2.78: `web_form_servoanim.install()` nach `web_form_house.install()`, benötigte Dateien (`web_form_servoanim`, `headless_servoanim`, `headless_gridmodel` 1.05, `mll_servocurve.js`).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `headless/headless_gridmodel.py` | 1.05 | Zeile 2 `#1A75D2` |
+| `headless/headless_servoanim.py` | 1.00 | neu: Rechnung des Servo-Animationsdialogs |
+| `_web/mll_servocurve.js` | 1.00 | neu: Grafik Kurvenverlauf |
+| `_web/web_form_servoanim.py` | 1.00 | neu: Dialog im Browser, `install()` |
+| `webmobaledlib.py` | 2.78 | Einbau, Version, benötigte Dateien |
+| `csv/Web_Languages.csv` | - | 1024 Einträge (49 neu) |
+| `install/ANLEITUNG_Installation.md` | 3.33 | Abschnitt 2.9f |
+| `install/BETATEST_Checkliste.md` | 2.04 | Punkte 137, 138 |
+
+**Tests:** `test_servoanim.py` (19, Vergleich mit dem Tk-Original), `test_servoanim_web.py` (34: der ganze Dialog mit nachgebautem NiceGUI und nachgebautem ARDUINO: Vorgaben, OK, Abbrechen, vorhandenes Makro laden und ändern, ServoAnim2B, Individuell mit Auswählen, Ziehen, Begrenzen, Einfügen, Löschen und Rundlauf, PingPong, zu wenige Punkte, Test mit und ohne ARDUINO, Anklicken und Ändern bewegt den Servo, Direktmodus beenden, Fabrik und `install()`), `test_servocurve_js.py` (9: das Skript in Node mit nachgebautem DOM: Zeichnen, Hervorheben, Ziehen, Begrenzen, nicht ziehbare Kurve, Testcursor), `test_head_color.py` (4). **Nicht geprüft:** der Dialog **in einem echten Browser** (ob `$emit('mll_servo')` das Element erreicht, ob die Grafik das Element mit der Kennung `c<Nummer>` findet, das Ziehen mit Finger, die Größe im Fenster) und mit **echtem ARDUINO und Servo**. **Offen:** LEDAnim, LEDColorAnim, Multiple_LEDColorAnim und der Mustereditor bleiben ohne Web-Dialog.
+
+## 2.77 (2026-11-03)
+
+**Zwei Punkte des Entwicklers:** (1) „Der Button ‚Alle Spalten‘ ist nur zum Testen notwendig und sollte nur angezeigt werden, wenn in den Programmeinstellungen die Option ‚Programmgenerator versteckte Tabellen anzeigen‘ eingeschaltet ist.“ (2) „Die Icons in der Icon-Spalte werden unten abgeschnitten (gut zu sehen in Zeile 5: die ‚2‘ im Icon). Die Icons müssen etwas kleiner sein. Die Zeile sollte nicht höher werden.“
+
+**Zu 1:** Die Einstellung heißt `ShowHiddentables` (Programm Einstellungen, `ConfigurationPage`); die Oberfläche wertet sie schon für die Reiter versteckter Tabellen aus (`visible_sheet_names`, `after_settings_save`). `_web/web_toolbar.py` 1.03: `hidden_tables_on(value)` (`"1"`/`"true"`, ohne Rücksicht auf Groß-/Kleinschreibung). `webmobaledlib.py` 2.77: Der Knopf (`b_cols`) wird beim Aufbau mit `set_visibility(hidden_tables_on(ctrl.getConfigData("ShowHiddentables")))` angelegt; in `after_settings_save` (nach dem Sichern der Einstellungen, **ohne Neustart**) wird `b_cols.set_visibility(ctrl.show_hiddentables)` gesetzt. Wird die Einstellung ausgeschaltet, während „Spalten bis Q“ (`state["all_cols"]`) aktiv war, wird `all_cols` zurückgesetzt (Text „Alle Spalten“ und Tooltip wie am Anfang), die Tabelle baut `after_settings_save` am Ende ohnehin neu auf (`show(state["ws"])`).
+
+**Zu 2:** Der Renderer der Tabellenzellen (`cell_renderer_js`) setzte das Symbol mit `height = round(22 × Maßstab)`, also **so hoch wie die Zeile** (`rowHeight = round(22 × Maßstab)`), mit `vertical-align: middle`; die Mitte der Zeichenzeile liegt etwas oberhalb der Zeilenmitte, deshalb wurde unten ein Stück abgeschnitten. Jetzt: Symbolhöhe `round(18 × Maßstab)` (Zeile 22), die Zelle ist ein **Flex-Behälter** (`display: flex; align-items: center; height: 100%`), das Bild mit `flex: none` und 3 Pixel Abstand zum Text, die Leerstelle zwischen Symbol und Text (`box.append(' ')`) entfällt. Die Zeilenhöhe ist unverändert (`rowHeight`, `ROW_HEIGHT_FIXED`). Für die Maßstäbe 0,5 bis 3,0 gilt „Symbol + 2 Pixel ≤ Zeile“.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 2.77 | Knopf Alle Spalten nur mit „versteckte Tabellen anzeigen“; Renderer der Symbole |
+| `_web/web_toolbar.py` | 1.03 | `hidden_tables_on` |
+| `install/ANLEITUNG_Installation.md` | 3.32 | Knopf Alle Spalten, Symbole der Tabelle |
+| `install/BETATEST_Checkliste.md` | 2.03 | Punkt 31 ergänzt, neuer Punkt 136 |
+
+**Tests:** neu `test_cols_icons.py` (10): Wahrheitstabelle von `hidden_tables_on`, die Stellen im Hauptprogramm (Aufbau, nach dem Sichern, Zurücksetzen, Reihenfolge), der **Renderer in Node** mit nachgebautem DOM bei vier Maßstäben (Höhe 14, 18, 27, 36 Pixel, mittig, `flex none`, Zelle ohne Symbol), Maßstäbe 0,5 bis 3,0, `rowHeight` unverändert. **Nicht geprüft:** das Aussehen im Browser (ob die „2“ im Servo-Symbol jetzt ganz zu sehen ist, auch bei den Schriftgrößen der Tabelle); sind 18 Pixel zu klein oder noch zu groß, ist es eine Zahl (`18` in `cell_renderer_js`).
+
+## 2.76 (2026-11-03)
+
+**Werkzeugleiste: einige Titel umbenannt, alle zweizeilig** (Entwickler: Dialog → Dialog Wizard; Z. Arduino schicken → Setup übertragen; Lösche Zeilen → Zeilen löschen; Verschiebe Zeilen → Zeilen verschieben; Kopiere Zeilen → Zeilen duplizieren; Lösche Tabelle → Tabelle löschen; Optionen → Optionen Werkzeuge; „Alle Titel sollen 2-zeilig sein, damit alle Buttons gleich hoch sind“).
+
+**Umsetzung:**
+- `webmobaledlib.py` 2.76, `toolbar_buttons()`: die sieben neuen Titel und, damit **alle** zweizeilig sind, auch **Online\nWiki** und **Zeilen\nFärben** (vorher einzeilig). Die Tooltips sind unverändert.
+- **Übersetzungen:** Für die neuen Titel gibt es im Blatt Languages keine Einträge. `web_toolbar.translate_label` sucht zuerst den Titel mit Zeilenumbruch (Blatt), dann einzeilig im Katalog der Web-Oberfläche; die Katalogeinträge haben **selbst einen Zeilenumbruch im Wert** („Delete\nrows“, „Regels\nverwijderen“, „Dupliquer\nles lignes“ …). Katalog 975 Einträge (6 neu: Setup übertragen, Zeilen löschen, Zeilen verschieben, Zeilen duplizieren, Tabelle löschen, Optionen Werkzeuge; 2 geändert: Zeilen Färben und Neue Tabelle jetzt zweizeilig). „Dialog Wizard“ und „Online Wiki“ bleiben in allen Sprachen gleich.
+- `_web/web_layout.py` 1.08: `.mll-tool-text { min-height: 2.3em }` (zwei Zeilen; ein einzeiliger Text in irgendeiner Sprache macht den Knopf nicht niedriger), im kompakten Layout `min-height: 0`.
+- `_web/web_toolbar.py` 1.02: `clean_label` behandelt den senkrechten Strich als Zeilenumbruch und lässt leere Zeilen weg. **Grund (im Test gefunden):** In der Spalte **Dänisch** des Blatts Languages steht der Zeilenumbruch als „ | “ ohne echten Umbruch („Indsæt | linie“, „Skjul / | Vis igen“); die Knöpfe waren dort einzeilig.
+- **Beobachtung, nicht geändert:** Der Eintrag „Alle Einblenden“ hat in der Spalte Dänisch den Inhalt „Unhide | Alle“ (Englisch/Deutsch gemischt statt Dänisch); im Blatt zu korrigieren. Die Spalten Italienisch und Spanisch haben bei den Knöpfen englische Texte (siehe 2.68).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 2.76 | Titel der Knöpfe, benötigte Dateien |
+| `_web/web_layout.py` | 1.08 | Beschriftung mindestens zwei Zeilen hoch |
+| `_web/web_toolbar.py` | 1.02 | `|` als Zeilenumbruch |
+| `csv/Web_Languages.csv` | - | 975 Einträge (6 neu, 2 geändert) |
+| `install/ANLEITUNG_Installation.md` | 3.31 | neue Titel |
+| `install/BETATEST_Checkliste.md` | 2.02 | Punkte 132, 134 |
+
+**Tests:** `test_toolbar.py` jetzt 32: die deutschen Titel genau wie gewünscht (13 Knöpfe in der Reihenfolge der Leiste), **in allen sieben Sprachen genau zwei Zeilen** (das fand das Dänisch-Problem), Beispiele in Englisch, Französisch, Niederländisch, Spanisch, `clean_label` mit dem Strich, CSS `min-height`. **Nicht geprüft:** das Aussehen im Browser (Höhe der Knöpfe, Breite bei „Optionen Werkzeuge“, „verwijderen“ und anderen langen Wörtern).
+
+## 2.75 (2026-11-03)
+
+**Fenster des Arduino-Monitors: eine Überschrift je Schritt** (Rückmeldung zu 2.74: Der Entwickler sah beim schnellen Bootloader mit einem einzelnen Nano „zweimal Hochladen“: erst `pio run … -t nobuild -t upload` (Schritt 1, ArduinoISP, erfolgreich), dann `avrdude.exe … stk500_getsync … Device signature = 0x000000` (Schritt 2, Signatur des linken Arduino lesen, ohne Jumper und ohne linken Arduino erwartbar), beide unter „Kompilieren und Hochladen gestartet. Dies kann einige Minuten dauern. Holen Sie sich einen Kaffee :)“).
+
+**Ursache:** `Prog_GeneratorPage.start_ARDUINO_program_cmd` schreibt vor **jedem** Befehl die Meldung `Message_1` aus `MobaLedTest_macrodef.json` („Kompilieren und Hochladen gestartet …“). Bei den Befehlen des Bootloaders (Signatur lesen, Bootloader schreiben) und bei fertigen `.hex`-Dateien (2.72) wird aber nichts kompiliert; der Kopf war irreführend.
+
+**Umsetzung:**
+- `mlpyproggen/Prog_Generator.py` 1.08: `start_ARDUINO_program_cmd(…, title="")`: mit `title` steht diese Überschrift statt `Message_1` (ohne `title` wie bisher). Die Methode wird von der Webversion unverändert übernommen (`headless_proggen._BORROWED`).
+- `proggen/M08_ARDUINO.py` 1.12: `Compile_and_Upload_Prog_to_Arduino(…, HexFile='', StepTitle='')`: bei einer fertigen Datei die Überschrift „Hochladen gestartet. Die fertig übersetzte Datei wird hochgeladen (es wird nichts übersetzt).“; `StepTitle` hat Vorrang.
+- `proggen/M08_Install_FastBootLoader.py` 1.03: „Schritt 1 von 3: ArduinoISP auf den rechten Arduino laden“ (über `StepTitle`), „Schritt 2 von 3: Signatur des linken Arduino lesen“, „Schritt 3 von 3: Bootloader auf den linken Arduino schreiben“ (über `__Run_Avrdude(Command, Title)`).
+- `webmobaledlib.py` 2.75 (Version, benötigte Dateien). Katalog 969 Einträge (4 neu, sechs Sprachen).
+
+**Zur Beobachtung des Entwicklers (Test mit einem einzelnen Nano, ohne Jumper und ohne linken Arduino):** Kein Fehler des Programms. Schritt 1 ist erfolgreich (`03.ArduinoISP.hex`, 4378 Bytes, Signatur 0x1e950f; das Vorab-Skript aus 2.73 arbeitet: `webMobaLedLib: … -> …\.pio\build\nano_old\firmware.hex`). Schritt 2 liest über den ArduinoISP die Signatur des linken Arduino; ohne Chip dort kommt `0x000000` (`Yikes! Invalid device signature`), das Programm meldet „Signatur … konnte nicht gelesen werden … Jumper?“ und schreibt nichts. Mit voller Hardware muss ein Tester prüfen (Checkliste 135); falls das Lesen dort scheitert, eine kurze Wartezeit nach dem Neustart des ArduinoISP und ein zweiter Leseversuch.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `mlpyproggen/Prog_Generator.py` | 1.08 | `start_ARDUINO_program_cmd(…, title)` |
+| `proggen/M08_ARDUINO.py` | 1.12 | `StepTitle`, Überschrift für fertige Dateien |
+| `proggen/M08_Install_FastBootLoader.py` | 1.03 | Überschriften Schritt 1 bis 3 |
+| `webmobaledlib.py` | 2.75 | Version, benötigte Dateien |
+| `csv/Web_Languages.csv` | - | 969 Einträge (4 neu) |
+| `install/ANLEITUNG_Installation.md` | 3.30 | Hinweis zu den Überschriften |
+| `install/BETATEST_Checkliste.md` | 2.01 | Punkt 135 ergänzt |
+
+**Tests:** `test_isp_flow.py` jetzt 28 (die Überschriften der drei Schritte, der Ausführer selbst mit und ohne `title`, alle Texte in sechs Sprachen), `test_hex_upload.py` 35 (Überschrift beim Hochladen einer fertigen Datei; ein Fehler im Test behoben, der alle Zellen ersetzte und damit die Sprachtabelle störte).
+
+## 2.74 (2026-11-03)
+
+**Schneller Bootloader mit PlatformIO** (Entwickler: „Im Optionen Formular hatten wir den Tab Bootloader … versteckt. Er kann jetzt genauso, wie DCC ARDUINO, auch unter PlatformIO genutzt werden, um eine .hex Datei hochzuladen. Die Datei heißt python\\libraries\\MobaLedLib\\firmware\\03.ArduinoISP.hex“).
+
+**Ausgangslage:** In der Webversion war der schnelle Bootloader nie umgesetzt: `M08_Install_FastBootLoader.Install_FastBootloader` zeigte nur die Meldung „noch nicht übernommen“ (HOC 2.49), `BootJumper_Form` ist ein Gerüst ohne Oberfläche, und das Schreiben lief über eine **Windows-Stapeldatei** mit dem avrdude der ARDUINO IDE (`Create_WriteFastBootloader_cmd`). Unter PlatformIO war der Reiter ausgeblendet (`ide_only`). Der Ablauf des Excel-Programms: Jumper-Dialog (mit der Wahl `FlashAs328P`) → ArduinoISP auf den rechten Arduino → Bootloader auf den linken Arduino (avrdude, stk500v1, 19200 Baud) → Schleife „noch einen Arduino?“ → wieder das DCC/LNet/Selectrix-Programm auf den rechten Arduino → Hinweis zu den Jumpern.
+
+**Umsetzung (nur PlatformIO; die ARDUINO IDE zeigt weiter die Meldung):**
+- Neues Modul `headless/headless_isp.py` 1.00 (nur Standardbibliothek, alles Parameter): `parse_signature` und `signature_cpu` (`0x1e,0x95,0x0f` → `atmega328p`, `0x1e,0x95,0x16` → `atmega328pb`; nichts gelesen oder `0x0,0x0,0x0` → `unreadable`; sonst `unsupported`; avrdude schreibt `0xf` ohne führende Null, deshalb wird numerisch verglichen), `bootloader_name` (328P: `optiboot_atmega328_Ver108.1.hex`; 328PB: dieselbe Datei, wenn „als 328P schreiben“ (Vorgabe `CheckBoxChangeSignature = True`), sonst `optiboot_atmega328pb_16mhz.hex`), `find_avrdude` (Paket `tool-avrdude` im Kernordner von PlatformIO: `avrdude`/`avrdude.exe` und `avrdude.conf`, auch mit Versionsangabe im Ordnernamen oder `bin/`, `etc/`), `read_signature_cmd` und `write_cmd` (**dieselben Argumente wie die Stapeldatei**: `-patmega328p -F -cstk500v1 -P<Anschluss> -b19200 -Usignature:r:<Datei>:h` und `-v -p<cpu> -cstk500v1 -P<Anschluss> -b19200 -Uflash:w:<Datei>:i -Ulock:w:0x0F:m -Uhfuse:w:0xDE:m`), `bootloader_dirs`/`find_bootloader` (`<Sketchbook>/libraries/MobaLedLib/extras/ArduinoISP`, wie `Get_SrcDirInLib() + 'ArduinoISP'` im VBA).
+- `proggen/M08_Install_FastBootLoader.py` 1.02: `Install_FastBootloader` ruft unter PlatformIO `Install_FastBootloader_PIO()` auf: (1) **Hinweis zu den Jumpern** als `MsgBox` OK/Abbrechen mit dem Text des Excel-Dialogs (Schlüssel = die Zelle des Blatts Languages, im Test mit dem Blatt verglichen; das Bild des Dialogs fehlt in der Webversion, `.frx` nicht übernommen), (2) `__Install_ArduinoISP_hex_to_Right_Arduino()`: **`03.ArduinoISP.hex`** mit `M08.Compile_and_Upload_Prog_to_Arduino('03.ArduinoISP.ino', …, HexFile=…)` (der Weg von 2.72/2.73), Zelle `R ISP`, (3) `Write_Bootloader_PIO(State)`: avrdude finden, Signatur lesen (Datei im Ordner für temporäre Dateien), CPU und Bootloader-Datei wählen, bei einem 328PB **einmal** fragen (`State['FlashAs328P']`, die Frage ersetzt das Kontrollkästchen des Excel-Dialogs), Bootloader schreiben; beide Befehle über denselben Ausführer wie das Hochladen (`start_ARDUINO_program_cmd(…, arduino_type='Right', empty_text=False, show_intro=False)`, Ausgabe im Fenster des Arduino-Monitors; Erfolg = `M40.Success` oder `Timeout` wie im VBA), (4) Schleife „Noch einen Arduino aktualisieren?“ (Vorgabe Nein, Text des Excel-Programms, in Sätze zerlegt, damit er übersetzt wird); schlägt das Schreiben fehl, Frage „Soll es noch einmal versucht werden?“, (5) **immer** danach `M08.Compile_and_Upload_Prog_to_Right_Arduino(True)` (der rechte Arduino trägt noch ArduinoISP) und die Abschlussmeldung (Text und Titel aus dem Blatt Languages). Windows: Kurzpfade (`M08.GetShortPath`) für avrdude, conf, Signatur- und Bootloader-Datei.
+- `proggen/M08_ARDUINO.py` 1.11: `Show_Hex_Missing(InoName)` (die Meldung „fertig übersetzte Datei fehlt“ aus 2.72 als eigene Funktion, auch für `03.ArduinoISP.ino`).
+- `_web/web_form_options.py` 1.17: Reiter **Bootloader** `ide_only: False` (auch mit PlatformIO sichtbar; Reiter **Update** bleibt nur für die IDE).
+- `webmobaledlib.py` 2.74 (Version, benötigte Dateien: `headless/headless_isp.py`). Katalog 965 Einträge (20 neu: Meldungen des neuen Ablaufs in sechs Sprachen).
+
+**Nicht umgesetzt / offen:**
+- **Das Bild der Jumper** aus dem Excel-Dialog (`BootJumper_Form` hat `.frx`) fehlt; der Hinweistext sagt „wie im Bild gezeigt“. Wenn ein Bild als Datei geliefert wird (zum Beispiel `images/…png`), kann es im Hinweis angezeigt werden.
+- **ARDUINO IDE:** weiter nur die Meldung (der Ablauf lässt sich mit dem avrdude der IDE nachbauen, wurde nicht verlangt).
+- **Die Texte der Fragen bei „noch einen Arduino?“** im Blatt Languages nennen noch „DCC/Selectrix“ (der Code sagt „DCC/LNet/Selectrix“): im Blatt anpassen; die Webversion benutzt jetzt den Katalog.
+- **Ungeprüft:** ein echter Ablauf mit Hardware (ArduinoISP, Jumper, avrdude von PlatformIO unter Windows, Linux und macOS); das Paket `tool-avrdude` heißt in PlatformIO so, wird aber erst mit der Plattform atmelavr geholt (der Ablauf lädt ArduinoISP vorher hoch; bei einer anderen Ordnerstruktur der Pakete findet `find_avrdude` es nicht, dann erklärt die Meldung den Weg). Die Quelle der Bootloader-Dateien: `libraries/MobaLedLib/extras/ArduinoISP/optiboot_atmega328_Ver108.1.hex` und `optiboot_atmega328pb_16mhz.hex` (aus dem VBA übernommen, im Paket des Entwicklers nicht geprüft).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `headless/headless_isp.py` | 1.00 | neu: avrdude von PlatformIO, Signatur, Bootloader-Datei, Befehle |
+| `proggen/M08_Install_FastBootLoader.py` | 1.02 | Ablauf mit PlatformIO |
+| `proggen/M08_ARDUINO.py` | 1.11 | `Show_Hex_Missing` |
+| `_web/web_form_options.py` | 1.17 | Reiter Bootloader auch mit PlatformIO |
+| `webmobaledlib.py` | 2.74 | Version, benötigte Dateien |
+| `csv/Web_Languages.csv` | - | 965 Einträge (20 neu) |
+| `install/ANLEITUNG_Installation.md` | 3.29 | Abschnitt 2.9e, Hinweise zum Reiter korrigiert |
+| `install/BETATEST_Checkliste.md` | 2.00 | Punkt 135 |
+
+**Tests:** neu `test_isp.py` (14: Signatur, Dateinamen, `find_avrdude` mit allen Ordnerformen, Befehle, Bootloader-Dateien) und `test_isp_flow.py` (26): der **ganze Ablauf mit nachgebautem avrdude** (Ausführer, der die Signaturdatei schreibt) und nachgebauten Meldungen: falscher Reiter, kein Arduino, IDE, Hinweis Abbrechen, Text des Hinweises gegen das Blatt Languages (Deutsch und Englisch), `03.ArduinoISP.hex` fehlt, Glücksfall 328P (Befehle genau, Ordner der Datei, `R ISP`), zwei Arduinos (vier Befehle, ArduinoISP nur einmal), 328PB (Frage einmal, Ja/Nein), Signatur nicht lesbar mit und ohne Wiederholung, anderer Chip, Fehler von avrdude beim Lesen und Schreiben, Bootloader-Datei fehlt, avrdude fehlt, immer danach das Programm für den rechten Arduino, **alle Meldungen in sechs Sprachen übersetzt**, Reiter in den Optionen.
+
+## 2.73 (2026-11-03)
+
+**Prog. Installieren mit PlatformIO, 2.72: „Source `.pio\\build\\nano_old\\firmware.hex' not found, needed by target `nobuild'“** (Meldung des Entwicklers beim Reiter DCC ARDUINO, Nano mit altem Bootloader, `Processing nano_old (platform: atmelavr; board: nanoatmega328; framework: arduino)`).
+
+**Ursache:** `headless_hex_upload.prepare_project` kopierte die Datei **vor** dem Start von PlatformIO nach `.pio/build/<Umgebung>/firmware.hex`. PlatformIO **leert den Build-Ordner**, wenn es zum ersten Mal läuft oder sich die Einstellungen des Projekts geändert haben (Vergleich einer Prüfsumme der Einstellungen, `project.checksum`; hier: neues Hilfsprojekt, neue Umgebung, neue ini). Dabei verschwand die vorher kopierte Datei, und das Ziel `nobuild` fand sie nicht. (Mein Test von 2.72 prüfte nur, dass die Datei nach `prepare_project` da war, nicht das Verhalten von PlatformIO; mit nachgebautem Leeren des Ordners nach dem Vorbereiten war der Fehler im Test nicht zu sehen. Das hätte ich bei der Zuordnung `nobuild` bedenken müssen.)
+
+**Umsetzung:** `headless/headless_hex_upload.py` 1.01: Die platformio.ini des Hilfsprojekts enthält `extra_scripts = pre:copy_hex.py` und `custom_hex_file = <voller Pfad der Datei>`. `prepare_project` schreibt das **Vorab-Skript `copy_hex.py`** (`PRE_SCRIPT`) in das Hilfsprojekt: Es läuft in PlatformIO **nach** dem Aufräumen des Build-Ordners und **vor** dem Auflösen der Ziele, legt den Build-Ordner an, entfernt Reste (`firmware.elf`, `firmware.bin`), kopiert die Datei als `<Build-Ordner>/firmware.hex` und meldet `webMobaLedLib: <Quelle> -> <Ziel>`; fehlt die Datei, `env.Exit(1)`. Die Datei wird nicht mehr vorab kopiert. `webmobaledlib.py` 2.73 (Version, benötigte Dateien).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `headless/headless_hex_upload.py` | 1.01 | Vorab-Skript `copy_hex.py`, `custom_hex_file` |
+| `webmobaledlib.py` | 2.73 | Version, benötigte Dateien |
+| `install/ANLEITUNG_Installation.md` | 3.28 | Satz zum Vorab-Skript |
+| `install/BETATEST_Checkliste.md` | 1.99 | Punkt 134 ergänzt |
+
+**Tests:** `test_hex_upload.py` jetzt 34: Ein **nachgebautes SCons-Environment** (`GetProjectOption` liest die ini, `subst('$BUILD_DIR')`, `Exit`) führt das Vorab-Skript wirklich aus: Datei kopiert; **Build-Ordner nach dem Vorbereiten gelöscht** (der gemeldete Fehler) und das Skript legt die Datei wieder hin; Reste entfernt, andere Dateien bleiben; andere Datei und Umgebung; Datei zwischen Vorbereiten und Hochladen gelöscht (Exit 1, nichts kopiert); Pfad mit Leerzeichen und Umlaut. **Weiter ungeprüft:** ein echter PlatformIO-Lauf; ob `Import("env")`, `GetProjectOption` und `$BUILD_DIR` in der Version Ihres PlatformIO wie erwartet arbeiten (Standard-Aufrufe von `extra_scripts`).
+
+## 2.72 (2026-11-03)
+
+**Prog. Installieren (Reiter DCC ARDUINO, SELECTRIX ARDUINO, LNET ARDUINO) mit PlatformIO: fertige .hex-Dateien hochladen** (Entwickler: „Bei PlatformIO funktioniert das nicht. Es ist auch nicht notwendig die Sourcen zu kompilieren, da ich bereits vorkompilierte .hex-Dateien habe … Die .hex Dateien heißen wie die Sourcedateien mit .hex als Endung und liegen im Verzeichnis python\\libraries\\MobaLedLib\\firmware.“).
+
+**Ursache:** `UserForm_Options.__ProInstall_Button_Click` → `M08.Ask_to_Upload_and_Compile_and_Upload_Prog_to_Right_Arduino` → `Compile_and_Upload_Prog_to_Right_Arduino` → `Compile_and_Upload_Prog_to_Arduino` → unter PlatformIO `Create_PIO_Build_cmd`: schreibt `platformio.ini` (feste Zeile `src_dir = LEDs_AutoProg`) in den Ordner `examples` und startet `cd .. && pio run -t upload -e <Umgebung>`; es gibt dort keinen Ordner `LEDs_AutoProg`, die Quellen der Beispiele (`23_A.DCC_Interface.ino` usw.) werden nie gebaut. Zusätzlich brauchte der Ablauf die Quelle (`Dir(SrcDir + InoName)`) und erzeugte eine Kopfdatei dazu (`Create_Config_Header_File`).
+
+**Umsetzung (PlatformIO; die ARDUINO IDE bleibt unverändert):**
+- Neues Modul `headless/headless_hex_upload.py` 1.00 (nur Standardbibliothek, alles Parameter): `hex_file_name` (`23_A.DCC_Interface.ino` → `23_A.DCC_Interface.hex`), `firmware_dirs` (zuerst `<Sketchbook>/libraries/MobaLedLib/firmware`, dann `M02a.Get_FirmwareDir()`; ohne Doppelte), `find_hex` (erste Datei; Groß-/Kleinschreibung von Ordner und Datei egal, wichtig unter Linux), `project_dir` (`<temp>/webmobaledlib_hex_upload`), `ini_text` (Plattform `atmelavr`, Platine je Umgebung: `nano_new` → `nanoatmega328new`, `nano_old` → `nanoatmega328`, `nano_full` → `nanoatmega328full` mit `boards_dir` auf `Boards/`; `upload_flags` `-u -V` wie in der ini des Programms), `prepare_project` (ini, leeres `src/main.cpp`, die Datei als `.pio/build/<Umgebung>/firmware.hex`; Reste wie `firmware.elf` werden entfernt), `command` (`pio run -d "<Projekt>" -e <Umgebung> -t nobuild -t upload --upload-port <Anschluss>`). **`-t nobuild`:** PlatformIO übersetzt nichts und lädt die vorhandene `firmware.hex` hoch (avrdude, Geschwindigkeit und Anschluss kommen von der Platine).
+- `proggen/M08_ARDUINO.py` 1.10: `PIO_Environment(BuildOptions)` (dieselbe Zuordnung wie `Create_PIO_Build_cmd`; im Test gleich geprüft), `Right_Arduino_Hex(InoName)` und `Right_Arduino_Hex_Dirs()`, `Create_PIO_Hex_cmd(ResultName, ComPort, BuildOptions, HexFile)` (pio finden, in den PATH, Hilfsprojekt, Befehl). `Compile_and_Upload_Prog_to_Arduino(…, HexFile='')`: mit `HexFile` wird `Create_PIO_Hex_cmd` statt `Create_PIO_Build_cmd` benutzt, die Prüfung „Programm nicht vorhanden“ entfällt, der Arbeitsordner ist der Ordner der Datei. `Compile_and_Upload_Prog_to_Right_Arduino`: unter PlatformIO (`M28.Is_PlatformIO()`) wird die Datei gesucht; fehlt sie, Fehlermeldung (Name der `.hex`-Datei, Hinweis, beide Ordner); sonst `Compile_and_Upload_Prog_to_Arduino(…, HexFile=…)` **ohne** Kopfdatei der Quelle. Die Prüfung des Anschlusses und die Erkennung des Bootloaders (`Check_If_Arduino_could_be_programmed_and_set_Board_type`, Baudrate 57600 oder 115200) bleiben wie sie sind und bestimmen die Umgebung (alt, neu, full).
+- **Mitgefunden und behoben:** `Compile_and_Upload_Prog_to_Arduino` gab nach erfolgreichem Hochladen **nichts** zurück (VBA-Original: `Compile_and_Upload_Prog_to_Arduino = True`, ein Übertragungsfehler der Umstellung). Folge: `Compile_and_Upload_Prog_to_Right_Arduino` setzte die Zelle `R OK` nie und `Upload_the_Right_Arduino_Prog_if_needed` bot den rechten Arduino bei **jedem** LED-Upload wieder an. Jetzt `fn_return_value = True` am Ende (Rückgabewert: nur diese Stellen und `M08_Install_FastBootLoader` werten ihn aus, jeweils wie im VBA).
+- `webmobaledlib.py` 2.72 (Version, benötigte Dateien: `headless/headless_hex_upload.py`). Katalog 945 Einträge (3 neu: Meldung „Die fertig übersetzte Datei #1# wurde nicht gefunden.“, Hinweis, Titel „Datei nicht gefunden“).
+
+**Nicht geändert:** die ARDUINO IDE (übersetzt weiter die Quelle; die fertigen Dateien ließen sich auch dort mit dem avrdude der IDE hochladen, wenn gewünscht); der Reiter für den **Pico** (er hat keinen rechten Arduino); der Ablauf „Datei nicht vorhanden“ der ARDUINO-IDE-Zweige. **Ungeprüft:** ein echter Upload mit PlatformIO und einem Nano (insbesondere `-t nobuild` zusammen mit der Plattform `atmelavr` und der Platine `nanoatmega328full` aus `Boards/`, und dass PlatformIO die Plattform beim ersten Mal selbst holt); die Pfade und Anschlussnamen unter Windows (`COM3`) und macOS (`/dev/cu.usbserial-…`). Falls es scheitert: bitte die Ausgabe im Arduino-Monitor (die ersten Zeilen mit `pio run …`) schicken.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `headless/headless_hex_upload.py` | 1.00 | neu: fertige .hex-Datei mit PlatformIO hochladen |
+| `proggen/M08_ARDUINO.py` | 1.10 | `PIO_Environment`, `Right_Arduino_Hex`, `Create_PIO_Hex_cmd`, `HexFile`, Rückgabe True |
+| `webmobaledlib.py` | 2.72 | Version, benötigte Dateien |
+| `csv/Web_Languages.csv` | - | 945 Einträge (3 neu) |
+| `install/ANLEITUNG_Installation.md` | 3.27 | Abschnitt 2.9d |
+| `install/BETATEST_Checkliste.md` | 1.98 | Punkt 134 |
+
+**Tests:** neu `test_hex_upload.py` (30) mit echten temporären Ordnern: Namen der drei Dateien, Suchreihenfolge und Groß-/Kleinschreibung, `ini_text` für alle Umgebungen, `prepare_project` (Datei, Reste entfernt, zweiter Aufruf), `command` (Leerzeichen, Windows-Pfad, Linux-Anschluss), `PIO_Environment` gleich `Create_PIO_Build_cmd` für alle Platinen, `Create_PIO_Hex_cmd` (Nano alt, full mit `boards_dir`, ohne PlatformIO), **die drei Reiter** (`Compile_and_Upload_Prog_to_Right_Arduino`: richtige Datei, kein Kopf der Quelle, `R OK`, Datei fehlt, ARDUINO IDE wie bisher), **`Compile_and_Upload_Prog_to_Arduino` echt** mit nachgebauten Abhängigkeiten (der Befehl an den Ausführer, Arbeitsordner, Rückgabe True), Katalog.
+
+## 2.71 (2026-11-03)
+
+**PlatformIO, Raspberry Pi Pico mit Extension** (Entwickler zu 2.70: „Arduino und ESP32 funktionieren jetzt. Pico noch nicht. Bitte ergänzen.“). **Ursache:** `M08.__Create_PIO_Build` ruft `M38.Write_PIO_Extension(fp2)` in den Umgebungen `esp32`, `nano_new`, `nano_old` und `nano_full` auf, in `pico` **nicht**; die Umgebung hatte auch keinen eigenen Block `lib_deps`. Der Header der benutzten Extension (jetzt der einzige in `LEDs_AutoProg.h`, siehe 2.70) war für den Pico daher nicht in `lib_deps`.
+
+**Umsetzung:** `proggen/M08_ARDUINO.py` 1.08: In `[env:pico]` steht vor `lib_ignore` **nur wenn eine Extension benutzt wird** (`M38.ExtensionsActiveCount() > 0`): `lib_deps = ${env.lib_deps}` und je Extension `<Name>=file://<Pfad>` (wie bei Nano und ESP32). **Ohne Extension bleibt die Umgebung `pico` unverändert**, normale Pico-Programme sind nicht berührt. `lib_ignore` (FastLED, U8g2, ArduinoOTA) bleibt hinter den Einträgen. `webmobaledlib.py` 2.71 (Version, benötigte Dateien).
+
+**Ungeprüft:** ein echtes Übersetzen für den Pico mit PlatformIO (die Plattform wird aus GitHub geholt, braucht git). Die Extension `P_ScheduleMLX.h` prüft `AVR`, `ESP32` und `ARDUINO_RASPBERRY_PI_PICO`; die `platforms` in `MobaLedLib.properties` (`ESP32`, `AM328`) nennen den Pico nicht, ich habe sie nicht ausgewertet. Falls es für den Pico scheitert: bitte die erzeugte `platformio.ini` und den Anfang der Meldung schicken.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `proggen/M08_ARDUINO.py` | 1.08 | Umgebung `pico` bekommt die benutzten Extensions |
+| `webmobaledlib.py` | 2.71 | Version, benötigte Dateien |
+| `install/ANLEITUNG_Installation.md` | 3.26 | Satz zum Pico |
+| `install/BETATEST_Checkliste.md` | 1.97 | Punkt 133 erweitert |
+
+**Tests:** `test_extensions_pio.py` jetzt 17 (vorher 13): Umgebung `pico` mit einer benutzten Extension (`lib_deps` und `P_ScheduleMLX=file://…` vor `lib_ignore`, keine Duo-Extension, `lib_ignore` mit FastLED, U8g2, ArduinoOTA), mit beiden, **ohne Extension genau wie bisher**, die anderen Umgebungen unverändert; die Zählung „beide benutzt“ jetzt fünf Umgebungen. `test_pico`, `test_pio`, `test_pio_only`, `test_pio_retry`, `test_pio_cache`, `test_linux`, `test_install_pio` laufen unverändert.
+
+## 2.70 (2026-11-03)
+
+**Fehler beim Übersetzen mit PlatformIO und einer Extension** (Entwickler: Programm mit `EX.P_ScheduleExtension(Hs1_1, Hs1_1, SI_1, 17, 30, 2, 0, 15)`, Arduino Nano, PlatformIO: `LEDs_AutoProg.h:109:10: fatal error: P_ScheduleDuoMLX.h: No such file or directory`; Ordner `libraries` und `.MLL_pgf` mitgeschickt).
+
+**Ursache:** Das Programm benutzt **nur** `P_ScheduleExtension` (Extension `P_ScheduleMLX`; die Duo-Extension hat den Typ `P_ScheduleDuoExtension` und kommt im Programm nicht vor). Trotzdem stand in `LEDs_AutoProg.h` der Header **beider** installierten Extensions: `M38_Extensions.Write_Header_File_Extension_After_Config` (und `…_Before_Config`) liefen in der Python-Fassung mit `for Extension in Extensions:` über **alle gefundenen** Extensions. In der **VBA-Vorlage** (`vba_vergleich_C1_K.zip`, `quelltext_neu/M38_Extensions.bas`) laufen beide mit `For Each Extension In ExtensionsActive.Items`, also nur über die **benutzten**; das war ein Übertragungsfehler der Umstellung (nicht von mir eingeführt). `Write_PIO_Extension` schreibt dagegen (wie im VBA) nur die benutzten nach `platformio.ini` (`P_ScheduleMLX=file://…`). Folge: PlatformIO kannte `P_ScheduleDuoMLX` nicht (Ordner `libraries` ist weder `lib_dir` noch `lib_extra_dirs`), der Header fehlte; die **ARDUINO IDE** sieht alle Ordner in `libraries`, dort ging es. Der Treffer stand an erster Stelle, weil die Ordner alphabetisch gelesen werden (`P_ScheduleDuoMLX` vor `P_ScheduleMLX`).
+
+**Umsetzung:** `proggen/M38_Extensions.py` 1.02: beide Schreibfunktionen laufen über `__ExtensionsActive.values()` (Reihenfolge der Benutzung, wie im VBA). Damit steht in der Kopfdatei genau das, was in `lib_deps` steht (Eigenschaft im Test geprüft). Nebenbei: Eine nicht benutzte Extension, die die Plattform nicht unterstützt (`#error Platform is not supported`), kann den Build nicht mehr stören.
+
+**Nicht geändert, Beobachtung:** In `platformio.ini` fehlt für die Umgebung **`pico`** der Aufruf `Write_PIO_Extension` (Nano und ESP32 haben ihn, auch im VBA-Original?). Ein Programm mit Extension für den Pico fände den Header weiter nicht; die Pico-Umgebung hat keinen eigenen Block `lib_deps`. Das ließe sich ergänzen (`lib_deps = ${env.lib_deps}` und die Extension-Zeilen nur, wenn eine Extension benutzt wird); **ich habe es nicht getan**, weil ich es nicht mit PlatformIO und einem Pico prüfen kann. **Ungeprüft:** ob PlatformIO die Zeile `P_ScheduleMLX=file://<Pfad>` für den Ordner unter Windows annimmt (der Name links stammt aus `id`, der Name in `library.properties` heißt `PeterScheduleMLX`); falls das Übersetzen mit der benutzten Extension weiter scheitert, bitte die erzeugte `platformio.ini` und den Anfang der Meldung schicken.
+
+**Außerdem (Kopfzeilen):** Mein Bearbeitungswerkzeug hatte ein **altes Datum** (2026-10-28) festgehalten; 18 Dateien, die seit 2.56 geändert wurden, trugen deshalb ein falsches Datum in der Kopfzeile, in „Last Update“ und in der Änderungsliste. Das Datum stimmt jetzt (aus den Versionstabellen dieser Datei, sonst 2026-11-01); das Werkzeug benutzt das Tagesdatum. Betroffen (Inhalt unverändert, nur die Kopfzeile): `ExcelAPI/XLA_Application.py`, `_web/web_dialogs.py`, `web_form_options.py`, `web_graph.py`, `web_layout.py`, `web_params.py`, `web_pattgen.py`, `web_sheet_tabs.py`, `web_toolbar.py`, `web_update.py`, `headless/headless_git.py`, `headless_graph.py`, `headless_graph_layout.py`, `headless_graph_ops.py`, `headless_pattgen.py`, `mlpyproggen/Prog_Generator.py`, `proggen/M08_ARDUINO.py`, `proggen/M38_Extensions.py`.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `proggen/M38_Extensions.py` | 1.02 | Header nur der benutzten Extensions |
+| `webmobaledlib.py` | 2.70 | Version |
+| `install/ANLEITUNG_Installation.md` | 3.25 | Absatz Extensions mit PlatformIO |
+| `install/BETATEST_Checkliste.md` | 1.96 | Punkt 133 |
+
+**Tests:** neu `test_extensions_pio.py` (13) mit den **beiden Extensions des Entwicklers** (Ordner `libraries`) und **seinem Programm** (`.MLL_pgf`): Extensions gefunden, nur `EX.P_ScheduleExtension` im Programm, Kopfdatei nach und vor der Konfiguration (nur benutzte, nur Duo, beide, keine), die echte `platformio.ini` aus `__Create_PIO_Build` (vier Umgebungen: nur `P_ScheduleMLX=file://…`), die **Eigenschaft** „jeder eingebundene Header steht in `lib_deps`“, Quelltext. **Mit den alten Funktionen läuft derselbe Test in 4 Prüfungen auf Fehler** (Fehler reproduziert: Header `{Duo, MLX}` gegen `lib_deps` `{MLX}`). Hinweis: der Prüfaufbau kopiert die Dateien des Arbeitsstands vor jedem Lauf in den Testordner; alte Fassungen müssen im Test selbst eingesetzt werden.
+
+## 2.69 (2026-11-01)
+
+**Werkzeugleiste: Text unter dem Symbol, Knopf nur so breit wie das Symbol** (Rückmeldung zu 2.68: „Buttons sind zu breit. Der Text sollte unter dem Bild stehen“). **Ursache:** Der Inhalt eines `q-btn` ist bei Quasar eine **Zeile** (`.q-btn__content` mit der Klasse `row`): Bild und Beschriftung standen nebeneinander (bei den alten Bildern war die Beschriftung ausgeblendet, deshalb fiel es vorher nicht auf). **Behoben** in `_web/web_layout.py` 1.07: `.q-btn.mll-tool .q-btn__content { flex-direction: column; flex-wrap: nowrap; align-items: center; justify-content: center; gap: 2px; }` (drei Klassen, schlägt `.row`; steht vor den Regeln des kompakten Layouts, dort ist das Symbol ausgeblendet). `webmobaledlib.py` 2.69 (Version, benötigte Dateien). Test: zwei Prüfungen in `test_toolbar.py` (jetzt 29: Regel vorhanden, Reihenfolge, Spezifität). **Nicht geprüft:** das Aussehen im Browser (Breite der Knöpfe bei langen Wörtern wie „Einblenden“ und in den anderen Sprachen).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_layout.py` | 1.07 | Inhalt der Knöpfe als Spalte |
+| `webmobaledlib.py` | 2.69 | Version, benötigte Dateien |
+| `install/ANLEITUNG_Installation.md` | 3.24 | Satz zur Beschriftung |
+| `install/BETATEST_Checkliste.md` | 1.95 | Punkt 132 |
+
+## 2.68 (2026-11-01)
+
+**Knöpfe der Werkzeugleiste: Text in der richtigen Sprache und eingedrückt dargestellt** (Konzeptfrage des Entwicklers; Entscheidungen: neue Symbole **ohne Text** vom Entwickler (13 Dateien, gleiche Dateinamen), Aussehen **modern**, gedrückt bleiben, **solange ein Befehl läuft**).
+
+**Vorher:** `ui.button(...)` mit `ui.image(/mll_images/Btn_*.png)` (80 × 101 Pixel, deutscher Text im Bild); die übersetzte Beschriftung (`M09.Get_Language_Str`) stand in einem Label mit `mll-hide-normal`, nur im kompakten Layout sichtbar; kein Eindruck beim Klick.
+
+**Umsetzung:**
+- **Neue Symbole** in `images_btn/` (13 Dateien, RGBA, etwa 214 × 164 Pixel, durchsichtig); die alten Bilder in `images/` bleiben als Rückfall. Die Adresse `/mll_images_btn` wird mit den anderen statischen Ordnern angelegt.
+- **Neues Modul `_web/web_toolbar.py` 1.01:** `build_tool_button(ui, icon, text, tooltip, handler, new_dir, old_dir, icon_images, tool_labels)`: Knopf (flach, `mll-tool`) mit Bild (`ratio` 214:164, damit die Seite beim Laden nicht springt) und Beschriftung (`white-space: pre-line`, immer sichtbar); der Handler wird in einer Hülle ausgeführt, die **`mll-pressed` setzt, solange er läuft** (`classes(add=…)`, `await`, `finally: classes(remove=…)`), also auch bei Fehlern und bei einem Befehl, der auf ein Fenster wartet (`run_command` wartet auf den Worker-Thread, der die MsgBox im Browser anzeigt). `image_for` (neu, sonst alt mit Text im Bild: dann Beschriftung nur im kompakten Layout, sonst nur Beschriftung), `clean_label` (vbCr aus dem Blatt Languages, vbCrLf, `\n` → `\n`), `single_line`, `label_px` (Schrift 14 Prozent der Symbolbreite, mindestens 9), `translate_label`.
+- **CSS** in `_web/web_layout.py` 1.06: `.q-btn.mll-tool` (Verlauf, Rand, 8 Pixel Rundung), `:hover`, **`:active` und `.mll-pressed`** (dunklere Fläche, `box-shadow: inset`, Symbol und Text `translateY(1px)`), `.mll-tool-text`, dunkles Aussehen (`.body--dark`). Die Regeln des **kompakten Layouts** stehen weiter dahinter (gleiche Spezifität, später gewinnt): Symbole weg, Text in einer Zeile.
+- **`webmobaledlib.py` 2.68:** `toolbar_buttons()`-Schleife benutzt `web_toolbar.build_tool_button`; `apply_icon_size` führt auch die Schrift nach (`toolbar_labels`); Befehlsname im Protokoll einzeilig (`single_line`); Katalog 942 Einträge (2 neu: „Zeilen Färben“, „Neue Tabelle“).
+
+**Sprachen (beim Prüfen gefunden):** Das Blatt Languages (Typ „Button“) enthält Texte für die Knöpfe mit anderem Zeilenumbruch: `Alle |` + Zeilenumbruch + `Einblenden` (**mit Leerzeichen** hinter „Alle“; der Schlüssel im Web war `Alle\nEinblenden` und blieb in **allen** Sprachen deutsch: mein erster Prüflauf hatte das übersehen, weil er `\r` und `\n` verglich). Der Schlüssel in `toolbar_buttons()` ist jetzt `Alle \nEinblenden` (wie im Blatt). **`Neue Tabelle`** und **`Zeilen Färben`** stehen im Blatt gar nicht (neue Knöpfe des Web-Programms): sie stehen jetzt im Katalog `Web_Languages.csv` (einzeilig); `translate_label` sucht zuerst den Text mit Zeilenumbruch (Blatt), dann einzeilig (Katalog). **Beobachtung, nicht geändert:** Im Blatt Languages stehen in den Spalten **Italienisch und Spanisch** bei den Knöpfen **englische** Texte („Copy lines“, „Delete lines“ …), nicht übersetzt; sie erscheinen so auch in diesen Sprachen (im Blatt zu ändern, nicht im Programm).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_toolbar.py` | 1.01 | neu: Knopf aus Symbol und Beschriftung, eingedrückt während des Befehls |
+| `_web/web_layout.py` | 1.06 | CSS der Knöpfe |
+| `webmobaledlib.py` | 2.68 | Werkzeugleiste mit `web_toolbar`, Schrift nach Symbolgröße, Route `/mll_images_btn` |
+| `images_btn/Btn_*.png` | - | 13 neue Symbole ohne Text |
+| `csv/Web_Languages.csv` | - | 942 Einträge (2 neu) |
+| `install/ANLEITUNG_Installation.md` | 3.23 | Abschnitt 2.9c |
+| `install/BETATEST_Checkliste.md` | 1.94 | Punkt 132 |
+
+**Tests:** neu `test_toolbar.py` (27): Hilfsfunktionen, `image_for` (neu, alt, keines), der Knopf mit nachgebauter Oberfläche (Bild, Seitenverhältnis, Beschriftung, Tooltip, Sammlungen für die Größe, Rückfälle), **eingedrückt**: normaler und asynchroner Befehl (Klasse während des Laufs, danach weg; Reihenfolge add, remove), Fehler im Befehl (finally), jeder Klick ruft den Befehl einmal; CSS (alle Regeln, kompaktes Layout dahinter, alte Bilder); die **13 Dateien** in `images_btn` (genau die Symbole der Werkzeugleiste, RGBA, Seitenverhältnis, durchsichtig); **alle sieben Sprachen** mit dem echten `M09`: jede Beschriftung da, höchstens zwei Zeilen, kein `\r`, in den sechs anderen Sprachen vom Deutschen verschieden (außer den Namen Dialog und Online Wiki), Beispiele Englisch und Französisch; `translate_label`; Quelltext des Hauptprogramms. **Nicht geprüft:** das Aussehen im Browser (Abstände, Höhe der Leiste mit den neuen Symbolen, Eindrücken auf dem Tablet, dunkler Modus) und das Verhalten bei sehr langen Befehlen. **Nicht umgesetzt:** die Knöpfe des Patterngenerators (`Btn_PA_*.png`: noch Bilder mit Text, die Symbole ohne Text fehlen).
+
+## 2.67 (2026-11-01)
+
+**Zwei gemeldete Probleme:** (1) Beim Ändern der Hintergrundfarbe einer Zelle verdeckt die Farbwahl nach einem Klick auf die Pipette den Knopf OK; beim Farbfeld der Tabellenreiter ist es besser gelöst. (2) Beim Duplizieren/Kopieren von Zeilen wird eine Mehrfachauswahl nicht berücksichtigt (nur die erste Zeile), die Kopien sollen hinter der letzten Zeile der Mehrfachauswahl erscheinen.
+
+**Zu 1 (Farbwahl):** Alle drei Farbfelder benutzen `ui.color_input`; dessen Menü (`color_input.picker`, `QMenu`) öffnet **unter** der Pipette und liegt damit über den Knöpfen, wenn das Fenster breit ist (Zellfarbe: 420 Pixel, Knöpfe rechtsbündig unter der Pipette); beim schmaleren Fenster der Reiterfarbe war OK nur zufällig frei. Neu: `web_dialogs.color_input(ui, **kwargs)` (1.09) setzt `picker.props('anchor="top right" self="top left"')`, das Menü geht also **rechts neben** der Pipette auf (Oberkante gleich) und deckt die Knöpfe im Fenster nicht ab; fehlt `picker` oder `props` in einer anderen NiceGUI-Fassung, bleibt alles wie vorher. Benutzt in: Hintergrundfarbe der Zelle (`webmobaledlib.py` `op_set_color`), Farbfeld im Parameterformular (`_web/web_params.py` 1.05, neuer Import `web_dialogs`), Reiterfarbe (`_web/web_sheet_tabs.py` 1.02). **Grenze:** In einem sehr schmalen Fenster (Tablet hochkant) schiebt Quasar das Menü zurück ins Fenster; dort kann es wieder Knöpfe berühren. Aussehen im Browser nicht geprüft.
+
+**Zu 2 (Zeilen), Ursache in der Excel-Schicht (`ExcelAPI/XLA_Application.py` 1.16):**
+- `CSelection._selectedRow()` lieferte nur `[self.ws.getSelectedRow()]`, die **erste** markierte Zeile; deshalb war `len(Selection.Rows())` immer 1 und `Proc_Copy_Row` (`M23`) kopierte eine Zeile. **Neu:** `CWorksheet.getSelectedRows()` (alle markierten Zeilen: ganze Zeilen und Zeilen markierter Zellen, als Datenindizes, aufsteigend; angezeigte Indizes werden bei ausgeblendeten Zeilen umgerechnet) und `_selectedRow()` liefert den **Block von der ersten bis zur letzten markierten Zeile** (wie Excel; nicht zusammenhängende Zeilen ergeben den Block dazwischen); nichts markiert: wie bisher `getSelectedRow()`.
+- **Mitgefunden und behoben:** `CSelection.get_entirerow` benutzte die **0-basierten** Zeilen von `_selectedRow` als **1-basierte** `CRange`-Zeilen. **`Selection.EntireRow` war deshalb die Zeile DARÜBER:** `Proc_Copy_Row` kopierte den Inhalt der Zeile über der markierten (im Test mit dem echten Arbeitsbuch: markiert C, Kopie enthielt B), `Hide_Unhide_Selected_Rows` (`M20`, Knopf Aus- oder Einblenden) versteckte die Zeile darüber, `Proc_Del_Row` (`M23`) hätte die Zeile darüber gelöscht. Jetzt `CRange((first + 1, 1), (last + 1, lastcolumn))`. `Selection.Rows()`/`CRow` (0-basiert, benutzt von `M22`) bleiben unverändert. **Nicht angefasst:** `Proc_Del_Row` hat einen eigenen Fehler (`__Del_Row_Msg_Shown` in der Funktion nicht gebunden); in der Web-Oberfläche wird Zeilenlöschen offenbar anders behandelt, ich habe es nicht geprüft; ebenso die Stelle `setSelectedCells`: Das Ende des Bereichs wird als ausschließlich an `create_selection_box` gegeben, nach dem Kopieren ist dadurch nur die erste neue Zeile markiert (Beobachtung im Test, ohne Folgen für das Kopieren).
+- `Proc_Copy_Row` selbst blieb unverändert: `DestRow = Selection.Row + len(Selection.Rows())` ist bei einem Block genau **hinter der letzten Zeile**, `RowCnt = len(Rows())` die Zahl der kopierten Zeilen, die Werte kommen aus `Selection.EntireRow.Value`.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `ExcelAPI/XLA_Application.py` | 1.16 | `getSelectedRows`, `_selectedRow` (alle markierten Zeilen), `get_entirerow` (richtige Zeile) |
+| `_web/web_dialogs.py` | 1.09 | `color_input` |
+| `_web/web_params.py` | 1.05 | Farbfeld mit `color_input` |
+| `_web/web_sheet_tabs.py` | 1.02 | Reiterfarbe mit `color_input` |
+| `webmobaledlib.py` | 2.67 | Hintergrundfarbe der Zelle mit `color_input`, Version, benötigte Dateien |
+| `install/ANLEITUNG_Installation.md` | 3.22 | Abschnitt 2.9b |
+| `install/BETATEST_Checkliste.md` | 1.93 | Punkt 131 |
+
+**Tests:** neu `test_rows_color.py` (22) am **echten Arbeitsbuch**: `getSelectedRows` (eine, mehrere, Zellbereich, nichts, mit ausgeblendeter Zeile), `_selectedRow` (Block, Rückfall), `EntireRow` (die markierte Zeile, Block), Ausblenden (die markierte Zeile), **`Proc_Copy_Row`**: eine Zeile (Kopie = Original, direkt dahinter), zwei und drei Zeilen (hinter der letzten, gleiche Reihenfolge), die letzten Zeilen, Zellbereich, nicht zusammenhängend (Block), Zahl der Zeilen, Auswahl danach, Kopfzeile unberührt; `color_input` (Anker, Rückgabe, ohne `picker`, ohne `props`) und die drei Verwendungen. **Nicht geprüft:** das Verhalten im Browser (Farbwahl neben dem Knopf; Mehrfachmarkierung im Gitter mit der Maus und das Zusammenspiel mit `on_selection_changed`).
+
+## 2.66 (2026-11-01)
+
+**Knopf „PlatformIO-Zwischenspeicher löschen“** (Optionen, Reiter Entwicklungsumgebung). Anlass (Entwickler): Die Version der MobaLedLib wurde auf 3.5.0-L gehoben (im VBA-Code nur `Test_Suffix = 'L'` in Zeile 75 von `M02_Public.py`, dazu eine geänderte `.h`-Datei); „PlatformIO hat im Cache noch die alte Datei und bleibt dabei“; gewünscht ein Knopf, der den Cache löscht und einen Neuaufbau erzwingt.
+
+**Ursache (aus dem Code):** `M08.__Create_PIO_Build` schreibt `lib_deps = … MobaLedLib=file://libraries/MobaLedLib@3.5.0-<Test_Suffix>`. PlatformIO übernimmt eine solche Bibliothek als **Kopie** nach `<Projekt>/.pio/libdeps/<env>/MobaLedLib` und hält übersetzte Dateien in `.pio/build/<env>`; ändert sich eine Datei der Bibliothek, **ohne** dass sich die Versionsangabe ändert, bleibt die alte Kopie in Gebrauch. Der Download-Zwischenspeicher liegt in `~/.platformio/.cache` (oder `PLATFORMIO_CORE_DIR/.cache`).
+
+**Umsetzung:**
+- Neues Modul `headless/headless_pio_cache.py` 1.00 (nur Standardbibliothek, alle Umgebungsdinge Parameter): `core_dir` (`PLATFORMIO_CORE_DIR`, sonst `~/.platformio`), `is_program_project` (**nur Projekte, deren `platformio.ini` mit `; Created by` beginnt**, also vom Programm geschriebene), `find_projects`, `dir_size` (folgt keinen Verknüpfungen), `human_size`, `plan_cleanup` (`[{kind: project|cache, path, size}]`, nur Vorhandenes), `remove_tree` und `clean` (`{removed, failed, freed}`).
+- **Sicherungen:** gelöscht werden **nur Ordner mit den Namen `.pio` und `.cache`**; jeder andere Name wird abgelehnt (auch das Projekt selbst, `packages`, `platforms`, `src`); eine **Verknüpfung** wird nur entfernt, ihr Ziel bleibt; schreibgeschützte Dateien werden freigegeben (Windows); ein Fehler bei einem Ordner hält die anderen nicht auf; ein Projekt, das nicht von diesem Programm stammt, behält sein `.pio`. **Plattformen, Compiler und Werkzeuge (`packages`, `platforms`) bleiben erhalten** (das Neuladen wäre sehr groß).
+- `proggen/M08_ARDUINO.py` 1.07: `PIO_Projects` (Menge der Projektordner, deren `platformio.ini` in dieser Sitzung geschrieben wurde; `__Create_PIO_Build` trägt `abspath(SrcDir/..)` ein), `PIO_Cache_Plan()` (gemerkte Projekte plus die üblichen Orte: Beispiele der Bibliothek `Get_SrcDirExamp()`, `GetWorkbookPath()/../examples`, Ordner der Arbeitsmappe; Fehler beim Raten werden übergangen) und `PIO_Cache_Clean(plan)`. Auch nach einem Neustart findet der Plan die Projekte an den üblichen Orten.
+- `_web/web_form_options.py` 1.16: Knopf (auf **allen** Betriebssystemen, nach „PlatformIO prüfen“, mit Hinweistext), Dispatch `__Pio_Cache_Button_Click`, Methode `_web_pio_cache`: nichts zu löschen → Hinweis; sonst Rückfrage (Ja/Nein, mit Pfaden und Größen, Hinweis, dass Plattformen und Compiler bleiben und das nächste Übersetzen länger dauert) → Wartefenster (`finally` schließt es auch bei einer Ausnahme) → Meldung mit der freigegebenen Größe, oder Fehlermeldung (kritisch) mit Ordner und Grund und dem Hinweis „Läuft gerade ein Übersetzen …?“.
+- `webmobaledlib.py` 2.66: Version, **neu in der Liste der benötigten Dateien: `headless/headless_pio_cache.py`**. Katalog 940 Einträge (11 neu, alle sechs Sprachen).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `headless/headless_pio_cache.py` | 1.00 | neu: Zwischenspeicher von PlatformIO finden und löschen |
+| `proggen/M08_ARDUINO.py` | 1.07 | `PIO_Projects`, `PIO_Cache_Plan`, `PIO_Cache_Clean` |
+| `_web/web_form_options.py` | 1.16 | Knopf, Dispatch, `_web_pio_cache` |
+| `webmobaledlib.py` | 2.66 | Version, benötigte Dateien |
+| `csv/Web_Languages.csv` | - | 940 Einträge (11 neu) |
+| `install/ANLEITUNG_Installation.md` | 3.21 | Absatz „PlatformIO benutzt noch die alte Fassung“ |
+| `install/BETATEST_Checkliste.md` | 1.92 | Punkt 130 |
+
+**Tests:** neu `test_pio_cache.py` (34) mit **echten temporären Ordnern**: Kernordner (Umgebungsvariable, `~`), Erkennung der Projekte (fremd, leer, fehlend, BOM, Doppelte), Größe (Verknüpfungen nicht verfolgt), Plan (`packages` und `platforms` nie darin), Löschen (schreibgeschützte Datei, nicht vorhanden, **Ablehnung anderer Ordnernamen**, Verknüpfung im `.pio` und `.pio` selbst als Verknüpfung, Fehler wie „Zugriff verweigert“), `clean` (echt, zweimal, Fehler hält die anderen nicht auf), fremdes Projekt bleibt, **M08** (Plan mit und ohne gemerkte Projekte, fremder Ordner übergangen, Löschen, und **`__Create_PIO_Build` wirklich ausgeführt**: trägt den Projektordner ein, schreibt `; Created by` und die `file://`-Bibliothek), der **Handler** des Knopfs ausgeführt (nichts zu löschen, Rückfrage mit Pfaden und Größen, Ja, Nein, Fehler, Ausnahme), Katalog. **Nicht geprüft:** ein echtes PlatformIO (dass nach dem Löschen die geänderte `.h`-Datei benutzt wird; das folgt aus der Arbeitsweise von PlatformIO, nicht aus einem Lauf hier), die Lage des Projektordners auf Ihrem Rechner (der Plan zeigt sie in der Rückfrage).
+
+**Mögliche Erweiterung (nicht umgesetzt):** Das Programm könnte beim Übersetzen selbst merken, dass sich Dateien der Bibliothek geändert haben (Stempel aus Änderungszeit oder Prüfsumme), und die Kopie `.pio/libdeps/<env>/MobaLedLib` dann allein löschen, ohne den Knopf. **Offen:** `M02_Public.py` (Ihre Änderung `Test_Suffix = 'L'`, Zeile 75) ist nicht in den Paketen; mein Arbeitsstand der Datei (1.02, `K-long`) weicht davon ab. Für den nächsten Release-Stand bitte Ihre Datei hochladen.
+
+## 2.65 (2026-11-01)
+
+**Update: mehr als 20 zu löschende Dateien brechen nicht mehr ab, das Programm fragt** (Entwickler: „Ich möchte ca. 100 Icons löschen. Geht aber nicht, da mehr als 20 Dateien nicht gelöscht werden dürfen. Bitte ändern, dass nur nachgefragt wird, ob wirklich so viele Dateien gelöscht werden sollen“).
+
+**Ursache:** `web_update.MAX_DELETE = 20` (seit 1.02): `make_plan` und `apply` brachen bei mehr zu löschenden Dateien mit `UpdateError` ab (Schutz vor einem unvollständigen ZIP, zum Beispiel einer Sammlung geänderter Dateien). Der Schutz vor einem unvollständigen ZIP steht aber **zusätzlich** in der Prüfung auf die Zahl der Dateien (`MIN_RATIO_KNOWN`: weniger als 80 Prozent der installierten Dateien) und in der Prüfliste `release_manifest.json`; diese bleiben und fangen ein unvollständiges ZIP weiter ab.
+
+**Umsetzung:**
+- `_web/web_update.py` 1.10: `make_plan` bricht nicht mehr ab, sondern setzt `plan.confirm_delete` (neues Feld) und `Plan.many_deletes` (`len(delete) > MAX_DELETE`). `apply(..., allow_downgrade=False, allow_many_delete=False)`: bei mehr als `MAX_DELETE` zu löschenden Dateien weiter `UpdateError` (dieselbe Meldung), **außer mit `allow_many_delete=True`**: ein Aufruf ohne Rückfrage kann so nie viele Dateien löschen, auch wenn die Oberfläche die Frage vergäße.
+- `webmobaledlib.py` 2.65, Update-Fenster (`run_update`): hat der Plan viele zu löschende Dateien, steht oben in der Anzeige in Rot (wie beim Zurückgehen) und in den Hinweisen **„Achtung: Das Update löscht {anzahl} Dateien (mehr als {grenze}). Das ist richtig, wenn sie in der neuen Version nicht mehr gebraucht werden (zum Beispiel nicht mehr benutzte Symbole). Sie werden vorher im Datenordner gesichert. Zum Beispiel: …“** mit den ersten sechs Dateinamen (die vollständige Liste zeigt wie bisher `wu.describe` unter „Wird gelöscht“). Knöpfe: **Abbrechen** (Standard, primary) und **„Ja, {anzahl} Dateien löschen und aktualisieren“** (outline, negative) → `do_apply_many_delete` → `do_apply(False, True)`. Es gibt keinen Knopf Aktualisieren, der ohne Frage löscht. **Ältere Version und viele Dateien:** der Knopf „Trotzdem … zurückgehen“ übergibt beides (`do_apply(True, work["plan"].many_deletes)`), die Warnung steht trotzdem im Fenster. Gilt auch für **Update Testversion**.
+- Katalog: 2 neue Texte (929 Einträge).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_update.py` | 1.10 | `confirm_delete`, `many_deletes`, `apply(allow_many_delete)`, kein Abbruch in `make_plan` |
+| `webmobaledlib.py` | 2.65 | Update-Fenster: Warnung, Knopf „Ja, … Dateien löschen und aktualisieren“ |
+| `csv/Web_Languages.csv` | - | 929 Einträge (2 neu) |
+| `install/ANLEITUNG_Installation.md` | 3.20 | Absatz „Viele Dateien löschen“, Liste der Abweisungsgründe |
+| `install/BETATEST_Checkliste.md` | 1.91 | Punkt 129 |
+
+**Tests:** `test_update_guard` (35, vorher 26): die alte Prüfung „30 Dateien: abgewiesen“ ersetzt: `make_plan` bricht nicht ab (`confirm_delete`), `apply` ohne Bestätigung weist ab **und verändert nichts** (Dateien, Version, keine Sicherung), mit Bestätigung 30 Dateien gelöscht, gesichert, Installation stimmt mit der Prüfliste überein; der **Fall des Entwicklers: 100 Dateien** bei einer Installation mit 700 Dateien; **Grenze genau bei 20 (keine Rückfrage, `apply` wie bisher) und 21 (Rückfrage)**; ein **unvollständiges ZIP** (60 statt 260 Dateien) wird weiter abgewiesen; ein Plan mit Rückfrage, aber `apply` ohne Bestätigung: abgewiesen. `test_update_testversion` (42, vorher 30): das Fenster mit nachgebauten Elementen: Anzeige und Hinweise mit den ersten sechs Dateien, Knöpfe, Ja ruft `apply` mit `(False, True)`, bis 20 Dateien unverändert `(False, False)`, 21 mit Rückfrage, älter und viele `(True, True)`, älter ohne viele `(True, False)`, Testversion, Quelltext. `test_install_check` an den neuen Aufruf angepasst. **Nicht geprüft:** das Aussehen der Rückfrage im Browser.
+
+## 2.64 (2026-11-01)
+
+**Knopf „Git installieren“ auch unter Windows und macOS** (Entwickler: „git muss auch unter Windows und mac installiert werden, damit PlatformIO richtig funktioniert. Der Button muss auch für Windows und mac funktionieren“). Bisher nur Linux (`install_git.sh` mit `pkexec`).
+
+**Neues Modul `headless/headless_git.py`** (1.01, nur Standardbibliothek; alle Umgebungsdinge sind Parameter (`which`, `isfile`, `run`, `download`, `find`), daher ohne Windows und macOS prüfbar):
+- **Erkennung `find_git`:** Linux: `which("git")`. **Windows:** `which`, dann der Installationsordner aus der **Registrierung** (`HKLM`/`HKCU`, `SOFTWARE\GitForWindows`, `InstallPath` + `cmd\git.exe`), dann die üblichen Stellen (Programme, Programme (x86), `%LOCALAPPDATA%\Programs\Git` für die Installation nur für den Benutzer). **macOS:** Homebrew (`/opt/homebrew/bin`, `/usr/local/bin`), die Kommandozeilen-Werkzeuge, Xcode, ein git von MacPorts in `PATH`; **`/usr/bin/git` zählt nur, wenn `xcode-select -p` erfolgreich ist**: unter macOS gibt es dort immer eine **Hülle**, die beim Aufruf ein Installationsfenster öffnet, ohne dass die Werkzeuge da sind (`shutil.which` allein hätte den Knopf nie angezeigt); `git` selbst wird zur Prüfung **nie** ausgeführt.
+- **`ensure_on_path`:** Ein eben installiertes git steht im laufenden Programm noch nicht in `PATH` (Windows und Homebrew ändern nur die Umgebung neuer Prozesse), PlatformIO erbt aber `PATH`. `git_installed` trägt deshalb den Ordner in `os.environ["PATH"]` ein (nach vorn, ohne Doppelte; Pfadregeln des Zielsystems: `ntpath`, bei Windows Groß-/Kleinschreibung und ein Schrägstrich am Ende egal). **Ein Neustart des Programms ist so nicht nötig.**
+- **Windows `setup_windows`:** (1) `winget install --id Git.Git -e --source winget --silent --accept-package-agreements --accept-source-agreements` (Zeitlimit 20 Minuten, ohne Konsolenfenster; winget fragt selbst um Erlaubnis); (2) fehlt winget oder bleibt git danach unauffindbar: `download_installer` fragt `api.github.com/repos/git-for-windows/git/releases/latest`, wählt mit `pick_installer` `Git-<Version>-64-bit.exe` (auf ARM `-arm64.exe`; nicht PortableGit, MinGit, 32-bit; nur https), lädt es (höchstens 500 MB), prüft die Prüfsumme (`digest` von GitHub, `sha256:`) und startet es mit **PowerShell `Start-Process -Verb RunAs -Wait -PassThru`** und `/VERYSILENT /NORESTART /SUPPRESSMSGBOXES /SP-`, dadurch zeigt Windows die **Abfrage der Benutzerkontensteuerung** und der Rückgabewert kommt zurück. Das Ergebnis zählt nur, wenn danach git **gefunden** wird (nicht blind True). Fehler (kein Netz, Erlaubnis verweigert, Zeitüberschreitung, PowerShell nicht startbar) ergeben eine Meldung mit dem Grund und der Seite <https://git-scm.com/download/win>; das temporäre Verzeichnis wird immer gelöscht; ein Apostroph im Pfad wird für PowerShell verdoppelt.
+- **macOS `setup_mac`:** Homebrew (`brew install git` mit `HOMEBREW_NO_AUTO_UPDATE`, `NONINTERACTIVE`), sonst `xcode-select --install`. Das öffnet nur das **Fenster von macOS**, das der Anwender bestätigt, die Installation läuft danach im Hintergrund weiter. Das Programm **wartet nicht** (ein Abbruch im Fenster ließe sich nicht erkennen, und das Wartefenster bliebe Minuten stehen): **`ok` ist `None` („gestartet“)** mit dem Text „macOS hat ein Fenster … geöffnet … Danach das Übersetzen wiederholen“.
+- **Texte:** `button_label` und `busy_text` je Betriebssystem (Linux unverändert, die vorhandenen Übersetzungen gelten weiter); die festen Meldungen laufen über `M09.Get_Language_Str`; neue Katalogeinträge (11 neu, alle sechs Sprachen), darunter der **neue Hinweistext** nach dem Übersetzen ohne git (Prog_Generator 1.07: nennt den Knopf für alle Systeme und `winget install --id Git.Git -e`).
+
+**Anpassungen:** `proggen/M08_ARDUINO.py` 1.06 (`Git_Installed` ruft `HG.git_installed()`; `Setup_Git` geht unter Windows und macOS an `HG.setup_git`, Linux bleibt), `_web/web_form_options.py` 1.15 (Knopf **nicht mehr nur unter Linux**, Text je System, Wartefenster, `ok is None` zeigt die Meldung als Information), `webmobaledlib.py` 2.64 (Version, benötigte Dateien, **`headless/headless_git.py` ist neu in der Liste**).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `headless/headless_git.py` | 1.01 | neu: git finden und installieren (Windows, macOS) |
+| `proggen/M08_ARDUINO.py` | 1.06 | `Git_Installed`, `Setup_Git` für alle Systeme |
+| `_web/web_form_options.py` | 1.15 | Knopf Git installieren für alle Systeme, Meldung bei „gestartet“ |
+| `mlpyproggen/Prog_Generator.py` | 1.07 | Hinweistext ohne git: Knopf für alle Systeme, winget |
+| `webmobaledlib.py` | 2.64 | Version, benötigte Dateien |
+| `csv/Web_Languages.csv` | - | 927 Einträge (11 neu) |
+| `install/ANLEITUNG_Installation.md` | 3.19 | Abschnitt zum Pico und git: Windows, macOS |
+| `install/BETATEST_Checkliste.md` | 1.90 | Punkt 128 |
+
+**Tests:** neu `test_git_cross.py` (60): Erkennung je Betriebssystem (Registrierung, übliche Stellen, Reihenfolge, **kein Aufruf von git unter macOS**, `xcode-select` fehlt oder wirft), `ensure_on_path` (Reihenfolge, doppelte, Windows-Regeln, leerer PATH), Texte (Linux unverändert, Katalog in sechs Sprachen), `pick_installer` (x64, ARM, Portable, MinGit, 32-bit, http, vier Zahlen, rc), Prüfsumme, `download_installer` mit nachgebautem GitHub (Kopf, Adressen, falsche Summe löscht die Datei, keine Datei, kein Netz, zu groß), **Windows** (schon da, winget mit genauem Befehl, winget scheitert -> Installationsprogramm mit RunAs, ohne winget, Download scheitert, Erlaubnis verweigert, Zeitüberschreitungen, winget wirft, PowerShell nicht startbar, Apostroph im Pfad, git danach nicht auffindbar, Übersetzung, temporäres Verzeichnis gelöscht), **macOS** (schon da, Homebrew mit Umgebung, ohne Homebrew `None`, brew scheitert -> Entwicklerwerkzeuge, schon installiert, Fehler, nicht startbar, Zeitüberschreitung, brew wirft, `brew_path`), `setup_git` verteilt, der **Handler** des Knopfs ausgeführt (schon da, Erfolg, Fehler, `None` als Information, Ausnahme schließt das Wartefenster). `test_git_install` angepasst (Windows/macOS gehen jetzt an `headless_git`). **Nicht geprüft: alles auf einem echten Windows- oder macOS-Rechner** (winget, Benutzerkontensteuerung, Installationsprogramm von Git for Windows mit `/VERYSILENT`, Homebrew, Fenster der Entwicklerwerkzeuge, `PATH` im laufenden Programm, PlatformIO danach). **Annahmen:** GitHub liefert im Release `assets[].name`, `browser_download_url` und (neuere Releases) `digest`; das Installationsprogramm von Git for Windows akzeptiert `/VERYSILENT /NORESTART /SUPPRESSMSGBOXES /SP-`.
+
+**Nicht geändert (Vorschlag):** `install_windows.bat` und `install_mac.command` installieren git nicht gleich mit (Linux: `install_linux.sh` ab 1.06 ja); wäre möglich, ist aber ohne Test auf den Zielsystemen riskanter als der Knopf.
+
+## 2.63 (2026-11-01)
+
+**Programm Generator: Reiterfarben, Kontextmenü der Blattreiter (Umbenennen, Duplizieren), Reiter verschiebbar** (Entwickler: drei Wünsche nach dem Vorbild von Excel und dem Tk-Kontextmenü in `XLA_Application.py` Zeile 385 bis 449). **Entscheidungen des Entwicklers:** Beim Start **keine Farben** (die Farben im Screenshot waren nur Beispiele); **nur eigene Blätter** (Kopien) lassen sich umbenennen; Duplizieren für **Datenblätter** (der Typ steht im Blatt selbst in der ersten Zeile, `M28.Is_Data_Sheet`); die **Reihenfolge ist beliebig** (die Systemblätter sind normalerweise unsichtbar); verschieben mit **Alt + linker Maustaste**.
+
+**Excel-Schicht** (`ExcelAPI/XLA_Application.py` 1.14): `CWorksheet.set_tab_color` (`tab_color`, '#rrggbb' klein geschrieben, '#rgb' wird erweitert, Unsinn ergibt ''), `Workbook.reorder_sheets(names)` (ändert die Liste `self.sheets` an Ort und Stelle, unbekannte und doppelte Namen werden ignoriert, nicht genannte Blätter folgen in ihrer Reihenfolge), `CWorksheet.rename_sheet` führt jetzt auch `Workbook.tabframedict` und den Reiter-Rahmen nach (vorher nur `global_worksheet_dict`), `Workbook.apply_sheet_layout`. **Sichern:** `SaveWorkbook` schreibt zusätzlich `SheetOrder` (alle Blätter in der Reihenfolge der Reiter) und `TabColors` (nur Blätter mit Farbe) in die oberste Ebene der Datei (sie gilt für beide Arbeitsmappen, Programm Generator und Patterngenerator); `LoadWorkbook` wendet beides nach dem Laden der Daten an. Eine Datei ohne diese Schlüssel (aus älteren Versionen) lädt wie bisher. Kopien werden schon bisher als Blatt mit ihrem Namen gesichert (`Workbookdata`) und beim Laden aus dem Muster DCC angelegt.
+
+**Neue Dateien:** `_web/web_sheet_tabs.py` 1.01 und `_web/mll_tabs.js` 1.00.
+- Reine Funktionen: `normalize_color`, `luminance`, `contrast_ratio`, `text_color` (**weiß, solange die weiße Schrift mindestens 3 : 1 Kontrast zur Reiterfarbe hat, sonst schwarz**, das ergibt wie bei Excel weiße Schrift auf Rot, Blau, Violett und schwarze auf Gelb, Grün, Hellblau und gibt immer mindestens 3 : 1; ein Maßstab nach der wahrgenommenen Helligkeit (YIQ, Schwelle 128) ließ weiße Schrift auf Türkis mit 2,6 : 1 zu und wurde verworfen), `mix_with_white`, `tab_style` (CSS-Variablen `--tab-color`, `--tab-fg`, `--tab-mid` (45 Prozent Weiß), `--tab-light` (80 Prozent Weiß)), `validate_sheet_name` (leer, mehr als 31 Zeichen, `[ ] : * ? / \`, Apostroph am Rand, schon vorhanden (Groß- und Kleinschreibung zählt nicht, der eigene Name darf bleiben), reserviert = Name eines Blatts des Programms), `unique_name`, `can_rename` (nur Namen, die **nicht** in `wb.sheetdict` stehen: DCC, Selectrix, CAN, LNet, Examples, Config, Languages ...), `plan_move` und `plan_step` (neue Reihenfolge **aller** Blätter; die verborgenen behalten ihre Stelle relativ zu den übrigen; **None, wenn die Reihenfolge der sichtbaren Reiter gleich bleibt**).
+- Oberfläche: `build_tab` (ui.tab mit `data-sheet`, `data-tabc` und Stil, Kontextmenü mit Umbenennen, Duplizieren, Nach links, Nach rechts, Untermenü Reiterfarbe mit 2 × 10 Feldern, Keine Farbe, Weitere Farben; nicht Erlaubtes ist ausgegraut mit Hinweis), `ask_name` (Fenster mit Prüfung, zeigt den Fehler und bleibt offen), `ask_color`.
+- `mll_tabs.js`: Hörer am Dokument (Aufnahmephase): Alt + linke Maustaste auf `.sheet-tabs .q-tab` startet, ab 6 Pixeln Bewegung gilt es als Ziehen (Reiter abgeblendet, blaue Marke an der Einfügestelle), Loslassen sendet `mll_tab_move {name, before}` (before = Reiter, vor dem eingefügt wird, `null` = ans Ende); `dropTarget` ist der erste Reiter ohne den gezogenen, dessen Mitte rechts vom Zeiger liegt; Esc und `pointercancel` brechen ab; das **Klick-Ereignis nach dem Ziehen wird verschluckt** (sonst würde der Reiter gewählt); ohne Alt, mit rechter Taste oder außerhalb der Reiter nichts.
+
+**Hauptprogramm** (`webmobaledlib.py` 2.63, in `build_page`): `rebuild_sheet_tabs` baut die Reiter mit `WT.build_tab` (ruft zuerst `load_sheet_dict`, damit neue und umbenannte Blätter bekannt sind), dazu `tab_step`, `on_tab_move`, `tab_set_color`, `tab_custom_color`, `tab_rename` (benennt `ws.rename_sheet` um und führt `graph_state["pos"]` und `["view"]` nach, die nach dem Namen geordnet sind), `duplicate_sheet` (`ws.Copy(name, copydata=True)` wie im Tk-Menü; **hat die Quelle Formen (Symbole, Testtasten), zusätzlich `setData(getData(), copyshapes=True)`**, weil `Copy` nur die Zellen kopiert; die Kopie bekommt die Reiterfarbe wie in Excel), `tab_duplicate`; `ui.add_body_html` fügt `mll_tabs.js` ein und `ui.on("mll_tab_move")`. `workbook_signature` enthält jetzt Name und Reiterfarbe (sonst hätte die automatische Sicherung eine Umbenennung oder Farbe nicht bemerkt; die Reihenfolge war über die Liste der Kennungen schon enthalten). CSS: `[data-tabc]` mit den Variablen, der gewählte farbige Reiter mit `linear-gradient(to bottom, var(--tab-mid), var(--tab-light) 55%, #ffffff)` und Streifen in der Farbe, `.mll-tab-dragging`, `.sheet-tabs { position: relative }` für die Marke. Die Rückmeldungen im Menü sind Lambdas ohne Parameter (NiceGUI gäbe einem Handler mit Parametern das Klick-Ereignis mit).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `ExcelAPI/XLA_Application.py` | 1.14 | `tab_color`, `set_tab_color`, `reorder_sheets`, `apply_sheet_layout`, `rename_sheet` führt den Reiter-Rahmen nach, `SheetOrder` und `TabColors` im Sichern und Laden |
+| `_web/web_sheet_tabs.py` | 1.01 | neu: Farben, Namen, Reihenfolge, Kontextmenü, Fenster |
+| `_web/mll_tabs.js` | 1.00 | neu: Reiter mit Alt + Maustaste ziehen |
+| `webmobaledlib.py` | 2.63 | Reiter, Handler, Signatur der automatischen Sicherung, CSS |
+| `csv/Web_Languages.csv` | - | 916 Einträge (22 neu, davon eine Nachlieferung zu 2.62) |
+| `install/ANLEITUNG_Installation.md` | 3.18 | Abschnitt 2.9a |
+| `install/BETATEST_Checkliste.md` | 1.89 | Punkte 125 bis 127 |
+
+**Tests:** neu `test_sheet_tabs.py` (88): Farben (Leuchtdichte, Schriftfarbe für ausgesuchte Farben und **3000 zufällige Farben mit mindestens 3 : 1**, Mischen, Stil), Namen (alle Fehlerfälle, Schreibweise, eigener Name, reserviert, 31 Zeichen), `unique_name`, `plan_move` und `plan_step` (verborgene Blätter, Randfälle, keine Änderung), `build_tab` mit nachgebauter Oberfläche (Aufbau, Reihenfolge der Einträge, 20 Farbfelder, Rückmeldungen, Ausgrauen), `ask_name` und `ask_color` mit nachgebauten Fenstern (Fehler bleibt im Fenster, Eingabetaste, Abbrechen), Excel-Schicht am **echten Arbeitsbuch** (`reorder_sheets`, `set_tab_color`, `rename_sheet` mit Kopie, Sichern und **LoadWorkbook** einer Datei mit und ohne `SheetOrder`/`TabColors`, kaputte Werte), die Behandlungsfunktionen des Hauptprogramms **ausgeführt** mit dem echten Arbeitsbuch (Verschieben per Menü und Ereignis, ungültige Ereignisse, Farbe, Umbenennen mit Nachführen der Grafik-Verzeichnisse, Duplizieren mit echter Kopie, Fehler beim Kopieren, Formen), Node-Test für `mll_tabs.js` (alle Wege). Alle anderen Reihen laufen weiter. **Nicht geprüft:** das Aussehen im Browser (Farbverlauf, Marke), das Verhalten des Kontextmenüs und des Untermenüs auf dem Tablet, das Ziehen mit echter Maus, Duplizieren mit Symbolen und Testtasten im laufenden Programm (im Test hat das Blatt keine Formen; der Zweig ist mit Ersatzobjekten geprüft) und das Erzeugen des Arduino-Programms aus einer Kopie. **Bekannte Grenze:** Nach einem Neustart legt das Programm gesicherte Kopien aus dem Muster DCC an, danach kommen ihre Daten (wie bisher bei jedem gesicherten Blatt).
+
+## 2.62 (2026-11-01)
+
+**Patterngenerator: Beschreibung des Blatts aus msoTextBox0, änderbar, beim Speichern wieder als msoTextBox0** (Entwickler: „Text wird beim Einlesen der MLL_PCF-Datei nicht übernommen. msoTextBox0 soll in die Beschreibung übernommen werden. Beschreibungsfeld änderbar machen, und beim Speichern in MLL_PCF diesen Text als msoTextBox0 übernehmen“).
+
+**Ausgangslage:** Die Web-Oberfläche legt Textfelder nicht an. `HeadlessPatternGeneratorPage.object_lines_in_file` merkt die Zeilen `msoTextBox*` und `msoFormControl*` samt Folgezeilen je Blatt in `ws.persistent_controls_dict["pcf_objects"]` und `save_sheets` schreibt sie unverändert wieder in die Datei. Die „Beschreibung“ auf der Seite war nur der feste Hilfetext der Seite (`info_text`, Text_Box1 des Blatts Main), nicht der Text des geladenen Blatts.
+
+**Format** (aus den Beispieldateien): `msoTextBox<Sprache>¯links;oben;breite;höhe¯Text`, mehrzeilige Texte in Folgezeilen ohne Trennzeichen; Format hinten als `{Attrib}` mit Einträgen `B Anfang,Ende` (fett) und `F Anfang,Ende,Farbe`, **die zweite Zahl ist das Ende** (wie `M08.Load_Textbox`: Länge = Ende - Anfang + 1), `|` ist ein Zeilenumbruch. Sprachen: 0 Deutsch, 1 Englisch, 2 Niederländisch, 3 Französisch; alte Dateien ohne Nummer (`msoTextBox`).
+
+**Umsetzung** (`headless/headless_pattgen.py` 1.20, `_web/web_pattgen.py` 1.21):
+- Reine Funktionen: `parse_text_boxes(lines)` (Textfelder mit Sprache, Lage, Text, Format, Zeilenbereich), `description_box` (msoTextBox0, sonst alte Datei ohne Nummer; eine **einzeilige Überschrift mit Farbe (F…) ist nie die Beschreibung**; sonst das Textfeld mit dem längsten Text; in den Beispielen hat nur das Blatt Morsecode zwei), `description_text`, `clean_description` (Zeilenumbrüche, Tabulator → Leerzeichen, Trennzeichen der Datei → `-`, `|` → `/`, `{Attrib}` → `(Attrib)`, Leerraum am Ende weg), `set_description_lines(lines, text)` → (neue Zeilen, geändert).
+- Ersetzen: gleicher Text → nichts; neuer Text → die Zeile `msoTextBox0` mit der bisherigen Lage (die **Höhe wächst und schrumpft mit der Zahl der Zeilen**, mindestens 20,8315) und Folgezeilen; leerer Text entfernt das Textfeld mit seinen Folgezeilen; fehlte es, entsteht eins mit der Lage `637.2;38.99992;522.3` und passender Höhe, hinter den übrigen Zeilen; ein altes `msoTextBox` wird zu `msoTextBox0`; **alle anderen Zeilen** (Überschrift, andere Sprachen, Formularknöpfe) **bleiben genau**. Das **Format** (fetter Anfang) bleibt (`_kept_attrib`, `{Attrib}` hinten an der letzten Zeile wie bei Excel), wenn der Text bis zum letzten formatierten Zeichen derselbe ist (Zeilenumbrüche zählen sicherheitshalber doppelt, weil Excel sie je nach Version als ein oder zwei Zeichen zählt); sonst entfällt es.
+- Klasse: `description(ws)` und `set_description(ws, text)` (legt das Wörterbuch an, setzt es auch am `tksheet`, lässt andere Einträge (Bilder) stehen). Gesichert wird wie bisher: `save_sheets` hängt `pcf_objects` an die Datei.
+- Seite: `PatternView` hat statt des festen Hilfetexts ein `ui.textarea` in der Aufklappliste „Beschreibung“ (`debounce=600`); `show()` ruft am Ende `update_description(ws)` (Datenblatt: Text von msoTextBox0, änderbar; Main: Hilfetext, `readonly`, ausgeblendet ohne Text); `on_description_change` speichert (nicht während die Seite das Feld selbst setzt, nicht auf Main, Fehler werden protokolliert).
+- **Nicht geändert:** Texte der anderen Sprachen (Englisch usw.) bleiben beim Ändern der deutschen Beschreibung stehen; sie werden in der Web-Oberfläche nicht angezeigt.
+- **Fund am Rande:** Im Paket liegt eine **veraltete Kopie `pattgen/headless_pattgen.py` (1.10)**, die niemand importiert (das Programm benutzt `headless/headless_pattgen.py`, 1.20); meine erste Änderung ging versehentlich dorthin und wurde verworfen. Die Kopie kann aus dem Ordner gelöscht werden.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `headless/headless_pattgen.py` | 1.20 | `parse_text_boxes`, `description_box`, `set_description_lines`, `description`, `set_description` |
+| `_web/web_pattgen.py` | 1.21 | Feld „Beschreibung“ änderbar, folgt dem Blatt |
+| `webmobaledlib.py` | 2.62 | Version, benötigte Dateien |
+| `install/ANLEITUNG_Installation.md` | 3.17 | Absatz „Beschreibung“ |
+| `install/BETATEST_Checkliste.md` | 1.88 | Punkt 124 |
+
+**Tests:** neu `test_pattgen_description.py` (42): alle Beispieldateien (kein Fehler, mindestens 50 Blätter mit Beschreibung), Basic/Morsecode (zwei Textfelder: lange Beschreibung statt Überschrift, drei Zeilen), Ersetzen (derselbe Text, ein- und mehrzeilig mit wachsender Höhe, Leeren, Blatt ohne Textfelder, nur Formularknopf, alte Datei ohne Nummer, nur Überschrift, `|`, Sonderzeichen, Eingabe unverändert), Format (am Ende erweitert, letzter Satz, Anfang geändert, gekürzt, `_kept_attrib`), Rundreise über Dateien (UTF-8 und cp1252), Datei aus Excel (cp1252) aus dem Upload, Seitenmethoden, `PatternView` mit Ersatzobjekten. **Nicht geprüft:** das Aussehen des Felds im Browser und das Öffnen der gespeicherten Datei im Excel-Programm (Lage und Höhe des Textfelds, fetter Anfang).
+
+## 2.61 (2026-11-01)
+
+**Testtasten der Tabelle auch in der Kette und in der Anlage** (Entwickler: „die Testbuttons aus der Tabelle sollten auch in der Kette und der Anlage bei den Icons verfügbar sein und dieselbe Funktionalität haben“; Antworten: unter dem Symbol, mit der Größe skaliert, nur bei Zeilen mit Testtasten, bei sehr kleinen Kästchen ausgeblendet).
+
+- **Daten:** `graph_test_buttons(ws)` (Hauptprogramm) macht aus `test_button_data` je Zeile (0-basiert, wie `node["row"]`) eine Liste `[{n: Name, c: Farbe, t: Text}]` in der Reihenfolge, die der Server in `tb_shape` benutzt (nach Spalte, in der Zelle von links nach rechts): Der **Index in der Liste ist das k** des Ereignisses `mll_tb`. `headless_graph.build_model(..., tests=)` 1.03 legt sie als `node["tests"]` an (Kopie, ohne Angabe `[]`).
+- **Darstellung:** `mll_graph.js` 1.13: `testsHtml(n, box)` baut `<span class="mll-g-tb" data-tb-row data-tb-k>` unter dem Symbol; Farbe nur `#rgb`..`#rrggbbaa` (sonst `#ff8080`), Text und Name maskiert; **ab 50 Pixel** Kästchengröße (`TEST_MIN`), in der Kette mit `--cs` der Kette, in der Anlage mit `--cs` der Kästchengröße (die Kästchen tragen jetzt `--cs`). Die Tasten haben **kein `data-row`**, und `hit()` liefert für ein Ziel in einer Taste `null`: ein Druck wählt kein Kästchen aus.
+- **Ereignisse:** `installTests` (in `install` als **erster** Hörer, vor dem Ziehen der Anlage): `pointerdown` auf eine Taste sendet `mll_tb {row, k, phase: "down"}` (`preventDefault`, `stopPropagation`, `stopImmediatePropagation`: kein Ziehen des Kästchens, kein Verschieben der Fläche); `pointerup` und `pointercancel` kommen **vom Fenster** (`window`), weil das Kästchen beim Druck neu gezeichnet wird (der Server zeichnet nach der Taste die Grafik neu) und das Ereignis sonst verloren ginge. Die Anlage hat zusätzlich eine Sperre im eigenen `pointerdown`. Der Server (`on_testbutton`, unverändert) ruft nach `show(ws_)` jetzt **`refresh_graph(ws_, True)`** auf, weil sich bei einem Umschalter nur Farbe und Text der Form ändern, nicht die Version der Tabelle (`refresh_graph` ohne Zwang hätte nichts gezeichnet).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/mll_graph.js` | 1.13 | `testsHtml`, `installTests`, `hit` |
+| `headless/headless_graph.py` | 1.03 | `tests` im Knoten |
+| `webmobaledlib.py` | 2.61 | `graph_test_buttons`, `refresh_graph`, `on_testbutton` |
+
+**Tests:** neu `test_graph_tests.py` (18): `graph_test_buttons` am echten Blatt (der Index k trifft in `tb_shape` genau die Taste mit demselben Namen, Farben, Zeilen), `build_model` mit und ohne `tests`, Darstellung in Kette und Anlage (Anzahl, Grenze 49/50, Felder, Maskierung, ungültige Farbe, `--cs`), Ereignisse (down, up am Fenster, cancel, rechte Taste, kein Ziel, ohne `window`), die Sperre in der Anlage. `test_graph`, `test_graph_page`, `test_graph_page2` angepasst (Namensraum, Selektor in `closest`, Liste der Hörer). **Nicht geprüft:** Testtasten mit echtem Arduino und das Verhalten auf dem Tablet.
+
+### Handkorrekturen des Entwicklers in 2.61 (übernommen, 2026-11-01)
+
+Der Entwickler hat zwei Fehler von Hand in seinem Arbeitsordner korrigiert (Zeilen mit `# v2.61` markiert) und die Dateien hochgeladen; sie sind jetzt im Arbeitsstand und gehen in die nächsten Pakete (Kopfzeilen und Verlauf nachgetragen):
+- **`ExcelAPI/XLA_Application.py` 1.13:** `Application.RoundUp(v1, 0)` gab bei einer ganzen Zahl `v1` unverändert zurück (aus `3.0` wurde `3.0`, `1.0` statt `1` in der Übergabe, weil ROUNDUP nur ganze Zahlen liefern darf); jetzt `return int(v1)`. Zeile 5033, die alte Zeile bleibt als Kommentar. **Beobachtung, nicht geändert:** Für Zahlen mit Nachkommastellen rechnet `RoundUp` mit `int(v1 + 1)`: bei **negativen** Zahlen (zum Beispiel `-1.5`) kommt `0` statt `-2` heraus (Excel rundet von null weg); in den Tabellen kommen negative Werte wahrscheinlich nicht vor.
+- **`proggen/M50_Exchange.py` 1.02:** In der Abfrage „Welcher LED Kanal soll verwendet werden?“ hieß Punkt 3 „Optionale LED Gruppe 2“; jetzt „Optionale LED Gruppe 3“ (Zeile 104, die alte Zeile bleibt als Kommentar).
+- **Offen (Übersetzungen):** Das Blatt **Languages** (in der Arbeitsmappe `csv/Prog_Generator_MobaLedLib.xlsm`; die Dateien `csv/*.csv` werden nicht geladen, die Einträge heißen dort `Filenamex`) enthält den alten Text mit „Gruppe 2“ bei Punkt 3 in **allen sieben Sprachspalten**. Die Suche (`Find_Language_Str_Row`, nur die ersten Zeichen) findet für den neuen deutschen Text die **alte Zeile** und liefert deshalb in den anderen Sprachen weiter „… 3 = … 2“, bis die Zeile in der Arbeitsmappe geändert ist (nur im Blatt Languages der Arbeitsmappe möglich; eine Änderung der Datei `csv/Languages.csv` bleibt ohne Wirkung und wurde wieder verworfen). Deutsch ist richtig.
+
+## 2.60 (2026-11-01)
+
+**Grafik: Größe der Kästchen in der Kette, mehrere markierte Kästchen gemeinsam ziehen, verschiebbare Trennlinie** (Entwickler: Punkte 1 bis 3; Antworten: Größe **getrennt** von der Anlage, Trennlinie **für alle Blätter gemeinsam**).
+
+- **Größe der Kette:** `layout["chain_size"]` (Standard 140, Bereich 30 bis 300 wie die Anlage, je Blatt, auch in `.MLL_view`; alte Layouts bekommen 140; `GL.clamp_chain_size`, bei Unsinn 140). Der Schieber ist in beiden Ansichten sichtbar und zeigt die Größe der **aktuellen** Ansicht (`plant_controls`); `on_graph_layout("size")` ändert in der Kette `chain_size` (Rückgängig-Eintrag, das Journal sichert jetzt `chain_size` mit). `view_model(model, plant, chain_size)` gibt es an die Seite; `mll_graph.js` 1.12: CSS-Variable `--cs` am Behälter `.mll-g`, Kästchen, Symbol, Schrift (`max(8px, …)`), Linie, Mindestbreite der Kette mit `calc(var(--cs) * Faktor)` (bei 140 genau die alten Werte); das Symbol wählt die Datei nach der Größe.
+- **Mehrfachzug:** `dragRows(el, row, channel)` (Mehrfachauswahl, wenn das gezogene Kästchen dazugehört, sonst nur das Kästchen): `{rows, channel}` oder `{mixed: true}` (markierte Kästchen in verschiedenen Ketten oder in „Ohne LEDs“). Bei `mixed` bricht `dragstart` ab und meldet `move_mixed` (Meldung „…liegen in verschiedenen Ketten…“). Sonst gehen `target.rows` (nach Zeile sortiert) mit der Meldung `move` oder `delete` (Papierkorb) an den Server; ein markiertes Kästchen als Ziel wird nicht angenommen; alle Mitgezogenen sind abgeblendet. Server: `graph_ops.plan_move_many` (alle in **einer** Kette, behalten ihre Reihenfolge, stehen zusammen vor oder hinter dem Ziel oder am Ende; kein Plan bei „liegt schon so“, Ziel in der Auswahl, anderer Kette) und `move_many` (Knoten für Knoten mit `plan_move` und frisch gebautem Modell, vor dem Ziel in der Reihenfolge, dahinter in umgekehrter; LED-Nummern werden neu gerechnet). Danach ist der erste der bewegten Kästchen gewählt.
+- **Trennlinie:** `GraphPanel` erzeugt `div#mll-splitter` (9 Pixel, `cursor: row-resize`, `touch-action: none`, anfangs unsichtbar) nach der Grafik; `set_visible(visible, both)` ruft `mllGraph.split(both)`. `mll_graph.js`: `split(both)`; die obere Fläche (`.mll-graph-wrap`) bekommt `flex: 0 0 <Pixel>`, die untere (`.mll-grid-wrap`) bleibt `1 1 0`; gemessen wird die Gesamthöhe aller drei Teile nach einem Zurücksetzen auf `1 1 0`; Anteil 0,12 bis 0,88, gespeichert in `localStorage["mll_split"]` (ein Wert für alle Blätter), Doppelklick Mitte, beim Loslassen ein `resize`-Ereignis (die Tabelle passt sich an), neu angewendet beim Ändern der Fenstergröße.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `headless/headless_graph_layout.py` | 1.04 | `chain_size`, `clamp_chain_size` |
+| `headless/headless_graph_ops.py` | 1.07 | `plan_move_many`, `move_many` |
+| `_web/web_graph.py` | 1.13 | Schieber in beiden Ansichten, Trennlinie, `chain_size` |
+| `_web/mll_graph.js` | 1.12 | Größe der Kette, Mehrfachzug, Trennlinie |
+| `webmobaledlib.py` | 2.60 | Größe der Kette, Rückgängig, Befehle `move` mit rows und `move_mixed`, Trennlinie |
+| `csv/Web_Languages.csv` | - | 893 Einträge |
+
+**Tests:** neu `test_graph_many.py` (37: `plan_move_many` und `move_many` am echten Blatt mit **allen** Fällen von 2 und 3 markierten Kästchen von 5 vor und hinter jedem anderen und ans Ende, Grenzfälle, LED-Nummern und Kennungen; Größe der Kette im HTML, CSS, `chainBox`; `dragRows` und alle Zug-Fälle; Trennlinie mit gespeicherter Stellung, Ziehen, Begrenzung, Loslassen, Doppelklick, Fenstergröße, rechte Taste), `test_graph_panel.py` (13: das echte `GraphPanel` mit Ersatzobjekten: Trennlinie, Sichtbarkeit der Bedienelemente je Ansicht, `set_visible`, `view_model`), erweitert `test_graph_cmd`, `test_graph_plant`, `test_graph_layout`. **Nicht geprüft:** das Aussehen im Browser (vor allem die Trennlinie und die Anpassung der Tabelle beim Ziehen, Tablet).
+
+## 2.59 (2026-10-30)
+
+**Hilfe → Update Testversion** (Entwickler: GitHub kennt Pre-Releases, `releases/latest` liefert sie nie; Tester und Entwickler sollen das neueste Release mit einem Klick bekommen). **Entscheidungen des Entwicklers:** (1) immer das **neueste Release, egal ob Pre-Release oder final**; (2) **vorher fragen**, ob man wirklich eine Testversion haben möchte; (3) Kennzeichnung nur im Bestätigungsfenster, nicht im Titel (die Version steht dort richtig).
+
+**Umsetzung:**
+- `_web/web_update.py` 1.09: `api_url()` (Standard `https://api.github.com/repos/haroldlinke/WebMLL/releases`, mit `MLL_UPDATE_API_URL` ersetzbar), `pick_release(Liste)` und `newest_release()`. Gewählt wird das **neueste nach `published_at`** (sonst `created_at`) unter den Releases, die **kein Entwurf** sind und den Anhang **`webmobaledlib.zip`** mit `https`-Adresse haben (ein neueres Release ohne Anhang wird übersprungen). Ergebnis `{tag, name, prerelease, date, url, size}`. GitHub-Fehler (403 und 429 = Abfragegrenze von 60 je Stunde, andere Codes, kein Netz, Zeitüberschreitung, kein JSON, keine Liste) werden zu `UpdateError` mit einer Meldung (übersetzt); der Rest des Updates (`download`, `prepare`, `apply`, Prüfliste, Zurückgehen) ist unverändert.
+- `webmobaledlib.py` 2.59: `run_update(test)` (vorher `update_program`): Mit `test=True` öffnet das Fenster mit der **Rückfrage** (Text, Standardknopf **Abbrechen**, Knopf **Testversion suchen**), erst dann `check()` mit `wu.newest_release` und dem Download von `url`; die Anzeige beginnt mit „Testversion: {Name} (Pre-Release|Release, veröffentlicht am {Datum})“, dazu der Hinweis „kann Fehler enthalten“. `update_program()` und `update_test_program()` sind **Wrapper ohne Parameter** (NiceGUI gibt einem Handler mit Parametern das Klick-Ereignis mit; `test` wäre immer wahr gewesen). Menü Hilfe: „Update webMobaLedLib …“, danach „Update Testversion …“.
+- Katalog 891 Einträge (13 neu, alle sechs Sprachen).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_update.py` | 1.09 | `newest_release`, `pick_release`, `api_url` |
+| `webmobaledlib.py` | 2.59 | `run_update(test)`, Rückfrage, Menü, Version |
+| `csv/Web_Languages.csv` | - | 891 Einträge |
+| `install/ANLEITUNG_Installation.md` | 3.15 | Abschnitt 7.1a Testversion |
+| `install/BETATEST_Checkliste.md` | 1.86 | Punkt 120 |
+
+**Tests:** neu `test_update_testversion.py` (30): `pick_release` (Pre-Release neuestes, normales neuestes, Reihenfolge der Liste egal, Entwurf, Release ohne Anhang, Adresse ohne https, ohne `published_at`, Nicht-Einträge, leere Liste, nur Entwürfe, nur ohne Anhang); `newest_release` mit nachgebautem GitHub (Adresse mit `per_page=30`, Kennung und Accept-Kopf, `MLL_UPDATE_API_URL`, HTTP 403, 429, 404, 500, kein Netz, Zeitüberschreitung, kein JSON, keine Liste); der **Dialog** `run_update` wirklich ausgeführt mit Ersatzobjekten (Rückfrage zuerst, GitHub und Download erst nach „Testversion suchen“, Abbrechen, Pre-Release und Release in der Anzeige, GitHub-Fehler im Fenster, normales Update ohne Rückfrage und mit der Adresse von `releases/latest`); Wrapper ohne Parameter; Menüreihenfolge; Katalog. Zwei ältere Prüfungen sind angepasst: `test_install_check` prüft Mindestversionen („ab“), `test_e2e_real` hat weitere Spannen (viele Dateien seit 2.05: 244 Symbole). **Alle Reihen laufen.** **Nicht geprüft:** die echte Antwort von GitHub (kein Netz hier; Aufbau der Antwort nach der Beschreibung der API: `tag_name`, `name`, `prerelease`, `draft`, `published_at`, `assets[].name`, `browser_download_url`), das Aussehen des Fensters im Browser, Verhalten hinter Proxys.
+
+## 2.58 (2026-10-30)
+
+**Kette und Anlage zeigten noch die alten Symbole, der Makrobaum die neuen** (Entwickler nach dem Einspielen von 2.57, auch nach Strg+F5).
+
+**Ursache:** Die Formen (Shapes) der Tabelle heißen `X.bmp`: `M27_Sheet_Icons` setzt `__Icon_Ext = '.bmp'` und `Add_Icon` legt `.../icons/<Name>.bmp` ab (das Excel-Programm und Tk laden BMP; `XLA_Application` fällt für Tk auf `.png` zurück, wenn `tk.PhotoImage` die BMP nicht liest). `collect_icons` machte aus dem Namen der Form die Adresse `/mll_icons/X.bmp`, und der Browser bekam die **alte BMP-Datei mit 16 × 16 Pixeln**. Der Makrobaum nimmt dagegen immer `icons/<Name>.png`. Meine Änderung in 2.57 betraf nur die PNG und konnte die Kette und die Anlage deshalb nicht erreichen; der Test hatte die Namen der Formen nicht nachgebildet.
+
+**Behoben** (`webmobaledlib` 2.58, `collect_icons`): Heißt die Form `X.bmp` (auch mit Windows-Pfad und der Endung `.BMP`) und gibt es `icons/X.png`, wird das PNG geliefert; ohne PNG bleibt die BMP; eine Form mit `.png` bleibt PNG. Dadurch bekommen auch `icon_large_url` (Name `X.png` in `icons_gross`) und die Tabelle (Symbole je Zeile) die neuen Symbole. Die BMP-Dateien bleiben für das Excel- und das Tk-Programm unverändert im Ordner.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 2.58 | `collect_icons`: PNG statt BMP |
+| `install/ANLEITUNG_Installation.md` | 3.14 | Version |
+| `install/BETATEST_Checkliste.md` | 1.85 | Punkt 119 ergänzt |
+
+**Tests:** `test_icons_gross.py` (jetzt 15): `collect_icons` mit nachgebauten Formen (`Heartbeat.bmp`, Windows-Pfad `...\LightBulb.bmp`, `House.png`, `Ampel.bmp` ohne neues Symbol, fehlende Datei, `Heartbeat.BMP`): Adresse des PNG, ohne neues Symbol das vorhandene; keine BMP-Adresse, wenn es ein PNG gibt. **Nicht geprüft:** die Darstellung im Browser; die Groß- und Kleinschreibung auf Linux (dort muss der Name der Form genau zum Dateinamen passen, wie bisher).
+
+## 2.57 (2026-10-30)
+
+**Symbole in hoher Auflösung** (Entwickler: Symbole in 400 × 400 Pixel mit Alphakanal von einem Anwender, gleiche Namen wie die kleinen BMP; „die zwei Größen sind ok“; nicht alle Symbole sind schon umgesetzt, für die übrigen gelten die alten).
+
+**Befund:** Makrobaum (22 Pixel), Tabelle und Kopfzeile benutzen die **PNG** in `icons/` (nicht die BMP, die gehören zum Excel- und Tk-Programm); die Grafik zeigt die Symbole in der Kette mit 48 und in der Anlage mit der halben Kästchengröße (bis 150 Pixel) und zog die 16-Pixel-Symbole unscharf hoch. `M27.Add_Icon` setzt die Größe der Form selbst (`addPicture(..., __Icon_Size, __Icon_Size)`): Die Pixelzahl der Datei ändert weder Zeilenhöhen noch Positionen. **ZIP des Anwenders:** 122 PNG (plus 122 Dateien `__MACOSX` ohne Wert), davon 113 mit 400 × 400, einige nicht quadratisch (zum Beispiel LightBulb 335 × 400, Heartbeat 400 × 375, House 397 × 400, Bluelight2 400 × 388, CopyLEDs 400 × 389), eines ohne Alphakanal (HSV, RGB); **90 haben ein altes Gegenstück** in `icons/`, **32 sind neue Namen** (zum Beispiel Bluelight, Bluelight2, CopyLEDs, Dependence_Original, Info*, Mono*, Pin*). 3,1 MB für 122 Symbole: alle 470 hätten rund 12 MB ergeben; deshalb zwei Größen.
+
+**Umsetzung:**
+- **`install/make_web_icons.py` 1.00** (neu; braucht Pillow nur zum Erzeugen, nicht zur Laufzeit): macht aus den Vorlagen `icons/<Name>.png` mit **64 × 64** und `icons_gross/<Name>.png` mit **200 × 200**. Nicht quadratische Vorlagen werden mit durchsichtigem Rand mittig ergänzt (Seitenverhältnis bleibt), RGB wird RGBA, verkleinert wird mit vormultiplizierter Farbe (`RGBa`, Lanczos: kein dunkler Saum an durchsichtigen Rändern). Alte Dateien werden nur überschrieben, wenn es eine neue Vorlage gibt. Neu im Release: **122 + 122 Dateien**, rund 430 KB und 1,5 MB.
+- **Hauptprogramm 2.57:** Route `/mll_icons_gross` (Ordner `icons_gross`); `icon_large_url(url)` liefert das Gegenstück (mit Zwischenspeicher je Dateiname) oder `""`; `build_model(..., icon_large=icon_large_url)` setzt `icon_large` in jeden Knoten (`headless_graph` 1.02, Vorgabe `None`: alte Aufrufe gehen weiter).
+- **`mll_graph.js` 1.11:** `iconSrc(n, cssPx, dpr)` nimmt `icon_large`, wenn `cssPx × devicePixelRatio > 64` (Kette 48 Pixel: normaler Bildschirm klein, Retina groß; Anlage halbe Kästchengröße: ab 66 Pixel Kästchen bei 1× groß; Makrobaum 22 Pixel immer klein), sonst das kleine; ohne Gegenstück das kleine.
+- **Originale:** Die 400er liegen bei den Ergebnissen (`icons_original/`, 122 Dateien), **nicht** im Release.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `install/make_web_icons.py` | 1.00 | neu: zwei Größen aus den Vorlagen |
+| `icons/*.png` | - | 122 Symbole (64 × 64), 90 ersetzt, 32 neu |
+| `icons_gross/*.png` | - | neu: 122 Symbole (200 × 200) |
+| `headless/headless_graph.py` | 1.02 | `icon_large` im Knoten |
+| `_web/mll_graph.js` | 1.11 | `iconSrc` |
+| `webmobaledlib.py` | 2.57 | Route, `icon_large_url`, Aufruf |
+| `install/ANLEITUNG_Installation.md` | 3.13 | Abschnitt Symbole |
+| `install/BETATEST_Checkliste.md` | 1.84 | Punkt 119 |
+
+**Tests:** neu `test_icons_gross.py` (13): 122 Symbole mit Gegenstück in `icons/`, alle 64 und 200 Pixel quadratisch und RGBA (auch HSV und die nicht quadratischen), durchsichtiger Rand bei LightBulb, kein dunkler Saum, Platzbedarf, keine `__MACOSX`-Dateien, `iconSrc` in Node (alle Fälle: 1×/2×, Grenze 64, Anlage, ohne Gegenstück, ohne Symbol, ohne `devicePixelRatio`), `icon_large_url`, Signatur von `build_model`. Die Seitentests (`test_graph_page`, `test_graph_page2`) bekamen die neue Funktion in den Namensraum. **Alle Reihen laufen.** **Nicht geprüft:** die Darstellung im Browser (Schärfe, Dunkelmodus, Tablet), das Verhalten des Raspberry Pi beim Laden (200 × 200 mit rund 13 KB je Symbol).
+
+## 2.56 (2026-10-30)
+
+**Git-Knopf: nur halb sichtbar, und keine Meldung während der Installation** (Entwickler nach dem Test von 2.54/2.55; Kompilieren und Hochladen funktionieren danach).
+
+**1. Knopf und Text abgeschnitten:** Die Optionskarte (`ui.card`, in NiceGUI eine Spalte mit `display: flex`) bekam in 2.52 `max-height: 96vh; overflow-y: auto`. Die Kinder einer solchen Spalte dürfen schrumpfen (`flex-shrink: 1`); die Reiterfläche (`q-tab-panels`, `overflow: hidden`) schrumpfte, statt dass die Karte scrollte, und schnitt den untersten Knopf und die Texte ab. Mit dem dritten Knopf im Reiter Entwicklungsumgebung (Git installieren, neben PlatformIO prüfen und USB-Zugriff für den Pico) reichte die Höhe nicht mehr. **Behoben** (`web_form_options` 1.14): Die Karte trägt die Klasse `mll-optcard`, und `ui.add_css(".mll-optcard > * { flex-shrink: 0; }")` verbietet das Schrumpfen; die Karte scrollt dann selbst. Das gilt für alle Reiter der Optionen (auch die Boardauswahl aus 2.52).
+
+**2. Hinweisfenster:** `_web_install_git` zeigt vor dem Aufruf von `Setup_Git` ein Fenster mit Drehzeichen und dem Text „Git wird installiert. Das Betriebssystem fragt gleich nach dem Passwort. Die Installation kann mehrere Minuten dauern, bitte warten ...“ und schließt es danach (auch bei einem Fehler: `try`/`finally`). Neu `web_dialogs.show_busy(text, title)` und `hide_busy(handle)` (`web_dialogs` 1.08; aus dem Arbeitsfaden, ohne Seite: `None`); der Optionsdialog ist in dieser Zeit geschlossen (die Schleife öffnet ihn nach der Aktion neu), das Fenster steht also auf der Hauptseite. Auch für spätere lange Aktionen verwendbar (zum Beispiel `udev`-Regel, Firmware schreiben).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_form_options.py` | 1.14 | Karte `mll-optcard` und CSS, Hinweisfenster bei Git installieren |
+| `_web/web_dialogs.py` | 1.08 | `show_busy`, `hide_busy` |
+| `webmobaledlib.py` | 2.56 | Versionen |
+| `csv/Web_Languages.csv` | - | 878 Einträge |
+| `install/ANLEITUNG_Installation.md` | 3.12 | Hinweisfenster |
+| `install/BETATEST_Checkliste.md` | 1.83 | Punkt 118 erweitert |
+
+**Tests:** `test_options_ide.py` (35): Regel `.mll-optcard > *` mit `flex-shrink: 0` und Klasse an der Karte; das Hinweisfenster erscheint vor `Setup_Git` und wird nach Erfolg und Fehler geschlossen, bei schon vorhandenem git gar nicht. `test_git_install.py` (20): `show_busy` und `hide_busy` mit Ersatz für NiceGUI (ohne Seite `None`, Fenster mit Drehzeichen, Titel und Text, geöffnet, geschlossen und entfernt). **Nicht geprüft:** die Darstellung im Browser (ob der Reiter jetzt vollständig sichtbar ist, bei niedrigem Bildschirm mit Bildlaufleiste), das Drehzeichen und die Reihenfolge von Hinweisfenster und Passwortfenster des Systems.
+
+## 2.55 (2026-10-30)
+
+**Fehler beim Start der Version 2.54: `NameError: name 'F00' is not defined`** (Entwickler mit Protokoll, `webmobaledlib.py` Zeile 3989 in `build_page`). **Ursache:** In 2.54 stand beim Knopf **Online Wiki** `is_wiki = func is F00.Help_Button_Click` in `build_page`; `F00` ist dort nicht sichtbar (`toolbar_buttons` bindet es nur in sich selbst), die Seite ließ sich nicht aufbauen. Mein Test hat nur geprüft, ob der **Quelltext** diese Zeile enthält, und sie damit sogar festgeschrieben; die Seite selbst lässt sich in der Prüfumgebung nicht aufbauen (kein NiceGUI). **Behoben:** `is_wiki = icon == "Btn_Help.png"` (das Symbol ist die Kennung des Knopfes). **Neu:** `test_undefined_names.py` (52): liest `webmobaledlib.py`, `_web/*.py` und `headless/*.py` und meldet jeden Namen, der in einer Funktion oder Klasse gelesen wird, aber nirgends gebunden ist (Parameter, Zuweisung, Import, Funktion, Schleife, Ausnahme; Modulebene; eingebaute Namen). Er findet genau diesen Fehler (eigener Test mit einer Nachbildung) und lief über alle 50 Dateien sauber. **Grenzen:** er prüft nicht, ob ein Name im richtigen Bereich steht (er hätte einen Namen nicht gemeldet, der in einer anderen Funktion desselben Moduls gebunden wird) und überspringt Dateien mit `from ... import *` (die meisten Dateien unter `proggen`). `test_help_wiki.py` prüft den Knopf jetzt mit dem neuen Ausdruck und dass `F00` dort nicht mehr vorkommt.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 2.55 | Knopf Online Wiki: Kennung über das Symbol |
+| `install/ANLEITUNG_Installation.md` | 3.11 | Version |
+| `install/BETATEST_Checkliste.md` | 1.82 | Version |
+
+## 2.54 (2026-10-30)
+
+**1. Knopf „Git installieren“ (Linux)** (Entwickler: „Ja, bitte einbauen“, zur Frage nach einem Knopf wie dem für die udev-Regel). **2. Knopf „Hilfe“ heißt „Online Wiki“ und öffnet das Wiki in einem neuen Tab.**
+
+**1. Git installieren:** Der Knopf steht in den Optionen im Reiter **Entwicklungsumgebung** neben **USB-Zugriff für den Pico einrichten**, **nur unter Linux und nur, wenn `git` fehlt** (`M08.Git_Installed` = `shutil.which("git")`, geprüft beim Öffnen des Dialogs). Er ruft `M08.Setup_Git` auf: `pkexec /bin/bash install/install_git.sh` (Passwortabfrage des Systems, Zeitlimit **15 Minuten**, weil `apt-get update` dauern kann). **`install/install_git.sh` 1.00** erkennt `apt-get`, `dnf`, `pacman` und `zypper` (in dieser Reihenfolge), installiert `git`, prüft danach, ob es da ist (Ergebnis 3, wenn nicht), meldet 2 bei unbekannter Paketverwaltung und 1 ohne Administratorrechte; mit `MLL_GIT_DRYRUN=1` zeigt es nur die Befehle. Ist `git` schon da, sagt es das (Ergebnis 0). Ergebnis des Aufrufs: `(True, Text)` nur wenn das Skript 0 meldet **und** `git` danach gefunden wird; 126 oder 127 (Abbruch der Passwortabfrage, nicht erlaubt) ergibt die Meldung mit dem Befehl für das Terminal; fehlt `pkexec`, ebenfalls. Der Dialog öffnet sich nach der Aktion neu (`continue` in `_web_loop`), der Knopf ist dann weg. Der Hinweis nach einem fehlgeschlagenen Übersetzen (`Prog_Generator` 1.06) nennt den Knopf.
+
+**2. Online Wiki:** Das Symbol `Btn_Help.png` hat der Entwickler schon ersetzt (der Text steht auf dem Symbol). In `webmobaledlib.toolbar_buttons` heißt der Eintrag jetzt **Online Wiki** mit dem Hinweis „Online Wiki im Webbrowser öffnen“ (beides im Katalog in allen Sprachen). **Das Öffnen macht der Klick im Browser selbst** (`js_handler`: `window.open(Adresse, '_blank', 'noopener')`, Adresse aus `M20.HELP_WIKI_URL`): ein Umweg über den Server (Klick, dann Server, dann `ui.navigate.to`) liegt manchmal außerhalb der Zeit, in der der Browser ein neues Fenster erlaubt, und der Popup-Blocker würde es sperren; der Server tut für diesen Knopf nichts (`func = lambda: None`). **`M20.Show_Help`** (von den Tabellenseiten und `F00.Help_Button_Click` aufgerufen) zeigt keine Seite im Programm mehr (`PG.global_controller.call_helppage()` entfällt) und ruft `Open_Online_Wiki`: `web_dialogs.open_url` (`ui.navigate.to(url, new_tab=True)` im Ereignisschleife-Faden, nur mit Seite und Schleife), sonst `webbrowser.open(url, new=2)`. Die Adresse ist `https://wiki.mobaledlib.de/anleitungen/spezial/programmgenerator`. **Nicht geändert:** der Menüeintrag **Hilfe → Hilfe öffnen** (Hilfeseite des Blattes, `open_help`) und die Hilfe-Links in den Dialogen (Pattern Generator u. a.).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `proggen/M20_PageEvents_a_Functions.py` | 1.08 | `HELP_WIKI_URL`, `Show_Help`, `Open_Online_Wiki` |
+| `_web/web_dialogs.py` | 1.07 | `open_url` (neuer Tab) |
+| `webmobaledlib.py` | 2.54 | Knopf Online Wiki (Name, Hinweis, Klick im Browser), Versionen |
+| `proggen/M08_ARDUINO.py` | 1.05 | `Git_Installed`, `Git_Script`, `Setup_Git` |
+| `_web/web_form_options.py` | 1.13 | Knopf Git installieren, Aktion |
+| `install/install_git.sh` | 1.00 | neu: git installieren |
+| `mlpyproggen/Prog_Generator.py` | 1.06 | Hinweis nennt den Knopf |
+| `csv/Web_Languages.csv` | - | 877 Einträge |
+| `install/ANLEITUNG_Installation.md` | 3.10 | Knopf Git installieren |
+| `install/BETATEST_Checkliste.md` | 1.81 | Punkt 118 |
+
+**Tests:** neu `test_help_wiki.py` (9: Adresse, Name und Hinweis des Knopfes im Quelltext der Knopfleiste, Klick im Browser mit `window.open`, `Show_Help` ohne Hilfeseite mit `open_url`, Rückfall auf `webbrowser` bei `False` und bei einer Ausnahme, `open_url` mit Seite und Schleife und ohne, Katalog), neu `test_git_install.py` (17: das Skript mit nachgebauten Paketverwaltungen im Probelauf für apt, dnf, pacman, zypper, ohne Paketverwaltung, ohne Administratorrechte, mit vorhandenem git; `Setup_Git` für Windows, schon installiert, Erfolg, Skript meldet 0 aber git fehlt, Abbruch 126, Fehler 3, Zeitüberschreitung, `pkexec` fehlt, Skript fehlt), `test_options_ide.py` (31: Knopf nur mit fehlendem git, Handler mit allen Meldungen, `continue` in der Schleife), `test_pio_retry.py` (die Meldung nennt den Knopf). **Alle Reihen laufen.** **Nicht geprüft:** ein echtes `pkexec` mit Passwortabfrage und echte Paketverwaltung (nur Probelauf und Attrappen), das Öffnen des neuen Tabs im Browser (Chrome, Firefox, Tablet) und das Verhalten des Popup-Blockers, das neue Symbol (die Datei kenne ich nicht).
+
+## 2.53 (2026-10-30)
+
+**Pico mit PlatformIO unter Linux Mint: „please install git. see logfile“** (Entwickler: „Unter Linux Mint wird der RP2040 erkannt. Aber beim Versuch des Kompilierens mit PlatformIO kommt ein Fehler“). Die Erkennung am USB-Port arbeitet damit (2.51).
+
+**Ursache (Protokoll, 4 Versuche 11:34 bis 11:39):** `Processing pico (platform: https://github.com/maxgerhardt/platform-raspberrypi.git; board: pico; framework: arduino)`, dann `Platform Manager: Installing git+https://github.com/maxgerhardt/platform-raspberrypi.git` und `UserSideException: Please install Git client from https://git-scm.com/downloads`. Das Programm schreibt für den Pico die Zeile `platform = https://github.com/maxgerhardt/platform-raspberrypi.git` in die `platformio.ini` (`M08_ARDUINO`, wie im Excel-Programm); PlatformIO klont sie mit `git`, und auf dem Laptop ist `git` nicht installiert (Linux Mint bringt es nicht mit; auf dem früheren Mint-Rechner und dem Pi war es da, deshalb fiel es bisher nicht auf). Die Nachricht stand nur im Protokoll („see logfile“). **Kein Programmfehler**, aber eine **nicht dokumentierte Voraussetzung**.
+
+**Nicht geändert:** die Plattform bleibt die Git-Adresse. Eine ZIP-Adresse (`.../archive/...zip`) würde PlatformIO ohne `git` laden, aber ob die Pakete, die die Plattform nachlädt, dann ebenfalls ohne `git` gehen, habe ich ohne Netz nicht prüfen können; ein Fehlgriff würde die Pico-Builds aller Rechner stören, die heute funktionieren.
+
+**Geändert:** (1) `Prog_Generator.execute_shell_cmd` 1.05: Enthält die Ausgabe „Please install Git“ (oder „GitNotFound“), steht im Meldungsfenster nach dem Fehler eine **Meldung mit den Befehlen** für Linux (`sudo apt install git`), macOS (`xcode-select --install`) und Windows (Git-Download, danach das Programm neu starten); sie ist in allen Sprachen übersetzt. Es gibt dafür **keinen zweiten Versuch** (der gilt nur für `UnknownPackageError`). (2) `install/install_linux.sh` 1.06: `git` gehört zu den Systempaketen (`apt`, `dnf`, `pacman`, `zypper`), also bei einer Neuinstallation gleich da. (3) Anleitung 3.09: Abschnitt „Raspberry Pi Pico mit PlatformIO braucht den Git-Client“, Checkliste 1.80 (Punkt 117). **Möglicher nächster Schritt (nicht gebaut):** ein Knopf in den Optionen, der `git` unter Linux mit `pkexec` installiert (wie der Knopf für die udev-Regel), oder eine Prüfung vor dem Übersetzen.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `mlpyproggen/Prog_Generator.py` | 1.05 | Meldung bei fehlendem Git-Client |
+| `install/install_linux.sh` | 1.06 | `git` mit den Systempaketen |
+| `webmobaledlib.py` | 2.53 | Version, Prog_Generator in REQUIRED_FILES |
+| `csv/Web_Languages.csv` | - | 869 Einträge |
+| `install/ANLEITUNG_Installation.md` | 3.09 | Git-Client für den Pico |
+| `install/BETATEST_Checkliste.md` | 1.80 | Punkt 117 |
+
+**Tests:** `test_pio_retry.py` (jetzt 13): ein Skript, das die Meldung von PlatformIO ausgibt: Fehler, nur **ein** Versuch, Meldung mit den drei Systemen, kein Hinweis auf `pio pkg show`; bei einem anderen Fehler keine Git-Meldung. Alle Reihen laufen. **Nicht geprüft:** ein Rechner ohne `git` mit der echten Meldung, `install_linux.sh` auf einem frischen System (Syntax mit `bash -n` geprüft).
+
+## 2.52 (2026-10-29)
+
+**Linux Mint Laptop: „Raspberry Pico“ wird in der Boardauswahl nicht angezeigt** (Entwickler; Angaben zur Version und zum Bildschirm fehlen).
+
+**Befund:** Im Programm ist der Eintrag **immer** vorhanden: `UserForm_Options` legt `PICO_L` (Wert 7) in beiden Zweigen an, `_radios` filtert ihn nicht, `board_second` blendet nur ESP32 aus (IDE ohne ESP32-Paket); geprüft mit der Spezifikation und mit dem Aufbau des Dialogs (`test_options_ide`: zweite Gruppe `{4, 5, 7}` ohne ESP32-Paket, `{4, 5, 6, 7}` mit PlatformIO). Das Fehlen auf dem Laptop ist damit **nicht** aus dem Quelltext erklärbar; **nicht nachgewiesen**. **Wahrscheinlichste Ursache:** Der Dialog ist **höher als der Bildschirm**. Der Pico steht als siebter von neun Einträgen weit unten (drei Nano, Uno, IDE, ESP32, Pico, Pico-WLAN, dazu Reiter, Titel und Knöpfe) und der Optionsdialog hatte keine Höhenbegrenzung und keine Bildlaufleiste; auf einem Laptop mit 768 Pixeln Höhe liegt der Browser-Bereich bei etwa 600 Pixeln. Dazu passt die frühere Meldung desselben Rechners („ESP32 und Pico werden nicht angezeigt, nach dem Neustart ESP32, Pico immer noch nicht“): Der unterste Eintrag blieb verdeckt, solange die Liste lang war. Die zweite denkbare Ursache sind **gemischte Dateiversionen** auf dem Laptop (ältere `web_form_options.py` mit der früheren Filterung); die Prüfung der Versionen beim Start meldet das.
+
+**Geändert** (`web_form_options` 1.12): Die Karte des Optionsdialogs hat `max-height: 96vh` und `overflow-y: auto` (Bildlaufleiste, wenn der Bildschirm zu niedrig ist), die Radiogruppen der Boards sind `dense` (etwa 12 Pixel weniger je Eintrag, also gut 100 Pixel insgesamt). Das gilt für beide Reiter mit Boardauswahl.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_form_options.py` | 1.12 | Dialog scrollt, Boardauswahl dichter |
+| `webmobaledlib.py` | 2.52 | Version |
+| `install/ANLEITUNG_Installation.md` | 3.08 | Version |
+| `install/BETATEST_Checkliste.md` | 1.79 | Punkt 116 |
+
+**Tests:** `test_options_ide.py` (jetzt 25): Die zweite Gruppe enthält „Raspberry Pico“ (Wert 7) auch ohne ESP32-Paket, ESP32 fehlt dort (Wert 6 nicht), alle Radiogruppen der Boards sind `dense`, die Karte hat `max-height: 96vh` und `overflow-y: auto`. **Nicht geprüft:** das Aussehen im Browser (Bildlaufleiste, Höhe) auf einem niedrigen Bildschirm; **die Ursache auf dem Laptop** ist offen, bis Version, Auflösung, Browser und ein Bild vorliegen.
+
+## 2.51 (2026-10-29)
+
+**Pico am USB-Port wird unter Linux nicht (mehr) erkannt** (Tester mit 2.50 unter Linux: „Nano-Programmierung geht jetzt, aber ein RP2040 wird am USB-Port nicht mehr erkannt … nur mit Klimmzügen: Port scannen ohne angeschlossenen Pi, dann nach einiger Zeit anschließen, dann wird ein Port angezeigt, OK und verlassen, wenn man erneut den Port scannen will, wird er nicht mehr erkannt.“).
+
+**Was das Protokoll zeigt und was nicht:** Es enthält 29 Aufzählungen der Anschlüsse (17:05:20 bis 17:05:51), jede mit genau **32 Einträgen, alle `/dev/ttyS0` bis `ttyS31` (`n/a`)**; ein `/dev/ttyACM*` kommt **nie** vor, das Programm hat in dieser Zeit also nie einen Pico gesehen (pyserial lieferte keinen). Der Fehlerfall (Pico steckt, wird nicht gelistet) ist in diesem Protokoll nicht enthalten; die Ursache ist **nicht nachgewiesen**. Gelesen und verworfen: `EnumComPorts` selbst ist in Ordnung (mit der Kennung `2E8A` und dem Board Pico stets gelistet; Nano und Pico, Board Nano: der Pico nur mit „Unbekannte Ports anzeigen“, geprüft mit allen Boards und Kombinationen); meine Änderungen aus 2.46 (`Test_IsPicoInBootMode`, `enum_disk_drives`) betreffen die Liste nicht.
+
+**Behoben, weil nachweislich fehlerhaft und mit dem beschriebenen Verhalten verträglich** (`M07_COM_Port_New` 1.03, `web_form_comport` 1.05):
+1. **Der Zeitgeber öffnete den Pico jede Sekunde.** `__Blink_Arduino_LED` ruft für **jeden** gewählten Anschluss `DetectArduino` auf (Anschluss öffnen, DTR umschalten, 250 ms warten, schließen), auch für Pico und ESP32, bei denen es keine blinkenden LEDs gibt und die der Test nicht versteht. Auf dem Pico lässt das die USB-Verbindung hängen (der Anschluss verschwindet, bis man ihn neu einsteckt), beim ESP32 meldet esptool „Zugriff verweigert“ (der Fall ist in `web_form_comport` 1.03 schon einmal umgangen worden). **Jetzt:** nur bei einem Arduino (oder unter Windows wie bisher, dort getestet) wird geöffnet; sonst gilt der Anschluss, der in der Liste steht, als in Ordnung (`_Probe_Port_by_Opening`, `_Dialog_for_Arduino`).
+2. **Ein neu angeschlossenes Gerät wurde nicht gewählt.** Der Zeitgeber ruft `Update_SpinButton(0)` auf; `_compute` verstand nur `" "` als „keine Vorgabe“ und suchte bei `0` einen Anschluss namens `0`, der Zweig für „neuer Anschluss“ lief **nie**. Zusätzlich fehlte der Fall „der neue Anschluss steht am Ende der Liste“ (nur gleiche Positionen wurden verglichen). **Jetzt:** `0`, `""`, `None` und `" "` bedeuten keine Vorgabe, der neue Anschluss am Ende wird gewählt (mit Nano und Pico gleichzeitig war der Pico vorher nie die Auswahl).
+3. **Die Prüfung auf einen Pico im Bootmodus** (neu in 2.46) lief ungeschützt im selben Zeitgeber: Eine Ausnahme (zum Beispiel `lsblk` oder `udisksctl` fehlt oder hängt) hätte den Zeitgeber **beendet**, und mit ihm die Aktualisierung der Liste. Jetzt in `try`/`except` mit Eintrag im Protokoll.
+4. **Protokollzeile** bei jeder Änderung der Liste: `Anschluesse: [...] (Board ..., unbekannte Ports anzeigen: ..., gewaehlt: ...)` (INFO), damit der nächste Fehlerfall im Protokoll zu sehen ist.
+
+**Offen, Rückfrage an den Tester:** Ausgabe von `python3 -c "import serial.tools.list_ports as p; [print(x.device, x.vid, x.hwid, x.description) for x in p.comports()]"` und `lsusb` mit **angeschlossenem Pico**, das **Board** aus den Optionen, und das Protokoll des Fehlerfalls (Pico steckt schon, Dialog öffnen). Mögliche weitere Ursachen: Board nicht auf Pico gestellt (dann nur mit „Unbekannte Ports anzeigen“, und nur wenn kein anderer bekannter Anschluss da ist), ModemManager oder fehlende Rechte (Gruppe `dialout`), der Pico steht im Bootmodus (kein serieller Anschluss, nur das Laufwerk RPI-RP2).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `proggen/M07_COM_Port_New.py` | 1.03 | Pico und ESP32 unter Linux und macOS nicht jede Sekunde öffnen, Bootmodus-Prüfung geschützt |
+| `_web/web_form_comport.py` | 1.05 | neuer Anschluss wird gewählt (0 = keine Vorgabe), Protokollzeile |
+| `webmobaledlib.py` | 2.51 | Versionen |
+| `install/ANLEITUNG_Installation.md` | 3.07 | Anschluss scannen |
+| `install/BETATEST_Checkliste.md` | 1.78 | Punkt 115 |
+
+**Tests:** neu `test_comport_detect.py` (19): Auswahl bei neu angeschlossenem Gerät (leer → Pico, Nano → Nano und Pico, neuer Anschluss vorn und am Ende, zwei neue, Vorgaben mit Namen und ohne, unbekannter Name), Protokollzeile nur bei Änderung, Zeitgeber (Pico unter Linux: kein `DetectArduino`; Arduino und Pico unter Windows: wie bisher; Ausnahme der Bootmodus-Prüfung: Zeitgeber läuft weiter; kein Anschluss: kein Öffnen). **Alle Reihen laufen.** **Nicht geprüft:** ein echter Pico unter Linux (Erkennung, mehrfaches Öffnen des Dialogs, Verhalten des USB-Anschlusses bei dem früheren Öffnen jede Sekunde ist eine **Annahme** aus dem Code, nicht gesehen).
+
+## 2.50 (2026-10-29)
+
+**Arduino Nano mit PlatformIO unter Linux: Absturz bei der Bibliothek AnalogScanner** (Tester Ulrich mit dem Zwischenrelease 2.47, Linux, Python 3.13: „Beim Kompilieren für einen Nano mit PlatformIO kommt der Fehler: FileNotFoundError: [Errno 2] No such file or directory: 'powershell Invoke-WebRequest "https://github.com/merose/AnalogScanner/archive/master.zip" -o:/home/ulrich/Downloads/webmobaledlib/python/libraries/AnalogScanner.zip"'“; Protokoll: `Befehl 'Z. Arduino schicken' fehlgeschlagen`).
+
+**Ursache:** `M06_Write_Header_SW` (analoge Taster, Board AM328) ruft `M70.Make_Sure_that_AnalogScanner_Library_Exists` auf. Die Funktion lud die ZIP-Datei in den Bibliotheksordner der **ARDUINO IDE** mit `M30.F_shellExec('powershell Invoke-WebRequest …')`. `F_shellExec` übergibt die ganze Zeichenkette an `subprocess.Popen` (ohne `shell`), unter Linux ist sie der Name eines Programms, das es nicht gibt; und `powershell` gibt es dort ohnehin nicht. Mit **PlatformIO** ist die Prüfung außerdem **überflüssig und falsch**: Die Bibliothek steht in `lib_deps` der erzeugten `platformio.ini` (`AnalogScanner=https://github.com/merose/AnalogScanner/archive/master.zip`, im Protokoll holt PlatformIO sie auch) und ein Ordner `libraries` im Programmordner (der Sketchbook-Ordner ist dort der Python-Ordner) gehört nicht dorthin.
+
+**Behoben** (`M70_Exp_Libraries` 1.01): (1) Mit PlatformIO tut die Funktion nichts und liefert True. (2) Mit der IDE lädt `__Download_File` mit **Python** (`urllib.request`, Zeitlimit 60 s, Kennung, auf allen Systemen gleich) statt mit PowerShell; Fehler (kein Netz, Zeitüberschreitung, `BadZipFile`) ergeben eine Meldung und False, keine Reste. (3) Nach dem Entpacken wird der Ordner `AnalogScanner-master` in `AnalogScanner` **umbenannt** (die Umbenennung stand als nicht übersetzter VBA-Code): vorher hätte die Prüfung beim nächsten Aufruf den Ordner nicht gefunden und die Bibliothek bei jedem Hochladen neu geladen. (4) Der Rückgabewert war bei Fehlern `None`, der Aufrufer prüft aber `== False` (`None == False` ist falsch): Ein Fehler hätte das Programm trotzdem weiter erzeugt; jetzt `False`. Weitere Aufrufe von `powershell` im Code (`M60_CheckColors`, `M37_Inst_Libraries`, `M70.__Test_Download_Exe`) sind Windows-Funktionen des Excel-Programms und im Web nicht erreichbar.
+
+**Nebenbefund im Protokoll, kein Fehler:** `UnicodeDecodeError … 0xfc` beim Laden der Datei `pub_final_26_06_11_00.MLL_pgf`: `Read_File_to_String` liest zuerst UTF-8 und fällt auf den Windows-Zeichensatz zurück (die Datei stammt aus dem Excel-Programm); die Seite wurde danach geladen.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `proggen/M70_Exp_Libraries.py` | 1.01 | PlatformIO: nichts tun; IDE: Download mit Python, umbenennen, Fehler = False |
+| `webmobaledlib.py` | 2.50 | M70_Exp_Libraries in REQUIRED_FILES |
+| `csv/Web_Languages.csv` | - | 868 Einträge |
+| `install/ANLEITUNG_Installation.md` | 3.06 | Version |
+| `install/BETATEST_Checkliste.md` | 1.77 | Punkt 114 |
+
+**Tests:** neu `test_analogscanner.py` (9, ohne Netz, mit echten ZIP-Dateien und einem nachgebauten `urlopen`; jeder Unterprozess würde den Test abbrechen): PlatformIO tut nichts; IDE lädt, entpackt, benennt um, löscht die ZIP-Datei, beim zweiten Aufruf kein Download; kein Netz, Zeitüberschreitung, keine ZIP-Datei, falscher Inhalt, vorhandener Ordner ohne die erwarteten Dateien; im Quelltext kein `powershell`. **Alle Reihen laufen.** **Nicht geprüft:** der echte Download von GitHub, die echte ARDUINO IDE unter Linux/macOS; ob das Layout von `merose/AnalogScanner` (Dateien im Hauptordner) zur Prüfung der erwarteten Dateien passt (Annahme des Originals).
+
+## 2.49 (2026-10-29)
+
+**Absturz im Reiter Bootloader nach dem Umstellen auf die ARDUINO IDE** (Entwickler mit Protokoll: nach der Frage „Sollen die Bibliotheken und Boards jetzt geprüft werden?“ mit Ja: `Optionen: Aktion __FastBootloader_Button_Click fehlgeschlagen`, `AttributeError: module 'proggen.M02_Public' has no attribute 'Get_BoardTyp'` in `M08_Install_FastBootLoader.py` Zeile 289).
+
+**Ablauf:** Das Protokoll zeigt die Frage zu den Bibliotheken **vor** dem Absturz, weil `_web_loop` zuerst die Werte übernimmt (Umstellung auf die IDE, Frage, Prüfung) und **danach** die Aktion ausführt, mit der der Dialog geschlossen wurde: Der Knopf **Bootloader** im Reiter Bootloader war gedrückt worden (der Reiter erscheint mit der IDE). Die Frage ist also nicht die Ursache; der Absturz hängt am Knopf.
+
+**Ursache 1:** `M02.Get_BoardTyp()` und `M02.Get_SrcDirInLib()` stehen nicht in `M02_Public`, sondern in `M02a_Public` (das Original `Get_BoardTyp` in `M02_Public` steht im Quelltext, ist aber im Modul nicht erreichbar). **Ursache 2 (dahinter):** `Install_FastBootloader` ist eine **unfertige Übersetzung** (VB2PY): `BootJumper_Form` ist nicht importiert und nur ein Gerüst (`CheckBoxChangeSignature`, `Me` fehlen, keine Oberfläche), `BootJumper_Form.ShowDialog` wird nicht aufgerufen, `time.sleep(1000)` wären 1000 Sekunden (VBA: Millisekunden), `Create_WriteFastBootloader_cmd` wird mit zwei Argumenten aufgerufen und hat eines; das Schreiben läuft über eine Windows-Stapeldatei mit avrdude und ArduinoISP. Mit der Korrektur der Namen allein käme gleich der nächste Absturz.
+
+**Behoben** (`M08_Install_FastBootLoader` 1.01): `M02a.Get_BoardTyp` und `M02a.Get_SrcDirInLib`; die Prüfungen (Seite DCC, LNet oder Selectrix; Board Arduino) laufen jetzt und melden wie im Original; danach kommt für den Arduino ein **Hinweis**, dass der schnelle Bootloader in der Webversion noch nicht umgesetzt ist (Excel-Programm benutzen), statt eines Absturzes. **Der Bootloader selbst ist nicht ergänzt**: Das bräuchte den Dialog für die Jumper, ein Schreiben mit avrdude ohne Windows-Stapeldatei und Hardware zum Testen (zwei Arduinos).
+
+**Gleiche Art von Fehler an anderen Stellen** (Suche über alle 183 Module: 5779 Zugriffe der Form `Alias.Name` auf Namen anderer Module): behoben `M02.Get_DestDir_All` (M12_Copy_Prog 1.0x, M50_Exchange), `M02.Get_MobaUserDir` (M17_Import_old_Data, `M02a` importiert), `M02.Get_Ardu_LibDir` (M39_Simulator, `M02a` importiert), `M02.DelLast` (Userform_House: steht in `M30_Tools`). **Nicht behoben, im Web nicht erreichbar** (bekannt, im Test festgehalten): `M02.DEFAULTICON1` und `M02.WikiPg_Icon` (Windows-Desktopverknüpfungen in M12), `P01.sheets` (M17, Import alter Daten), `BuildOT_COL` im alten Rumpfstück der Pico-Prüfung in M07.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `proggen/M08_Install_FastBootLoader.py` | 1.01 | M02a statt M02, Hinweis statt Absturz |
+| `proggen/M12_Copy_Prog.py` | 1.0x | `M02a.Get_DestDir_All` |
+| `proggen/M50_Exchange.py` | 1.0x | `M02a.Get_DestDir_All` |
+| `proggen/M17_Import_old_Data.py` | 1.03 | `M02a.Get_MobaUserDir` (3 Stellen) |
+| `proggen/M39_Simulator.py` | 1.02 | `M02a.Get_Ardu_LibDir` |
+| `proggen/Userform_House.py` | 1.0x | `M30.DelLast` |
+| `webmobaledlib.py` | 2.49 | M08_Install_FastBootLoader in REQUIRED_FILES |
+| `csv/Web_Languages.csv` | - | 866 Einträge |
+| `install/ANLEITUNG_Installation.md` | 3.05 | Hinweis zum schnellen Bootloader |
+| `install/BETATEST_Checkliste.md` | 1.76 | Punkt 113 |
+
+**Tests:** neu `test_module_names.py` (6): prüft über **alle** Module, dass jeder Zugriff `Alias.Name` auf ein anderes Modul einen vorhandenen Namen trifft (außer den fünf bekannten); neue Fehler dieser Art (zum Beispiel `M02.Get_BoardTyp`) fallen damit sofort auf. Dazu der Knopf: mit Arduino Nano der Hinweis, mit Pico und ESP32 die Meldung „nur für Arduino“. **Alle Reihen laufen mit Ergebnis.** **Nicht geprüft:** nicht gefundene **Namen, die im Code ohne Modulvorsatz benutzt werden** (zum Beispiel `BootJumper_Form` in M08: nicht importiert; ein Fehler dieser Art zeigt sich erst beim Aufruf): dafür gibt es hier kein Werkzeug (kein pyflakes).
+
+## 2.48 (2026-10-29)
+
+**Pico-Firmware, zwei Punkte aus dem Test unter Windows** (Entwickler: „1. Beim Hochladen kommt folgender Fehler: Der Anschluss COM8 ließ sich nicht öffnen: Cannot configure port, something went wrong. Original message: OSError(22, 'Ein nicht vorhandenes Gerät wurde angegeben.', None, 433). 2. Der Button darf nur sichtbar sein, wenn in dem Verzeichnis MobaLedLib/Firmware eine uf2-Datei zu finden ist.“).
+
+**1, Ursache:** `flash_uf2` weckt einen laufenden Pico, indem es den Anschluss mit 1200 Baud öffnet (`serial.Serial(port, 1200)`). Der Pico startet in diesem Augenblick im Bootmodus neu; unter Windows verschwindet das Gerät **mitten in der Einstellung des Anschlusses** (`SetCommState`), pyserial meldet `OSError(22, 'Ein nicht vorhandenes Gerät wurde angegeben.')`. Das ist das Zeichen, dass der Weckruf **angekommen** ist, kein Fehler (`uf2conv.py` des Excel-Programms fängt ihn ebenfalls ab). Meine Fassung 2.46 brach dort mit „ließ sich nicht öffnen“ ab, ohne auf das Laufwerk zu warten. **Behoben** (`headless_pico` 1.02): Jeder Fehler beim Öffnen außer **fehlendem Recht** (`PermissionError`, errno 13, „Permission denied“, „Zugriff verweigert“, „Access is denied“: sofort Meldung, Warten hilft nicht, Linux-Gruppe `dialout`) wird gemerkt und protokolliert; das Programm wartet wie sonst bis zu 20 s auf das Laufwerk RPI-RP2 und schreibt die Datei. Erscheint es nicht, kommt die Meldung „Der Pico meldet sich nicht im Bootmodus …“ mit dem Grund des Anschlusses in Klammern. **Dazu:** Unter Windows werden die Laufwerke nicht mehr mit bis zu 26 Aufrufen von `cmd /c vol` gesucht (zu langsam für das Warten), sondern mit `GetLogicalDrives`, `GetDriveTypeW` und `GetVolumeInformationW` (`ctypes`, `SetErrorMode` gegen „Laufwerk nicht bereit“-Fenster); der Name RPI-RP2 gilt ohne Rücksicht auf Groß- und Kleinschreibung.
+
+**2:** Der Knopf ist jetzt nur sichtbar, wenn das Board **Pico** gewählt ist **und** im Ordner `MobaLedLib/firmware` des Sketchbook-Ordners mindestens eine Datei `*.uf2` liegt (`headless_pico.has_firmware`; geprüft beim Öffnen des Dialogs, `firmware_available` in der Spezifikation; die Auswahl des Boards schaltet ihn weiter live). `resolve_firmware_dir` findet den Ordner auch mit **anderer Schreibweise** (`Firmware` statt `firmware`: Linux unterscheidet Groß- und Kleinschreibung, das Excel-Programm schrieb `firmware`); der Dialog und `scan_firmware` benutzen dieselbe Suche. Das Verhalten ändert die Abweichung aus 2.46 („der Knopf erscheint auch ohne Ordner“).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `headless/headless_pico.py` | 1.02 | Wecken: Fehler beim Öffnen nicht abbrechen (außer Recht), Windows-Laufwerke ohne Unterprozess, `resolve_firmware_dir`, `has_firmware` |
+| `_web/web_form_options.py` | 1.11 | Knopf nur mit Pico und UF2-Datei, Ordner mit anderer Schreibweise |
+| `webmobaledlib.py` | 2.48 | Versionen |
+| `install/ANLEITUNG_Installation.md` | 3.04 | Sichtbarkeit, Windows-Hinweis |
+| `install/BETATEST_Checkliste.md` | 1.75 | Punkt 112 |
+
+**Tests:** `test_pico.py` (jetzt 47: Windows-Laufwerke über die Liste, Name ohne Rücksicht auf Groß- und Kleinschreibung, Fehler beim Lesen, kein `vol` mehr im Quelltext; Wecken mit genau der Meldung des Entwicklers (OSError 22) mit Laufwerk nach dem zweiten Warten: kein Abbruch, geschrieben; Laufwerk erscheint nie: Meldung mit dem Grund und vier Pausen; fehlendes Recht: sofort, ohne Warten; `_is_permission_error` für alle Texte; Ordner `Firmware`/`firmware`/`FIRMWARE`, Dateien `.txt`, `.desc`, `.UF2`, Unterordner `x.uf2`), `test_options_ide.py` (jetzt 23: Knopf mit Pico und UF2-Datei sichtbar, ohne Datei nicht, live mit dem Board). Die Reihen laufen mit Ergebnis. **Nicht geprüft:** echter Pico unter Windows und Linux (Weckruf, Laufwerk, Schreiben), `ctypes`-Aufrufe unter Windows (nur über die Attrappe; keine Windows-Umgebung hier).
+
+## 2.47 (2026-10-29)
+
+**Hintergrundbild der Anlagenansicht ohne Pillow** (Entwickler: „Die Bildbearbeitung in Layout benötigt Pillow. Das gibt es aber nicht für alle Plattformen und wir haben es extra herausgeworfen. Gibt es eine andere Lösung?“). **Fehler in 2.40:** `headless_graph_layout.process_image` importierte Pillow (`from PIL import Image`), das nicht in `requirements-web.txt` steht (nur `install/make_icons.py` und Tests brauchten es). Auf einem Rechner ohne Pillow hätte „Bild laden“ nur „Zum Verarbeiten von Bildern fehlt das Paket Pillow“ gemeldet; das fiel nicht auf, weil die Prüfumgebung Pillow hat. Aufbau siehe Konzept 0.71, „Hintergrundbild ohne Pillow“.
+
+**Neu:**
+- `headless/headless_graph_layout.py` 1.03: `sniff_image` (Bildkopf von PNG, JPEG, GIF, WebP VP8, VP8L, VP8X; ohne Pillow), `process_image` prüft und gibt die Bytes unverändert als Base64 zurück (kein Verkleinern mehr), `image_from_base64`; kein Import von PIL mehr.
+- `_web/mll_graph.js` 1.10: `pickImage` (Dateifeld im Klick des Knopfes), `loadImageFile` (Canvas, höchstens 2048 Pixel, JPEG 0,85 oder PNG bei Transparenz, `createImageBitmap` oder `Image` als Rückfall), `fitSize`, `uploadImage` (POST an `/mll_view_upload`, dann `mll_graph_image {token, name}` oder `{error, name}` mit den Fehlern `empty`, `too_big`, `not_image`, `network` oder dem Text des Servers).
+- `_web/web_graph.py` 1.11: Adresse `/mll_view_upload` (POST, prüft mit `process_image`, legt das Bild unter einem Token ab, höchstens 6 nicht abgeholte), `take_pending_image`, Ereignis `mll_graph_image` (`_handle_image`), der Knopf **Bild laden …** öffnet das Dateifenster **im Browser** (`js_handler`, nur direkt im Klick erlaubt).
+- `webmobaledlib.py` 2.47: `on_graph_image` (Fehlertexte, Token abholen, Layout setzen, Positionen in der Fläche halten, Meldung), `image_load` bleibt als Rückfall.
+- Katalog 864 Einträge (1 neu), Anleitung 3.03, Konzept 0.71.
+
+**Warum nicht über die Websocket-Verbindung:** Die Nachrichten sind in der Größe begrenzt (je nach Version etwa 1 MB); ein Foto als Base64 kann mehr haben. Der POST hat diese Grenze nicht, und das Bild muss nicht noch einmal als Base64 durch die Seite.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `headless/headless_graph_layout.py` | 1.03 | Bildkopf lesen, kein Pillow |
+| `_web/mll_graph.js` | 1.10 | Bild im Browser verkleinern und hochladen |
+| `_web/web_graph.py` | 1.11 | Upload-Adresse, Ereignis, Knopf im Browser |
+| `webmobaledlib.py` | 2.47 | `on_graph_image` |
+| `csv/Web_Languages.csv` | - | 864 Einträge |
+| `install/ANLEITUNG_Installation.md` | 3.03 | Hinweis zum Verkleinern im Browser |
+
+**Tests:** `test_graph_layout.py` (jetzt 42, **ohne Pillow**: Testbilder aus Bytes, `archiv/test_images/imgs.py`: PNG, JPEG mit EXIF von 60 KB und DHT vor dem SOF, progressives JPEG, GIF, WebP in drei Formen, abgeschnittene und falsche Dateien, 0 und 40000 Pixel, zu groß, `image_from_base64`), `test_image_upload.py` (neu, 14: `fitSize`, `loadImageFile` mit Attrappen für Canvas und `createImageBitmap`, Transparenz, Fehler, `uploadImage` mit allen Antworten, `pickImage`; die Upload-Adresse mit Attrappen für Starlette: Token, Fehler, höchstens 6 gemerkte Bilder, Bild-Adresse und 404), `test_graph_plant.py` (jetzt 57: der Weg über `on_graph_image` mit allen Fehlercodes, unbekanntem Token und fertigem Fehlertext). **Alle 66 Reihen laufen mit Ergebnis.** **Nicht geprüft:** das Dateifenster, das Canvas und `toBlob` in echten Browsern (Chrome, Firefox, Safari, Tablet), sehr große Fotos (Speicher des Browsers bei über 12000 Pixeln Kantenlänge), das Bild hinter einem Reverse-Proxy mit Größenbegrenzung.
+
+## 2.46 (2026-10-29)
+
+**Abschlussseite in allen Sprachen; Raspberry Pi Pico unter Linux: Hinweis „PICO im Bootmodus gefunden“ und Knopf „Firmware installieren“** (Entwickler: „Diese beiden Punkte bearbeiten … Einen Pico zum Testen habe ich hier.“; die Punkte standen seit 2.28 offen).
+
+**1. Feste Seiten:** `/beendet`, `/heruntergefahren`, die Seite für unbekannte Adressen (`web_tabs.not_found_page`) und der Text „Anmeldung erforderlich“ (`web_auth`) sind übersetzt. Nach dem Beenden liefert das Programm Deutsch (die Arbeitsmappe ist weg): `quit_program` merkt die Sprache **vor** `close_session` und gibt sie als `lang=` in der Adresse mit; `web_i18n.use_language(n)` (neu, `ContextVar`) setzt sie für die Anfrage. Die HTML-Seiten werden aus einzeiligen Teilen zusammengesetzt (nicht als mehrzeiliger Text), weil die Versionsmarken sonst in den Text geraten. **Fehler gefunden und behoben:** Der Test fand eine doppelte Maskierung der Adresse in `not_found_page` (von mir in derselben Änderung eingebaut; `web_tabs` 1.10).
+
+**2. Pico, Ursachen:** (a) `Test_IsPicoInBootMode` in `M07_COM_Port_New.py` war ein **leerer Rumpf** (der Rumpf stand in einer zweiten, nie aufgerufenen Funktion mit dem undefinierten Namen `EnumDiskDrives`); (b) `M08.AskBootPico` wurde im Web **nie auf True gesetzt** (im Excel-Programm setzt `Show_USB_Port_Dialog` es); der Hinweis erschien also auf **keinem** System, nicht nur unter Linux; (c) die Laufwerkssuche unter Linux kannte nur `/media/<Benutzer>/RPI-RP2` (nicht `/run/media`, nicht ein nicht eingehängtes Laufwerk, `USER` kann fehlen). Der Knopf **Firmware installieren** (Excel-Programm 3.5.0-K: `Select_Firmware_Form`, `Boot_Firmware_Button`, `flashonly`) war nicht übernommen.
+
+**Neu:**
+- `headless/headless_pico.py` 1.01: `scan_firmware` (Dateien `*.uf2`, Gruppen nach Name, Versionen absteigend, Beschreibung aus `.desc` (JSON) in der Sprache, Rückfall EN, Dateiname als Rückfall; Namens- und Versionsregeln wie im Original: `-v`, `_v`, `V` + Zahl, `compare_versions` zahlenweise), `find_boot_drives` (Windows `vol`, macOS `/Volumes`, Linux `/proc/mounts`, `/media`, `/run/media`, `/mnt`; nur Ordner mit `INFO_UF2.TXT`; nicht eingehängtes Laufwerk über `lsblk` und `udisksctl mount -b` ohne Root, Fehlschlag nur alle 30 s neu versucht), `find_pico_serial_ports` (VID 0x2E8A), `flash_uf2` (Laufwerk da: kopieren; sonst Anschluss mit 1200 Baud öffnen, bis 20 s warten, kopieren; das Verschwinden des Laufwerks beim Schreiben ist kein Fehler). **Ersetzt `uf2conv.py` und die Option `flashonly` von M08**: Das Schreiben braucht weder ARDUINO IDE noch die Python-Werkzeuge des rp2040-Pakets.
+- `_web/web_form_firmware.py` 1.00: Firmware-Dialog (Liste, Version, Beschreibung, Installieren, Abbrechen).
+- `_web/web_form_options.py` 1.10: Knopf im Reiter LED Arduino, **live sichtbar** nur mit Pico-Board (`pico_values`, `update_pico_buttons`), `_web_pico_firmware` (Dialog, Schreiben, Meldungen). **Abweichung vom Excel-Programm:** Der Knopf hängt nicht davon ab, dass der Firmware-Ordner existiert; der Dialog nennt den Ordner, wenn keine Dateien da sind.
+- `proggen/M07_COM_Port_New.py` 1.02: `Test_IsPicoInBootMode` (Frage, `Heartbeat.uf2` kopieren, 3 s warten; einmal fragen), `AskBootPico = True` in `Show_USB_Port_Dialog`. `proggen/M30_Tools.py` 1.02: `enum_disk_drives` ruft `headless_pico.find_boot_drives`.
+- `_web/web_i18n.py` 1.07, `_web/web_tabs.py` 1.10, `_web/web_auth.py` 1.04, `webmobaledlib.py` 2.46; Katalog 863 Einträge (22 neu; schon vorhandene Übersetzungen, zum Beispiel „Le Raspberry Pi s'arrête“, haben Vorrang), Anleitung 3.02, Checkliste 1.74 (Punkt 112).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `headless/headless_pico.py` | 1.01 | neu: Firmware suchen, Pico-Laufwerk, Schreiben |
+| `_web/web_form_firmware.py` | 1.00 | neu: Firmware-Dialog |
+| `_web/web_form_options.py` | 1.10 | Knopf Firmware installieren |
+| `proggen/M07_COM_Port_New.py` | 1.02 | Hinweis Bootmodus |
+| `proggen/M30_Tools.py` | 1.02 | `enum_disk_drives` |
+| `_web/web_i18n.py` | 1.07 | `use_language` |
+| `_web/web_tabs.py` | 1.10 | Adressseite übersetzt |
+| `_web/web_auth.py` | 1.04 | Text übersetzt |
+| `webmobaledlib.py` | 2.46 | Seiten übersetzt, `lang` in der Adresse |
+| `csv/Web_Languages.csv` | - | 863 Einträge |
+
+**Tests (neu):** `test_pico.py` (28: Namen und Versionen, Sortierung, `.desc`, Mountpunkte mit `\040`, Marker `INFO_UF2.TXT`, Einhängen mit `udisksctl`, Weckruf, Wartezeit, Fehler), `test_form_firmware.py` (5, Dialog mit Attrappen), `test_pico_hint.py` (8: Frage, Kopieren, einmal fragen, Nein, kein Pico, Fehler), `test_pages_i18n.py` (25: Seiten in allen Sprachen, Maskierung, `use_language`, `lang=` im Quelltext), `test_options_ide.py` (22, Knopf live und Handler). Zwei ältere Prüfungen von Mindestversionen (`test_i18n`, `test_z21_integration`) prüfen jetzt „ab“ statt „genau“. **Alle 63 Reihen laufen mit Ergebnis.** **Nicht geprüft:** alles mit echter Hardware (Schreiben auf den Pico, Weckruf über den Anschluss, `udisksctl` auf dem Desktop), der Dialog im Browser, macOS.
+
+## 2.45 (2026-10-29)
+
+**Grafik: Größe der Kästchen, Raster, Mehrfachauswahl, gemeinsam verschieben, Ausrichten, mehrere löschen, Rückgängig für Positionen, Ausrichten und Größe; die übrigen Dialogtypen mit dem Platzhalter geprüft** (Entwickler nach „umsetzen“: Mehrfachauswahl nur in der Anlagen- und Kettenansicht; Rückgängig nur Positionen, Ausrichten und Größe). Aufbau siehe Konzept 0.70, „Stufe 3, Fortsetzung“.
+
+**Dialogtypen mit dem Platzhalter `Name(`:** `test_form_other.py` (jetzt für alle 291 Makros mit dem Dialog Other, auch den Typ `EX.Macro.*`) und neu `test_form_house.py` (House und GasLights mit Platzhalter, unvollständiger, leerer, voller und fremder Zeile, mit zwei Kanälen; der Webdialog wird nachweislich aufgebaut) laufen ohne Absturz. **Nicht erreichbar bzw. nicht geprüft:** `PattConf` (Pattern, ServoAnim, LEDColorAnim ... laufen über die noch nicht umgesetzten Formulare), `ColTab` (öffnet nur die Farbtest-Seite) und `EX.Constructor` (Erweiterungen).
+
+**Neu:**
+- `headless/headless_graph_layout.py` 1.02: `clamp_size` (30 bis 300), `snap_value` und `snap_pos` (Raster = halbe Kästchengröße), `align_positions` (8 Arten, reine Funktion), `layout["snap"]` (neues Layout, `get_layout`, `import_json` übernimmt und begrenzt).
+- `_web/mll_graph.js` 1.09: Mehrfachauswahl (`multiRows`, `setMulti`, `applyMulti`, `mll-multi`), Strg/Cmd-Klick, Auswahlrahmen (Umschalt + Ziehen), Gruppe ziehen (`place_many`), Menü bei Mehrfachauswahl (`align:Art`, „n Kästchen löschen“), Entf mit `rows`, Strg+Z/Cmd+Z → `undo`.
+- `_web/web_graph.py` 1.10: Kopfzeile mit Schieber Größe (`update:model-value`, `throttle`), Kontrollkästchen Raster, Knopf Rückgängig mit Anzeige; Befehle `place_many`, `align`, `undo`, `delete` mit mehreren Zeilen; Texte.
+- `webmobaledlib.py` 2.45: `plant_controls`, `lundo_stack/push/label`, `layout_undo` (Journal je Blatt, höchstens 30 Schritte, Stand vor der Änderung), `on_graph_layout` (`size`, `snap`, `undo`), `on_graph_cmd` (`place` mit Raster und Eintrag, `place_many`, `align`, `undo`, `delete` mehrerer Zeilen mit **einer** Rückfrage, von unten nach oben), `confirm_delete(…, count)`.
+- Katalog 841 Einträge (20 neu), Anleitung 3.01, Checkliste 1.73 (Punkt 111), Konzept 0.70.
+
+**Grenzen:** Das Rückgängig gilt **nicht** für Änderungen an der Tabelle und nicht nach einem Neustart (das Journal liegt im Speicher, die Positionen hängen an den Zeilenkennungen der Sitzung). Bei „Ausrichten“ wird das Raster nicht angewendet. Die Mehrfachauswahl wird nicht mit der Tabelle gekoppelt (Entscheidung des Entwicklers).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `headless/headless_graph_layout.py` | 1.02 | Größe, Raster, Ausrichten |
+| `_web/mll_graph.js` | 1.09 | Mehrfachauswahl, Rahmen, Gruppe ziehen, Menü, Strg+Z |
+| `_web/web_graph.py` | 1.10 | Kopfzeile, Befehle |
+| `webmobaledlib.py` | 2.45 | Rückgängig (Layout), Befehle, Löschen mehrerer |
+| `csv/Web_Languages.csv` | - | 841 Einträge |
+| `install/ANLEITUNG_Installation.md` | 3.01 | neue Funktionen |
+| `install/BETATEST_Checkliste.md` | 1.73 | Punkt 111 |
+
+**Tests (neu oder erweitert):** `test_graph_align.py` (11: Größe, Raster, alle acht Arten des Ausrichtens, Eingabe unverändert), `test_graph_multi_js.py` (7, Node: Strg-Klick, Klick und `select`, Gruppe ziehen mit Begrenzung, Strg beim Druck, Auswahlrahmen, Menü, Entf, Strg+Z), `test_graph_plant.py` (jetzt 49: Größe, Raster, `place_many`, `align`, mehrere löschen mit einer Rückfrage, Rückgängig stufenweise), `test_form_house.py` (2), `test_form_other.py` (291 Makros). Die Attrappen in `test_graph_page`, `test_graph_page2`, `test_graph_cmd` wurden nachgezogen. **Alle 57 Reihen laufen mit Ergebnis.** **Nicht geprüft:** alles im Browser (Schieber mit `throttle`, Auswahlrahmen, Gruppe ziehen, Strg+Z), Tablet.
+
+## 2.44 (2026-10-28)
+
+**Dialog Other stürzte ab, wenn ein Makro aus dem Baum in eine Kette gezogen wird** (Entwickler mit Protokoll: `IndexError: Index '1' is out of range (0, 0)` in `web_form_other.py` Zeile 249, aufgerufen über `Dialog_Guided_Input` → `Input_Connector` → `SelectMacros` → `__Proc_General_With_Other_Par` → `Show_UserForm_Other`). **Ursache:** Beim Ablegen mit dem ganzen Dialog (seit 2.35, auch Knopf Dialog im Baum) steht das Makro als Platzhalter `Name(` ohne Parameter in der Zelle Config, damit die Makroauswahl es vorwählt. `Show_UserForm_Other` liest die alten Parameter aus dieser Zelle (`OldParams = Split(...)`, bei `Name(` ein Feld mit einem leeren Eintrag) und griff beim Parameter `Cx` und `B_LED_Cx` ohne Prüfung darauf zu. Dasselbe galt für die RGB-Parameter (`Get_RGB_from_OldParams` in `Userform_Other.py`). Es betrifft also jede unvollständige Zeile, nicht nur den Platzhalter.
+
+**Behoben** (`_web/web_form_other.py` 1.06): Zugriff auf `OldParams` nur noch innerhalb von `UBound(OldParams)` (Cx, B_LED_Cx, RGB, RGB2); fehlende Werte nehmen die Vorgabe. **Test** (`test_form_other.py`, neu): ruft den Dialog für **alle 282 Makros mit dem Dialog Other** aus `Lib_Macros` auf (leerer Dialogtyp), je mit dem Platzhalter `Name(`, einer unvollständigen Zeile (`Name(1`) und einer Zeile mit vielen Werten; der Dialog selbst wird abgebrochen (nur der Aufbau wird geprüft). Vor der Korrektur schlug es mit genau dieser Meldung an (und fand dabei auch die RGB-Fälle PushButton_RGB_* und PushButton2I_RGB_*), danach laufen alle 282 durch. **Nicht geprüft:** die übrigen Dialogtypen (House, Pattern, Servo, ColTab und andere) auf diesem Weg mit dem Platzhalter; Punkt 110 der Checkliste. Hinweis: Dasselbe passiert von Hand (Makroname in die Zeile schreiben, Zelle in Spalte D aktivieren, Dialogknopf), es war nur dort bisher nicht aufgefallen.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_form_other.py` | 1.06 | Zugriff auf die alten Parameter nur innerhalb von `UBound` |
+| `webmobaledlib.py` | 2.44 | Version von `web_form_other.py` |
+
+## 2.43 (2026-10-28)
+
+**Anlagenansicht: Klick und Doppelklick auf ein Kästchen kamen nicht an; Umschalt-Doppelklick** (Entwickler: „Beim Klick auf ein Makro-Icon sollte dasselbe passieren wie in der Kette: die Zeile markieren, Doppelklick öffnet den Dialog, Umschalt-Doppelklick den Makroparameter-Dialog. Von der Tabelle aus funktioniert es.“). **Ursache:** `installPlant` rief bei **jedem** Druck `setPointerCapture` auf dem Behälter auf. Mit eingefangener Maus geht das Klickereignis an den Behälter statt an das Kästchen, `hit()` fand kein `data-row`, es kam nichts an. **Behoben** (`mll_graph.js` 1.08): Einfangen erst, wenn wirklich gezogen wird (mehr als 3 Pixel), beim Verschieben des Hintergrunds sofort. Nach dem Ziehen meldet die Seite zusätzlich `mll_graph` (Auswahl): das Kästchen ist danach auch in der Tabelle markiert.
+
+**Umschalt-Doppelklick (neu, Ketten und Anlage):** `hit()` trägt `shift`, `web_graph.py` 1.09 gibt es als dritten Wert an `on_hit` weiter, `on_graph_hit(row, dbl, shift)` (`webmobaledlib.py` 2.43) bestimmt mit `headless_graph_ops.macro_of_row` (1.06: `Find_Macro_in_Lib_Macros_Sheet` über den Text der Zeile, Name aus Lib_Macros) das vorhandene Makro, gibt es der Makroauswahl per `force_result` vor und öffnet gleich den Dialog mit den Parametern; ohne bekanntes Makro die normale Makroauswahl. Die Vorgabe wird immer gelöscht (auch bei Fehler).
+
+**Tests:** `test_graph_plant_js.py` (13: Einfangen erst beim echten Ziehen, Klick und Doppelklick mit shift, Auswahl nach dem Ziehen), `test_graph_page.py` (36: Umschalt-Doppelklick mit dem echten Makro, ohne Umschalt-Taste, leere und unbekannte Zeile, Umschalt-Klick, Aufräumen bei Fehler). **Wichtige Korrektur zu den Testläufen 2.39 bis 2.42:** `test_graph_page`, `test_graph_page2` und `test_options_ide` stürzten seit 2.32, 2.40 und 2.39 ab; mein Filter wertete nur Zeilen mit „bestanden“ aus und übersah Abstürze. Behoben (Hilfsfunktionen und Attrappen nachgezogen), und der Aufrufer `/tmp/work/runsuite.sh` zählt eine Reihe ohne Ergebniszeile als Fehler. Alle 56 Reihen laufen jetzt mit Ergebnis.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/mll_graph.js` | 1.08 | Maus erst beim Ziehen einfangen, `shift`, Auswahl nach dem Ziehen |
+| `_web/web_graph.py` | 1.09 | `shift` an `on_hit` |
+| `headless/headless_graph_ops.py` | 1.06 | `macro_of_row` |
+| `webmobaledlib.py` | 2.43 | `on_graph_hit(row, dbl, shift)` |
+| `install/ANLEITUNG_Installation.md` | 2.99 | Klicken auf Kästchen |
+| `install/BETATEST_Checkliste.md` | 1.72 | Punkt 110 |
+
+## 2.42 (2026-10-28)
+
+**Anlagenansicht: „Bild laden ...“ öffnete keinen Dialog** (Entwickler nach dem Test von 2.41: „Die Anzeige der Anlage funktioniert. Makros können verschoben werden, Position wird gespeichert. Aber: Beim Klick auf Bild laden öffnet sich kein Bild-laden-Dialog.“). **Ursache:** `GraphPanel._layout` startete `on_layout` mit `asyncio.ensure_future(...)`. Eine solche Hintergrundaufgabe hat **keinen Zusammenhang zur Seite** (NiceGUI führt den Slot-Stapel je Aufgabe), und `ui.dialog()` lässt sich dort nicht anlegen; derselbe Fehler wie beim leeren Makrobaum in 2.32 (`load_tree`). **Behoben** (`web_graph.py` 1.08): `_layout` gibt die Coroutine **zurück**; NiceGUI wartet bei einem Rückgabewert dieser Art selbst und im Zusammenhang der Seite darauf. Der Umschalter Ketten/Anlage und das Entfernen des Bildes liefen schon vorher, weil sie keinen Dialog brauchen. Die Menüeinträge „Anlagenansicht laden/speichern“ sind eigene asynchrone Handler (kein Problem).
+
+**Test** (`test_graph_plant.py`, jetzt 29): `_layout` liefert die Coroutine und startet sie nicht selbst, ohne Wert bei `guard` oder ohne `on_layout`; im Quelltext von `web_graph.py` gibt es keine Hintergrundaufgaben (`ensure_future`, `create_task`) und die Kopfzeile ruft `_layout` direkt auf. Alle Reihen laufen. **Nicht geprüft:** der Dialog selbst im Browser.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_graph.py` | 1.08 | `_layout` gibt die Coroutine zurück statt eine Hintergrundaufgabe zu starten |
+| `webmobaledlib.py` | 2.42 | Version von `web_graph.py` |
+
+## 2.41 (2026-10-28)
+
+**Absturz beim Seitenaufbau in 2.40 behoben** (Entwickler: „crash nach start“, `UnboundLocalError: cannot access local variable 'on_graph_layout' where it is not associated with a value` in `build_page`, Zeile 1962). **Ursache:** `graph_panel = web_graph.GraphPanel(..., on_graph_layout)` steht im Quelltext **vor** der Definition von `on_graph_layout` (die liegt bei `refresh_graph`, weiter unten in `build_page`); in 2.40 hatte ich die Funktion dort eingefügt, wo die übrigen Hilfen der Anlagenansicht stehen. **Warum die Tests es nicht fanden:** Sie laden die Funktionen einzeln aus dem Quelltext und sehen die Reihenfolge in `build_page` nicht. **Behoben** (`webmobaledlib.py` 2.41): Übergabe als `lambda action, value=None: on_graph_layout(action, value)`, aufgelöst erst beim Aufruf. **Neuer Test** (`test_graph_plant.py`, jetzt 24): prüft mit dem Syntaxbaum, dass beim Aufbau der Seite (oberste Ebene von `build_page`, ohne die Rümpfe von Funktionen und Lambdas) kein Name gelesen wird, der erst weiter unten zugewiesen oder definiert wird; mit 2.40 schlägt er an (`on_graph_layout` Zeile 1962, definiert Zeile 2279), mit 2.41 nicht. Alle übrigen Reihen laufen. Die Prüfung gilt für diese ganze Klasse von Fehlern, nicht nur für diesen Namen.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 2.41 | `on_graph_layout` erst beim Aufruf auflösen |
+
+## 2.40 (2026-10-28)
+
+**Grafische Ansicht, Stufe 3: Anlagenansicht mit Hintergrundbild** (Entwickler: „Kann ich erst morgen testen. Kannst Du schon mal mit Stufe 3 anfangen?“). Aufbau und Gründe siehe Konzept 0.60, „Stufe 3“.
+
+**Wichtige Abweichung:** Entscheidung 1 (Zusatzdatei neben der PGF-Datei) ist so nicht möglich: Die Datei-Dialoge der Weboberfläche laden hoch und herunter (`web_dialogs`: temporäre Ordner, Download im Browser), es gibt keinen festen Ordner neben der PGF-Datei. Das Layout ist deshalb Teil des Datenblatts und wird mit der Arbeitsmappe gesichert (JSON, mit der automatischen Sicherung); zum Austausch gibt es die Datei `.MLL_view` (Bild eingebettet) im Menü Datei. Die PGF-Datei bleibt unverändert.
+
+**Neu:**
+- `headless/headless_graph_layout.py` 1.01: Layout (Modus, Bild als Base64, Positionen), `bind_positions` (Signatur = Makroaufruf und Vorkommen), `collect_positions`, `auto_place`, `clamp`, `process_image` (Pillow, höchstens 2048 Pixel, höchstens 15 MB), `export_json`/`import_json`.
+- `ExcelAPI/XLA_Application.py` 1.12: `getData` und `setData` sichern und laden `view_layout` (damit auch die automatische Sicherung).
+- `_web/mll_graph.js` 1.07: Anlagenansicht (Fläche, Bild, Linien, Kästchen), Zeigerereignisse (Kästchen ziehen → `place`, Hintergrund ziehen, Mausrad-Zoom, `fit`, `zoom`), Ablagestelle `plant`, Kontextmenü und Entf auch dort.
+- `_web/web_graph.py` 1.07: Bildablage im Speicher (`register_image`, Adresse `/mll_view_image/<Kennwert>`, `install_routes`), `plant_data`, Kopfzeile (Umschalter Ketten/Anlage, Bild laden, Bild entfernen, Alles zeigen, Zoom), Befehl `place`.
+- `webmobaledlib.py` 2.40: `plant_data_for` (binden, automatisch ergänzen, Layout auf dem Stand der Tabelle halten), `on_graph_layout`, `ask_upload`, `layout_export`/`layout_import` (Menü Datei), `place` in `on_graph_cmd`, Ablegen auf die Fläche (`place_macro(..., plant_pos)`), `view_layout_ver` in der Signatur der automatischen Sicherung, Adresse für Bilder beim Start.
+- Katalog 821 Einträge (20 neu), Anleitung 2.98, Checkliste 1.71 (Punkt 109), Konzept 0.60.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `headless/headless_graph_layout.py` | 1.01 | neu: Layout, Positionen, Bild, Austausch |
+| `ExcelAPI/XLA_Application.py` | 1.12 | `view_layout` sichern und laden |
+| `_web/mll_graph.js` | 1.07 | Anlagenansicht |
+| `_web/web_graph.py` | 1.07 | Bildablage, Kopfzeile, `place` |
+| `webmobaledlib.py` | 2.40 | Anlagenansicht, Menü Datei |
+| `csv/Web_Languages.csv` | - | 821 Einträge |
+| `install/ANLEITUNG_Installation.md` | 2.98 | Anlagenansicht |
+| `install/BETATEST_Checkliste.md` | 1.71 | Punkt 109 |
+
+Test (neu): `test_graph_layout.py` (24: Bild, Verkleinern, Fehler; Positionen und Signaturen mit dem echten Blatt, auch nach einer neuen Sitzung mit neuen Kennungen und gleichen Makroaufrufen; Sicherung und Laden der Arbeitsmappe; Austausch), `test_graph_plant.py` (21: Seite mit dem echten Blatt: Umschalten, `place`, Bild laden/entfernen, neue Sitzung, neue und gelöschte Zeilen, Export und Import), `test_graph_plant_js.py` (11, Node: Darstellung, Fit, Zoom um einen Punkt, Rad, Ziehen mit Zoom, Begrenzen, kleiner Wackler, Hintergrund ziehen, Ablagestelle, Menü, Entf). Alle Reihen laufen. **Nicht geprüft:** alles im Browser (Zeigerereignisse, Rad, Bild-Auslieferung über die Adresse, der Hochladen-Dialog, Tablet). **Offen:** Größe der Kästchen als Einstellung, Ausrichten, mehrere Kästchen gemeinsam, Rückgängig (zurückgestellt).
+
+## 2.39 (2026-10-28)
+
+**Linux Mint, PlatformIO: Boardliste und UnknownPackageError** (Entwickler mit Protokoll: Mint-PC, `install_linux.sh --with-platformio`, Update von 2.26 auf 2.28 im Programm, PlatformIO Core 6.2.0 in `~/.platformio/penv`; „1. Bei den Boards werden ESP32 und Raspberry Pico nicht angezeigt. 2. Nach Restart wird ESP32 angezeigt, aber Pico immer noch nicht. 3. Kompilieren und Hochladen zu ESP32 bringt: Tool Manager: Installing platformio/tool-mkfatfs @ ~2.0.0, UnknownPackageError“). Gleichzeitig: **Rückgängig (Stufe 2d) zurückgestellt**, der ausgelieferte Stand ist wieder 2.38 ohne Rückgängig; die Umsetzung (Version 2.39 der Reihe, 13 + 37 + 26 Prüfungen) liegt unter `archiv/Rueckgaengig_2d_zurueckgestellt_2.39/`.
+
+**1 und 2, Boardliste:** Im Protokoll: `use_pio` wechselt im Dialog um 16:25:07 von False auf True. Die Liste der Boards wurde aber beim **Öffnen** des Dialogs aufgebaut (ESP32 nur, wenn die IDE das ESP32-Paket hat oder PlatformIO eingestellt ist) und folgte dem Wechsel im selben Dialog nicht: ESP32 fehlte, bis der Dialog neu geöffnet wurde. Mein Eingriff in 2.28 betraf nur diese Stelle beim Öffnen, nicht den Wechsel im Dialog. **Neu** (`web_form_options` 1.08): `_radios` listet ESP32 immer; die Spezifikation trägt `esp32_value` und `esp32_lib`; im Dialog entscheidet `board_second` (ESP32 nur bei PlatformIO oder mit ESP32-Paket der IDE) und `refresh_boards` setzt die Optionen der Radiogruppe nach jedem Wechsel der Entwicklungsumgebung neu (`set_options`), zusammen mit dem Ausblenden der Reiter. **Der Raspberry Pico fehlt im Code nirgends:** Die Boardliste enthält ihn bei IDE und bei PlatformIO (geprüft mit dem echten Formular; kein Filter auf `PICO_Lib_Installed` für den Text „Raspberry Pico“). Warum er auf dem Mint-PC fehlt, ist offen; ich habe um einen Screenshot der Liste und die Angabe der Version gebeten (nicht nachgestellt).
+
+**3, UnknownPackageError:** Im Protokoll: Plattform `espressif32 @ 6.9.0`, `toolchain-xtensa-esp32`, `framework-arduinoespressif32`, `tool-esptoolpy`, `tool-mkspiffs`, `tool-mklittlefs` ließen sich laden; bei `platformio/tool-mkfatfs @ ~2.0.0` (nach nur 0,6 s) meldet die Registry „UnknownPackageError: Could not find the package“ (kein Netzfehler: die Pakete davor kamen aus demselben Netz). Nicht nachstellbar (kein Netz). **Neu** (`Prog_Generator` 1.04, `execute_shell_cmd`): Bei einem `pio`-Aufruf mit Fehler und „UnknownPackageError“ in der Ausgabe wird **einmal** wiederholt (drei Sekunden Pause, Meldung „Zweiter Versuch …“); schon geladene Pakete bleiben. Die Ausgabe dafür wird auch aus den **letzten Zeilen nach dem Ende des Prozesses** (`_drain_output`, Parameter `collector`) gesammelt: die erste Fassung hätte die Meldung dort verpasst (Wettlauf, im Test mit 20 Wiederholungen erfasst). Scheitert auch der zweite Versuch, kommt ein Hinweis (Internet prüfen, später noch einmal, `pio pkg show` und `pio --version` melden). **Ursache offen:** ob die Registry das Paket für diesen Rechner nicht (mehr) liefert oder kurz nicht antwortet; Bitte um die Ausgabe von `pio --version` und `pio pkg show platformio/tool-mkfatfs`. Für den Fall, dass es bleibt, wäre ein Platzhalter-Paket (`platform_packages` mit einem lokalen Ordner) möglich, nicht ohne Test eingebaut.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_form_options.py` | 1.08 | Boardliste folgt dem Wechsel der Entwicklungsumgebung sofort |
+| `mlpyproggen/Prog_Generator.py` | 1.04 | UnknownPackageError: einmal wiederholen, Hinweis |
+| `webmobaledlib.py` | 2.39 | Versionen |
+| `csv/Web_Languages.csv` | - | 801 Einträge |
+| `install/ANLEITUNG_Installation.md` | 2.97 | Fehler UnknownPackageError, Boardliste |
+| `install/BETATEST_Checkliste.md` | 1.70 | Punkt 108 |
+
+Test (neu): `test_pio_retry.py` (11: Wiederholung bei UnknownPackageError mit nachgebauten Befehlen: erfolgreich im zweiten Versuch, zwei Fehlversuche mit Hinweis, anderer Fehler und kein pio-Befehl ohne Wiederholung, Meldung als letzte Zeile ohne Zeilenende in 20 Läufen; Boardliste: Spezifikation und `board_second` für IDE ohne Paket, IDE mit Paket, PlatformIO). `test_pio_only.py` angepasst. Alle Reihen laufen. **Nicht geprüft:** der echte Ablauf auf dem Mint-PC (Registry, Netz), die Boardliste im Browser.
+
+## 2.38 (2026-10-28)
+
+**Grafische Ansicht, Stufe 2c: Kästchen verschieben (nur innerhalb der eigenen Kette), löschen, Kontextmenü** (Entwickler auf meine Frage, ob ein Kästchen in eine andere Kette gezogen werden darf: „Verschieben nur innerhalb der eigenen Kette. Sonst kann man sich ganz schnell etwas zerstören.“).
+
+**Neu:**
+- `headless/headless_graph_ops.py` 1.05: `chain_of`, `move_destination`, `plan_move` (nur Knoten derselben Kette, `end` nur mit dem eigenen Kanal; sonst `None`), `neighbour_target` (Nach oben/unten), `move_row` (`CWorksheet.int_moveRows`, danach `M20.Update_Start_LedNr()`), `delete_row` (Zeile markieren, `CWorksheet.deleterows()` wie der Knopf Lösche Zeilen, danach LED-Nummern). Gegen das echte Blatt in allen 40 Fällen geprüft (jede Zeile vor und hinter jede andere); `move_rows` setzt die Zeile hinter `move_to`, wenn `move_to` unter ihr liegt, sonst davor.
+- `_web/mll_graph.js` 1.05: Kästchen der Ketten `draggable` (nicht die der Spalte Ohne LEDs); `acceptNodeTarget`: nur Ablagestellen der eigenen Kette und der Papierkorb (sonst keine Markierung, kein `preventDefault`: der Zeiger zeigt „verboten“); Papierkorb `mll-g-trash` (nur sichtbar, solange ein Kästchen gezogen wird: Klasse `mll-dragging-node`); Taste Entf (`installKeys`, der Behälter ist fokussierbar, `tabindex`); Kontextmenü (`installMenu`, `menuEntries`, `menuHtml`: Dialog öffnen, Nach oben, Nach unten, Löschen); Ereignis `mll_graph_cmd`.
+- `_web/web_graph.py` 1.06: `mll_graph_cmd` (`_handle_cmd`), Texte (Papierkorb, Menü).
+- `webmobaledlib.py` 2.38: `on_graph_cmd(cmd, row, target)` unter `graph_lock`: `move` (nur wenn `plan_move` ein Ziel liefert; danach Zeile des verschobenen Kästchens markiert), `up`/`down`, `delete` (**immer mit Rückfrage** `confirm_delete`), `dialog` (wie der Doppelklick).
+- Katalog 799 Einträge (8 neu), Anleitung 2.96, Checkliste 1.69 (Punkt 107), Konzept 0.50.
+
+**Stufe 2d (Rückgängig) zurückgestellt** (Entwickler: „Es sieht so aus, als wenn das Rückgängig machen sehr kompliziert ist. Stellen wir das erstmal zurück.“). Die Umsetzung (Version 2.39: Journal mit Zeilenkennungen, `undo_insert`, `undo_move`, `undo_delete`, `remap_ids`, Knopf und Strg+Z, 13 + 37 + 26 Prüfungen) ist unter `archiv/Rueckgaengig_2d_zurueckgestellt_2.39/` gesichert und nicht im ausgelieferten Stand (2.38).
+
+**Schutz an zwei Stellen** (Browser und Server, wie vereinbart gegen versehentliches Zerstören): Der Browser lässt keine andere Kette zu; selbst bei einem falschen oder veralteten Ereignis entscheidet der Server nur über `plan_move` aus dem Modell, nicht über die Angaben der Seite. **Entfallen im Konzept:** Duplizieren und Kanalwechsel durch Verschieben.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `headless/headless_graph_ops.py` | 1.05 | `plan_move`, `move_row`, `delete_row` |
+| `_web/mll_graph.js` | 1.05 | Verschieben, Papierkorb, Entf, Kontextmenü |
+| `_web/web_graph.py` | 1.06 | Ereignis `mll_graph_cmd` |
+| `webmobaledlib.py` | 2.38 | `on_graph_cmd`, `confirm_delete` |
+| `csv/Web_Languages.csv` | - | 799 Einträge |
+| `install/ANLEITUNG_Installation.md` | 2.96 | Verschieben, Löschen, Menü |
+| `install/BETATEST_Checkliste.md` | 1.69 | Punkt 107 |
+
+Test (neu): `test_graph_move.py` (10: `move_destination` gegen das echte Blatt in 40 Fällen, `plan_move` nur in der eigenen Kette, `neighbour_target`, `move_row` mit Kennungen und LED-Nummern, `delete_row`), `test_graph_cmd.py` (25: Befehle mit dem echten Blatt: Verschieben, Nach oben/unten, Ränder, Ablehnung anderer Ketten, Löschen mit Rückfrage Ja und Nein, Menü-Dialog, laufender Befehl; JavaScript mit Node: ziehbar, `dragover` nur in der eigenen Kette, `drop`, Papierkorb, `dragend`, Entf, Kontextmenü mit Esc und Klick daneben, Maskierung). `test_graph.py` und `test_graph_drop.py` an die neuen Eigenschaften angepasst. Alle Reihen laufen. **Nicht geprüft:** das Ziehen, der Papierkorb, die Taste Entf und das Kontextmenü im Browser (auch Tablet); die Rückfrage-Seite (NiceGUI-Dialog) nur im Quelltext.
+
+## 2.37 (2026-10-28)
+
+**Grafik, Ablegen startet den ganzen Dialog** (Entwickler: „Funktioniert. Es sollte aber der gesamte Dialog, wie beim Button Dialog erscheinen und nicht nur die Makro-Parameter“). `on_graph_drop` ruft `place_macro` jetzt standardmäßig mit `full` (geführte Eingabe, Zelle in Spalte D aktiv, Text aus „Find Name“ in der Zeile); mit der Umschalt-Taste beim Loslassen nur mit `params` (Dialog mit den Parametern, wie beim +). In 2.36 war es umgekehrt. `web_graph.py` 1.05: Protokolltext.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 2.37 | `on_graph_drop`: ganzer Dialog, Umschalt-Taste: nur Parameter |
+| `_web/web_graph.py` | 1.05 | Protokolltext |
+| `install/ANLEITUNG_Installation.md` | 2.95 | Ablegen |
+| `install/BETATEST_Checkliste.md` | 1.68 | Punkt 106 |
+
+Test: `test_graph_page2.py` (25): ohne Umschalt-Taste läuft die geführte Eingabe (neue Kette, Ende der Kette, Abbrechen), mit Umschalt-Taste nur die Parameter (vor und hinter einem Kästchen). Alle Reihen laufen. **Nicht geprüft:** im Browser.
+
+## 2.36 (2026-10-28)
+
+**Grafische Ansicht, Stufe 2b: Ziehen und Ablegen** (Entwickler: „Funktioniert. 2b umsetzen“).
+
+**Neu:**
+- `_web/mll_graph.js` 1.04: Makros im Baum `draggable`; `dropTarget(target, clientY)` (reine Funktion): `before`/`after` (obere/untere Hälfte eines Kästchens, Kanal der Kette), `end` (freier Raum in der Kette), `new` (Zone „Neue Kette“, auch ausserhalb der Ketten), `other_before`/`other_after`/`other_end` (Spalte Ohne LEDs); `installDrop` am Behälter (`dragover` markiert und erlaubt das Ablegen, `dragleave`, `drop` meldet `emitEvent('mll_graph_drop', {macro, row, shift, target})`), nur wenn ein Makro aus dem Baum gezogen wird (`dragData`; eine Datei aus dem Explorer wird nicht beachtet); blaue Markierung (`mll-drop-before`, `-after`, `-end`, `-hot`); `render` zeichnet immer die Zone „Neue Kette“ (auch bei leerem Modell, damit sich das erste Makro ablegen lässt).
+- `_web/web_graph.py` 1.04: Ereignis `mll_graph_drop` (`_handle_drop`), Text „Neue Kette: Makro hierher ziehen“, `on_drop` im Behälter.
+- `headless/headless_graph_ops.py` 1.03: `drop_position(model, target, first_data_row0)` → (Zeilenindex, LED Kanal); der Kanal kommt aus dem Modell, nicht aus der Seite; ungültige Angaben: neue Kette am Ende.
+- `webmobaledlib.py` 2.36: `on_tree_hit` zerlegt in `wait_not_busy`, `place_macro` (Zeile einfügen, Dialog, Abbrechen) und `on_tree_hit`; neu `on_graph_drop` (unter `graph_lock`, wartet auf `state["busy"]`, `drop_position`, `place_macro`; mit Umschalt-Taste die geführte Eingabe). Anhängen und Ablegen teilen sich also eine Funktion.
+- Katalog 791 Einträge (1 neu), Anleitung 2.94, Checkliste 1.67 (Punkt 106), Konzept 0.40.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/mll_graph.js` | 1.04 | Ziehen, Ablagestellen, Markierung, Zone Neue Kette |
+| `_web/web_graph.py` | 1.04 | Ereignis `mll_graph_drop` |
+| `headless/headless_graph_ops.py` | 1.03 | `drop_position` |
+| `webmobaledlib.py` | 2.36 | `place_macro`, `on_graph_drop` |
+| `csv/Web_Languages.csv` | - | 791 Einträge |
+| `install/ANLEITUNG_Installation.md` | 2.94 | Ziehen und Ablegen |
+| `install/BETATEST_Checkliste.md` | 1.67 | Punkt 106 |
+
+Test (neu): `test_graph_drop.py` (15: `drop_position` für alle Ablagestellen mit dem echten Blatt, Einfügen vor einem Kästchen mit Kennungen, JavaScript mit Node: Zone, Ablagestellen, Markierung, `dragstart`, `dragover`, `drop`, Umschalt-Taste, ohne gezogenes Makro, `dragend`), `test_graph_page2.py` (25: Ablegen vor, hinter, neue Kette, mit Umschalt-Taste, Abbrechen, laufender Befehl); `test_graph.py` (32) an die neue Zone angepasst. Alle Reihen laufen. **Nicht geprüft:** das Ziehen im Browser (HTML5-Ziehen und Ablegen mit der echten Maus und auf dem Tablet; Rückmeldung des Entwicklers nötig).
+
+## 2.35 (2026-10-28)
+
+**Grafik, Knopf Dialog im Makrobaum startet die geführte Eingabe** (Entwickler: „Der Dialog startet nicht mit der Abfrage der Testbuttons, der Beschreibung usw., sondern mit dem Makroselect-Dialog. Dazu muss beim Aufruf des Dialogs die Zelle in Spalte D aktiv sein.“).
+
+**Ursache:** Der Dialogknopf der Werkzeugleiste ruft `F00.Dialog_Button_Click` → `M03.Dialog_Guided_Input` auf. Je nach aktiver Zelle öffnet das einen anderen Dialog: Ist die Zelle in `DCC_or_CAN_Add_Col` (Spalte D, DCC-Adresse) und die Adresse leer, startet `Ask_External_Control` die **geführte Eingabe** (Adresse, Typ und Testtasten, Startwert, Beschreibung, Verteiler, zuletzt die Makroauswahl); die aktive Symbolzelle führt dagegen nur zur Makroauswahl. In 2.34 war die Symbolzelle aktiv und `open_macro_dialog` wurde aufgerufen.
+
+**Neu (`webmobaledlib.py` 2.35):** Beim Knopf **Dialog** (`mode` „full“) wird die Zelle in der Startspalte aktiv (`headless_graph_ops` 1.02 `guided_start_column`: DCC-Adresse, bei Selectrix der Kanal, sonst Config) und `open_guided_dialog` ruft wie der Knopf `F00.Dialog_Button_Click` im Worker auf, danach `show`. Der Text aus „Find Name for detection“ steht weiter in der Spalte Config, damit die Makroauswahl am Ende das Makro vorwählt. `+` und Doppelklick (`mode` „params“) bleiben wie bisher. Abbrechen: `is_unused_row` (Config leer oder nur der vorgemerkte Text) entfernt die Zeile.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `headless/headless_graph_ops.py` | 1.02 | `guided_start_column` |
+| `webmobaledlib.py` | 2.35 | `open_guided_dialog`, Startzelle des Dialogs |
+| `install/ANLEITUNG_Installation.md` | 2.93 | geführte Eingabe |
+| `install/BETATEST_Checkliste.md` | 1.66 | Punkt 105 |
+
+Test: `test_graph_page2.py` (19: beim Start der geführten Eingabe ist die aktive Zelle in Spalte D und der Text aus „Find Name“ steht in der Zeile, die einfache Makroauswahl wird dabei nicht benutzt; `open_guided_dialog` ruft `F00.Dialog_Button_Click` mit der aktiven Zelle auf; `+` unverändert), `test_graph_ops.py` (25: `guided_start_column`). Alle Reihen laufen. **Nicht geprüft:** der ganze Ablauf der geführten Eingabe im Browser (Adresse, Typ, Testtasten, Beschreibung, Makroauswahl mit dem vorgewählten Makro).
+
+## 2.34 (2026-10-28)
+
+**Grafik, Makrobaum: zwei Wege, auch der ganze Dialog** (Entwickler: „Das Hinzufügen funktioniert einwandfrei inklusive dem Abbrechen. Es wird nur der Parameterdialog geöffnet. Da die Zeile noch komplett leer ist, wäre es besser, wenn der gesamte Dialog mit dem Dialog-Button durchlaufen wird … Wenn man das von Hand macht, trägt man das Makro in die Zeile ein, aktiviert die Zelle und drückt den Dialogknopf. Vielleicht lässt sich das einfacher umsetzen.“).
+
+**Umsetzung (einfach, wie vorgeschlagen):** Der Baum hat zwei Wege je Makro: **+** und Doppelklick wie bisher (`mode` „params“: `force_result`, nur der Parameterdialog) und der neue Knopf **Dialog** (`mode` „full“): Die neue Zeile bekommt das Makro als Text in die Spalte Config, und der gewohnte Dialog (`open_macro_dialog`) läuft ohne `force_result`: Die Makroauswahl liest den Text, wählt das Makro vor (`Find_Macro_in_Lib_Macros_Sheet`) und läuft danach mit den Parametern weiter. Der Text ist die Spalte **„Find Name for detection“** von `Lib_Macros` (zum Beispiel `House(`), mit der die Makroauswahl das Makro einer Zeile findet; Rückfall `Name(`. Es braucht keinen neuen Code in der Makroauswahl.
+
+**Abbrechen:** `is_unused_row(ws, r, placeholder)`: Die Zeile wird entfernt, wenn Config leer ist oder nur noch den vorgemerkten Text enthält (auch wenn man nur die Makroauswahl abbricht).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/mll_graph.js` | 1.03 | Knopf Dialog am Makro, Meldung mit `mode` |
+| `_web/web_graph.py` | 1.03 | Texte (Hinweise der Knöpfe), `mode` weitergeben |
+| `_web/web_macro_tree.py` | 1.05 | `find_name` je Makro |
+| `headless/headless_graph_ops.py` | 1.01 | `set_config_text`, `is_unused_row` |
+| `webmobaledlib.py` | 2.34 | `on_tree_hit(…, mode)` |
+| `csv/Web_Languages.csv` | - | 790 Einträge |
+| `install/ANLEITUNG_Installation.md` | 2.92 | zwei Wege |
+| `install/BETATEST_Checkliste.md` | 1.65 | Punkt 105 erweitert |
+
+Test: `test_graph_page2.py` (17: Knopf Dialog: Zeile am Ende der Kette mit dem Text aus „Find Name“ beim Öffnen des Dialogs, kein Makro vorgemerkt; Abbrechen mit dem Text in der Zeile: Zeile weg; `params` wie bisher), `test_graph_ops.py` (24: `set_config_text`, `is_unused_row`, JavaScript mit `mode`). Alle Reihen laufen. **Nicht geprüft:** das Verhalten im Browser; ob die Makroauswahl im Browser das Makro tatsächlich vorwählt (das tut sie im Programm über `web_select_macro_treeview`, in dieser Form nicht im Browser gesehen).
+
+## 2.33 (2026-10-28)
+
+**Grafik: der Makrobaum war beim Öffnen der Seite leer** (Protokoll des Entwicklers: „Makrobaum der Grafik nicht geladen … RuntimeError: The current slot cannot be determined because the slot stack for this task is empty“ in `load_tree` bei `run_in_worker`).
+
+**Ursache:** `refresh_graph` (am Ende von `show()` beim Aufbau der Seite) startet `load_tree` mit `asyncio.ensure_future`. Diese Hintergrundaufgabe hat keinen Kontext der Seite (NiceGUI führt den Slot-Stapel je Aufgabe), und `run_in_worker` liest `context.client`, um die Brücke für Dialoge zu setzen. Der Test in 2.32 hatte `run_in_worker` durch eine einfache Funktion ersetzt und konnte den Fehler deshalb nicht zeigen.
+
+**Neu (`webmobaledlib.py` 2.33):** `load_tree` liest `collect_macro_rows` mit `asyncio.get_running_loop().run_in_executor(None, …)`: Es liest nur das Blatt `Lib_Macros` und braucht weder die Brücke noch den Kontext der Seite. `on_tree_hit` bleibt bei `run_in_worker` (Ereignis der Seite, Kontext vorhanden). Test: `test_graph_page2.py` lässt `run_in_worker` mit genau dieser Meldung scheitern; mit 2.32 schlägt die Prüfung fehl, mit 2.33 besteht sie. Alle Reihen laufen. Die Meldung „Die Ereignisschleife war 9,1 s blockiert“ im Protokoll gehört vermutlich zum Aufbau der Seite (nicht untersucht; kam nach dem Fehler, nicht dadurch).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 2.33 | `load_tree` ohne `run_in_worker` |
+| `install/ANLEITUNG_Installation.md` | 2.91 | nur die Versionsangabe |
+| `install/BETATEST_Checkliste.md` | 1.64 | nur die Versionsangabe |
+
+## 2.32 (2026-10-28)
+
+**Grafische Ansicht, Stufe 2a: Makrobaum links und Anhängen** (Entwickler: „Jetzt geht es. Dann können wir mit dem nächsten Schritt weitermachen“; Stufe 2 aus dem Konzept, in Teilen: 2a Baum und Anhängen, 2b Ziehen, 2c Verschieben und Löschen, 2d Rückgängig).
+
+**Neu:**
+- `headless/headless_graph_ops.py` 1.00 (neu): `target_channel`, `next_free_channel`, `insertion_index` (hinter dem letzten Knoten der Kette, neuer Kanal hinter der letzten Zeile mit Makro), `insert_macro_row` (`tksheet.insert_rows` wie der Knopf Zeile einfügen, `P01.CellDict[...] = Kanal`, die Kennungen der anderen Zeilen bleiben), `is_empty_row`, `remove_row`.
+- `_web/web_macro_tree.py` 1.04: `force_result('Name,Zeile')` (das nächste `web_select_macro_treeview` liefert sofort das Makro, ohne den Baum zu zeigen; das Ergebnis hat dieselbe Form wie der Dialog: Name in Lib_Macros und Zeile), `clear_forced`, `graph_tree_nodes(items, text)` (verschachtelte Liste für den Baum der Grafik, Suche ohne Beachtung der Schreibweise).
+- `_web/mll_graph.js` 1.02: Makrobaum (`renderTree`, `treeHit`, `installTree`, `updateTree`): Gruppen als `<details>`, Makros als Zeilen mit Symbol und `+`; ein Klick wählt, Doppelklick oder `+` meldet `emitEvent('mll_graph_tree', {macro, row, dbl})`. Eigene Darstellung statt `ui.tree`, damit 2b die Einträge ziehbar machen kann.
+- `_web/web_graph.py` 1.02: Behälter in einer Zeile: links Suchfeld und Baum (280 px), rechts die Ketten; `set_tree`, Ereignis `mll_graph_tree`, `set_visible` blendet beides aus.
+- `webmobaledlib.py` 2.32: `load_tree` (liest Lib_Macros im Worker, einmal; angestoßen von `refresh_graph`), `on_tree_filter`, `on_tree_hit`: Doppelklick im Baum → unter `graph_lock` (wartet auf `state["busy"]`) Kanal des markierten Kästchens, Zeile einfügen, Zelle der Symbolspalte aktiv, `force_result`, `open_macro_dialog` (der gewohnte Dialog mit den Parametern), danach `clear_forced`; **leer geblieben (Abbrechen): Zeile wieder entfernt**; sonst Zeile markieren und in der Grafik wählen. `refresh_graph` merkt das Modell (`graph_state["model"]`).
+- Katalog 787 Einträge (3 neu), Anleitung 2.90, Checkliste 1.63 (Punkt 105), Konzept 0.30.
+
+Beim Eintragen in die Prüfliste der Mindestversionen (`REQUIRED_FILES`) hat mein Skript einmal eine Zeichenkette falsch maskiert und den Lauf verworfen (nichts geschrieben); behoben und geprüft: `headless_graph_ops` 1.00 steht drin.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `headless/headless_graph_ops.py` | 1.00 | neu: Zeile am Ende einer Kette einfügen, entfernen |
+| `_web/web_macro_tree.py` | 1.04 | `force_result`, `graph_tree_nodes` |
+| `_web/mll_graph.js` | 1.02 | Makrobaum |
+| `_web/web_graph.py` | 1.02 | Baum und Suche in der Seite |
+| `webmobaledlib.py` | 2.32 | Baum laden, Anhängen, Abbrechen |
+| `csv/Web_Languages.csv` | - | 787 Einträge |
+| `install/ANLEITUNG_Installation.md` | 2.90 | Makrobaum und Anhängen |
+| `install/BETATEST_Checkliste.md` | 1.63 | Punkt 105 |
+
+Test (neu): `test_graph_ops.py` (23: Stelle und Kanal, Einfügen und Entfernen mit dem echten Blatt, Kennungen bleiben, neue Kette, Baum aus dem echten Lib_Macros mit Suche, `force_result`, JavaScript des Baums), `test_graph_page2.py` (14: Anhängen mit Kanal des markierten Kästchens, Dialog mit vorgemerktem Makro, Abbrechen, einfacher Klick, laufender Befehl, Fehler beim Einfügen, Suche, Laden). Alle Reihen laufen. **Nicht geprüft:** das Verhalten im Browser; die verschiedenen Dialogarten (House, Animationen, Muster) mit einem vorgemerkten Makro (nur der Weg über `force_result` ist getestet, nicht jeder Dialog).
+
+## 2.31 (2026-10-28)
+
+**Grafische Ansicht, zweite Rückmeldung des Entwicklers** (Klick in der Tabelle wählt das richtige Kästchen, Klick im Kästchen markiert die Symbolzelle der Zeile, besser wäre die ganze Zeile; Doppelklick macht nichts, im Protokoll steht „Grafik: Klick auf Zeile 3“ dreimal und „Grafik: Doppelklick auf Zeile 3“).
+
+**Ursache des verschluckten Doppelklicks:** Der Browser sendet bei einem Doppelklick Klick, Klick, Doppelklick. Jeder Klick ruft `fire_selection_event` auf, das im Worker läuft und `state["busy"]` setzt; `on_graph_hit` verwarf jedes Ereignis, solange `state["busy"]` gesetzt war. Der Doppelklick kam, während der zweite Klick noch lief, und wurde verworfen. Beim Klick auf das Symbol in der Tabelle gibt es das nicht (ein Ereignis).
+
+**Neu (`webmobaledlib.py` 2.31):** `graph_lock` (asyncio.Lock): die Ereignisse der Grafik werden nacheinander bearbeitet; der **Doppelklick wartet** bis zu 3 Sekunden, bis `state["busy"]` frei ist (30 mal 0,1 Sekunden), dann öffnet er `open_macro_dialog`; ein einfacher Klick während eines Befehls wird wie bisher verworfen. **Ganze Zeile:** `select_row` setzt `set_selection(rows=…, type_="row")` wie der Klick auf die Zeilennummer und im Grid `setSelected` (`run_row_method`); beim Doppelklick bleibt die Symbolzelle aktiv, solange der Dialog offen ist (die Makroauswahl liest die aktive Zelle), danach wieder die ganze Zeile.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 2.31 | `graph_lock`, `select_row`, `on_graph_hit` wartet beim Doppelklick |
+| `install/ANLEITUNG_Installation.md` | 2.89 | Klick markiert die ganze Zeile |
+| `install/BETATEST_Checkliste.md` | 1.62 | Punkt 104: ganze Zeile, schneller Doppelklick |
+
+Test: `test_graph_page.py` (30) bildet die Folge Klick, Klick, Doppelklick mit gesetztem `state["busy"]` nach, außerdem Doppelklick während ein Befehl läuft (wartet), dauerhaft belegt (nichts), einfacher Klick während eines Befehls (nichts) und die Zeilenauswahl. **Mit der Fassung 2.30 schlagen die beiden Doppelklick-Prüfungen fehl, mit 2.31 bestehen sie** (die Makroauswahl öffnet sich nicht, wie gemeldet). Alle Reihen laufen. **Nicht geprüft:** das Verhalten im Browser.
+
+## 2.30 (2026-10-28)
+
+**Grafische Ansicht, Rückmeldung des Entwicklers zu 2.29** („Umschalter funktioniert; es wird nur die Anzahl der LEDs angezeigt, nicht die Nummern; LEDs mit einer Farbe (`C1-1`, `C2-1` …) hängen nicht in der Kette, sondern stehen unter ‚ohne LEDs‘; die Bedienung funktioniert gar nicht: weder Klick in Tabelle oder Grafik noch Doppelklick“).
+
+**Ursachen und Behebung:**
+1. **LED-Nummern:** In `M20` (Update Start LedNr) schreibt das Programm bei mehreren LED Kanälen und `LEDNr_Display_Type` 1 `Kanal-Nummer` (`1-5`) in die Spalte LED Nr. `to_int('1-5')` gab None, also fehlte die Nummer (nur „3 LEDs“). Neu: `headless_graph` 1.01 `parse_led_nr` (`5` → (None, 5), `1-5` → (1, 5); der Kanal der Zelle LED Kanal gilt, sonst der aus LED Nr).
+2. **Einzel-LEDs:** Die Spalte LEDs enthält bei Makros mit einzeln angesteuerten Farben `C1-1`, `C2-3`, `C1-6` (Sound_JQ6500_Seq1, AmpelX, Herz_BiRelais, Charlie_Buttons …), keine Zahl; `to_int` gab 0, also „ohne LEDs“. Neu: `parse_leds` (Zahl, `C…`-Angabe, `^`-Präfix, mehrzeilige Zellen werden addiert wie `CellLinesSum`, negative Zahlen nicht); Knoten mit LEDs **oder** Einzel-LEDs gehören in die Kette; Feld `single`; Anzeige „LED 3, C1-1“ (`web_graph` 1.01 `led_text`, neuer Text im Katalog, 784 Einträge); Untertitel der Kette „n Makros, m LEDs“.
+3. **Bedienung:** (a) Klick in der Tabelle: `on_cell_clicked` setzt die Auswahl mit `tksheet.set_selection`; das löst die Rückruffunktionen `on_select` (und damit `focus_cell`, wo ich die Grafik angehängt hatte) **nicht** aus: Sie feuern nur bei programmgesteuerter Auswahl (`Cells().Select()`). Neu: `graph_follow(r)` wird in `on_cell_clicked` (Zelle und Zeilennummer) und `on_selection_changed` ausdrücklich aufgerufen. (b) Klick in der Grafik: Die Tabelle erfuhr nichts, weil `set_selection` kein `on_select` auslöst: `on_graph_hit` ruft jetzt `focus_cell(ws.tksheet, zeile, spalte)` (Tabelle springt zur Zeile, Zelle markiert). (c) Der Weg des Klicks aus dem Browser ist unsicher gewesen (`ui.element.on(..., js_handler=...)`): jetzt meldet `mll_graph.js` 1.01 Klick und Doppelklick per `emitEvent('mll_graph', {row, dbl})` (`install` am Behälter, bei jedem `update`, idempotent) und die Seite hört mit `ui.on("mll_graph", …)`, wie bei den Testtasten (`mll_tb`) und `mll_dblmacro`, die im Browser erprobt sind; `_handle` akzeptiert das Argument als Objekt oder als Liste. Protokollzeile „Grafik: Klick auf Zeile n“ bei jedem Ereignis (Diagnose).
+4. **Mindestversionen:** In 2.29 hatte ich `web_graph.py`, `mll_graph.js`, `headless_graph.py` und `web_tabs` **nicht** in die Prüfliste `REQUIRED_FILES` eingetragen (ein Fehler meines Eintrags: die Zeilen wurden nicht gefunden und die Prüfung hat es nicht gemeldet). Jetzt eingetragen (`web_graph` 1.01, `mll_graph.js` 1.01, `headless_graph` 1.01, `web_tabs` 1.08; 67 Einträge); `check_file_versions` liest die Version auch aus der JavaScript-Datei. `test_z21_integration` an `web_tabs` 1.08 angepasst.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `headless/headless_graph.py` | 1.01 | `parse_led_nr`, `parse_leds`, Einzel-LEDs in der Kette |
+| `_web/web_graph.py` | 1.01 | Text mit Einzel-LEDs, Untertitel, Ereignis `mll_graph` |
+| `_web/mll_graph.js` | 1.01 | `install`, `emitHit`: Klick und Doppelklick per `emitEvent` |
+| `webmobaledlib.py` | 2.30 | `graph_follow`, `focus_cell` beim Klick auf ein Kästchen, Mindestversionen |
+| `csv/Web_Languages.csv` | - | 784 Einträge |
+| `install/ANLEITUNG_Installation.md` | 2.88 | Einzel-LEDs, LED Nr |
+| `install/BETATEST_Checkliste.md` | 1.61 | Punkt 104 erweitert |
+
+Test: `test_graph.py` (32: Zeilen mit `1-5`, `C1-1`, `C1-6`, mehrere Kanäle, `parse_leds`, `parse_led_nr`, Texte, JavaScript mit `install` und `emitEvent`), `test_graph_page.py` (27: `graph_follow`, `focus_cell` beim Klick auf ein Kästchen, `GraphPanel` mit `ui.on`). Alle Reihen laufen. **Nicht geprüft:** das Verhalten im Browser; der Weg `emitEvent` → `ui.on` ist derselbe wie bei den Testtasten, aber in dieser Form nicht im Browser gesehen.
+
+## 2.29 (2026-10-28)
+
+**Grafische Ansicht im Programm Generator, Stufe 1** (Wunsch des Entwicklers: eine Ansicht „Grafik“ neben der Tabelle; Konzept `KONZEPT_Grafische_Ansicht.md`, Entscheidungen vom 28.10.2026, Stufe 1 zuerst allein). Die Tabelle bleibt die einzige Wahrheit: Das Modell wird bei jeder Änderung neu aus dem Blatt berechnet und nie getrennt gespeichert.
+
+**Neu:**
+- `headless/headless_graph.py` 1.00 (neu): `build_model(ws, icons, display)`: Knoten aus den Zeilen mit einem Makro in der Spalte Config; **Ketten** nach LED Kanal (Zeilen mit LEDs, Tabellenreihenfolge, LED-Bereich aus „LED Nr“ und „LEDs“), Knoten **ohne LEDs** in `other` (Entscheidung 2); Name aus der Namensspalte (in der Sprache der Anzeige), Symbol aus `collect_icons`, Zeilenkennung `row_id`; `find_node`.
+- `_web/mll_graph.js` 1.00 (neu): `render` (Kästchen mit Eingang oben, Ausgang unten, Linie vor jedem Knoten, Spalte „Ohne LEDs“ ohne Linien, Hinweis bei leerem Modell, alle Texte maskiert), `update`, `select`, `hit` (Zeile aus einem Klick, `closest('[data-row]')`); reine Zeichenkettenarbeit, mit Node geprüft.
+- `_web/web_graph.py` 1.00 (neu): `view_model` (Texte in der Sprache: Kanal, Anzahl, LED-Bereich, Hinweis aus Name, Beschreibung und Aufruf), `normalize_view`, `GraphPanel` (Behälter `mll-graph`, `click` und `dblclick` mit `js_handler`, Aufrufe von `mllGraph.update` und `select`).
+- `webmobaledlib.py` 2.29: Umschalter **Tabelle | Grafik | Beides** in der Werkzeugleiste (nur auf Datenblättern), Behälter **über** der Tabelle (`grid_wrap` und `graph_panel` werden je Ansicht ein- und ausgeblendet), Ansicht je Blatt (`graph_state["view"]`), sonst die Standardansicht; `refresh_graph` am Ende von `show()` in try/except (stört die Tabelle nie) und nur bei geändertem Stand der Tabelle (`tksheet.version`); `focus_cell`: die Grafik folgt der Auswahl der Tabelle; `on_graph_hit`: Klick wählt die Zelle der Symbolspalte (die Tabelle folgt über `on_select`), Doppelklick öffnet `open_macro_dialog` (Entscheidung 5); während ein Befehl läuft passiert nichts.
+- `_web/web_tabs.py` 1.08: Option **Standardansicht des Programm Generators** (Combo Tabelle, Grafik, Beides, `graphdefaultviewnumber`, Voreinstellung Tabelle; Entscheidung 3).
+- Katalog 783 Einträge (13 neu, sieben Sprachen). Anleitung 2.87 (Abschnitt 2.17), Checkliste 1.60 (Punkt 104), Konzept 0.20.
+
+**Befund beim Lesen des Bestands:** Die Tabelle führt schon eine **stabile Zeilenkennung** (`sh.row_id`, `_sync_ids`; die Symbole und Testtasten hängen daran). Das ist die Grundlage der Positionen für Stufe 3.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `headless/headless_graph.py` | 1.00 | neu: Modell der Ketten |
+| `_web/mll_graph.js` | 1.00 | neu: Darstellung |
+| `_web/web_graph.py` | 1.00 | neu: Texte, Ansichten, Behälter |
+| `webmobaledlib.py` | 2.29 | Umschalter, Aktualisierung, Klick und Doppelklick |
+| `_web/web_tabs.py` | 1.08 | Standardansicht in den Programm Einstellungen |
+| `csv/Web_Languages.csv` | - | 783 Einträge |
+| `install/ANLEITUNG_Installation.md` | 2.87 | Abschnitt 2.17 |
+| `install/BETATEST_Checkliste.md` | 1.60 | Punkt 104 |
+
+Test (neu): `test_graph.py` (24: Modell mit dem echten Blatt und zwei Kanälen, Zeile ohne LEDs, Änderung der Tabelle ändert das Modell, Texte, JavaScript mit Node: Knoten, Linien, Auswahl, Maskierung, leeres Modell, `hit`, `update`, `select`) und `test_graph_page.py` (23: die Funktionen der Seite aus dem Quelltext des Hauptprogramms mit nachgebauten Elementen: Standardansicht, Umschalten, Blatt ohne Daten, Zwischenspeicher, Klick, Doppelklick, laufender Befehl, `GraphPanel`). Alle 34 Reihen laufen. **Nicht geprüft:** das Aussehen und die Klicks im Browser, sehr viele Zeilen, Tablet. **Offen (nächste Stufen):** 2 Ziehen und Ablegen, 3 Hintergrundbild und Zusatzdatei, 4 Feinschliff; Umschalt+Doppelklick für die Parameter (später).
+
+## 2.28 (2026-10-27)
+
+**PlatformIO ohne ARDUINO IDE** (Rückmeldung des Entwicklers: Raspberry Pi mit neuem Raspberry Pi OS (Trixie, 64 Bit), neu installiert mit `--with-platformio`: Start meldet „keine ARDUINO-IDE gefunden“; nach dem Umschalten auf PlatformIO funktioniert Übersetzen und Hochladen auf den Pico). Gewünscht: (1) bei PlatformIO keine Suche der IDE, keine Prüfung und kein Update der Bibliotheken, Reiter Update ausblenden; (2) `M02.Sketchbook_Path` = Python-Ordner; (3) weitere Stellen suchen.
+
+**Neu:**
+- `M28_Diverse` 1.01 `Is_PlatformIO()` (liest `Use_PlatformIO`). `M02a_Public` 1.02: `Get_Project_Dir()` (Python-Ordner); `Read_Sketchbook_Path_from_preferences_txt()` setzt bei PlatformIO den Python-Ordner, liest `preferences.txt` nicht und meldet keinen Fehler; `Get_Sketchbook_Path()` bestimmt den zwischengespeicherten Pfad beim **Wechsel** der Entwicklungsumgebung neu.
+- Start: `F00_mainbuttons` 1.01 und `DieseArbeitsmappe` 1.01: mit PlatformIO keine Suche der IDE, keine Meldung, keine Bibliotheksprüfung; Sketchbook-Pfad setzen und **`M38.Load_Extensions()` trotzdem ausführen** (es benutzt `M02.Sketchbook_Path` direkt; vorher setzte ihn erst die Bibliotheksprüfung, ohne sie hätte es im Wurzelverzeichnis `/libraries/*` gesucht). `headless_startup` 1.01: die zurückgestellte Prüfung beim ersten Browser entfällt. `M37_Inst_Libraries` 1.06: `Install_Missing_Libraries_and_Board()` kehrt bei PlatformIO sofort zurück (für alle Aufrufer).
+- Version der MobaLedLib: `M37.Get_Lib_Version("MobaLedLib")` liest bei PlatformIO `libraries/MobaLedLib/library.properties` im Sketchbook-Pfad (sonst bliebe die Spalte „erkannte Version“ der Seite Bibliotheken leer, weil nur die IDE-Prüfung sie füllt: Folge wäre eine leere Version in `START_MSG` des erzeugten Programms, `M06_Write_Header`, und in der Anzeige, `webmobaledlib.py`). Zusätzlich fehlten `import re` und `import logging` in `M37` (hätten die Abfrage still leer gelassen; vor dem Test aufgefallen).
+- Optionen: `web_form_options` 1.07: Die Reiter **Update** und **Bootloader** (nur der schnelle Bootloader, der Reiter eines WLAN-Pico bleibt) tragen `ide_only` und sind ausgeblendet, solange PlatformIO eingestellt ist, **live** beim Umschalten der Entwicklungsumgebung im Dialog (`update_ide_tabs`); **ESP32** (und Pico) sind mit PlatformIO immer wählbar (`_radios`, dazu `UserForm_Options` 1.02 an zwei Stellen: Auswahl des Radioknopfs beim Lesen von BuildOpt); der Reiter Entwicklungsumgebung zeigt den Hinweis auf das Programmupdate (Menü Hilfe), der sonst nur auf dem Reiter Update stand. Wechsel IDE → PlatformIO: `M02.Sketchbook_Path` zurückgesetzt; PlatformIO → IDE: Meldung, wenn die IDE fehlt, sonst **Frage, ob die Bibliotheken und Boards jetzt geprüft werden sollen** (neuer Text in sieben Sprachen, Katalog 770 Einträge).
+- **Weitere Stellen** (Antwort auf Frage 3): bereits abgesichert: die Prüfungen der Arduino-Erweiterungen (ESP32, Pico, NmraDcc) in `M08_ARDUINO` (`Use_PlatformIO == False` an fünf Stellen); weiter an die IDE gebunden und nicht geändert: schneller Bootloader (`M08_Install_FastBootLoader`: ArduinoISP und avrdude der IDE), Übersetzen des Simulators (`M39_Simulator`, nur Windows), Installationsknöpfe der Seite Bibliotheken.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `proggen/M28_Diverse.py` | 1.01 | `Is_PlatformIO` |
+| `proggen/M02a_Public.py` | 1.02 | Sketchbook-Pfad bei PlatformIO |
+| `proggen/M37_Inst_Libraries.py` | 1.06 | keine Bibliotheksprüfung bei PlatformIO, Version der MobaLedLib |
+| `proggen/F00_mainbuttons.py`, `proggen/DieseArbeitsmappe.py` | 1.01 | Start ohne IDE-Suche bei PlatformIO |
+| `headless/headless_startup.py` | 1.01 | zurückgestellte Prüfung entfällt |
+| `_web/web_form_options.py` | 1.07 | Reiter live ausblenden, ESP32, Wechsel der Umgebung |
+| `proggen/UserForm_Options.py` | 1.02 | ESP32 und Pico ohne IDE-Pakete |
+| `csv/Web_Languages.csv` | - | 770 Einträge |
+| `webmobaledlib.py` | 2.28 | Version, Mindestversionen |
+| `install/ANLEITUNG_Installation.md` | 2.86 | Abschnitt 2.16 |
+| `install/BETATEST_Checkliste.md` | 1.59 | Punkt 103 |
+
+Test (neu, `test_pio_only.py`, 27): Is_PlatformIO; Sketchbook-Pfad bei IDE (aus `preferences.txt`), nach dem Wechsel auf PlatformIO ohne Neustart der Python-Ordner, ohne `preferences.txt` und ohne Fehlermeldung; keine Bibliotheksprüfung; Version aus `library.properties`; `Workbook_Open` in beiden Modulen (mit PlatformIO: keine Suche der IDE, keine Prüfung, Erweiterungen geladen, Pfad gesetzt; mit der IDE wie bisher inklusive Meldung); zurückgestellte Prüfung im Web-Start; Reiter und ESP32 in der Spezifikation der Optionen; Wechsel in beide Richtungen und die Rückfrage (ohne IDE, Ja, Nein). Alle Reihen laufen. **Bestätigt vom Entwickler (27.10.2026):** Programmieren von **Pico und ESP32 auf dem Raspberry Pi ohne ARDUINO IDE** funktioniert (Raspberry Pi OS Trixie, 64 Bit, Installation mit `--with-platformio`). **Nicht geprüft:** die Anzeige im Browser (live ein- und ausgeblendete Reiter), das Zurückschalten auf die IDE auf einem Gerät mit IDE.
+
+## 2.27 (2026-10-27)
+
+**Rückmeldung des niederländischen Testers (Theo) zu 2.22.** Positiv: PlatformIO nach Anleitung installiert, Update 2.18 auf 2.22 über das Menü Hilfe, Hochladen mit beiden Entwicklungsumgebungen auf LichtMaschine Classic und MoLLi; erstes Hochladen etwa 5 Minuten (Nano) und etwa 10 Minuten (Pico). Die Prüfung der Übersetzungen läuft noch (Datei `Web_Languages_Nederlands_Entwurf.csv`).
+
+**1. Ein/Aus-Testtaste mit Startwert 1** („nach dem Ausschalten nicht mehr einschaltbar, das Feld bleibt grün mit 1, das Gerät ist aber aus“). **Ursache** (nachgestellt): `M20.Update_TestButtons` setzt den Namen einer **wiederverwendeten** Taste nicht neu (nur beim Neuanlegen, `AddShape(..., name=...)`); das VBA-Original setzt `.Name = ...` bei **jedem** Aufruf. Eine Ein/Aus-Taste hat zwei Zustände: Name und `AlternativeText` enthalten abwechselnd den Befehl „an“ und „aus“. Wird eine schon umgeschaltete (grüne) Taste mit dem Startwert neu gezeichnet (`ResetTestButtons`, zum Beispiel nach dem **Hochladen auf den Arduino** oder bei „Tabelle reparieren“), setzte der Code `AlternativeText = Name` (den schon umgeschalteten Namen) und `Name = Gegenteil`: danach waren beide **gleich**. Der Druck sendete weiter nur „aus“, `DCCSend` tauschte zwei gleiche Namen, die Taste blieb grün mit 1. **Neu:** `elif objButton.Name != objButton_Name: objButton.Name = objButton_Name` (`M20_PageEvents_a_Functions` 1.06). Test (`test_feedback_nl2.py`): Startwert 1 → Druck (aus, rot, 0) → Druck (an, grün, 1) → `ResetTestButtons` (zweimal, auch aus dem Zustand „aus“): immer wieder ein gültiges Paar, die Taste schaltet danach weiter um; Startwert 0 → aus. **Nicht untersucht:** der Weg über den echten Arduino (dort wurde der Befehl gesendet).
+
+**Zweite Meldung zur selben Taste** (ein anderer Tester): Steht ein DCC-Schalter auf „an“ (grün) und programmiert man danach (Hochladen), lässt er sich nicht mehr ein- und ausschalten; erst „Tabelle reparieren“ (manchmal) oder „Tabelle neu berechnen“ (immer) hilft. **Gleiche Ursache, auch ohne Startwert:** Das Hochladen ruft `ResetTestButtons(False)`; die Taste steht grün mit dem Namen des Zustands „an“; `Update_TestButtons` setzt `AlternativeText` aus den Grundwerten und ließ den Namen unverändert: beide gleich (nachgestellt mit dem Stand 2.22: Name und Ersatzname `B 100- 0- 1-1`, der Druck sendet zweimal „aus“). Mit der Korrektur aus 2.27 geht die Taste nach dem Hochladen sauber auf „aus“ (rot, 0; der Arduino startet ohnehin neu) und lässt sich wieder umschalten. „Tabelle neu berechnen“ und „reparieren“ legen die Tasten neu an, daher halfen sie. Test erweitert (`test_feedback_nl2.py`, 27).
+
+**2. Kontrollkästchen „Pattern Configurator“** in den Programm Einstellungen: `ShowPatternGenerator` ist im Web nirgends angeschlossen (der Reiter ist immer sichtbar). **Neu:** `web_tabs` 1.07 `PARAM_REMOVALS = ("ShowPatternGenerator",)`: `apply_param_overrides` nimmt die Option aus der Seite. Z21 und DM Servo bleiben. **Entscheidung** gegen „funktionsfähig machen“: Sonst wäre der Reiter mit der Vorgabe 0 standardmäßig weg.
+
+**3. Reiter „DCC Arduino“ bei einem Pico** (Excel: `UpdateDCCSubPage`, Reiter nur bei `Get_BoardTyp() = HT_AM328` und Seite ≠ CAN; im Python-Tk-Code ist der Aufruf auskommentiert). **Neu:** `web_form_options` 1.06: Der Reiter bekommt `nano_only` und `visible` (`M02a.Get_BoardTyp() == M02.HT_AM328`); `nano_values` (die Radioknöpfe von Nano und Uno, auch „wie in der IDE“, nicht ESP32 und Pico); in `_options_async` blenden die Radioknöpfe und das Häkchen „Automatisch erkennen“ den Reiter sofort ein und aus (`update_dcc_tab`, `set_tab_visible` mit Rückfall auf `visible`, für verschiedene NiceGUI-Versionen); bei automatischer Erkennung bleibt der Stand von vorher.
+
+**4. Pico eingestellt, Nano am Anschluss** („meldet, dass am erkannten Anschluss kein PICO gefunden wurde“). **Ursache:** Bei Pico filtert `EnumComPorts` die Anschlüsse auf Pico-Geräte; ein Nano (CH340, `USB2.0-Serial`) fehlt dann in der Liste, `Check_If_Arduino_could_be_programmed_and_set_Board_type` meldet „kein PICO angeschlossen“, obwohl der Anschluss stimmt. **Neu:** `M07_COM_Port` 1.04 `Find_Nano_Like_Device(Anschluss)` (Hersteller 0x1A86 CH340, 0x0403 FTDI, 0x2341 und 0x2A03 Arduino oder Beschreibung CH340, CH341, Arduino, USB2.0-Serial; **nicht** CP210x der ESP32 und nicht 0x2E8A Raspberry Pi); `M08_ARDUINO` 1.04: beim Hochladen mit Board Pico und einem solchen Gerät fragt das Programm „Am COM Port #1# ist ein Arduino Nano (#3#) angeschlossen, eingestellt ist aber #2#. Soll das Board auf Arduino Nano umgestellt werden?“; bei „Ja“ wird das Board umgestellt (`Change_Board_Typ`) und die Prüfung wiederholt, bei „Nein“ kommt die bisherige Meldung. **Entscheidung:** nur bei Pico (viele ESP32-Platinen haben ebenfalls einen CH340). Die drei Texte stehen in allen sieben Sprachen im Katalog (769 Einträge).
+
+**5. Dauer beim ersten Hochladen mit PlatformIO** (etwa 5 Minuten Nano, etwa 10 Minuten Pico): Anleitung 2.85 (2.16), `install_platformio.sh` 1.01, `install_windows.bat` 1.09.
+
+**Offen (nicht angefasst, auf einen Pico zum Prüfen wartend):** (6) Hinweis „PICO im Bootmodus gefunden, Start-Firmware installieren?“ erscheint nicht (Python: `test_is_pico_in_boot_mode` liest USB-Laufwerke mit `EnumDiskDrives`, unter Linux vermutlich ohne Wirkung; Bootmodus unter Linux besser über die USB-Kennung 2e8a:0003 oder den Einhängepunkt `RPI-RP2`); (7) Knopf „Firmware installieren“ für den Pico (`Boot_Firmware_Button`, `Select_Firmware_Form`, `flashonly`; Jürgens Sound- und Servo-Modul).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `proggen/M20_PageEvents_a_Functions.py` | 1.06 | Name einer wiederverwendeten Testtaste immer neu setzen |
+| `_web/web_tabs.py` | 1.07 | Kästchen Pattern Configurator entfernt |
+| `_web/web_form_options.py` | 1.06 | Reiter DCC Arduino nur bei Nano, live |
+| `proggen/M07_COM_Port.py` | 1.04 | `Find_Nano_Like_Device` |
+| `proggen/M08_ARDUINO.py` | 1.04 | Frage zum Board, wenn Pico eingestellt und ein Nano am Anschluss |
+| `install/install_platformio.sh` | 1.01 | Dauer beim ersten Hochladen |
+| `install/install_windows.bat` | 1.09 | dito |
+| `csv/Web_Languages.csv` | - | 769 Einträge (3 neu, sieben Sprachen) |
+| `webmobaledlib.py` | 2.27 | Version, Mindestversionen |
+| `install/ANLEITUNG_Installation.md` | 2.85 | 2.16 |
+| `install/BETATEST_Checkliste.md` | 1.58 | Punkte 99 bis 102 |
+
+Tests: `test_feedback_nl2.py` (neu, 23); alle 32 Reihen laufen (`test_z21_integration` auf die neue Version von `web_tabs` angepasst). **Nicht geprüft:** die Anzeige im Browser (Reiter DCC Arduino, die Frage zum Board), der Weg mit echter Hardware (Arduino, Pico).
+
+## 2.26 (2026-10-27)
+
+**PlatformIO in den Installationsskripten** (Wunsch des Entwicklers: „Können wir die Installation der PlatformIO in die Installationsskripte mit eigenem Parameter einfügen?“). Keine Änderung am Programm (nur die Versionsnummer).
+
+**Entscheidung:** PlatformIO kommt in eine **eigene Python-Umgebung `~/.platformio/penv`** (Windows: `%USERPROFILE%\.platformio\penv`), also dorthin, wo auch der Installer von platformio.org sie anlegt und wo `Find_PIO` (`M08_ARDUINO`) `pio` ohne Einstellung findet (`penv/bin/pio`, Windows `penv\Scripts\pio.exe`). Gründe gegen die Alternativen: `pip install platformio` scheitert auf Debian, Ubuntu und Raspberry Pi OS an PEP 668 („externally-managed-environment“, Rückmeldung des Ubuntu-Testers); `pipx` ist dort ein zusätzliches Systempaket und fehlt auf älteren Systemen; ein eigenes `venv` braucht nur `python3-venv`, das die Installation ohnehin verlangt. Die Umgebung gehört dem Benutzer (auf dem Pi dem Dienstbenutzer, dessen `HOME` der Dienst benutzt).
+
+**Neu:**
+- `install/install_platformio.sh` (1.00, **neu**, gemeinsam für Linux, macOS und Raspberry Pi; auch einzeln und nachträglich: `bash install/install_platformio.sh`): findet eine vorhandene Installation (eigene Umgebung, `~/.local/bin/pio` von pipx, `pio` im PATH) und tut dann nichts; sonst Python 3.10 oder neuer suchen (oder `MLL_PYTHON`), `venv` anlegen (eine unvollständige Umgebung eines früheren Versuchs wird ersetzt), pip aktualisieren, `pip install --prefer-binary platformio`, prüfen, Version ausgeben, Hinweise (Entwicklungsumgebung einstellen, erstes Hochladen lädt nach, unter Linux: `install_pico_udev.sh` für den Pico). Fehler mit Diagnose (Prozessor, Python, pip) und Rückgabe 1. Umgebungsvariablen für Sonderfälle und Tests: `MLL_PIO_HOME`, `MLL_PYTHON`, `MLL_PIO_PIP_ARGS`.
+- `install/install_linux.sh` 1.05 (`--with-platformio`), `install/install_mac.command` 1.10 (`--with-platformio`), `pi/install_pi.sh` 1.10 (`--with-platformio`, läuft als Dienstbenutzer: `sudo -u … env HOME=… bash install/install_platformio.sh`; ein Fehler bricht die Installation des Dienstes nicht ab), `install/install_windows.bat` 1.08 (`/platformio`, dieselben Schritte in der Batch-Datei; die Umgebung wird nur angelegt, wenn es sie nicht gibt, mit Sprungmarke statt `if errorlevel` nach einem übersprungenen Befehl, damit kein alter Fehlercode wirkt). Die Option ist **unabhängig** von `--with-arduino-ide` und kombinierbar. Die Entwicklungsumgebung wird nicht von Skripten eingestellt (nur in den Optionen der Oberfläche, wie vereinbart: keine Dateien von Hand ändern).
+- Nebenbei: Die Hilfe (`-h`) von `install_linux.sh` und `install_pi.sh` druckte bisher eine Zeile zu viel (`set -uo pipefail`); jetzt nur die Kommentarzeilen mit den Optionen.
+- Anleitung 2.84 (Abschnitt 2.16 und die vier Optionstabellen), Checkliste 1.57 (Punkt 98).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `install/install_platformio.sh` | 1.00 | **neu** |
+| `install/install_linux.sh` | 1.05 | `--with-platformio`, Hilfe |
+| `install/install_mac.command` | 1.10 | `--with-platformio` |
+| `pi/install_pi.sh` | 1.10 | `--with-platformio`, Hilfe |
+| `install/install_windows.bat` | 1.08 | `/platformio` |
+| `webmobaledlib.py` | 2.26 | nur die Versionsnummer |
+| `install/ANLEITUNG_Installation.md` | 2.84 | 2.16 und die Optionstabellen |
+| `install/BETATEST_Checkliste.md` | 1.57 | Punkt 98 |
+
+Test (neu, `test_install_pio.py`, 22): mit einem **nachgebauten PlatformIO-Paket (Wheel, offline)**: Neuinstallation (Umgebung, `pio`, Version, Hinweise), zweiter Aufruf (nichts mehr, kein pip), vorhandenes `~/.local/bin/pio` und `pio` im PATH, Fehler (Paket nicht auffindbar: Rückgabe 1, Diagnose, kein halbes `pio`; danach gelingt ein neuer Aufruf), kein Python, `MLL_PIO_HOME`; `install_linux.sh --with-platformio` mit einem Mini-Projekt (installiert, endet mit „Fertig“; ohne die Option wird nichts installiert; `--help` nennt die Option); `install_mac.command` und `install_pi.sh` (Aufbau, Syntax, Hilfe); `install_windows.bat` (Option, alle Sprungmarken vorhanden, CRLF, Reihenfolge). **Nicht geprüft:** das echte PlatformIO (nur ein Nachbau, kein Internet), `install_mac.command`, `install_pi.sh` und die Batch-Datei **nicht ausgeführt** (nur gelesen und auf Syntax und Aufbau geprüft; die gemeinsame Hilfe ist auf Linux getestet), das Zusammenspiel auf einem Raspberry Pi als Dienst, `sudo bash install_pi.sh --with-platformio` auf echter Hardware.
+
+## 2.25 (2026-10-27)
+
+**Zeilen färben, dritte Rückmeldung** („Einfärbung einer ganzen Zeile wird nicht zurück genommen“, nach 2.24). Die Daten stimmten da schon (2.24, `test_rowcolor.py`: nach dem Ersetzen des Macros oder dem Abschalten von „ganze Zeile“ sind die Zellfarben im Blatt weg, auch über `X02.CRange(...).Value`, das Schreiben des Browsers, im Arbeitsthread). Es blieb die Anzeige.
+
+**Ursache:** Die Funktion `cellStyle` des Rasters (`JS_CELL_STYLE`) lieferte für Zellen **ohne** Farbe `null`. AG Grid überträgt die Eigenschaften eines zurückgegebenen Stilobjekts auf die Zelle, **entfernt aber früher gesetzte Eigenschaften nicht**, wenn die Funktion bei einer späteren Auswertung nichts mehr liefert: `refreshCells(force)` (2.23) zeichnete die Zelle zwar neu, die grüne Farbe blieb als Stil an der Zelle stehen. (Nachgebildet mit Node: Stil `#00FF00` anwenden, danach `null` anwenden: Farbe bleibt; mit ausdrücklichem Rücksetzen: leer.) Das erklärt auch die erste Meldung („die alte Farbmarkierung bleibt erhalten“) und dass Typ und Icon die Farbe bekamen, aber in den anderen Spalten nie etwas zurückgenommen wurde. **Nicht im Browser beobachtet** (kein AG Grid hier); die Ursache folgt aus dem Verhalten und dem bekannten Verhalten von AG Grid.
+
+**Neu:** `JS_CELL_STYLE` setzt **immer** `backgroundColor` und `color` ausdrücklich: `Object.assign({backgroundColor: '', color: ''}, st || {})` (leer = zurücksetzen); andere Angaben des Stils (Kopfzeile: fett, blau) bleiben. In `webmobaledlib.py` 2.25 und `_web/web_pattgen.py` 1.20 (dieselbe Funktion; der Patterngenerator hatte dasselbe Verhalten bei Farbänderungen). Mindestversion von `web_pattgen` in `webmobaledlib.py` eingetragen. Der Browser muss die Seite neu laden (Strg+F5), weil der Code der Spalten in die Seite gesendet wird.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 2.25 | `JS_CELL_STYLE` setzt die Farben ausdrücklich zurück |
+| `_web/web_pattgen.py` | 1.20 | dieselbe Funktion |
+| `install/BETATEST_Checkliste.md` | 1.56 | Punkt 97: Seite neu laden (Strg+F5) |
+
+Test (`test_rowcolor.py`, jetzt 27): die echten Funktionen aus beiden Dateien mit Node: Farbe setzen, dann zurücksetzen (grün → leer), auch ohne Zeilendaten; die Stilangaben der Kopfzeile (blau, gelbe Schrift, fett) bleiben. Alle 30 Reihen laufen.
+
+## 2.24 (2026-10-27)
+
+**Zeilen färben, zweite Rückmeldung** (nach 2.23): (1) Schaltet man „Ganze Zeile“ ab, bleibt die ganze Zeile eingefärbt. (2) Wurde auf das Macro „Servo“ getestet und ersetzt man „Servo“ durch ein anderes Macro (Bedingung nicht mehr erfüllt), bleibt die Farbe stehen.
+
+**Befund (nachgestellt, `test_rowcolor.py`):** Zweiter Fehler im **Ereignispfad** beim Ändern einer Zelle (`Evt_SheetChange` → `EVT_SheetConditionalFormating` → `check_conditionalformating(Target)` ohne `allcolumns`), den der Knopf „Zeilen Färben“ (löscht alles mit `dehighlight("3:Letzte")`, daher funktionierte er) umging: (a) Bei „ganze Zeile“ setzt `sheet[row-1].bg` die **Zellfarben aller 29 Zellen** der Zeile. Das Löschen im Ereignispfad, `dehighlight(row-1)`, traf diese Zellfarben **nicht** (ganze Zahl als Schlüssel), die Zeile blieb grün, auch wenn die Bedingung nicht mehr erfüllt war. (b) Der Pfad prüfte zuerst nur die geänderte Spalte und löschte **nichts vor dem Färben**: Eine frühere Farbe („ganze Zeile“) blieb stehen, wenn danach nur die Zelle gefärbt wurde (abgeschaltetes „ganze Zeile“), und Farben verschiedener Bedingungen mischten sich. 2.23 hatte nur die Anzeige im Browser (Neuzeichnen der Spalten) behoben, nicht die Daten.
+
+**Neu (`M20_PageEvents_a_Functions` 1.05):** `check_conditionalformating` bewertet bei **jeder** Änderung die **ganze Zeile neu**: erst alle Farben der Zeile löschen (`dehighlight(f"{row}:{row}")`, Zellen und ganze Zeile), dann alle Spalten mit Bedingungen prüfen (die geänderte Spalte mit dem neuen Wert, die übrigen aus den Daten); das Zurückspringen in eine zweite Prüfung (`allcolumns`) entfällt. Kopfzeilen 1 und 2 unverändert (blau, gelbe Schrift). Mindestversion in `webmobaledlib.py` 2.24 eingetragen.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `proggen/M20_PageEvents_a_Functions.py` | 1.05 | die ganze Zeile bei jeder Änderung neu bewerten |
+| `webmobaledlib.py` | 2.24 | Mindestversion M20 1.05 |
+| `install/BETATEST_Checkliste.md` | 1.55 | Punkt 97 erweitert |
+
+Test (`test_rowcolor.py`, jetzt 23): zwei Bedingungen mit ganzer Zeile (grün und rot); Macro einer Zeile ersetzt, Bedingung nicht mehr erfüllt: Farbe in der ganzen Zeile weg, die anderen Zeilen behalten sie; von Servo zu House: rot, nicht gemischt; „ganze Zeile“ abgeschaltet und die Zelle bearbeitet: nur die Zelle Macro gefärbt (vorher die ganze Zeile); Bedingungen in zwei Spalten (Beschreibung und Macro): beim Ändern des Macros bleibt die Farbe der Beschreibung; Kopfzeile; keine Bedingungen; Zuweisung über `Cells().Value` löst die Färbung aus. **Nicht geprüft:** die Anzeige im Browser (die Aktualisierung der Spalten aus 2.23 ist unverändert).
+
+## 2.23 (2026-10-27)
+
+**Zeilen färben** (Rückmeldung des Entwicklers: Bedingungen unter ProgGenerator Einstellungen „Macro“ – „Enthält“ – „Servo“, Farbe grün, ganze Zeile an; es wurden nur die Spalten Typ und Icon grün, nicht die ganze Zeile; ohne Haken blieb die alte Farbe stehen, und die Zelle Macro wurde nicht gefärbt).
+
+**Befund (nachgestellt mit dem echten Raster, `test_rowcolor.py`):** Die Rechnung war richtig: `check_conditionalformating` setzt bei „ganze Zeile“ alle 29 Zellen der Zeile, sonst nur die Zelle Macro, und `apply_formatting` löscht vorher alle Farben. Falsch war die **Anzeige im Browser**: `show()` schickt nach dem Knopf nur die geänderten Zeilen (`applyTransaction`) und lässt danach mit `refreshCells(force)` nur die Spalten neu zeichnen, die Symbole oder Testtasten enthalten (`renderer_columns`: `_img`, `_tb`, also **Typ und Icon**). AG Grid wertet `cellStyle` für eine Zelle aber nur neu aus, wenn ihr Wert sich ändert oder sie ausdrücklich neu gezeichnet wird. In allen anderen Spalten blieb deshalb der alte Stil stehen: neue Farben fehlten, entfernte Farben blieben, die Zelle Macro wurde nicht gefärbt. Der Fehler trat bei jeder Änderung der Farbe einer Zelle ohne Änderung des Wertes auf (gezielte Aktualisierung), nicht nur bei diesem Knopf.
+
+**Neu:** `style_columns(old_rows, new_rows)` in `webmobaledlib.py` 2.23 ermittelt die Spalten, in denen sich der Stil (`_st`) einer Zeile gegenüber dem Stand des Browsers geändert hat; `show()` nimmt sie in `refresh_cols` auf, sowohl nach `applyTransaction` als auch nach dem Austausch aller Zeilen (`refresh_cols |= style_columns(…)`). `M20_PageEvents_a_Functions` 1.04: `RFColorRow` als Text „0“ oder „False“ (Stand einer älteren Konfiguration) gilt nicht mehr als „ganze Zeile“ (vorher war jeder nicht leere Text wahr). Mindestversion in `webmobaledlib.py` eingetragen.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 2.23 | `style_columns`, Spalten mit geänderter Farbe neu zeichnen, Mindestversion M20 |
+| `proggen/M20_PageEvents_a_Functions.py` | 1.04 | `RFColorRow` als Text |
+| `install/BETATEST_Checkliste.md` | 1.54 | Punkt 97 |
+
+Test (neu, `test_rowcolor.py`, 13, mit dem echten Raster und `build_grid`): ohne Bedingung keine Farbe; „ganze Zeile an“: die Zeilen mit „Servo“ in allen 29 Spalten grün, `style_columns` nennt c0 bis c28 (also auch Macro); „aus“: nur c11 grün, `style_columns` nennt die übrigen Spalten (die Farbe verschwindet); von „ohne Farbe“ zu „aus“: genau c11; unveränderte Zeilen: nichts; unbekannte Zeilen; Zeilen ohne `_st`; RFColorRow „0“, „False“, „True“; die beiden Aufrufe stehen im Programm. **Nicht geprüft:** die Anzeige im Browser (AG Grid), die Ursache ist aus dem Code und dem Verhalten (genau die Renderer-Spalten Typ und Icon waren grün) abgeleitet, nicht im Browser beobachtet; die Seite des Patterngenerators (eigene Aktualisierung).
+
+## 2.22 (2026-10-27)
+
+**Release-Stand 2.28** (auf Wunsch „bitte release erstellen“; Stand seit dem veröffentlichten 2.13): `webmobaledlib_Dateien_Stand_2.28.zip` (124 Dateien, alle von mir gelieferten im Ordner `python`, **kein** Update-ZIP; Skripte `.sh` und `.command` mit Rechten 755), `ANLEITUNG_Installation.pdf` (2.86, 30 Seiten), `BETATEST_Checkliste.pdf` (1.59, 10 Seiten), `RELEASE_Hinweise_2.28.md` (alles seit 2.13), `VERSIONEN_Stand_2.28_2026-10-27.txt` (115 Dateien), `RELEASE_Ablauf.md`, `zip_erstellen.bat` 1.07, `Web_Languages_Nederlands_Entwurf.csv` und `Web_Languages_Entwurf_FR_IT_ES_DA.csv` für die Tester. Die Release-Dateien von 2.22 und die Änderungs-ZIP liegen im `archiv/`. **Geprüft:** Dateipaket unbeschädigt, alle 124 Dateien gleich dem Ordner `headless`, alle `.py` kompilieren, keine Versionsabweichung (64 Einträge); **Nachbau von `zip_erstellen.bat` 1.07** (sein Paket `9a2dbf` plus meine Dateien, ein künstliches `.pio`, Staging ohne persönliche Dateien, `release_tools.py make`, `zip`, `check --previous`): **in Ordnung, Version 2.28, 1757 Dateien, ZIP 16,7 MB, `.pio` nicht im ZIP, die 9 Namen mit „ü“ mit UTF-8-Kennzeichen**; alle Prüfreihen laufen (`test_pio_only` 27, `test_feedback_nl2` 27, `test_rowcolor` 27, `test_install_pio` 22 und die übrigen). **Vom Entwickler bestätigt (27.10.2026):** 2.27 (Testtasten, Zeilen färben); Raspberry Pi (Trixie, 64 Bit) mit `--with-platformio`: Pico und ESP32 ohne ARDUINO IDE, Reiter Update und Bootloader erscheinen und verschwinden beim Umschalten im Browser, Zurückschalten auf die IDE auf einem Gerät mit IDE. **Nicht geprüft:** `zip_erstellen.bat` 1.07 selbst unter Windows (nachgebaut mit denselben Befehlen), das echte Entpacken mit „Hier entpacken“ auf einem Pi, macOS, die Qualität der Entwürfe (English, Nederlands, Français, Italiano, Español, Dansk). **Vom Entwickler bestätigt (27.10.2026):** Release 2.28 auf dem Raspberry Pi mit PlatformIO ohne ARDUINO IDE getestet, „alles hat wie erwartet funktioniert“. **Vorgemerkt für die nächsten Änderungen (nicht umsetzen, auf Wunsch des Entwicklers):** Die **Schlussseite „Programm beendet“** gibt es nur auf Deutsch und folgt der gewählten Sprache nicht. Fundstelle: `webmobaledlib.py`, Route `/beendet` (`beendet_seite`), eine feste HTML-Seite mit `lang="de"`, Titel „webMobaLedLib beendet“, Überschrift „Programm beendet“, „Das Fenster kann geschlossen werden.“ und den beiden Hinweisen „Die Daten wurden gespeichert.“ und „Es wurde nicht gespeichert.“. Behebung: die fünf Texte mit `tr(...)` übersetzen (Katalog, sieben Sprachen) und `lang` aus der gewählten Sprache setzen; Aufwand klein (etwa 30 Minuten). Beim nächsten Durchgang prüfen, ob es weitere feste Seiten ohne Übersetzung gibt (zum Beispiel Fehlerseiten, Anmeldung).
+
+**Offen:** Hinweis „PICO im Bootmodus gefunden“ unter Linux und Knopf „Firmware installieren“ für den Pico (warten auf einen Pico zum Prüfen), Korrekturen der Übersetzungen durch die Tester, Ursache der Hänger des Pi 400.
+
+**Release-Stand 2.22** (auf Wunsch „wir machen jetzt erstmal einen Release“; Stand seit dem veröffentlichten 2.13): `webmobaledlib_Dateien_Stand_2.22.zip` (120 Dateien, alle von mir gelieferten im Ordner `python`, **kein** Update-ZIP; Skripte `.sh` mit Rechten 755, die Dateien des Entwicklers in der neuen Fassung), `ANLEITUNG_Installation.pdf` (2.82, 29 Seiten), `BETATEST_Checkliste.pdf` (1.52, 10 Seiten), `RELEASE_Hinweise_2.22.md` (alles seit 2.13), `VERSIONEN_Stand_2.22_2026-10-27.txt` (111 Dateien), `RELEASE_Ablauf.md`, `zip_erstellen.bat` **1.07**, `Web_Languages_Nederlands_Entwurf.csv` und `Web_Languages_Entwurf_FR_IT_ES_DA.csv` (für die Tester; **nach der Auslieferung des Release-Stands neu gebaut**: Katalog mit Français, Italiano, Español und Dansk, Anleitung 2.83, Checkliste 1.53). Die Dokumente von 2.18 und die Änderungs-ZIP liegen im `archiv/`. **Geprüft:** Dateipaket unbeschädigt, alle 120 Dateien gleich dem Ordner `headless`, alle `.py` kompilieren, keine Versionsabweichung (61 Einträge); **Nachbau seines Ablaufs mit `zip_erstellen.bat` 1.07** (sein Paket `9a2dbf` plus meine Dateien, ein künstliches `.pio` mit 2 MB, Staging ohne persönliche Dateien, `release_tools.py make`, `zip`, `check --previous` mit seinem ZIP): **in Ordnung, Version 2.22, 1755 Dateien, ZIP 16,6 MB, `.pio` nicht im ZIP, alle 9 Namen mit „ü“ mit UTF-8-Kennzeichen**; alle 29 Prüfreihen laufen. **Nicht geprüft:** `zip_erstellen.bat` 1.07 selbst unter Windows (nachgebaut mit denselben Befehlen), das echte Entpacken mit „Hier entpacken“ auf einem Pi, Pi- und Pico-Funktionen auf echter Hardware, die Qualität der Entwürfe English und Nederlands. **Wichtig für den Entwickler:** das Release-ZIP **muss** mit `zip_erstellen.bat` 1.07 gebaut werden (sonst lehnt die Prüfung es wegen der fehlenden UTF-8-Kennzeichen ab); die überflüssige `LEDs_AutoProg/platformio.ini` aus 2.18 bitte löschen, falls noch da.
+
+**Protokoll des niederländischen Testers** (`webmobaledlib__18_.log`, 15172 Zeilen, 39 Programmläufe vom 21. bis 26. Oktober; neue leere SSD, Raspberry Pi OS, Pi 400 mit 4 GB; **Raspberry Pi OS (Debian 13), Kernel 6.18.50 aarch64, Python 3.13.5, NiceGUI 3.18.0**, uvicorn 0.54, starlette 1.9/1.10; Protokollstufe DEBUG).
+
+**Befund 1: Die Hänger sind harte Abbrüche des Systems, nicht des Programms.** Das Protokoll enthält **drei Blöcke mit Nullbytes** (Zeilen 11301, 14139, 14957) und danach Zeilen mit **früherer Uhrzeit** als die letzte Zeile davor (Pi ohne batteriegepufferte Uhr). Das ist das Bild eines abgeschalteten Systems, das die Datei nicht mehr fertig geschrieben hat. Keine Ausnahme (`Traceback`) und kein `Prozess … beendet` davor. Die Stellen: 13:36:14 unmittelbar nach dem Verbinden des Browsers (Prüfung der Bibliotheken und Boards, der erste Start nach dem Update, genau der gemeldete Hänger), 15:33:38 beim Eingabedialog für eine Zeile (Auswahl der Makros) und 15:44:24 nach dem Hochladen auf den Nano mit der ARDUINO IDE. Keine gemeinsame Funktion: Verdacht **Stromversorgung** (Pi 400 mit USB-SSD und Arduino am USB), danach Hitze und Speicher. **Nicht belegt**; `vcgencmd get_throttled` und `dmesg` fehlen. Weiter: 22 von 39 Läufen enden ohne `Prozess … beendet` (die meisten waren nach dem Stand der Uhr Neustarts des Pi).
+
+**Befund 2: Die Sprachmischung ist erklärt.** Die Meldung beim Beenden (Frage, wie das Programm beendet werden soll) steht nur im Katalog der Oberfläche, nicht in der Tabelle Languages; im Katalog gab es kein Niederländisch (Spalte leer) und damit **English als Rückfall**. Dazu kam ein Fehler: `tr()` nahm bei einem Text, den der Katalog auf English kannte, **nie** die niederländische Übersetzung der Tabelle (der Katalog ging vor, die Tabelle wurde nur gefragt, wenn der Text im Katalog fehlte). Das betraf **22 Texte**. **Neu:** `web_i18n` 1.06: gewählte Sprache im Katalog, gewählte Sprache in der Tabelle, dann English im Katalog, English in der Tabelle (`ToDo` zählt als nicht übersetzt). **Entwürfe Französisch, Italienisch, Spanisch, Dänisch (nachträglich, auf Wunsch „auf diesem Weg“):** Für **744 von 766** Katalogeinträgen (die 742 des niederländischen Entwurfs plus die zwei Texte der Raspberry-Pi-Warnung) schrieb Claude je einen Entwurf in Français (Anrede „vous“), Italiano („tu“, Infinitiv und Imperativ), Español („tú“, mit ¿…?) und Dansk („du“); zugleich die **zwei fehlenden niederländischen Texte** (Warnung des Raspberry Pi). Aus dem englischen Entwurf und dem Deutschen, in fünf Blöcken zu je 150 Texten; die Quelltexte sind die englischen. Zusammengesetzte Teile sind so übersetzt, dass der Satz mit den eingesetzten Teilen passt (zum Beispiel Italienisch „Attenzione: la pagina 'X' deve essere eliminata?“, Spanisch „Atención: ¿debe la página 'X' eliminarse?“). **Geprüft per Programm:** je Text gleiche Platzhalter, Zahlen und Zeilenumbrüche (nur der Status „<Connected>“ ist absichtlich übersetzt), Katalog lädt, `tr()` liefert „Quitter“, „Esci“, „Salir“, „Afslut“, Hilfe → „Aide“, „Aiuto“, „Ayuda“, „Hjælp“; `test_i18n.py` 61 Prüfungen. Wo die Tabelle Languages schon eine Übersetzung hat (die 22 Texte), gilt sie. **Nicht geprüft:** Sprache und Wortwahl durch Muttersprachler (Fachwörter wie französisch „carte de distribution“ und „retour d'information“, italienisch „riscontro“, spanisch „retroinformación“, dänisch „tilbagemelding“ und „fordelerprint“ sind Vorschläge); die Tasten in Klammern (A), (O), (S), (V), (W), (J), (N) blieben wie im Deutschen. Vorlagen für Muttersprachler: `Web_Languages_Entwurf_FR_IT_ES_DA.csv`. Das Release-Dateipaket 2.22 wurde neu gebaut (Katalog, Anleitung 2.83, Checkliste 1.53, `UEBERSETZEN.md` 1.04, Release-Hinweise); die Versionsnummer bleibt 2.22 (nur Daten und Dokumente).
+
+**Niederländischer Entwurf (nachträglich, auf Wunsch):** Für **742 von 766** Katalogeinträgen (alle ohne Niederländisch und ohne Entsprechung in der Tabelle Languages) schrieb Claude einen **niederländischen Entwurf**; Übersetzung aus dem Deutschen und dem englischen Entwurf, in fünf Blöcken, Ton „je” wie das Excel-Programm („Wil je …?”). **Geprüft per Programm:** gleiche Platzhalter (`{name}`, `#1#`, `<…>`), gleiche Zahlen, gleiche Zeilenumbrüche je Text, Katalog lädt, `tr()` liefert Niederländisch („Beenden” → „Afsluiten”), Deutsch bleibt Deutsch. **Nicht geprüft:** Sprache und Wortwahl von einem Muttersprachler (Fachwörter wie „verdeelprint”, „terugmelding”, „centrale”, „bedrijfsmodus” sind Vorschläge); Teile, die zusammengesetzt werden (Bruchstücke wie „Fout: De afbeelding '”), sind so übersetzt, dass der Satz mit den eingesetzten Teilen passt, aber nicht jede Kombination wurde gelesen. Zum Prüfen für den Tester: `Web_Languages_Nederlands_Entwurf.csv` (Deutsch;English;Nederlands (Entwurf)). Die Vorlage `Web_Languages_Nederlands_fehlt.csv` entfällt. `test_i18n.py` 52.
+
+**Befund 3: „Pico: COM-Port nicht gefunden“ ist richtig gemeldet.** Die Anschlussliste enthält nur `/dev/ttyUSB0` mit der Beschreibung `USB2.0-Serial` (der Nano); kein `ttyACM0`. Die Meldung „Fehler: geen PICO aangesloten op COM-poort /dev/ttyUSB0“ ist korrekt. Der Pico war nicht angesteckt oder im BOOTSEL-Modus (dort gibt es keinen seriellen Anschluss; dafür der Hinweis auf die Start-Firmware). Die Platzhalter `ttyS0`…`ttyS31` erscheinen auf diesem System nicht (nur im Ubuntu-Fall).
+
+**Befund 4: Fehlende Dateien nach der Installation, Ursache im ZIP.** Beim Start nach der Neuinstallation von 2.13 meldet das Programm „Datei passt nicht zur Version 2.13: **9 Dateien fehlen** … `Pattern_Config_Examples/hs_vorsignal_grün_gelb.jpg`, `.png`, `vorsignal_grün*.png/.jpg` …“ (Prüfung beim Start, Zeilen 11504 bis 11514): alle Dateinamen enthalten ein **ü**. Das ZIP des Entwicklers speichert diese 9 Namen **ohne UTF-8-Kennzeichen** (Bit 0x800 nicht gesetzt, geprüft in `webmobaledlib_9a2dbf.zip`): `tar -a` von Windows (in `zip_erstellen.bat`) schreibt die Namen in der lokalen Zeichentabelle; Python und Windows lesen sie richtig, **Linux („Hier entpacken“) legt sie mit falschem Namen an**. Das Update (Python) stellt sie wieder her. **Neu:** `release_tools` 1.07: Befehl `zip` (baut das ZIP mit Python, UTF-8-Kennzeichen für Umlaute, Rechte 755 für `.sh` und `.command`, Aufbau `python/...`) und **die ZIP-Prüfung lehnt ein ZIP ohne das Kennzeichen ab** (Fehler mit Anzahl, Beispiel und Hinweis auf `zip_erstellen.bat` 1.07); `zip_erstellen.bat` 1.07 ruft `release_tools.py zip` statt `tar` und PowerShell. Das ZIP des Entwicklers (9a2dbf) wird von der neuen Prüfung als fehlerhaft gemeldet (getestet). **Wichtig:** Das nächste Release muss mit `zip_erstellen.bat` 1.07 gebaut werden.
+
+**Befund 5 (kein Fehler):** Meldungen `UnicodeDecodeError … Demo_TMC_MSG.MLL_pgf` (3 Tracebacks, 12:40, 12:42, 13:31) sind das bekannte Lesen einer cp1252-Datei mit Rückfall (`M30_Tools.Read_File_to_String`); die Datei wird danach gelesen. Die Protokollstufe ist **DEBUG** (Standard laut Hilfe des Programms): das Protokoll wächst mit jedem Klick um hunderte Zeilen (`Synch_Evt_SheetChange`); Vorschlag: im Dienst `MLL_LOGLEVEL=INFO` (nicht umgesetzt).
+
+**Neu: Raspberry Pi beobachten** (`web_pi_status` 1.00, nur auf einem Raspberry Pi; `web_logging` 1.05; Hauptprogramm): beim Start eine Zeile „Raspberry Pi: Modell | get_throttled=0x…, Temperatur, Speicher frei, Swap“; ein Thread (alle 15 s) prüft `vcgencmd get_throttled`, die Temperatur und `/proc/meminfo` und schreibt eine **Warnung** bei neuen Bits (Unterspannung, Taktbegrenzung, Drosselung, Temperaturgrenze; jeweils „jetzt“ und „seit dem Start“), bei Prozessor ≥ 80 °C und bei weniger als 250 MB freiem Speicher; jede Minute eine Verlaufszeile. Beim Verbinden eines Browsers erscheint bei Unterspannung (und getrennt bei Drosselung) **einmal pro Programmlauf** eine gelbe Meldung (übersetzbar). Auf anderen Rechnern geschieht nichts. Damit zeigt das Protokoll beim nächsten Hänger, ob Unterspannung, Hitze oder Speichermangel davor lag.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `release_tools.py` | 1.07 | Befehl `zip`, Prüfung des UTF-8-Kennzeichens |
+| `zip_erstellen.bat` | 1.07 | ZIP mit Python statt `tar` |
+| `_web/web_i18n.py` | 1.06 | Reihenfolge der Sprachen: Katalog, Tabelle, dann English |
+| `_web/web_pi_status.py` | 1.00 | **neu** (Raspberry Pi: Unterspannung, Temperatur, Speicher) |
+| `_web/web_logging.py` | 1.05 | Zeile „Raspberry Pi“ im Kopf des Protokolls |
+| `webmobaledlib.py` | 2.22 | Beobachtung starten, Warnung beim Verbinden, Mindestversionen (61 Einträge) |
+| `csv/Web_Languages.csv` | - | 766 Einträge (2 neu), **Nederlands für 742 Texte (Entwurf)** |
+| `install/ANLEITUNG_Installation.md` | 2.82 | Abschnitt 9.5 (Pi hängt sich auf, Umlaute fehlen), Katalog 766 Einträge |
+| `install/BETATEST_Checkliste.md` | 1.52 | Punkte 94 bis 96 |
+| `install/UEBERSETZEN.md` | 1.03 | Reihenfolge, Nederlands (Entwurf) |
+| `RELEASE_Ablauf.md` | - | ZIP mit Python |
+
+Tests (neu: `test_zip_utf8.py` 11, `test_pi_status.py` 24; erweitert `test_english.py`): ZIP mit Umlauten und Kennzeichen, Rechte, `unzip` in UTF-8-Umgebung legt die Namen richtig an und die Installation stimmt mit der Prüfliste, Nachbau des `tar`-ZIP (cp437 ohne Kennzeichen) wird abgelehnt, das ZIP des Entwicklers wird beanstandet (9 Namen); Raspberry Pi mit nachgebildeten Systemdateien und `vcgencmd` (Bits, Temperatur, Speicher, Warnung einmal, Thread, anderer Rechner). Alle 30 Reihen laufen. **Nicht geprüft:** auf einem echten Pi (`vcgencmd`, Thread im Dienst, die gelbe Meldung im Browser), das echte Entpacken mit „Hier entpacken“ unter Raspberry Pi OS, und die Ursache der Hänger.
+
+**Offen:** Ursache der Hänger (Stromversorgung vermutet); Wiederholen mit `vcgencmd get_throttled` und `dmesg`; Niederländisch vom Tester prüfen lassen; Protokollstufe im Dienst auf INFO; Update mit Bestätigung und Absicherung des Dienstes (Vorschlag aus 2.21, zurückgestellt).
+
+## 2.21 (2026-10-27)
+
+**Rückmeldungen** des niederländischen Testers (Raspberry Pi 400) und eines Ubuntu-Testers (Linux, PlatformIO, 2.18).
+
+**Offen, nicht gelöst (Pi 400, Niederländisch):** Nach dem Update 2.13 auf 2.18 hing sich das Programm und der ganze Pi auf, danach startete das Programm erst nach einer Neuinstallation wieder. **Nicht nachstellbar:** das Programm mit `LANG=nl_NL.UTF-8` (Sprache „Auto“ = Niederländisch), alle Meldungstexte (700) in 0,2 s, Kopfzeilen, Namen, Typen und `tr` ohne Hänger; die Anforderungsdateien (`requirements-web.txt`, `pi/requirements-pi.txt`) und die Dienstdatei sind in 2.13 und 2.18 gleich, das Update ruft kein `pip` auf; unter systemd (`INVOCATION_ID`) startet das Update keinen zweiten Prozess. Verdächtig, aber ohne Beleg: (1) die erste Frage nach dem Update zu den Bibliotheken (K-long: Installation von Bibliotheken und Boards mit der ARDUINO IDE unter xvfb, schwer für einen Pi), (2) der alte Stand (Konfiguration, gespeicherte Tabellen) aus 2.13, der bei einer Neuinstallation fehlt, (3) Speicher. **Wartet auf:** Protokolle `webmobaledlib.log` und `webmobaledlib-console.log` im Datenordner (`~/.local/share/webMobaLedLib`), `.update_journal.json`, `.update_notice.json`, `dmesg | grep -i -E "oom|killed|under-voltage"`, `free -m`, welcher Dialog erschien. **Vorschlag, zurückgestellt:** Update mit Bestätigung (die neue Version meldet nach dem Start, dass sie läuft; sonst automatisch zurück), `StartLimitBurst` und `OOMScoreAdjust` in `mobaledlib-web.service`, Prüfung von Speicher und Platz vor einem Update auf dem Pi.
+
+**1. Anschlussliste unter Linux** (Ubuntu-Tester: „bei mir wird immer ‚unbekannte Ports‘ aktiviert und das Programm versucht sich mit USB31 zu verbinden“): Zwei Ursachen. (a) `web_form_comport` schaltete „Unbekannte Ports anzeigen“ unter Linux und macOS **immer** ein (`self._show_unknown = not windows`), weil die Erkennung dort schwächer ist; dann stehen alle Anschlüsse in der Liste, darunter die **32 Platzhalter `/dev/ttyS0` bis `ttyS31`** (Beschreibung und `hwid` `n/a`), und der Vorschlag ist nicht der Arduino (der Tester sah `ttyS31`). (b) `M07_COM_Port.EnumComPorts` zählte `ttyS*` wegen `'tty' in description` auch ohne das Häkchen als bekannt. **Neu:** `EnumComPorts` übergeht unter Linux und macOS `/dev/ttyS<Zahl>` mit `hwid` `n/a` in jedem Fall (`M07_COM_Port` 1.03); `web_form_comport` 1.04 `_initial_show_unknown`: **Windows aus; Linux und macOS nur dann an, wenn kein bekannter Anschluss gefunden wird** (zum Beispiel ESP32 mit CH340, wenn die Erkennung nichts findet); Geräte mit anderer Kennung (`ttyAMA0` am Pi) bleiben mit dem Häkchen sichtbar. Bekannt: Das Häkchen bleibt für den Anwender weiter schaltbar.
+
+**2. PlatformIO unter Debian, Ubuntu, Raspberry Pi OS** (Tester: `pip install platformio` geht dort nicht, nur `pipx install platformio` + `pipx ensurepath` + neu anmelden; danach erkennt das Programm es): `M08_ARDUINO` 1.03: `Find_PIO` sucht unter Linux und macOS auch in **`~/.local/bin`** (dort legt pipx es ab), Vorrang hat der Ordner von PlatformIO, dann `~/.local/bin`, dann der PATH. `PIO_Install_Hint()` nennt je System den richtigen Befehl (Windows: `pip install platformio`; Linux, macOS: `pipx install platformio`, `pipx ensurepath`, neu anmelden, `sudo apt install pipx`); verwendet in der Meldung beim Hochladen, im Status und im Knopf „PlatformIO prüfen“ der Optionen. Anleitung 2.80 (Abschnitt 2.16 mit den Wegen je System). Außerdem bestätigt: Der Tester schreibt, dass das erste Übersetzen die Bibliotheken und Abhängigkeiten selbst lädt und mit dem Nano ohne Probleme läuft.
+
+**3. Raspberry Pi Pico unter Linux** („No accessible RP-series devices in BOOTSEL mode were found … picotool was unable to connect. Maybe try ‚sudo‘ or check your permissions. *** [upload] Error 249“; anders als unter Windows fehlt ein Hinweis auf einen Treiber): Ursache ist die fehlende **udev-Regel** (Hersteller 2e8a). `M08_ARDUINO` 1.03: `Pico_Udev_Ok()` sucht in `/etc/udev/rules.d`, `/lib/udev/rules.d`, `/usr/lib/udev/rules.d` nach einer Regel mit `2e8a` (auch eine vorhandene Regel von picotool oder PlatformIO zählt); fehlt sie, fragt `Create_PIO_Build_cmd` **vor dem Hochladen auf den Pico** (nur Linux, nur Umgebung `pico`) mit dem Befehl und „Trotzdem hochladen?“ (Standard Nein). **Neu:** `install/install_pico_udev.sh` (1.00, `sudo bash install/install_pico_udev.sh [Benutzer]`): schreibt `/etc/udev/rules.d/99-mobaledlib-pico.rules` (`SUBSYSTEM=="usb"`, `ATTRS{idVendor}=="2e8a"`, `MODE="0660"`, `TAG+="uaccess"`, `GROUP="plugdev"`, dazu `ttyACM*` mit `dialout`), legt die Gruppe `plugdev` an, nimmt den Benutzer in `plugdev` und `dialout` auf, lädt udev neu; Prüfmodus `MLL_UDEV_DIR=<Ordner>` (nur die Regel, ohne Gruppen und ohne udev). Knopf **„USB-Zugriff für den Pico einrichten“** im Reiter Entwicklungsumgebung (nur Linux; `web_form_options` 1.05; ruft das Skript mit `pkexec` auf und fragt nach dem Passwort; ohne `pkexec` oder bei Abbruch steht der Befehl für das Terminal in der Meldung). **Nicht geprüft:** der Aufruf mit echtem `pkexec` und echtem `udevadm` (hier ohne Administratorrechte; geprüft mit einem Ersatz für `pkexec` und dem Prüfmodus), die Namen der Gruppen auf allen Distributionen, ob die Regel bei einem RP2350 greift (alle Geräte des Herstellers 2e8a), und der Upload selbst. Der Ausführungsbit des Skripts ist im Ausgabeordner nicht setzbar; das Skript wird immer mit `bash` aufgerufen.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `proggen/M07_COM_Port.py` | 1.03 | keine Platzhalter `ttyS0` bis `ttyS31` |
+| `_web/web_form_comport.py` | 1.04 | unbekannte Ports nur ohne bekannten Anschluss an |
+| `proggen/M08_ARDUINO.py` | 1.03 | `~/.local/bin`, Installationshinweis je System, udev-Hinweis und Einrichtung für den Pico |
+| `_web/web_form_options.py` | 1.05 | Knopf USB-Zugriff für den Pico, Hinweis je System |
+| `install/install_pico_udev.sh` | 1.00 | **neu** |
+| `csv/Web_Languages.csv` | - | 764 Einträge (19 neu) |
+| `webmobaledlib.py` | 2.21 | Version, Mindestversionen |
+| `install/ANLEITUNG_Installation.md` | 2.80 | Abschnitt 2.16 |
+| `install/BETATEST_Checkliste.md` | 1.50 | Punkte 89 und 93 |
+
+Tests (neu, `test_linux.py`, 31): die 32 Platzhalter in beiden Betriebsarten nicht in der Liste, echte Anschlüsse und ihre Reihenfolge, Vorgabe des Häkchens (Windows aus; Linux mit bekanntem Anschluss aus; ohne bekannten Anschluss an; `ttyAMA0` sichtbar), pipx-Pfad (`~/.local/bin`) und Vorrang, Installationshinweis Linux und Windows, Meldung ohne PlatformIO, `Pico_Udev_Ok` (leer, mit Regel auch in Großbuchstaben, Windows), Hinweis vor dem Hochladen auf den Pico (Nein bricht ab, Ja lädt hoch, mit Regel kein Hinweis, Nano und ESP32 nie), das Skript im Prüfmodus (Regel mit `2e8a`, `ttyACM`, `uaccess`; ohne Administratorrechte Meldung und Rückgabe 1), `Setup_Pico_Udev` mit Ersatz für `pkexec` (Erfolg, Abbruch 126, ohne `pkexec`), die Optionen (zwei Knöpfe unter Linux, Status mit pipx, Meldungen des Knopfes). Angepasst: `test_pio`, `test_options_ide`. Alle 27 Reihen laufen.
+
+## 2.20 (2026-10-26)
+
+**Mehrsprachigkeit: zusammengesetzte Meldungen** (Fortsetzung von 2.19, vom Entwickler mit „Ja, die übrigen auch noch umsetzen“ beauftragt).
+
+**Befund** (AST-Suche über `webmobaledlib.py`, `_web/*.py`, `headless/*.py`): **104 Stellen** mit deutschem Text, der aus Teilen zusammengesetzt wird: 82 f-Strings außerhalb der Aufrufe von `ui.*` (Zuweisungen, `UpdateError(...)`, `append`, `set_text`, `finish` …) und 22 Verkettungen mit `+`. Davon bewusst **nicht** umgestellt (Konsole, Protokoll, Aufrufzeilen, englisch oder ohne Sprache): 9 Stellen in `main()` und den Startmeldungen, `web_logging` (Protokolldatei), `web_z21` („Socket opened …“), `Version `-Textteile in `web_params`. **93 Stellen umgestellt**, plus 4 von Hand (siehe unten).
+
+**Verfahren** (Hilfsprogramm, nicht im Paket): **f-Strings** → `tr("Vorlage {name} …", name=Ausdruck)` (Platzhalter wie die Variable oder nach einer Tabelle lesbarer Namen: `{anzahl}`, `{datei}`, `{meldung}`, `{neue_version}` …); **Verkettungen** → **jedes deutsche Textstück einzeln** `tr("Stück ")`, die übrigen Teile bleiben (`tr("Fehler: ") + text`). Jedes Stück steht mit seinen Leerzeichen im Katalog; die Leerzeichen bleiben beim Übersetzen (`_fit`). Die Dateien bekommen `from _web.web_i18n import tr` mit Rückfall (`except ImportError`).
+- **Von Hand:** `web_z21` Status „Z21 Simulator läuft, Rückmeldung für {n_rm} Programm(e)“ (der Plural-Zusatz `'e' if n_rm != 1` ist nicht übersetzbar; jetzt „Programm(e)“ / „program(s)“); `web_params` „Die Datei ist vorhanden“ und „Kein Pfad eingetragen. Automatisch gefunden: {found}“ (die Version in Klammern bleibt); `web_servotest` (die Texte `TEXT_MIN` und `TEXT_MAX` wurden zuerst beim Import übersetzt: **falsch**, weil sich die Sprache später ändern kann; jetzt `text_min()` und `text_max()`, die beim Aufruf übersetzen).
+- **Wächter im Test:** `test_i18n.py` prüft per AST, dass **kein `tr(...)` beim Import einer Datei läuft** (nur innerhalb von Funktionen); sonst bliebe die Sprache bei einem Wechsel stehen.
+- **Katalog** `csv/Web_Languages.csv`: **745 Einträge** (vorher 656), 89 neue; die Texte im Web-Quelltext: 360, alle im Katalog, English zu 100 Prozent, **0 f-Strings** außerhalb der Ausnahmen. Platzhalter in Deutsch und English gleich (geprüft); jede Vorlage lässt sich in beiden Sprachen mit Werten füllen (auch `{size:.0f}`).
+
+**Nicht übersetzt (bewusst):** Konsolen- und Protokolltexte; Tk-Formulare ohne Gegenstück im Web (Servo- und LED-Animation, MainMenu des Patterngenerators, rund 170 Texte); die Beschreibungen in den Beispielblättern; die Anleitung.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 2.20 | 31 Stellen, 59 Mindestversionen |
+| `_web/web_update.py` | 1.08 | 19 Meldungen (Fehler, Plan, Hinweise) |
+| `_web/web_access.py` | 1.11 | 14 Meldungen (Firewall, Passwort, Name) |
+| `_web/web_z21.py` | 1.02 | 8 Meldungen, Status |
+| `_web/web_params.py` | 1.03 | Treffer, Datei vorhanden |
+| `_web/web_form_house.py` | 1.05 | 4 Fehlermeldungen |
+| `_web/web_pattgen.py` | 1.19 | 4 Meldungen |
+| `_web/web_serial.py` | 1.04 | 4 Meldungen (Verbinden) |
+| `_web/web_firewall.py` | 1.03 | 3 Meldungen |
+| `_web/web_servotest.py` | 2.06 | `text_min()`, `text_max()` |
+| `_web/web_log.py`, `_web/web_network.py` | 1.05, 1.01 | je 1 Meldung |
+| `headless/headless_pattgen.py` | 1.16 | 2 Meldungen |
+| `csv/Web_Languages.csv` | - | 745 Einträge |
+| `install/ANLEITUNG_Installation.md` | 2.79 | Abschnitt 2.15 |
+| `install/BETATEST_Checkliste.md` | 1.49 | Punkt 92 erweitert |
+
+Tests: `test_i18n.py` jetzt 48 Prüfungen (neu: kein `tr` beim Import, 0 f-Strings, Update-Meldung Deutsch und English); `test_install_check`, `test_recovery`, `test_z21_rmbus`, `test_z21_integration`, `test_e2e_real` an die neuen Texte und Versionen angepasst (die Prüfung der aus dem Hauptprogramm herausgelösten Funktionen bekommt ein einfaches `tr`). Alle 26 Reihen laufen. **Nicht geprüft:** jede einzelne Meldung im laufenden Programm (geprüft: die Umwandlung am Quelltext, der Katalog, das Füllen der Vorlagen mit Werten und je eine Update-Meldung in beiden Sprachen); die Anzeige im Browser; die Qualität der englischen Entwürfe. **Hinweis zum Prüfrechner:** Die Testläufe erzeugen viele Kopien in `/tmp`; sie füllten die Platte (Fehler „No space left on device“), Abhilfe: `/tmp/tmp*` löschen.
+
+## 2.19 (2026-10-26)
+
+**Mehrsprachigkeit vervollständigt** (Rückmeldung des Entwicklers mit zwei Bildschirmfotos, Sprache English): (1) Formular „Verteiler und Stecker Nummer“, (2) Dialog „Optionen und spezielle Funktionen“, Reiter Update (Knöpfe und Beschreibungen deutsch), (3) alle Knöpfe der Optionen („USB Port erkennen“, „Hilfe im Forum“, „Prog. Installieren“, „Speichern in Datei“, „Laden aus Datei“ …), (4) Beschreibungstexte auf den Hauptseiten, (5) viele Texte der Programm Einstellungen.
+
+**Ursachen und Befund** (gemessen, nicht geraten):
+- **Die Tabelle Languages wurde im Web nicht benutzt.** Die Texte der Formulare (zum Beispiel „Verteiler und Stecker Nummer“) sind in der Excel-Tabelle Languages längst ins English übersetzt; die Web-Oberfläche schlug aber nur im eigenen Katalog nach. Die Formulare stehen als Wörterbücher (`"Caption": …`) in `UserForm_*.py` und laufen nicht durch `Get_Language_Str`; sie erreichen die Oberfläche als `ui.label`/`ui.button` und damit nur `web_i18n.tr`.
+- **Texte, die es im Excel-Programm nicht gibt**, hatten nirgends eine Übersetzung: 74 Texte in den Parameterdefinitionen (`MobaLedTest_macroparamdef.json`, Hinweise und Beschriftungen der Programm Einstellungen), 227 Meldungen und Beschriftungen, die über `Get_Language_Str` laufen (aber in der Tabelle fehlen, zum Beispiel Patterngenerator: Multiplexer, Morsecode, Laden von Blättern; die PlatformIO-Meldungen), 20 Formulartexte (Verteiler und Stecker, Optionen, LNet-Lizenz, Auswahl der Zeile), und 95 Sätze im Web-Quelltext, die nicht in `ui`-Aufrufen stehen (Beschreibungen der Seiten, Meldungen).
+
+**Neu:**
+- `web_i18n` 1.05: **`tr()` schlägt zuerst im Katalog nach, dann in der Tabelle Languages** (`sheet_index()`, normiert nach Leerzeichen und Groß-/Kleinschreibung, nur Einträge mit Text, „ToDo“ gilt als nicht übersetzt, Rückfall English). Dadurch erscheinen alle Texte, die das Excel-Programm schon kannte, auf einmal übersetzt, in **allen** Sprachen der Tabelle (zum Beispiel Nederlands: „Verdeler- en connectornummer“, „Help op het forum“). `catalog_text()`: Nachschlagen nur im Katalog. `_fit()`: Die Übersetzung wird mit den Leerzeichen des Textes eingesetzt; vor einem Satzzeichen entfällt das Leerzeichen (` werden?` → `?`).
+- `M09_Language` 1.04: **`Get_Language_Str` schlägt nach der Tabelle im Katalog nach**, wenn der Text dort fehlt (vor dem Eintragen in die Tabelle, mit dem VB-Zeilenende); so werden die Meldungen und die Beschriftungen der Knöpfe (die schon durch `Get_Language_Str` laufen) übersetzt, bevor Werte (`#1#`) eingesetzt werden.
+- `csv/Web_Languages.csv`: **656 Einträge** (vorher 267), 389 neue, English zu 100 Prozent (Entwurf). Platzhalter (`#1#`, `{name}`) in Deutsch und English gleich (geprüft).
+- Dokumente: Anleitung 2.78 (Abschnitt 2.15: Katalog und Tabelle Languages), `UEBERSETZEN.md` 1.01 (Wo die Texte stehen), Checkliste 1.48 (Punkt 92).
+
+**Nicht übersetzt (bewusst oder noch offen):**
+- **Meldungen, die aus Teilen zusammengesetzt werden** (`'Text ' + Name + ' Text'`): zum Beispiel die Hinweise zum Update („Das Update auf Version … ist abgebrochen …“), die Firewall-Statustexte in `web_access`, Teile der Meldungen von `web_form_house` und `web_z21`. Sie brauchen `tr("… {name} …", name=…)` wie in 2.16 (noch etwa 60 Stellen). Die Teile selbst sind im Katalog, wirken aber nur, wenn jedes Teil einzeln durch `tr` oder `Get_Language_Str` läuft.
+- **Tk-Formulare ohne Gegenstück im Web** (Servo- und LED-Animation, MainMenu des Patterngenerators): im Web nicht sichtbar, nicht übersetzt (rund 170 Texte).
+- Meldungen, die in der Tabelle Languages vollständig (mehrzeilig) stehen und im Code aus mehreren Teilen zusammengesetzt werden (`'…' + vbCr + '…'` in `Get_Language_Str`): die Suche sieht nur einen Teil; nicht gemessen.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_i18n.py` | 1.05 | Nachschlagen in der Tabelle Languages, `catalog_text`, `_fit` |
+| `proggen/M09_Language.py` | 1.04 | `Get_Language_Str`: Katalog als Rückfall |
+| `csv/Web_Languages.csv` | - | 656 Einträge (389 neu) |
+| `webmobaledlib.py` | 2.19 | Version, Mindestversionen |
+| `install/ANLEITUNG_Installation.md` | 2.78 | Abschnitt 2.15 |
+| `install/BETATEST_Checkliste.md` | 1.48 | Punkt 92 |
+| `install/UEBERSETZEN.md` | 1.01 | Wo die Texte stehen |
+
+Tests (neu, `test_english.py`, 8, mit den echten Tabellen und Formularen): Formular „Verteiler und Stecker Nummer“ (alle Texte: „Distributor and connector number“ …), **Optionen und spezielle Funktionen**: alle Reiter, Knöpfe und Beschreibungen (kein deutscher Text übrig), **Programm Einstellungen**: Beschriftungen und Hinweise aller Optionen (28 Texte), `Get_Language_Str` mit einem Text, den die Tabelle nicht kennt („Picture not found“), mit Platzhalter, mit VB-Zeilenende, Deutsch bleibt deutsch, die Satzzeichenregel. Alle 26 Prüfreihen laufen; `test_pio` und `test_options_ide` erzwingen jetzt Deutsch (die Sprache „Auto“ richtet sich nach dem Rechner, im Prüfrechner ist das English). **Nicht geprüft:** die Anzeige im Browser; die Seiten selbst (Servo Test, Sound Test, DCC Keyboard, Farbtest, Z21): ihre Beschreibungstexte sind im Katalog, aber ich habe die Seiten hier nicht aufgebaut; die vorhandenen niederländischen Übersetzungen der Tabelle Languages (viele sind „ToDo“, dann English).
+
+## 2.18 (2026-10-26)
+
+Teil 1: Änderungen des Entwicklers ohne Claude (Paket `webmobaledlib_9a2dbf.zip`). Teil 2: Umsetzung der vier Punkte und des Speicherns im Windows-Zeichensatz durch Claude (ab „Umsetzung“).
+
+Aufgenommen aus dem Paket `webmobaledlib_9a2dbf.zip` (1754 Dateien, `VERSION` im Paket noch **2.17**; die Marken des Entwicklers im Code heißen `#V2.18`). Meine 113 gelieferten Dateien sind im Paket **unverändert** enthalten; nur 3 davon hat der Entwickler selbst geändert (siehe Tabelle), dazu kommen 6 weitere Dateien und 68 neue. **Meine Arbeitsbasis ist ab jetzt dieses Paket** (die drei Dateien in `headless/` sind auf seine Fassung gesetzt, die „Änderungen seit …“-Pakete vergleichen künftig gegen dieses Paket).
+
+**Excel-Programm 3.5.0-K-long** (`csv/Prog_Generator_MobaLedLib.xlsm`, Blatt Libraries verlangt MobaLedLib `3.5.0-K-long`, vorher `3.5.0-J-long`): bis zu **2048 statt 250 Eingänge (Variablen)**.
+- **VBA unverändert gegenüber K:** Vergleich aller 103 Module mit `vbaextract.py`: Der Code ist gleich, nur die 30 UserForms haben andere interne Kennungen (`VB_Base`, durch Neuspeichern). `Test_Suffix` bleibt im VBA `"K"`.
+- **Die Änderungen stehen in den Daten:** Blatt Platform_Parameters, Zeile `MaxInput` (Spalten 4 und 5): 250 → **2048**; Lib_Macros: 117 neue Zellen (ab Zeile 377, `EX.Macro.1` …, Puzzle); Par_Description: 144 neue Zellen (ab Zeile 176, `EX.HLMakro.Zeit` …); Libraries: Version, Zeit, Pfad. Der Port liest `MaxInput` wie das VBA (`M30.Get_Current_Platform_Int("MaxInput")`, `M06_Write_Header`, `M06_Write_Header_SW`); `Switch?<Nr>` bleibt wie im VBA bei **1..250** (im VBA K-long ebenso fest).
+- **Port:** `proggen/M02_Public.py` `Test_Suffix = 'K-long'` (damit passt die geforderte Bibliotheksversion); `proggen/M37_Inst_Libraries.py`: Nach dem Laden der Bibliothek von GitHub wird ein Ordner `…-longInpAddresses` in den Bibliotheksnamen umbenannt (VBA vom 19.11.21, Jürgen).
+
+**PlatformIO** als Ersatz für die ARDUINO-IDE (`proggen/M08_ARDUINO.py`): neue Funktion `Create_PIO_Build_cmd(ResultName, ComPort, BuildOptions, InoName, Mode, SrcDir, CPUType)` wählt aus dem Board (`--board …`) die Umgebung (`nano_new`, `nano_old`, `nano_full`, `pico`, `esp32`) und liefert `cd .. && pio run -t upload -e <Umgebung> --upload-port <Port>`; sie wird beim Hochladen aufgerufen, wenn die Config-Variable `Use_PlatformIO` an ist (`M28.Get_Bool_Config_Var("Use_PlatformIO")`; die Variable steht im Blatt Config als „PlatformIO Build verwenden“, Standard 0). `__Create_PIO_Build_cmd` und die Erzeugung von `Start_Arduino.cmd`/`platformio.ini` angepasst (`FastLED@=3.9.13` fest, Eintrag `MobaLedLib=file://../libraries/MobaLedLib@3.5.0-K-long`, Kommentarzeile `; Created by …` an den Anfang).
+- **Neue Dateien:** `LEDs_AutoProg/platformio.ini`, `LEDs_AutoProg/LEDs_AutoProg.ino`, `libraries/MobaLedLib/**` (54 Dateien der Bibliothek 3.5.0-K-long, lokal für `lib_deps`); die versehentlich entstandene Datei `LEDs_AutoProg/DDevelopmentgithub…LEDs_AutoProg.ino` ist entfernt.
+- **`proggen/UserForm_Options.py`:** Beschriftungen „Installiere Korrekturversion“ (vorher „Installiere Beta Test“) und „Hilfe im Forum“ (vorher „Mail an Hardi“).
+
+| Datei | Version im Kopf | Änderung des Entwicklers |
+|---|---|---|
+| `csv/Prog_Generator_MobaLedLib.xlsm` | - | Excel 3.5.0-K-long (MaxInput 2048) |
+| `proggen/M02_Public.py` | 1.01 | `Test_Suffix = 'K-long'` |
+| `proggen/M37_Inst_Libraries.py` | 1.04 | Ordner `-longInpAddresses` umbenennen |
+| `proggen/M08_ARDUINO.py` | 1.01 | PlatformIO: `Create_PIO_Build_cmd`, `platformio.ini`, `Start_Arduino.cmd` |
+| `proggen/UserForm_Options.py` | - | zwei Beschriftungen |
+| `LEDs_AutoProg/platformio.ini`, `LEDs_AutoProg.ino`, `libraries/MobaLedLib/**` | - | neu |
+
+Der Kopf dieser Dateien ist jetzt aktualisiert (siehe Umsetzung): `M02_Public` 1.02, `M37_Inst_Libraries` 1.05 (die Marken `#V2.18` heißen jetzt `# v1.05`), `UserForm_Options` 1.01 (neuer Kopf, die beiden alten Zeilen stehen als Kommentar), `M08_ARDUINO` 1.02.
+
+**Prüfung (Claude):** `release_tools check` auf das Paket: in Ordnung (1753 Dateien; Hinweis: die entfernte Datei `DDevelopment…ino` fehlt gegenüber 2.05, erwartet); alle 20 Prüfreihen laufen mit dem Paket und der neuen Excel-Datei (Programm Einstellungen, Sprache, Patterngenerator, Update, Reparatur, Z21 u. a.). **Nicht geprüft:** PlatformIO selbst (kein `pio` hier), das Hochladen auf einen Arduino/Pico/ESP32, die neuen Makros `EX.*` im Dialog.
+
+**Beobachtungen zur PlatformIO-Funktion** (nicht geändert, zur Entscheidung): (1) Die Option `Use_PlatformIO` hat **keine Oberfläche**, weder im Excel noch im Web: Ein Anwender kann sie nur im Blatt Config ändern (gegen die Regel „Einstellungen in die Oberfläche“). (2) `__Create_PIO_Build_cmd` hängt bei **jedem Aufruf** das PlatformIO-Verzeichnis an `os.environ["PATH"]` (die Umgebungsvariable wird immer länger). (3) Der Pfad `…/.platformio/penv/Scripts` gilt nur unter **Windows** (Linux, macOS und Raspberry Pi: `…/penv/bin`). (4) `InoName`, `Mode` und `CPUType` werden nicht benutzt; `if True:` lässt einen toten else-Zweig stehen. (5) Fehlt `pio`, gibt es keine verständliche Meldung (und keine Installation/Prüfung wie bei der IDE).
+
+### Umsetzung durch Claude (Entscheidung des Entwicklers: alle vier Vorschläge „Ja“, dazu das Speichern im Windows-Zeichensatz)
+
+**1. Option in der Oberfläche** (`_web/web_form_options.py` 1.04): Neuer Reiter **Entwicklungsumgebung** im Dialog „Optionen und spezielle Funktionen“ (hinter Dateien, vor Update; nicht beim ersten Seitenaufruf): Auswahl *ARDUINO-IDE (Standard)* / *PlatformIO (Ersatz für die ARDUINO-IDE)*, Status („PlatformIO gefunden: <Pfad>“ oder Installationshinweis) und Knopf **PlatformIO prüfen** (nur im Web, Handler `__Check_PIO_Button_Click` → `_web_check_pio`: Meldung mit Version und Pfad oder „nicht gefunden“). Die Auswahl steht in `_web_prepare` (`use_pio` aus `M28.Get_Bool_Config_Var("Use_PlatformIO")`) und wird in `_web_apply` mit `M28.Set_String_Config_Var("Use_PlatformIO", "1"/"0")` gespeichert (wie jeder Knopfdruck des Dialogs). Die Config-Variable bleibt dieselbe wie im Excel-Programm (Blatt Config, „PlatformIO Build verwenden“).
+
+**2. Plattformen und PlatformIO-Aufruf** (`proggen/M08_ARDUINO.py` 1.02): `PIO_Scripts_Dir()` (Windows `…\.platformio\penv\Scripts`, sonst `~/.platformio/penv/bin`), `Find_PIO()` (erst Ordner von PlatformIO, dann PATH; `pio.exe`/`platformio.exe` unter Windows), `PIO_Version()` (erste Zeile von `pio --version`, Zeitgrenze 30 s). `__Create_PIO_Build_cmd`: trägt den Ordner **nur einmal** in `os.environ["PATH"]` ein (vorher wuchs er bei jedem Aufruf), setzt `USERPROFILE` nur unter Windows, **schreibt die `platformio.ini` mit den aktuellen Einstellungen** (`__Create_PIO_Build(None, …)`: mit `fp=None` entfällt die Start-Datei, vorher wurde die Datei beim Hochladen mit PlatformIO nicht neu geschrieben) und liefert `cd .. && pio run -t upload -e <Umgebung> --upload-port <Port>`. **Fehlt `pio`:** verständliche Meldung (Installationshinweis, ARDUINO-IDE wieder einstellen), leerer Befehl (der Aufrufer bricht ab), keine Datei. Die Beobachtungen 2, 3 und 5 der Liste oben sind damit behoben; 1 (Oberfläche) ebenfalls. Offen: 4 (nicht benutzte Parameter und der tote Zweig mit `if True/elif True`, unverändert gelassen: Struktur des Entwicklers).
+
+**3. Version 2.18:** `VERSION` 2.18; Köpfe, History und Marken von `M02_Public` 1.02, `M37_Inst_Libraries` 1.05, `UserForm_Options` 1.01, `M08_ARDUINO` 1.02 (siehe oben).
+
+**4. Dokumente:** Anleitung 2.74 (Abschnitte 2.16 Entwicklungsumgebung und 2.17 Anzahl der Eingänge, Ergänzungen bei 2.2, 2.10 und 2.15), Checkliste 1.45 (Punkte 89 bis 91), `RELEASE_Hinweise_2.18.md` (Entwurf, die PDF und die Versionsliste gibt es erst mit „Release-Stand“).
+
+**5. Speichern im Windows-Zeichensatz für das Excel-Programm** (Rückweg nach Excel, Frage aus 2.17 vom Entwickler mit „umsetzen“ beantwortet): `VBFiles.to_excel_charset(path)` (`vb2py/vbclasses.py` 1.03): eine mit UTF-8 geschriebene Datei wird in **cp1252** umgeschrieben, wenn alle Zeichen darin Platz haben (ein UTF-8-Kennzeichen am Anfang entfällt dabei; nur ASCII bleibt; schon cp1252 bleibt; Zeichen außerhalb, zum Beispiel „ł“: bleibt UTF-8, kein Fehler; Ersetzen über Hilfsdatei und `os.replace`). Aufruf **nach** dem Schreiben (so entsteht keine Mischung bei den angehängten Blättern): `headless_pattgen.save_for_download` 1.15 (nach den angehängten Textfeld-Zeilen, vor dem Packen in ZIP) und `M18_Save_Load.__Save_Data_to_File_CallBack` 1.04 (PGF, Hilfsfunktion `Convert_to_Excel_Charset`). **Neue Option** in den Programm Einstellungen: **Dateien für das Excel-Programm speichern** (`SaveExcelCharset`, Checkbutton, Standard **an**, `DefaultConstants` 1.01; als `PARAM_ADDITIONS` in `web_tabs` 1.06 angelegt, ohne die JSON-Dateien des Tk-Programms zu ändern; `apply_param_overrides` trägt sie hinter „Z21 Simulator anzeigen“ in `ConfigurationPage` ein). Das Laden erkennt beide Zeichensätze (siehe 2.17). **Nicht geprüft:** das Lesen im Excel-Programm selbst (kein Excel hier): geprüft ist, dass die Bytes denen einer Excel-Datei entsprechen (Trennzeichen 0xAF, Umlaute cp1252, keine 0xC2 0xAF).
+
+**6. `platformio.ini` gehört jetzt zu den vom Programm geänderten Dateien** (`VOLATILE_PATHS` um `platformio.ini` im Ordner `python` erweitert: `release_tools` 1.05, `web_update` 1.06, `repair` 1.03): Sie wird beim Hochladen mit PlatformIO bei jedem Aufruf neu geschrieben; Update (nicht ersetzt, nicht gelöscht, fehlend wird installiert), Reparatur und Prüfung beim Start behandeln sie wie `LEDs_AutoProg.h`. Die Datei `LEDs_AutoProg/platformio.ini` im Paket des Entwicklers ist ein **Überbleibsel** (andere Fassung: `file://../libraries/…`, `src_dir = LEDs_AutoProg`; das Programm schreibt nach `python/platformio.ini`): Sie sollte gelöscht werden; sie bleibt als normale Datei im Release, bis der Entwickler sie entfernt. Test `test_volatile_pio.py` (7).
+
+**7. Ordner `.pio` nicht ins Release** (Rückmeldung des Entwicklers nach dem Test: „PlatformIO funktioniert. Getestet auf Windows 11 und ESP32 und Raspberry Pi Pico. Achtung: PlatformIO erzeugt ein riesiges Verzeichnis `.pio` im python Ordner (> 400 MByte). Dieses Verzeichnis darf nicht in die webmobaledlib.zip gepackt werden.“): `zip_erstellen.bat` 1.06 (`SKIP_DIRS` um `.pio` erweitert; `robocopy /XD` schließt den Ordner in jeder Tiefe aus); `release_tools` 1.06 (`SKIP_DIRS`: nicht in der Prüfliste, die ZIP-Prüfung meldet jede Datei aus `.pio` als Fehler „gehört nicht ins Release“; **neu:** Warnung, wenn das ZIP entpackt mehr als `BIG_UNPACKED_MB` = 100 MB hat (üblich etwa 32 MB), mit den drei größten Ordnern); `web_update` 1.07 (`PROTECTED_DIRS`: das Update fasst `.pio` nie an, auch wenn eine alte Prüfliste Dateien daraus nennt). Test `test_pio_dir.py` (11). Anleitung 2.76 (Abschnitt 2.16), Checkliste 1.46 (Punkt 89), Release-Hinweise und `RELEASE_Ablauf.md`. **Das bisher gebaute ZIP muss der Entwickler mit dem neuen Skript neu bauen**, wenn es `.pio` enthält (die Prüfung in `zip_erstellen.bat` 1.06 meldet es sonst als Fehler). **Bestätigt vom Entwickler:** PlatformIO funktioniert unter Windows 11 mit ESP32 und Raspberry Pi Pico (Hochladen), Linux, macOS und Raspberry Pi weiter ungeprüft.
+
+**Release-Stand 2.18** (auf Wunsch „Release bauen“): `webmobaledlib_Dateien_Stand_2.18.zip` (118 Dateien, alle von mir gelieferten, im Ordner `python`, **kein** Update-ZIP; enthält auch die vom Entwickler geänderten Dateien in der neuen Fassung), `ANLEITUNG_Installation.pdf` (2.77), `BETATEST_Checkliste.pdf` (1.47), `RELEASE_Hinweise_2.18.md` (PlatformIO „unter Windows 11 mit ESP32 und Raspberry Pi Pico getestet“), `VERSIONEN_Stand_2.18_2026-10-26.txt` (109 Dateien), `RELEASE_Ablauf.md`, `zip_erstellen.bat` 1.06. Die Dokumente von 2.13 liegen im `archiv/`. **Geprüft:** Dateipaket unbeschädigt, alle 118 Dateien gleich dem Ordner `headless`, alle `.py` kompilieren, keine Versionsabweichung (57 Einträge), 11 Dateien ausführbar; **Nachbau mit dem Paket des Entwicklers** (`webmobaledlib_9a2dbf.zip` plus meine Dateien, dazu ein künstlicher Ordner `.pio` mit 2 MB im Ordner `python`): `release_tools check --previous` in Ordnung, Version 2.18, 1753 Dateien, 0 neue und 0 fehlende gegenüber seinem Paket, ZIP 16,5 MB, **`.pio` nicht im ZIP**; alle 25 Prüfreihen laufen. **Nicht geprüft:** `zip_erstellen.bat` unter Windows (`robocopy /XD` mit `.pio`), PlatformIO auf Linux, macOS und Raspberry Pi, das Lesen der gespeicherten Dateien im Excel-Programm.
+
+**8. Rückmeldung zum Raspberry Pi Pico unter Windows** (nur Dokumente, Code unverändert): „Update funktioniert auch auf einem 2. PC mit PlatformIO. Für den Raspi Pico musste ein zusätzlicher USB-Treiber mit Zadig installiert werden.“ Vom Entwickler bestätigt: Pico im Bootloader-Modus, Eintrag „RP2 Boot (Interface 1)“, Treiber **WinUSB**; die Fehlermeldung von PlatformIO nennt Zadig bereits (deshalb keine eigene Erkennung im Programm). Anleitung 2.77 (Abschnitt 2.16, die Schritte in Zadig außer Gerät und Treiber sind allgemein bekannt, nicht vom Entwickler bestätigt: BOOTSEL beim Anstecken, *Options → List All Devices*, *Install/Replace Driver*), Checkliste 1.47 (Punkt 89), Release-Hinweise 2.18. Die PDF und das Dateipaket wurden neu gebaut (Anleitung 2.77, Checkliste 1.47).
+
+**Katalog:** `csv/Web_Languages.csv` 267 Texte (15 neu: Reiter, Optionen, Meldungen), English zu 100 Prozent; `web_i18n` 1.02: Der Auszug liest jetzt auch die Texte in `PARAM_OVERRIDES` und `PARAM_ADDITIONS` (die Beschriftungen und Hinweise der Programm Einstellungen, die bisher fehlten: „Der Reiter DM Servo Einstellungen …“, „Der Reiter Z21 Simulator wird angezeigt …“).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 2.18 | Version, Mindestversionen (57 Einträge) |
+| `zip_erstellen.bat` (neben dem Ordner python) | 1.06 | Ordner `.pio` nicht im ZIP |
+| `proggen/M08_ARDUINO.py` | 1.02 | PlatformIO: Ordner, `Find_PIO`, `PIO_Version`, PATH einmal, ini wird geschrieben, Meldung |
+| `_web/web_form_options.py` | 1.04 | Reiter Entwicklungsumgebung, Knopf PlatformIO prüfen |
+| `_web/web_tabs.py` | 1.06 | Option SaveExcelCharset (`PARAM_ADDITIONS`) |
+| `mlpyproggen/DefaultConstants.py` | 1.01 | Standard `SaveExcelCharset` = 1 |
+| `vb2py/vbclasses.py` | 1.03 | `to_excel_charset` |
+| `proggen/M18_Save_Load.py` | 1.04 | PGF für Excel umschreiben |
+| `headless/headless_pattgen.py` | 1.15 | `.MLL_pcf` für Excel umschreiben |
+| `_web/web_i18n.py` | 1.02 | Auszug liest die Optionstexte |
+| `release_tools.py` | 1.06 | `platformio.ini` zu den vom Programm geänderten Dateien (1.05), Ordner `.pio` nicht ins Release, Warnung bei großem ZIP (1.06) |
+| `_web/web_update.py` | 1.07 | `platformio.ini` (1.06), Ordner `.pio` geschützt (1.07) |
+| `repair.py` | 1.03 | dito |
+| `proggen/M02_Public.py` | 1.02 | `Test_Suffix` K-long (Entwickler) |
+| `proggen/M37_Inst_Libraries.py` | 1.05 | `-longInpAddresses` (Entwickler) |
+| `proggen/UserForm_Options.py` | 1.01 | zwei Beschriftungen (Entwickler), erster Kopf |
+| `csv/Web_Languages.csv` | - | 267 Texte |
+| `install/ANLEITUNG_Installation.md` | 2.77 | 2.2, 2.10, 2.15, neue Abschnitte 2.16 und 2.17, 7.1 |
+| `install/BETATEST_Checkliste.md` | 1.47 | Punkte 89 bis 91 |
+
+Tests (neu): `test_pio.py` (14, mit Ersatzprogrammen `pio` für Linux und PATH, Pfad unter „Windows“ mit einem Ersatz für `os.name`; Umgebung nach dem Board, PATH nur einmal, `platformio.ini`, Meldung ohne `pio`, die Start-Datei wie bisher), `test_options_ide.py` (15: Reiter, Status mit und ohne pio, Speichern der Auswahl in Config, Knopf prüfen, Darstellung mit Ersatzobjekten von NiceGUI), `test_charset.py` (18: Umschreiben in allen Fällen, 20000 Zeilen, Option und Standard, Eintrag in die Programm Einstellungen nicht doppelt, PGF, Patterngenerator mit Ihrer Datei `MyExamples_28_05_2026.MLL_pcf`: cp1252, Trennzeichen 0xAF). Angepasst: `test_i18n` (267 Texte), `test_pcf_encoding`, `test_z21_integration`, `test_pgf_msg` (neue Versionen). **Nicht geprüft:** PlatformIO selbst (kein `pio`, kein Internet), das Hochladen, Linux/macOS/Raspberry Pi mit echtem PlatformIO, die Darstellung des neuen Reiters im Browser, das Lesen der Dateien im Excel-Programm.
+
+
+## 2.17 (2026-10-23)
+
+**Fehler vom Entwickler:** Beim Einlesen einer `.MLL_pcf`-Datei in den Patterngenerator kommt „Fehler: 'utf-8' codec can't decode byte 0xaf in position 9: invalid start byte“ („utf-8 Dateien werden nicht unterstützt“). Beispieldatei `MyExamples_28_05_2026.MLL_pcf` (43771 Bytes, 24 Blätter) und Protokoll `webmobaledlib__15_.log`.
+
+**Ursache (Protokoll bestätigt):** Die Datei kommt aus dem Excel-Programm und hat den **Windows-Zeichensatz cp1252** (Anfang `SheetName¯Historie`, Trennzeichen `Chr(175)` = Byte 0xAF); das Programm las **jede Datei als UTF-8**. Aufrufkette: `web_pattgen.action` → `load_upload` → `load_files` → `M08.Load_Sheets` → `VBFiles.getLineInput` → `getInput` → `f.readline()` → `UnicodeDecodeError`. (Die Meldung „utf-8 Dateien nicht unterstützt“ trifft es umgekehrt: Die Datei ist **kein** UTF-8.)
+
+**Neu:**
+- `vb2py/vbclasses.py` 1.02: `VBFiles._encoding_for(filename, mode)`; `openFile` öffnet zum **Lesen** mit dem erkannten Zeichensatz: UTF-8 mit Kennzeichen (`utf-8-sig`), sonst UTF-8, sonst **cp1252**, sonst `latin-1`; Schreiben, Anhängen und `r+` bleiben UTF-8. Das gilt für alle Dateien, die über `VBFiles` gelesen werden (Patterngenerator, Beispiele, weitere Stellen des Ports).
+- `headless/headless_pattgen.py` 1.14: **Zweite Stelle mit demselben Fehler, still:** `sheet_names_in_file` und `object_lines_in_file` lasen mit `encoding="utf-8", errors="replace"`: Das Trennzeichen 0xAF wurde zu U+FFFD, die Zeilen `SheetName`/`msoTextBox` wurden nie erkannt (keine Blattnamen für die Überspringen-Logik, **Textfelder und Formularknöpfe gingen beim Speichern verloren**). Jetzt `file_encoding(path)` (über `VBFiles._encoding_for`, mit Rückfall auf UTF-8 bei älterer `vbclasses.py`).
+- `webmobaledlib.py` 2.17: Mindestversionen (54 Einträge).
+
+**Lehre, wichtig für meine Arbeitsweise:** Meine Testbasis `/tmp/full/python` stammte aus einem älteren Stand als Ihr Paket 2.05. Für `vb2py/vbclasses.py` (Ihre Fassung 1.01 vom 2026-10-15: `Collection.__delitem__` und `f.readline()` in `getInput`) war die Basis eine **ältere** Datei: Meine erste Fassung der Korrektur (aus der Basis erzeugt) hätte Ihre Änderungen **überschrieben**. Das ist beim Vergleich mit Ihrem Paket aufgefallen (Größe 16238 gegenüber 18276 Bytes, im Protokoll `line=f.readline()` in Zeile 428, die in der Basis anders war). Die Korrektur ist **neu auf Ihre Fassung 1.01 gesetzt** (nur Kopf, die neue Funktion und eine Zeile in `openFile` ändern sich; `readline` und `__delitem__` sind erhalten, CRLF wie bei Ihnen). Die Prüfung aller bisher gelieferten Dateien gegen Ihr Paket 2.05 ergab **keinen weiteren Fall** (Version oder Verlauf passen, keine Datei mit geändertem Inhalt und gleicher Version). Künftig prüfe ich vor jeder ersten Änderung einer Datei, ob sie in Ihrem letzten Paket gleich der Basis ist, und baue auf Ihrer Datei auf.
+
+**Offene Frage an den Entwickler (nicht geändert):** Das Web-Programm **schreibt** weiter UTF-8. Eine so gespeicherte `.MLL_pcf` enthält das Trennzeichen `¯` als zwei Bytes (0xC2 0xAF); das Excel-Programm (VBA, Windows-Zeichensatz) kann sie daher nicht lesen (Trennzeichen und Umlaute falsch). Für den Austausch in beide Richtungen müsste das Web-Programm im Windows-Zeichensatz speichern, wenn alle Zeichen darin Platz haben (sonst UTF-8). Die Dateien lassen sich im Web in beiden Formaten laden.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `vb2py/vbclasses.py` | 1.02 | Lesen: UTF-8 oder cp1252 (auf Ihrer Fassung 1.01) |
+| `headless/headless_pattgen.py` | 1.14 | Blattnamen und Textfelder aus Dateien in cp1252 |
+| `webmobaledlib.py` | 2.17 | Mindestversionen |
+| `install/ANLEITUNG_Installation.md` | 2.73 | Hinweis zu Dateien aus dem Excel-Programm |
+| `install/BETATEST_Checkliste.md` | 1.44 | Punkt 88 |
+
+Tests (neu, `test_pcf_encoding.py`, 15, mit **Ihrer Datei**): Erkennung als cp1252; Lesen ohne Fehler, erste Zeile `SheetName¯Historie`, 24 Blätter, Umlaute; UTF-8, UTF-8 mit Kennzeichen, Schreiben bleibt UTF-8 (und wird wieder gelesen), Bytes, die auch cp1252 nicht kennt (0x81, 0x8D: latin-1), nicht vorhandene Datei und andere Modi; `sheet_names_in_file` (24 Namen mit Umlauten), `object_lines_in_file` (Textfelder und Knöpfe aller 24 Blätter); **Laden über die Seite des Patterngenerators** (`load_upload`): 24 neue Blätter ohne Fehler, `Bus gelb Rücklicht` dabei, die Textfelder und Knöpfe werden gemerkt; Speichern eines Blatts (UTF-8) und Lesen des Blattnamens. Alle 19 weiteren Reihen laufen weiter; die Versionsprüfung meldet für alle 54 Einträge die verlangte Version. **Nicht geprüft:** die Anzeige der geladenen Blätter im Browser (Texte, Bilder); Bilder, die zur Datei gehören (die Beispieldatei enthält nur die Beschreibung der Bilder, keine Bilddateien); ein Rückweg zum Excel-Programm.
+
+## 2.16 (2026-10-23)
+
+**Mehrsprachigkeit: Texte mit eingesetzten Werten** (die 39 f-Strings der Liste `python _web/web_i18n.py fstrings`, offener Punkt a aus 2.14). Der Entwickler hat entschieden: zuerst diese 39, die Beispielblätter später.
+
+**Umwandlung** (Hilfsprogramm, nicht im Paket; AST, Ersetzen der Quelltext-Abschnitte, Marken `# v…`): Jeder f-String in einem Aufruf von `ui.label`, `ui.button`, `ui.notify`, `ui.tab`, … wird zu `tr("Text {name} …", name=Ausdruck)`. Der **deutsche Text mit den {Platzhaltern} ist der Schlüssel** im Katalog; `tr` setzt nach der Übersetzung die Werte ein (`str.format`). Platzhalter heißen wie die Variable (`{ex}`, `{name}`), bei zusammengesetzten Ausdrücken nach einer Tabelle lesbarer Namen (`{reiter}`, `{meldung}`, `{adresse}`, `{alte_adresse}`, `{benutzer}`, `{blatt}`, `{anzahl}`, `{pfeil}`, `{schritt}`, `{befehl}`, `{typ}`, `{farbe}`); Formatangaben (`{schritt:+d}`) und Umwandlung (`{ptype!r}`) bleiben erhalten; geschweifte Klammern im Text werden verdoppelt. Das **zusammengesetzte Wort im DCC Keyboard** (`'rot' if channel == 0 else 'grün'`) wird einzeln übersetzt (`tr('rot')`, `tr('grün')`). Nicht umgewandelt (nichts zu übersetzen): `webMobaLedLib {VERSION}`, `Max: {high}`, `{key}\n{brightness}`.
+- **36 Stellen** in `webmobaledlib.py` (22), `web_access.py` (4), `web_pattgen.py` (5), `web_params.py` (2), `web_dcckeyboard.py` (3 `tr`-Aufrufe), `web_form_exchange.py` (1), `web_servotest.py` (1). `webmobaledlib.py` hat eine eigene `tr(text, **values)`, die ohne `web_i18n` auf den deutschen Text zurückfällt; die Module importieren `tr` aus `_web.web_i18n` mit **Rückfall** (`except ImportError`: eine ältere Installation ohne `web_i18n.py` stürzt nicht ab, die Texte bleiben deutsch).
+- **`web_i18n` 1.01:** Der Auszug (`extract`, `check`, `fstrings`) erkennt die Texte der `tr(...)`-Aufrufe (immer in den Katalog, auch wenn sie mit `{Wert}` beginnen oder klein geschrieben sind: `ForcedKey`); f-Strings ohne Wörter oder nur mit neutralen Wörtern (`webMobaLedLib`, `Max`, `Min`) werden nicht mehr gemeldet. Ergebnis: **0 f-Strings in den Aufrufen der Oberfläche**.
+- **Katalog:** jetzt **252 Texte** (216 + 34 Vorlagen + `rot`, `grün`), English zu 100 Prozent (Entwurf). In Deutsch und English stehen dieselben Platzhalter (geprüft für alle Einträge); alle Vorlagen lassen sich mit Werten füllen.
+
+**Noch offen:** Es gibt außerhalb dieser Aufrufe **88 weitere deutsche f-Strings** (Stand der Zählung): 36 Zuweisungen und Listen (zum Beispiel Texte, die vor dem Aufruf in Variablen zusammengesetzt werden), 17 Fehlertexte der Update-Funktion (`UpdateError(f"…")`, 20 in `web_update.py`), 11 `append`, 9 `print` (Konsole, nicht übersetzen), 3 `finish`, 3 `set_text`, je 1 `notify`, `confirm`, `set_buttons`, `HTMLResponse` und weitere. Ein Teil davon sind Konsole und Protokoll; etwa 50 sind Anzeigetexte. Vorschlag: als Nächstes die Anzeigetexte dieser Gruppe auf `tr(…)` umstellen (gleiches Verfahren). Weiter offen: Beispielblätter (`M09_Translate_Examples`), Übersetzungen (Nederlands durch den Tester).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 2.16 | 22 Texte mit `tr(...)`, eigene `tr`, Mindestversionen (53 Einträge) |
+| `_web/web_i18n.py` | 1.01 | Auszug erkennt `tr(...)`, neutrale f-Strings |
+| `_web/web_access.py` | 1.10 | 4 Texte |
+| `_web/web_dcckeyboard.py` | 1.01 | Kanal und Farbe |
+| `_web/web_form_exchange.py` | 1.01 | 1 Text |
+| `_web/web_params.py` | 1.02 | 2 Texte |
+| `_web/web_pattgen.py` | 1.18 | 5 Texte |
+| `_web/web_servotest.py` | 2.05 | 1 Text |
+| `csv/Web_Languages.csv` | - | 252 Texte (36 neu) |
+| `install/ANLEITUNG_Installation.md` | 2.72 | Abschnitt 2.15 |
+| `install/BETATEST_Checkliste.md` | 1.43 | Punkt 87 |
+
+Tests (`test_i18n.py`, jetzt 44 Prüfungen, davon 8 neu): Katalog 252 Texte; Auszug: 252 Texte, keiner fehlt, keiner überzählig, **keine f-Strings** in den Aufrufen der Oberfläche; in Deutsch und English dieselben Platzhalter; **jede Vorlage mit Platzhaltern lässt sich in Deutsch und English mit Werten füllen**; Beispiele (Fehlertext, Zahl mit Vorzeichen `{schritt:+d}`, Farbe `Channel 0 (red)`, `{anzahl} Seite(n) gelöscht`, `!r`); die Module importieren `tr` mit Rückfall. Alle 18 weiteren Reihen laufen weiter, die Versionsprüfung (jede Datei der Liste hat genau die verlangte Version). **Nicht geprüft:** die Anzeige im Browser; jede einzelne umgestellte Meldung durch Auslösen im Programm (geprüft ist die Umwandlung am Quelltext und die Übersetzung mit Werten, nicht der Weg, auf dem jede Meldung entsteht).
+
+## 2.15 (2026-10-23)
+
+**Mehrsprachigkeit, Spaltenköpfe und Namensspalte** (nächster Schritt nach 2.14, offener Punkt b): Die Köpfe der Datenblätter und die Namensspalte erscheinen im Raster in der eingestellten Sprache; die Zellen bleiben unverändert (wie bei den Tokens, nur Anzeige).
+
+**Wie Excel es macht** (VBA, `M09_Language.bas`): `Update_Language_in_Sheet` schreibt die Texte der Zeilen **`Cell`**, **`Cell_DCC`**, **`Cell_LNET`**, **`Cell_SX`**, **`Cell_CAN`** der Tabelle Languages (Spalte Param = Adresse der Zelle, zum Beispiel `B2`, `D2`) und die Hinweise aus den Zeilen **`Comment*`** in die Zellen und Kommentare des Blatts; `Update_Language_Name_Column_in_Sheet` (`M27_Sheet_Icons`) bestimmt für jede Zeile mit einem Makro in der Spalte Config den Namen neu (`FindMacro_and_Add_Icon_and_Name(…, NameOnly=True)` → `Add_Icon_and_Name`: `Get_Language_Text(Zeile, SM_LName_COL, Sprache)`, sonst der Name ohne Sprache `SM_Name__COL`; Sonderfälle `Pico Config` für Zeilen mit `//` und „Muster Pattern_Configurator“ für Pattern). Im Port ist die Umstellung der Blätter abgeschaltet (siehe 2.14).
+
+**Neu** (`M09_Language` 1.03, `headless_gridmodel` 1.04, `webmobaledlib` 2.15):
+- `M09.Get_Display_Cells(Sh)` liefert `{(Zeile, Spalte): Text}` (0-basiert) für ein Datenblatt: **Kopfzeilen** (nur wenn die Sprache nicht Deutsch ist): Für jede Zeile `Cell`/`Cell_<Seite>` (Seite aus `M25.Page_ID`) wird die Zelle an der Adresse in Param (der Teil vor dem Kommentar `§`, zum Beispiel `D1§Location …` für die Sprachkennung) gelesen; ist ihr Text (ohne Tooltip, Leerzeichen und Groß-/Kleinschreibung egal) **einer der Texte der Zeile in irgendeiner Sprache**, wird er durch den Text der gewählten Sprache ersetzt (fehlt er oder steht „ToDo“ darin: English, dann Deutsch); der **Tooltip** (nach `§`) kommt aus der Zeile `Comment`/`Comment_<Seite>` mit derselben Adresse. Ein vom Anwender geänderter Kopf bleibt. Die Sprachkennung D1 zeigt `NL`, `GB` usw. **Namensspalte** (alle Sprachen, auch Deutsch): Name aus Lib_Macros wie oben, mit den Sonderfällen.
+- Zwischenspeicher: `__LibRowCache` (Zeile eines Makros in Lib_Macros, bleibt beim Sprachwechsel), `__NameCache` (Name je Makro und Sprache, wird von `Language_Changed` geleert). Erster Aufruf für das Blatt Examples (121 Zeilen, 74 Makros) 1,4 s (Suche in Lib_Macros), nach einem Sprachwechsel 1 ms, danach 0,7 ms.
+- `build_grid(…, display_cells=…)`: ersetzt den Zellwert vor der Behandlung von `§` (Kopfzeile 2 mit Tooltip), `show(ws)` übergibt `M09.Get_Display_Cells(ws)`. `M09.DISPLAY_TRANSLATION = False` schaltet es ab.
+- Fehler im Port, dabei gefunden: `M30.LastUsedColumnInRow` (`Sh.Columns.Count`) funktioniert nicht; `M25.Page_ID` ist ein Zellobjekt (mit `str()` lesen); die Adresse in Param kann einen Kommentar tragen (`D1§…`).
+
+Befund bei der Namensspalte: `' Spoorwegovergang RGB'` (Lib_Macros, Nederlands) beginnt mit einem Leerzeichen; Daten der Excel-Datei, im Port unverändert.
+
+Nicht Teil dieses Schritts (offen): die Texte der Beispielblätter (`M09_Translate_Examples`), die 39 f-Strings, die Übersetzungen.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `proggen/M09_Language.py` | 1.03 | `Get_Display_Cells`, `DISPLAY_TRANSLATION`, Zwischenspeicher |
+| `headless/headless_gridmodel.py` | 1.04 | `display_cells` |
+| `webmobaledlib.py` | 2.15 | Anzeige der Köpfe und der Namensspalte, Mindestversionen |
+| `install/ANLEITUNG_Installation.md` | 2.71 | Abschnitt 2.15 |
+| `install/BETATEST_Checkliste.md` | 1.42 | Punkt 86 |
+
+Tests (neu, `test_headers_names.py`, 17, mit den echten Tabellen und der Datei des niederländischen Testers): Deutsch: keine Kopfzeilen angefasst; English: `Activ`, `Address or name`, `Type`, `Description`, Tooltip englisch; Nederlands: `Actief`, `Adres of naam`, `Beschrijving`, Tooltip niederländisch, Sprachkennung `NL`; ein selbst geänderter Kopf bleibt; Raster: Kopfzeile mit getrenntem Tooltip, die Zellen im Blatt bleiben deutsch; Namensspalte (Blatt Examples, 74 Makros): `Belebtes Haus` / `Busy house` / `Druk huis`, entspricht `Get_Language_Text`, kein leerer Name, ein veralteter Name wird ersetzt; Datei `Sein_Plank` (Köpfe `Actief`/`Adres of naam`/`Beschrijving`, Namen `Hartslag-LED`, `Selecteer geluidsmodule`, `Pico Config`); `DISPLAY_TRANSLATION = False`; Blatt Config (kein Datenblatt) ohne Anzeige; Dauer. Dazu alle 19 bisherigen Reihen (`test_i18n` und `test_e2e_real` an die neuen Versionen und Dateizahlen angepasst). **Nicht geprüft:** die Anzeige im Browser; Seiten Selectrix, CAN und LNet (die Zeilen `Cell_SX`, `Cell_CAN`, `Cell_LNET` werden gleich behandelt, nicht mit einem Blatt dieser Art getestet).
+
+## 2.14 (2026-10-23)
+
+**Mehrsprachigkeit, erste Stufe** (Bausteine 1 und 2 des abgestimmten Konzepts und die Probe zu Baustein 3). Vom Entwickler bestätigt: neutrale Sprache Deutsch; eigener Katalog für die Web-Oberfläche, für Programm Generator und Patterngenerator weiter die Tabelle Languages; Reihenfolge der Sprachen Deutsch, Englisch, dann Niederländisch; der niederländische Tester liefert eine Beispieldatei.
+
+**Befund zur Ursache** („nach Umstellung der Sprache im laufenden Betrieb funktioniert nichts mehr richtig“): `Update_Language_in_All_Sheets` (`M09_Language.py`) ist im Port mit `return #*HL` **abgeschaltet**. In Excel stellt sie beim Sprachwechsel die Blätter auf die neue Sprache um (Spaltenköpfe, Tokens, Namensspalte, Beispieltexte). Im Port bleiben die Zellen immer deutsch, aber `Set_Tast_Txt_Var` bildete `Red_T`, `Green_T`, `OnOff_T`, `Tast_T` aus der Tabelle Languages **in der gewählten Sprache** (`Rood`, `Aan uit` …) und der Code (`M06_Write_Header`, `M20_PageEvents_a_Functions`, Formulare, 45 Stellen) verglich die deutschen Zellen damit: Nichts passte mehr. Außerdem blieben Zwischenspeicher (Tokens, Suchergebnisse) beim Wechsel stehen. Nachgewiesen im Test (Nederlands: `Rood`/`Aan uit` statt `Rot`/`AnAus`).
+
+**Baustein 1: Die Einstellung wirkt sofort** (`webmobaledlib` 2.14, `M09_Language` 1.02):
+- Die Auswahl „Sprache“ (Programm Einstellungen, Parameter `Language`, Konfiguration `language`: 0 Auto, 1 bis 7 Deutsch, English, Nederlands, French, Italian, Spanish, Denmark) bestimmt `M09.Get_ExcelLanguage()` (0 bis 6); Auto: Sprache des Rechners (`locale`), sonst English. Getestet für alle sieben Werte und Auto mit `nl_NL`, `de_DE`, `sv_SE`, ohne Angabe.
+- Neu `M09.Language_Changed()`: setzt die Token-Konstanten zurück, leert die Suchspeicher der Blätter (`searchcache`), `Reset_Par_Prefix_Cache`. `after_settings_save` erkennt den Wechsel (`lang_active`), ruft `Language_Changed`, `web_i18n.language_changed()` und `web_i18n.reload_all_clients()` (**`location.reload()` in allen Browsern**, `Client.instances`), danach kein weiterer Aufbau in dieser Sitzung.
+
+**Baustein 2: Katalog und Übersetzung** (`_web/web_i18n.py` 1.00, `csv/Web_Languages.csv`, `install/UEBERSETZEN.md`):
+- Katalog: UTF-8 mit Kennzeichen, Semikolon, Spalten Deutsch (Schlüssel), English, Nederlands, Francais, Italiano, Espanol, Dansk (Nummern wie `Get_ExcelLanguage`); 216 feste Texte der Oberfläche, **English zu 100 Prozent (Entwurf von mir, bitte von einem Muttersprachler prüfen)**, die anderen Spalten leer. Wird bei Änderung der Datei (Zeitstempel) von selbst neu gelesen.
+- `tr(text, **werte)`: gewählte Sprache, sonst English, sonst der deutsche Text; führende und folgende Leerzeichen bleiben; `{name}` wird ersetzt.
+- `install(ui)` leitet die Elemente von `nicegui.ui` (`label`, `button`, `checkbox`, `switch`, `expansion`, `menu_item`, `link`, `badge`, `chip`, `tab`, `input`, `number`, `textarea`, `select`, `tooltip`) ab und übersetzt Text, `label`, `placeholder`, `caption` und `set_text`; dazu `ui.notify` und `Element.tooltip`. **Keine der rund 216 Stellen musste geändert werden.** Texte mit eingesetzten Werten (39 f-Strings, Liste mit `python _web/web_i18n.py fstrings`) werden schrittweise mit `tr("… {name}", name=…)` umgestellt.
+- Werkzeuge: `python _web/web_i18n.py check` (Abdeckung je Sprache, fehlende Texte), `extract` (neue Texte aufnehmen, Übersetzungen bleiben), `fstrings`; Testsprache `MLL_TEST_LANGUAGE=1` (jeder übersetzte Text in `⟦ ⟧`).
+- Tastenkürzel in den Beschriftungen (`(A)`, `(J)` …) bleiben in den Übersetzungen gleich, weil die Tastenbehandlung auf diese Buchstaben reagiert.
+
+**Probe zu Baustein 3: neutrale Tokens, Anzeige übersetzt** (Ergebnis: es geht sauber, an **zwei Stellen**; wegen des Befunds oben jetzt gleich **Standard**, `M09.CANONICAL_TOKENS = True`):
+- `Set_Tast_Txt_Var`: die Konstanten sind immer `Rot`, `Grün`, `AnAus`, `Tast` (für Deutsch ändert sich nichts; die übrigen Stellen des Programm Generators bleiben unverändert).
+- **Anzeige:** `headless_gridmodel.build_grid(…, display_cols={Spalte: M09.Token_Display})`; in `show(ws)` für die Spalte Typ (`typ_column(ws)`, `M25.Inp_Typ_Col`). Im Test mit dem Blatt Examples (English): `Red`, `Green`, `OnOff`; das Blatt selbst bleibt deutsch.
+- **Eingabe:** `on_cell_changed` wandelt in der Spalte Typ mit `M09.Token_Canonical` zurück (ganzes Wort oder erster Buchstabe in der eingestellten Sprache, Beispiel English: `r` → Rot, `on` → AnAus, `p` → Tast (`Push`)).
+- **Laden:** `M09.Token_Canonical_Any` (Token in irgendeiner der 7 Sprachen der Tabelle Languages → deutsch); `M18_Save_Load` 1.03 ruft es beim Lesen einer PGF-Zeile für die Spalte Typ auf. Alle 4 Tokens in allen 7 Sprachen getestet. **Mit einer echten Datei des niederländischen Testers noch nicht geprüft.**
+- Auch `M09.Language_Changed` leert `__AnyTokenMap`. `M30.LastUsedColumnInRow` funktioniert im Port nicht (`Sh.Columns.Count`), deshalb feste 7 Sprachspalten.
+
+**Beispieldatei des niederländischen Testers** (`Sein_Plank_23102026.MLL_pgf`, 4352 Bytes, **cp1252**, Zeilenende CRLF, 55 Zeilen, `Head:`/`Sheet:`/`Line:` mit Tabulator, Blatt DCC): Die Spalte Typ enthält `Rood` (2), `Groen` (2), `Aan uit` (5), genau wie vorhergesagt; Beschreibungen, Namen und Verteilerbezeichnungen (`Centrale`, `Speciale instellingen`, `Één positie terug (-1)`) sind niederländischer Inhalt. Geladen mit `M18.Read_PGF` bei eingestellter Sprache Nederlands: Die Typen sind nach dem Laden `Rot` (2), `Grün` (2), `AnAus` (5), die Anzeige zeigt wieder `Rood`, `Groen`, `Aan uit`; die niederländischen Beschreibungen bleiben unverändert, das é wird richtig gelesen. Beobachtung: Die **Spaltenköpfe** (Zeile 2) des geladenen Blatts bleiben deutsch (`Typ§Typ des Eingangs:\nAnAus, Rot, Grün`), weil die Umstellung der Blätter abgeschaltet ist (offener Punkt b). Die Meldungen des Programms kommen auf Niederländisch (zum Beispiel „Fout: de pin '6' in 'SOUND_CHANNEL_DEFINITON(' wordt al gebruikt als de 'LED'-pin …“; in der Testumgebung gilt das Standard-Board Nano, die Datei nutzt einen Pico). **Nicht geprüft:** das vollständige Erzeugen der Header-Datei für diese Datei (in der Testumgebung gibt es keine Arduino IDE, `preferences.txt` fehlt, und das Standard-Board passt nicht zu dem Pico der Datei); der Vergleich der Header-Datei mit Deutsch und Nederlands steht deshalb noch aus und sollte der Tester am echten System prüfen (Checkliste 84). Test `test_nl_file.py` (6 Prüfungen).
+
+**Noch offen** (nächste Schritte): (a) die 39 f-Strings umstellen; (b) **Spaltenköpfe** der Datenblätter (Zeile 2, mit `§`-Tooltips) und die **Namensspalte** (Namen der Makros aus Lib_Macros je Sprache) im Raster übersetzt anzeigen: dazu `Languages`-Zeilen mit Typ `Cell`, die bisher nur `__Update_Language_in_Sheet` (abgeschaltet) nutzte; (c) Beispieltexte (`M09_Translate_Examples`); (d) Menüeinträge und Texte, die nicht über `ui.*`-Aufrufe laufen (zum Beispiel Wörterbücher wie `MENU` mit eigener Ausgabe, `web_dialogs`); (e) Übersetzungen: Nederlands (Tester), danach French, Italian, Spanish, Denmark; (f) Sprache der Anleitung/Checkliste (englische PDF) offen; (g) im Test mit echtem NiceGUI prüfen (hier nicht installiert; `web_i18n` ist mit Ersatzobjekten getestet).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_i18n.py` | 1.00 | **neu**: Katalog, `tr`, Umstellung der Elemente, Auszug, Abdeckung, Testsprache |
+| `csv/Web_Languages.csv` | - | **neu**: 216 Texte, English (Entwurf) |
+| `install/UEBERSETZEN.md` | 1.00 | **neu**: Anleitung für Übersetzer |
+| `proggen/M09_Language.py` | 1.02 | `Language_Changed`, neutrale Tokens (`CANONICAL_TOKENS`, `Token_Display`, `Token_Canonical`, `Token_Canonical_Any`) |
+| `proggen/M18_Save_Load.py` | 1.03 | Token beim Laden einer PGF-Datei neutral |
+| `headless/headless_gridmodel.py` | 1.03 | `display_cols` (übersetzte Anzeige) |
+| `webmobaledlib.py` | 2.14 | Umstellung installiert, Sprachwechsel, Anzeige und Eingabe der Tokens, 51 Einträge |
+| `install/ANLEITUNG_Installation.md` | 2.70 | Abschnitt 2.15 |
+| `install/BETATEST_Checkliste.md` | 1.41 | Punkte 83 bis 85 |
+
+Tests (neu): `test_i18n.py` (36, Ersatzobjekte für NiceGUI): Katalog (216 Texte, BOM, Semikolon, Zeilenumbruch im Text, Schreiben und Lesen mit Semikolon und Anführungszeichen), `tr` (Deutsch, English, Nederlands mit Rückfall auf English, Leerzeichen, Werte, Zahlen und None, Neuladen bei Änderung, fehlende Datei, Testsprache), Elemente (Knopf, Beschriftung, Haken, Reiter, Eingabe mit Platzhalter, Auswahl, Menüeintrag, `set_text`, `tooltip`, `notify`, `isinstance`, doppelter Aufruf, `uninstall`), `reload_all_clients` (ein fehlerhafter Browser stört nicht), Auszug und Abdeckung am echten Quelltext (**216 Texte, alle im Katalog, English 100 Prozent**: bricht ab, wenn ein neuer Text ohne Katalogeintrag dazukommt), `extract`, Einbindung im Hauptprogramm. `test_i18n_m09.py` (28, mit den echten Tabellen): Einstellung 1 bis 7 und Auto, Nachweis des alten Fehlers (alte Tokens `Red`/`OnOff`, `Rood`), `Language_Changed`, neutrale Tokens in Deutsch, English und Nederlands, Anzeige und Rückübersetzung, Eingabe, Raster mit dem Blatt Examples, `Token_Canonical_Any` für alle 4 Tokens in 7 Sprachen, Haken in `M18`. Dazu alle 15 bisherigen Reihen (`test_pgf_msg` an die neue Version von `M18` angepasst) und die Versionsprüfung (jede Datei der Liste hat genau die verlangte Version). **Nicht geprüft:** die Umstellung mit echtem NiceGUI (nicht installiert), die Anzeige im Browser (Neuladen aller Fenster, Reiter, Menü, Knöpfe), Dateien in niederländischer Sprache, die Übersetzungsqualität des englischen Entwurfs, das Verhalten auf einem Raspberry Pi.
+
+## 2.13 (2026-10-23)
+
+**Korrektur zu 2.10** (Rückmeldung des Entwicklers nach dem Release 2.12: „Fehler bzw. Missverständnis: Die Dateien aus LEDs_AutoProg müssen alle mit in dem Release enthalten sein. Sie dürfen nur nicht beim Updatevergleich als Fehler auftauchen, da sie nachträglich vom Programm geändert werden können.“). Ich hatte die sechs Dateien (`LEDs_AutoProg/LEDs_AutoProg.h`, `Start_Arduino.cmd`, `Start_ESP32_Sub.cmd`, `Start_PICO_Sub.cmd`, `fastBuild.cmd`, `fastBuild2.cmd`) in 2.10 ganz aus dem Release genommen (nicht im ZIP, nicht in der Prüfliste, `zip_erstellen.bat` 1.04 ließ sie weg). Das war falsch: Sie gehören zum Release (`.h` und `.cmd` werden zum Kompilieren gebraucht), nur Abweichungen sollen kein Fehler sein.
+
+**Jetzt** (`VOLATILE_PATHS` = `LEDs_AutoProg/LEDs_AutoProg.h` und `LEDs_AutoProg/*.cmd`, genau dieser Ordner, Groß-/Kleinschreibung egal; in `release_tools`, `web_update`, `repair` jeweils `is_volatile`):
+- **Im ZIP und in der Prüfliste** wie alle Dateien; `check` meldet sie nicht als Fehler (`is_skipped` kennt sie nicht mehr); `zip_erstellen.bat` 1.05 ohne `SKIP_GENERATED`.
+- **Update** (`web_update` 1.05): Fehlt die Datei, steht sie bei „neu“ und wird installiert. Ist sie da, zählt sie als **gleich** (`plan.same`), auch wenn der Inhalt vom Release abweicht: nicht ersetzt, nicht bei „geändert“ angezeigt. Nie bei „gelöscht“, auch wenn ein späteres Release sie nicht mehr enthält. Dadurch entfällt der **einmalige Nebeneffekt** aus 2.10 (Löschen beim ersten Update der Tester).
+- **Prüfung beim Start** (`release_tools.check_installation`) und `--check-only`/`quick`/`full`: weder Abweichung noch Fehlen ist ein Fehler.
+- **Reparatur** (`repair` 1.02): vergleicht sie nicht, ersetzt eine vorhandene nie (auch nicht mit `--all`); fehlt sie, holt sie sie aus dem Release, wenn sonst repariert wird.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `release_tools.py` | 1.04 | `VOLATILE_PATHS`, `is_volatile` statt `GENERATED_PATHS`; gehören ins Release |
+| `_web/web_update.py` | 1.05 | gleich, nie ersetzt oder gelöscht, fehlende installiert (statt geschützt) |
+| `repair.py` | 1.02 | nie ersetzt, fehlende wiederhergestellt |
+| `zip_erstellen.bat` | 1.05 | keine Ausnahme mehr |
+| `webmobaledlib.py` | 2.13 | Mindestversionen |
+| `install/ANLEITUNG_Installation.md` | 2.69 | Abschnitt 7.1 |
+| `install/BETATEST_Checkliste.md` | 1.40 | Punkt 82 |
+
+Tests (neu, `test_volatile.py`, 20; ersetzt `test_generated.py`): die 6 Dateien erkannt (auch Schreibweise), die 11 Gegenbeispiele nicht; nicht geschützt und nicht übersprungen; Prüfliste und ZIP enthalten sie, `check` in Ordnung; Update: 6 veränderte Dateien bei „gleich“, nach dem Update Byte für Byte wie vom Programm hinterlassen; Prüfung und `--all` ohne Fehler; zwei fehlende: bei „neu“ und installiert; späteres Release ohne sie löscht sie nicht; `repair.py --check-only` (nur die fehlende Programmdatei), Reparatur stellt die fehlende `.cmd` her und ersetzt die geänderte nicht, auch nicht mit `--all`; **mit Ihrem echten Paket**: alle 6 und die 6 anderen `.cmd`-Dateien in der Prüfliste, `check` in Ordnung (0 fehlende gegenüber dem vorherigen Release), Update auf das eigene Release mit allen 6 vom Programm verändert: nichts zu tun, Prüfung in Ordnung. Die übrigen Prüfreihen laufen weiter.
+
+**Release-Stand 2.13** (ersetzt den Stand 2.12, der die Dateien noch ausgeklammert hatte; die Dokumente von 2.12 liegen in `archiv/`): `webmobaledlib_Dateien_Stand_2.13.zip` (113 Dateien, alle von mir gelieferten, **kein** Update-ZIP), `ANLEITUNG_Installation.pdf` (2.69, 27 Seiten), `BETATEST_Checkliste.pdf` (1.40, 8 Seiten), `RELEASE_Hinweise_2.13.md`, `VERSIONEN_Stand_2.13_2026-10-23.txt` (105 Dateien), `RELEASE_Ablauf.md`, `zip_erstellen.bat` (1.05). Das GitHub-ZIP baut weiterhin nur `zip_erstellen.bat` aus dem vollständigen Ordner des Entwicklers. **Geprüft:** Dateipaket unbeschädigt, alle 113 Dateien gleich dem Ordner `headless`, alle `.py` kompilieren, Versionsprüfung „alles passt“ (50 Einträge); Nachbau mit seinem echten Paket (Stand 2.05) plus meinen Dateien: `check --previous` in Ordnung, Version 2.13, **1684 Dateien (die 6 LEDs_AutoProg-Dateien enthalten)**, 6 neue, 0 fehlende; alle 15 Prüfreihen laufen (20, 26, 15, 70, 28, 19, 43, 26, 16, 27, 8, 8, 8, 5, 9). **Nicht geprüft:** `zip_erstellen.bat` und die Reparaturskripte unter Windows, ein abgebrochenes Update unter Windows, Acronis, Download von GitHub.
+
+## 2.12 (2026-10-23)
+
+Meldung des Entwicklers: Beim Speichern einer Tabelle im Format MLL_PGF (Optionen → Update → Datei speichern) erscheint zuerst eine Meldung „Datei wurde geschrieben“ mit dem internen Pfad und Dateinamen; erst nach OK kommt die Abfrage des Browsers, wohin die Datei gespeichert werden soll. Die Meldung ist nicht mehr nötig und verwirrt.
+
+**Ursache:** `Save_Data_to_File` (`M18_Save_Load.py`) schreibt die Datei über `Save_Sheets_to_pgf` an den internen Namen, den `GetSaveAsFilename` geliefert hat, und `__Save_Data_to_File_CallBack` zeigt danach die Meldung aus dem VBA-Original („Die Datei wurde erfolgreich geschrieben: '<Name>'“, Titel „Datei wurde geschrieben“). Das Web-Gerüst bietet die Datei erst nach dem Ende des Befehls zum Speichern an (`offer_download`), also nach dem OK.
+
+**Neu** (`M18_Save_Load` 1.02): Die Meldung erscheint nur noch **ohne** `MLL_HEADLESS=1` (die Tk-Variante des Programms behält sie, dort ist der Pfad nützlich); in der Web-Oberfläche entfällt sie. Sonst unverändert: Die Datei wird wie bisher geschrieben, bei einem Fehler von `Save_Sheets_to_pgf` gibt es weiter keine „erfolgreich“-Meldung. `import os` ergänzt. Dieselbe Meldung steht noch in `M18a_Load_PicoConfig.py` (Zeile 480), für die Konfiguration des Pico, deren Menüeintrag in 2.02 entfallen ist: nicht geändert.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `proggen/M18_Save_Load.py` | 1.02 | keine Meldung „Datei wurde geschrieben“ im Web |
+| `webmobaledlib.py` | 2.12 | Mindestversion `M18_Save_Load` 1.02 (50 Einträge) |
+
+Tests (neu, `test_pgf_msg.py`, 5): mit `MLL_HEADLESS=1` wird die Datei geschrieben und es erscheint keine Meldung; ohne die Variable kommt sie wie im Original (Titel, Dateiname); bei fehlgeschlagenem Speichern und bei Abbruch keine Meldung; Kopf und Markierung der Datei. **Nicht geprüft:** der Ablauf im Browser (Abfrage des Speicherorts direkt nach dem Klick).
+
+## 2.11 (2026-10-23)
+
+Menü **Tabelle** vereinfacht (Wunsch des Entwicklers: vier sehr ähnliche Einträge irritieren die Anwender). Analyse der vier Einträge: „Proggenerator Tabelle neuberechnen“ (`recalc_table`) rechnet alle Blätter neu und macht danach für das **aktive** Blatt `refreshicons` („Symbole aktualisieren“) und `ResetTestButtons(False)` („Testtasten neu aufbauen“): diese beiden stecken vollständig im ersten. „Symbole und Testtasten neu aufbauen (Reparatur)“ (`rebuild_decorations`) löscht auf **allen** Datenblättern die Symbole und Testtasten und legt sie aus dem Tabelleninhalt neu an (auch fehlende; `ResetTestButtons` legt keine fehlenden an) und setzt die Namen aus dem Makro: das leistet der erste nicht.
+
+**Neu** (`webmobaledlib.py` 2.11): Menü Tabelle mit **zwei** Einträgen: „**Tabelle neu berechnen**“ (`recalc_table`, unverändert, nur der Name ohne „Proggenerator“) und „**Tabelle reparieren (Symbole und Testtasten neu aufbauen) …**“ (`repair_table`: Rückfrage Ja/Nein mit Fragezeichen, Titel „Tabelle reparieren“, der Text sagt „aller Datenblätter“, „einige Sekunden“ und verweist auf „Tabelle neu berechnen“; bei Nein oder Abbruch geschieht nichts; bei Ja läuft `rebuild_decorations` wie bisher). „Symbole aktualisieren“ und „Testtasten neu aufbauen“ entfallen (als Kommentar im Menü stehen geblieben). Die Funktionen `refreshicons`, `ResetTestButtons` und `rebuild_decorations` sind unverändert. Anleitung 2.67 (Abschnitt Tabelle mit dem neuen Eintrag), Checkliste 1.38 (Punkte 29 und 32 mit den neuen Namen).
+
+Noch offen, später (Vorschlag mit dem Entwickler abgestimmt): „Tabelle neu berechnen“ soll nach einer Testphase selbst fehlende Symbole und Testtasten auffüllen, dann entfällt auch „Tabelle reparieren“.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 2.11 | Menü Tabelle: zwei Einträge, Rückfrage vor der Reparatur |
+| `install/ANLEITUNG_Installation.md` | 2.67 | Abschnitt Menü Tabelle |
+| `install/BETATEST_Checkliste.md` | 1.38 | Punkte 29 und 32 |
+
+Tests (neu, `test_menu_tabelle.py`, 8): die aktiven Menüeinträge sind genau die zwei, die alten stehen nur als Kommentar, Zuordnung zu `recalc_table` und `repair_table`; `repair_table` aus dem Quelltext ausgeführt: Antwort Nein (7) und Abbruch (2) bauen nichts, Ja (6) ruft `rebuild_decorations` genau einmal; Flags 36 (4 + 32), Titel, Text; `rebuild_decorations` und `recalc_table` unverändert vorhanden. **Nicht geprüft:** die Rückfrage im Browser (das Fenster `X02.MsgBox` mit Ja/Nein wird sonst von vielen Makros so benutzt) und der Lauf von „Tabelle reparieren“ mit einer echten Tabelle in dieser Version.
+
+## 2.10 (2026-10-23)
+
+Meldung des Entwicklers: Das Programm erzeugt im Ordner `python/LEDs_AutoProg` die Datei `LEDs_AutoProg.h` und alle `.cmd`-Dateien dynamisch; sie müssen aus dem Vergleich herausgenommen werden. (Zweiter Punkt der Meldung, Menü „Tabelle“: siehe Antwort im Gespräch, noch nicht umgesetzt.)
+
+**Folge ohne die Änderung:** Die Dateien standen im ZIP (sechs: `LEDs_AutoProg.h`, `Start_Arduino.cmd`, `Start_ESP32_Sub.cmd`, `Start_PICO_Sub.cmd`, `fastBuild.cmd`, `fastBuild2.cmd`; dazu die Datei mit dem aus einem Windows-Pfad entstandenen Namen `DDevelopmentgithub…LEDs_AutoProg.ino`) und damit in der Prüfliste. Das Update hätte die vom Programm erzeugten Stände der Anwender mit dem Entwicklungsstand des Entwicklers überschrieben (Hash-Vergleich aller Dateien).
+
+**Neu:** Pfadmuster **`LEDs_AutoProg/LEDs_AutoProg.h`** und **`LEDs_AutoProg/*.cmd`** (genau dieser Ordner, Groß- und Kleinschreibung egal; im Paket gibt es weitere `.cmd`-Dateien, die zum Release gehören: `Restart_ProgGen.cmd`, `Update_Libraries.cmd`, `hex-files/Set_Fuses.cmd`, `hex-files/upload_hex.cmd`, `csv/Update_Libraries.cmd`, `Configuration/build.cmd`) in vier Modulen, jeweils als eigene Konstante:
+- `release_tools.py` 1.03: `GENERATED_PATHS`, `is_generated`; `is_skipped` ist für sie wahr: nicht in der Prüfliste, `verify_zip` meldet sie als Fehler, wenn sie im ZIP sind; `check_installation` überspringt sie auch bei einer **älteren Prüfliste**, die sie noch nennt.
+- `web_update.py` 1.04: `PROTECTED_PATHS` in `is_protected`: weder ersetzt noch gelöscht, nicht im Plan.
+- `repair.py` 1.01: `GENERATED_PATHS`, `is_generated`: nicht verglichen, nie geschrieben, auch wenn ein älteres Release sie noch enthält.
+- `zip_erstellen.bat` 1.04: `SKIP_GENERATED` mit den zwei Pfaden hinter `/XF` im `robocopy`-Aufruf.
+- `webmobaledlib.py` 2.10: Mindestversionen `web_update` 1.04, `release_tools` 1.03, `repair` 1.01.
+
+**Einmaliger Nebeneffekt:** Installationen mit Version 2.07 oder älter kennen die Regel nicht (ihr `web_update` ist installiert) und führen die sechs Dateien in ihrer Liste der installierten Dateien: Das erste Update auf ein ZIP **ohne** sie löscht sie dort einmal (gesichert in `update_backup`; 6 Dateien, unter der Grenze von 20). Das Programm muss sie danach bei Bedarf selbst wieder anlegen: `Start_*.cmd` und `fastBuild*.cmd` sind nach Aussage des Entwicklers dynamisch erzeugt. **Vom Entwickler unter Windows zu prüfen** (Checkliste 82, `RELEASE_Ablauf.md`).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `release_tools.py` | 1.03 | erzeugte Dateien ausgenommen |
+| `_web/web_update.py` | 1.04 | erzeugte Dateien geschützt |
+| `repair.py` | 1.01 | erzeugte Dateien ausgenommen |
+| `zip_erstellen.bat` | 1.04 | erzeugte Dateien nicht im ZIP |
+| `webmobaledlib.py` | 2.10 | Mindestversionen |
+| `install/ANLEITUNG_Installation.md` | 2.66 | Abschnitt 7.1 |
+| `install/BETATEST_Checkliste.md` | 1.37 | Punkt 82 |
+
+Tests (neu, `test_generated.py`, 17): die 6 Dateien erkannt (auch bei anderer Schreibweise), die 11 anderen Beispiele (`.cmd` in anderen Ordnern, andere Dateien in `LEDs_AutoProg`) nicht; `is_protected`; Prüfliste ohne sie; ZIP ohne sie in Ordnung, ZIP mit ihnen: genau zwei Fehler; Update: sie stehen weder bei „gelöscht“ noch „geändert“ noch „neu“, bleiben nach dem Update Byte für Byte unverändert; Schnellprüfung und `--all` ohne Meldung auch bei einer älteren Prüfliste, die sie nennt und deren Dateien fehlen; `repair.py --check-only`; `repair.py` mit einem älteren Release, das sie noch enthält (schreibt sie nicht); **mit Ihrem echten Paket**: alle 6 vorhanden, keine in der Prüfliste, die 6 anderen `.cmd` schon, `check` in Ordnung mit `--previous` (ohne fehlende Dateien); `zip_erstellen.bat` (Zeile mit `SKIP_GENERATED`, `/XF`, CRLF). Die Tests zu Update-Schutz, Rücksicherung, Reparatur und dem echten Paket (26, 70, 28, 19) und die Z21- und Meldungstests laufen weiter (Erwartungen der vier Tests angepasst, weil `LEDs_AutoProg.h` nicht mehr als Beispiel taugt). **Nicht geprüft:** `robocopy /XF` mit Pfad und Platzhalter unter Windows (laut Dokumentation erlaubt), der Lauf von `zip_erstellen.bat`.
+
+## 2.09 (2026-10-21)
+
+Fehler vom Entwickler: `List_Lenght` in `M06_Write_Header_SW.py` liefert 1 für die Liste `" "`, VBA liefert 0. Folge: `TOTAL_VARIABLES` in `LEDs_AutoProg.h` ist 1 statt 0. (Der Name der Prozedur ist im Original `List_Lenght`, ein Tippfehler, nicht `List_Length`.)
+
+**Ursache:** `Split` eines leeren Textes liefert in **VBA keinen Eintrag** (`UBound = -1`, `For Each` läuft nie), in Python/`vb2py.vbfunctions.Split` einen leeren Eintrag (`"".split(" ") == [""]`). `List_Lenght` zählt die Durchläufe von `For Each Var In Split(Trim(list), " ")`: leere Liste ergab 1. **Zweite Stelle mit demselben Fehler:** `Print_DstVar_List` schrieb bei leerer Liste eine Zeile `#define` ohne Variablennamen und erhöhte den Kanal.
+
+**Neu** (`M06_Write_Header_SW` 1.04): Hilfsfunktion `Split_List(List)` (leerer Text: keine Einträge, sonst `Split(Trim(List), ' ')`), benutzt in `List_Lenght` und `Print_DstVar_List`. Doppelte Leerzeichen zählen wie in VBA weiter einzeln („A  B“ = 3 Einträge). Der Rest bleibt gleich.
+
+**Nicht geändert:** `vb2py/vbfunctions.Split` selbst. Die allgemeine Ursache steckt dort; im Port gibt es 265 Aufrufe, 84 davon greifen auf Einträge per Index zu. Würde `Split("")` global leer, könnten Stellen mit `Parts[0]` auf leerem Text (die in VBA mit „Index außerhalb des gültigen Bereichs“ endeten) im Port plötzlich mit `IndexError` abbrechen. Die gleiche Fehlerart steckt noch in `UBound(Split(Liste, ' ')) + 1` (`M06_Write_Header_SW`, Zeilen 1260, 1664 bis 1679: Anzahl der Eingänge bei leerer Liste 1 statt 0, hier durch den Zähler davor geschützt) und anderen Zeilen; Vorschlag: gezielt prüfen (Liste liegt in `HOC_intern`, bei Bedarf).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `proggen/M06_Write_Header_SW.py` | 1.04 | `List_Lenght` und `Print_DstVar_List`: leere Liste hat 0 Einträge |
+| `webmobaledlib.py` | 2.09 | Mindestversion `M06_Write_Header_SW` 1.04 |
+
+Tests (neu, `test_listlen.py`, 8): `List_Lenght` mit `""`, `" "`, `"   "` (0), einer und mehreren Variablen (auch mit Leerzeichen vorn und hinten), doppeltem Leerzeichen (wie VBA 3); `Print_DstVar_List` mit leerer Liste (keine Zeile, Kanal unverändert), zwei Variablen (zwei Zeilen, Kanal +2), `_V`-Variablen passend zum Kanal (gedruckt) und eines anderen Kanals (übersprungen); `TOTAL_VARIABLES` nutzt `List_Lenght(DstVar_List)`. Dazu `test_dup` (8) und die Versionsprüfung (50 Einträge). **Nicht geprüft:** der Lauf mit einem echten Programm ohne Variablen und der Vergleich der erzeugten `LEDs_AutoProg.h` mit der Excel-Ausgabe.
+
+## 2.08 (2026-10-21)
+
+**Wiederherstellung (Recovery), zweite Stufe:** Das Update ist „alles oder nichts“ mit selbsttätigem Zurückgehen, dazu ein Reparaturskript, das auch bei nicht startendem Programm läuft, und ein Zwischenspeicher der letzten zwei Release-ZIP. Entscheidungen des Entwicklers: automatisch zurückgehen und beim Start einen Hinweis zeigen; Reihenfolge der Systeme Windows, Linux, Raspberry Pi, Mac.
+
+**Ablauf des Updates (`web_update.apply`, `recover.py`):**
+1. Dateien sichern, die ersetzt oder gelöscht werden (`update_backup/<Datum-Uhrzeit>` im Datenordner, wie bisher).
+2. **Journal** `<python>/.update_journal.json` schreiben (Zustand `applying`, Versionen, Pfad der Sicherung, Liste aller Schritte `new`/`changed`/`delete`), atomar (Hilfsdatei, `fsync`, `os.replace`).
+3. Alle Dateien außer `recover.py`, `webmobaledlib.py`, `release_manifest.json` schreiben (Hilfsdatei `.update.tmp`, SHA-256 beim Schreiben, `fsync`, ersetzen), entfallene Dateien löschen, **alles noch einmal lesen und prüfen** (SHA-256, Python-Dateien müssen kompilieren; ausgenommen die fünf nicht ladbaren Altdateien `release_tools.LEGACY_UNCOMPILABLE`).
+4. **Zuletzt** `recover.py`, `webmobaledlib.py`, `release_manifest.json` (Festschreiben): Solange `webmobaledlib.py` noch die alte ist, startet das alte Programm und findet das Journal.
+5. Journal löschen, `update_manifest.json` schreiben, Release in `release_cache` aufheben (die letzten zwei, `webmobaledlib_<n.nn>.zip`).
+Fehler in einem Schritt (gesperrte Datei, Prüfsumme, Syntaxfehler, unerwartete Ausnahme): sofort `recover.rollback` aus der Sicherung (neue Dateien entfernt, Hilfsdateien gelöscht, bereits unveränderte Dateien übersprungen) und `UpdateError` mit „automatisch wiederhergestellt“. Scheitert das Zurücksetzen (Datei dauerhaft gesperrt): Journal bleibt `applying`, Meldung mit Hinweis auf `repair.py`; der nächste Start versucht es erneut.
+**Prozess beendet (Absturz, Strom, Sicherungsprogramm):** `webmobaledlib.py` ruft ganz am Anfang (nur `recover.py`, Standardbibliothek, vor jedem anderen Import) `recover_if_needed` auf. Offenes Journal → Rücksicherung → `.update_notice.json` (`rolled_back`) → **Neustart des Prozesses** (`os.execv`, unter Windows `subprocess.call`, Schutz gegen Schleifen `MLL_RECOVERED=1`). Ist die Sicherung weg oder die Rücksicherung unvollständig: Journal `failed`, Hinweis `failed`, kein Neustart-Schleife. Ein unterbrochenes Zurücksetzen wird beim nächsten Start zu Ende geführt.
+**Hinweis in der Oberfläche** (`update_notice`, Banner oben mit OK): `rolled_back` orange („… ist abgebrochen oder fehlgeschlagen … zurückgegangen“), `failed` rot (mit Hinweis auf `repair` und Abschnitt 9.6), `repaired` grün; wird auch auf der Konsole und im Protokoll ausgegeben.
+
+**`repair.py` 1.00 (neu, `python/`, nur Standardbibliothek):** macht ein offenes Journal rückgängig, vergleicht die Installation mit ihrer Prüfliste (statische Dateien mit SHA-256, erzeugbare nur auf Vorhandensein, `--all` alles), sucht ein vollständiges Release (`--zip`, sonst `release_cache`, sonst Download von GitHub nur HTTPS, `--offline` ohne), prüft es (Prüfliste, SHA-256 aller Dateien, Version; ein älteres Release nur mit `--allow-older`), fragt (`--yes` ohne Rückfrage), sichert die ersetzten Dateien (`repair_backup/<Datum-Uhrzeit>` im Datenordner), schreibt die abweichenden Dateien (zuletzt `recover.py`, `webmobaledlib.py`, `release_manifest.json`) und prüft noch einmal; entfernt Journal und Hinweis und legt den Hinweis `repaired` an. `--check-only` ändert nichts. Rückgabe 0 in Ordnung oder repariert, 1 nicht erfolgreich, 2 falscher Aufruf (argparse).
+**Start-Skripte** (`install/`, wie `start_*`; suchen `venv_web`, dann `venv`, dann `py -3`/`python3`/`python`): `repair_windows.bat` (CRLF), `repair_linux.sh` (auch Raspberry Pi: danach Hinweis `sudo systemctl restart mobaledlib-web`, wenn der Dienst eingerichtet ist), `repair_mac.command`. Sie geben die Rückgabe weiter; Unter Windows gehen die Ausführungsrechte der `.sh`/`.command` beim Packen verloren (Aufruf mit `bash …` in der Anleitung).
+
+**Änderungen an bestehenden Dateien:** `release_tools.py` 1.02 (Journal-Dateien `.update_*` gehören nicht ins Release; `recover.py` und `repair.py` müssen im ZIP sein; `LEGACY_UNCOMPILABLE`); `web_update.py` 1.03 (`apply` neu, `cache_release`, `.update_*` geschützt, `import recover`; die alte Fassung von `apply` steht als Kommentar mit `# v1.03 (entfallen)` im Quelltext, auf Wunsch räume ich sie auf); `webmobaledlib.py` 2.08 (Aufruf von `recover` ganz am Anfang, `update_notice` und Banner, Mindestversionen: `web_update` 1.03, `release_tools` 1.02, `recover` 1.00, `repair` 1.00, 50 Einträge). Anleitung 2.65: Abschnitt 7.1 (alles oder nichts, Zwischenspeicher) und neu 9.6 (drei Hilfen, Tabelle der Aufrufe, ohne Internet mit `--zip`, von Hand); Checkliste 1.36: Punkte 80 und 81; `RELEASE_Ablauf.md` (2.08).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `recover.py` | 1.00 | **neu**: Journal, Rücksicherung, Hinweis |
+| `repair.py` | 1.00 | **neu**: Reparatur ohne laufendes Programm |
+| `install/repair_windows.bat`, `repair_linux.sh`, `repair_mac.command` | 1.00 | **neu**: Aufrufe |
+| `release_tools.py` | 1.02 | Journal-Dateien, Pflichtdateien, Ausnahmen |
+| `_web/web_update.py` | 1.03 | alles oder nichts, Journal, Zwischenspeicher |
+| `webmobaledlib.py` | 2.08 | Rücksicherung beim Start, Hinweis, Mindestversionen |
+| `install/ANLEITUNG_Installation.md` | 2.65 | Abschnitte 7.1 und 9.6 |
+| `install/BETATEST_Checkliste.md` | 1.36 | Punkte 80, 81 |
+
+Tests (neu): `test_recovery.py` (70): Fehler an sechs Stellen (erste, mittlere, letzte Datei, Löschen, Prüfung, letzte Dateien) und echte Fehler des Betriebssystems (`os.replace` gesperrt: einmal, dauerhaft bei einer geschriebenen Datei), falsche Prüfsumme, unerwartete Ausnahme, Syntaxfehler im Release: **jedes Mal ist der Ordner danach Byte für Byte der alte** (alle Dateien, keine neuen, keine Hilfsdateien, kein Journal); **Prozess beendet an neun Stellen** (direkt nach dem Journal, nach der ersten, mitten, nach der letzten Datei der ersten Gruppe, beim Löschen, vor der Prüfung, nach `recover.py`, nach `webmobaledlib.py` (Mischstand!)): `recover_if_needed` stellt jedes Mal den alten Stand genau wieder her; abgebrochenes Zurücksetzen wird fortgesetzt; Sicherung fehlt (`failed`, keine Schleife); Hinweise; **Programmstart** im echten Prozess (offenes Journal: Rücksicherung, genau ein Neustart, zweiter Start ohne Neustart, Schleifenschutz). `test_repair.py` (29) mit **Ihrem echten Paket (1684 Dateien)**: intakte Installation; Löschen, Abschneiden und Verändern von Dateien (genau die richtigen vier gefunden, geänderte erzeugbare Datei nicht); Reparatur mit `--zip`, aus dem Zwischenspeicher, ohne Release (klare Meldung), mit der Delta-ZIP und einem veränderten ZIP (abgewiesen), Rückfrage j/n, älteres Release, Installation ohne Prüfliste, offenes Journal, Download-Fehler und http, Journal `failed`, und die drei Start-Skripte. `test_e2e_real.py` (19) mit Ihrem Paket: das neue ZIP (2.08 über Ihrem Ordner) besteht `check` mit `--previous` (1684 Dateien, 6 neue, 0 fehlende); Update 2.05 → 2.08 (13 Dateien) an fünf Stellen beendet: danach jedes Mal genau der Stand 2.05; vollständiges Update, danach alle Dateien in Ordnung; beschädigt, `repair.py` aus dem Zwischenspeicher. Dazu die bisherigen: `test_update_guard` (26, angepasst: falsche Prüfsumme nimmt das Update jetzt zurück), `test_install_check` (15), Z21 (43, 26, 16), Kopfzeile (27), Meldungen (8). **Nicht geprüft:** Windows (die Skripte `repair_windows.bat`, `os.execv`-Ersatz `subprocess.call`, `zip_erstellen.bat`), das Verhalten mit Acronis, der Download von GitHub (die Fehlerwege sind geprüft), macOS-Doppelklick; der Neustart des Dienstes auf dem Raspberry Pi nach der Rücksicherung (es startet der Prozess selbst neu).
+
+## 2.07 (2026-10-21)
+
+**Wiederherstellung (Recovery), erste Stufe.** Anlass: zwei Vorfälle beim Entwickler: (1) Acronis hat ein Update unterbrochen, danach startete das Programm nicht mehr; (2) eine falsche `webmobaledlib.zip` mit einem alten Delta wurde auf GitHub hochgeladen und hat die Installation zerstört. Vereinbart (Antworten des Entwicklers): keine vom Anwender änderbaren Dateien in der ZIP; bei einem fehlgeschlagenen Update **automatisch zurückgehen** mit Hinweis beim Start (folgt in Stufe 2); **ältere Version nach deutlicher Warnung und Rückfrage zulassen**; Reihenfolge der Systeme für das Reparaturskript: Windows, Linux, Raspberry Pi, Mac (Stufe 2).
+
+**Das Paket auf GitHub** (hochgeladene `webmobaledlib_1.zip`): 1678 Dateien, 31 MB entpackt, 17 MB gepackt, Version 2.05; enthält außer den Python-Dateien Icons (978), Beispiele (`Pattern_Config_Examples`, 138), `LEDs_AutoProg`, `LEDs_AutoConfig` (Hilfsdateien zum Kompilieren), `hex-files`, `libraries`, `csv` (mit der Excel-Datei), `pi`, `install`. Der Entwickler baut sie mit `zip_erstellen.bat` aus seinem Ordner `python`, in den er meine gelieferten (nur geänderten) Dateien einspielt. **Meine „Änderungen seit …“-ZIP sind kein Update-ZIP.**
+
+**Ursache des Vorfalls 2 (aus dem Code):** `web_update.make_plan` löschte alle Dateien, die `update_manifest.json` (Liste der von früheren Updates installierten Dateien) kennt und die im ZIP **fehlen**, und ersetzte alle abweichenden Dateien. Eine Delta-ZIP mit 5 bis 25 Dateien machte so fast alle der rund 1600 installierten Dateien zu „entfallen“ und setzte die geänderten auf den alten Stand. Geprüft wurde nur, ob `webmobaledlib.py` und `_web` im ZIP stehen. **Ursache des Vorfalls 1:** Das Update schreibt Datei für Datei; ein Abbruch mittendrin lässt Dateien zweier Versionen nebeneinander stehen; die Sicherung `update_backup` gibt es, aber nichts, was sie nach einem Abbruch zurückspielt (Stufe 2).
+
+**Neu:**
+- **`release_tools.py` 1.01** (neu, im Ordner `python`, nur Standardbibliothek): `make` schreibt die Prüfliste `release_manifest.json` (Programm, Format 1, Art `full`, Version aus `webmobaledlib.py`, Zahl, SHA-256 und Größe jeder Datei; ohne `__pycache__`, `venv*`, `.git`, Protokolle, persönliche Dateien, mindestens 200 Dateien); `check <zip> [--previous <zip>]` prüft das fertige ZIP: unbeschädigt, Pfade, Prüfliste da, Art `full`, jede Datei in der Prüfliste und umgekehrt, SHA-256 und Größe stimmen, keine persönlichen Dateien, mindestens 200 Dateien, `webmobaledlib.py` und `release_tools.py` vorhanden, Version der Prüfliste gleich `VERSION`, **`REQUIRED_FILES` gegen die Dateiversionen im ZIP** (zu alte oder fehlende Datei), **Syntax** der Programmdateien (die Dateien aus `REQUIRED_FILES`, `webmobaledlib.py`, `_web`, `headless`; fünf ältere Dateien des Projekts lassen sich nicht kompilieren und werden nicht geladen: `proggen/clsTreeView.py`, `vb2py/basesource.py`, `pattgen/M00_Revision_History.py`, `UserForm_Move_Shapes.py`, `Test_Select_from_Sheet_Form.py`), mit `--previous`: ältere Version (Fehler), gleiche Version (Warnung), mehr als 5 Prozent fehlende Dateien (Fehler); `quick`/`full` vergleichen eine Installation mit ihrer Prüfliste. Zeitbedarf: Prüfliste für das echte Paket in 0,1 s.
+- **`zip_erstellen.bat` 1.03:** schreibt die Prüfliste in die Dateien für das ZIP, packt, **prüft das ZIP** und nennt ein fehlerhaftes `webmobaledlib_FEHLERHAFT.zip`; ohne Python oder bei einem Fehler wird kein ZIP bereitgestellt. Optional `webmobaledlib_vorheriges.zip` für den Vergleich. **Auf Windows nicht ausprobiert** (hier kein Windows); die Befehle sind einfach gehalten.
+- **`web_update.py` 1.02:** `open_release` verlangt die Prüfliste (ohne: Abbruch „keine Prüfliste“, Notfall: `MLL_UPDATE_ALLOW_NO_MANIFEST=1`), liest und prüft sie (Art, Format, Zahl, Version) und vergleicht sie mit den Dateien (fehlt, weicht ab, zusätzlich). `make_plan`: bekannte Dateien jetzt auch aus der Prüfliste der **installierten** Version (löschen entfallener Dateien funktioniert auch beim ersten Update dieses Verfahrens); **Abbruch**, wenn das ZIP weniger als 80 Prozent der Dateien der installierten Version enthält oder **mehr als 20 Dateien gelöscht** würden; `plan.downgrade` bei älterer Version; `apply(..., allow_downgrade=False)` verweigert ohne Bestätigung; jede geschriebene Datei wird mit der Prüfsumme verglichen (Abweichung: nicht ersetzt, als Fehler gemeldet, nicht in der Liste der installierten Dateien).
+- **`webmobaledlib.py` 2.07:** `installation_problems()` vergleicht beim Start die Dateien mit der Prüfliste der Installation (vorhanden und Größe; für erzeugbare Dateien nur „vorhanden“: Ordner `LEDs_AutoProg`, `LEDs_AutoConfig`, `Configuration`, `processed_output` und alle Dateien außer `.py .csv .xlsm .bat .sh .command .service .md .json .png .jpg .ico .icns .uf2 .hex`) und zeigt Abweichungen in der roten Meldung oben (mit Hinweis auf Hilfe → Update und die Anleitung); nicht bei Installationen ohne Prüfliste, in Git-Arbeitskopien und mit `MLL_NO_INSTALL_CHECK=1`. Update-Dialog: bei älterer Version rote Warnung, Standardknopf **Abbrechen**, ein zweiter Knopf „Trotzdem auf Version … zurückgehen“.
+- **Fehler in der Versionsprüfung behoben:** `_web/web_z21.py` stand in `REQUIRED_FILES` noch mit „1.00“ (die Anpassung in 2.06 hatte eine auskommentierte Zeile getroffen). Gegenprobe jetzt: jede Datei aus `REQUIRED_FILES` im Ausgabeordner hat genau die verlangte Version.
+- Anleitung 2.64: Abschnitt 7.1 (Schutz, ältere Version), neu 9.6 „Wenn nichts mehr geht“ (rote Meldung, Update derselben Version stellt wieder her, ZIP abgewiesen, Programm startet nicht: Ordner `python` umbenennen und das ZIP entpacken, Datenordner bleibt, `update_backup`); Checkliste 1.35 (Punkt 79); neu `RELEASE_Ablauf.md` (Ablauf für den Entwickler, nicht im ZIP).
+
+**Beobachtung im Paket 2.05:** `LEDs_AutoProg/DDevelopmentgithubWebMLLWebMLLpythonLEDs_AutoProgLEDs_AutoProg.ino`: Der Name ist aus einem Windows-Pfad (`D:\Development\github\WebMLL\WebMLL\python\LEDs_AutoProg\LEDs_AutoProg.ino`) ohne Trennzeichen entstanden, vermutlich eine Datei, die das Programm bei der Erzeugung schreibt. Sie liegt im Release; in `RELEASE_Ablauf.md` vermerkt.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `release_tools.py` | 1.01 | **neu**: Prüfliste, ZIP-Prüfung, Prüfung der Installation |
+| `_web/web_update.py` | 1.02 | Prüfliste verlangt, Schutz vor Delta und Massenlöschung, ältere Version, Prüfsumme |
+| `webmobaledlib.py` | 2.07 | Prüfung beim Start, Update-Dialog, Mindestversionen (48 Einträge) |
+| `zip_erstellen.bat` | 1.03 | Prüfliste und Prüfung des ZIP (liegt **neben** dem Ordner `python`) |
+| `install/ANLEITUNG_Installation.md` | 2.64 | Abschnitte 7.1 und 9.6 |
+| `install/BETATEST_Checkliste.md` | 1.35 | Punkt 79 |
+| `RELEASE_Ablauf.md` | 1.00 | neu, Ablauf für den Entwickler (nicht im ZIP) |
+
+Tests (neu): `test_update_guard.py` (26): vollständiges Release (angenommen, Plan, Schreiben, danach in Ordnung), ohne Prüfliste (abgewiesen, Notfallschalter), Art „partial“ und unlesbare Prüfliste, **alte Delta-ZIP mit gültiger Prüfliste (7 von 262 Dateien) abgewiesen, nichts verändert**, Prüfliste weicht ab, Datei fehlt, Versionen verschieden, 30 zu löschende Dateien, ältere Version (Plan, ohne Bestätigung abgewiesen, mit Bestätigung installiert), gleiche Version kein Downgrade, falsche Prüfsumme beim Schreiben, erstes Update ohne `update_manifest.json` (Löschen über die Prüfliste, Installation ohne beide Listen löscht nichts); **mit Ihrem echten Paket (1679 Dateien)**: angenommen, gegen die eigene Installation nichts zu tun, Installation in Ordnung, nach Löschen und Ändern (`csv/Lib_Macros.csv`, `DCC_KeyboardPage.py`, `LEDs_AutoProg.h`) genau die richtigen Abweichungen gemeldet und eine geänderte erzeugbare Datei nicht, das Update derselben Version stellt alles wieder her. `test_install_check.py` (15): Meldung beim Start (Kopfzeile, Dateien, „und n weitere“, Größe, erzeugbare Dateien, ohne Prüfliste, kaputte Prüfliste, Schalter, Git-Arbeitskopie) und die Einbindung im Update-Dialog. Dazu mit dem echten Paket: `check` bei einem vollständigen ZIP in Ordnung; bei fehlender, veränderter, zusätzlicher Datei, fehlender Prüfliste, persönlichen Dateien, Syntaxfehler, zu alter Datei und bei meinen beiden Delta-ZIP **abgewiesen**. Alle bisherigen Z21-, Kopfzeilen- und Meldungstests laufen weiter (43, 26, 16, 27, 8). **Nicht geprüft:** `zip_erstellen.bat` unter Windows, das Verhalten mit Acronis, ein Update über GitHub auf einem echten System.
+
+**Noch offen (Stufe 2, nächster Schritt):** (4) Einspielen alles oder nichts mit Zwischenordner, Journal und **selbsttätiger Rücksicherung beim nächsten Start mit Hinweis**; (5) Reparaturskript `repair.py` mit `repair.bat`, `repair.sh` (Reihenfolge Windows, Linux, Raspberry Pi, Mac) unabhängig vom Programm; (6) Zwischenspeicher der letzten zwei Release-ZIP im Datenordner.
+
+## 2.06 (2026-10-21)
+
+Z21 Simulator **Phase 2: Rückmeldung (RMBUS)** vom Arduino an die Steuerprogramme (Phase 1 lief beim Entwickler „einwandfrei“).
+
+**Wie es im Original ging:** Die Seite Serial Monitor las alle Zeilen vom Arduino und gab Zeilen `JSON:{"RMBUS": "<Hex, 7 Bit je Byte>"}` an `Z21MonitorPage.notifyZ21_RMBUS_DATA` weiter, wenn ein Client das Flag R-Bus (0x02) gesetzt hatte (`set_check_RMBUS`); ihr Zeitgeber schickte dann alle `RMbusTimer` × 100 ms die Frage `?*`. `RMbusTimer` ist eine versteckte Einstellung (Vorgabe in `DefaultConstants` „0“, im Original wird der Wert beim Start der Seite auf 1 gesetzt, wenn er leer ist). Im Web gibt es dafür keine Serial-Monitor-Seite mit dieser Logik (`web_serial` baut die Binärnachrichten des Arduinos (Byte ≥ 0xD0) schon zu `JSON:{"RMBUS": ...}` und legt alle Zeilen in `ctrl.queue`).
+
+**Neu:**
+- `web_serial.py` 1.03: `ctrl.rx_listeners` (Liste von Funktionen `Text -> None`); `_on_rx_line` ruft jeden Zuhörer für jede Zeile vom Arduino auf, ein Fehler darin stört weder die anderen noch den Empfang.
+- `web_z21.py` 1.01: Der Simulator meldet `_on_arduino_line` als Zuhörer an (beim Start; beim Stop wieder ab) und gibt `JSON:{"RMBUS": ...}`-Zeilen an `Z21Core.notifyZ21_RMBUS_DATA` weiter, **solange mindestens ein Client das Flag R-Bus hat**. Dort wird (wie im Original) von 7 Bit auf 8 Bit umgewandelt (`convert_7bit_to_8bit`, dieselbe Bitreihenfolge wie das Original: 7F 7F → FF 3F, 01 → 40 00) und je 10 Bytes (eine Gruppe) als `LAN_RMBUS_DATACHANGED` (15 Bytes) an die Clients geschickt, **nur wenn sich der Stand der Gruppe ändert** (`set_RMBUS_DATA`). Im Fenster erscheint nur dann eine Zeile (`ARDUINO  JSON:… - LAN_RMBUS_DATACHANGED: …`), nicht bei jeder Abfrage.
+- **Abfrage `?*`:** ein Hintergrund-Thread (`_poll_loop`) schickt sie alle `rmbus_interval()` Sekunden, solange ein Client das Flag hat **und** der Arduino verbunden ist. Intervall: `RMbusTimer` × 100 ms; **0, leer oder unlesbar ergibt 100 ms** (im Original wäre bei „0“ die Rückmeldung aus gewesen; im Web gibt es keine Oberfläche für die versteckte Einstellung, deshalb läuft sie sofort).
+- `LAN_RMBUS_GETDATA` antwortet **dem Anfragenden** mit dem gemerkten Stand der Gruppe (im Original nur den Clients mit dem Flag) und fragt den Arduino mit `?*`.
+- `LAN_LOGOFF` des letzten Clients mit dem Flag beendet die Abfrage; ebenso Stop.
+- Die Statuszeile nennt „Rückmeldung für n Programm(e)“.
+- **Fehler im Original/Port behoben:** Eine Zeile `JSON:{…}` ohne den Eintrag `RMBUS` machte aus dem leeren Text ein Byte 00 und überschrieb die Gruppe 0 (und meldete sie an die Clients); kaputtes JSON oder ein Eintrag, der kein Text ist, brach mit `TypeError` ab. Beides wird jetzt ignoriert (unlesbare Zeilen mit einer Zeile im Fenster).
+- Ohne `rx_listeners` (ältere serielle Schicht) läuft der Simulator weiter, mit einem Hinweis, dass die Rückmeldung fehlt.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_serial.py` | 1.03 | `rx_listeners` |
+| `_web/web_z21.py` | 1.01 | Rückmeldung, Abfrage, GETDATA an den Anfragenden, Statuszeile |
+| `webmobaledlib.py` | 2.06 | Mindestversionen `web_z21` 1.01 und `web_serial` 1.03 |
+| `install/ANLEITUNG_Installation.md` | 2.63 | Rückmeldung beschrieben |
+| `install/BETATEST_Checkliste.md` | 1.34 | Punkt 78 |
+
+Tests (neu, `test_z21_rmbus.py`, 26): `convert_7bit_to_8bit` gleich der **Funktion des Originals** (aus `Z21MonitorPage.py` herausgelöst, Zufallsdaten Länge 1 bis 14); Zuhörer und Abfrage-Thread laufen nach dem Start; das Intervall aus `RMbusTimer`; ohne Client mit dem Flag keine Abfrage, mit Flag 5 bis 10 Abfragen in 0,8 s; eine Zeile vom Arduino ergibt die Pakete je Gruppe wie die Funktion des Originals (Gruppe 0 mit 10 Bytes, Gruppe 1 mit dem Rest); derselbe Stand noch einmal: nichts; geänderter Stand: neues Paket; kaputte, fremde und leere JSON-Zeilen; `LAN_RMBUS_GETDATA` ohne Flag; `LAN_LOGOFF` beendet die Abfrage; ohne Client wird nichts ausgewertet; Statuszeile (ein und mehrere Programme); Stop (Zuhörer weg, Abfrage beendet) und erneuter Start; ohne Verbindung keine Abfragen; ältere serielle Schicht; `web_serial` (alle Zuhörer, Fehler eines Zuhörers, `_serial_init`). Dazu `test_z21` (43), `test_z21_integration` (16), `test_connect_ui` (27) und die Versionsprüfung (46 Einträge). **Nicht geprüft:** mit einem echten Arduino und Rückmeldern (ob die Bitreihenfolge zum Arduino passt: sie ist die des Originals), mit einem echten Steuerprogramm; die Last der Abfrage alle 100 ms auf dem Arduino und der seriellen Verbindung.
+
+## 2.05 (2026-10-21)
+
+Neuer Reiter **Z21 Simulator** (Phase 1) nach der Tk-Seite `mlpyproggen/Z21MonitorPage.py` (1162 Zeilen). Vorab vom Entwickler bestätigt: Reihenfolge Phase 1 (ein Arduino), dann Rückmeldung, dann Port-Liste; Reiter nur mit der Option „Z21 Simulator anzeigen“; Test mit einem Steuerprogramm später durch den Entwickler.
+
+**Was die Seite tut:** Sie gibt sich gegenüber Steuerprogrammen als Roco Z21 aus (UDP-Port 21105, Z21-LAN-Protokoll), antwortet auf die Anfragen (Seriennummer, Hardware, Firmware, Version, Code, Status, Broadcast-Flags, System State, Weichen- und Lokinfo) und schickt Weichenbefehle als `@ AAA CC AA` an den Arduino (Z21 zählt Adressen ab 0, die MobaLedLib ab 1: `Adresse + 1`; Kanal 0 oder 1 aus Bit 0 des DB2-Bytes, aktiv aus Bit 3).
+
+**Aufbau** (`_web/web_z21.py` 1.00):
+- `Z21Core`: die Pakete, ohne Netz und ohne Oberfläche (`EthSend`, `slicePacket`, `receive_message`, Clients und Broadcast-Flags, RMBUS-Funktionen, `convert_7bit_to_8bit`). Aus der Tk-Klasse übernommen und bereinigt.
+- `Z21Simulator`: UDP-Socket und Hintergrund-Thread, Protokollzeilen mit Nummer (`lines_since`), `start()` und `stop()`; **ein** Simulator je Programm (`get_simulator`), er läuft beim Wechsel des Reiters und beim Neuladen der Seite weiter (die Seite zeigt dann die letzten 200 Zeilen); `stop_all()` beim Beenden und bei „Beenden“.
+- `build`: die Seite (Titel, einzeilig aufklappbare Beschreibung, Status, IP-Adresse und Port zum Eintragen im Steuerprogramm, Tasten Start, Stop und Zeige Taster-Adressen mit den Texten der Seitendefinition, Protokollfenster `ui.log` mit 1000 Zeilen).
+- `key_address_lines` / `read_key_addresses`: die Eingangskanäle aus `LEDs_AutoProg.h` wie `show_key_adresses` im Original.
+
+**Reiter und Option:** `web_tabs` 1.05: Adresse `/Z21Simulator`, Reiter `z21`, `OPTIONAL_TABS["z21"] = "ShowZ21Simulator"` (die Option steht schon in den Programm Einstellungen, vorher „Die Z21-Simulator-Seite wird nach Neustart angezeigt“, im Web ohne Wirkung; jetzt wirkt sie wie bei den DM Servo Einstellungen sofort nach dem Speichern, der Hinweis ist neu). Standard: aus. `webmobaledlib.py` 2.05: Reiter hinter DCC Keyboard, Aufbau beim ersten Öffnen, `apply_optional_tabs` blendet ihn ein und aus.
+
+Unterschiede zum Tk-Original:
+- **Ein Arduino:** der mit ARDUINO → Verbinden verbundene (`ctrl.send_to_ARDUINO`, `ctrl.is_connection_open`). Das Original schaltete über `serial_port_dict` je nach DCC-Adressbereich mehrere Arduinos (Port-Liste `Z21Data`); folgt in Phase 3 (braucht mehrere serielle Verbindungen im Web-Controller: `connect_Z21`, `start_process_serial_all`).
+- **Rückmeldung (RMBUS):** `LAN_RMBUS_GETDATA` antwortet mit Nullen und fragt den Arduino mit `?*` nach dem Stand; die Daten vom Arduino (JSON-Zeilen `RMBUS`) kommen noch nicht an (Phase 2: Lesen der seriellen Schnittstelle, `notifyZ21_RMBUS_DATA`); `SerialMonitorPage.set_check_RMBUS` entfällt.
+- Pakete werden **direkt im Thread** bearbeitet (das Original reihte sie in eine Warteschlange und las sie alle 100 ms im Tk-Hauptfenster); das Kommando geht in einem Stück an `send_to_ARDUINO` (die serielle Schicht sendet Zeichen für Zeichen mit Pause).
+- **Fehler im Original behoben:** `false` (`LAN_GET_BROADCASTFLAGS`) und `FALSE` (`remove_client`) sind in Python Namensfehler; zu kurze, abgeschnittene und unbekannte Pakete beendeten den Thread oder brachen mit `IndexError` ab (jetzt nur eine Zeile „Paket zu kurz“ oder „unbekanntes Paket“). `LAN_LOGOFF` entfernt jetzt den Client (im Original wurde nur protokolliert, die Weicheninfo ging weiter an ihn).
+- Ohne Verbindung zum Arduino startet der Simulator trotzdem (Hinweis im Protokoll); die Weichenbefehle erscheinen im Fenster als „nicht gesendet“.
+- Neu: Die Seite nennt **IP-Adresse und Port**, die man im Steuerprogramm einträgt (`local_ip`: Verbindung nach 192.0.0.1, ohne etwas zu senden).
+
+**Netz:** Der Port 21105 (UDP) muss vom Steuerprogramm erreichbar sein: Windows fragt beim ersten Start nach der Freigabe für Python (private Netze), unter Linux mit `ufw` `sudo ufw allow 21105/udp`, auf dem Raspberry Pi normalerweise frei. In der Anleitung 2.14 beschrieben; die Firewall-Schritte des Programms (Zugriff aus dem Netz, nur Port 8080) legen für 21105 **keine** Regel an.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_z21.py` | 1.00 | **neu**: Seite, Simulator und Protokoll |
+| `_web/web_tabs.py` | 1.05 | Adresse `/Z21Simulator`, Reiter nur mit der Option, neuer Hinweis |
+| `webmobaledlib.py` | 2.05 | Reiter, Aufbau, Beenden; Mindestversionen (46 Einträge) |
+| `install/ANLEITUNG_Installation.md` | 2.62 | Abschnitt 2.14 |
+| `install/BETATEST_Checkliste.md` | 1.33 | Punkte 76 und 77 |
+
+Tests (neu): `test_z21.py` (43) mit einem **UDP-Testclient auf dem Rechner** (Loopback, freier Port): Start, Seriennummer (`08 00 10 00 F5 1A 00 00`), Hardware und Firmware, Code, Version, Status, Gleis ein, Firmware-Version, Weichen- und Lokinfo, System State; die XOR-Prüfsumme der Antworten; Weiche schalten (`@ 005 01 01` bei Adresse 4, Kontakt 1, ein; `@ 005 00 00` aus; Adresse 256 -> `@ 257 00 01`); Broadcast-Flag 1 (zweiter Client bekommt die Weicheninfo, `LAN_GET_BROADCASTFLAGS` antwortet), `LAN_LOGOFF` beendet die Meldungen an den Client; zwei Pakete in einem Datagramm; leere, zu kurze, unbekannte und zufällige Pakete (der Simulator antwortet danach weiter); Port belegt (Meldung, läuft nicht), Stop (Port wieder frei), erneuter Start, doppeltes Stop; ohne Verbindung zum Arduino (kein Kommando, Hinweis); RMBUS-Anfrage; Taster-Adressen aus einer Testdatei und eine fehlende Datei; die Seite mit Ersatzobjekten (Tasten, Status, Adresse, Protokollfenster ohne doppelte Zeilen, Port-belegt-Meldung). `test_z21_integration.py` (16): Adresse, Option und Standard aus, Hinweis der Option, die Option steht in den Programm Einstellungen, Reihenfolge der Reiter, Aufbau und Sichtbarkeit, Stoppen beim Beenden, `apply_optional_tabs` aus dem Quelltext (Option aus, an, beim Ausschalten bei offenem Reiter). Dazu die Versionsprüfung (46 Einträge) und `test_connect_ui` (27). **Nicht geprüft:** mit einem echten Steuerprogramm oder einer Z21-App und einem echten Arduino (Entwickler); die Oberfläche im Browser (Platz, Protokollfenster auf dem Telefon); die Firewall von Windows. Das Protokoll ist nur so gut wie die Tk-Vorlage: Pakete, die das Original nicht kannte (zum Beispiel Lok-Fahrbefehle mit 14 und 28 Fahrstufen im Detail), antworten wie dort.
+
+## 2.04 (2026-10-21) - Release
+
+Release **2.04** auf Wunsch des Entwicklers („Funktioniert. Bitte einen neuen Release erzeugen“). Das Paket 1.96 liegt als `webmobaledlib_Stand_1.96_2026-10-21.zip` im Ordner.
+
+| Datei (Ordner `/mnt/user-data/outputs`) | Inhalt |
+|---|---|
+| `webmobaledlib.zip` | Programm 2.04, 106 Dateien im Ordner `python`, 10 mit Ausführungsrecht |
+| `ANLEITUNG_Installation.pdf` | Anleitung 2.61, 24 Seiten |
+| `BETATEST_Checkliste.pdf` | Checkliste 1.32, 7 Seiten |
+| `RELEASE_Hinweise_2.04.md` | Hinweise für die GitHub-Veröffentlichung (Anhänge: ZIP, beide PDF) |
+| `VERSIONEN_Stand_2.04_2026-10-21.txt` | Versionen aller 98 Dateien mit Versionsangabe |
+
+**Neu im Paket seit 1.96** (13 Dateien): `proggen/M02_Public.py`, `M02a_Public.py`, `M03_Dialog.py`, `M06_Write_Header_LED2Var.py`, `M06_Write_Header_SW.py`, `M09_Language.py`, `M10_Par_Description.py`, `M30_Tools.py`, `M32_DCC.py`, `M38_Extensions.py`, `Userform_Other.py`, `clsExtension.py` und `vb2py/vbfunctions.py`. **Geändert** (13 Dateien): `webmobaledlib.py` (2.04), `ExcelAPI/XLA_Application.py` (1.11), `proggen/M06_Write_Header.py` (1.04), `M07_COM_Port.py` (1.02), `M20_PageEvents_a_Functions.py` (1.03), `M37_Inst_Libraries.py` (1.04), `_web/web_servotest.py` (2.04), `web_soundtest.py` (1.01), `web_servotest2.py` (1.01), `web_form_other.py` (1.04), `web_layout.py` (1.05), Anleitung und Checkliste. Die Versionsprüfung beim Start verlangt 45 Dateien in Mindestversionen.
+
+**Geprüft am entpackten ZIP:** `testzip` ohne Fehler; alle 106 Dateien gleich dem Ordner `headless`; PDF im ZIP gleich den PDF daneben; keine `__pycache__`; alle `.py` kompilieren; Versionsprüfung „alles passt“ (45 Einträge); Shell-Skripte ohne CRLF; Ausführungsrechte wie im Paket 1.96 (10). **Nicht erneut gelaufen:** die älteren Testläufe gegen das ZIP (die Testumgebung war zurückgesetzt); geprüft sind die neuen Änderungen mit eigenen Tests (Servo und Sound, Kopfzeile, Meldungen, Languages, Datei K).
+
+**PDF:** Das Werkzeug zum Bauen der PDF (pandoc und wkhtmltopdf) ging mit der Testumgebung verloren und wurde neu aufgebaut; Aussehen und Aufbau (Titel, Inhaltsverzeichnis, blaue Überschriften) wie bisher, aber ohne Seitenumbrüche vor den Kapiteln; die Anleitung hat 24 statt 33 Seiten.
+
+**Noch zu tun (nicht im Paket):** ZIP und beide PDF als Release auf GitHub veröffentlichen. **Hinweis in den Release-Hinweisen:** Vor dem Ersetzen der Excel-Datei durch 3.5.0K im Blatt DCC die persönlichen Einstellungen des Autors zurücksetzen.
+
+## 2.04 (2026-10-21)
+
+Rückmeldung des Entwicklers zur Meldung „Anzahl der verwendeten Eingangskanäle“ (2.03): Die Meldung ist besser, aber das Zeilenende (`vbCr`) erscheint teilweise als `|_x000D_` (mit einem Zeilenumbruch dahinter), zum Beispiel „…zu groß!|_x000D_ / Es sind maximal 250 verfügbar…“.
+
+**Ursache (zwei Fehler, die zusammen wirken):**
+1. **`_x000D_` ist die Schreibweise, mit der Excel das Zeichen CR (Zeilenende) in `sharedStrings.xml` ablegt** (`_xHHHH_` für Zeichen, die nicht roh gespeichert werden). `openpyxl` gibt das Kürzel als Text unverändert zurück. In der Datei K betrifft das 315 Texte: 151 Zellen in `Languages`, 28 in `Lib_Macros` (Beschreibungen) und 7 in `Par_Description` (Hinweise wie „Zeitverzögerung des Farbwechsels._x000D_ ↵ Je höher der Wert …“). Der Lader `LoadSheetfromExcelWorkbook` hat es nicht umgewandelt.
+2. **Die schnelle Suche der Übersetzungen** (`find_in_col_ret_col_val`) vergleicht nur die **ersten 50 Zeichen** und nimmt bei gleichem Anfang die **letzte** Zeile. In `Languages` gibt es für diese Meldung zwei Zeilen mit demselben Anfang: Zeile 431 (… „maximal 250 verfügbar …“) und die neuere Zeile 1096 (… „maximal #1# verfügbar …“, `|` + CR + LF). Der Programmtext enthält `#1#` und fand also Zeile 1096, deren Text das Kürzel enthält. Der zweite Teil der Meldung (Zeile 1097, „zum einlesen“) hat dasselbe Problem. Die Zeilen 1096 und 1097 gehören dem Entwickler von Excel (K); dort **findet** `Find` mit `MatchCase = True` diese Zeilen nicht (`|` + LF im Programmtext gegen `|` + CR + LF in der Zelle), und der Text bleibt der deutsche aus dem Programm.
+
+**Neu** (`ExcelAPI/XLA_Application.py` 1.11):
+- `LoadSheetfromExcelWorkbook` wandelt `_xHHHH_` beim Lesen in das Zeichen um (`_x000D_` -> CR). Damit zeigen auch die Hinweise der Parameter und die Beschreibungen der Makros kein `_x000D_` mehr. Nach dem Laden gibt es in `Languages`, `Lib_Macros` und `Par_Description` kein `_x000D_` mehr.
+- `find_in_col_ret_col_val`: Bei langen Texten (nur 50 Zeichen im Zwischenspeicher) muss die gefundene Zeile den **ganzen** Text enthalten, sonst Rückgabe „nicht gefunden“ (dann die genaue Suche).
+- `find_in_col_ret_row`: Für Texte über 50 Zeichen gab es bisher **nie** einen Treffer (der Zwischenspeicher kennt nur die ersten 50 Zeichen); neu eine **genaue Suche** wie `Range.Find` mit `xlPart` (gleiche Schreibweise, der Text darf in der Zelle vorkommen), mit einem Merker für Texte ohne Treffer (damit nicht jedes Mal die ganze Spalte gelesen wird; wird mit dem Zwischenspeicher geleert).
+
+**Ergebnis** (echte Tabelle Languages der Datei K): Der deutsche Text der Meldung ist jetzt „…zu groß!“ + Zeilenende + „Es sind maximal #1# verfügbar…“, ohne `|` und ohne `_x000D_`; die Zeile 431 (mit 250) wird für Englisch richtig übersetzt. Für Englisch bleibt der Text der Meldung aus dem Programm deutsch, weil die Zeilen 1096 und 1097 wie in Excel nicht gefunden werden (Hinweis für den Entwickler von Excel: in der Spalte C stehen dort `|` + CR + LF statt `|` + LF, und „einlesen“ statt „Einlesen“).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `ExcelAPI/XLA_Application.py` | 1.11 | Kürzel `_xHHHH_` umwandeln, genaue Suche in der Tabelle Languages |
+| `webmobaledlib.py` | 2.04 | Mindestversion `XLA_Application` 1.11 |
+
+Tests (`test_lang.py`, 9 Prüfungen, mit der echten Tabelle Languages der Datei K, bisherige und neue Datei im Vergleich): Mit der bisherigen Datei erscheint `|_x000D_` genau wie gemeldet (Deutsch und Englisch, 5 Fehler); mit der neuen Datei: kein `_x000D_`, kein senkrechter Strich, Platzhalter `#1#` erhalten, zwei Zeilen, Deutsch entspricht dem Programmtext, Englisch bleibt ohne Treffer deutsch, Zeile 431 wird für Englisch übersetzt. Nach dem Laden kein `_x000D_` mehr in den drei Tabellen. Dazu die Versionsprüfung (45 Einträge), `test_dup` (8) und `test_connect_ui` (27). **Nicht geprüft:** die Geschwindigkeit des Aufbaus von Dialogen mit vielen Texten (die genaue Suche liest bei Texten ohne Treffer einmal die Spalte); in den Tests unauffällig.
+
+## 2.03 (2026-10-21)
+
+Fehlermeldung vom Entwickler beim Testen: `M06_Write_Header.py` Zeile 1782, die Meldung „Fehler: Die Anzahl der verwendeten Eingangskanäle ist zu groß!“ bricht ab: `MaxInput` ist eine Zahl, und `Replace` braucht eine Zeichenkette.
+
+**Ursache:** Die Zeile (aus der Umsetzung der VBA-Anweisung `MsgBox Replace(Get_Language_Str(...), "#1#", MaxInput) & Channel & "." & ...`) hatte **zwei Fehler**: (1) `Replace(..., "#1#", MaxInput)` und `+ Channel` mit Zahlen: `str.replace` bricht bei einer Zahl mit `TypeError` ab. (2) Die Klammern waren falsch gesetzt: Nach `Replace(...)` stand eine zusätzliche schließende Klammer, die `MsgBox(` schon beendete; der Rest (`+ Channel + ..., vbCritical, Titel`) bildete ein Tuple. `MsgBox` bekam also nur den ersten Teil des Textes, Symbol und Titel fehlten, und die Addition mit dem Ergebnis von `MsgBox` hätte danach ebenfalls versagt. Der VBA-Text (K, `M06_Write_Header.bas` Zeile 1523) zeigt `MaxInput` und `Channel` (nicht `Channel - 1`); das ist übernommen.
+
+**Neu:**
+- `proggen/M06_Write_Header.py` 1.04: Die Zeile ist korrigiert (`str(MaxInput)`, `str(Channel)`, Klammern richtig, drei Argumente für `MsgBox`: Text, Symbol, Titel). Die alte Zeile bleibt als Kommentar stehen.
+- `vb2py/vbfunctions.py` 1.01: **`Replace` wandelt Zahlen (und `None`) wie VBA in Zeichenketten um** (`expression`, `find` und `replace`). In VBA ist `Replace(Text, "#1#", 250)` erlaubt; die Umsetzung brach bei einer Zahl ab. Damit sind alle weiteren Aufrufe mit Zahlen im Port abgesichert, zum Beispiel `Replace(..., "#1#", r)` mit einer Zeilennummer in `M06_Write_Header_SW.py` (Zeilen 133, 508 und andere), die bisher bei einer Fehlermeldung ebenfalls abgebrochen wären.
+- Eine Suche über alle Dateien von `proggen`, `mlpyproggen`, `pattgen` und `pgcommon` findet **keine weitere Anweisung**, die wegen falscher Klammern ein Tuple mit Aufruf bildet.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `proggen/M06_Write_Header.py` | 1.04 | Meldung „Anzahl der verwendeten Eingangskanäle“ korrigiert |
+| `vb2py/vbfunctions.py` | 1.01 | `Replace` mit Zahlen |
+| `webmobaledlib.py` | 2.03 | Mindestversionen beider Dateien (45 Einträge) |
+
+Tests (6): `Replace` mit Zahl als Ersatztext, als Suchtext und mit `None`, mit Zeichenketten wie bisher (auch mit Anzahl und leerem Suchtext); die Anweisung aus `M06_Write_Header.py` wird ausgeführt: genau drei Argumente für `MsgBox`, Symbol 16, Titel „Anzahl der InCh Variablen überschritten“, Text „maximal 250 verfügbar … aber 301.“; kein Tuple mehr. Die Versionsprüfung beim Start passt. **Nicht geprüft:** der echte Ablauf mit mehr als 250 Eingangskanälen im Programm.
+
+## 2.02 (2026-10-21)
+
+Wünsche des Entwicklers: (1) Die Version der Bibliothek muss nicht alle 5 Sekunden gelesen werden (sie ändert sich ein- oder zweimal im Jahr), das Lesen beim Erstellen der Seite reicht; (2) im Menü ARDUINO den vierten Punkt „Konfiguration vom Pico laden“ entfernen (die Funktion geht bis auf weiteres nicht).
+
+**Version der Bibliothek:** Das laufende Lesen in `refresh_status` (jeder zehnte Takt) entfällt. `update_lib_version()` läuft jetzt (a) einmal beim **Aufbau der Seite**, (b) nach der **Prüfung der Bibliotheken beim Start** (`run_startup_tasks`, rund 1,5 s nach dem Aufbau; ohne das bliebe das Feld beim ersten Start leer, weil die Bibliothek erst dort erkannt wird) und (c) nach **jedem Befehl** (`run_command`, zum Beispiel nach einer Installation der Bibliotheken). Ein Befehl liest nur eine Zeile der Tabelle Libraries; das kostet nichts. `refresh_status` kümmert sich nur noch um die Meldungen und die Farbe des Knopfes „Mit ARDUINO verbinden“.
+
+**Menü ARDUINO:** Der Eintrag „Konfiguration vom Pico laden (experimentell)“ (`M06cfg.download_from_Pico`) ist entfernt; er bleibt als Kommentar im Code stehen. Das Menü hat jetzt Verbinden, Trennen und Alle LED aus. Die Funktion `download_from_Pico` selbst ist unverändert.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 2.02 | Version der Bibliothek nicht mehr laufend, Menü ARDUINO ohne Pico laden |
+| `install/ANLEITUNG_Installation.md` | 2.60 | Beschreibung der Version |
+| `install/BETATEST_Checkliste.md` | 1.31 | Punkt 72 |
+
+Tests (`test_connect_ui.py`, jetzt 27 Prüfungen): `refresh_status` liest die Version nicht mehr (nach 25 Takten unverändert), `update_lib_version` liest neu, die Version wird beim Aufbau (vor dem Zeitgeber), nach der Prüfung beim Start und nach jedem Befehl gelesen, kein Zähler mehr im Code; das Menü ARDUINO hat genau die drei Einträge, `download_from_Pico` wird nirgends aufgerufen. Die Versionsprüfung beim Start und alle Dateien kompilieren. **Nicht geprüft:** im Browser mit der echten Bibliothek (ob die Version nach der Prüfung beim ersten Start erscheint).
+
+## 2.01 (2026-10-21)
+
+Wünsche des Entwicklers: (1) In der Knopfzeile der Programm-Generator-Seite rechts die Version der Bibliothek anzeigen wie in Excel (`Ver.3.5.0-K`, aus `M37.Get_Lib_Version("MobaLedLib")`). (2) Der Knopf „Verbinden“ aus „Servo Einstellungen“ und „Sound Test“ soll für alle Reiter gelten und neben „Vollbild“ in die erste Zeile; Name „Mit ARDUINO verbinden“ (wegen Missverständnissen), rot ohne Verbindung, grün mit Verbindung mit dem Text „Mit ARDUINO verbunden“.
+
+**Version der Bibliothek:** Rechts in der Zeile der Funktionsknöpfe (`toolbar`) steht `lib_version_label` mit `"Ver." + M37.Get_Lib_Version("MobaLedLib")` (kleine Schrift, `mll-libver`). Der Wert wird alle 5 Sekunden neu gelesen (jeder zehnte Takt von `refresh_status`, danach ändert er sich nach einer Installation von selbst); ist die Bibliothek nicht erkannt oder tritt ein Fehler auf, bleibt das Feld leer. `Get_Lib_Version` liest die Spalte „erkannte Version“ der Tabelle Libraries (Stand der letzten Prüfung), nicht die Datei der Bibliothek.
+
+**Knopf in der Kopfzeile** (`connect_btn`, links neben „Vollbild“ und „Beenden“, Klasse `mll-connect`): „Mit ARDUINO verbinden“ (rot, `color=negative`) ohne, „Mit ARDUINO verbunden“ (grün, `color=positive`) mit Verbindung (`ctrl.is_connection_open()`). Der Zustand folgt `refresh_status` (alle 0,5 s), also auch, wenn über das Menü ARDUINO verbunden oder getrennt wird oder die Verbindung abbricht; Text und Farbe werden nur bei einer Änderung gesetzt. Ein Klick ohne Verbindung ruft `connect_arduino` auf (dieselbe Funktion wie das Menü ARDUINO → Verbinden, `run_command`), mit Verbindung geschieht nichts (Trennen im Menü). `connect_arduino` ist jetzt eine Funktion, die erst den Befehl ausführt und dann `after_connect()` aufruft: Hat der **offene** Reiter eine Seite mit `on_connected` (Servo Einstellungen, DM Servo Einstellungen, Sound Test), startet diese den Direktmodus neu (bei Servo Einstellungen mit Servo wählen und Wackeln); andere Reiter bleiben unberührt, Fehler einer Seite werden protokolliert und abgefangen.
+
+**Seiten:** In „Servo Einstellungen“ ist die dritte Taste im Zustand Einstellen **ausgeblendet** (sie war die Taste Verbinden) und beim Konfigurieren als „nicht speichern“ sichtbar (`set_visibility(prog_step != 0)`); `BUTTON_CONNECT` ist leer. „Sound Test“ hat nur noch die Taste zum Senden über die ganze Zeile. Der Parameter `connect` von `build` bleibt (nicht mehr benutzt), damit sich der Aufruf nicht ändert. CSS: `.mll-connect` einzeilig, im kompakten Layout (Telefon) kleiner (`web_layout`).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 2.01 | Knopf in der Kopfzeile, `after_connect`, Version der Bibliothek in der Knopfzeile, Mindestversionen der drei Seiten |
+| `_web/web_servotest.py` | 2.04 | dritte Taste im Zustand Einstellen ausgeblendet, `ServoPage.on_connected` |
+| `_web/web_soundtest.py` | 1.01 | Taste Verbinden entfällt, `SoundPage.on_connected` |
+| `_web/web_servotest2.py` | 1.01 | `Servo2Page.on_connected` |
+| `_web/web_layout.py` | 1.05 | CSS für den Knopf |
+| `install/ANLEITUNG_Installation.md` | 2.59 | Abschnitt 2.11 (Verbindung, Version), 2.12 und 2.13 |
+| `install/BETATEST_Checkliste.md` | 1.30 | Punkte 71 und 72 |
+
+Tests (neu, mit Ersatzobjekten): `test_connect_ui.py` (23): Reihenfolge in der Kopfzeile (Knopf vor Vollbild und Beenden), Aufbau der Knopfzeile (Platz und Versionsfeld rechts), Funktionen aus dem Quelltext ausgeführt: Knopf rot und „Mit ARDUINO verbinden“ ohne Verbindung, grün und „Mit ARDUINO verbunden“ mit, nur bei Änderung neu gesetzt, wieder rot bei Verbindungsverlust; Version `Ver.3.5.0-K`, alle 10 Takte neu gelesen, leer ohne Bibliothek und bei einem Fehler; `after_connect` nur mit Verbindung, nur die Seite des offenen Reiters, Reiter ohne `on_connected` und Fehler einer Seite ohne Folgen; Klick bei bestehender Verbindung tut nichts, ohne Verbindung ruft `connect_arduino`; `connect_arduino` erst Befehl, dann `after_connect`. `test_connect_pages.py` (12): die drei Seiten mit Ersatzobjekten aufgebaut: keine Taste „Verbinden“ mehr, dritte Taste der Servo Einstellungen nur beim Konfigurieren sichtbar, `on_connected` mit und ohne Verbindung (Direktmodus nur mit Verbindung, Zeitgeber aktiv), Sound Test nur eine Taste, Fehler beim Prüfen der Verbindung. Dazu `test_dup.py` (8) und die Versionsprüfung (44 Einträge). **Nicht geprüft:** das Aussehen im Browser (Platz der Kopfzeile auf dem Telefon, Farbe und Schrift des Knopfes, Wechsel der Farbe beim Verbinden mit echter serieller Schnittstelle) und die Version mit der echten Bibliothek 3.5.0-K. Die älteren Prüfungen (Servo 125, Adressen 34 und andere) liefen in der zurückgesetzten Umgebung nicht erneut; die geänderten Seiten sind nur durch die neuen Tests abgedeckt.
+
+## 2.00 (2026-10-21)
+
+Rückmeldung mit dem Protokoll `webmobaledlib__12_.log`: Das Erzeugen der Header-Datei ist mit 1.99 wieder schnell (M10 1.02 wirkt). Die Frage „Achtung: Die folgenden Zielvariablen werden mehrfach gesetzt“ kommt aber weiter.
+
+**Befund:** Die Meldung kommt aus `Init_HeaderFile_Generation_SW` beim Einbinden von Blättern mit `include(...)` (Aufrufkette: `Create_HeaderFile > ProcessSheet > ProcessLine > ProcessSheet > Init_HeaderFile_Generation_SW`). Im Protokoll gibt es **keinen** Eintrag „LED-Name ... ist mehrfach definiert“; der Weg über Name_LED_Number (`KnownVariables`), den ich in 1.99 abgeschaltet hatte, ist also nicht die Ursache. Die Namen (`Foto0 Foto1 FotoAkt1`, später `MuBu1 MuBu2 MB_Rot MB_Blau`) sind **echte Zielvariablen (DstVar)** der Beispielblätter `MyButtons` (Zeilen 30 und 32: `PushButton_0_1(#InCh, Foto0, ...)`, `Logic(FotoAkt1, ...)`) und `MyStadt` (Zeilen 143 bis 149) aus der Datei K. Die Reihenfolge der Analysen im Protokoll passt zu `Main_all` (62 Zeilen) mit den Einbindungen `MyButtons` (41), `MyOberdorf` (167), `MyStadt` (156), `MyUnterdorf` (103), `MyAmpel` (35), `MyBurg` (64), `MyBus` (35), `MyBahnhof` (89), `MyBU` (97). Die Meldung steht jeweils nach dem Einlesen von `MyButtons` und bleibt danach für jedes weitere Blatt in der Liste (die Liste wird nur beim ersten Blatt geleert), deshalb kam sie bis zu zehnmal je Lauf.
+
+**Geklärt (Rückmeldung des Entwicklers):** Die pgf-Datei war **zweimal eingelesen** worden, dadurch waren alle Definitionen doppelt; die Meldung war also berechtigt. Die Angabe von Blatt und Zeile in der Meldung hat das gezeigt. Nach dem Löschen aller Blätter und dem neuen Laden funktioniert alles. Die folgende Simulation war vor dieser Klärung:
+
+**Simulation:** Eine Simulation (echter Code von `Init_HeaderFile_Generation_SW` und `First_Scan_of_Data_Rows`, Zellen aus den zehn Beispielblättern der Datei K, jedes Blatt einmal) liefert **keine** Meldung (214 Zielvariablen, keine doppelte). In der Umgebung des Entwicklers wird also etwas zweimal registriert oder die Daten unterscheiden sich von den Beispielblättern (zum Beispiel selbst geänderte Blätter, Extension-Makros wie `EX.P_ScheduleExtension`, die nur mit den installierten Erweiterungen auftreten). Aus dem Protokoll allein ist das nicht zu sehen.
+
+**Neu** (`M06_Write_Header_SW` 1.03):
+- Die Meldung nennt für jede mehrfach gesetzte Variable **Blatt und Zeile beider Definitionen** (`Foto0: Blatt 'MyButtons' Zeile 30 und Blatt '...' Zeile ...`). Dasselbe steht als **WARNING** im Protokoll (`Zielvariable 'Foto0' wird mehrfach gesetzt: ...`). Damit ist die Meldung im Protokoll nachvollziehbar.
+- Wird **dieselbe Zeile desselben Blattes** noch einmal gelesen (Blatt mehrfach eingebunden oder doppelt analysiert), zählt das **nicht** als doppelte Definition (INFO im Protokoll: `... wurde noch einmal gelesen`). Zwei verschiedene Zeilen mit demselben Namen melden weiter.
+- Die Frage kommt **nur, wenn die Liste neu ist** (`MultiSet_Asked` auch in `Init_HeaderFile_Generation_SW`), nicht mehr für jedes eingebundene Blatt wieder.
+- `DstVar_Source`, `MultiSet_Info`, `Current_Source` (Blatt und Zeile der gerade analysierten Zeile, gesetzt in `First_Scan_of_Data_Rows`), `MultiSet_Message_Text`.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `proggen/M06_Write_Header_SW.py` | 1.03 | Fundstellen, Protokoll, kein Fehlalarm beim erneuten Lesen, Frage nur einmal |
+| `webmobaledlib.py` | 2.00 | Mindestversion `M06_Write_Header_SW` 1.03 |
+
+Tests (neu, `test_dup.py`, 8 Prüfungen, mit den echten Zellen der Beispielblätter): zehn Blätter einmal gelesen: keine Meldung; dieselben Blätter noch einmal gelesen: keine Meldung, keine neuen Variablen, Eintrag im Protokoll; echte doppelte Definition (`FotoAkt1` in `MyButtons` Zeile 32 und einer eingefügten Zeile 40 in `MyBus`): genau eine Meldung mit beiden Fundstellen und WARNING im Protokoll; weitere Blätter fragen dieselbe Liste nicht noch einmal; `Check_Detected_Variables` fragt nicht noch einmal. Die Versionsprüfung beim Start passt (44 Einträge). **Nicht geprüft:** der echte Ablauf mit den Programmblättern des Entwicklers; dort zeigt die nächste Meldung, welche Zeilen betroffen sind. Alle älteren Tests liefen in der zurückgesetzten Umgebung nicht erneut (die Testumgebung unter `/tmp` ging verloren und wurde nur für diese Prüfung neu aufgebaut).
+
+## 1.99 (2026-10-21)
+
+Fehlerkorrektur zu 1.98, gemeldet mit dem Protokoll `webmobaledlib__11_.log`: (1) Das Erzeugen der Header-Datei ist mehr als zehnmal langsamer geworden. (2) Mehrfach kommt die Frage „Achtung: Die folgenden Zielvariablen werden mehrfach gesetzt“ (Ja, Nein), die nicht kommen sollte.
+
+**Ursache 1 (Geschwindigkeit):** Im Protokoll brauchte jede Makrozeile der ersten Analyse („Programmzeilenanalyse: 1st round“) etwa 0,09 s, Zeilen ohne Makro dagegen 1 ms. In `Add_InpVars` rief ich seit 1.98 für **jedes Argument jeder Makrozeile** `Get_Par_Prefix` auf, und das suchte mit `Range.Find` in der Tabelle Par_Description. Die Suche ist im Port langsam (im Testprojekt 3,2 ms, im Programm des Entwicklers offenbar ein Vielfaches). **Neu** (`M10_Par_Description` 1.02): Die Tabelle wird einmal gelesen (Name -> Präfix, der erste Eintrag gilt wie bei `Find`), danach ist ein Aufruf eine Wörterbuchabfrage (2000 Aufrufe in 0,2 ms). Der Zwischenspeicher wird bei jeder Header-Erzeugung (`firstRun` in `Init_HeaderFile_Generation_SW`) neu aufgebaut (`Reset_Par_Prefix_Cache`).
+
+**Ursache 2 (Fehlalarm):** Die Meldung kam aus `Init_HeaderFile_Generation_SW` (Aufrufkette im Protokoll: `Create_HeaderFile > ProcessSheet > ProcessLine > ProcessSheet > Init_HeaderFile_Generation_SW`), also beim Einbinden eines Blattes mit `include(...)`. Die Namen (`Foto0 Foto1 FotoAkt1`, später `MuBu1 MuBu2 MB_Rot MB_Blau`) stammen aus Name_LED_Number: Mein `Add_Variable_to_KnownVariables` (wie in Excel 3.5.0K) trägt einen Namen, der ein zweites Mal vorkommt, in `MultiSet_DstVar_List` ein, und das löst die Frage aus. Ein Blatt wird bei jedem `include` neu analysiert (`Init_HeaderFile_Generation_SW` -> `First_Scan_of_Data_Rows` auf dem aktiven Blatt), und `KnownVariables` wird nur beim ersten Blatt geleert. **Nicht eindeutig geklärt**, ob dasselbe Blatt mehrfach eingebunden wird oder mehrere Blätter denselben Namen definieren (die Arbeitsmappe des Entwicklers liegt mir nicht vor). **Neu** (`M06_Write_Header_SW` 1.02): Ein mehrfach bekannter LED-Name löst die Warnung **nicht** mehr aus (nur ein Debug-Eintrag im Protokoll, `LED-Name '...' ist mehrfach definiert`). Die Warnung für echte Zielvariablen (`DstVar`) bleibt. Dazu: Die Warnung am Ende von `Check_Detected_Variables` (neu in Excel K) fragt nur noch, wenn die Liste neu ist (`MultiSet_Asked`), sonst käme dieselbe Frage zweimal.
+
+**Zur dritten Beobachtung („wird nicht im Protokoll protokolliert“):** Im Protokoll steht die Meldung (INFO `_web.web_dialogs: MsgBox 'Warnung: Mehrfach benutzte Zielvariablen' ... aufgerufen von: ...`, zum Beispiel Zeile 313). Gemeint war vermutlich etwas anderes (das Protokollfenster des Programms?); **Rückfrage an den Entwickler**, bisher nichts geändert.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `proggen/M10_Par_Description.py` | 1.02 | `Get_Par_Prefix` mit Zwischenspeicher, `Reset_Par_Prefix_Cache` |
+| `proggen/M06_Write_Header_SW.py` | 1.02 | keine Warnung bei mehrfach bekannten LED-Namen, Warnung je Liste nur einmal (`MultiSet_Asked`), Zwischenspeicher bei jeder Erzeugung zurücksetzen |
+| `webmobaledlib.py` | 1.99 | Mindestversionen M10 1.02 und M06_Write_Header_SW 1.02 |
+
+Tests (`test_port_k.py` jetzt 55 Prüfungen): derselbe LED-Name ein zweites Mal -> keine Warnung; echte Zielvariablen doppelt -> Warnung bleibt; `Check_Detected_Variables` fragt nicht noch einmal, fragt bei neuer Liste einmal; Geschwindigkeit (Einlesen 3 ms, 2000 Aufrufe 0,2 ms, alte Suche 3,2 ms je Aufruf); Reset. Alle bisherigen Tests laufen weiter. **Nicht geprüft:** die Zeit der Header-Erzeugung mit der Arbeitsmappe des Entwicklers (das Testprojekt hat keine 160 Zeilen mit Makros); ob die Frage bei ihm jetzt ausbleibt.
+
+## 1.98 (2026-10-21)
+
+Auftrag „umsetzen“ nach dem VBA-Vergleich (`VBA_Vergleich_C1_nach_K.md`): Stufe 1 (kleine Punkte) und Stufe 2 (Name_LED_Number, Name_LED_Offset, neue Parametertypen) des Excel-Programms 3.5.0K im Python-Port. **Noch nicht umgesetzt** (größer): SoundPro (`M06_Write_Header_Sound`, `Add_ProSound_Entry`, Zählung `Get_SoundLines_Of_Type(SCT_PRO)` in `Write_LowProrityLoop_Header_File`), der Firmware-Dialog für den Pico (`Select_Firmware_Form`, Taste in den Optionen, `flashonly` in `M08_Fast_ARDUINO`), `usePlatformIO` und die PlatformIO-Datei in `M08_ARDUINO`, `M08_Install_FastBootLoader` (hängt an `M08`).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `proggen/M02_Public.py` | 1.01 | `Test_Suffix` = K (`Prog_Version` = `Ver. 3.5.0K`); neue Konstanten `DEFAULT_TX_PAUSE`, `FirmwareDir`, `MLLFORUM_ICON`, `MLLFORUM_LINK`, `MLLSHOP_LINK` (shop.mobaledlib.de), `SF_PRO_SOUND_LED`, `SF_NAME_LED_NUMBER`, `SF_NAME_LED_OFFSET`, `SCT_*`, `SMT_*`, `PAT_ExtensionName`, `PAT_LEDVariableName`, `VT_LEDOrName`, `VT_LEDName` |
+| `proggen/M02a_Public.py` | 1.01 | `Get_FirmwareDir` (unterhalb des Sketchbook-Ordners). **Hinweis:** In `M02_Public.py` steht der Block mit den Pfadfunktionen (Zeilen 278 bis 390) in einem Kommentar (Zeichenkette); die gültigen Funktionen liegen in `M02a_Public.py` |
+| `proggen/M30_Tools.py` | 1.01 | `IsValidVariableName`, `VersionStr_is_GreaterEqual` |
+| `proggen/M10_Par_Description.py` | 1.01 | `Get_Par_Prefix` (Option `pf=` der Tabelle Par_Description), `__Get_ParDesc_Row` mit `ShowError` |
+| `proggen/M03_Dialog.py` | 1.01 | `Input_Address` setzt InCnt auf 1 |
+| `proggen/M09_Language.py` | 1.01 | `Get_Language_Identifier` (DE, EN, NL, FR, IT, ES) |
+| `proggen/M32_DCC.py` | 1.01 | `SendDCCAccessoryCommand`: Adresse 0 erlaubt |
+| `proggen/M20_PageEvents_a_Functions.py` | 1.03 | Adresse muss größer 0 sein (`Select_Typ_by_Dialog`, `Proc_Typ_Col`, `Complete_Addr_Column_with_InCnt`, `Update_StartValue`); `Update_TestButtons` löscht Typ, Adresse und Testknöpfe, wenn das Makro keinen Eingang mehr braucht oder die Adresse entfällt (neu `ClearButtons`, `__Rect_List_has_Row`) |
+| `proggen/M07_COM_Port.py` | 1.02 | Pico: jede Kennung `VID 2E8A` und Adafruit `239A:813D` (pyserial- und Windows-Zweig); `DetectArduino` schaltet RTS ein |
+| `proggen/clsExtension.py` | 1.01 | `MinimumMobaLedLibVersion`; `CheckValid` prüft `self.Name` mit `M02.PAT_ExtensionName` (vorher globale Variable und nicht importiertes `Matches`) |
+| `proggen/M38_Extensions.py` | 1.01 | Extensions-Schnittstelle V2: `minimumMobaLedLibVersion` aus der JSON-Datei, `#define USE_EXTENSIONS_V2` ab der höchsten Mindestversion 3.5.0 |
+| `proggen/M06_Write_Header.py` | 1.03 | `Proc_Special_Functions` mit `ChannelBaseOffset` und den Makros Name_LED_Number und Name_LED_Offset (Offset = LED-Nummer minus Anfang des Kanals); `Generate_Config_Line` mit `ChannelBaseOffset` und Variable `#ChannelOffset`; `Addr >= 1` in `Create_Header_Entry` (zwei Stellen), `Addr >= 0` in `ProcessLine`; keine Prüfung des Boards bei nur Simulator; `START_MSG` ohne `Test_Suffix`; `inch_t` in `HandleValue_t`; `Undef_Input_Var_Row` zurücksetzen |
+| `proggen/M06_Write_Header_SW.py` | 1.01 | `KnownVariables`, `Add_Variable_to_KnownVariables`, `IsKnownVariable`; `Add_InpVars` für Name_LED_Number und Name_LED_Offset (einzeln und als Folge) und Parameter mit Präfix (`Get_Par_Prefix`); `Check_Nr_From_Var` herausgezogen; `Add_Undefined_Input_Var`; Warnung bei mehrfach gesetzten Zielvariablen auch am Ende von `Check_Detected_Variables` |
+| `proggen/M06_Write_Header_LED2Var.py` | 1.01 | `Add_LED_Name_Entry`, `LED_Names_Tab` |
+| `proggen/Userform_Other.py` | 1.01 | Typen `LED#OrName` (LED-Nummer oder Name) und `LEDName` (`Check_Variable_Name`), Option `pf=<Präfix>` (`ValToParVal`, `ParValToVal`, `Prefix`) |
+| `_web/web_form_other.py` | 1.04 | Option `pf=<Präfix>` im Browserformular (sonst „Unknown option“ und Programmabbruch) |
+| `webmobaledlib.py` | 1.98 | `REQUIRED_FILES` mit 44 Einträgen (die 14 neuen Mindestversionen) |
+
+Wichtig beim Verständnis der Änderung:
+- **Name_LED_Number(Name[, Anzahl])** und **Name_LED_Offset(Name[, Anzahl])** werden zu `#define Name <LED-Nummer>` (Offset: Nummer minus Anfang des LED-Kanals); bei Anzahl größer 1 entsteht eine Folge aus `Name0`, `Name1` … (der Name muss mit einer Zahl enden). Die Namen sind danach als LED-Variablen bekannt (`KnownVariables['LedNumber']`). Parameter mit Option `pf=` (zum Beispiel `pf=_LED_ABS_`) dürfen eine Zahl oder eine bekannte LED-Variable sein; eine unbekannte Variable wird als undefinierter Eingang gemerkt und am Ende gemeldet. Im Ergebnis des Dialogs bekommt nur ein **Name**, keine Zahl, das Präfix vorangestellt.
+- **Adresse 0** ist jetzt für `#InCh=0` bei den Makros InCh und BinCh möglich (`Addr >= 0` in `ProcessLine`); in der Tabelle und für die Defines gilt weiter `>= 1`.
+- **Das erzeugte Programm verlangt die Bibliothek 3.5.0-K** (`inch_t`, `USE_EXTENSIONS_V2`).
+- Diese Änderungen brauchen die neue Excel-Datei: Name_LED_Number und die neuen Parametertypen stehen in `Lib_Macros` und `Par_Description` der Datei K (siehe 1.97, Punkt 3: Blatt DCC vorher zurücksetzen).
+
+Beim Umsetzen gefunden:
+- **Vorgabe zu gelöschten Zeilen:** Das Werkzeug ließ ersetzte Zeilen weg. Jetzt bleiben sie als Kommentar mit der Marke (`# v1.xx (entfallen)`) stehen; für alle Dateien seit dem Release 1.96 (`webmobaledlib.py`, `XLA_Application`, `M37`, `M02`, `M10`, `M32`, `clsExtension`, `M07`, `M20`) nachgetragen. In den früheren Releases fehlt das.
+- Das Original ruft in der Fehlermeldung von `Add_Cx_to_DstVars` `Replace(..., '#2#', r)` mit einer Zahl auf (`TypeError`); `Check_Nr_From_Var` nimmt `str(Row)`.
+- `Userform_Other.Check_Limit_to_MinMax` liefert bei einem Fehler `None`, nicht `False`; die bestehenden Prüfungen `== False` fallen deshalb durch, und eine ungültige Zahl wird nach der Meldung übernommen. Die neue Verzweigung prüft mit `not`; die bestehenden habe ich nicht angefasst.
+- `Add_Undefined_Input_Var`: Wie in VBA wird der **erste** Name der Liste nicht als Duplikat erkannt (er hat kein führendes Leerzeichen); unverändert übernommen.
+
+Tests: `test_port_k.py` (neu, 49 Prüfungen, mit den echten Daten der Datei K und den neuen Dateien): Konstanten und Muster, `Get_FirmwareDir`, `IsValidVariableName`, `VersionStr_is_GreaterEqual`, `Get_Language_Identifier`, `Get_Par_Prefix` an den echten Zeilen mit `pf=`, Name_LED_Number und Name_LED_Offset einzeln, als Folge und mit Fehlermeldung, doppelte Namen, Parameter mit Präfix (unbekannt, bekannt, Zahl), `Check_Nr_From_Var`, `Add_LED_Name_Entry`, `Proc_Special_Functions`, `Generate_Config_Line` mit `#ChannelOffset`, `clsExtension`, `USE_EXTENSIONS_V2` (zwei aktive Extensions, 3.4.0, ohne, 3.5.1, Reihenfolge vor den Includes), `ValToParVal` und `ParValToVal`, die Typen `LED#OrName` und `LEDName` (gültig, Zahl im Bereich, über dem Maximum, ungültiger Name, Zahl als Name) und der unbekannte Typ. Dazu alle bisherigen Tests: Servo, Adressen, Vollbild, Netzzugriff, Start, Hilfsbefehl python, Lizenzfenster, Meldung (zwei Erwartungen angepasst: `M07_COM_Port` 1.02 und 5 statt 4 ersetzte Zeilen), Bibliotheken 25 und 5, Befehlsausgabe und Blinken 15, Ports 16, Datei K 10, Patterngenerator 90 von 90, Tabelle 28 von 28. **Nicht geprüft:** das erzeugte Arduino-Programm mit den neuen Makros (Kompilieren und Hochladen mit der Bibliothek 3.5.0-K), die Oberfläche im Browser, `Update_TestButtons` mit ClearButtons im Programm Generator (nur die Funktion `ClearButtons` selbst im Quelltext, nicht in der Oberfläche).
+
+Testaufbau: Beim Aufbau des Patterngenerator-Testprojekts `/tmp/pt/proj` habe ich zuerst versehentlich das echte Paket `proggen` hineinkopiert (dort wird es mit Attrappen ersetzt) und die Konstanten von `DefaultConstants` (`COLORCOR_MAX` und andere) fehlten in der Attrappe; beides im Test behoben, nicht im Produkt.
+
+## 1.97 (2026-10-21)
+
+Klarstellung des Entwicklers zum VBA-Vergleich: Die Daten der Blätter (`Lib_Macros`, `Par_Description`, `Languages`, `Platform_Parameters`, `Libraries`) liest der Port **direkt aus der Excel-Datei**; die Datei 3.5.0K ersetzt `python\csv\Prog_Generator_MobaLedLib.xlsm`. Ein eigener Vergleich der Blätter ist deshalb nicht nötig. Notwendig ist nur, dass der Port mit den **neuen Daten** läuft. Ich habe die Datei K in eine Kopie des Projekts gelegt und den Port damit gestartet: **zwei Fehler im Code** und **eine Angabe in der Datei selbst**.
+
+1. **Der Port startet mit der Datei K nicht** (`IndexError` in `XLA_Application.LoadSheetfromExcelWorkbook`). In K zeigen 20 benannte Bereiche (alle aus der Pattern-Konfiguration, vorher `[2]Main!$E$33`) auf `#REF!`, weil die Verknüpfung zur anderen Arbeitsmappe fehlt. Der Lader zerlegte jeden Bezug an `$`. **Neu** (`XLA_Application` 1.10): Namen mit ungültigem Bezug (kein `$`, `#REF!`) und Bereiche (`$A$1:$B$5`) werden übersprungen. Der Rest bleibt, auch das `break` bei einem Namen ohne Blattbezug (`Wait_at_End`).
+2. **Der ESP32-Upload bricht mit der Datei K ab**, auch unter Windows: In K schreibt die Tabelle Libraries die Pfade mit Backslash (`ATTinyCore\src\ATTinyCore.h`, `esp32:tools\esptool_py`), die Datei des Projekts mit Schrägstrich. `M08_ARDUINO` fragt `M37.Get_Lib_Version('esp32:tools/esptool_py')`; mit dem Backslash in der Tabelle ist die Antwort leer, und das Programm meldet „Eine notwendige Arduino Erweiterung ist nicht installiert: esptool_py“. **Neu** (`M37_Inst_Libraries` 1.04): `Norm_Path` liest Pfade und Namen aus der Tabelle mit `/`; `Is_Lib_Installed`, `Get_Lib_Version` und `Get_Required_Version` vergleichen mit normierten Namen; Testdatei und Zusatzordner der Boards (`ExtraType`) ebenfalls. Die Erkennung der Testdateien unter Linux und macOS hatte der Port für die Bibliotheken selbst schon (`TestFile.replace`), für die Namen nicht. Mit der Datei des Projekts ändert sich nichts.
+3. **Die Datei K trägt die persönlichen Einstellungen des Autors im Blatt DCC.** Im Port ist das Blatt DCC der Ausgangszustand eines neuen Programmblatts: Zeile 1 hat in K die Build-Optionen `--board rp2040:rp2040:rpipico:...` (Raspberry Pico), die COM-Nummer `3` (Spalte 5), `R OK` (Spalte 8) und `3` (Spalte 13); darunter stehen **zwei zusätzliche Programmzeilen**: Zeile 5 (Adresse 100, Typ „Rot“, „Servo mit 2 Positonen“, `Servo2(#LED, #InCh, C1, 10, 210, 10 Sek)`) und Zeile 7 (zweite „Heartbeat LED“, `RGB_Heartbeat(#LED)`, Start LedNr 2). Die bisherige Datei hat dort `COM?`, `AutoDet --board arduino:avr:nano:cpu=atmega328old --pref programmer=arduino:arduinoisp`, `R not Chk` und nur die Heartbeat-Zeile 3. **Das ist keine Änderung im Code**, sondern eine Angabe in der Datei: Vor dem Ersetzen im Excel das Blatt DCC auf die Vorgabe zurücksetzen (Zeilen 5 und 7 löschen, Zeile 1 wie in der bisherigen Datei: Spalte 5 `COM?`, Spalte 7 die AutoDet-Zeichenfolge mit `arduino:avr:nano`, Spalte 8 `R not Chk`, Spalte 13 `1`), sonst starten alle neuen Installationen mit einem Pico. Die Blätter Selectrix, CAN, LNet und Examples sind unverändert; im Blatt Config steht eine Zeile anders („Baumansicht zur Makroauswahl“).
+
+Weitere Beobachtungen mit der Datei K (kein Handlungsbedarf, nur festgehalten):
+- Der Port lädt aus der Datei nur seine 12 festen Blätter (`DCC`, `Selectrix`, `CAN`, `LNet`, `Examples`, `Config`, `Languages`, `Lib_Macros`, `Libraries`, `Par_Description`, `Platform_Parameters`, `Named_Ranges`). Die 10 neuen Blätter von K (`Main_all`, `MyButtons`, `MyOberdorf`, `MyStadt`, `MyBurg`, `MyUnterdorf`, `MyAmpel`, `MyBus`, `MyBahnhof`, `MyBU`) bleiben ungenutzt.
+- **Neue Daten:** In `Lib_Macros` sind die neuen Makros da (Name_LED_Number, Name_LED_Offset, Signal2, Signal2_RGB, CopyLED, Heartbeat, `LedCnt_Cpy`, die Beispielmakros `EX.Macro.*` und `EX.Constructor`), in `Par_Description` kommen 31 neue Zeilen (unter anderem die Typen **`LED#OrName`** und **`LEDName`** mit Präfix `pf=_LED_ABS_` und `pf=_LED_REL_`), in `Languages` 30 Texte, in `Platform_Parameters` `PIN_ALIAS_LDR`. **Der Code des Ports kennt diese Typen noch nicht** (siehe VBA-Vergleich, Gruppe A: `UserForm_Other`, `M06_Write_Header*`); bis dahin lassen sich diese Makros im Port nicht sinnvoll verwenden.
+- `Libraries`: Die geforderte Bibliotheksversion heißt jetzt `3.5.0-K` (vorher `3.5.0`). Der Versionsvergleich des Ports (wie in Excel) wertet nur die Zahlen: `3.5.0-K` ist gleich `3.5.0` und `3.5.0-C1`, eine installierte ältere Beta wird also nicht zum Update vorgeschlagen.
+- `Prog_Version` des Ports zeigt weiter `Ver. 3.5.0C1` (`M02_Public.Test_Suffix`); sie ändert sich mit dem Nachziehen des Codes, nicht mit der Datei.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `ExcelAPI/XLA_Application.py` | 1.10 | Lader: Namen mit ungültigem Bezug überspringen |
+| `proggen/M37_Inst_Libraries.py` | 1.04 | `Norm_Path`, Namen und Testdateien aus der Tabelle Libraries mit `/` |
+| `webmobaledlib.py` | 1.97 | Mindestversionen von `XLA_Application` (1.10) und `M37_Inst_Libraries` (1.04) in `REQUIRED_FILES` |
+
+Tests (`test_k_compat.py`, 10 Prüfungen, mit dem echten Projekt): Mit `XLA_Application` 1.09 startet der Port mit K nicht (`IndexError`), mit 1.10 ja (12 Blätter, die neuen Makros in `Lib_Macros`, mit der bisherigen Datei unverändert). Eine **vollständige Ersatz-Installation** (alle Bibliotheken, Platinen und Zusatzordner, jeweils mit dem Testpfad der Tabelle) wird von der bisherigen Datei mit dem bisherigen `M37` zu 20 von 20 Zeilen erkannt, von K mit dem bisherigen `M37` zu **19 von 20** (`esp32:tools\esptool_py` fehlt, `Get_Lib_Version('esp32:tools/esptool_py')` ist leer), von K mit `M37` 1.04 und von der bisherigen Datei mit `M37` 1.04 zu **20 von 20** (`esptool_py` 2.6.1). Dazu der Versionsvergleich mit dem Zusatz `-K`. Alle bisherigen Tests laufen unverändert. **Nicht geprüft:** die Oberfläche mit K im Browser (Programm Generator, Optionen), der Ablauf der Bibliotheksinstallation mit der echten Arduino IDE.
+
+## 1.96 (2026-10-21) - Release
+
+Anlass: Der Entwickler will als Basis für den Vergleich mit der neuen Excel-Fassung (Änderungen im VBA-Code) einen Release-Stand. Release **1.96** (zwischen 1.90 und 1.96 liegen die Versionen 1.91 bis 1.96, siehe die Einträge darunter). Das Paket 1.90 liegt als `webmobaledlib_Stand_1.90_2026-10-20.zip` im Ordner.
+
+| Datei (Ordner `/mnt/user-data/outputs`) | Inhalt |
+|---|---|
+| `webmobaledlib.zip` | Programm 1.96, 93 Dateien im Ordner `python`, 10 mit Ausführungsrecht |
+| `ANLEITUNG_Installation.pdf` | Anleitung 2.58, 33 Seiten |
+| `BETATEST_Checkliste.pdf` | Checkliste 1.29, 7 Seiten |
+| `RELEASE_Hinweise_1.96.md` | Hinweise für die GitHub-Veröffentlichung (Anhänge: ZIP, beide PDF) |
+| `VERSIONEN_Stand_1.96_2026-10-21.txt` | Versionen aller 85 Dateien mit Versionsangabe |
+
+**Neu im Paket seit 1.90** (5 Dateien): `_web/web_servotest2.py` (1.00), `_web/web_soundtest.py` (1.00), `_web/web_dcckeyboard.py` (1.00), `proggen/M07_COM_Port.py` (1.01), `proggen/M08_ARDUINO.py` (1.01). **Geändert** (6 Dateien): `webmobaledlib.py` (1.96), `_web/web_dialogs.py` (1.06), `_web/web_form_comport.py` (1.03), `_web/web_tabs.py` (1.04), `headless/headless_gridmodel.py` (1.02), `mlpyproggen/Prog_Generator.py` (1.02); dazu Anleitung und Checkliste (Quelle und PDF). Die Versionsprüfung beim Start verlangt 31 Dateien in Mindestversionen.
+
+**Geprüft am entpackten ZIP:** `testzip` ohne Fehler; alle 93 Dateien gleich dem Ordner `headless`; PDF im ZIP gleich den PDF daneben; keine `__pycache__`; alle `.py` kompilieren; Versionsprüfung „alles passt“ (31 Einträge); Shell-Skripte ohne CRLF; Ausführungsrechte wie im Paket 1.90. Tests gegen die entpackten Dateien: Änderungen 1.96 32, Sound und DCC 62, Servo 125 und 89, Adressen 34, Vollbild 19, Netzzugriff 33 und 13, Start 15, Hilfsbefehl python 17, Lizenzfenster 20, Meldung 13. Mit dem Projekt (nicht gegen das ZIP): Bibliotheken 25 und 5, Ports 16, Befehlsausgabe und Blinken 15, Patterngenerator 90 von 90 und Tabelle 28 von 28.
+
+**Noch zu tun (nicht im Paket):** (1) ZIP und beide PDF als Release auf GitHub veröffentlichen; erst dann sehen die Tester das Update. (2) Als Nächstes: Vergleich des VBA-Codes der neuen Excel-Fassung mit der alten (beide `vbaProject.bin` oder die exportierten Module); Auswertung nach Modulen, mit Hinweis auf nachzuziehende Stellen im Python-Port.
+
+## 1.96 (2026-10-21)
+
+Rückmeldung des Entwicklers: DCC Keyboard und Sound Test sind in Ordnung. Vier kleinere Änderungen:
+
+1. **Reiter „Servo Test 1“ heißt „Servo Einstellungen“** (Reiter und Titel in `web_tabs.TAB_TITLES`, also auch in der Liste bei einer unbekannten Adresse). Die Adresse `/ServoTest1` bleibt, damit vorhandene Lesezeichen weiter gehen. Der Titel im Reiter („Servo Test und Einstellung“, aus dem Excel-Dialog) bleibt.
+2. **Reiter „Servo Test 2“ heißt „DM Servo Einstellungen“ und erscheint nur mit einer Option.** Dafür dient die Option `ShowProgramGenerator` (Checkbutton in den Programm Einstellungen, Seite `ConfigurationPage`), im Original „Programmgenerator anzeigen“ („Die ProgrammGenerator-Seite wird nach Neustart angezeigt“), im Web ohne Wirkung. Neuer Text: **„DM Servo Einstellungen anzeigen“**, Hinweis „Der Reiter DM Servo Einstellungen (Servos im Direct Mode) wird angezeigt“. Die JSON-Datei `MobaLedTest_macroparamdef.json` gehört zum Tk-Programm und bleibt unverändert; die Web-Oberfläche trägt den neuen Text beim Aufbau der Seite in die geladenen Definitionen ein (`web_tabs.PARAM_OVERRIDES`, `apply_param_overrides`, vor dem Aufbau der Einstellungsseiten). Die Option ist **aus**, solange sie nicht eingeschaltet wurde. `web_tabs.OPTIONAL_TABS` ordnet dem Reiter die Option zu, `tab_enabled` wertet sie aus (1, true, ja, an, ein), `apply_optional_tabs` (in `webmobaledlib.py`) blendet den Reiter ein oder aus: beim Aufbau der Seite und **nach dem Speichern der Programm Einstellungen** (`after_settings_save`), also ohne Neustart; ist der Reiter beim Ausschalten gerade offen, geht es zurück zum Programm Generator. Ruft jemand `/ServoTest2` bei ausgeschalteter Option auf, bleibt der Programm Generator offen, und es kommt der Hinweis „Der Reiter DM Servo Einstellungen ist ausgeschaltet. Einschalten: Programm Einstellungen, „DM Servo Einstellungen anzeigen““. Für den Tk-Betrieb ändert sich nichts.
+3. **Titel ohne „(Prototyp)“.** Die Kopfzeile zeigt nur noch „webMobaLedLib – Programmgenerator“ (die Zeile mit dem Zusatz ist als Kommentar stehen geblieben). Wenn auch „Programmgenerator“ weg soll (der Titel gilt für alle Reiter), ist das eine Zeile.
+4. **Breite der Spalte Zeilennummer im Programm Generator passt sich der größten Zeilennummer an** (vorher fest 76 Pixel). `headless_gridmodel.row_number_width(max_nummer, scale)` rechnet Ziffern mal 10 Pixel plus 16 Pixel Rand, mindestens 36, mit der Schriftgröße der Tabelle skaliert; bei zwei Stellen 36, bei drei 46, bei vier 56 Pixel. Die Zelle bekommt dafür einen kleinen Rand (4 und 6 Pixel). `build_grid` hat den neuen Parameter `row_number_width`; ohne Angabe bleibt es bei 76 (der **Patterngenerator** ruft ohne Angabe auf, damit sich dort die Lage der Pfeile und Bilder nicht verschiebt). `show()` nimmt die größte angezeigte Nummer (`_r + 1` der angezeigten Zeilen, sonst die Zahl der Zeilen). Ändert sich die Stellenzahl (Zeile 100 kommt dazu), sendet der vorhandene Vergleich der Breiten (`widths`) die Spalten neu; ein Neuaufbau der Tabelle ist nicht nötig.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_tabs.py` | 1.04 | Titel der Reiter; `OPTIONAL_TABS`, `PARAM_OVERRIDES`, `is_enabled`, `tab_enabled`, `apply_param_overrides` |
+| `headless/headless_gridmodel.py` | 1.02 | `row_number_width`, Parameter `row_number_width` in `build_grid` |
+| `webmobaledlib.py` | 1.96 | Reiternamen, Reiter mit Option, Titel, Breite der Zeilennummer; `REQUIRED_FILES` mit 31 Einträgen |
+| `install/ANLEITUNG_Installation.md` | 2.58 | Abschnitte 2.12 und 2.13, Adressen, Titel |
+| `install/BETATEST_Checkliste.md` | 1.29 | Namen, Punkte 69 und 70 |
+
+Tests (32 neu): Titel der Reiter und der Liste bei unbekannter Adresse; `is_enabled` und `tab_enabled` (Option aus, leer, 0, False, ein, True, 1; alle anderen Reiter immer sichtbar; Fehler beim Lesen: aus); Umbenennung der Option (Text und Hinweis, übrige Angaben bleiben, zweiter Aufruf ohne Änderung, andere Optionen unberührt, ohne Definitionen kein Absturz); `row_number_width` für 1 bis 5 Stellen und mit Schriftgröße 1,25 und 0,8; `build_grid` ohne Angabe (76, ohne Rand, wie bisher) und mit Angabe (Breite, Mindest- und Höchstbreite gleich, Rand, Rest der Spalte unverändert); der Quelltext (Titel, Namen, Aufrufe von `apply_optional_tabs` nach dem Aufbau der Reiter und nach dem Speichern, Hinweis bei `/ServoTest2`, Überschreiben der Texte vor den Einstellungsseiten, Übergabe der Breite); die **Logik von `apply_optional_tabs` aus dem Quelltext** (Option aus: Reiter weg, kein Wechsel; ein: sichtbar; aus bei offenem Reiter: zurück zum Programm Generator; anderer Reiter offen: bleibt); Versionsprüfung (31 Einträge). Dazu alle bisherigen Tests, darunter die Tabellen des Programm Generators (90 von 90 und 28 von 28). **Beim Testen gefunden und behoben:** `show()` las `displayed_rows` ohne Vorsicht, das einfache Blatt eines Tests hat es nicht (im Betrieb gibt es das Attribut immer) und `getattr` fängt das ab; dazu waren drei Zeilen mit doppelten Versionsmarken (`# v1.96  # v1.96`) entstanden, sie sind bereinigt. **Nicht geprüft:** das Aussehen der Spalte im Browser (ob die Zahlen bei jeder Schriftgröße vollständig bleiben; die Faktoren stehen als Konstanten `ROW_NUMBER_DIGIT_WIDTH` und `ROW_NUMBER_EXTRA` in `headless_gridmodel.py`) und das Ein- und Ausblenden des Reiters im Browser.
+
+## 1.95 (2026-10-21)
+
+Wunsch des Entwicklers: „Es fehlen noch 2 Reiter: DCC Keyboard und Soundcheck“; die Tk-Seiten `DCC_KeyboardPage.py` und `SoundCheckPage.py` lagen bei (keine VBA-Vorlage, beide Reiter gehören zur Tk-Fassung). Die Reiter heißen **Sound Test** (`/SoundTest`) und **DCC Keyboard** (`/DCCKeyboard`) und stehen hinter Servo Test 2. Der „ARDUINO Monitor“ der Tk-Fassung ist das Protokollfenster beim Kompilieren und Hochladen (`web_log`), er braucht keinen Reiter.
+
+**DCC Keyboard** (`web_dcckeyboard` 1.00): Basisadresse (`DCC_BaseAddress`, 1 bis 9999, Vorgabe 200, gemerkt), 32 Adressen in **vier Gruppen zu acht**, je ein roter (Kanal 0, mit der Adresse beschriftet) und ein grüner Knopf (Kanal 1) darunter. Ein Druck sendet `@ AAA CC 01` (Adresse mindestens dreistellig, Kanal zweistellig, Zeilenende). Wie im Original verbindet die Seite beim ersten Druck selbst (`connect_if_not_connected`), hier im Hintergrund (`run_in_executor`), damit die Oberfläche nicht hängt; gelingt das nicht, kommt eine Meldung (das Original schwieg). Das Kommando geht in einem Stück an `send_to_ARDUINO` (das Original rief es je Zeichen auf; die serielle Schicht sendet ohnehin Zeichen für Zeichen). Die Beschriftung der roten Knöpfe folgt der Basisadresse sofort (im Original erst nach dem nächsten Druck). Kein Direktmodus (wie im Original: `tabselected` tut nichts).
+
+**Sound Test** (`web_soundtest` 1.00): Werte `Sound_Address` (0 bis 32767), `SoundLEDChannel` (0 bis 99, bis zu den Kanälen der Startmeldung), `Sound_ImpulsLength` (0 bis 1200 ms), `Sound_RED`, `Sound_GREEN`, `Sound_BLUE` (je 0 bis 255), gemerkt unter den Namen des Originals. Die Taste **Sound an ARDUINO schicken** sendet `#L <Adresse> <R> <G> <B> 01` (Version 2: vier Hex-Ziffern, Version 1: zwei) und nach der Impulslänge `#L <Adresse> 00 00 00 01`; Adresse = Soundmodul-Adresse + Versatz des LED-Kanals. **Änderungen an Adresse, Impulslänge, R, G und B senden gleich** (ValueChangeEvent im Original), der LED Kanal nicht. Beim Betreten Direktmodus, beim Verlassen beendet.
+
+Unterschiede zur Tk-Seite (Sound Test):
+- Beim Tippen wird erst 300 ms nach der letzten Eingabe gesendet (`debounce=300`), sonst ginge für 120 je ein Kommando für 1, 12 und 120 an die Platine.
+- Das Ende des Impulses geht an **dieselbe Adresse wie der Start**, auch bei Version 1 und LED Kanal ungleich 0 (das Original nahm bei Version 1 die Adresse ohne Versatz des Kanals, bei Version 2 die zum Ablauf der Zeit im Feld stehende Adresse).
+- Beim **Verlassen** des Reiters, Schließen oder Neuladen der Seite und Beenden des Programms wird ein noch laufender Impuls sofort beendet (je Adresse einmal Wert 0), dann der Direktmodus. Eine neuere Seite wird nicht gestört (Muster wie bei Servo Test 1 und 2).
+- Die Tastenkürzel **Strg-R und Alt-R** für den Rotwert (`Key_Up` und `Key_Down` von `Sound_RED`) gibt es nicht: Strg-R lädt im Browser die Seite neu.
+- Neu: die Taste **Verbinden** (wie bei Servo Test 1, `connect_arduino`); die Tk-Seite verband nicht selbst, und ohne Verbindung wird still nichts gesendet.
+
+Beide Seiten: Beschreibung (`Ausführliche Beschreibung` aus `MacroDef`) einzeilig und aufklappbar, Smartphone-Layout.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_dcckeyboard.py` | 1.00 | **neu**: Seite DCC Keyboard |
+| `_web/web_soundtest.py` | 1.00 | **neu**: Seite Sound Test |
+| `_web/web_tabs.py` | 1.03 | Adressen `/SoundTest`, `/DCCKeyboard` (`sound`, `dcc`) |
+| `webmobaledlib.py` | 1.95 | Reiter, Behälter, Aufbau, Betreten und Verlassen, Abmeldung des Browsers, `stop_all` beim Beenden und Programmende; `REQUIRED_FILES` mit 30 Einträgen |
+| `install/ANLEITUNG_Installation.md` | 2.57 | Abschnitt 2.13, Adressen, Kapitel 10 |
+| `install/BETATEST_Checkliste.md` | 1.28 | Punkte 66 bis 68 (Servo Test 2, Sound Test, DCC Keyboard) |
+
+Tests (Ersatzobjekte, 62 Prüfungen): **DCC**: Basisadresse (Vorgabe, Grenzen, gemerkt, ungültig), Kommandoformat (`@ 200 00 01`, `@ 005`, vierstellig `@ 1000`, Kanal 1), 4 Gruppen zu 16 Knöpfen (8 rot, dann 8 grün), Beschriftung, Farben, Senden bei bestehender Verbindung ohne Verbinden, Verbinden vor dem Senden, Meldung bei fehlgeschlagenem Verbinden, Beschriftung folgt der Basisadresse, Beschreibung aufklappbar. **Sound**: Grenzen, Namen und Merken, Adresse mit Versatz, Version 1 und 2, Senden mit geplantem Ende nach der Impulslänge (0,25 s), Ende an die Adresse des Starts, Senden beim Ändern von R, G, B, Adresse, Impulslänge und nicht beim LED Kanal, kein Senden bei gleichem oder leerem Wert und beim Setzen vom Programm aus, Verlassen mit laufenden Impulsen an zwei Adressen, neuere Seite, `stop_all`, Verbinden, Trennen des Browsers. Dazu der Einbau (Reihenfolge, Abmeldung, Beenden) und die Versionsprüfung (30 Einträge) und alle bisherigen Tests. **Nicht geprüft:** an echten Geräten (MP3-TF-16-Soundplatine, DCC-Arduino) und mit echtem NiceGUI (`debounce`, Aussehen auf dem Telefon).
+
+## 1.94 (2026-10-21)
+
+Test des Entwicklers mit **1.93 und ESP32 auf dem Windows-PC** (erstes Mal mit ESP32). Das Kompilieren gelingt (`Sketch uses 399625 bytes (30%)`), das Hochladen mit `esptool.exe` bricht ab: `esptool.py v2.6`, `Serial port COM6`, `Traceback (most recent call last):`, `File "esptool.py", line 2959, in <module>`; der Rest des Tracebacks fehlte im Fenster.
+
+Aus dem Protokoll ergaben sich **zwei Fehler**, die beide behoben sind:
+
+1. **Der Zeitgeber der blinkenden LEDs läuft endlos und belegt den Port.** Im Protokoll folgen 537 Durchläufe von `__Blink_Arduino_LED` (`CheckComPort:COM6`) im Abstand von rund einer Sekunde über mehr als 9 Minuten, auch während und nach dem Hochladen. Jeder Durchlauf öffnet über `M07.DetectArduino` den Port (Baudrate 50, DTR umschalten). Der Durchlauf vor dem Hochladen dauerte von 10:40:54,890 bis 10:40:55,158; `esptool` meldete sich bei 10:40:55,109 und brach bei 10:40:55,116 ab, also **mitten in diesem Fenster** (unter Windows kann ein Port nur ein Programm öffnen: „Zugriff verweigert“; die genaue Meldung fehlte ja, siehe 2). Auch ohne Kollision setzt das Umschalten von DTR den ESP32 zurück, während `esptool` noch verbindet. Ursache: Die Schleife endet erst, wenn `M07.CheckCOMPort` ein Leerzeichen ist (`F00.port_is_available(" ")` ist falsch); `ShowDialog` setzt es beim Schließen. Ein Durchlauf ruft aber zuerst `Update_SpinButton(0)` auf, und im Web wird das Tk-Original verwendet, wenn kein Dialog offen ist (`not bridge_usable() and _ui is None`). Es setzt `CheckCOMPort` wieder auf den ersten verfügbaren Port, und die Schleife plant sich neu. **Neu** (`web_form_comport` 1.03): Ist der Dialog nicht offen (`IsActive` falsch), setzt `Update_SpinButton` `CheckCOMPort` auf `" "` und kehrt zurück; der nächste Durchlauf findet den Port „nicht verfügbar“ und endet. Bei offenem Dialog unverändert. Es bleibt höchstens ein Durchlauf nach dem Schließen (er versucht noch einmal vergeblich, den Port `" "` zu öffnen).
+2. **Die Ausgabe eines Befehls wurde abgeschnitten.** `execute_shell_cmd` las eine Zeile, prüfte `poll()` und brach ab, **ohne die gelesene Zeile auszugeben** und ohne den Rest der Leitung zu lesen. Endet ein Prozess, der seine Ausgabe in einem Stück schreibt (`esptool.exe` als PyInstaller-Programm, ein Traceback und Ende), vor dem ersten Lesen, geht die gesamte Ausgabe verloren; bei diesem Lauf blieben vier Zeilen, der Rest fehlte. **Neu** (`Prog_Generator` 1.02): die gelesene Zeile wird zuerst ausgegeben, dann wird `poll()` geprüft; nach dem Ende liest `_drain_output` den Rest (in einem Hintergrundthread mit `read1`, höchstens 2 s, damit ein Kindprozess, der die Leitung offen hält, das Programm nicht aufhält); Zeichen, die kein UTF-8 sind, werden ersetzt (vorher ging die Zeile verloren). Die zweite Schleife `write_stdout_to_text_window` (Tk-Ablauf, im Web ungenutzt) ist unverändert.
+
+**Korrektur am selben Tag (Fehler in der ersten Fassung von 1.94):** Die Hilfsmethode `_drain_output` war eine Methode von `Prog_GeneratorPage`. `HeadlessProgGeneratorPage` übernimmt aber nur die Methoden der Liste `_BORROWED` (`headless_proggen.py`), die neue stand nicht darin. Folge beim ersten Test: `Exception in start_ARDUINO_program_Popen 'HeadlessProgGeneratorPage' object has no attribute '_drain_output'` (das Kompilieren lief, das Hochladen nicht). **Jetzt eine Funktion auf Modulebene** (`Prog_Generator._drain_output(process, page)`), die jede Klasse über die Modulglobalen der Methode erreicht. Der Test, der das nicht gesehen hat, rief die Methode mit einem Ersatzobjekt auf, das das Hilfsattribut mitbrachte. Neu im Test: (1) der echte Weg `HeadlessProgGeneratorPage.execute_shell_cmd` (mit dem Wrapper aus `headless_proggen`), (2) eine **Prüfung der Lücke an sich**: Für jede übernommene Methode werden die Aufrufe `self.<Methode>()` gesammelt; jede Methode von `Prog_GeneratorPage`, die dabei aufgerufen wird, muss es auch in `HeadlessProgGeneratorPage` geben. Sie hätte den Fehler gefunden und findet derzeit keine weitere Lücke. Das Datum in den Köpfen der drei Dateien ist der 21.10.
+
+**Bestätigt vom Entwickler (21.10., Windows-PC, ESP32 an COM6): Das Hochladen funktioniert jetzt, und das Blinken endet mit dem Verlassen des USB-Dialogs.** Damit war der Zugriff des Blink-Zeitgebers auf `COM6` die Ursache (die Annahme aus dem Zeitablauf ist bestätigt). Die Platine war richtig erkannt (Silicon Labs CP210x, COM6). Wie schon beim Mac-Tester kann das Hochladen zusätzlich an der Taste BOOT hängen (Hinweis im Fenster seit 1.92).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `mlpyproggen/Prog_Generator.py` | 1.02 | `execute_shell_cmd` gibt die gelesene Zeile aus, liest den Rest (`_drain_output`), ersetzt ungültige Zeichen |
+| `_web/web_form_comport.py` | 1.03 | `Update_SpinButton` beendet den Zeitgeber der blinkenden LEDs, wenn kein Dialog offen ist; Kopf neu |
+| `webmobaledlib.py` | 1.94 | `REQUIRED_FILES` mit 28 Einträgen (`Prog_Generator` 1.02, `web_form_comport` 1.03) |
+| `install/BETATEST_Checkliste.md` | 1.27 | Punkt 65 |
+
+Tests (13 mit dem echten Projekt und echten Prozessen): Ein Ersatzprozess, der schon beendet ist und dessen Ausgabe noch im Puffer steht, liefert beim **alten** Code keine einzige Zeile und beim neuen alle sechs (mit der Fehlermeldung am Ende); ein echter Prozess mit Traceback und Fehlercode; Erfolg (zwei Zeilen, Markierung OK); 300 Zeilen auf einmal; ein Kindprozess, der die Leitung offen hält (`_drain_output` kehrt nach 2 s zurück, die Zeile ist da); Zeichen, die kein UTF-8 sind; Fehlercode ohne Ausgabe; der **echte** `__Blink_Arduino_LED` mit geschlossenem Dialog: Der erste Durchlauf setzt `CheckCOMPort` auf `" "` und plant genau einen weiteren, der zweite tut nichts mehr und plant keinen; bei offenem Dialog bleibt `CheckCOMPort` unverändert. Dazu die bisherigen Tests (Bibliotheken 25 und 5, Ports 16, Servo 125 und 89, Lizenz 20, Meldung 12, Adressen 34, Patterngenerator 90 von 90 und 28 von 28). **Nicht geprüft:** am ESP32 unter Windows (ob der Upload jetzt gelingt) und das Verhalten von `esptool.exe` bei belegtem Port.
+
+## 1.93 (2026-10-20)
+
+Rückmeldung des Raspberry-Pi-Testers (Pi 400, Raspberry Pi OS 13 ARM64, Version 1.90, Classic mit FTDI-Arduinos und MoLLi mit RP2040) mit Protokoll. Er meldet drei Dinge; im Protokoll waren sie nachzuvollziehen, und alle drei sind behoben:
+
+1. **LNet-Programm auf den rechten Arduino laden: Fehlermeldung** (DCC geht). Ursache: Vor dem Hochladen des LNet-Programms zeigt das Programm das Formular **UserForm_ConfirmLicense** (LNet Lizenzbestimmungen, nach der Lizenz der Digitrax-Bibliothek `LocoNet`). Das Tk-Original wartet mit `controller.wait_window`, das es im Betrieb ohne Tk nicht gibt: `AttributeError: 'HeadlessAppController' object has no attribute 'wait_window'` (Aktion `__ProInstall_Button_Click` in `UserForm_Options`, Meldung „Optionen: Aktion fehlgeschlagen“). **Neu:** `web_dialogs.WebConfirmLicense` (`web_dialogs` 1.06) zeigt Titel, Lizenztext, Link, das Bild `images/LocoNetLicense.png` (als data-URI), das Kontrollfeld „Ich bestätige die Einhaltung dieser Lizenzbestimmungen“ und **Abbrechen** und **OK**; **OK ist erst nach dem Haken bedienbar** (wie im Original), Texte aus der Beschreibung des Originals (`ConfirmLicense_Form_RSC`). Ergebnis wie im Original (`UserForm_Res = "ok"`). Ohne Brücke (Hauptthread) gilt das Tk-Original. In `install_forms` eingetragen.
+2. **Schnittstelle wird beim Schreiben auf die LichtMaschinen nicht automatisch erkannt**, obwohl eine Verbindung besteht; „Nein“ im Dialog hilft. Ursache: `M07_COM_Port.EnumComPorts` nimmt eine Schnittstelle nur auf, wenn ihre Beschreibung eines von `CH340`, `Arduino`, `USB Serial Port`, `USB2.0-Ser`, `tty` enthält (oder Silicon Labs CP210x / CP2102, oder die Pico-Kennung). Ein Arduino mit **FTDI** heißt unter Windows „USB Serial Port“ (passt), unter Linux und macOS aber **„FT232R USB UART - FT232R USB UART“** (passt nicht). Die Prüfung `Check_If_Port_is_Available` fand dann den Port nicht, und das Programm meldete „Es ist kein … Arduino an COM Port /dev/ttyUSB0 angeschlossen“ (im Protokoll innerhalb von 40 ms nach der Aufzählung). **Neu** (`M07_COM_Port` 1.01): zusätzlich `FT232` in der Beschreibung **oder die Hersteller-ID `VID:PID=0403:`** (FTDI; deckt alle FTDI-Chips ab). Alles bisher Erkannte bleibt.
+3. **Nach der Installation der Bibliotheken und Boards bleibt der Vorgang stehen, ohne Fehlermeldung.** Ursache: Das Protokollfenster („Installation der Boards und Bibliotheken“, Ausgabe „Installation abgeschlossen!“) wird nach einem erfolgreichen Befehl 10 Sekunden später von `run_command` geschlossen (`weblog.close_later_if_ok()`). Die zurückgestellte Prüfung beim Start (`run_startup_tasks`, seit 1.79) tat das nicht, das Fenster blieb stehen und wirkte, als warte das Programm. Das Programm lief weiter (im Protokoll: Zustände gelesen, später Seiten bedient). **Neu:** `run_startup_tasks` setzt vorher `weblog.last_result = None` und ruft nach dem Lauf `weblog.close_later_if_ok()` (wie `run_command`). Bei einem Fehler bleibt das Fenster offen, damit man die Meldung lesen kann.
+
+Dazu im selben Protokoll gefunden und behoben (`M07_COM_Port` 1.01): **Absturz im Blink-Thread** (CRITICAL `AttributeError: 'NoneType' object has no attribute 'port'` in `DetectArduino`). Das Programm blinkt beim Prüfen die LED des Arduinos (`__Blink_Arduino_LED`) und hängt dabei die serielle Verbindung des Controllers um; der Sendethread meldete gleichzeitig einen Schreibfehler (`Bad file descriptor`) und setzte `arduino` auf `None`. Jetzt prüft `DetectArduino`, ob die Verbindung noch da ist, und kehrt sonst mit `-2` zurück (der Aufrufer behandelt den Wert). Die Wurzel (die Erkennung teilt sich die serielle Verbindung mit dem Sendethread) ist damit **nicht** behoben, nur der Absturz.
+
+Nicht geändert: Der Tester fand es „in einer Endlosschleife“, wenn er auf die Meldung „kein … Arduino“ mit „Ja“ antwortete (Rückfrage „Wollen sie es noch mal …“); mit der Erkennung der FTDI-Schnittstelle kommt die Meldung nicht mehr.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_dialogs.py` | 1.06 | `WebConfirmLicense`, `build_license_dialog`, `license_image_uri`; in `install_forms` |
+| `proggen/M07_COM_Port.py` | 1.01 | **neu im Ordner** (Projektdatei, Kopf neu): FTDI in `EnumComPorts`, Schutz in `DetectArduino` |
+| `webmobaledlib.py` | 1.93 | `run_startup_tasks` schließt das Fenster nach Erfolg; `REQUIRED_FILES` mit 27 Einträgen (`web_dialogs` 1.06, `M07_COM_Port` 1.01) |
+| `install/BETATEST_Checkliste.md` | 1.26 | Punkte 62 bis 64 |
+
+Tests (Ersatzobjekte; mit dem echten Projekt für `M07`): **M07** (16): FTDI an der Beschreibung, an der Hersteller-ID allein und ohne hwid (macOS); alle bisher erkannten Beschreibungen (CH340, Arduino, USB Serial Port, USB2.0-Serial, Silicon Labs CP210x, CP2102) bleiben; unbekannte Ports (`n/a`) nicht; `Check_If_Port_is_Available('/dev/ttyUSB0')` ist wahr (vorher falsch); `DetectArduino` ohne Absturz (-2), wenn die Verbindung während der Erkennung wegfällt, und unverändert im Normalfall; Vergleich mit dem Original aus dem Paket: genau vier Zeilen ersetzt. **Lizenzformular** (20): Text, Link, Titel und Tasten aus dem Original; OK gesperrt bis zum Haken; Ergebnis True und False; ohne Brücke das Tk-Original; Bild als data-URI (Bytes gleich der Datei, ohne Bild eine leere Zeichenkette); `install_forms`; Reihenfolge in `run_startup_tasks`; Versionsprüfung (27 Einträge). Dazu alle bisherigen Tests. **Nicht geprüft:** am echten Pi mit FTDI-Arduino (Erkennung, Hochladen des LNet-Programms) und mit echtem NiceGUI (Aussehen des Lizenzfensters, das Schließen des Fensters nach 10 s).
+
+## 1.92 (2026-10-20)
+
+Rückmeldung des Mac-Testers (ESP32, CP2102): `esptool.py v2.6` läuft jetzt (der Hilfsbefehl `python` aus 1.89 funktioniert; die Platine 1.0.4 läuft unter Python 3), der Upload endet aber mit `Connecting........_____ ... A fatal error occurred: Failed to connect to ESP32: Timed out waiting for packet header`. **Das Gedrückthalten der Taste BOOT hat geholfen.** Es ist also kein Fehler des Programms: Das Board hat keinen zuverlässigen Auto-Reset (bei DevKit-Nachbauten üblich). Das Protokoll, das der Tester mitschickte, war ein älteres (Version 1.69, vor dem Hilfsbefehl, noch mit dem Fehler `exec: "python"`). Die vermutete Upload-Geschwindigkeit (`UploadSpeed=921600` in `M02.BOARD_ESP32`) war nicht die Ursache, die Einstellung dafür wird **nicht** gebaut. Der Entwickler wünschte (1) einen Eintrag in Anleitung und Checkliste und (2) einen Hinweis im Fenster vor dem Hochladen.
+
+- **Hinweis im Fenster:** Unter dem ESP32-Bild stehen zwei neue Zeilen („Bleibt es bei 'Connecting....' stehen: am ESP32 die Taste BOOT“ / „gedrueckt halten, bis 'Writing at ...' erscheint.“), danach eine leere Zeile und der Rahmen. Nur ASCII und ohne Sonderzeichen der Befehlszeile (`% ^ & | < >` und doppelte Anführungszeichen), weil derselbe Text in der Windows-Datei `Upload.cmd` (`M08_ARDUINO.Create_Cmd_file`) und im Textfenster (`Prog_Generator.start_ARDUINO_program_cmd`) steht. Beide Stellen erzeugen dieselben Zeilen, 73 Zeichen breit wie der Kasten; der Text wird mit `M09.Get_Language_Str` übersetzt und mit `M30.AddSpaceToLen` auf die Breite gebracht. Nur der Zweig `HT_ESP32` ändert sich (Nano und Pico nicht).
+- **Anleitung 2.56:** neue Zeile in der Fehlersuche 9.1 (Meldung, BOOT-Taste, Kondensator 10 µF zwischen EN und GND, Datenkabel ohne Hub, anderer Port, bei zwei Anschlüssen desselben Boards den anderen wählen). **Checkliste 1.25:** Punkt 61. Die PDF entstehen beim nächsten Release-Stand.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `proggen/M08_ARDUINO.py` | 1.01 | **neu im Ordner** (Projektdatei, bisher nicht im ZIP), Kopf neu: zwei Hinweiszeilen im Zweig ESP32 von `Create_Cmd_file` |
+| `mlpyproggen/Prog_Generator.py` | 1.01 | zwei Hinweiszeilen im Zweig ESP32 von `start_ARDUINO_program_cmd`; Kopf neu |
+| `webmobaledlib.py` | 1.92 | Mindestversionen von `Prog_Generator` und `M08_ARDUINO` in `REQUIRED_FILES` (25 Einträge) |
+| `install/ANLEITUNG_Installation.md` | 2.56 | Fehlersuche: ESP32 Upload `Timed out waiting for packet header` |
+| `install/BETATEST_Checkliste.md` | 1.25 | Punkt 61 |
+
+Tests (11 Prüfungen, mit den Quelltexten): Der ESP32-Zweig beider Dateien wird aus dem Syntaxbaum ausgewertet; beide erzeugen dieselben Zeilen; drei Zeilen mehr als das Original (Hinweis 1, Hinweis 2, leere Zeile), die übrigen Zeilen unverändert und in der Reihenfolge; alle Zeilen des Kastens 73 Zeichen breit; die Hinweise stehen nach der leeren Zeile hinter „das angezeigt.“ und vor dem Rahmen; ASCII und ohne Sonderzeichen; `M08_ARDUINO.py` unterscheidet sich vom Projektstand (außer dem Kopf) nur durch die drei hinzugekommenen Zeilen; Versionsprüfung (25 Einträge). Dazu alle bisherigen Tests und der Import des Projekts mit den geänderten Dateien (Bibliotheken 25, Patterngenerator 90 von 90, Tabelle 28 von 28). **Nicht geprüft:** das Aussehen im Fenster auf einem Mac und in der Windows-Datei `Upload.cmd` (Zeilen mit einfachen Anführungszeichen im ECHO sind in `cmd` unkritisch; auf einem Windows-Rechner nicht gesehen).
+
+## 1.91 (2026-10-20)
+
+Wunsch des Entwicklers: **Servo Test 2** (`mlpyproggen/ServoTestPage2.py`, Direct Mode Servos). Es gibt keine entsprechende VBA-Seite, die Vorlage ist die Tk-Seite. Umfang: **Teil A (direkte Steuerung)** jetzt; **B** (Attiny direkt programmieren: Hex-Datei über den Bus laden) und **C** (Servo-Attiny mit Programmieradapter, `MainMenu_Form`) später.
+
+Die Seite steuert Servos im Direct Mode (Variante von Eckhart: ein ATtiny statt des WS2811-Chips). Ein Zeitgeber schickt laufend ein Kommando an die LED des Servos; die drei Farbbytes sind **High**, **Control mit CRC4** (unteres Halbbyte die Betriebsart, oberes die Prüfsumme aus `tools.CRCalgorithms.CalculateControlValuewithChecksum`) und **Low**: `#L <LED Nummer> <High> <Control> <Low> <Anzahl>`.
+
+| Betriebsart | Kommando (High, Control, Low), mit ENTER |
+|---|---|
+| 1 Normal | Position, 1, 0 |
+| 2, 3 Training standard, weit | Position, 2 oder 3, 0; mit ENTER Control + 8 |
+| 4 Max Speed | Position, 4, 0x9A; mit ENTER 12 |
+| 5 Invers umschalten | 1, 4, 0x15; mit ENTER 12 |
+| 6 Servo zurücksetzen | 0xE9, 5, 0x8A; mit ENTER 13 |
+| 7 Werkseinstellung | 0x16, 5, 0x75; mit ENTER 13 |
+| 8 Letzte Position zurücksetzen | 0x5A, 5, 0x9E; mit ENTER 13 |
+| 9 Oszillator trimmen | Position × 35 / 255, 4, 0x9C; mit ENTER 12 |
+| 10 Speed (Legacy) | Position, 4, 0x65; mit ENTER 12 |
+| 0 | es wird nichts gesendet |
+
+**ENTER** (Taste, gedrückt halten): In den Betriebsarten 4 bis 8 und 10 setzt es beim Loslassen die Betriebsart auf **0**, danach wird nichts mehr gesendet. In den Betriebsarten 2 und 3 braucht es **zwei Drücke** (Beschriftung „2nd Step“, dann „Enter“); nach dem zweiten Loslassen steht die Betriebsart auf 0. In 9 ändert ENTER nur das Control-Bit.
+
+Aufbau (`web_servotest2` 1.00): `Servo2Model` (Logik, ohne Browser testbar), `build` (Oberfläche), `Servo2Page` (`tab_selected`, `tab_unselected`, `page_closed`). Oberfläche in einer Spalte für das Smartphone: Beschreibung einzeilig und aufklappbar; **Servo Modul Adresse**, **LED Kanal**, **Servo Betriebsart** (Auswahl 0 bis 10 mit Namen), **Fast Refresh**; Regler 0 bis 255 mit Pfeilen und Anzeige; **Pos 0**, **ENTER**, **Pos 255** in einer Zeile.
+
+Unterschiede zum Tk-Original:
+- Der Zeitgeber (50 ms, mit Fast Refresh 40 ms; im Original `Servo_delay` und der Parameter `ServoCRCold`) sendet nur, wenn die Sendewarteschlange leer ist (`tx_idle`). Ein Kommando wird in der nächsten Runde ohnehin wiederholt; so staut sich bei einer langsamen Verbindung nichts. Der Merker für das Umschalten auf Betriebsart 0 wird unabhängig vom Senden gesetzt.
+- Gesendet wird mit `send_to_ARDUINO` (normale Pause, wie im Original) und im Format des Originals (Version 2: LED-Nummer zweistellig, Anzahl vierstellig; **anders als Servo Test 1**, das dem Excel-Dialog folgt).
+- **Die Betriebsart wird nicht gemerkt**, die Seite beginnt immer mit 1 (Normal); ein gemerktes „Servo zurücksetzen“ soll nicht nach dem Start Kommandos senden. Adresse, LED Kanal und Fast Refresh werden gemerkt, unter eigenen Namen (`Servo2Address`, `Servo2LEDChannel`, `Servo2FastRefresh`), also nicht die Werte von Servo Test 1.
+- Der **LED Kanal** wird auf die Kanäle der Startmeldung des Arduinos begrenzt (sonst bis 99).
+- Wird die Betriebsart geändert, beginnt die ENTER-Abfolge („2nd Step“) von vorn. Im Original blieb sie hängen.
+- **Pos 0 setzt die Position 1**, nicht 0 (wie im Original).
+- Der Regler setzt nur die Position (höchstens 20 Werte je Sekunde); gesendet wird im Zeitgeber, wie im Original.
+- **Verlassen** (Reiter gewechselt, Seite geschlossen oder neu geladen, Programm beendet, Neustart): wie im Original **nur der Direktmodus wird beendet**; ENTER wird losgelassen. Es wird kein Wert an den Servo gesendet (Servo Test 1 sendet dort den Wert 0): Was ein Direct Mode Servo ohne Kommandos tut, ist nicht bekannt. Eine neuere Seite (zum Beispiel nach dem Neuladen im Browser) wird nicht gestört, wie bei Servo Test 1.
+- ENTER ist beim Berühren gedrückt; rutscht der Finger ab (`pointerleave`, `pointercancel`), wird losgelassen.
+- Ein sehr kurzer Druck (unter einer Zeitgeber-Runde, 50 ms) setzt den Merker für Betriebsart 0 nicht (der Merker entsteht im Zeitgeber, wie im Original).
+- Keine Taste **Verbinden** (anders als Servo Test 1 gab es dafür keinen freien Platz); das Verbinden geht über ARDUINO → Verbinden. Nicht übernommen: die Tasten Strg+O (LEDs aus; steht im Menü ARDUINO) und F1.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_servotest2.py` | 1.00 | **neu:** `Servo2Model`, `build`, `Servo2Page`, `stop_all` |
+| `_web/web_tabs.py` | 1.02 | Adresse `/ServoTest2` (Reiter `servo2`, Titel) |
+| `webmobaledlib.py` | 1.91 | Reiter Servo Test 2 hinter Servo Test 1 (Behälter, Aufbau beim ersten Öffnen, Sichtbarkeit, `tab_selected` und `tab_unselected`, Abmeldung des Browsers); `stop_all` auch beim Beenden, Neustart und Programmende; `REQUIRED_FILES` mit 23 Einträgen |
+
+Die CRC-Funktionen stehen in `tools/CRCalgorithms.py` (Projektdatei, nicht im ZIP; die Seite importiert sie beim ersten Kommando).
+
+Tests (Ersatzobjekte für Servoplatine, Zeit und NiceGUI, 89 Prüfungen): Nachrichten für Version 1 und 2 mit den echten CRC-Funktionen (Control: unteres Halbbyte = Betriebsart, oberes = CRC4); **alle zehn Betriebsarten** mit und ohne ENTER (High, Control, Low und der Merker); ENTER-Abfolgen (Betriebsart 4 mit Merker, Training mit zwei Drücken, kurzer Druck, Doppeldruck, Wechsel der Betriebsart); Zeitgeber (sendet mit `send_to_ARDUINO`, lässt aus bei belegter Warteschlange, Betriebsart 0 sendet nichts); Parameter und Grenzen (Adresse, LED Kanal mit Versatz, Fast Refresh 40 ms, eigene Namen beim Merken); Betreten und Verlassen (einmal, neuere Seite, nie abgemeldete ältere Seite, `stop_all`, Fehler im Direktmodus); die Verdrahtung der Oberfläche (Regler mit `throttle` 0,05, Zeitgeber an und aus, Fast Refresh ändert den Zeitgeber, Pos 0 und Pos 255, ENTER mit vier Ereignissen auch beim Abrutschen, die Anzeige folgt der Betriebsart 0, Beschreibung aufklappbar, Trennen des Browsers); der Einbau in `webmobaledlib.py` (Reihenfolge der Blöcke beim Wechsel, `stop_all`, Versionsprüfung). Dazu die bisherigen Tests unverändert (Servo Test 1: 125, Adressen: 34, Vollbild, Netzzugriff, Start, Hilfsbefehl `python`, Bibliotheken, Patterngenerator). **Nicht geprüft:** am **echten Direct Mode Servo** (Werte und CRC kommen aus dem Original, aber ob die Seite bei der gewählten Taktung und Warteschlange denselben Servo bewegt wie die Tk-Seite, ist offen), mit echtem NiceGUI (Zeitgeber, Regler, Zeigerereignisse) und auf dem Telefon.
+
+## 1.90 (2026-10-20) - Release
+
+Anlass: Die Tester haben unterschiedliche Versionsstände; mit einem Release können sie über **Hilfe → Update webMobaLedLib …** alles auf einmal laden. Release-Stand **1.90** (zwischen 1.78 und 1.90 liegen die Versionen 1.79 bis 1.89, siehe die Einträge darunter).
+
+Vor dem Packen kam ein letzter Fehler dazu (`M37_Inst_Libraries` 1.03): Beim Lesen der Anleitung fiel auf, dass Kapitel 10 schon festhält, dass sich **ESP32 1.0.4 auf Linux mit 64-Bit-ARM (Raspberry Pi) nicht installieren lässt** („Tool esptool_py is not available for your operating system“, früher auf dem Pi geprüft). Nach der Korrektur der URLs (1.88) hätte das Programm es dort bei **jedem Start** wieder versucht und wäre gescheitert. `Select_Missing` wählt `esp32:esp32` jetzt auf Linux mit `aarch64` oder `arm64` nicht aus (`Board_not_installable`); Linux x86_64, 32-Bit-ARM, macOS (auch Apple-Chip, läuft mit x86-Werkzeugen) und Windows bleiben unverändert. Die Vermutung in der Meldung zu 1.88 („nicht geprüft“) war damit zu vorsichtig: Es war eine bekannte Einschränkung. Die Zeile bleibt in der Tabelle „Libraries“ sichtbar und lässt sich von Hand auswählen.
+
+**Inhalt des Pakets** (88 Dateien im Ordner `python`, 10 mit Ausführungsrecht): gegenüber dem Release 1.78 **neu** `_web/web_fullscreen.py` (1.02), `_web/web_tabs.py` (1.01), `_web/web_servotest.py` (2.03), `headless/headless_startup.py` (1.00), `proggen/M37_Inst_Libraries.py` (1.03); **geändert** `webmobaledlib.py` (1.90), `arduino_prefs.py` (1.02), `no_tk.py` (1.01), `_web/web_serial.py` (1.02), `_web/web_pattgen.py` (1.17); dazu Anleitung **2.55** und Checkliste **1.24** (Quelle und PDF). Die Versionsprüfung beim Start verlangt 22 Dateien in Mindestversionen.
+
+| Datei (Ordner `/mnt/user-data/outputs`) | Inhalt |
+|---|---|
+| `webmobaledlib.zip` | Programm 1.90 (Vorgänger als `webmobaledlib_Stand_1.78_2026-10-20.zip`) |
+| `ANLEITUNG_Installation.pdf` | Anleitung 2.55, 33 Seiten (neu: 2.11 Vollbild und Adressen, 2.12 Servo Test 1, Bibliotheken beim Start und `python` in 2.3, Fehlersuche, Kapitel 10) |
+| `BETATEST_Checkliste.pdf` | Checkliste 1.24, 6 Seiten (neu: Punkte 53 bis 60) |
+| `RELEASE_Hinweise_1.90.md` | Hinweise für die GitHub-Veröffentlichung (Anhänge: ZIP, beide PDF) |
+| `VERSIONEN_Stand_1.90_2026-10-20.txt` | Versionen aller 80 Dateien mit Versionsangabe |
+
+**Geprüft am entpackten ZIP:** `testzip` ohne Fehler; alle 88 Dateien gleich dem Ordner `headless`; PDF im ZIP gleich den PDF daneben; keine `__pycache__`; alle `.py` kompilieren; Versionsprüfung „alles passt“ (22 Einträge); Shell-Skripte ohne CRLF; Ausführungsrechte wie im Paket 1.78. Tests gegen die entpackten Dateien: Servo Test 125, Adressen 34, Vollbild 19, Netzzugriff 33 und 13, Start 15, Hilfsbefehl python 17; mit den echten Daten der Bibliotheksliste Boards und Wiederholung 25 und Antwort „Nein“ 5; Patterngenerator 90 von 90 und Tabelle 28 von 28.
+
+**Noch zu tun (nicht im Paket):** (1) Das ZIP und die beiden PDF als Release auf GitHub veröffentlichen; erst dann sehen die Tester das Update in ihrem Programm. (2) Nach dem Update das Programm neu starten; der Hilfsbefehl `python` entsteht beim Start. (3) Offene Rückmeldungen: Raspberry Pi (Boards ohne Einfrieren?), Mac (ESP32 1.0.4 mit Python 3?), Servo Test 1 (Wert 0 beim Verlassen). (4) Weiter: Servo Test 2, Test Pattern und Senden an ein Modul (Stufe 4d).
+
+## 1.89 (2026-10-20)
+
+Meldung des Mac-Testers: Die Platine esp32:esp32 wurde durch Anklicken der Zeile auf die Version 1.0.4 gebracht (die die Excel-Fassung verlangt). Beim Hochladen auf den ESP32 bleibt das Programm einige Zeit bei „Überprüfungsvorgang“ stehen, dann kommt: `exec: "python": executable file not found in $PATH`.
+
+Ursache: Die Regeln der Platine esp32:esp32 in der Version **1.0.4** (`platform.txt`, Aufrufe von `gen_esp32part.py` und `esptool.py`) rufen `python` auf. Neuere macOS-Versionen (ab 12.3), Debian (auch Raspberry Pi OS auf Debian 13) und viele Linux-Systeme haben nur `python3`. Die Arduino IDE startet ihren Builder mit dem PATH des Programms; er findet `python` nicht. Neuere Platinenversionen brauchen es nicht, die Platine ist aber in der Bibliotheksliste auf 1.0.4 festgelegt. Das betrifft auch den Raspberry Pi (ESP32 würde dort nach der Korrektur von 1.88 an derselben Stelle scheitern).
+
+Umsetzung (`arduino_prefs` 1.02, `webmobaledlib` 1.89): `arduino_prefs.ensure_python_command()` läuft beim Start vor `ensure_arduino_prefs()` (Linux und macOS). Gibt es keinen Befehl `python` im PATH, legt sie im Datenordner `bin/python` an, ein kleines Shell-Skript `exec <sys.executable> "$@"` (ausführbar, `shlex.quote` für Pfade mit Leerzeichen), und stellt den Ordner an den Anfang von `os.environ["PATH"]`; alle Kindprozesse (die IDE, ihr Builder, `esptool.py` mit `#!/usr/bin/env python`) erben es. Es ist ein **Skript statt eines Links** auf den Python des Programms: Der Python des Programms ist der der virtuellen Umgebung und hat `pyserial`, das `esptool` braucht; ein Link in einen anderen Ordner fände die Umgebung (`pyvenv.cfg`) nicht. Gibt es schon ein `python`, passiert nichts; eine veraltete Hilfsdatei (anderer Pfad, fehlendes Ausführungsbit) wird erneuert; ein Fehler beim Anlegen (Berechtigung) wird protokolliert und das Programm läuft weiter. Der Anwender muss nichts von Hand einrichten.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `arduino_prefs.py` | 1.02 | `ensure_python_command`, `python_shim_dir`; Header neu |
+| `webmobaledlib.py` | 1.89 | Aufruf in `start_backend`; `arduino_prefs` 1.02 in `REQUIRED_FILES` (22 Einträge) |
+
+Tests (Linux im Sandkasten, ohne `python` im PATH, 17 Prüfungen): Hilfsbefehl angelegt, ausführbar, steht vorn im PATH; `python` läuft und ist der Python des Programms (3); Argumente mit Leerzeichen bleiben erhalten; ein Skript mit `#!/usr/bin/env python` (Ersatz für `esptool.py`) läuft; zweiter Aufruf ändert nichts; veraltete Datei und fehlendes Ausführungsbit werden repariert; vorhandenes `python` bleibt unberührt; Windows tut nichts, macOS legt es an; nicht anlegbarer Ordner ohne Absturz. **Nicht geprüft:** auf einem echten Mac mit ESP32 1.0.4. Offen: (1) ob `gen_esp32part.py` und `esptool.py` der Version 1.0.4 mit Python 3 laufen (sie sind es nach unserem Kenntnisstand; zeigt der Tester „SyntaxError: Missing parentheses in call to 'print'“, braucht die Platine Python 2); (2) ob die IDE auf dem Mac den PATH des Programms erbt (das gilt, wenn das Programm sie selbst startet, wie es `Find_ArduinoExe` tut). Der Tester muss das Programm nach dem Einspielen neu starten.
+
+## 1.88 (2026-10-20)
+
+Fehler vom Tester (Raspberry Pi 400, Version 1.79, saubere neue Installation): Beim Start fragt das Programm nach den fehlenden Bibliotheken und Boards (richtig, seit 1.79 im Browser). Das Update endet mit „Fehler beim Aktualisieren aufgetreten, esp32:esp32 und rp2040:rp2040 wurden nicht installiert“. „Ja“ führt in eine Endlosschleife, „Nein“ lässt nur „Abbrechen“ oder „Schließen“ (das Protokollfenster des Befehls). Der Raspberry Pi friert ein, nach dem Neustart beginnt es von vorn. Der Entwickler schickte den VBA-Code (`M37_Inst_Libraries` der Excel-Fassung) und fragte, ob er etwas anderes macht.
+
+**Ergebnis des Vergleichs VBA und Linux-Fassung:** Die Windows-Fassung der Python-Datei (`Create_Do_Update_Script`, Zeile 780) macht dasselbe wie das VBA. Die **Linux-Fassung** (`Create_Do_Update_Script_Linux_part2`, nur für Linux, Pi und Mac geschrieben) hat einen Fehler. Im VBA bekommt **jede** Platine alle URLs der Paketindizes (`--pref "boardsmanager.additional.urls=" & URLList`). Die Linux-Fassung verteilte die URLs der Reihe nach, die i-te URL an die i-te Platine (`URLList_split[0]`, dann `del`). `URLList` enthält aber nur die Zeilen **mit** URL, `BrdList` alle Platinen. Mit den echten Daten der Bibliotheksliste (Zeilen 21 bis 28):
+
+| Platine | URL in der Liste | bekam bisher | |
+|---|---|---|---|
+| ATTinyCore:avr:1.5.2 | Hardi-St/MobaLedLib_Docu (Index) | dieselbe | ok |
+| arduino:avr:1.8.6 | keine | die URL von esp32 | egal (eingebaut) |
+| esp32:esp32:1.0.4 | dl.espressif.com | die URL von **rp2040** | **Index nicht bekannt: Fehler** |
+| rp2040:rp2040:4.4.0 | earlephilhower | **leer** (`urls=`) | **Index nicht bekannt: Fehler** |
+
+Das erklärt genau die beiden Meldungen. Die erste Pi-Meldung vom 20.10. (Version 1.69, ohne rp2040 in der Liste) bekam esp32 gar keine URL, derselbe Fehler. Weitere Unterschiede (VBA bricht beim ersten Fehler ab, die Linux-Fassung macht mit der nächsten Platine weiter) sind harmlos.
+
+**Endlosschleife und Einfrieren:** Auf dem Pi scheiterten esp32 und rp2040 in jedem Durchgang. Nach den zwei automatischen Versuchen fragte `Check_All_Selected_Libraries_Result`: „Ja“ wiederholte den ganzen Auftrag (wie im VBA): Jede Wiederholung **löscht** den Ordner der Platinen in `~/.arduino15/packages` (`part1`) und lädt **alle** ausgewählten Bibliotheken und Platinen noch einmal, auch die schon installierten. Das ist auch im VBA so; dort gelingt es nach einem zweiten Anlauf. Auf dem Pi (Java-IDE unter Xvfb, 4 GB, Datenträger) blockiert das die Maschine. Das „Einfrieren“ ist **nicht bestätigt**; die wahrscheinlichste Ursache sind diese wiederholten Komplettinstallationen, die wir hier nicht ausprobieren können.
+
+Umsetzung (`M37_Inst_Libraries` 1.02):
+- **URLs:** Jede Platine bekommt alle URLs (wie im VBA). Die alten Zeilen sind als Kommentar stehen geblieben und mit der Version markiert.
+- **Wiederholung nur für das Fehlende:** `Keep_Only_Missing_Selected` entfernt nach jedem Durchgang die Auswahl der schon installierten Zeilen. Der zweite Versuch lädt also nur noch esp32 und rp2040 (und löscht nur deren Ordner).
+- **Keine endlose Schleife:** Wird beim zweiten Versuch dasselbe wie beim ersten nicht installiert (kein Fortschritt), kommt **keine** Rückfrage „Soll die Aktualisierung noch mal aufgerufen werden?“, sondern eine Meldung mit den Namen der fehlenden Zeilen und dem Hinweis auf das Protokoll (Hilfe → Logfile anzeigen), und der Ablauf endet. Gibt es Fortschritt, geht es weiter, bis alles da ist.
+- Die Versionsprüfung beim Start verlangt jetzt `M37_Inst_Libraries` 1.02.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `proggen/M37_Inst_Libraries.py` | 1.02 | Linux: alle URLs je Platine, nur das Fehlende wiederholen, kein Wiederholen ohne Fortschritt |
+| `webmobaledlib.py` | 1.88 | Mindestversion von `M37_Inst_Libraries` 1.02 |
+
+Tests (mit den echten Daten der Bibliotheksliste und einem Ersatz für das Ausführen der Befehle, 16 Prüfungen): Die vier Platinen bekommen je einen Befehl, jeder mit den drei URLs (ATTinyCore, Espressif, earlephilhower); esp32 kennt den eigenen Index; zum Vergleich der bisherige Code mit dem falschen Befehl (esp32 mit dem Index von rp2040, rp2040 mit leerem Wert); Schleife: nie installierbar (2 Versuche, danach Meldung ohne Rückfrage, nur die fehlenden Zeilen im zweiten Versuch), esp32 gelingt beim zweiten Versuch, alles beim ersten, Fortschritt bei jedem Versuch (4 Versuche, jeweils nur das Fehlende), kein Fortschritt (Meldung statt Frage, auch bei „Nein“); dazu die 5 Prüfungen der Antwort „Nein“ aus 1.79.
+
+**Nicht geprüft (und offen):**
+- **Ob die Installation auf dem Pi damit gelingt.** Es kann einen zweiten Grund geben: Die Platine **esp32:esp32 in der Version 1.0.4** (die Excel-Fassung fordert sie so) enthält Werkzeuge nur für x86 und 32-Bit-ARM. Auf einem **64-Bit-Raspberry-Pi-OS** (aarch64, wie im Protokoll des Testers) fehlt dann das Werkzeug für den Rechner, und die Installation scheitert auch mit dem richtigen Index. Das ist eine Vermutung aus dem Stand der Paketindizes, nicht geprüft. rp2040 4.4.0 hat aarch64-Werkzeuge. Hilfe: die Ausgabe im Protokollfenster des Befehls (oder `webmobaledlib.log`) nach dem Update.
+- Die Meldungen „USB wird nicht erkannt“ und Probleme beim Hochladen von LNet-Daten mit der Classic-Version sind ein anderes Thema und nicht Teil dieser Änderung.
+
+## 1.87 (2026-10-20)
+
+Wunsch des Entwicklers: Das „Wert 0 senden“, das im Excel-Dialog bei **Schließen** passiert (`Abort_Button_Click`: `SendValueToCurrent 0`, dann `#X`), soll jetzt beim **Verlassen des Tabs oder der Seite** passieren, damit keine Funktion hängen bleibt.
+
+Stand vor dieser Version: Beim Wechsel des Tabs sendete `tab_unselected` den Wert 0 und beendete den Direktmodus schon. Es fehlten drei Fälle:
+1. **Seite verlassen:** Browser geschlossen, neu geladen oder Verbindung weg (Telefon gesperrt).
+2. **Programm beendet oder neu gestartet** (Beenden, Update, Raspberry Pi herunterfahren, Dienst gestoppt, Strg+C).
+3. **Ablauf mit Pausen läuft noch** (zum Beispiel Servo zurücksetzen, rund zwei Sekunden): Nach dem Verlassen sendete der Ablauf seine restlichen Befehle weiter, obwohl der Wert 0 und das Ende des Direktmodus schon gesendet waren. Das ist genau ein hängender Servo.
+
+Umsetzung (`web_servotest` 2.03, `webmobaledlib` 1.87):
+- **`ServoModel.leave()`** (`tab_unselected` ist derselbe Aufruf): erhöht die Kennung `_epoch` (ein laufender Ablauf bricht beim nächsten Schritt ab: `_pause` und `_send_pause` prüfen sie und lösen `_Aborted` aus; die Sperre `busy` wird dann freigegeben), beendet das Wackeln, lässt die Pfeiltaste los, sendet **Wert 0** an den Servo und beendet den **Direktmodus**, stellt den Zustand Einstellen her. **Nur einmal**: ein zweiter Aufruf (Reiter verlassen, danach Seite zu) sendet nichts mehr.
+- **Reiter gewechselt:** wie bisher über `on_tab`.
+- **Browser getrennt:** `context.client.on_disconnect(lambda *_: state["servo1"].page_closed())` beim Aufbau der Seite; `ServoPage.page_closed` schaltet den Zeitgeber aus und ruft `leave()`, schreibt aber **nichts mehr in die Anzeige** (der Client ist weg).
+- **Programm beendet oder neu gestartet:** `close_session` (Beenden, Neustart, Update, Pi herunterfahren) ruft `web_servotest.stop_all(wait=True)` vor dem Trennen vom Arduino auf; zusätzlich `nicegui_app.on_shutdown(...)` für das Ende ohne Dialog (Strg+C, Dienst gestoppt). `stop_all` wartet bis zu 1 s (`ctrl._wait_sent`), bis die Nachrichten gesendet sind (der Sendethread ist ein Hintergrundthread).
+- **Zwei Seiten gleichzeitig** (Neuladen im Browser: das alte Fenster meldet sich erst später ab; zwei Browser): `ACTIVE_MODELS` merkt für jede Seite mit offenem Reiter eine laufende Nummer. Hat inzwischen eine **neuere** Seite den Servo übernommen, sendet die ältere beim Verlassen nichts und beendet den Direktmodus nicht, um die neuere nicht zu stören. Eine **ältere** Seite, die sich nie abgemeldet hat (Abmeldung verloren), sperrt das Senden nicht. `stop_all` lässt die zuletzt betretene Seite senden, die älteren räumen still auf (`quiet`).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_servotest.py` | 2.03 | `leave`, `stop_all`, `page_closed`, `ACTIVE_MODELS`, Abbruch laufender Abläufe (`_epoch`) |
+| `webmobaledlib.py` | 1.87 | `on_disconnect` der Seite, `stop_all` in `close_session` und beim Herunterfahren; `web_servotest` 2.03 in `REQUIRED_FILES` |
+
+Tests (Ersatzobjekte, 125 Prüfungen, davon 18 neu): Verlassen sendet 0 und das Ende des Direktmodus nur einmal; ohne vorheriges Betreten nichts; Abbruch von Servo zurücksetzen nach der 3. Pause (gesendet wurde 225, 240, 55, dann nur noch die 0 vom Verlassen), Servo Konfigurieren und Speichern; nach dem Abbruch und erneutem Betreten laufen Abläufe wieder; neuere Seite wird nicht gestört, die letzte Seite sendet; alte Seite meldet sich vor der neuen ab (0, Ende, dann Beginn der neuen); eine nie abgemeldete ältere Seite sperrt nichts; `stop_all` (eine 0, ein Ende, Warten, danach keine aktive Seite); Trennen des Browsers (Zeitgeber aus, 0, Ende, Anzeige bleibt unberührt, zweites Trennen schweigt); der Einbau in `webmobaledlib.py` im Quelltext. **Nicht geprüft:** `client.on_disconnect` und `on_shutdown` mit echtem NiceGUI (auch wie schnell der Browser beim Schließen des Tabs oder Sperren des Telefons als getrennt erkannt wird, das hängt vom Ping-Zeitgeber ab) und die Wirkung am Servo.
+
+## 1.86 (2026-10-20)
+
+Rückmeldung des Entwicklers zu 1.85: Auf dem Smartphone passt das Layout jetzt sehr gut. Die Taste **Schließen** wird nicht gebraucht (im Browser gibt es kein Fenster zum Schließen wie in Excel). Stattdessen soll die Taste mit dem Arduino **verbinden** und dieselbe Funktion aufrufen wie der Menüpunkt **ARDUINO → Verbinden**.
+
+- **`connect_arduino`** (`webmobaledlib.py`): `run_command(lambda: ctrl.connect(), "Verbinden")`, einmal vor `MENU` angelegt und vom Menüpunkt **und** von der Seite benutzt (vorher stand der Aufruf nur im Menü). `run_command` ist der Befehlsrahmen mit Sperre gegen gleichzeitige Vorgänge, Protokollfenster und Meldung „Es läuft noch ein Vorgang“; die Taste verhält sich damit genau wie das Menü.
+- **`web_servotest.build(..., connect=...)`** (statt `close`): Die dritte Taste im Zustand Einstellen heißt **Verbinden** (Excel: Schließen) und ruft `connect()` auf. Beim Konfigurieren bleibt es **nicht speichern**. Das Modell hat kein `close` und kein `cancel_button` mehr.
+- **Nach dem Verbinden** startet die Seite den **Direktmodus** neu und wählt den Servo (`model.tab_selected()` inklusive Wackeln), wenn die Verbindung offen ist (`ctrl.is_connection_open()`): `connect()` meldet nur „Verbunden … EFFECT Mode“, und `ARDUINO_begin_direct_mode` sendet im Reiter ohne Verbindung nichts. Bleibt die Verbindung zu (zum Beispiel kein Port), passiert nichts weiter (die Meldung kommt wie beim Menü).
+- Das Verlassen des Reiters und alles andere ist unverändert.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_servotest.py` | 2.02 | Taste Verbinden statt Schließen, `connect` statt `close`, Direktmodus nach dem Verbinden |
+| `webmobaledlib.py` | 1.86 | `connect_arduino` gemeinsam für Menü und Seite; `web_servotest` 2.02 in `REQUIRED_FILES` |
+
+Tests (Ersatzobjekte, 107 Prüfungen): Taste im Zustand Einstellen heißt Verbinden und ruft die übergebene Funktion auf; bleibt die Verbindung zu, wird nichts weiter gesendet; nach erfolgreichem Verbinden Direktmodus, der eingestellte Servo (Anschluss 1 = 230) und Wackeln; kein Reiterwechsel und kein Wert 0 mehr; beim Konfigurieren ist dieselbe Taste „nicht speichern“ (0 gesendet, keine Verbindung); `connect_arduino` steht einmal im Programm, das Menü und die Seite benutzen es (Quelltext). **Nicht geprüft:** das Verbinden mit echtem Arduino und NiceGUI (auch ob die Taste sich beim Verbinden gut anfühlt, während der Befehlsrahmen das Protokollfenster zeigt).
+
+Offen: Soll die Taste, wenn schon verbunden ist, **Trennen** heißen (wie die Menüpunkte Verbinden und Trennen)? Bisher heißt sie immer Verbinden und verbindet neu.
+
+## 1.85 (2026-10-20)
+
+Rückmeldung des Entwicklers zu 1.84: funktioniert. Wunsch: Optimierung für das **Smartphone** nach der Excel-Vorlage:
+1. Beschreibungstext höchstens eine Zeile oder wegklappbar;
+2. der Text „Servo Modul Auswahl“ in dieselbe Zeile wie LED Nummer (davor ist Platz);
+3. die drei Tasten in eine Zeile, beim Konfigurieren ebenfalls.
+
+Umsetzung (nur Anzeige, die Logik ist unverändert):
+- **Beschreibung:** zugeklappt zeigt sie nur die **erste Zeile** (einzeilig, mit Auslassung), aufgeklappt den ganzen Text. Umschalten durch Antippen des Textes oder des Pfeils (`expand_more`, `expand_less`) rechts daneben. Der Zustand bleibt über die Schritte erhalten (aufgeklappt bleibt aufgeklappt), Standard zugeklappt; die Farbe (grau, im Konfigurieren grün) bleibt. Beim Konfigurieren steht zugeklappt zum Beispiel „Konfiguration der Minimalposition“.
+- **Servo Modul Auswahl** steht jetzt als Beschriftung in der Zeile der drei Felder, vor **LED Nummer**. Die Zeile bricht nicht um (`flex-wrap: nowrap`); die Beschriftung darf auf bis zu 7 em schrumpfen und in zwei Zeilen umbrechen, die Felder teilen sich den Rest (mindestens 64 px, höchstens 150 px).
+- **Drei Tasten in einer Zeile** (`mll-servo-actions`): gleich breit (`flex: 1 1 0`), Text darf umbrechen, 13 px, mindestens 52 px hoch, in beiden Zuständen. Fällt „Weiter“ im dritten Schritt weg, bleibt der Platz leer (`visibility: hidden` statt `display: none`), wie im Excel-Dialog, damit die anderen Tasten nicht springen.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_servotest.py` | 2.01 | Layout wie oben |
+| `webmobaledlib.py` | 1.85 | Versionsstand; `web_servotest` 2.01 in `REQUIRED_FILES` |
+
+Tests (Ersatzobjekte, 105 Prüfungen, davon 10 neu): Beschriftung und die drei Felder haben dieselbe Zeile in der Reihenfolge Beschriftung, LED Nummer, Anschluss, LED Kanal; keine Umbruchregel für diese Zeile; die drei Tasten teilen sich eine Zeile (Einstellen und Konfigurieren: Weiter, Einstellungen speichern, nicht speichern); gleiche Breite und Umbruch des Textes in der Formatvorlage; Beschreibung zugeklappt, aufgeklappt, bleibt über die Schritte, Umschalten durch Antippen des Textes und des Pfeils; „Weiter“ unsichtbar mit Platz. **Nicht geprüft: das tatsächliche Aussehen auf dem Telefon** (ob Beschriftung und drei Felder in einer Zeile bei schmalen Bildschirmen genug Platz haben, Textumbruch in den Tasten).
+
+## 1.84 (2026-10-20)
+
+Rückmeldung des Entwicklers: Servo Test 1 funktioniert (steuern und programmieren). Die Excel-Fassung hat seit Kurzem einen abgewandelten Dialog („Servo Test und Einstellung“, zwei Screenshots und der VBA-Code der UserForm), der auch für das Smartphone besser ist. Die Seite ist **nach diesem Dialog neu gebaut** (die Fassung 1.83 nach `ServoTestPage.py` ist damit abgelöst).
+
+Aufbau wie im Dialog: Beschreibung (grau, im Konfigurieren grün), Rahmen **Servo Modul Auswahl** mit **LED Nummer**, **Anschluss**, **LED Kanal** (gemerkt unter `ServoAddress`, `ServoChannel`, `ServoLEDChannel`, wie bisher), Regler mit Pfeilen und Anzeige (Bereich 10 bis 210), Tasten **Servo Konfigurieren**, **Servo zurücksetzen**, **Schließen**; beim Konfigurieren Pfeiltasten **<< < > >>** mit dem Namen des Schritts in der Mitte (Minimalposition, Maximalposition, Geschwindigkeit) und die Tasten **Weiter** (im letzten Schritt ausgeblendet), **Einstellungen speichern**, **nicht speichern**. Eine Spalte, Tasten mindestens 52 px hoch.
+
+Ablauf nach dem VBA-Code (Namen aus dem Code):
+- **Zeitgeber alle 100 ms** (`OnTimer`). Im Zustand Einstellen: **Wackeln** (nach der Wahl eines Servos 20 Schritte im Abstand von 0,5 s, erst nach 0,2 s: 120, 110 im Wechsel), sonst ein **Keep-Alive** `#L 0 0 0 0 0` (Version 1: `#L00 00 00 00 00`). Beim Konfigurieren: der Wert `MinMaxValue` (Ruhe 100; mit gedrückter Pfeiltaste ab 96, 90, 104, 110 mit Schritt −1, −5, +1, +5 je Zeitgeber, begrenzt auf 20 bis 180 mit dem Wechsel um 1 an den Grenzen; ein kurzer Klick bewirkt mindestens einen Schritt, `WaitTimerTriggered`).
+- **Wahl** von LED Nummer, Anschluss, LED Kanal: Servo wählen (225, 230, 235), Wackeln starten, ein laufendes Konfigurieren beenden (`CheckEndSettings`); die Grenzen kommen aus der Startmeldung des Arduinos (`ctrl.max_ledcnt_list`: LEDs je Kanal), sonst aus `MacroParamDef`. Beim Betreten: Direktmodus, LED Nummer 0 wird 1 (Heartbeat-LED überspringen).
+- **Konfigurieren:** Servo Konfigurieren sendet 225/230/235, 240, 250; Weiter 205; Weiter 205, 245, 250; **Einstellungen speichern geht in jedem Schritt** (Schritt 1: 205, 100, 205, …, Schritt 2 und 3: 205, …; danach immer 250, 254, 0 und die Position des Reglers); **nicht speichern**: 0 und die Position; **Servo zurücksetzen** nach einer Rückfrage („Sollen der Servo auf die Grundeinstellungen (Limits, Geschwindigkeit) zurückgesetzt werden?“): 225.., 240, 55, 110, 245, 58, dann wie Speichern. **Pausen von 200 ms** nach jedem Befehl, asynchron (`await`), während eines Ablaufs ruhen Zeitgeber und Tasten (`busy`).
+- **Schließen:** Wert 0; dann Wechsel zum Programm Generator (der Reiter bleibt); Verlassen des Reiters beendet den Direktmodus (`#X`, wie `Abort_Button_Click`).
+
+Unterschiede und Auffälligkeiten (bitte beachten):
+- **Fehler im VBA-Code (übernommen):** `ResetPostition` ruft `SendValue GetCurrentAddress, ScrollBarPosition.value, 0` auf, die Position steht dort als Anschluss. `SendValue` sendet dann nichts (`Select Case module`). Das gemeinte „Wert 0 an den vorher gewählten Servo“ passiert also nie. `reset_position` tut deshalb nichts; Entscheidung des Entwicklers, ob das so bleibt oder im Excel-Code berichtigt wird.
+- **Befehlsformat:** Der VBA-Code sendet `#L<Hex(Adresse)> …` ohne Auffüllen; wir bleiben bei dem bisherigen Format (Version 2: `#L ` und 4 Hex-Ziffern, Version 1: 2 Ziffern, Werte mit 2 Ziffern), das mit dem Arduino des Entwicklers läuft.
+- **Dec/Inc** haben jetzt die Werte des neuen Dialogs (90/96/104/110 mit Schritt) statt 60/90/110/140 mit Loslassen 100 der Tk-Seite.
+- **Keep-Alive** nur, wenn die Sendewarteschlange leer ist (`web_serial.tx_idle`): Eine Servo-Nachricht dauert bei 20 LEDs 4 ms je Zeichen.
+- Tippfehler „Positition“ im Text berichtigt.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_servotest.py` | 2.00 | **neu gebaut** nach dem Excel-Dialog: `ServoModel` (Logik, asynchrone Abläufe), `build`, `ServoPage` |
+| `_web/web_serial.py` | 1.02 | `tx_idle` |
+| `webmobaledlib.py` | 1.84 | `close` der Seite wechselt zum Programm Generator; `REQUIRED_FILES`: `web_servotest` 2.00, `web_serial` 1.02 |
+
+Tests (Ersatzobjekte für Servoplatine, Zeit, Pausen und NiceGUI, 95 Prüfungen): alle Befehlsfolgen des VBA-Codes (Servo Konfigurieren, Weiter, Speichern in jedem Schritt, Zurücksetzen, nicht speichern, Schließen) mit den Pausen; Zeitgeber (Wackeln mit 20 Schritten, Keep-Alive, Ruhewert 100, alle vier Pfeiltasten, Grenzen 20 und 180, kurzer Klick, zwei Tasten); Wahl von LED Nummer, Anschluss und LED Kanal mit Versatz und Grenzen; Betreten und Verlassen; busy; die Verdrahtung der Oberfläche (Felder in der Reihenfolge des Dialogs, Regler mit `throttle`, Pfeiltasten mit vier Ereignissen, Rückfrage, Schließen, Zeitgeber an und aus, kein Servo-Befehl durch das Setzen der Felder vom Programm aus). **Nicht geprüft:** die Wirkung am Servo (vor allem Wackeln, Keep-Alive und Konfigurieren mit der Pause von 0,2 ms je LED und Zeichen), echtes NiceGUI (Zeitgeber, Regler, Zeigerereignisse) und das Telefon.
+
+## 1.83 (2026-10-20)
+
+Wunsch des Entwicklers: Reiter **Servo Test 1** (pyMobaLedLib: `mlpyproggen/ServoTestPage.py`, Klasse `ServoTestPage1`). Die Seite schickt Servo-Kommandos als LED-Befehl über dieselbe serielle Schnittstelle wie der Farb Test. Entscheidungen: Reiter hinter Farb Test mit der Adresse `/ServoTest1`; beim Ziehen des Reglers höchstens zehn Positionen je Sekunde (der Sendepuffer in `web_serial` fängt auf, wenn der Arduino nicht mitkommt); Programmieren wie im Original; ohne die ausgeblendeten Testtasten (`show_buttons=False`) und die ungenutzte Variante `_save_min_max_pos2`. Servo Test 2 (Direct Mode Servos) folgt später mit dem meisten Code.
+
+Die Seite im Überblick (Namen und Abfolge wie im Original):
+- **Nachricht** (`_update_servos`): Version 2 `#L <Adresse mit 4 Hex-Ziffern> <s0> <s1> <s2> 01`, Version 1 `#L<Adresse mit 2 Ziffern> …`; Adresse = Servo Modul Adresse plus `get_lednum_offset_for_channel(LED Kanal)`; die Werte als 2 Hex-Ziffern.
+- **Parameter** `ServoAddress` (0 bis 32767, Vorgabe 1), `ServoLEDChannel` (0 bis 99, 0), `ServoChannel` (0 bis 2, 0) mit Texten, Grenzen und Hinweisen aus `MacroParamDef`; gemerkt über `setConfigData` und `SaveConfigData`, beim Start aus `getConfigData`; ungültige Werte werden begrenzt oder durch die Vorgabe ersetzt.
+- **Regler** 10 bis 210 (`Servo_Scale_Min`, `Servo_Scale_Max`), Positionen 1 bis 9 werden 10 (`Servo_Min`); die Position geht an den gewählten Anschluss (0: `s0`, 1: `s1`, sonst `s2`). **Servo STOP**: Drücken und Loslassen senden Code 0.
+- **Dec <<, Dec <, Inc >, Inc >>**: Drücken sendet 60, 90, 110, 140, Loslassen 100 (`s0` = Code).
+- **Programmieren** (`_save_min_max_pos`): Start 225/230/235 (Servo wählen), 240, 250; Min speichern 205; Max speichern 205, 245, 250; Ende 254, 0. Abbrechen sendet 0. Texte und gelber Hinweis wie im Original.
+
+Umsetzung und Unterschiede zum Tk-Original:
+- `web_serial` 1.01: `send_to_ARDUINO_servo` (wie im Original Zeichen für Zeichen mit der Pause `maxLEDcnt * 0,2 ms`, zehnmal länger als bei Farben, auch bei ESP32 und Pico ohne Block senden). Die Sendeschleife kennt dafür eine Pause je Nachricht (vierter Wert im Eintrag der Warteschlange). **Die Pause von einer Sekunde nach jeder Nachricht entfällt:** Das Original blockiert damit die Oberfläche, hier sorgt die Warteschlange für die Reihenfolge.
+- Regler: `slider.on("update:model-value", …, throttle=0.1)` (der Browser meldet höchstens zehn Werte je Sekunde, der letzte kommt an).
+- Dec, Inc und Servo STOP mit `pointerdown` und `pointerup`; Dec und Inc senden das Loslassen auch bei `pointercancel` und `pointerleave` (der Finger rutscht ab), jeweils **genau einmal**. Die Tasten haben `touch-action: none` und mindestens 52 px Höhe.
+- **Beim Verlassen des Reiters:** gedrückte Tasten loslassen, ein laufendes Programmieren abbrechen (Code 0), Direktmodus beenden. Das Original lässt den Arduino im Programmiermodus.
+- Hinweistext Geschwindigkeit: „mit mit den“ im Original zu „mit den“ berichtigt.
+- Einbau in `webmobaledlib.py` wie beim Farb Test: Reiter, Behälter, Aufbau beim ersten Öffnen, Sichtbarkeit, `tab_selected` und `tab_unselected` im Handler `on_tab` (Verlassen von servo1 steht vor dem Betreten von farb, damit der Direktmodus zuerst beendet wird).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_servotest.py` | 1.00 | **neu:** `ServoModel` (Logik), `build` (Oberfläche), `ServoPage` |
+| `_web/web_serial.py` | 1.01 | `send_to_ARDUINO_servo`, Pause je Nachricht in `_tx_loop`; Header neu |
+| `_web/web_tabs.py` | 1.01 | Adresse `/ServoTest1` (Reiter `servo1`) |
+| `webmobaledlib.py` | 1.83 | Reiter, Behälter und Wechsel; `REQUIRED_FILES` mit 21 Einträgen (`web_servotest` 1.00, `web_serial` 1.01, `web_tabs` 1.01) |
+
+Tests (Ersatzobjekte für Servoplatine, Port und NiceGUI, 61 Prüfungen): Nachrichten für Version 1 und 2, alle drei Anschlüsse, Versatz des LED-Kanals, Begrenzung der Position, Servo STOP, Dec und Inc (Codes 60, 90, 110, 140, Loslassen genau einmal), die Folge der vier Schritte des Programmierens für alle drei Anschlüsse (Codes, Taste, Hinweis, Farbe), Abbrechen, Betreten und Verlassen (auch bei Fehlern im Direktmodus), Merken und Einlesen der Parameter; die Verdrahtung der Oberfläche (Regler mit `throttle`, Ereignisse der Tasten, Felder, Anzeige beim Programmieren); `send_to_ARDUINO_servo` mit Ersatzport (Reihenfolge der Zeichen, 4 ms Pause bei 20 LEDs, 100 ms bei 500 LEDs, ESP32, ohne Verbindung, Mindestpause 1 ms); der Einbau in `webmobaledlib.py` und die Versionsprüfung. Dazu Adressen 34, Vollbild 19, Netzzugriff 33 und 13, Start 15, Patterngenerator 90 von 90 und Tabelle 28 von 28. **Nicht geprüft:** das Verhalten mit **echtem NiceGUI** (Regler mit `throttle`, Argument des Ereignisses `update:model-value`, Zeigerereignisse auf Tasten), **im Browser und auf dem Telefon** (Größe der Tasten, Berühren und Halten), und **die Wirkung am Servo** mit der echten Platine (vor allem das Programmieren und die Pause je Zeichen von 0,2 ms je LED).
+
+Offen: Die Anleitung und die Checkliste kennen den Reiter noch nicht (beim Release-Stand).
+
+## 1.82 (2026-10-20)
+
+Wunsch des Entwicklers: Einen Reiter direkt per Adresse auswählen und gleich im Vollbild öffnen, zum Beispiel `localhost:8080/Farbtest`. Vorschläge bestätigt: die Namen, der Zusatz `?vollbild=1`, der erste Tipp schaltet den Browser auf Vollbild, bei unbekanntem Namen die Liste der gültigen Adressen.
+
+- **Adressen** (`_web/web_tabs.py`, `TAB_URLS`): `/ProgGenerator`, `/Patterngenerator`, `/ProgGeneratorEinstellungen`, `/Farbtest`, `/SerialMonitor`, `/ARDUINOEinstellungen`, `/ProgrammEinstellungen`. Die Startseite `/` bleibt der Programm Generator. In `webmobaledlib.py` wurde `index()` zu `build_page(start_tab="pg", fullscreen=False)` (der alte Inhalt unverändert); `index()` (Seite `/`) und die sieben Reiterseiten (`_tab_page`, Zusatz `vollbild` als Text mit der Voreinstellung leer, `web_tabs.is_fullscreen` wertet `1, true, ja, yes, an, ein, on` aus) rufen sie auf. Eine Seite je Adresse statt eines Auffangpfads `/{name}`: Ein Auffangpfad würde `/mll-version` und andere später angelegte Pfade überdecken.
+- **Reiter öffnen:** Nach `tabs.on_value_change(on_tab)` setzt `tabs.set_value(start_tab)` den Reiter. Der vorhandene Handler `on_tab` baut die Seite auf (Farb Test, Patterngenerator, Einstellungen) und zeigt den Container, genau wie bei einem Klick.
+- **Vollbild:** Mit `?vollbild=1` hängt `build_page` ein Skript in den Kopf der Seite: Beim Laden (`DOMContentLoaded`) `mllSetFull(true)` (Titel, Menü und Reiterleiste sind sofort weg) und `mllArmTapFullscreen()`; nach dem Aufbau gleicht ein Zeitgeber (0,6 s) Beschriftung und Symbol des Knopfes an. Das **Vollbild des Browsers darf nur nach einer Benutzeraktion** starten: `mllArmTapFullscreen` wartet im Erfassungsmodus auf `click`, `touchend` oder `keydown`, ruft dann einmal `mllRequestFullscreen` und entfernt sich. Ein Tipp auf den Knopf Vollbild zählt nicht (der schaltet ohnehin um). Der Browser bleibt außen vor, wenn die Seite nicht im Vollbild ist oder er schon im Vollbild ist. (`web_fullscreen` 1.02: `mllRequestFullscreen` und `mllExitFullscreen` als eigene Funktionen.)
+- **Andere Schreibweise und unbekannter Name:** Eine eigene 404-Behandlung (`@nicegui_app.exception_handler(404)`, ersetzt die von NiceGUI): `/farbtest` wird auf `/Farbtest` umgeleitet (Zusatz bleibt erhalten); für Browser (`Accept: text/html`, kein Dateiname) kommt die Liste der gültigen Adressen mit Status 404, für alles andere (Dateien, JSON) die Standardantwort. Der Passwortschutz (`web_auth`) prüft alle Pfade, die neuen Adressen sind also geschützt wie alle anderen.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_tabs.py` | 1.00 | **neu:** `TAB_URLS`, `TAB_TITLES`, `canonical_name`, `is_fullscreen`, `not_found_page` |
+| `_web/web_fullscreen.py` | 1.02 | `mllArmTapFullscreen`, `mllRequestFullscreen`, `mllExitFullscreen` |
+| `webmobaledlib.py` | 1.82 | `build_page`, Seiten für die Adressen, 404-Behandlung, Vollbild und Reiter beim Öffnen; `REQUIRED_FILES` mit `web_tabs` 1.00 und `web_fullscreen` 1.02 (19 Einträge) |
+
+Tests (ohne Browser und ohne NiceGUI, Ersatzobjekte): Namen und Schreibweisen, Zusatz, Seite mit der Liste (auch gegen eingeschleuste Zeichen), Aufbau von `build_page` und der Seiten (Reiter und Vollbild werden richtig übergeben), 404-Behandlung (Umleitung mit Zusatz, Liste, Dateien, JSON), JavaScript in Node (erster Tipp, Knopf, Seite nicht im Vollbild, Browser schon im Vollbild, ohne Fullscreen API, Umschalten wie bisher) (34 Prüfungen); Vollbild-Knopf 19, Netzzugriff 33 und 13, Start 15. **Nicht geprüft:** der Betrieb mit echtem NiceGUI (Ersatz der 404-Behandlung, mehrere Seiten mit demselben Aufbau, Wechsel des Reiters beim Öffnen), das Verhalten im Browser und auf dem Telefon.
+
+Für den Entwickler zum Ausprobieren auf dem Telefon: `http://<Adresse des PCs>:8080/Farbtest?vollbild=1`. Als Verknüpfung auf dem Startbildschirm kann das Fenster je nach Browser ohne Browserleiste öffnen; im Heimnetz mit `http://` oft nicht (muss am Telefon probiert werden).
+
+## 1.81 (2026-10-20)
+
+Rückmeldung des Entwicklers zum Vollbild (1.80): funktioniert sehr gut; die Position des Knopfes ist nicht optimal. Gewünscht: **ein Knopf neben dem Knopf Beenden**, und **Beenden soll auch im Vollbild erhalten bleiben**.
+
+- Der Knopf steht jetzt **einmal in der Kopfzeile** (`with header_row:` in `webmobaledlib.py`, nach der Statusmeldung und der Verbindung, direkt vor **Beenden**) statt je einer in jedem Reiter. Die Kopfzeile gilt für alle Reiter, der Knopf ist also überall erreichbar, und er bleibt im Vollbild sichtbar, weil die Kopfzeile bleibt. Die fünf Einbauorte aus 1.80 (Werkzeugleiste Programm Generator und Patterngenerator, Serial Monitor, Farb Test, Einstellungsseiten) sind als Kommentar stehen geblieben und mit der Version markiert.
+- `.mll-quit` steht nicht mehr in der Liste der ausgeblendeten Teile: **Beenden bleibt im Vollbild**. Ausgeblendet werden weiter Titel, Version, Menü, Zwischenspeicher-Anzeige und Reiterleiste. Im kompakten Layout (`.mll-compact`) hat der Knopf wie Beenden die kleine Größe und kein Symbol.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_fullscreen.py` | 1.01 | `.mll-quit` nicht mehr ausgeblendet, Regeln für das kompakte Layout, Text der Beschreibung |
+| `_web/web_pattgen.py` | 1.17 | Knopf und Import auskommentiert |
+| `webmobaledlib.py` | 1.81 | Knopf in der Kopfzeile, die vier anderen Einbauorte auskommentiert, `REQUIRED_FILES` mit `web_pattgen` 1.17 und `web_fullscreen` 1.01 |
+
+Tests (ohne Browser): JavaScript und Knopf wie in 1.80, dazu: Beenden steht nicht in der Liste der ausgeblendeten Teile, der Knopf steht genau einmal im Programm und in der Kopfzeile nach Status und Verbindung, die Regel für das kompakte Layout ist da (19 Prüfungen); Patterngenerator 90 von 90, Tabelle 28 von 28. **Nicht geprüft: Aussehen im Browser** (Reihenfolge Vollbild und Beenden in der Kopfzeile, kompaktes Layout, schmale Bildschirme).
+
+## 1.80 (2026-10-20)
+
+Wunsch des Entwicklers: In jedem Reiter ein Knopf, der den Reiter auf **Vollbild** schaltet: Alles oberhalb des Reiters verschwindet bis auf die Statusmeldungen; wenn möglich geht auch der Browser in den Vollbildmodus; derselbe Knopf macht es rückgängig. Hintergrund: einzelne Reiter sollen auch auf dem Smartphone bedienbar sein.
+
+Umsetzung (nur Browser, kein Umweg über den Server):
+- Neues Modul `_web/web_fullscreen.py`: `button()` erzeugt den Knopf „Vollbild“ (Symbol `fullscreen`, Klasse `mll-fs-btn`), der Klick ruft per `js_handler` direkt `window.mllToggleFull()` auf. Das ist nötig, weil `requestFullscreen` aus einem Klick des Anwenders kommen muss; ein Umweg über den Server (`run_javascript`) wäre keine Benutzeraktion mehr.
+- `mllSetFull(on)` setzt die Klasse `mll-full` auf `body`, schaltet an allen Knöpfen Symbol (`fullscreen_exit`) und Text („Vollbild beenden“) um und löst ein `resize` aus, damit sich Tabellen anpassen (das Layout ist Flex: Die Kopfzeile schrumpft, der Reiter nimmt den Rest). `mllToggleFull` ruft danach `requestFullscreen` (oder die webkit-Fassung) beziehungsweise `exitFullscreen` auf; Ablehnung oder fehlende Unterstützung (iPhone) werden abgefangen, das Ausblenden gilt dann trotzdem. ESC im Vollbild des Browsers (`fullscreenchange`) schaltet die Seite ebenfalls zurück.
+- CSS unter `body.mll-full`: ausgeblendet werden `.mll-titlebox`, `.mll-ver`, `.mll-menu`, `.mll-quit`, `.mll-autosave` und `.main-tabs` (Titel, Version, Menü, Beenden, Zwischenspeicher-Anzeige und Reiterleiste). Die Kopfzeile `mll-header` bleibt mit `mll-status` (Meldung des Programms) und `mll-conn` (Verbindung zum Arduino), also den Statusmeldungen. Die Meldung über fehlende Dateien (rote Zeile) und die Blattreiter des Programmgenerators bleiben ebenfalls sichtbar.
+- Der Zustand gilt für die ganze Seite. Die Reiterleiste ist im Vollbild weg: Wechseln geht über „Vollbild beenden“. Ein Knopf je Reiter: Programm Generator (Werkzeugleiste vor den Funktionsknöpfen), Patterngenerator (`mll-pattbar` vor „Neues Blatt“), Serial Monitor, Farb Test und die drei Einstellungsseiten (jeweils als erstes Element des Reiters).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_fullscreen.py` | 1.00 | **neu:** `CSS`, `JS`, `head_html`, `button` |
+| `_web/web_pattgen.py` | 1.16 | Knopf in der Werkzeugleiste des Patterngenerators |
+| `webmobaledlib.py` | 1.80 | `head_html` einbinden, Knopf in den anderen Reitern; `REQUIRED_FILES` mit `web_fullscreen` 1.00 und `web_pattgen` 1.16 (18 Einträge) |
+
+Tests (ohne Browser, JavaScript in Node mit Ersatz für das DOM): Knopf (Text, Symbol, `js_handler`), die Klassen der CSS-Regeln gibt es in der Seite und die Statusklassen sind nicht ausgeblendet, Einschalten (Klasse, beide Knöpfe, Browser-Vollbild, `resize`), Ausschalten, ESC im Browser-Vollbild, Browser ohne Fullscreen API, `requestFullscreen` wirft oder wird abgelehnt, `fullscreenchange` ohne Vollbild (16 Prüfungen); Patterngenerator 90 von 90, Gestaltung 26, Bilder 35, Dialoge, Goto. **Nicht geprüft: das Aussehen und das Verhalten im Browser** (Höhe der Reiter im Vollbild, kompaktes Layout, ob die Kopfzeile mit den Statusmeldungen gut aussieht, iPhone).
+
+Nicht Teil dieses Wunsches, aber für das Smartphone wichtig: Die Werkzeugleisten, Tabellen und Dialoge sind für breite Fenster gebaut. Ein Reiter im Vollbild ist auf einem kleinen Bildschirm noch nicht unbedingt bequem zu bedienen (Knopfgrößen, Berührung statt Maus, Doppelklick, Bildlauf der Tabellen).
+
+## 1.79 (2026-10-20)
+
+Rückmeldung eines Testers (Raspberry Pi 400, aarch64, `webmobaledlib.py` 1.69, Dienst mit Xvfb `DISPLAY=:99`): „Das Update der Bibliotheken scheint fehlzuschlagen, es kommt keine Fehlermeldung.“ Das Protokoll zeigt beim Start: `Überprüfe Bibliotheken und Boards`, dann `tkinter.messagebox.askyesno ohne Display: ARDUINO Bibilothem update - Folgende ARDUINO Bibliotheken müssen aktualisiert werden: Libraries: ATtinySerialOut, DIO2, EWMA, MobaTools, LocoNet, TimerOne, U8g2, Boards: ATTinyCore, arduino:avr, esp32:esp32, Othersource 14, 27, 29`, danach `showerror … Fehler 1 beim Ausführen des Update Programms ''`.
+
+Ursache: `DieseArbeitsmappe.Workbook_Open` (Original, `proggen/`) ruft beim Start `M37.Install_Missing_Libraries_and_Board`. Auf einem frisch eingerichteten Rechner fehlen alle Bibliotheken, `Create_Do_Update_Script_Linux_part2` stellt die Frage „Soll das Update ausgeführt werden?“ per `MsgBox`. Beim Start ist **noch kein Browser verbunden**, `web_msgbox` fällt auf den Ersatz `no_tk` zurück, und dessen `askyesno` antwortet automatisch mit `False`. Die Funktion gibt `M40.Failure` (1) zurück, der Aufrufer meldet „Fehler 1 beim Ausführen des Update Programms ''“ (der Name ist in der Linux-Fassung leer) als weitere Meldung, die ebenfalls nur im Protokoll landet. Es lief also nie ein Update; niemand wurde gefragt. Das betrifft jedes frisch eingerichtete System (Windows, Linux, Pi), nicht nur den Pi; der Entwickler und die ersten Tester hatten die Bibliotheken schon. Dieselbe Falle gilt für andere Meldungen des Starts, zum Beispiel „Die ARDUINO IDE wurde nicht gefunden“.
+
+Umsetzung:
+- **Zurückgestellt:** `headless_startup.install` ersetzt `M37.Install_Missing_Libraries_and_Board` durch eine Hülle. Während des Starts (`headless_startup.begin` bis `end` in `webmobaledlib.py` um das Anlegen der Seite) merkt sie das Original nur vor; danach ruft sie es unverändert auf (die Knöpfe der Seite Bibliotheken laufen also wie bisher). Beim **ersten Verbinden eines Browsers** führt `run_startup_tasks` (1,5 s nach dem Aufbau der Seite, noch nach der Wiederherstellung) das Vorgemerkte im Worker aus (`run_in_worker`, Brücke zum Browser gesetzt): Die Frage erscheint jetzt im Browser, bei „Ja“ läuft das Update mit der Statusanzeige.
+- **Meldungen vom Start:** `no_tk` (1.01) gibt sie zusätzlich an `headless_startup.record_message` (höchstens 20, nur während des Starts, nur wenn die Web-Schicht da ist); `run_startup_tasks` zeigt sie beim ersten Verbinden in **einem** Dialog „Meldungen beim Start des Programms“ (Fragen mit dem Hinweis, dass sie mit Nein beantwortet wurden).
+- **Nein ist kein Fehler:** `M37_Inst_Libraries` (1.01, Original-Port, Header neu): `UPDATE_DECLINED = -2` statt `M40.Failure`, der Aufrufer beendet dann ohne die Meldung „Fehler #1# beim Ausführen des Update Programms ''“. Echte Fehler melden weiter.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `headless/headless_startup.py` | 1.00 | **neu:** `begin`, `end`, `install`, `record_message`, `take_pending`, `take_messages`, `message_text` |
+| `no_tk.py` | 1.01 | Meldungen vom Start vormerken |
+| `proggen/M37_Inst_Libraries.py` | 1.01 | `UPDATE_DECLINED`, Nein ohne Fehlermeldung |
+| `webmobaledlib.py` | 1.79 | Start zurückstellen, `run_startup_tasks`; `REQUIRED_FILES` mit den drei Dateien (17 Einträge) |
+
+Tests (ohne Browser und ohne NiceGUI): Zurückstellen im Start, Aufruf danach unverändert, Original später lauffähig, Höchstzahl der Meldungen, Dialogtext; `no_tk` mit und ohne Web-Schicht (15 Prüfungen); der echte Ablauf `Update_All_Selected_Libraries_Linux` im Programmgenerator mit Ersatzfunktionen für ARDUINO und Dateien: Nein → keine Fehlermeldung, echter Fehler → Meldung wie bisher, Erfolg → keine Meldung (5 Prüfungen); Versionsprüfung des Programms (17 Einträge); Netzzugriff 33 und 13; Tabelle 28 von 28. **Nicht geprüft:** `run_startup_tasks` im Browser (NiceGUI) und das eigentliche Installieren der Bibliotheken und Boards auf dem Raspberry Pi (`execute_shell_cmd` mit der ARDUINO IDE unter Xvfb; der ESP32-Kern ist groß, die Installation kann auf dem Pi 400 lange dauern; während sie läuft, sind weitere Befehle gesperrt).
+
+## 1.78 (2026-10-19)
+
+**Release 1.78 (2026-10-20):** `webmobaledlib.zip` (83 Dateien, `python/`; neu gegenüber 1.69: `_web/web_network.py`, `pattgen/M08_Load_Sheet_Data.py`), `ANLEITUNG_Installation.pdf` (2.54), `BETATEST_Checkliste.pdf` (1.23), `VERSIONEN_Stand_1.78_2026-10-20.txt`, `RELEASE_Hinweise_1.78.md`. Das Paket 1.69 liegt als `webmobaledlib_Stand_1.69_2026-10-19.zip` bei. Für den Release angepasst: Anleitung Kapitel 8 (Schalter statt Bearbeiten von `start_windows.bat`, die Beschreibung „von Hand“ bleibt als Alternative; neue Zeile in der Fehlersuche zur roten Meldung), Checkliste (Punkt 41 und neue Punkte 48 bis 52), Release-Hinweise (überholt waren „Balken nach Aktualisieren“ und „Bilder nach Neustart“). Geprüft (Dateien aus dem entpackten ZIP): 55 Python-Dateien kompilieren, Versionsliste stimmt für 74 Dateien mit den Kopfzeilen überein, PDFs im ZIP gleich den einzelnen PDFs, Skripte ausführbar, die Versionsprüfung des Programms meldet für den ZIP-Inhalt nichts (14 Einträge); Programmgenerator: 655 von 655 LED-Nummern, Header-Erzeugung mit veralteten Tabellen, versteckte Zeilen nach dem Neustart; Patterngenerator: 90 von 90, Tabelle 28, Gestaltung 26, Bilder 35 und 23, Dialoge 24 und 20, Goto 30, Firewall 33, Zeilenhöhen und Neustart (7 und 2, Zeile 47 und 13 mit neuer und alter Sicherung), Beispiele 14 von 15 (bekannte Einschränkungen); Zugriff aus dem Netz 33 und 13. **Nicht im Browser geprüft**, außer was der Entwickler selbst berichtet hat (Schalter und Firewall-Regel unter Windows 11, Doppelklick auf Goto Aktivierung, Spezial Mode, Zeile 13).
+
+Entscheidung des Entwicklers: Das Einschalten von „Zugriff aus dem Netz erlauben“ legt unter Windows **gleich die Firewall-Regel an**.
+
+Ablauf (`web_access.ensure_firewall_for_lan`, aus `on_lan` nach dem Speichern der Einstellung, nur wenn `web_firewall.supported()` und der Firewall-Bereich gebaut ist):
+1. `wf.rule_status(port)` lesen. Lässt die Firewall den Port schon zu (mindestens eine Zulassungsregel, keine Blockierregel), kommt nur der Hinweis „Die Windows-Firewall lässt den Port 8080 schon zu.“, es gibt **keine** Rückfrage nach Administratorrechten.
+2. Sonst (keine Regel, Blockierregel oder Zustand nicht lesbar) ruft es `add_firewall` auf: dieselbe Funktion wie der Knopf (Meldung zur Benutzerkontensteuerung, Warten bis zu 45 s auf die Regel, Anzeige aktualisieren, Ergebnismeldung).
+3. Gilt das Netzwerk als „Öffentlich“, kommt eine Warnung mit den Schritten zum Netzwerkprofil „Privat“ (die Regel gilt nur für Privatnetzwerke).
+Ausschalten entfernt die Regel **nicht** (eine weitere Rückfrage nach Administratorrechten wäre lästig, die Regel schadet bei einem nur lokal lauschenden Server nicht); **Freigabe entfernen** im Firewall-Bereich bleibt. Auf macOS und Linux gibt es keine Firewall-Schritte.
+
+Außerdem: Die Warnung im Firewall-Bereich „Der Server lauscht nur auf diesem Rechner“ nennt jetzt je nach Zustand den Schalter (aus), den fehlenden Neustart (ein, Server läuft noch lokal) oder die fest vorgegebene Adresse (`--host` oder `MLL_HOST`) statt `MLL_HOST=0.0.0.0`; im Firewall-Bereich steht ein Satz, dass die Regel beim Einschalten automatisch angelegt wird.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_access.py` | 1.09 | `ensure_firewall_for_lan`, Warntexte, Hinweis im Firewall-Bereich |
+| `webmobaledlib.py` | 1.78 | Versionsstand; `web_access` 1.09 in `REQUIRED_FILES` |
+
+**Eigener Fehler beim Bau, sofort behoben:** Beim Anheben der Mindestversion hatte ich einen Kommentar mitten in die Zeile von `REQUIRED_FILES` gesetzt; dadurch wären die Einträge dahinter (`web_firewall`, `M08` und weitere) aus der Prüfung gefallen, ohne dass der Code einen Fehler meldete. Jetzt hat die Liste 14 Einträge, der Test prüft die Zahl.
+
+Tests (Ersatzobjekte, ohne Browser und ohne NiceGUI): keine Regel, Regel vorhanden, Blockierregel, Zustand unbekannt, Netzwerk „Öffentlich“, kein Windows, ohne Firewall-Bereich, Ausschalten, die vier Warntexte (13 Prüfungen), dazu die 33 des Schalters; `web_firewall` (33). Nicht geprüft: die echte Windows-Abfrage der Benutzerkontensteuerung im Zusammenspiel mit dem Schalter (der Knopf ist seit 1.67 vom Entwickler und Tester benutzt worden).
+
+## 1.77 (2026-10-19)
+
+Rückmeldung eines Testers über den Entwickler: Der Zugriff aus dem Netz ließ sich unter Windows nicht einrichten (Frage, wo `set MLL_HOST=0.0.0.0` in `start_windows.bat` hinkommt, Frage nach Benutzername und Passwort, Verwirrung bei der Firewall). Entscheidung des Entwicklers: **Der Anwender soll nicht von Hand in `start_windows.bat` (oder einer anderen Startdatei) editieren müssen, das muss eine Option in den Einstellungen sein.**
+
+Umsetzung: Schalter „Zugriff aus dem Netz erlauben“ auf der Seite Programm Einstellungen (Windows, macOS, Linux-Desktop; nicht beim Dienst auf dem Raspberry Pi, dort steht die Adresse in `/etc/mobaledlib-web.env`):
+- Die Einstellung steht in `network.json` im Datenordner (`{"lan_access": true}`, erst in eine Zwischendatei geschrieben, dann ersetzt). Beim Start bestimmt `web_network.resolve_host` die Adresse des Servers in der Rangfolge: Startparameter `--host`, Umgebungsvariable `MLL_HOST`, Einstellung (`0.0.0.0`), Voreinstellung `127.0.0.1`. Bisherige Startdateien mit `MLL_HOST` gehen also weiter vor; ist die Adresse so vorgegeben, ist der Schalter gesperrt und die Seite sagt es.
+- `--host` hat keine Voreinstellung mehr (`None`), der Neustart (`spawn_restart`) übergibt `--host` nur, wenn es beim Start angegeben war; ein neuer Prozess liest die Einstellung neu. `port_in_use` und `running_instance_info` prüfen bei `0.0.0.0` auf `127.0.0.1`, eine laufende Instanz mit alter Adresse wird also erkannt.
+- Der Schalter gilt nach einem Neustart: Text „Eingeschaltet. Das gilt nach einem Neustart des Programms.“ und ein Knopf **Jetzt neu starten** (`restart_program` aus `webmobaledlib.py`, über `web_access.HOOKS["restart"]`: sichert, startet einen neuen Prozess und lädt den Browserreiter neu). Die Seite zeigt die Adresse für andere Rechner (und den Benutzernamen, wenn ein Passwort gesetzt ist).
+- Beim Einschalten **ohne Passwort** fragt ein Dialog nach einem Passwort (mindestens 4 Zeichen; leer lassen: ohne Passwort; Abbrechen: der Schalter springt zurück). Der Text nennt die Gefahr (jeder im Heimnetz kann Programme auf den Arduino laden). Unter Windows erinnert eine Meldung an den Knopf **Zugriff aus dem Netz freigeben** im Bereich Firewall.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_network.py` | 1.00 | **neu:** `lan_access`, `set_lan_access`, `resolve_host`, `describe`, `is_open` |
+| `_web/web_access.py` | 1.08 | `build_lan`, `refresh_lan`, `on_lan`, `ask_password_for_lan`, `restart_now`, `HOOKS` |
+| `webmobaledlib.py` | 1.77 | `--host` ohne Vorgabe, `resolve_host`, Protokollzeile „Adresse des Servers“, Hook für den Neustart; Versionsprüfung verlangt `web_access` 1.08 und `web_network` 1.00 |
+
+Tests (ohne Browser und ohne NiceGUI, das im Test nicht installiert ist; Ersatzobjekte): Rangfolge der Adresse, kaputte oder fehlende Datei, Schreiben ohne Zwischendatei, Texte für alle Zustände, Schalter mit Passwort, abgebrochen, ohne Passwort, mit neuem Passwort, Ausschalten, Schutz gegen die Rückwirkung von `set_value`, Neustart mit und ohne Funktion, Versionsprüfung (32 Prüfungen). `main()` und die Oberfläche selbst sind **nicht** ausgeführt (nur kompiliert und die Stellen gelesen: `restart_program` liegt in derselben Funktion wie die Stelle des Hooks).
+
+Offen für den nächsten Release-Stand: Anleitung Kapitel 8 und die Checkliste beschreiben noch das Eintragen von `MLL_HOST` in `start_windows.bat`; sie müssen auf den Schalter umgestellt werden (das Eintragen bleibt als Alternative). Möglicher nächster Schritt: Das Einschalten legt gleich die Firewall-Regel an (Windows).
+
+## 1.76 (2026-10-19)
+
+Fehler vom Anwender (Stand 1.75, Screenshot `KS_Hauptsignal_Zs3_Zs 6_Zs1_RGB`): „Bei Doppelklick auf Goto Mode Zeile 12 Spalte E wird das Formular nicht mehr geöffnet“, danach: „Zeile 13 ist nicht sichtbar.“ Der Screenshot zeigt die Zeilen 12 (Goto Mode) und 14, Zeile 13 (Goto Aktivierung) fehlt (106 statt 107 sichtbar). Der Dialog gehört zu E13 (benannter Bereich `Goto_Aktivierung`); E12 hat im Original keinen (`Proc_DoubleClick`). Ist die Zeile versteckt, gibt es nichts zum Doppelklicken.
+
+Ursache: Die Vorlage versteckt Zeile 13 (`HideRows` der Vorlage, Datenindex 12). Das Original zeigt sie mit `M02_Main.Hide_Show_Check_Goto_Activation` (`Hide = not Goto_Mode_is_Active()`), aufgerufen in `Set_Defaults_for_Sheet` (Laden einer Datei, `M08` Zeile 534) und in `Global_Worksheet_Change`. `restore_dynamic_rows` (1.74) kannte die Funktion nicht: Es rief nur `Hide_Show_GotoLines_If_Enabled` (Zeile 47, Zeilen 46 und 48) und `Hide_Show_Special_ModeLines_If_Enabled` (Zeilen 16 bis 18) auf. Nach dem Neustart mit einer Sicherung ohne `hidden_rows` (alle bis 1.73) blieb Zeile 13 versteckt.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `headless/headless_pattgen.py` | 1.13 | `restore_dynamic_rows` ruft zusätzlich `M02_Main.Hide_Show_Check_Goto_Activation` auf |
+| `webmobaledlib.py` | 1.76 | Versionsstand; Mindestversion von `headless_pattgen.py` in `REQUIRED_FILES` auf 1.13 |
+
+Tests: In allen 52 Blättern der Beispiele ist Zeile 13 nach dem Neustart genau dann angezeigt, wenn der Goto Mode aktiv ist (34 Blätter), und sonst versteckt (18); das gilt mit der neuen Sicherung (`hidden_rows`) und mit einer alten ohne diese Angabe; auf `KS_Hauptsignal_Zs3_Zs 6_Zs1_RGB` ist Zeile 13 angezeigt und die Zeilen 16 bis 18 sind versteckt. Der Dialog der Zelle (13, 5) öffnet auch auf den neu gestarteten Blättern (Liste mit 12 Einträgen). Regression: Goto 30, Dialoge 20 und 24, Gestaltung 26, Patterngenerator 90 von 90, Neustart 2 und 4. Nicht im Browser geprüft. **Offen:** Ob der Entwickler tatsächlich E13 (Goto Aktivierung) meinte; er hat auf die Frage nach Zeile 12 nicht geantwortet, nur Zeile 13 genannt.
+
+## 1.75 (2026-10-19)
+
+Rückmeldung des Entwicklers (Screenshot `KS_Hauptsignal_Zs3_Zs 6_Zs1_RGB`, Stand 1.74): Die Goto-Zeile 47 ist wieder da, die höheren Zeilen (46 und 48) sind aber immer noch nicht sichtbar. Alle Zeilen sind gleich hoch, die Pfeile sitzen unter der Goto-Zeile bei den LEDs.
+
+Bei den eigenen Tests (neue `headless_sheet.py`) sind 46 und 48 hoch (93 px). Der Screenshot passt zu einer **alten `ExcelAPI/headless_sheet.py` (1.01)**: Dann gilt die Rückfallstufe aus 1.73 (alle Zeilen gleich hoch, Warnung „veraltet“ im Protokoll); `XLA_Application` 1.09 sichert dann keine versteckten Zeilen, und die Goto-Zeile kommt nur durch `restore_dynamic_rows` (`headless_pattgen` 1.12) wieder, genau das zeigt der Screenshot. Nicht bestätigt: Der Entwickler hat noch nicht gesagt, welche Version `headless_sheet.py` hat und ob das Protokoll die Warnung enthält.
+
+Weil Dateien jetzt zweimal fehlten (`headless_sheet.py` 1.02 bei 1.72 und 1.73), prüft das Programm beim Start die Versionen:
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 1.75 | `REQUIRED_FILES` (13 Dateien mit der verlangten Mindestversion: `headless_sheet` 1.02, `XLA_Application` 1.09, `headless_pattgen` 1.12, `web_pattgen` 1.15, `web_form_select` 1.01, `web_access` 1.07, `web_firewall` 1.02, `M08_Load_Sheet_Data` 1.01, `M06_Write_Header` 1.02, `M20_PageEvents_a_Functions` 1.02, `M18_Save_Load` 1.01, `M18a_Load_PicoConfig` 1.01, `M17_Import_old_Data` 1.01) und `check_file_versions`; die Abweichungen stehen als Fehler im Protokoll, als Block „ACHTUNG“ auf der Konsole und als rote Meldung oben auf der Seite (jede Zeile: Datei, gefundene und verlangte Version). Eine neuere Datei ist in Ordnung; verglichen wird Haupt- und Nebenversion als Zahlen (1.10 ist neuer als 1.9) |
+
+Bei jedem Stand, der eine Datei so ändert, dass sie die anderen braucht, muss `REQUIRED_FILES` angehoben werden (gehört in die Liste der Änderungen).
+
+Test: Das Paket besteht die Prüfung; eine Kopie mit der alten `headless_sheet.py` (1.01) ergibt genau die Zeile „ExcelAPI/headless_sheet.py: Version 1.01, verlangt wird mindestens 1.02“; fehlende Datei, Datei ohne Versionsangabe, neuere Datei, Vergleich als Zahl (1.10 gegen 1.9 und 1.12) (8 Prüfungen). Die rote Meldung im Browser ist nicht geprüft (Quelltext kompiliert).
+
+## 1.74 (2026-10-19)
+
+Rückmeldung des Entwicklers (Screenshot `Dep Signal4 RGB`, Stand 1.73): „Die Zeilenhöhen-Änderung scheint nicht zu funktionieren.“ Auf dem Screenshot fehlt die Zeile 47 (Goto Tabelle), die Zeilen 46 und 48 sind nicht hoch, und die Goto-Pfeile mit den Nummern sitzen unter den Balken bei Zeile 78.
+
+Nachgestellt in einem Neustart mit den Beispielen (Prozess A lädt und sichert, Prozess B startet neu): Direkt nach dem Laden stimmt alles (Zeile 47 angezeigt, 46 und 48 mit 93 px). Nach dem Neustart fehlt Zeile 47 aus der Liste der angezeigten Zeilen, die Höhen waren (aus der Sicherung 1.72) wieder da.
+
+Ursachen:
+1. **Versteckte Zeilen der Vorlage:** Beim Anlegen eines Blatts wendet `XLA_Application` die `HideRows` der Vorlage an (Main: Datenindizes `[12, 15, 16, 17, 28 … 44, 46]`, also Excel-Zeilen 13, 16 bis 18, 29 bis 45 und **47**, die Goto-Zeile). Das Sichern kannte keine versteckten Zeilen. Das Original blendet die Goto-Zeile nur beim Laden einer Datei (`Set_Defaults_for_Sheet`) und beim Ändern einer Zelle (`Global_Worksheet_Change`) wieder ein, nicht beim Aktivieren eines Blatts. Nach dem Neustart blieb sie deshalb versteckt.
+2. **Pfeile:** `getCellCoords` rechnete für eine versteckte Zeile mit `displayed_rows.index(r)` und nahm bei dem Fehler den Datenindex als angezeigten Index. Mit Höhen und Positionen für die angezeigten Zeilen (1.72) ergab das für Zeile 47 die Oberkante einer Zeile weit unten (Zeile 78). Vorher (Positionen für alle Zeilen) war der Wert für versteckte Zeilen zufällig nahe an der richtigen Stelle.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `ExcelAPI/XLA_Application.py` | 1.09 | `getData` sichert `hidden_rows` (versteckte Datenzeilen), `setData` stellt sie wieder her (`display_rows(all_displayed=True)`, `hide_rows`); `getCellCoords`: eine versteckte Zeile hat Höhe 0 an der Oberkante der nächsten angezeigten Zeile (nur Web-Fassung) |
+| `headless/headless_pattgen.py` | 1.12 | `restore_dynamic_rows`: beim Start für jedes Blatt `Hide_Show_GotoLines_If_Enabled` und `Hide_Show_Special_ModeLines_If_Enabled` (wie `Set_Defaults_for_Sheet`); damit stimmen auch Sicherungen ohne `hidden_rows` (die der Fassungen bis 1.73) |
+| `webmobaledlib.py` | 1.74 | Versionsstand |
+
+Auswirkung auf den **Programmgenerator** (gleiche Schicht): Seine Definition hat keine `HideRows`, versteckt werden Zeilen nur über „Aus- oder Einblenden“ (`M22_Hide_UnHide`). Diese Zeilen bleiben jetzt nach einem Neustart versteckt (wie in Excel, wo der Zustand zur Mappe gehört), vorher waren alle Zeilen wieder da. Sicherungen ohne `hidden_rows` laden wie bisher.
+
+Tests (Beispiele aus dem Paket): Sichern enthält `hidden_rows` ohne Zeile 47 und mit den Zeilen 29 bis 45; Neustart: Zeile 47 angezeigt, 46 und 48 hoch, acht Pfeile am Anker (Oberkante Zeile 47), in keinem Blatt mit aktivem Goto Mode ist Zeile 47 versteckt; **Sicherung im Zustand des Anwenders** (ohne `hidden_rows`): dasselbe Ergebnis durch `restore_dynamic_rows`; versteckte Zeile 47: Oberkante gleich der Oberkante von Zeile 48, Höhe 0 (4 und 4 Prüfungen). Programmgenerator: Zeilen 5 und 6 verstecken, sichern, neu starten: bleiben versteckt; 655 von 655 LED-Nummern, Header-Erzeugung mit veralteten Tabellen, Tabelle 28 von 28. Patterngenerator: 90 von 90, Gestaltung 26, Bilder 35, Dialoge und Goto, Firewall 33, Zeilenhöhen 7, Robustheit gegen die alte `headless_sheet.py` (8). Nicht im Browser geprüft.
+
+## 1.73 (2026-10-19)
+
+Fehler vom Anwender (Windows, Stand 1.72 teilweise eingespielt): Beim Wechsel in den Patterngenerator Absturz `TypeError: float() argument must be a string or a real number, not 'NoneType'` in `scaled_height(sheet.data_row_height(...))`. Das Protokoll zeigt davor `HeadlessSheet: 'set_data_row_heights' ist nicht implementiert (No-Op)` und `'data_row_height' ist nicht implementiert (No-Op)`: Die Datei `ExcelAPI/headless_sheet.py` war noch die Fassung 1.01, `XLA_Application.py` und `web_pattgen.py` schon die neuen.
+
+Ursache in der Auslieferung: `headless_sheet.py` 1.02 stand in dem abgebrochenen Beitrag und ging beim Anwender unter; die Änderung der Zeilenhöhen besteht aus drei zusammengehörenden Dateien. Ursache im Programm: `HeadlessSheet.__getattr__` liefert für **jede** unbekannte Methode ein protokolliertes No-Op (Ergebnis `None`), deshalb war `hasattr(sheet, "data_row_height")` auch bei der alten Datei wahr, und die neue Seite rechnete mit `None`. Dieselbe Falle steckte in `XLA_Application.py` (acht Stellen).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `ExcelAPI/XLA_Application.py` | 1.08 | Die Prüfung läuft über die Klasse (`hasattr(type(self.tksheet), "data_row_height")` und die zwei weiteren): mit einer alten `headless_sheet.py` gilt der bisherige Weg |
+| `_web/web_pattgen.py` | 1.15 | dieselbe Klassenprüfung beim Setzen von `_h`; fehlt die Methode, werden alle Zeilen gleich hoch gezeichnet (Warnung „ExcelAPI/headless_sheet.py ist veraltet“ einmal im Protokoll); `scaled_height` nimmt bei `None` die Standardhöhe |
+| `webmobaledlib.py` | 1.73 | Versionsstand |
+
+Test: Mit der alten `headless_sheet.py` (1.01 aus dem Release 1.69) stürzt `show()` nicht ab, alle Zeilen sind 20 px hoch, die Warnung steht genau einmal im Protokoll, `RowHeight` liefert eine Zahl, Formen und Gestaltung laufen (8 Prüfungen). Mit der neuen Datei unverändert: Gestaltung und Höhen 26, Bilder 35, Dialoge, Goto, Patterngenerator 90 von 90, Tabelle 28, Zeilenhöhen und Neustart.
+
+Lehre für die Auslieferung: Bei Änderungen, die mehrere Dateien betreffen, in der Antwort die Liste **aller** zu kopierenden Dateien nennen. Eine Version, die einen Abgleich der Dateien (Versionen) zur Laufzeit ermöglicht, wäre zu überlegen.
+
+## 1.72 (2026-10-19)
+
+Rückmeldung des Entwicklers mit einem Screenshot aus dem Excel-Patterngenerator (KS_Hauptsignal_Zs3_Zs1_RGB): Die Zeilen über und unter der Goto-Tabelle sind in Excel viel höher (Platz für Pfeile und Bögen), außerdem fehlen schwarze Rahmen, Farben der Kopfzeile und der Spalte LED Nr usw. Entscheidungen: 1 (Farben und Schrift), 2 (Rahmen) und 3 (Zeilenhöhen) umsetzen; die vier schwarzen Kreise gehören zum Test Pattern (Stufe 4d, zurückgestellt); die Knöpfe bleiben in der Werkzeugleiste (nicht wie in Excel im Blatt verteilt); die roten Ecken (Kommentare) bleiben als Tooltips.
+
+**Fehler in der Excel-Schicht (Ursache der falschen Zeilenhöhen):** `headless_sheet.row_height` speicherte nach dem ANGEZEIGTEN Index, `get_RowHeight` las nach dem Datenindex, `get_row_heights` lieferte eine Höhe je Datenzeile. Das Original setzt die Höhen in `Hide_Show_GotoLines` (`RowDict[GoTo_Row - 1]` und `[GoTo_Row + 1]`: 60 pt bei aktivem Goto Mode, sonst 12 und 15). Wurden danach Zeilen versteckt oder eingeblendet, rutschten die Höhen auf andere Zeilen (gemessen: `KS_Hauptsignal_Zs3_Zs1_RGB` hohe Zeile 46, `Status_Button` dagegen 28 und 47). Bei echtem tksheet verschiebt `hide_rows` die Positionen mit; unsere Nachbildung tat das nicht.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `ExcelAPI/headless_sheet.py` | 1.02 | Höhen nach DATENZEILE (`data_row_height`, `data_row_heights`, `set_data_row_heights`); `row_height` (angezeigter Index wie tksheet) rechnet um; `get_row_heights` und damit `MT.row_positions` für die ANGEZEIGTEN Zeilen; `set_row_heights` ordnet der Liste die angezeigten Zeilen zu |
+| `ExcelAPI/XLA_Application.py` | 1.07 | `RowHeight` von `CRange` und `CRow` (Setzen und Lesen) über `data_row_height`, wenn die Schicht es hat (Tk unverändert); Sichern als `row_heights` (Datenzeile → Höhe), Laden nur daraus (`row_pos` älterer Sicherungen hing am angezeigten Index und wird in der Web-Fassung nicht mehr übernommen; die Goto-Zeilen setzt das Blatt beim Berechnen neu) |
+| `_web/web_pattgen.py` | 1.14 | Jede Zeile des Gitters hat ihre Höhe (`_h` = Höhe der Excel-Schicht mal Faktor der Schriftgröße, `getRowHeight`, `resetRowHeights`, wenn sich Höhen ändern); die Formen werden zeilenweise mit den echten Höhen umgerechnet (bei Faktor 1 die Identität); `apply_design` (Farben, Schrift, schwarze Rahmen, zentrierte Zahlen) |
+| `headless/headless_pattgen.py` | 1.11 | `led_row_count` (benannter Bereich `LED_Cnt_Rng`, E5) |
+| `webmobaledlib.py` | 1.72 | Versionsstand |
+| `install/ANLEITUNG_Installation.md` | 2.53 | Abschnitt 2.10: Aussehen wie in Excel |
+| `install/BETATEST_Checkliste.md` | 1.22 | Punkte 45 bis 47 |
+
+Werte der Gestaltung (aus dem Excel-Screenshot gemessen, Pillow auf dem Screenshot): Rahmen 1 px `#000000`; Zeile Spalte Nr (D49 bis BK49) `#BDD7EE`; Spalte LED Nr (Kopf und Nummern) `#FFF2CC`; Beschriftung Goto Tabelle `#C6E0B4`; Ergebnis `#0000FF` fett; Makro `#00B050` fett; zweite Makro-Zeile `#AEAAAA`; Flashbedarf kleine Schrift; Zahlen der Kopfzeile, der Zeilen Dauer und Goto und die Marken der LED-Zeilen zentriert, Spalte Nr -> rechtsbündig. Rahmenbereiche nach `GridList` der Definition (Zeile 28 Dauer ab E, Zeile 47 Goto ab E, Zeile 49 bis zur letzten LED-Zeile ab D, jeweils bis Spalte BK). **Die Zahl der LED-Zeilen kommt aus `LED_Cnt_Rng`:** In Spalte D stehen die Nummern 1 bis 20 in jedem Blatt (Zeilen 50 bis 69), eine Erkennung über die Ziffern ergab für alle Blätter 20 Zeilen (zuerst so gebaut, im Test aufgefallen).
+
+Vorgehen und Absicherung: Weil die Excel-Schicht auch vom Programmgenerator benutzt wird, nach der Änderung Programmgenerator und Patterngenerator neu geprüft.
+
+Tests (echte Arbeitsmappe, alle Beispiele): Zeilenhöhen: Bei den 34 Blättern mit aktivem Goto Mode sind die Zeilen 46 und 48 hoch (93 px), bei den 18 anderen nicht; Höhen bleiben bei ihrer Zeile, wenn danach Zeilen versteckt werden und wieder erscheinen; `Rows().RowHeight` liefert Punkte; Oberkante der Goto-Zeile = Summe der Höhen der angezeigten Zeilen davor (einschließlich der hohen Zeile); nach Neustart wieder an der richtigen Zeile. Web: `_h` je Zeile, Faktor 1 und 1,3 (Pfeilanker = Summe der `_h`, Pfeillänge skaliert), `resetRowHeights` nur bei geänderter Höhe, Gestaltung (Farben, Schrift, Rahmenbereiche, LED-Zeilen aus `LED_Cnt_Rng`, auch bei einem Blatt mit einer LED), JS `getRowHeight` in Node (26 Prüfungen). Regression: Programmgenerator 655 von 655 LED-Nummern, Header-Erzeugung mit veralteten Tabellen, Tabelle 28 von 28; Patterngenerator 90 von 90; Bilder (23), Dialoge, Goto, Firewall; Beispiele 14 von 15 (bekannte Einschränkungen). **Nicht geprüft: Aussehen und Verhalten im Browser** (Bildlauf mit unterschiedlich hohen Zeilen, Lage von Bildern, Balken und Pfeilen in hohen Zeilen, Schriftgrößen, Darstellung der schwarzen Rahmen neben den Linien des Gitters).
+
+## 1.71 (2026-10-19)
+
+Rückmeldung des Entwicklers (Screenshots `Status_Button` und `KS_Hauptsignal_Zs3_Zs1_RGB`, Stand 1.70): Die Darstellung sieht gut aus. Auf `KS_Hauptsignal_Zs3_Zs1_RGB` sind die Goto-Pfeile zu kurz und kaum zu erkennen.
+
+Ursache: Die Pfeile der Excel-Schicht haben feste Längen (`Draw_StraitArrow`: Startpfeil 30 × `guifactor` = 31,6 px Länge mit dx, Endpfeil 19,7 px) und laufen vom Anker (Oberkante der Goto-Zeile 47) nach oben durch die Zeilen 46 und 28. Meine Umrechnung `web_y` (1.09, gedacht für Balken) bildet Zeile für Zeile ab und staucht damit auch die Pfeile mit der Höhe der durchlaufenen Zeilen. Gemessen: Zeile 28 ist auf `KS_Hauptsignal_Zs3_Zs1_RGB` und `Dep Signal4` in Excel 93 px hoch, im Gitter 20 px: Länge 11,9 und 10,7 statt 31,6 und 19,7. Bei `Status_Button` ist stattdessen Zeile 27 hoch, daher 24,3 und es fiel nicht auf.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_pattgen.py` | 1.13 | `shapes_payload`: Pfeile und Kurven sind Zeichnungen fester Größe. Nur der **Anker** wird auf das Zeilenraster umgerechnet (bei geraden Pfeilen das Ende `(Left+Width, Top+Height)`, bei Kurven der erste Punkt), Länge und Abstände bleiben (mal `row_scale`); die Beschriftung folgt dem Anfang ihres Pfeils (10 px darüber; Pfeil und Beschriftung legt `Draw_StraitArrow` nacheinander an) |
+| `webmobaledlib.py` | 1.71 | Versionsstand |
+| `install/BETATEST_Checkliste.md` | 1.21 | Punkt 43 |
+
+Balken und Bilder bleiben bei der Zeilenumrechnung (sie sollen in ihren Zeilen liegen, die Pfeile nicht).
+
+Test (echte Arbeitsmappe): Pfeillängen im Gitter gleich denen der Excel-Schicht auf `Status_Button`, `KS_Hauptsignal_Zs3_Zs1_RGB` und `Dep Signal4` (31,6 und 19,7), alle Pfeile enden in einer Höhe, Beschriftungen am Pfeilanfang, gekrümmter Pfeil: Abstände der Punkte zum Anker unverändert (35 von 35 mit den früheren). Nicht im Browser geprüft: ob die Länge von 31,6 px mit den Zeilen darüber (Zeilen 46 und 28) gut aussieht; die Beschriftung sitzt jetzt 10 px über dem Pfeilanfang statt 25 px (Excel).
+
+## 1.70 (2026-10-19)
+
+Patterngenerator Stufe 4a bis 4c (Entscheidung des Entwicklers: umsetzen, **die Bilder bleiben, wo sie sind, nicht kopieren**; Test Pattern und Senden an ein Modul (4d) bleiben zurückgestellt, Hardware nötig):
+- **4a Goto-Pfeile:** Die Excel-Schicht legt sie schon an (`M06.Draw_All_Arrows`, beim Laden über das Ändern des Blatts): gerade Pfeile `Goto_Graph_Arrow` (Typ `Connector`, Linie von `(Left, Top)` nach `(Left+Width, Top+Height)`, Spitze nach `EndArrowheadStyle_val` oder `BeginArrowheadStyle_val`, Farbe in `Fillcolor`), Beschriftungen `Goto_Graph_Label` (Typ 17, Text in `Text_val`, auch `0`) und gekrümmte Pfeile `Goto_Graph_CurvedArrow` (Typ 5, vier Punkte einer kubischen Bézierkurve). Bisher zeichnete die Oberfläche nur Typ 5 und zwar **als Fläche**: ein gekrümmter Pfeil war ein gefülltes Vieleck.
+- **4b Bilder anzeigen:** Bilder sind Formen vom Typ 13, der Pfad steht im Namen, Lage und Größe in `Left`, `Top`, `Width`, `Height` (Excel-Schicht; die Datei enthält Punkte, `Load_Picture` multipliziert mit `guifactor` 1,55). Auslieferung über `app.add_static_file` je Bilddatei unter `/mll_pcf_pic/<md5 des Pfads>.<Endung>?v=<Änderungszeit>`; ausgeliefert werden nur Dateien, die als Bild in einem Blatt stehen. Lage mit derselben Umrechnung `web_y` wie die Balken, Höhe aus oberem und unterem Rand.
+- **Sichern der Bilder:** `LoadWorkbook` lädt `PatternWorkbook` ohne Formen. `sync_pictures` merkt Pfad, Lage und Größe in `persistent_controls_dict["pcf_pictures"]` (wie die Textfelder, `tksheet.persistent_controls_dict` zeigt auf dasselbe Wörterbuch); `show()` ruft es für das angezeigte Blatt auf, `load_files` für die geladenen. `restore_pictures` legt die Formen beim Start wieder an (nur wenn die Datei noch da ist). Damit entfällt die Einschränkung „Bilder nach Neustart“ und das Speichern verliert keine Bilder mehr.
+- **4c Bild einfügen** (`M80.Load_New_Picture`: Dateiauswahl, Kopie in den Beispielordner, Bild an Zelle B63): `insert_picture` legt die hochgeladene Zwischendatei in den Bilderordner `<Datenordner>/pattern_pictures` (gleicher Name und Inhalt: keine zweite Kopie; gleicher Name, anderer Inhalt: `_2`, `_3` …), setzt das Bild an `Cells(63, 2)` in natürlicher Größe (Pixel × 0,75 × `guifactor`, wie die Dateien es speichern); `image_size` liest die Größe aus dem Dateikopf (PNG, JPEG), **Pillow wird nicht gebraucht** (`requirements-web.txt`: wird nicht installiert). `remove_pictures` entfernt alle Bilder eines Blatts (Optionen → „Bilder dieser Seite entfernen“, mit Rückfrage; die Dateien bleiben).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_pattgen.py` | 1.12 | `JS_SHAPES` zeichnet `pic` (image), `curve` (Pfad mit Spitze), `arrow` (Linie mit Spitze am Ende oder Anfang), `text`; `shapes_payload` mit den neuen Arten (Reihenfolge Bilder, Balken, Linien/Text; nicht sichtbare Formen ausgelassen); `picture_url`; Knopf „Bild einfügen“, `on_insert_picture`, `remove_pictures`; `show()` merkt die Bilder |
+| `headless/headless_pattgen.py` | 1.10 | `image_size`, `picture_dir`, `sync_pictures`, `restore_pictures`, `restore_all_pictures` (am Ende von `__init__`), `insert_picture`, `remove_pictures` |
+| `pattgen/M08_Load_Sheet_Data.py` | 1.01 | `Load_Picture`: `.jpg` wird nur durch `.png` ersetzt, wenn die PNG-Datei existiert (Port-Eigenheit, die Beispiele liefern PNG zu den JPG-Namen der Dateien); ein JPG ohne PNG daneben, auch ein eingefügtes, wurde beim erneuten Laden nie gefunden |
+| `webmobaledlib.py` | 1.70 | Versionsstand |
+| `install/ANLEITUNG_Installation.md` | 2.52 | Abschnitt 2.10: Bilder, Bild einfügen, Goto-Pfeile, Hinweis zu den Balken |
+| `install/BETATEST_Checkliste.md` | 1.20 | Punkte 42 bis 44 |
+
+**Nachtrag (Versehen):** `ensure_grafik` (`headless_pattgen` 1.07, `web_pattgen` 1.10: Balken beim ersten Anzeigen eines Blatts nach dem Neustart zeichnen) ist schon im Stand 1.69 enthalten, ohne dass es in HOC, Anleitung und Release-Hinweisen stand. Ich hatte es unmittelbar vor der Antwort des Entwicklers („Aktualisieren reicht erstmal“) eingebaut. Geprüft jetzt: Nach dem Neustart 0 Balken, nach `ensure_grafik` 27 (wie vorher), ein zweiter Aufruf legt keine Duplikate an. Die Release-Hinweise 1.69 und die Anleitung 2.43 bis 2.51 sagten „Aktualisieren drücken“; die Anleitung 2.52 ist berichtigt. Nicht im Browser geprüft.
+
+Tests (echte Arbeitsmappe, Beispiel Signals, Basic und Status_Buttons; Bilder aus Pillow erzeugt, nur im Test): Bildgröße PNG und JPG, kaputte Datei abgelehnt; Beispielbilder geladen und in `persistent_controls_dict` gemerkt, Pfad im Beispielordner (keine Kopie); Einfügen (Dateiname, Kopie, Größe, Lage B63, gemerkt, dasselbe Bild nochmal, gleicher Name anderer Inhalt, kaputtes Bild, andere Dateiart); Speichern als ZIP, Seite löschen, ZIP laden: PNG und JPG sind wieder da; Entfernen; Neustart (zwei Prozesse): Bilder des Beispiels und das eingefügte Bild in gleicher Lage und Größe zurück (23 und 5 Prüfungen). Nutzlast und Oberfläche mit Ersatzobjekten für NiceGUI: 8 Pfeile und 8 Beschriftungen auf `Dep Signal4`, gekrümmter Pfeil auf `KS_Vorsignal_Zs3V_RGB` als Kurve (nicht als Fläche), Bilder mit URL, Registrierung nur einmal, Reihenfolge; **JavaScript in Node** mit einem Ersatz für das DOM ausgeführt (Bild, Fläche, Kurve mit Spitze, Start- und Endpfeil mit Spitze, Pfeil ohne Spitze, Text; Kurve als Bézierpfad, Spitzen an den richtigen Enden); Knöpfe Bild einfügen und Entfernen (25 von 25). **Nicht geprüft: Aussehen und Verhalten im Browser** (Lage der Bilder und Pfeile, Schriftgröße der Beschriftungen, Auslieferung der Bilder über die Passwortabfrage).
+
+## 1.69 (2026-10-18)
+
+Rückmeldung des Entwicklers (Windows, 1.68 installiert und neu gestartet): „Zugriff aus dem Netz freigeben“ legt genau eine Regel `webMobaLedLib 8080` an und ersetzt die beiden alten (Zugriff von außen geht, geprüft mit `Get-NetFirewallPortFilter` in einer Administrator-PowerShell). Der Bereich meldet aber weiter „Es gibt noch keine Regel für den Port 8080“, und „Freigabe entfernen“ erscheint nicht.
+
+Ursache (vermutet, nicht auf Windows nachgestellt): Das Programm läuft ohne Administratorrechte. Die Leseabfrage mit `Get-NetFirewallPortFilter`/`Get-NetFirewallRule` lieferte dort nichts (vermutlich „Zugriff verweigert“). `$ErrorActionPreference = 'SilentlyContinue'` hat den Fehler verschluckt, und ein leeres Ergebnis wurde als „keine Regel“ gelesen. Das war doppelt falsch: Annahme „Lesen geht ohne Administratorrechte“ nicht geprüft, und „kann nicht lesen“ von „keine Regel“ nicht unterschieden.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_firewall.py` | 1.02 | `status_script`: zwei unabhängige Wege mit eigenem `try/catch` (Cmdlets `Get-NetFirewall*` mit `-ErrorAction Stop`; COM `HNetCfg.FwPolicy2`, alle aktiven Eingangsregeln mit Profilen als Bitmaske, Aktion, Protokoll, lokalen Ports und Programm, gefiltert in Python); Zeilen `S` (Weg hat geklappt), `E` (Fehler), `N`; `parse_status(text, port)` mit `known` (mindestens ein Weg hat gelesen), `errors`, Portangaben (`8080`, `80,8080`, `8000-9000`), Regeln für Python mit Port `*`, BOM; `rule_status` protokolliert Quellen, Regeln und Fehler (INFO „Firewall-Status Port …“) und meldet `known=False` mit Grund |
+| `_web/web_access.py` | 1.07 | Statustext bei nicht lesbarem Zustand: „konnte nicht gelesen werden (Grund)“ statt „keine Regel“, „Entfernen“ bleibt dann sichtbar; `wait_for_rule` liefert `ok`, `timeout` oder `unknown` (bei `unknown` sofort, ohne 45 s Warten, mit eigener Meldung) |
+| `webmobaledlib.py` | 1.69 | Versionsstand |
+| `install/ANLEITUNG_Installation.md` | 2.51 | Kapitel 8: zwei Leseweg, Meldung „nicht gelesen“, Protokoll |
+| `install/BETATEST_Checkliste.md` | 1.19 | Punkt 41 |
+
+Fund beim Test: Spalten sind durch Tabulator getrennt, Regeln ohne Programm enden mit einem leeren Feld, `line.strip()` schnitt den Tabulator ab, und die Regel wurde verworfen (fast alle Regeln). Behoben: Felder zählen vor dem Auffüllen, nicht `strip()`.
+
+Nicht geprüft: **alles auf einem echten Windows-System.** Ob einer der beiden Wege ohne Administratorrechte liest, ist offen; schlägt beides fehl, zeigt der Bereich jetzt den Grund an und das Protokoll die Rohdaten. Dann wäre der nächste Schritt: Probe in einer normalen PowerShell (`Get-NetFirewallRule -DisplayName "webMobaLedLib*"` und `(New-Object -ComObject HNetCfg.FwPolicy2).Rules | Where-Object Name -like "webMobaLedLib*"`).
+
+Tests (Ersatzobjekte): Auswertung der Cmdlet-Zeilen (der Fall des Anwenders), COM-Zeilen mit Port einzeln, Bereich, Liste, Python, alle Protokolle, UDP und fremdes Programm ausgeschlossen, Blockierregel, Profile aus Bitmaske, nur ein Weg mit Fehler, beide mit Fehler (nicht bekannt), BOM, fehlerhafte Zeilen, PowerShell nicht startbar, erzeugtes Skript, Oberfläche (Status in allen Fällen, kein 45-s-Warten bei nicht lesbarem Zustand) (33 von 33).
+
+**Release 1.69 (2026-10-19):** `webmobaledlib.zip` (81 Dateien, python/; neu gegenüber 1.57: `_web/web_firewall.py`, `_web/web_form_select.py`, `proggen/M06_Write_Header.py`), `ANLEITUNG_Installation.pdf` (2.51), `BETATEST_Checkliste.pdf` (1.19), `VERSIONEN_Stand_1.69_2026-10-19.txt`, `RELEASE_Hinweise_1.69.md`. Das Paket 1.57 liegt als `webmobaledlib_Stand_1.57_2026-10-18.zip` bei. Geprüft (Dateien aus dem entpackten ZIP): 53 Python-Dateien kompilieren, Versionsliste stimmt für 72 Dateien mit den Kopfzeilen überein, PDFs im ZIP gleich den einzelnen PDFs, Skripte ausführbar; Programmgenerator: 655 von 655 LED-Nummern wie Excel, Header-Erzeugung mit veralteten Tabellen (`LEDS_PER_CHANNEL ",81,17,87,27,74,37,0,7,6"`, `LED2Var_Tab` wie Excel); Patterngenerator 90 von 90, Tabelle 28 von 28, Oberfläche 19, 24 und 20 Prüfungen, Goto 30, Firewall 33, Beispiele 14 von 15 (die eine Abweichung sind die dokumentierten Einschränkungen beim Speichern).
+
+## 1.68 (2026-10-18)
+
+Rückmeldung des Entwicklers zum Firewall-Knopf (1.67): „Freigabe entfernen“ lässt die alte Regel für Port 8080 stehen, der Bereich meldet trotzdem „Es gibt noch keine Regel für den Port 8080“, und „Freigeben“ legt eine Regel „webMobaLedLib“ an, die er ohne Port 8080 sieht.
+
+Ursache: `rule_status` fragte mit `netsh ... show rule name=webMobaLedLib` nach dem **Namen**. Die vom Entwickler von Hand angelegte Regel hieß `webMobaLedLib 8080` (Befehl `New-NetFirewallRule -DisplayName "webMobaLedLib 8080"` aus der Fehlersuche): nicht gefunden, nicht entfernt, Status „keine Regel“, obwohl der Port offen war. Der Eindruck „ohne Port“: Die Regel des Knopfes trug den Port (`localport=8080`, im Filter von `Get-NetFirewallPortFilter -LocalPort 8080` neben der alten Regel gelistet), aber der **Name** hatte keine Nummer, und die Spalte „Lokaler Port“ der Firewall-Oberfläche ist leicht zu übersehen.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_firewall.py` | 1.01 | `rule_status` nach Wirkung: ein PowerShell-Aufruf (UTF-8) liefert Regeln, die den Port zulassen (`Get-NetFirewallPortFilter` mit `LocalPort -contains`, dazu `Get-NetFirewallApplicationFilter` mit `*python*`; eingehend, `Allow`, aktiv), Blockierregeln (`Block`) und `NetworkCategory`; `parse_status`, `status_script`; Name der Regel `webMobaLedLib <Port>`; `add_rule` löscht zuerst alle `webMobaLedLib*` (`Remove-NetFirewallRule -DisplayName 'webMobaLedLib*'`) und legt dann `New-NetFirewallRule` an, `remove_rule` löscht `webMobaLedLib*`; beides über `ShellExecuteW(..., "runas", "powershell.exe", ...)`; `netsh` und `network_categories` entfallen |
+| `_web/web_access.py` | 1.06 | Status nennt die Regeln (eigene und fremde) mit Profil; fremde (zum Beispiel von Windows für Python angelegte) bleiben unverändert und werden angezeigt; Warnung vor Blockierregeln; „Freigabe entfernen“ sichtbar, wenn eine eigene Regel da ist; Warten bis die eigenen Regeln da oder weg sind |
+| `webmobaledlib.py` | 1.68 | Versionsstand |
+| `install/ANLEITUNG_Installation.md` | 2.50 | Kapitel 8: Prüfung nach Wirkung, Name `webMobaLedLib 8080` |
+| `install/BETATEST_Checkliste.md` | 1.18 | Punkt 41 |
+
+Entscheidungen:
+- **Nach Wirkung statt nach Namen:** Entscheidend ist, ob eine aktive Regel eingehende Verbindungen auf den Port zulässt, nicht wer sie angelegt hat.
+- **Eigene Regeln:** alle mit Namen `webMobaLedLib*` (auch von Hand angelegte, die alte Regel `webMobaLedLib` der Fassung 1.67). Andere Regeln werden nie gelöscht.
+- **Aufzählungen** (`Inbound`, `Allow`, `Private`) und `NetworkCategory` heißen in jeder Windows-Sprache gleich, deshalb PowerShell statt der übersetzten Ausgabe von `netsh`.
+- Nicht berücksichtigt: Portbereiche in Regeln (`8000-9000`) und Regeln mit `LocalPort Any` ohne Programmfilter.
+
+Tests (Linux-Sandbox, Windows-Aufrufe durch Ersatzobjekte): Auswertung der Ausgabe mit dem Fall des Anwenders (beide Regeln), nur Handregel, nur Python-Regel, Blockierregel, Umlaute, mehrere Profile, fehlerhafte Zeilen; erzeugtes PowerShell-Skript (Einzelteile) und die Befehle von `add_rule`/`remove_rule`; Oberfläche mit Ersatzobjekten für NiceGUI (Status in den Fällen, Warnungen, Freigabe, Entfernen mit Warten bis alle Regeln weg sind, Verweigerung, Linux) (32 von 32). **Nicht geprüft: das Skript auf einem echten Windows-System** (die Syntax habe ich nicht mit PowerShell ausgeführt).
+
+## 1.67 (2026-10-18)
+
+Wunsch des Entwicklers: Die Firewall-Regel für den Zugriff aus dem Netz soll ein Knopf in den Programmeinstellungen einrichten (je nach System); die Kommandozeile ist für normale Anwender zu kompliziert. Vorher geklärt: Auf dem Windows-PC des Entwicklers gab es keine Regel für Python (weder Zulassen noch Blockieren), das Netz war „Privat“; nach `New-NetFirewallRule ... -LocalPort 8080 -Action Allow -Profile Private` antwortete der Server dem anderen PC (`curl` ging).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_firewall.py` | 1.00 | neu: `rule_status(port)` (liest mit `netsh advfirewall firewall show rule`, ohne Administratorrechte, deutsche und englische Ausgabe), `network_categories()` (PowerShell `Get-NetConnectionProfile`), `add_rule`/`remove_rule` (über `ShellExecuteW(..., "runas", "cmd.exe", ...)`; Windows fragt selbst nach den Administratorrechten; die Regel wird erst gelöscht, dann angelegt: keine doppelten Regeln), `hint_other_system()` |
+| `_web/web_access.py` | 1.05 | Bereich „Firewall“ auf der Seite Programm Einstellungen: Status, Warnungen, Knöpfe „Zugriff aus dem Netz freigeben“ und „Freigabe entfernen“ (warten bis 45 s auf die Abfrage der Benutzerkontensteuerung, prüfen dann die Regel); macOS und Linux nur ein Hinweistext; `SERVER` (Adresse und Port) statt der Umgebungsvariablen; Kopfblock eingefügt |
+| `webmobaledlib.py` | 1.67 | `main()` setzt `web_access.SERVER` aus `--host` und `--port` |
+| `install/ANLEITUNG_Installation.md` | 2.49 | Kapitel 8 („Einfachster Weg“) und 9.2 |
+| `install/BETATEST_Checkliste.md` | 1.17 | Punkt 41 |
+
+Entscheidungen:
+- **Regel:** Name `webMobaLedLib`, eingehend, TCP, Port des Servers, Profil `private` (nur Heimnetz). Bei einem als „Öffentlich“ eingestuften Netz wirkt sie nicht; der Bereich warnt dann und nennt den Weg zum Profil „Privat“.
+- **Warnung bei lokalem Server:** Lauscht der Server nur auf `127.0.0.1` (Standard), nützt die Regel nichts. Der Bereich sagt das und nennt `MLL_HOST=0.0.0.0`. `SERVER["host"]` kommt aus `--host`; vorher las `refresh()` nur die Umgebungsvariable `MLL_HOST`.
+- **Nur Windows mit Knopf:** macOS hat die Firewall normalerweise aus (Rückfrage beim Start), auf dem Raspberry Pi ist keine aktiv, bei Linux-Desktops mit ufw braucht es sudo. Dort nur der Befehl als Text.
+- Die Abfrage des Status (`netsh`, PowerShell mit etwa einer Sekunde) läuft nach dem Aufbau der Seite im Hintergrund (`ui.timer`), damit die Seite nicht wartet.
+
+Tests (Linux-Sandbox, Windows-Aufrufe durch Ersatzobjekte, `platform.system` und `ctypes.windll` ersetzt): `netsh`-Ausgabe deutsch und englisch (Regel da, aktiv, Port, ausgeschaltet, nicht da, `netsh` nicht startbar), Netzwerkprofile, `ShellExecuteW`-Aufruf (`runas`, `cmd.exe`, erst löschen dann anlegen, Port, Privat, Fenster versteckt, Rückgabe 42, 5, 2), Oberfläche mit Ersatzobjekten für NiceGUI: Status ohne Regel, Warnungen, Freigabe mit Wartezeit, Verweigerung, Entfernen, Regel für anderen Port, Linux (25 von 25). **Nicht geprüft: Verhalten unter Windows** (Rückfrage der Benutzerkontensteuerung, versteckter `cmd`-Aufruf mit `>nul 2>&1 &`, `netsh`-Ausgabe auf anderssprachigen Systemen).
+
+## 1.66 (2026-10-18)
+
+Rückmeldung des Entwicklers (Windows-PC, Zugriff von einem anderen PC, `MLL_HOST=192.168.178.79`, `MLL_PASSWORD=mobaledlib`): 1. Der Browser öffnet `localhost:8080`: „Seite nicht gefunden“. 2. Vom anderen PC `http://192.168.178.79:8080`: Ladefehler, der Server antwortet nicht.
+
+Zu 1 (Fehler im Programm): `open_browser_when_ready` und der Zweig „läuft schon eine Instanz“ öffneten immer `http://localhost:<Port>`. Mit `MLL_HOST=<IP>` lauscht uvicorn nur auf dieser Adresse, `localhost` geht dann nicht. Die Anleitung empfiehlt `MLL_HOST=0.0.0.0` (Kapitel 8), das hatte der Anwender nicht benutzt.
+
+Zu 2 (nicht im Programm, vermutete Ursache): Die Windows-Firewall lässt eingehende Verbindungen zu `python.exe` nicht zu (Rückfrage beim ersten Start verneint oder verpasst, oder das Netzwerk ist als „Öffentlich“ eingestuft). Der Server selbst lauscht, sonst wäre er auch unter der IP auf dem PC nicht erreichbar. Eine Verbindung des Rechners an seine eigene Adresse wird von der Firewall nicht blockiert, deshalb lässt sich das im Programm nicht erkennen. Nicht bestätigt: Der Anwender hat noch nicht geprüft, ob `http://192.168.178.79:8080` auf dem PC selbst geht und was `netstat` zeigt.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 1.66 | `browser_host(host)`: `localhost` bei `0.0.0.0`, leer, `::`, `127.0.0.1`, `localhost`, sonst die Adresse, auf der der Server lauscht (IPv6 in eckigen Klammern); benutzt von `open_browser_when_ready`, dem Zweig `--open-if-running` und der Anzeige beim Start; unter Windows bei einer Adresse außerhalb von `localhost` ein Hinweis mit dem `netsh`-Befehl für die Firewall |
+| `install/ANLEITUNG_Installation.md` | 2.48 | (2.46, 2.47, dann 2.48: Blockierregeln für `python.exe` (entstehen, wenn die Rückfrage der Firewall verneint wird, und gewinnen gegen Zulassungsregeln), Netzwerkprofil, Sicherheitssoftware, Firewall kurz ausschalten zum Eingrenzen; Rückmeldung des Anwenders: `curl` timed out, beide PC im selben Netz mit gemeinsamen Daten, also kein Netzproblem; 2.47: Der Test der Verbindung nennt `Test-NetConnection` nur für die PowerShell, dazu `curl` und `nc` für Eingabeaufforderung, Linux und macOS und die Deutung der Ergebnisse; der Anwender hatte keine PowerShell auf dem anderen Rechner) Kapitel 8: „Windows im Detail“ (`MLL_HOST=0.0.0.0` statt IP, Firewall, Netzwerkprofil, Regel, Prüfen mit `netstat`, Test im Browser des PCs, `Test-NetConnection`, feste IP); Kapitel 9.2: zwei Zeilen; Kapitel 3: Verweis |
+
+Test: `browser_host` mit acht Adressen (aus der Datei gezogen), Datei kompiliert. Nicht geprüft: das Verhalten unter Windows (Browserstart, Firewall).
+
+## 1.65 (2026-10-18)
+
+Patterngenerator Stufe 3c: **Goto Aktivierung** (`M14_Select_GotoAct.Select_GotoAct`). Damit geht auch der Export im Goto Mode (`M11.Check_Table_before_Copy` ruft `Select_GotoAct(Goto_Start_Points)`, wenn der Anwender die Auswahl wünscht).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `headless/headless_pattgen.py` | 1.09 | `DOUBLECLICK_CELLS` um `Goto_Aktivierung`; `HeadlessSelectFromSheetForm` wertet `oCheck_Param_Func` aus (`getattr(M14, Name)`, `TypeError` bei fehlendem `ExpOutCnt` zeigt alle Einträge); `HeadlessUserFormOther` (Ersatz für das fehlende `UserForm_Other` des Patterngenerators, setzt `M14.Userform_Res`), `check_param_value`, `HeadlessPresenters.params`; `run_cell_dialog` für `goto_act` |
+| `_web/web_form_select.py` | 1.01 | `params_dialog` (je Parameter ein Feld mit Beschriftung, Vorgabe und Hinweis aus `Par_Description`, Prüfung beim Bestätigen) |
+| `_web/web_pattgen.py` | 1.11 | `on_cell_dbl`: Doppelklick während eines Vorgangs ohne Meldung |
+| `webmobaledlib.py` | 1.65 | Versionsstand |
+| `install/ANLEITUNG_Installation.md` | 2.45 | Abschnitt 2.10: Goto Aktivierung |
+| `install/BETATEST_Checkliste.md` | 1.16 | Punkte 38 bis 40 |
+
+Fundstellen:
+- **Fehlendes Formular:** `M14.Proc_General` ruft für Einträge mit Klammern (`Counter(Flags, Timeout)`, `RandButton(Flags, Timeout)`, `RandomTime/RandomCount/RandomPingPong(MinTime, MaxTime)`) `UserForm_Other.Show_UserForm_Other(Par, Name, Description)`. Der Name ist in `M14` nicht definiert (Python-Port: `NameError`), das Formular des Patterngenerators gibt es im Port nicht (das des Programmgenerators hat sechs weitere Parameter). Eingesetzt wird `M14.UserForm_Other`; die Werte kommen aus `Par_Description` (`Timeout` Zeit 1 bis 1048560 ms, 30 Sek; `Flags` 0; `MinTime` 5 Sek; `MaxTime` 120 Sek).
+- **Zeitprüfung** wie `Userform_Other.Check_Time_String` des Programmgenerators: Zahl (ms) oder genau `Zahl Einheit` mit Einheit `Min`, `Sek`, `sek`, `Sec`, `sec`, `Ms`, `ms`, dann Bereich. Ergebnis `Name(Wert1, Wert2)` mit den Werten, wie getippt.
+- **Filter:** `Check_Param_Goto(Row)` vergleicht `OutCnt` mit `ExpOutCnt_g`. Ohne Argument ist `ExpOutCnt_g` die Klasse `VBMissingArgument` (VBA: 0), der Vergleich löst `TypeError` aus: alle Einträge. Mit `Goto_Start_Points` fällt `Nothing` (OutCnt 0) weg.
+- **Anklicken der leeren Zelle:** `Global_Worksheet_SelectionChange` öffnet die Liste bei aktivem Goto Mode schon beim Auswählen der leeren Zelle (wie in Excel). Gilt in der Web-Oberfläche über `select_cell`; der Doppelklick während des geöffneten Dialogs bleibt ohne Meldung.
+- `Select_GotoNr_Form` (D01) wird im Port nirgends aufgerufen und bleibt ein Platzhalter.
+
+Tests (echte Arbeitsmappe, Beispiel Basic und Signals): Liste mit zwölf Einträgen, Löschen-Knopf, Beschreibung; `N_Buttons` ohne Parameter; `Counter(0, 30 Sek)` und `RandomTime(5 Sek, 2 Min)` mit Parameterdialog, Abbrechen im Parameterdialog, Löschen, Abbrechen; Zeitprüfung mit 17 Fällen; `Select_GotoAct(3)` zeigt elf Einträge, ohne Argument zwölf (30 von 30). Export-Prüfung auf `KS_Hauptsignal_Zs3_Zs 6_Zs1_RGB` (aktiver Goto Mode, vier Startspalten): Liste mit elf Einträgen, Aktivierung gesetzt, Prüfung liefert `True`; 34 der Beispielblätter haben aktiven Goto Mode mit mehr als einer Startspalte. Anklicken der leeren Zelle öffnet die Liste, anderer Zellen und gefüllter Zellen nicht. Dialoge im Browser mit Ersatzobjekten (24 von 24). Nicht geprüft: Aussehen und Verhalten im Browser; der komplette Export bis in den Programmgenerator mit Goto-Mode-Blatt.
+
+## 1.64 (2026-10-18)
+
+Rückmeldung des Entwicklers: Auf der Seite Main öffnet der Doppelklick auf Spezial Mode und RGB Modul Nr nur den Zelleditor, auf der Seite Wechselblinker geht er.
+
+Ursache: `dialog_cells` lieferte für alle Blätter aus `NON_DATA_SHEETS` nichts, und dazu gehört `Main`. Das Original (`M02_Main.Is_Data_Sheet`) fragt nicht nach dem Blattnamen, sondern nur, ob der benannte Bereich `RGB_Modul_Nr` im Blatt vorhanden ist. In der Web-Oberfläche ist `Main` ein Arbeitsblatt wie die anderen (dieselben Zellen E15 und E16), das der Anwender benutzt.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `headless/headless_pattgen.py` | 1.08 | `dialog_cells`: nur die Hilfsblätter (`PG-Temp`, `Named_Ranges`, `Languages` usw.) ausnehmen, `Main` nicht |
+| `webmobaledlib.py` | 1.64 | Versionsstand |
+
+Test (echte Arbeitsmappe): `Main` hat dieselben Dialogzellen wie ein Datenblatt, `PG-Temp` keine; beide Dialoge tragen auf `Main` ihre Werte ein (20 von 20), Dialoge im Browser mit Ersatzobjekten 19 von 19, Patterngenerator 90 von 90.
+
+## 1.63 (2026-10-18)
+
+Patterngenerator Stufe 3b: Doppelklick auf **Spezial Mode** und **RGB Modul Nr** (nach `M02_Main.Proc_DoubleClick`; Goto Aktivierung folgt mit 3c, `CPX_LED_Assignement` gehört zum Senden an ein Modul).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_form_select.py` | 1.00 | neu: `select_dialog` (Liste mit Name und Kurzbeschreibung, Beschreibung und Details darunter, Expertenmodus, Löschen, Doppelklick wählt), `number_dialog` (Zahl mit − und +), `install()` |
+| `_web/web_pattgen.py` | 1.10 | `JS_DBLCLICK`, `on_cell_dbl`, `window.mllPDlg` je Blatt (in `show()`), `editable` im `defaultColDef` als Funktion (`window.mllPNoEdit`) |
+| `headless/headless_pattgen.py` | 1.07 | `HeadlessSelectFromSheetForm` (ersetzt den Platzhalter `D00.Select_from_Sheet_Form`, gleiche `Show_Form`-Parameter und gleicher Rückgabewert), `led_address_dialog` (ersetzt `M60.Select_LED_Address_Dialog`), `HeadlessPresenters`, `dialog_cells`, `run_cell_dialog`, `DOUBLECLICK_CELLS` |
+| `webmobaledlib.py` | 1.63 | Versionsstand |
+| `install/ANLEITUNG_Installation.md` | 2.44 | Abschnitt 2.10: Doppelklick auf besondere Zellen |
+| `install/BETATEST_Checkliste.md` | 1.15 | Punkte 36 und 37 |
+
+Entscheidungen und Fundstellen:
+- **Doppelklick und Bearbeiten:** AG Grid sendet `cellDoubleClicked` vor dem Start des Bearbeitens. Der Handler setzt für 400 ms `window.mllPNoEdit`, die Funktion `editable` im `defaultColDef` liefert dann `false`; nur für die Zellen, deren Schlüssel `Zeile,Spalte` in `window.mllPDlg` steht (setzt `show()` aus `dialog_cells`, benannte Bereiche `Special_Mode` und `RGB_Modul_Nr`, hier E15 und E16). Tippen und F2 bearbeiten wie in Excel weiter.
+- **Rückgabewert der Liste:** Das Tk-Formular fügte `Name : Kurzbeschreibung` als einen Eintrag ein und lieferte ihn als Namen (`Select_Special_Mode` hätte den ganzen Text in die Zelle geschrieben). Die Web-Fassung liefert wie VBA nur den Namen (`Charlieplexing V2,4`).
+- **Liste aus dem Blatt:** gelesen wie `Add_Filtered` (drei leere Namen beenden die Liste), Name Spalte 4, Kurzbeschreibung Spalte 5, ausführliche Beschreibung Spalte 6 (`|` wird Zeilenwechsel), Blatt `Special_Mode_Dlg` ab `Special_Mode_Head`+1.
+- **RGB Modul Nr:** Das Original sucht ein Modul am USB-Anschluss, liest die letzte LED und lässt die gewählte LED blinken. Das gehört zum Senden an ein Modul (Stufe 4), hier nur die Nummer (0 bis 255, ohne Modul ist das Maximum unbekannt).
+- **Allgemein gehalten für 3c:** Die Auswahlliste kennt schon Expertenmodus (Spalte `oExp_Mode_COL`), Löschen-Knopf und die Detailspalte; `oCheck_Param_Func` (Goto Aktivierung) wird noch nicht ausgewertet.
+
+Tests (echte Arbeitsmappe, Beispiel Basic, Blatt Morsecode): Spezial Mode eintragen (erster und zweiter Eintrag), Abbrechen und keine Antwort lassen den Wert unverändert, RGB Modul Nr eintragen, Startwert ist der aktuelle Wert, Abbrechen; Zellen mit Dialog `E15` und `E16`, `Main` hat keine. Dialoge im Browser mit Ersatzobjekten für NiceGUI: Liste mit und ohne Expertenmodus, Auswahl, Doppelklick, Abbrechen, Löschen, Zahl mit Grenzen, Abbrechen; Handler `on_cell_dbl` (19 von 19). Die JavaScript-Zeile besteht `node --check`. Nicht geprüft: das Aussehen und das Verhalten im Browser (vor allem, dass das Bearbeiten beim Doppelklick wirklich unterdrückt wird).
+
+## 1.62 (2026-10-18)
+
+Rückmeldung des Entwicklers (Screenshots `RGB_AmpelX_A`, `Viessm.4751`): Nach dem Laden aller Beispiele sitzen die Balken zu tief, je mehr Zeilen davor liegen desto weiter, und bei später geladenen Blättern mehr.
+
+Ursache: Die geladenen Dateien setzen die Zeilenhöhen einzelner Zeilen (`LED_Attr`, über `Rows(r).RowHeight`, mit `xlvp2py_guifactor` 1,55 multipliziert). `M03.Update_Grafik` berechnet die Formen aus `Cells(r, c).Top` und `.Height`, das sind die Positionen aus `tksheet.MT.row_positions` (kumulierte Zeilenhöhen mit diesen Werten). Das Gitter im Browser zeichnet alle Zeilen gleich hoch (`ROW_PX` = 20, die Formen „beziehen sich darauf“). Gemessen: `RGB_AmpelX_A` hat 18 LED-Zeilen mit 21 statt 20 px (je Zeile 1 px Drift, nach 17 Zeilen eine knappe Zeile), `Viessm.4751` hat vor der LED-Tabelle zwei Zeilen mit 93 px, drei mit 23 und neun mit 21 (zusammen 156 px). Die Blätter aus den CSV-Dateien haben nur Zeilen mit 20 px, deshalb fiel es vorher nicht auf. Dass es bei später geladenen Blättern schlimmer wirkt, liegt an den Blättern selbst (mehr Sonderzeilen), nicht an der Reihenfolge: Neu zeichnen ergibt dieselben Werte.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_pattgen.py` | 1.09 | `shapes_payload`: y der Formen je Zeile auf das Gitter umrechnen (`web_y`: Zeile k der Excel-Schicht wird Zeile k des Gitters, der Anteil innerhalb der Zeile bleibt); die Zeilenhöhen in den Daten bleiben unverändert (das Speichern schreibt sie wieder in `LED_Attr`) |
+| `webmobaledlib.py` | 1.62 | Versionsstand |
+| `install/BETATEST_Checkliste.md` | 1.14 | Punkt 33 um die Lage der Balken ergänzt; Kopf: gilt für 1.62 |
+| `install/ANLEITUNG_Installation.md` | 2.43 | Abschnitt 2.10: Hinweis, dass nach einem Neustart die Balken erst nach **Aktualisieren** erscheinen; Kopf: gilt für 1.62 |
+
+Test (echte Arbeitsmappe, alle 52 Beispielblätter, 2118 Balken ohne Doppelte): Balken, die unter der letzten LED-Zeile enden, vorher 1056 in 43 Blättern, nachher 0. Blatt `Morsecode` (alle Zeilen 20 px) unverändert. `Viessm.4751`: y 751 bis 1078 wird 599 bis 859, `RGB_AmpelX_A`: größtes y 896 wird 879. Bestätigt vom Entwickler: Die Balken sitzen jetzt richtig. Bekannte Einschränkung (so belassen, nur in der Anleitung vermerkt): Nach einem Neustart sind alle Blätter wieder da, aber ohne Balken, weil die Formen nicht gesichert werden (`LoadWorkbook` mit `copyshapes=False`) und beim Start nur das erste Blatt gezeichnet wird; **Aktualisieren** zeichnet sie. Möglicher späterer Ausbau: `ensure_grafik` beim ersten Anzeigen eines Blatts ohne Balken. Nicht geprüft: die Darstellung im Browser. Zeilen mit großer Höhe (93 px) werden im Gitter 20 px hoch gezeichnet; Formen innerhalb solcher Zeilen werden entsprechend gestaucht (es gibt dort keine).
+
+## 1.61 (2026-10-18)
+
+Fehler vom Tester: Beim Laden aller Beispiele (Statusmeldung „Erstelle Worksheet: KellerLichtAn“) bricht `load_selected` ab: `RuntimeError: The parent element this slot belongs to has been deleted.` in `context.client` (`PatternView.action`, aufgerufen von `goto_sheet` nach dem Laden).
+
+Ursache: Der Dialog Optionen wurde beim Schließen gelöscht (`dlg.on("hide", safe_delete)`). Die Handler der Knöpfe laufen nach dem Schließen weiter, ihr Kontext (Slot) gehört zum gelöschten Dialog; das Laden dauert Sekunden, der Dialog war schon weg. Betroffen waren alle Aktionen nach dem Schließen: `goto_sheet`, `ui.notify`, der Download-Dialog. Im Test mit Ersatzobjekten für NiceGUI nicht erkennbar.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_pattgen.py` | 1.08 | Dialog wird erst beim nächsten Öffnen von Optionen gelöscht (`_options_dlg`), `action` nimmt den Client der Seite (`self.client`, in `__init__` gemerkt) für die Brücke statt `context.client` |
+| `webmobaledlib.py` | 1.61 | Versionsstand |
+
+Nicht geprüft: Das Verhalten von NiceGUI beim Löschen von Slots lässt sich in der Testumgebung nicht nachstellen. Die Abläufe selbst bestehen den Test mit Ersatzobjekten (19 von 19).
+
+## 1.60 (2026-10-18)
+
+Patterngenerator Stufe 3a: Knopf **Optionen** (Reiter „Beispiele“ des Originals `MainMenu_Form`). Beispiele laden, eigene Datei hochladen, Seiten als Download speichern, Seiten löschen. Entscheidungen des Entwicklers: Speichern als Download, Laden als Upload, Löschen wie in Excel (`Del_All_Sheets_Excep_Main`: alle Datenblätter außer Main und den Hilfsblättern). Die Reiter „Spezielle Module“ und „Extras“ (ISP, Servo, Multiplexer-Editor) gibt es nicht.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 1.60 | `build_patt` übergibt `offer_download` an die Seite (Dialog „Datei bereit“ wie im Programmgenerator) |
+| `_web/web_pattgen.py` | 1.07 | Knopf Optionen: Dialog mit Beispielsammlungen (Haken, „Alle Beispiele“), Datei laden (Upload über `web_askopenfilename`), Aktuelle Seite speichern, Alle Seiten speichern, Aktuelle Seite löschen, Alle Beispiele löschen (mit Rückfrage), Meldungen; `goto_sheet`, `after_load`, `confirm` |
+| `headless/headless_pattgen.py` | 1.06 | `example_collections` (die neun Sammlungen von `Examples_UserForm` mit ihren Namen), `load_examples`, `load_files`, `load_upload` (ZIP, nur Dateinamen), `save_for_download` (ZIP, wenn Bilder dazugehören), `delete_sheet`, `delete_all_data_sheets`, `is_data_sheet`, `first_sheet`; Textfelder und Formularknöpfe der Datei werden gemerkt |
+| `ExcelAPI/XLA_Application.py` | 1.06 | `SaveWorkbook`: erst in `<Datei>.tmp` schreiben und ersetzen, nicht serialisierbare Werte weglassen |
+| `install/ANLEITUNG_Installation.md` | 2.42 | Abschnitt 2.10: Optionen; Kopf: gilt für 1.60 |
+| `install/BETATEST_Checkliste.md` | 1.13 | Punkte 33 bis 35; Kopf: gilt für 1.60 |
+
+Entscheidungen und Fundstellen:
+- **Doppelte Blätter:** `Load_Sheets` überspringt Blätter, deren Name in `Loaded_Sheets` steht; das Original füllt die Zeichenkette über ByRef, im Python-Port geht das verloren. `load_files` übergibt daher alle vorhandenen Blattnamen (und die der vorher geladenen Dateien). Abweichung vom Original: Eine schon geladene Sammlung ergibt keine Kopien mit `_Copy_`, sondern eine Meldung. Dieselben Blattnamen in zwei Sammlungen (zum Beispiel `AmpelX`) werden nur einmal geladen, wie im Original.
+- **Speichern:** `M07.Save_All_Sheets_to` löscht vorher alle Blätter mit `_Copy_` im Namen. Das ist hier nicht übernommen (eine eigene Schleife über die Datenblätter), damit der Knopf nichts löscht.
+- **Löschen:** `Del_All_Sheets_Excep_Main` iteriert über die Liste der Blätter, während es sie löscht (überspringt jedes zweite) und fragt über `Is_Normal_Data_Sheet` bei `PG-Temp` nach. Eigene Schleife über eine Kopie der Liste, `PG-Temp` und die Hilfsblätter ausgenommen.
+- **Verlust beim Speichern:** Die Web-Oberfläche legt die Textfelder (Beschreibungen in vier Sprachen, 141 in den Beispielen) und Formularknöpfe (4) nicht an, und `Save_Objects` schrieb sie deshalb nicht. `object_lines_in_file` merkt ihre Zeilen mit den Folgezeilen je Blatt in `persistent_controls_dict["pcf_objects"]` (wird mit der Arbeitsmappe gesichert, `tksheet.persistent_controls_dict` zeigt auf dasselbe Wörterbuch), `save_for_download` hängt sie an. Danach fehlen im Vergleich mit den Beispieldateien nur 8 Bilder, deren Dateien nicht mitgeliefert werden.
+- **Sichern der Arbeitsmappe:** Ein Formularknopf im Blatt (`Command` ist eine Funktion) brach `json.dump` mitten in der Datei ab, `shutdown_program` überschreibt die Datei direkt: Die letzte gute Sicherung wäre kaputt gewesen. Gilt für alle Arbeitsmappen (Programmgenerator auch).
+- **Bekannte Einschränkungen:** Bilder kommen nach einem Neustart nicht zurück (`LoadWorkbook` lädt `PatternWorkbook` mit `copyshapes=False`); sie sind im Speichern nur enthalten, solange die Sitzung läuft. Der Parameter „Charlieplexing LED Zuordnung“ (zum Beispiel `Viessmann`) wird beim Speichern nicht geschrieben (`Save_One_Sheet` schreibt nur gelbe Parameterzellen, die Bedingte Formatierung gibt es im Port nicht). Die Zellen für „Morse text“ gehören nicht zum Dateiformat.
+
+Tests (echte Arbeitsmappe, die Beispieldateien des Pakets): Alle neun Sammlungen laden (52 von 56 Blättern, 4 doppelte Namen übersprungen), alle speichern (ZIP mit 60 Dateien), alle löschen, aus der ZIP-Datei laden: 50 von 52 Blättern Zelle für Zelle gleich, die zwei übrigen die beiden Einschränkungen oben. Neustart: Blätter und Textfelder kommen aus der gesicherten Datei zurück. Abläufe der Oberfläche mit Ersatzobjekten für NiceGUI: 19 von 19. Die Regressionstests (Patterngenerator 90 von 90, Tabelle des Programmgenerators 28 von 28) bestehen. Nicht geprüft: das Aussehen des Dialogs und der echte Upload und Download im Browser.
+
+## 1.59 (2026-10-18)
+
+Rückmeldung des Entwicklers: Alle Blätter vor der Header-Erzeugung neu rechnen, und ein Menüpunkt „Proggenerator Tabelle neuberechnen“ (Tabelle neu zeichnen inklusive Testtasten und alle Blätter neu rechnen). Anlass: Ein Tester meldet weiterhin falsche LED-Zahlen. Wahrscheinliche Ursache: Er benutzt das gespeicherte Worktable (`temp_workbook.table_ProgGenerator.json`), dessen Zeile 1 noch von einer früheren Version stammt.
+
+Nachgestellt (echte Arbeitsmappe, Datei `Prog_Gen_Data_15_08_2026.MLL_pgf`, Header-Erzeugung mit Ersatz für die Plattformprüfungen): Setzt man Zeile 1 aller geladenen Blätter auf 0 (veraltetes Worktable), erzeugt `M06` 1.01 `#define LEDS_PER_CHANNEL ",9,0,2,2,2,2,0,3"` und `NUM_LEDS 20`, genau die Zeichenkette aus der ersten Fehlermeldung. Die Header-Erzeugung rechnete bisher nur das aktive Blatt (`Update_Start_LedNr`) und las die Zeile 1 der eingebundenen Blätter.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 1.59 | Menü Tabelle: „Proggenerator Tabelle neuberechnen“ (`recalc_table`: `M20.Update_All_Start_LedNr()`, aktives Blatt wieder wählen, `refreshicons()`, `M20.ResetTestButtons(False)`; läuft über `run_command`, danach `show()` und `sync_shapes`) |
+| `proggen/M06_Write_Header.py` | 1.02 | `Create_HeaderFile`: vor `M20.Update_Start_LedNr()` zuerst `M20.Update_All_Start_LedNr()` für alle Blätter, danach das aktive Blatt wieder wählen und `Make_sure_that_Col_Variables_match()` |
+| `install/ANLEITUNG_Installation.md` | 2.41 | Abschnitt 2.9: Menüpunkt; Kopf: gilt für 1.59 |
+| `install/BETATEST_Checkliste.md` | 1.12 | Punkt 32; Kopf: gilt für 1.59 |
+
+Test: Mit `M06` 1.02 und veralteter Zeile 1 kommt `LEDS_PER_CHANNEL ",81,17,87,27,74,37,0,7,6"`, `NUM_LEDS 336` und `LED2Var_Tab` gleich Excel heraus, das aktive Blatt bleibt `Main_all`. Der Menüpunkt (Funktion aus der Datei gezogen, mit der echten Arbeitsmappe): Zeile 1 `Main_all` von lauter Nullen auf `[81, 17, 87, 27, 74, 37, 0, 7, 6, 0]`, das zuvor gewählte Blatt ist danach wieder aktiv. Nicht geprüft: Aussehen im Browser; „Symbole aktualisieren“ und die Testtasten nur über den Aufruf, nicht über die Anzeige.
+
+## 1.58 (2026-10-18)
+
+Rückmeldung zum Release 1.57: Die für das Kompilieren erzeugte `LEDs_AutoProg.h` hat in `LED2Var_Tab` andere LED-Nummern als die mit Excel erzeugte Datei (zum Beispiel `MB_Rot` 261 statt 182, `KiGlo2`, `A_Auto`, `BG_BR0` usw. alle 410 statt 330 bis 332, Differenz 77 bis 80).
+
+Nachgestellt mit der echten Arbeitsmappe und der Datei `Prog_Gen_Data_15_08_2026.MLL_pgf` (`M06.Create_HeaderFile(True)` mit Ersatz für die Prüfungen, die die Plattformparameter und die Erweiterungsdefinitionen der Arduino-Bibliothek brauchen: Pin-Listen, Doppelbelegungen, `MaxLed`, `GetExtensionByTypeName`): Die Tabelle war Zeichen für Zeichen die des Anwenders.
+
+Ursache: `M06.Create_HeaderFile`/`ProcessLine` gibt jeder Zeile den LED Kanal der Zeile, Zeilen ohne Eintrag in der Spalte „LED Kanal“ (zum Beispiel `LED_to_Var(...)`) erben ihn von der vorherigen Zeile (`Previous_LEDChannel`, Jürgen 13.02.2025, ToDo #27). Im Python-Port ging das aus zwei Gründen nicht:
+- Die Bedingung lautet `Trim(P01.val(Zelle)) == ""`: `Val('')` ist 0, `Trim(0)` ist `'0'`, also nie leer. Jede Zeile ohne Kanal bekam Kanal 0 (und den Offset von Kanal 0, hier 80 durch `MyOberdorf`).
+- `Previous_LEDChannel` steht in `M02_Public`, `ProcessSheet` setzte `M02a.Previous_LEDChannel = 0`, `Create_Header_Entry` liest und schreibt eine lokale Variable: drei verschiedene Variablen.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 1.58 | Versionsstand |
+| `proggen/M06_Write_Header.py` | 1.01 | `Previous_LEDChannel` als Modulvariable von M06 (`global` in `Create_Header_Entry` und `ProcessSheet`, Rücksetzen am Anfang jedes Blatts), Bedingung auf `Trim(P01.Cells(r, M25.LED_Cha_Col)) == ""`; alte Zeilen als Kommentar. Kopfblock eingefügt |
+
+Test: Alle 16 Einträge von `LED2Var_Tab` gleich den Excel-Werten (`MB_Rot` 182 … `ServAuf` 335); `LEDS_PER_CHANNEL` `",81,17,87,27,74,37,0,7,6"`, `NUM_LEDS 336`. Weitere Unterschiede in anderen Teilen der Header-Datei sind nicht ausgeschlossen (nur `LED2Var_Tab` lag zum Vergleich vor): die ganze Datei mit der aus Excel vergleichen.
+
+## 1.57 (2026-10-18)
+
+Release-Stand. Neu gegenüber 1.56: `proggen/M18a_Load_PicoConfig.py` Version 1.01. `__Copy_and_Clear_Sheet` löscht mit `Rows(a:b).EntireRow.ClearContents()` statt `Rows(a:b).ClearContents()`; die Vorlagenzeile `RGB_Heartbeat(#LED)` blieb beim Laden einer Pico-Konfiguration im neuen Blatt stehen (wie bei `M18_Save_Load` 1.01). Geprüft mit der echten Arbeitsmappe: Zeile 3 des neuen Blatts ist leer, die Vorlage `DCC` unverändert. Das Laden einer Pico-Konfiguration selbst ist nicht durchgespielt.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 1.57 | Versionsstand |
+| `proggen/M18a_Load_PicoConfig.py` | 1.01 | siehe oben, Kopfblock eingefügt |
+| `install/ANLEITUNG_Installation.md` | 2.40 | Knopf „Alle Spalten“ (2.9), Kopfzeile mit der Programmversion |
+| `install/BETATEST_Checkliste.md` | 1.11 | Abschnitt J (Punkte 30 und 31), Kopfzeile mit der Programmversion |
+
+**Release 1.57:** `webmobaledlib.zip` (python/, mit den Dateien `proggen/M17_Import_old_Data.py`, `M18_Save_Load.py`, `M18a_Load_PicoConfig.py`, `M20_PageEvents_a_Functions.py`, `pattgen/M17_Import_a_Dec_Macro.py`), `ANLEITUNG_Installation.pdf` (2.40), `BETATEST_Checkliste.pdf` (1.11), `VERSIONEN_Stand_1.57_2026-10-18.txt`, `RELEASE_Hinweise_1.57.md`. Das Paket 1.52 liegt als `webmobaledlib_Stand_1.52_2026-10-17.zip` bei.
+
+## 1.56 (2026-10-17)
+
+Wunsch des Entwicklers: Datenblätter zeigen in der Web-Oberfläche nur die Spalten bis Q (so entschieden, `M30.LastColumnDatSheet()` = `LED_Nr__Col + INTERNAL_COL_CNT - 1`). Die Spalten dahinter (R bis AC, unter anderem die LED-Zahlen der Kanäle 1 bis 9 in Zeile 1) sollen sich mit einem Knopf einblenden lassen.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 1.56 | `state["all_cols"]` (Standard aus). `last_column(ws)` gibt mit eingeschaltetem Schalter `None` zurück, `build_grid` zeigt dann alle Spalten (`max_col=None`). Neuer Knopf „Alle Spalten“ / „Spalten bis Q“ in der Werkzeugleiste des Programm Generators (`toggle_all_cols`: Schalter umlegen, Beschriftung und Tooltip wechseln, `show()`; der geänderte Spaltenaufbau löst die volle Aktualisierung aus). Der Schalter gilt für alle Datenblätter und bis zum Beenden des Programms (nicht gespeichert) |
+
+Test (echte Arbeitsmappe mit geladener Datei, Blatt `Main_all`): ohne Knopf 17 sichtbare Spalten (A bis Q) und 12 ausgeblendet, mit Knopf 29 sichtbare Spalten (A bis AC); Zeile 1 enthält Kanal 1 in Spalte R (17). Nicht geprüft: Aussehen im Browser.
+
+## 1.55 (2026-10-17)
+
+Rückmeldung zu 1.54: Die Tabellen werden richtig eingelesen, die LED-Zahl-Berechnung ist aber noch falsch.
+
+Prüfung: Die Datei `Prog_Gen_Data_15_08_2026.MLL_pgf` enthält die in Excel berechnete Spalte „LED Nr“. Nach dem Laden mit dem echten Programmgenerator wurden 655 Zeilen aller zehn Blätter Zeile für Zeile mit diesen Excel-Werten verglichen (Zuordnung über Beschreibung, Config und LEDs). Ergebnis vor der Korrektur: 654 stimmten, eine nicht (`Main_all` Zeile 41, Kanal 4: Excel `4-73`, Programm `4-72`).
+
+Ursache: `M20.Update_Start_LedNr` ruft `CellLinesS = M30.CellLinesSum("")` auf (Summe über einen leeren Text, immer 0), gemeint ist die LED-Angabe der Zeile. Dadurch wird der Fall „Zeile zieht LEDs ab“ nie erkannt (`CellLinesS < 0`), und der Höchststand vor `Next_LED(-n)` wird nicht in `MaxLEDNr` gemerkt (Hardi, 20.04.23). `MyAmpel` endet auf Kanal 4 mit `// Next_LED(-1)` (Höchststand 3, danach 2): Excel zählt 3, das Programm zählte 2; `Main_all` zählte dadurch auf Kanal 4 nach dem Include eine LED zu wenig.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 1.55 | Versionsstand |
+| `proggen/M20_PageEvents_a_Functions.py` | 1.02 | `CellLinesS = M30.CellLinesSum(LEDs)` statt `CellLinesSum("")`; alte Zeile als Kommentar |
+
+Test: 655 von 655 Zeilen gleich den Excel-Werten. Zeile 1 nach dem Laden (Kanäle 0 bis 9): `Main_all` `[81, 17, 87, 27, 74, 37, 0, 7, 6, 0]` (jeweils die Nummer der letzten Heartbeat-Zeile in Excel plus 1: `0-80`, `2-86`, `3-26`, `4-73`, `5-36`, `7-6`), `MyAmpel` Kanal 4 gleich 3.
+
+## 1.54 (2026-10-17)
+
+Rückmeldung zu 1.53: Die LED-Zahlen stimmen mit Excel überein, die Vorlagenzeile „LED auf dem Mainboard“ (`RGB_Heartbeat(#LED)`, Kanal 0) steht aber in jedem beim Laden einer PGF-Datei angelegten Blatt. Das ist ein Fehler: Die Vorlagenzeile soll beim Anlegen einer neuen Seite als Beispiel stehen, beim Laden einer PGF-Datei aber vorher gelöscht werden.
+
+Ursachen (mit der echten Arbeitsmappe und der Datei `Prog_Gen_Data_15_08_2026.MLL_pgf` nachgestellt):
+- `M18.__Copy_and_Clear_Sheet` löscht mit `P01.Rows(a:b).ClearContents()`. `Rows(a:b)` liefert in der Excel-Schicht nur die Spalte A (`CRange((a,1),(b,1))`), das Löschen betraf also keine ganzen Zeilen.
+- `CRange.ClearContents` übergab 1-basierte Koordinaten mit eingeschlossenem Ende unverändert an `tksheet.span` (0-basiert, Ende ausgeschlossen): Das Löschen begann eine Zeile und eine Spalte zu spät. Auch mit ganzen Zeilen blieb die erste Zeile des Bereichs stehen. Betroffen sind alle Aufrufer, auch im Patterngenerator (`X02.Range(…).ClearContents()` in M17, M20_Morsecode, M16).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 1.54 | Versionsstand |
+| `proggen/M18_Save_Load.py` | 1.01 | `__Copy_and_Clear_Sheet`: `Rows(a:b).EntireRow.ClearContents()` statt `Rows(a:b).ClearContents()`; alte Zeile als Kommentar. Kopfblock eingefügt |
+| `ExcelAPI/XLA_Application.py` | 1.05 | `CRange.ClearContents`: `span(Start - 1, …, Ende)`, die erste Zeile und Spalte des Bereichs werden mitgelöscht |
+
+Test (echte Arbeitsmappe, `Read_PGF`, Typtexte deutsch): Zeile 1 nach dem Laden (Kanäle 0 bis 9) `Main_all` `[81, 17, 87, 27, 73, 37, 0, 7, 6, 0]`, `MyOberdorf` `[79, 0, …]`, die übrigen Blätter Kanal 0 gleich 0; erste Datenzeile von `MyStadt` ist die erste Zeile der Datei, die Vorlage `DCC` bleibt unverändert. Patterngenerator: 90 von 90 (die Prüfung der Rundreise ignoriert die Punkte, die der Decoder in leere Spalten setzt; vorher blieb durch das zu späte Löschen Inhalt stehen).
+
+Nicht geändert: `proggen/M18a_Load_PicoConfig.py` Zeile 143 hat dasselbe Muster (`Rows(a:b).ClearContents()`) und hat dasselbe Problem, ebenso `M20_PageEvents_a_Functions.py` Zeile 700 („Rows(FirstDat_Row + ':' …)“, mit Textverkettung von Zahl und Text, vermutlich ohnehin nicht lauffähig).
+
+## 1.53 (2026-10-17)
+
+Fehlersuche des Entwicklers: Beim Laden von MLL_pgf-Dateien mit Include-Blättern, die mehrere LED-Kanäle benutzen, stimmt die LED-Anzahl nicht. Gefunden und mit der echten Arbeitsmappe und der Datei `Prog_Gen_Data_15_08_2026.MLL_pgf` (Main_all bindet neun Blätter ein) nachgestellt.
+
+Ursachen:
+- `M20.Update_All_Start_LedNr` rechnete nach dem Laden **kein** Blatt: `Sh.Visible == xlSheetVisible` ist im Python-Port nie wahr (`Visible` liefert `True`/`False`, `xlSheetVisible` ist `-1`, und `True == -1` ist falsch). Zeile 1 aller Blätter blieb `[1, 0, 0, …]`. Dieselbe Prüfung steht in `M17_Import_old_Data.Remove_Selection_in_Sheet`.
+- Auch nach Korrektur der Prüfung reicht ein Durchgang nicht: `Main_all` steht vor den eingebundenen Blättern und liest deren noch nicht berechnete Zeile 1 (`SH_VARS_ROW`, Kanal 0 in `LED_Nr__Col`, Kanäle 1 bis 9 ab `LED_TastCol`). Ergebnis nach einem Durchgang: `[12, 0, 2, 2, 2, 2, 0, 3, 0, 0]`.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 1.53 | Versionsstand |
+| `proggen/M20_PageEvents_a_Functions.py` | 1.01 | `Update_All_Start_LedNr`: `Sh.Visible in (xlSheetVisible, True)`, Durchgang wiederholen, bis sich Zeile 1 (alle LED-Kanäle) aller Blätter nicht mehr ändert (höchstens so viele Durchgänge wie Blätter); alte Zeilen als Kommentar. Kopfblock eingefügt |
+| `proggen/M17_Import_old_Data.py` | 1.01 | `Remove_Selection_in_Sheet`: `Sh.Visible in (xlSheetVisible, True)`. Kopfblock eingefügt |
+
+Test (echte Arbeitsmappe aus den CSV-Dateien, `Read_PGF` mit der Datei, Typtexte deutsch, Frage „Seite importieren?“ mit Ja): vorher `Main_all` und alle Blätter `[1, 0, …]`; nachher `Main_all` `[91, 17, 87, 27, 73, 37, 0, 7, 6, 0]` (Kanäle 0 bis 9), gleich dem Ergebnis „eingebundene Blätter zuerst“; drei Durchgänge (zwei ändernd, einer zur Prüfung), Rechenzeit unter einer Sekunde. Ersatzmodule in der Testumgebung: `serial` und `nicegui`; kein Arduino.
+
+Beobachtung, nicht geändert: Jedes beim Laden neu angelegte Blatt enthält die Vorlagenzeile 3 „LED auf dem Mainboard“ / `RGB_Heartbeat(#LED)` (LEDs 1, Kanal 0), weil die Datei sie nicht enthält und der Lader sie nur überspringt, wenn die erste Zeile der Datei ebenfalls `RGB_Heartbeat` ist. Dadurch zählt jedes eingebundene Blatt auf Kanal 0 eine LED mehr (Main_all Kanal 0: 91 = 3 eigene + 80 von MyOberdorf + 8 Blätter mit je 1). Mit Excel vergleichen.
+
+## Nach Release 1.52 (nur Dokumente, kein neuer Programmstand) - in Release 1.57 enthalten
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `install/ANLEITUNG_Installation.md` | 2.39 | Kapitel 4 (macOS): „Getestet“ mit MacBook Air (2024), Apple M3, 8 GB RAM, macOS 27.0 („Golden Gate“), Programmversion 1.38, Rückmeldung „funktioniert“ (Umfang des Tests nicht bekannt). Kopfzeile mit der zugehörigen Programmversion („gilt für webMobaLedLib 1.52“), beim nächsten Release-Stand auf die dann gültige Version setzen. PDF nicht neu erzeugt |
+
+## Release 1.52 (2026-10-17)
+
+Release-Stand für die Betatester: `webmobaledlib.zip` (python/, 74 Dateien), `ANLEITUNG_Installation.pdf` (2.38), `BETATEST_Checkliste.pdf` (1.10; Abschnitt I „Symbole und Testtasten“ neu, Punkte 28 und 29), `VERSIONEN_Stand_1.52_2026-10-17.txt`, `RELEASE_Hinweise_1.52.md`. Neue Dateien seit 1.38: `_web/web_pattgen.py`, `_web/web_form_exchange.py`, `headless/headless_pattgen.py`, `mlpyproggen/Pattern_Generator.py`, `pattgen/M17_Import_a_Dec_Macro.py` (geänderte Datei des Originals).
+
+## 1.52 (2026-10-17)
+
+Rückmeldung zu 1.51: Mit `MLL_GRID_UPDATE=full` erscheinen neue Symbole, Schalten geht, „Symbole aktualisieren“ geht. „Symbole und Testtasten neu aufbauen“ löscht die Testtasten weiterhin (auch im vollen Modus).
+
+Ursachen:
+- Neue Symbole und Testtasten einer neuen Zeile erscheinen nur bei voller Aktualisierung, die gezielte (`applyTransaction`, `refreshCells`) zeigt sie nicht. Die Ursache im Browser ist nicht geklärt; Toggeln (gleiche Zellen, andere Farbe) geht gezielt.
+- `rebuild_decorations` löschte die Testtasten und rief `M20.ResetTestButtons(False)` auf. Das ruft `Update_TestButtons(Row, First_Call=…)`, und das legt für alle Zeilen außer der ersten keine Tasten an, wenn die Zeile keine alten Tasten hat (`Global_Rect_List[Row] == ''` → `return`). Anlegen geschieht mit `redraw=True`.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 1.52 | `decor_signature(rows)` ({(Zeile, Feld)} der Zellen mit `_img` oder `_tb`). `show()`: ändert sich diese Menge gegenüber dem Stand des Browsers, wird wie bis 1.48 die ganze Tabelle gesendet (`full_update`, Optionen normal zugewiesen, `grid.update()`); Toggeln, Symbolwechsel und Textänderungen bleiben gezielt. `rebuild_decorations`: Testtasten mit `M20.Update_TestButtons(row, onValue, redraw=True)` für jede Zeile anlegen (`onValue` aus der Startwert-Spalte, wie `ResetTestButtons`) |
+
+Test: `show()` aus der Datei gezogen (28 von 28: neue und wegfallende Knöpfe und Symbole → ganze Tabelle; Toggeln, Symbolwechsel, Text → gezielt). Nicht geprüft: Browser und echter Programm Generator, insbesondere `rebuild_decorations`.
+
+## 1.51 (2026-10-17)
+
+Rückmeldung zu 1.50: Die Testknöpfe schalten wieder um. Bei einer neuen Zeile erscheinen Symbol und Testknopf aber nicht; „Symbole und Testtasten neu aufbauen“ lässt die vorhandenen Knöpfe verschwinden und legt keine neuen an; „Symbole aktualisieren“ zeigt die alten wieder, aber nicht die neuen. Ursache nicht gefunden: Im Code sind `_tb` und `_img` für neue Zeilen vorhanden, und `show()` sendet und zeichnet sie wie die Knöpfe bestehender Zeilen. Ohne den echten Programm Generator (CSV und xlsm fehlen) nicht nachstellbar. Verglichen mit 1.38 haben sich für den Programm Generator nur `show()` (1.49, 1.50) und `XLA_Application.py` (1.01 bis 1.04: Auswahl mit Datenindizes, `Select()`, `Shapes` über Momentaufnahme, `Calculate()` nur Patterngenerator) geändert.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 1.51 | Diagnose `MLL_DEBUG_SHAPES=1`: `shapes_report(ws)` (aktives Arbeitsbuch und Blatt der Excel-Schicht, Zahl der Symbole und Testtasten, nicht zuzuordnende Shapes) vor und nach dem Schreiben einer Zelle und bei jedem `show()` mit den Zeilen, die `_tb` und `_img` tragen, sowie was gesendet wurde (`SHAPES:`) |
+| `install/ANLEITUNG_Installation.md` | 2.38 | Umgebungsvariablen `MLL_DEBUG_SHAPES`, `MLL_GRID_UPDATE=full` |
+
+Zum Eingrenzen: `MLL_GRID_UPDATE=full` (vorhanden seit vor 1.38) sendet bei jeder Änderung wieder die ganze Tabelle. Zeigt sich der Knopf damit, liegt es an der gezielten Aktualisierung; sonst fehlt er schon in den Daten (dann zeigt `SHAPES:`, ob das Shape existiert, zugeordnet wird und auf welchem Arbeitsbuch und Blatt die Excel-Schicht gerade arbeitet).
+
+## 1.50 (2026-10-17)
+
+Rückmeldung zu 1.49: Einfügen, Löschen und Verschieben gehen, aber die Testknöpfe ändern nach einem Klick ihre Farbe nicht mehr, und bei einer neuen Zeile erscheint „AnAus“, der Knopf aber nicht.
+
+Ursache (aus 1.49): Der Renderer der Zellen (`cell_renderer_js`) zeichnet die Testknöpfe aus `params.data._tb` und die Symbole aus `params.data._img`. Ändert sich nur dieses Zusatzfeld und nicht der Zellwert, zeichnet AG Grid die Zelle nach `applyTransaction` nicht neu. Bis 1.48 hat das der komplette Neuaufbau durch die Zuweisung an `grid.options` nebenbei erledigt. Kommt der Knopf bei einer neuen Zeile erst nach der Eingabe (die Form entsteht beim Auswerten der Zelländerung, ein späteres `show()` fügt `_tb` hinzu), bleibt der Wert „AnAus“ gleich und der Knopf fehlt.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 1.50 | neue Funktion `renderer_columns(rows)` (Spalten, in denen Zeilen `_tb` oder `_img` tragen). `show()`: nach `applyTransaction` bzw. dem Austausch aller Zeilen `refreshCells({columns, force: True})` für die Spalten der geänderten Zeilen (alte und neue Fassung) bzw. aller Zeilen. Ohne Knopf und Symbol in den geänderten Zeilen kein Aufruf (spart Arbeit) |
+
+Test: `show()` aus der Datei gezogen, 23 von 23 (neu: Knopf wechselt die Farbe, neuer Knopf bei gleichem Zellwert, Symbol wechselt, nur Text geändert ohne `refreshCells`, Zeile eingefügt und gelöscht). Nicht geprüft: Browser und echter Programm Generator. Falls ein Knopf nach dem Neuladen der Seite (F5) fehlt, wird die Form (`collect_test_buttons`) nicht angelegt; dann `MLL_DEBUG_TIMING=1` und das Protokoll.
+
+## 1.49 (2026-10-17)
+
+Beschwerde eines Linux-Nutzers mit langsamem Laptop (Programm Generator): Nach jeder Änderung bleibt die Tabelle lange weiß, bevor sie wieder erscheint; im Video klickt er nur auf einen Testknopf in der Tabelle. Der Titel in seinem Video lautet noch „pyMobaLedLib“, er hat also eine Version vor der Umbenennung (Stand vor dem 15.10.). Der Testknopf ruft nach dem Arduino-Befehl `show(ws)` auf.
+
+Vermutete Ursache (im Browser nicht gemessen): `show()` wies `grid.options["columnDefs"|"rowData"|…]` direkt zu. NiceGUI schickt dabei die ganze Tabelle, AG Grid baut Spalten und Zeilen neu auf; das gezielte Senden mit `applyTransaction` kam zusätzlich. Dasselbe Muster hatte beim Patterngenerator das Springen verursacht (1.45).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 1.49 | `show()`: im unveränderten Fall (gleiches Blatt, gleicher Spaltenaufbau) werden die Optionen mit `dict.__setitem__` still nachgeführt, gesendet werden nur die Unterschiede (`applyTransaction`, `setGridOption` für alle Zeilen). Der Spaltenaufbau umfasst jetzt auch Kopfname und Anheftung. Spaltenbreiten, die ein Makro ändert, werden per `setGridOption("columnDefs")` gesendet; `shown["widths"]` hält die dem Browser bekannten Breiten, `on_column_resized` trägt gezogene Breiten dort ein. `animateRows: False`. Zeitmessung mit `MLL_DEBUG_TIMING=1`: `TIMING: show(...)` (Aufbau der Zeilen, Vergleich und Senden, gesamt, Zeilen, KB) und `TIMING: Testtaste` (Arduino-Befehl, Aktualisierung) |
+| `install/ANLEITUNG_Installation.md` | 2.37 | Tabelle der Umgebungsvariablen (`MLL_DEBUG_TIMING`), Fehlersuche 9.1 und 9.4 (weiße Tabelle, Hardwarebeschleunigung) |
+
+Die Wiederherstellung von Bildlauf und Ankerzeile (`mllFreeze`, `mllRestore`, `ensureIndexVisible`) bleibt unverändert. Test: `show()` wurde aus der Datei gezogen und mit einer Attrappe der Tabelle geprüft (15 von 15: erstes Anzeigen, eine Zeile geändert, nichts geändert, Zeile hinzugekommen, Breite durch Makro und durch Ziehen, Spalte ausgeblendet, Kopfname, anderes Blatt). Nicht geprüft: Browser, echter Programm Generator. Falls es auf dem Laptop weiter lange weiß bleibt, zeigen die `TIMING:`-Zeilen, ob Aufbau auf dem Server oder Senden und Darstellung im Browser die Zeit brauchen (nächster Schritt: nur geänderte Zeilen in `build_grid` neu aufbauen).
+
+## 1.48 (2026-10-17)
+
+Rückmeldung zu 1.47: Die Excel-Version behält `#InCh` im Feld „Schalter Nummer“ und meldet beim Import nichts; die Web-Version meldete beim Import „Das Macro entspricht leider nicht genau dem original Macro“. Die Änderung an `#InCh` in 1.47 war falsch (die Vermutung war nur aus dem Text der Meldung abgeleitet) und wird zurückgenommen.
+
+Ursache: Beim Import in ein **neues Blatt** stand `Ergebnis` (E20) falsch da (`PatternT1(0,92,#InCh,8,0,128,0,0,1 Sec,…` statt `…,28,…,PM_NORMAL,…`), weil die davon abhängigen Zellen E36, E37, E42 nach den vielen gleichzeitigen Änderungen (Ereignisse abgeschaltet) noch Werte eines Zwischenstands hatten. `Calc_Worksheet` wertet die Formeln des Patterngenerators in fester Reihenfolge in einem Durchgang aus, Excel löst die Abhängigkeiten selbst auf. Beim Import ins aktuelle Blatt fiel das nicht auf, weil die Werte dort zufällig schon stimmten.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 1.48 | Versionsstand |
+| `ExcelAPI/XLA_Application.py` | 1.04 | `Calculate()`: im Arbeitsbuch „PatternWorkbook“ wird `Calc_Worksheet` wiederholt, bis sich in den Zellen nichts mehr ändert (höchstens 6 Durchgänge, Ereignisse währenddessen aus, danach wie bisher `EventWScalculate`), auch bei abgeschalteten Ereignissen. Andere Arbeitsbücher (Programm Generator) unverändert |
+| `pattgen/M17_Import_a_Dec_Macro.py` | 1.02 | Änderung von 1.01 zurückgenommen: Der Code ist wieder wie im Original (`#InCh` bleibt im Feld stehen, Vergleich mit `Org` ohne Ersetzung); die Zeilen von 1.01 stehen als Kommentar |
+| `install/ANLEITUNG_Installation.md` | 2.36 | Hinweis: Nach dem Import steht `#InCh` im Feld „Schalter Nummer“ (wie in Excel) |
+
+Test: Import ins aktuelle Blatt und in ein neues Blatt („Nein“ auf die Rückfrage): keine Meldung, Ergebnis und LED-Tabelle wie das Original, `#InCh` bleibt (90 von 90). Eine stabile Berechnung des Blatts „Main“ dauert 40 bis 90 ms.
+
+## 1.47 (2026-10-17)
+
+Rückmeldung zu 1.46: Der Import meldet „Das Macro entspricht leider nicht genau dem original Macro“, weil `#InCh` nicht durch `SI_1` ersetzt wird.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 1.47 | Versionsstand |
+| `pattgen/M17_Import_a_Dec_Macro.py` | 1.01 | `Decode_Pattern_String_and_Compare` ersetzt vor dem Vergleich auch `,#InCh,` durch `,SI_1,` (bisher nur `,InCh,`; `(#LED,` war schon behandelt); der Decoder (`Decode_Pattern_String`) setzt den Schalter auch bei `#InCh` auf `SI_1`. Kopfblock eingefügt |
+| `install/ANLEITUNG_Installation.md` | 2.35 | Hinweis auf `#InCh` nach dem Import entfernt |
+
+Der Export schreibt `#LED` und `#InCh` in die Zeile des Programm Generators (`M11.Copy_Pattern_Macro_Callback`); beim Import war nur `#LED` berücksichtigt. Test: Rundreise Export → Import ergibt dasselbe Ergebnis wie vorher, ohne Meldung, „Schalter Nummer“ steht auf `SI_1` (84 von 84).
+
+## 1.46 (2026-10-17)
+
+Patterngenerator, Stufe 2: Export zu ProgGen und Import von ProgGen. Die Tk-Fenster `Select_ProgGen_Dest_Form` und `Select_ProgGen_Src_Form` sind durch ein gelbes Hinweisband im Reiter Programm Generator ersetzt.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 1.46 | Versionsstand; Band über der Tabelle (`web_form_exchange.build_banner`, vor `grid_wrap`) |
+| `_web/web_form_exchange.py` | 1.00 | neu: `WebSelectDestForm`, `WebSelectSrcForm` erben von den Originalklassen (Prüfungen und Rückrufe unverändert, nur `Show`/`Hide` ersetzt, Haken als `_Check`), `install_forms`, `ExchangeBanner` (Texte aus dem Quelltext der Originale, OK und Abbrechen laufen im Worker, danach wird der Programm Generator wieder zum aktiven Arbeitsbuch gemacht, Reiter und Tabelle werden umgeschaltet bzw. neu gezeigt) |
+| `headless/headless_proggen.py` | 1.08 | `web_form_exchange.install_forms` nach `web_dialogs.install_forms`; Kopfblock eingefügt |
+| `headless/headless_pattgen.py` | 1.05 | `export_to_proggen` (mit `M11.Check_Table_before_Copy`; im Tk-Port waren die Prüfungen ausgelassen), `import_from_proggen`, `update_table_empty_flag` |
+| `_web/web_pattgen.py` | 1.06 | Knöpfe „Export zu ProgGen“, „Import von ProgGen“ (`on_export`, `on_import`) |
+| `install/ANLEITUNG_Installation.md` | 2.34 | Abschnitt 2.10 und Kapitel 10 |
+| `install/BETATEST_Checkliste.md` | 1.09 | Punkte 26 und 27 |
+
+Zu wissen:
+- **Zelle F44** (`M01.TableEmptyMsgRng`) ist in Excel eine Formel („LED Tabelle leer“); die CSV-Datei enthält nur ihren leeren Wert, die Prüfung hätte nie angeschlagen. `update_table_empty_flag` rechnet sie vor jedem Export nach (leer = keine Zelle der Tabelle mit Text; die Zelle in Spalte BY, die eine Liste enthält, zählt nicht).
+- **Arbeitsbücher:** Die Rückrufe (`Copy_Pattern_Macro_Callback`, `Import_From_Prog_Gen_Callback`) rufen `PG.ThisWorkbook.Activate()` (Patterngenerator) auf. Das Band stellt danach mit `X02.activate_workbook` den Programm Generator und `X02.ThisWorkbook` wieder her.
+- **Import:** Der Decoder (`M17.Decode_Pattern_String_and_Compare`) setzt `InCh` nur bei genau `InCh` auf `SI_1`; der Export schreibt `#InCh`, deshalb steht nach dem Import `#InCh` in „Schalter Nummer“. Das ist der unveränderte Originalcode.
+- **Goto Mode:** Mit aktivem Goto Mode rufen Export und Prüfung Auswahldialoge von `pattgen` auf, die es im Web noch nicht gibt (Stufe 3).
+- **Test:** Im Test sind `proggen.M50`, `M25`, `M27`, `M28` und der Programm Generator nachgebildet (die CSV-Blätter des Programm Generators fehlen). Geprüft wurden die echten Formularklassen, die echten Rückrufe, die Prüfungen vor dem Export, die Rundreise Export → Import und die Reiter- und Arbeitsbuchumschaltung (82 von 82). Nicht geprüft: das Schreiben in eine echte Zeile des Programm Generators und der Browser.
+
+## 1.45 (2026-10-17)
+
+Rückmeldung zu 1.44: Die Tabelle springt weiter an den Anfang zurück. Vermutete Ursache (nicht im Browser bestätigt): Jede Zuweisung an `grid.options` lässt NiceGUI die Tabelle sofort an den Browser schicken, AG Grid baut dann die Zeilen neu auf. Beim Programmgenerator steht dazu derselbe Befund im Kommentar zu `mllFreeze` („der Browser setzt sie ohne Ereignis auf 0, wenn AG Grid die Zeilen neu aufbaut“).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 1.45 | Versionsstand |
+| `_web/web_pattgen.py` | 1.05 | Im unveränderten Fall (gleiches Blatt, gleiche Höhen) werden die Optionen mit `dict.__setitem__` still nachgeführt, geschickt werden nur die Unterschiede (`applyTransaction`, `setGridOption`). Zusätzlich `JS_SCROLL`: `mllPScroll` merkt Bildlauf oben und links aus den Bildlaufereignissen, `mllPFocus` die Markierung (`onCellFocused`), `mllPApi` die Tabellen-API (`onGridReady`). `mllPRestore()` stellt nach einer Aktualisierung bis zu 1,2 s lang Bildlauf und Markierung wieder her und endet sofort, wenn der Benutzer eingreift (Rad, Berührung, Klick, Taste) |
+
+Bleibt es dabei: Bei den Rückmeldungen steht, ob die Position nach Bearbeiten, Klick, Einfügen oder „+“ verloren geht (vertikal oder horizontal). Danach sind Protokollzeilen im Browser (Konsole) und `MLL_DEBUG_SCROLL` wie beim Programmgenerator der nächste Schritt.
+
+## 1.44 (2026-10-17)
+
+Rückmeldung zu 1.43: Bei einer Änderung springen Tabelle und Cursor an den Anfang (wie früher beim Programmgenerator). Ursache: `show()` schickte jedes Mal die ganze Tabelle mit `grid.update()`, dabei setzt AG Grid Bildlauf und Markierung zurück.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 1.44 | Versionsstand |
+| `_web/web_pattgen.py` | 1.04 | `show()` merkt sich Blatt, Zeilen- und Kopfhöhe und die Spalten der gesendeten Tabelle. Unverändert: nur die Unterschiede senden (`applyTransaction` für geänderte Zeilen, `setGridOption` für Spalten oder den Austausch aller Zeilen). `grid.update()` nur beim ersten Mal, beim Blattwechsel und bei geänderter Zeilenhöhe (dann beginnt der Bildlauf oben) |
+
+## 1.43 (2026-10-17)
+
+Patterngenerator, Stufe 1, Runde 3: gleich breite Muster-Spalten (vom Entwickler bestätigt), Tastatur und Zwischenablage, Kontextmenü, Anleitung und Checkliste.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 1.43 | Versionsstand |
+| `headless/headless_pattgen.py` | 1.04 | Muster-Spalten ab F 56 Pixel, `M01.NormColWidth = 56` (die Excel-Schicht passt benutzte Spalten an die Dauer an, ausgehend davon: Funktion von `M04.Adjust_Column_With_to_Duration` bleibt erhalten); `clear_cell`, `paste_text` (Tabulator und Zeilenwechsel wie Excel, mehrere Zellen ohne Ereignisse, danach einmal neu berechnen, gesperrte Spalten übersprungen) |
+| `_web/web_pattgen.py` | 1.03 | Entf, Strg+C, Strg+X, Strg+V (`JS_KEYDOWN`, Ereignis `mll_pcell_op`), Kontextmenü (Zelle bearbeiten, Kopieren, Ausschneiden, Einfügen, Löschen) mit `JS_CONTEXT` und den Menüskripten, `on_cell_op` |
+| `install/ANLEITUNG_Installation.md` | 2.33 | Abschnitt 2.10 „Der Patterngenerator“; Kapitel 10: was im Patterngenerator noch fehlt |
+| `install/BETATEST_Checkliste.md` | 1.08 | Abschnitt H „Patterngenerator“ (Punkte 22 bis 25) |
+
+Bekanntes: Die Zwischenablage wird im Browser gelesen (`navigator.clipboard.readText`), beim ersten Mal fragt der Browser. Der Programmgenerator funktioniert ebenso. Offen: Stufe 2 (Export zu ProgGen, Import von ProgGen), Stufe 3 (Optionen „Beispiele“, Auswahldialoge beim Doppelklick).
+
+## 1.42 (2026-10-17)
+
+Rückmeldung zu 1.41: „+“ und „−“ funktionieren nur in den LED-Zeilen 1 und 2, sonst kommt „Cursor außerhalb der Tabelle“; beim Einfügen einer Spalte bleibt ein gelber Balken stehen.
+
+Ursachen (alle in der Excel-Schicht, wirken bei ausgeblendeten Zeilen, der Patterngenerator blendet 22 Zeilen aus):
+- `Selection.Row` und `Selection.Column` (`getSelectedRow`, `getSelectedColumn`) lieferten angezeigte statt Datenindizes. `In_Pattern_Table()` bestand nur in den Zeilen 50 und 51 zufällig, weil 50 − 22 = 28 die Dauer-Zeile und 51 − 22 = 29 die Goto-Zeile ist.
+- `CRange.Select()` (`setSelectedCells`) setzte die Auswahl mit Datenindizes als angezeigte Indizes. Nach „+“ stand die Auswahl 22 Zeilen zu tief, „−“ meldete deshalb „Cursor outside the table“.
+- Die Iteration über `Shapes` lief über die lebende Liste: `Delete()` in der Schleife (`M03.Del_Analog_Trend_Objects`) ließ jede zweite Form stehen, alte Balken blieben sichtbar.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 1.42 | Versionsstand |
+| `ExcelAPI/XLA_Application.py` | 1.03 | 1.01: `getSelectedRow` und `getSelectedColumn` liefern Datenindizes; 1.02: `setSelectedCells` rechnet Datenindizes in angezeigte um (bei nichts Ausgeblendetem unverändert); 1.03: `Shapes` iteriert über eine Momentaufnahme. Kopf eingefügt |
+| `headless/headless_pattgen.py` | 1.03 | Auswahlereignis mit Datenindizes (`Selected(row - 1, col - 1)`), nach Spalte hinzufügen und entfernen werden die Balken neu gezeichnet |
+
+Wirkt auch auf den Programmgenerator, sobald dort Zeilen ausgeblendet sind (Aus-/Einblenden, Kopieren, Verschieben von Zeilen): Dort bitte einmal prüfen.
+
+## 1.41 (2026-10-17)
+
+Rückmeldung zu 1.40 (Screenshot): Die Spalten waren alle etwa 36 Pixel breit und damit unlesbar, die Balken lagen daneben. Ursache vermutlich die automatische Spaltenanpassung von NiceGUI (`auto_size_columns`): Sie schiebt 77 Spalten auf die Fensterbreite, die Balken rechnen aber mit den Pixelbreiten des Blatts. Das ist nicht bestätigt, deshalb schreibt das Programm die Breiten ins Protokoll.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 1.41 | Versionsstand |
+| `headless/headless_pattgen.py` | 1.02 | Breitere Spalten im Blatt selbst: D 200 und E 240 Pixel (`apply_column_widths`), damit die Formen der Excel-Schicht dieselbe Geometrie haben wie die Tabelle; `right_aligned_columns` (aus `ColumnAlignment`). Die Muster-Spalten ab F setzt M04 selbst (49 bis 56) |
+| `_web/web_pattgen.py` | 1.02 | `auto_size_columns` aus (nur wenn NiceGUI den Parameter kennt), `suppressSizeToFit`, kleine Mindestbreite, schmale Zellränder und zentrierter Kopf, Beschriftungen in D rechtsbündig, Textüberlauf nach rechts bei leerer Nachbarzelle (Klasse `mll-ovf`), Balken werden bei **jedem** Start gezeichnet (Freiformen werden nicht gesichert), doppelte Formen der Excel-Schicht werden übersprungen, Protokollzeile „Spaltenbreiten A bis N“ |
+
+Bekanntes: Die Breite eines Zeichens für den Textüberlauf ist geschätzt (7 Pixel bei Schrift 100 %). Die Muster-Spalten ab F bleiben bei 49 bis 56 Pixeln, solange M04 sie setzt.
+
+## 1.40 (2026-10-17)
+
+Patterngenerator, Stufe 1, Runde 2: Bearbeiten, Werkzeugleiste, Beschreibung und die Balken der grafischen Anzeige (gleich nach dem Laden).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 1.40 | Versionsstand |
+| `headless/headless_pattgen.py` | 1.01 | Aktionen für den Browser: `select_cell` (Datenindizes plus Auswahlereignis, setzt `X02.Selection`), `set_value`, `update_grafik` (wie der Knopf der Tk-Seite), `add_columns`, `del_columns`, `new_sheet` (`G00.New_Sheet`), `set_rgb_led`; `HeadlessControl` als Ersatz für den Haken „RGB LED“; `protected_columns` (aus `ProtectedCells`), `info_text` (Textbox des Blatts), `find_sheet`, `workbook_dict` |
+| `_web/web_pattgen.py` | 1.01 | Zellen bearbeiten (Spalten A bis D gesperrt), Klick setzt die aktive Zelle, Werkzeugleiste (Neues Blatt, Aktualisieren, Neu berechnen, + und −, Haken RGB LED), Beschreibung aufklappbar, Balken als SVG über den Zellen (aus den Freiformen `Analog_Trend` der Excel-Schicht), feste Zeilenhöhe 20 und nicht verstellbare Spalten (Geometrie der Formen), Sperre gegen gleichzeitige Aktionen, Fehler des Blattwechsels behoben (`SheetsDict.get` gibt es nicht) |
+| `_web/web_dialogs.py` | 1.05 | `redirect_messagebox()`: `tkinter.messagebox.*` erscheint für die Dauer einer Aktion im Browser (Meldungen wie „Cursor outside the table“) |
+
+Bekanntes: Leert man E5 (Anzahl der Ausgabekanäle), meldet das Programm einen Fehler, weil `pattgen` und `P01_Worksheetcalc` dort eine Zahl erwarten (`int('')`), wie im Original. `CRange.Select()` setzt die Auswahl bei ausgeblendeten Zeilen an die falsche Stelle (Auswahl liegt in angezeigten Indizes), deshalb setzt `select_cell` die Auswahl über `HeadlessSheet.set_selection`. Offen (Runde 3): Textausrichtung und Überlauf der Beschriftungen, Kopieren, Einfügen und Löschen, Anleitung und Checkliste; Auswahldialoge beim Doppelklick und Optionen in Stufe 3.
+
+## 1.39 (2026-10-17)
+
+Patterngenerator, Stufe 1, Runde 1: Die Tabelle wird im neuen Reiter „Patterngenerator“ angezeigt (noch ohne Bearbeiten, Werkzeugleiste und Ereignisse).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 1.39 | Reiter „Patterngenerator“ hinter „Programm Generator“; Aufbau erst beim ersten Öffnen (`build_patt`, die Arbeitsmappe gibt es nur einmal: `_PATT`); Kopf eingefügt |
+| `mlpyproggen/Pattern_Generator.py` | 1.00 (neu im Paket, Original 4.03) | `build_workbook_dict()` aus `Pattern_GeneratorPage.__init__` herausgelöst (gemeinsame Quelle mit `headless_pattgen.py`, Test: identisch mit dem Originalblock); Kopf eingefügt, keine Zeilenmarken (großer Umbau) |
+| `headless/headless_pattgen.py` | 1.00 (neu) | Seite ohne Tk: öffnet die Arbeitsmappe `PatternWorkbook`, Platzhalter statt der Tk-Formulare (`HeadlessForm`), `activated()` (schaltet für Aktionen auf PatternWorkbook um), `recalculate()`, Kennzeichen `fresh` (erster Start) |
+| `_web/web_pattgen.py` | 1.00 (neu) | Reiter im Browser: eigene Tabelle (AG Grid), Blattreiter (ohne `PG-Temp` und `Named_Ranges`), Tooltips aus „Beschriftung§Tooltip“, einmalige Berechnung beim ersten Aufbau |
+| `headless/headless_gridmodel.py` | 1.01 | `build_grid`: Option `data_header` (Kopfzeilenlogik abschaltbar) und `tooltips_in_cells` (Tooltips in jeder Zelle); Standardverhalten unverändert (Test gegen 1.00) |
+| `ExcelAPI/headless_sheet.py` | 1.01 | `getColorAt` und `setColorAt` (bisher Platzhalter): Zellfarben, mit denen der Patterngenerator LED-Werte bestimmt |
+
+Offen in dieser Stufe: Bearbeiten und Ereignisse (Runde 2), Werkzeugleiste (Neues Blatt, Aktualisieren, Neu berechnen, Spalten, RGB LED), Textausrichtung und Textüberlauf der Beschriftungen, Farben der LED-Tabelle (vermutlich bedingte Formatierung), Anleitung und Checkliste.
+Bekanntes Risiko: Importzirkel `XLA_Application` → `P01_Worksheetcalc` → `pattgen` → `Pattern_Generator`. `headless_pattgen` wird deshalb erst beim ersten Öffnen des Reiters importiert.

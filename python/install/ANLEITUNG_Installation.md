@@ -1,5 +1,5 @@
 # webMobaLedLib – Installation und Betrieb
-*Datei-Version: 3.77 (2026-11-14), gilt für webMobaLedLib 3.38*
+*Datei-Version: 4.22 (2026-11-19), gilt für webMobaLedLib 4.22*
 
 Windows · macOS · Linux-Desktop · Raspberry Pi
 
@@ -177,7 +177,7 @@ prüft die Bibliotheken und Boards beim Start („Überprüfe Bibliotheken und B
 - Es sollte immer nur **ein Browser** gleichzeitig mit der Oberfläche arbeiten.
 - **Beenden und serielle Schnittstelle (3.24):** Beim Beenden schließt das Programm alle seriellen Verbindungen und beendet sich nach spätestens 8 Sekunden hart, falls
   etwas hängt. Der COM Port ist danach für andere Programme (zum Beispiel die Arduino IDE) wieder frei.
-- **Automatisch verbinden (3.25):** Öffnest du die Reiter **Farb Test**, **Servo Test**, **DM Servo Test** oder **Sound Test** ohne Verbindung, verbindet das Programm selbst mit dem Arduino (wie ARDUINO → Verbinden) und startet danach den Direktmodus.
+- **Automatisch verbinden (3.25):** Öffnest du die Reiter **Farb Test**, **Servo Test**, **DM Servo Test** oder **Sound Test** ohne Verbindung, verbindet das Programm selbst mit dem Arduino (wie Lichtmaschine → Verbinden) und startet danach den Direktmodus.
 - **Suche in der Tabelle (3.28):** Auf den Datenblättern (DCC, Selectrix, CAN) steht in der Werkzeugleiste ein **Suchfeld**. **Strg+F** setzt den Cursor dorthin (die Suche des Browsers findet nur, was gerade sichtbar ist). Beim Tippen springt die Tabelle zum ersten Treffer ab der gewählten Zelle; alle Treffer sind **gelb**, der aktuelle **orange** hinterlegt. **Eingabetaste** = nächster, **Umschalt+Eingabetaste** = voriger Treffer (oder die Pfeilknöpfe), **Esc** beendet die Suche. Daneben steht die Trefferzahl („3 / 7“). Gesucht wird in allen Spalten (auch Filter) und auch in **inaktiven** Zeilen, aber **nicht** in den beiden Kopfzeilen, ohne Rücksicht auf Groß- und Kleinschreibung. Haken **Wort** (Ganzes Wort): ID.1 findet dann nicht mehr ID.12. Haken **Alle** (Alle Blätter): die Suche geht über alle Datenblätter und wechselt bei einem Treffer das Blatt.
 - **Eingefärbte Zeilen (3.27):** Die Schriftfarbe passt automatisch zur Hintergrundfarbe (schwarz auf hellem, weiß auf dunklem Grund). Mit dem Haken **Schrift in eingefärbten Zeilen fett** (Programm Einstellungen, Gruppe Programm Generator) wird die Schrift in gefärbten Zeilen und Zellen zusätzlich fett.
 - **Letztes Blatt (3.24):** Beim nächsten Start öffnet das Programm das Blatt, an dem du zuletzt gearbeitet hast (vorher immer das erste DCC-Blatt).
@@ -210,8 +210,9 @@ Unter Linux zeigt `xdg-settings get default-web-browser`, welcher Browser als St
 
 ### 2.5 Das Programmsymbol
 
-Das Symbol ist das des originalen ProgrammGenerators (Ring aus bunten LEDs, Tabelle, Stift) mit einer kleinen blauen Weltkugel unten rechts. Dieselbe Datei steht als Symbol im Browserreiter. `install/make_icons.py` erzeugt daraus `mobaledlib.png`
-(Verknüpfungen, Raspberry Pi), `favicon.png`, `mobaledlib.ico` (Windows) und `mobaledlib.icns` (macOS). Ohne Weltkugel: `python make_icons.py --plain`. Die fertigen Dateien liegen bei; die Installer erzeugen sie nur neu, wenn sie fehlen. `make_icons.py` braucht Pillow (`pip install Pillow`), die Web-Oberfläche selbst nicht.
+Das Symbol (neu in 4.10) zeigt den Ring aus bunten LEDs, eine Weltkugel mit Stift und ein rotes Zahnrad. Dieselbe Vorlage steht als Symbol im Browserreiter. `install/make_icons.py` erzeugt aus `install/mobaledlib_icon.png` und `install/mobaledlib_icon_full.png` die Dateien `mobaledlib.png` (Verknüpfungen, Raspberry Pi), `favicon.png`, `mobaledlib.ico` (Windows) und `mobaledlib.icns` (macOS). Die fertigen Dateien liegen bei; die Installer erzeugen sie nur neu, wenn sie fehlen. `make_icons.py` braucht Pillow (`pip install Pillow`), die Web-Oberfläche selbst nicht.
+
+**Das neue Symbol auf dem Desktop:** Nach dem Aktualisieren steht es im Programm (Browserreiter) sofort. Für die Verknüpfung auf dem Desktop: unter Windows `install/install_windows.bat` noch einmal ausführen (legt die Verknüpfung mit dem neuen Symbol neu an, bestehende Einstellungen und Dateien bleiben), unter Linux `install/install_linux.sh`, unter macOS die Verknüpfung (Symbol) über Informationen > Symbol ersetzen. Zeigt Windows noch das alte Symbol, hilft ein Neustart des Explorers (Symbol-Zwischenspeicher).
 Die Vorlage `mobaledlib_source.png` ist nur 128 × 128 Pixel groß und wirkt vergrößert etwas weich; wer sie höher aufgelöst hat, ersetzt die Datei und startet
 `make_icons.py` noch einmal.
 
@@ -270,7 +271,7 @@ setzt `MLL_LOG_LIBS=1`. Bei einer Fehlermeldung bitte die Datei `webmobaledlib.l
 Auf kleinen Bildschirmen (zum Beispiel einem Laptop mit 1366 × 768 Punkten, auf dem der Browser nur rund 600 Punkte Höhe hat) bleibt für die Tabelle wenig Platz, weil
 Kopfzeile, Menü, Reiter und die großen Symbole der Funktionsknöpfe mehr als die Hälfte belegen. Das **kompakte Layout** schafft Platz:
 
-- Menü (Datei, Tabelle, ARDUINO, Hilfe), Titel, Statusmeldung und der Knopf **Beenden** stehen in **einer** Zeile. Der Titel ist kleiner, der Knopf
+- Menü (Datei, Tabelle, Lichtmaschine, Hilfe), Titel, Statusmeldung und der Knopf **Beenden** stehen in **einer** Zeile. Der Titel ist kleiner, der Knopf
   Beenden ohne Symbol, die Versionsangabe und die Zeit der Zwischensicherung sind ausgeblendet (die Version steht unter Hilfe → Über …).
 - Die Reiter sind schmaler.
 - Die **Symbole der Funktionsknöpfe werden durch ihren Text ersetzt:** eine schmale Reihe kleiner Textknöpfe statt großer Symbole.
@@ -341,7 +342,7 @@ Die Knöpfe der Werkzeugleiste des Programm Generators (Dialog Wizard, Setup üb
 
 **Alle Titel haben zwei Zeilen**, damit alle Knöpfe gleich hoch sind (auch in den anderen Sprachen; die Beschriftung ist mindestens zwei Zeilen hoch). Die Titel (ab 2.76): **Dialog Wizard**, **Setup übertragen** (früher „Z. Arduino schicken“), **Zeilen löschen**, **Zeilen verschieben**, **Zeilen duplizieren**, **Tabelle löschen**, **Optionen Werkzeuge**.
 
-Die Symbole liegen im Ordner `images_btn` (Dateinamen wie die alten Bilder `Btn_*.png`, aber ohne Text, etwa 214 × 164 Pixel, durchsichtiger Hintergrund). Fehlt ein Symbol dort, zeigt das Programm das alte Bild aus dem Ordner `images` (mit dem deutschen Text im Bild). Die Knöpfe des Patterngenerators haben noch die alten Bilder.
+Die Symbole liegen im Ordner `images_btn` (Dateinamen wie die alten Bilder `Btn_*.png`, aber ohne Text, etwa 214 × 164 Pixel, durchsichtiger Hintergrund). Fehlt ein Symbol dort, zeigt das Programm das alte Bild aus dem Ordner `images` (mit dem deutschen Text im Bild). Die Knöpfe des Timeline Editors haben noch die alten Bilder.
 
 ### 2.9d Programme für den rechten Arduino (DCC, Selectrix, LNet) mit PlatformIO (2.72)
 
@@ -392,9 +393,212 @@ Das Makro **LEDColorAnim** (Gruppe PatternConfig, Dialog **LED Farb-Animation**)
 
 **Abweichungen vom Excel-/Tk-Programm:** Bei geänderter Dauer werden die Zeiten der Kurve Individuell für **alle drei Kurven** gleich gestreckt (das Tk-Programm streckte nur die erste; die Ausgabe benutzte nur deren Zeiten); beim Senden an die LED gilt der Wert 0 für Grün und Blau (das Tk-Programm ersetzte 0 durch den Startwert); Einfügen und Löschen der Punkte mit Knöpfen.
 
-### 2.10 Der Patterngenerator
+### 2.9h Neu seit 3.85: Tabelle, Blätter und Einstellungen (3.88 bis 3.93)
 
-Der Reiter **Patterngenerator** erstellt aus einer Tabelle ein Muster für die LEDs (Wechselblinker, Lauflicht usw.). Das Ergebnis ist ein Makro, das im Programmgenerator eingetragen wird.
+- **Nach unten ausfüllen (3.93):** Mehrere Zeilen markieren (Klick auf die Zeilennummern, mit der Umschalttaste ein Bereich), rechte Maustaste auf eine Zelle, **Nach unten ausfüllen** (oder **Strg+D**): Die **oberste** markierte Zeile ist die Quelle, ihr Inhalt steht danach in allen markierten Zeilen. Bei einem Klick auf die Zeilennummer gilt das für die ganze Zeile. Ist nur eine Zelle gewählt, kopiert **Strg+D** die Zelle darüber. **Reihe fortsetzen** (rechte Maustaste) zählt die Zahl am Ende weiter: aus `1` wird 1, 2, 3 …, aus `V1` wird V1, V2, V3 …, aus `V01` wird V01, V02 …; Text ohne Zahl am Ende wird kopiert. Das Ziehen am Ausfüllkästchen gibt es nicht (nur in der kostenpflichtigen Fassung der Tabellenkomponente).
+- **Rückgängig und Wiederholen (4.02):** **Strg+Z** nimmt die letzte Änderung in der Tabelle zurück, **Strg+Y** (oder **Strg+Umschalt+Z**) stellt sie wieder her. Beides gibt es auch im Menü der rechten Maustaste; dort steht die Aktion dabei, zum Beispiel „Rückgängig: Strg+D, 12 Zellen“. Gemerkt werden die letzten 50 Änderungen je Blatt (Eingabe in einer Zelle, Löschen, Ausschneiden, Einfügen, Nach unten ausfüllen, Reihe fortsetzen). Nicht erfasst sind das Umschalten des Aktiv-Hakens und Farben. Wenn Zeilen eingefügt oder gelöscht werden, beginnt der Verlauf des Blatts neu.
+- **Beenden ohne Speichern (4.02):** Die nicht gespeicherten Änderungen werden als „verworfener Stand“ aufgehoben. Beim nächsten Start fragt das Programm einmal: „Die letzten verworfenen Änderungen wiederherstellen?“ Mit **Wiederherstellen** ist der Stand wieder da, mit **Nein** wird er gelöscht.
+- **Verbinden (4.04):** Ist noch kein USB-Anschluss eingestellt, öffnet ein Klick auf **Mit Lichtmaschine verbinden** gleich das Fenster Optionen. Dort **Board und USB Port erkennen** wählen und das Fenster schließen: Das Programm verbindet danach von selbst, die Schaltfläche wird grün. Beim Programmstart wird nicht automatisch verbunden.
+- **Spaltenbreiten übertragen (4.08):** Rechte Maustaste auf den Reiter einer Datenseite, **Spaltenbreiten übertragen …**. Erst die Spalten wählen, dann die Zielseiten. Die Breiten werden auf diese Seiten übernommen, Bilder und Symbole rechts davon werden mitverschoben.
+- **Zellinnenabstand (4.08):** In den Programm Einstellungen (Layout) lässt sich der Abstand links und rechts im Text der Zellen in Pixeln einstellen. Kleinere Werte geben auf kleinen Bildschirmen mehr Platz für die Spalten.
+- **Spalte Verteiler (3.93):** Neben `V1` genügt die Zahl `1`; beides ist derselbe Verteiler (Grafische Ansicht, Abschnitt 2.17).
+- **Blätter verstecken (3.90):** Rechte Maustaste auf einen Blattreiter: **Tabelle verstecken** (nicht das letzte sichtbare Blatt) und **Versteckte Tabellen anzeigen**. Die Auswahl wird mit den Daten gespeichert.
+- **Die Seite Config entfällt (3.91):** Ihre Werte stehen in den **Programm Einstellungen**: Gruppe **Programm Generator** (House-Zeiten, DCC-Offset) und die neue Gruppe **Simulatoreinstellungen** (nur im Experten Modus; **Simulator anzeigen** steht am Anfang der Gruppe). Beim ersten Start nach dem Update werden die Werte der alten Seite übernommen. Die Seite ist versteckt und nur mit der Option **Versteckte Tabellen anzeigen** zu sehen.
+- **Tabelle Färben (3.88, 3.92):** Der Reiter heißt **Tabelle Färben** (früher ProgGenerator Einstellungen). Die Haken **Automatisch einfärben** (nach jeder Änderung wird nach den Bedingungen gefärbt) und **Zeilen Färben Button verstecken** stehen vor den Bedingungen. Es gibt zwei Speichern-Knöpfe: **Speichern und aktuelle Seite färben** und **Speichern und ALLE Seiten färben**.
+- **Protokolle herunterladen (3.89):** Hilfe → Logdatei anzeigen hat den Knopf **Die letzten 3 log-Dateien herunterladen** (eine ZIP-Datei mit `webmobaledlib.log`, `.log.1` und `.log.2`), nützlich bei großen Projekten.
+- **Testtasten (3.89):** Die Tasten stehen in der Spalte Typ rechts neben dem vollständigen Typnamen.
+- **Optionen, Reiter Dateien (3.93):** **Importieren v. altem Prog.** erklärt, wie die Daten des alten Excel-Programms über eine MLL_pgf-Datei übernommen werden; **Kopiere von Seite zu Seite** entfällt (dafür gibt es **Seite duplizieren** im Blattreiter).
+- **Online Wiki (3.93):** Der Knopf öffnet die Einführung der webMobaLedLib-Anleitung.
+
+### 2.9i ESP Einstellungen je Blatt (3.94, Beitrag von moosbewohner)
+
+Ist unter **Optionen Werkzeuge** ein **ESP32** als LED-Zentrale gewählt, erscheint der Reiter **ESP Einstellungen**. Die Auswahl gilt **für das aktive Blatt**, wird mit der Arbeitsmappe gespeichert und beim Duplizieren eines Blattes mit kopiert. Bei anderen Boards ist der Reiter nicht sichtbar.
+
+- **OLED-Anzeige:** Modus 0 (aus) bis 5. Eine animierte Vorschau zeigt Beispieldaten. Modus 1 MLL-Zeit, 2 LDR-Wert, 3 MLL-Zeit und LDR-Wert, 4 WLAN, IP, LDR und Zeit, **5 WLAN, IP und Hostname** (Zeile 1 Status, Zeile 2 IP, Zeile 3 Hostname; lange Namen laufen in Zeile 4 weiter).
+- **Fotowiderstand aktivieren** setzt `READ_LDR`, **Zustände werden gespeichert** setzt `ENABLE_STORE_STATUS()`.
+- Beim **Setup übertragen** erzeugt das Programm die passenden Defines aus den Einstellungen des aktiven Blattes. Defines, die schon in der Tabelle stehen, bleiben wirksam; ein gewählter OLED-Modus hat Vorrang vor der Modusnummer aus der Tabelle. Danach kannst du die manuellen Define-Zeilen löschen.
+- Nach dem Ändern das Setup erneut auf den ESP32 übertragen, damit die Firmware die Auswahl übernimmt.
+- Der **Upload des ESP32-Setups** (USB oder WLAN) läuft jetzt über denselben zentralen Code wie die anderen Boards (`M08_ARDUINO`).
+
+### 2.9j Erweiterungen (MLX) ein- und ausschalten (3.96)
+
+**Optionen → Erweiterungen** zeigt die bekannten MobaLedLib Extensions mit einem Haken je Erweiterung. Eine eingeschaltete Erweiterung erscheint in der Makroauswahl in der Gruppe „Erweiterungen“.
+
+- **Standard (vorab eingeschaltet):** Zeitplan (P_ScheduleMLX) und Zeitplan Duo (P_ScheduleDuoMLX). Sie liegen im Programmpaket (Ordner `libraries`).
+- **Optional (vorab ausgeschaltet):** AddressLearnMLX (Adressen einlernen), FireplaceMLX (Kaminfeuer) und InfraredMLX (IR-Fernbedienung, braucht einen IR-Empfänger). Beim Einschalten lädt das Programm die Erweiterung einmal von GitHub in den Datenordner (Unterordner `extensions`); danach läuft sie auch ohne Internet.
+- Die Einstellung gilt für alle Dateien und bleibt beim Programm-Update erhalten. Erweiterungen, die man von Hand in den Ordner `libraries` gelegt hat, sind wie bisher immer eingeschaltet.
+- Nur mit **PlatformIO** (die Arduino IDE wird dafür nicht mehr unterstützt).
+- **Eigene Erweiterungen (seit 3.98):** Unten im Reiter steht ein Feld **Eigene Erweiterung hinzufügen**. Eine Zeile: `Name` (PlatformIO-Registry, aktuelle Version), `Name@=1.1.0` (genau diese Version), `Name=https://github.com/Besitzer/Repo` (Code aus dem Repository, nach `#` ein Tag oder Zweig) oder nur die Adresse. Beim ersten Hinzufügen einer Adresse kommt der Hinweis auf **fremden Code**. Das Programm lädt die Erweiterung in den Datenordner (`extensions`), liest ihre `MobaLedLib.properties` und schaltet sie ein. **Entfernen** löscht sie wieder. Zum Aktualisieren entfernen und neu hinzufügen.
+- **Rückfrage beim Öffnen (seit 3.98):** Benutzt eine Datei eine **ausgeschaltete** Erweiterung, fragt das Programm, ob es sie einschalten soll (einmal je Erweiterung und Sitzung); ohne sie fehlen die Zeilen in der erzeugten Datei.
+- **Wiki:** eigene Seite `erweiterungen` (siehe Wiki-Paket 3.98).
+
+### 2.9k Neu seit 3.93 (3.94 bis 4.22)
+
+Kurzfassung der Änderungen seit dem letzten Release, neueste Version zuerst (ausführlich in `HOC_Anwender.md`):
+
+**Version 4.22**
+
+*Neue Funktionen:*
+- Erweiterungen zeigen Name und Beschreibung aus ihrer Datei libraries.json.
+
+**Version 4.21**
+
+*Korrekturen:*
+- Erweiterungen, die du neu importierst, lassen sich jetzt kompilieren (der Pfad in der platformio.ini war falsch).
+
+**Version 4.20**
+
+*Korrekturen:*
+- Die Reiter unter dem Menü sind niedriger.
+
+**Version 4.19**
+
+*Korrekturen:*
+- Kopfbereich (Titel, Menü, Reiter) braucht noch weniger Höhe.
+
+**Version 4.18**
+
+*Korrekturen:*
+- Der Tooltip von „Mit Lichtmaschine verbinden“ nennt jetzt das Menü Lichtmaschine statt ARDUINO.
+
+**Version 4.17**
+
+*Neue Funktionen:*
+- Die Tastenkombination für „Inkrementell speichern“ stellst du selbst ein (Programm Einstellungen, Allgemeine Einstellungen), falls Strg+Umschalt+S bei dir schon belegt ist, zum Beispiel von einem Screenshot-Programm.
+
+**Version 4.16**
+
+*Korrekturen:*
+- Im Kopfbereich ist weniger Platz zwischen Titel, Menü und Reitern, die Tabelle rückt etwas nach oben (Issue 22).
+
+**Version 4.15**
+
+*Neue Funktionen:*
+- Inkrementelles Speichern: Mit Strg+Umschalt+S (oder Datei → Inkrementell speichern) sicherst du die ganze Arbeitsmappe als Datei mit fortlaufender Nummer (Name_0001, Name_0002 …). Beim ersten Mal fragt das Programm nach Ordner und Namen.
+- Datei → Sicherungsdatei öffnen …: zeigt die Sicherungen mit Datum und Uhrzeit, die gewählte wird geladen. Datei → Sicherungsort ändern … ändert Ordner und Namen.
+
+**Version 4.14**
+
+*Neue Funktionen:*
+- Beim Start verbindet sich das Programm wieder mit der Lichtmaschine, die beim letzten Beenden verbunden war. War keine verbunden, sucht es eine angeschlossene Lichtmaschine (Nano, ESP32 oder Pico) und verbindet, wenn es genau eine findet. Das läuft im Hintergrund und verzögert den Start nicht.
+- Nach „Setup übertragen“ verbindet das Programm mit der Lichtmaschine, auf die gerade übertragen wurde (bei einer WLAN-Übertragung über WLAN).
+- Neben dem Knopf „Mit Lichtmaschine verbinden“ gibt es einen Pfeil: Verbindung trennen, Neu verbinden, Board wechseln. Dieselben Einträge stehen im Menü Lichtmaschine.
+- In den Programm Einstellungen (Allgemeine Einstellungen) lässt sich das automatische Verbinden abschalten.
+
+**Version 4.13**
+
+*Korrekturen:*
+- „Board und USB Port erkennen“ unterscheidet bei einem Nano mit neuem Bootloader jetzt zwischen „neu“ und „Full“ anhand der Bootloader-Version. Ein folgender Upload verwendet dadurch die richtige Methode (Issue 14).
+
+**Version 4.12**
+
+*Korrekturen:*
+- „Vorgang abbrechen“ beim Kompilieren und Hochladen beendet jetzt wirklich alles, und der COM-Port ist sofort wieder frei (Issue 15).
+
+**Version 4.11**
+
+*Korrekturen:*
+- Nach „Verwerfen“ beim Start (Zwischengespeicherter Stand gefunden) reagierte ein Klick auf die Spalte Aktiv nicht, erst nach einem Blattwechsel. Jetzt funktioniert er sofort (Issue 16).
+
+**Version 4.10**
+
+*Neue Funktionen:*
+- Neues Programmsymbol (Ring aus bunten LEDs, Weltkugel mit Stift, rotes Zahnrad) für die Verknüpfung auf dem Desktop und den Browserreiter. Für die Verknüpfung den Installer noch einmal ausführen.
+
+**Version 4.09**
+
+*Korrekturen:*
+- ESP32: Bei eingeschaltetem WLAN und ausgeschalteten OTA-Updates übersetzte die Firmware nicht (WiFi unbekannt). Jetzt klappt das Übertragen per USB auch ohne OTA (Beitrag von moosbewohner, PR 18).
+
+**Version 4.08**
+
+*Neue Funktionen:*
+- Spaltenbreiten übertragen: Im Menü der rechten Maustaste am Reiter einer Datenseite steht „Spaltenbreiten übertragen …“. Man wählt die Spalten und die Zielseiten und die Breiten werden auf diese Seiten übertragen (Wunsch aus Issue 12, Beitrag von moosbewohner, PR 19).
+- Zellinnenabstand: Der Abstand links und rechts im Text der Zellen ist in den Programm Einstellungen (Layout) in Pixeln einstellbar. Kleinere Werte geben auf kleinen Bildschirmen mehr Platz.
+
+**Version 4.07**
+
+*Korrekturen:*
+- Versteckte Tabellen: Nach dem Laden einer Arbeitsmappe erschien die versteckte Tabelle DCC (das Startblatt) trotzdem als Reiter. Jetzt wird die erste sichtbare Tabelle geöffnet.
+
+**Version 4.06**
+
+*Korrekturen:*
+- ESP32: „Fotowiderstand aktivieren“ in den ESP-Einstellungen richtet den Sensor beim Übertragen auch ohne Makrozeile ein (Beitrag von moosbewohner, PR 9).
+
+**Version 4.05**
+
+*Korrekturen:*
+- Erweiterung Infrarot (InfraredMLX) auf dem Pico: Das Übersetzen brach ab, weil PlatformIO die neueste IRremote-Bibliothek (5.0) holte, die nicht zur Erweiterung passt. Jetzt wird IRremote 4.x verwendet.
+
+**Version 4.04**
+
+*Neu:*
+- Verbinden einfacher: Klickt man auf „Mit Lichtmaschine verbinden“, obwohl noch kein USB-Anschluss eingestellt ist, öffnet sich gleich das Fenster Optionen mit „Board und USB Port erkennen“.
+- Nach „Board und USB Port erkennen“ verbindet das Programm automatisch, sobald das Fenster geschlossen ist. Die Schaltfläche wird dann grün.
+
+**Version 4.03**
+
+*Korrekturen:*
+- ESP32-Setup übertragen: Wurde eine Arbeitsmappe mit eingeschaltetem OTA auf einem anderen Rechner geöffnet, brach die Übertragung (auch mit „USB“) mit „Das OTA-Passwort muss 1 bis 64 druckbare ASCII-Zeichen haben“ ab, weil das Passwort nur auf dem ursprünglichen Rechner gespeichert ist. Jetzt fragt das Programm nach dem Passwort (wird gespeichert) oder überträgt per USB ohne OTA.
+
+**Version 4.02**
+
+*Neu:*
+- **Rückgängig und Wiederholen** in der Tabelle: **Strg+Z** nimmt die letzte Änderung zurück, **Strg+Y** (oder Strg+Umschalt+Z) stellt sie wieder her. Beides auch im Menü der rechten Maustaste, mit dem Namen der Aktion (zum Beispiel „Rückgängig: Strg+D, 12 Zellen“). Es werden die letzten 50 Änderungen je Blatt gemerkt: Eingabe in einer Zelle, Löschen, Ausschneiden, Einfügen, Nach unten ausfüllen, Reihe fortsetzen. Werden Zeilen eingefügt oder gelöscht, beginnt der Verlauf des Blatts neu.
+- **Beenden ohne Speichern:** Die nicht gespeicherten Änderungen werden aufgehoben. Beim nächsten Start fragt das Programm einmal: „Die letzten verworfenen Änderungen wiederherstellen?“
+
+**Version 4.01**
+
+*Korrekturen:*
+- Board und USB Port erkennen (Issue 13): Das erkannte Board (zum Beispiel „Nano neue Version“ beim LNet-Arduino) wurde sofort wieder durch die alte Auswahl ersetzt. Beim Hochladen galt dann der falsche Bootloader. Jetzt bleibt das erkannte Board eingestellt.
+- Nach „Board und USB Port erkennen“ öffnet das Fenster wieder auf dem Reiter der Seite, nicht auf „Lichtmaschine“.
+
+**Version 4.00**
+
+*Korrekturen:*
+- Board und USB Port erkennen: Sind eine Lichtmaschine und ein LNet-Arduino (oder DCC-Arduino) angeschlossen, nahm das Programm den falschen Anschluss und stellte das Board der anderen Seite ein (Issue 13). Jetzt wird der Anschluss der anderen Seite ausgelassen.
+
+**Version 3.99**
+
+*Korrekturen:*
+- Optionen: Die Reiterbeschriftungen sind bei Bedarf zweizeilig, alle Reiter sind sichtbar. Bei einem ESP32 war der Reiter „Erweiterungen“ vorher hinter dem Blätterpfeil versteckt.
+
+**Version 3.98**
+
+*Neue Funktionen:*
+- Im Reiter „Erweiterungen“ lassen sich eigene Erweiterungen hinzufügen: nur mit dem Namen (PlatformIO-Registry), mit Version (Name@=1.1.0), mit GitHub-Adresse oder nur mit der Adresse. Beim ersten Hinzufügen einer Adresse kommt ein Hinweis auf fremden Code. „Entfernen“ nimmt sie wieder heraus.
+- Öffnet man eine Datei, die eine ausgeschaltete Erweiterung benutzt, fragt das Programm, ob sie eingeschaltet werden soll.
+- Neue Wiki-Seite „Erweiterungen (MLX)“.
+
+**Version 3.97**
+
+*Korrekturen:*
+- Erweiterungen: Die Dateien der Erweiterungen AddressLearnMLX, FireplaceMLX und InfraredMLX wurden mit „load error“ abgelehnt. Sie werden jetzt wie im Excel-Programm gelesen.
+- Eine ausgeschaltete Erweiterung wird zuverlässig nicht mehr geladen.
+
+**Version 3.96**
+
+*Neue Funktionen:*
+- Neuer Reiter „Erweiterungen“ in den Optionen: Die MobaLedLib Extensions (MLX) lassen sich mit einem Haken ein- und ausschalten. Zeitplan (P_ScheduleMLX) und Zeitplan Duo (P_ScheduleDuoMLX) sind im Paket und vorab eingeschaltet.
+- AddressLearnMLX, FireplaceMLX und InfraredMLX sind vorab ausgeschaltet. Beim Einschalten werden sie von GitHub geladen und danach ohne Internet benutzt.
+- Eigene Erweiterungen und Rückfrage beim Öffnen einer Datei folgen in einer späteren Version.
+
+**Version 3.95**
+
+Neue Funktion:
+- Hilfe → Update Testversion: Neben den Versionen auf GitHub kann man jetzt einen **eigenen Link (https) zu einer ZIP-Datei** angeben oder eine **ZIP-Datei auf dem Rechner auswählen**. Die Datei wird wie webmobaledlib.zip geprüft und installiert. Das geht auch, wenn GitHub nicht erreichbar ist.
+
+**Version 3.94**
+
+*Neue Funktionen:*
+- Neuer Reiter „ESP Einstellungen“ in den Optionen (nur bei ESP32): OLED-Anzeige Modus 0 bis 5 mit Vorschau, Fotowiderstand und Zustandsspeicherung, je Blatt. Beim Übertragen erzeugt das Programm die Defines selbst (Beitrag von moosbewohner).
+- Neuer OLED-Modus 5: WLAN, IP-Adresse und Hostname.
+- Der ESP32-Upload per USB oder WLAN läuft über den zentralen Programmteil der anderen Boards.
+
+### 2.10 Der Timeline Editor
+
+Der Reiter **Timeline Editor** erstellt aus einer Tabelle ein Muster für die LEDs (Wechselblinker, Lauflicht usw.). Das Ergebnis ist ein Makro, das im Programmgenerator eingetragen wird.
 **Stand:** Anzeigen, Bearbeiten, Berechnen sowie **Export zu ProgGen** und **Import von ProgGen** gehen. Dazu kommen **Optionen** mit den Beispielen und die Auswahldialoge für **Spezial Mode**, **RGB Modul Nr** und **Goto Aktivierung**. Die Seiten zeigen auch ihre **Bilder** und die **Goto-Pfeile**, **Bild einfügen** fügt eigene Bilder ein. **Test Pattern** (seit 2.90) spielt das Muster auf dem Bildschirm ab. **Noch nicht** gibt es das Senden an ein Modul (zurückgestellt, bis ein Tester es braucht; damit auch das Blinken der LED bei RGB Modul Nr), die Wirkung der Spezial Modes auf dem Modul und den Multiplexer.
 
 - **Aufbau:** Oben stehen die gelben Eingabefelder (Erste RGB LED, Anzahl der Ausgabe Kanäle, Mode usw.) und darunter das Ergebnis (`PatternT1(…)`), der Makroname und das Makro. Unten liegt die
@@ -440,20 +644,20 @@ Der Reiter **Patterngenerator** erstellt aus einer Tabelle ein Muster für die L
   - **Export zu ProgGen:** trägt das Makro des Blatts in eine Zeile des Programm Generators ein. Vorher prüft das Programm, ob ein Makroname eingetragen ist, die LED-Tabelle
     nicht leer ist und die Dauer-Zeile stimmt, und meldet sonst den Fehler. Danach springt der Browser zum Programm Generator, über der Tabelle erscheint ein **gelbes Band**:
     In die Zeile klicken, in der das Muster stehen soll, und **OK** drücken. Die Haken „gleich zum Arduino schicken“ (erzeugt die Dateien, kompiliert und lädt hoch) und „Anschließend
-    zurück zum Patterngenerator“ gelten für diesen Vorgang. Bereits vorhandene Einträge in der Spalte „Beleuchtung, Sound, oder andere Effekte“ werden überschrieben, Symbol und Name der Zeile
-    kommen dazu. **Abbrechen** bringt zurück zum Patterngenerator.
+    zurück zum Timeline Editor“ gelten für diesen Vorgang. Bereits vorhandene Einträge in der Spalte „Beleuchtung, Sound, oder andere Effekte“ werden überschrieben, Symbol und Name der Zeile
+    kommen dazu. **Abbrechen** bringt zurück zum Timeline Editor.
   - **Import von ProgGen:** liest ein Muster aus einer Zeile des Programm Generators. Im gelben Band eine Zeile mit einem `PatternT…`-Makro anklicken und **OK** drücken. Das Programm fragt, ob
-    die Daten in das aktuelle Blatt kommen oder ein neues Blatt angelegt wird. Danach zeigt der Browser den Patterngenerator. Wie in der Excel-Version steht im Feld „Schalter Nummer“ danach `#InCh`.
+    die Daten in das aktuelle Blatt kommen oder ein neues Blatt angelegt wird. Danach zeigt der Browser den Timeline Editor. Wie in der Excel-Version steht im Feld „Schalter Nummer“ danach `#InCh`.
 - **Beschreibung:** Der Text des Blatts lässt sich über „Beschreibung“ oben aufklappen.
 - **Spaltenbreite:** Die Muster-Spalten sind gleich breit. Das Programm passt die benutzten Spalten an die Dauer an, wenn die Zeiten sehr unterschiedlich sind (wie in Excel).
   In dieser Tabelle lassen sich die Spalten nicht von Hand verstellen, weil die Balken an den Spaltenbreiten hängen.
 - **Daten:** Die Blätter werden beim Beenden im Datenordner gesichert (`temp_workbook.table_PatternWorkbook.json`) und beim nächsten Start geladen.
 
-**Dateien aus dem Excel-Programm laden:** Dateien im Format `.MLL_pcf` und `.MLL_pgf`, die mit dem Excel-Programm gespeichert wurden, haben den Windows-Zeichensatz (cp1252; als Trennzeichen im Patterngenerator dient das Zeichen `¯`). Das Programm erkennt den Zeichensatz beim Laden selbst: Dateien in **UTF-8** (vom Web-Programm gespeichert, auch mit Kennzeichen am Anfang) und im **Windows-Zeichensatz** lassen sich beide laden, mit Umlauten und Sonderzeichen. Früher kam bei einer Datei aus Excel die Meldung „'utf-8' codec can't decode byte 0xaf …“. Beim **Speichern** schreibt das Programm die Dateien (`.MLL_pcf` und `.MLL_pgf`) ebenfalls im **Windows-Zeichensatz**, damit auch das Excel-Programm sie lesen kann (sonst stimmen Trennzeichen und Umlaute dort nicht). Das lässt sich in den **Programm Einstellungen** mit der Option **Dateien für das Excel-Programm speichern** abschalten (Standard: an). Enthält eine Datei Zeichen, die im Windows-Zeichensatz keinen Platz haben (zum Beispiel ein polnisches „ł“), bleibt sie UTF-8; das Excel-Programm kann sie dann nicht richtig lesen. Das Laden geht immer mit beiden.
+**Dateien aus dem Excel-Programm laden:** Dateien im Format `.MLL_pcf` und `.MLL_pgf`, die mit dem Excel-Programm gespeichert wurden, haben den Windows-Zeichensatz (cp1252; als Trennzeichen im Timeline Editor dient das Zeichen `¯`). Das Programm erkennt den Zeichensatz beim Laden selbst: Dateien in **UTF-8** (vom Web-Programm gespeichert, auch mit Kennzeichen am Anfang) und im **Windows-Zeichensatz** lassen sich beide laden, mit Umlauten und Sonderzeichen. Früher kam bei einer Datei aus Excel die Meldung „'utf-8' codec can't decode byte 0xaf …“. Beim **Speichern** schreibt das Programm die Dateien (`.MLL_pcf` und `.MLL_pgf`) ebenfalls im **Windows-Zeichensatz**, damit auch das Excel-Programm sie lesen kann (sonst stimmen Trennzeichen und Umlaute dort nicht). Das lässt sich in den **Programm Einstellungen** mit der Option **Dateien für das Excel-Programm speichern** abschalten (Standard: an). Enthält eine Datei Zeichen, die im Windows-Zeichensatz keinen Platz haben (zum Beispiel ein polnisches „ł“), bleibt sie UTF-8; das Excel-Programm kann sie dann nicht richtig lesen. Das Laden geht immer mit beiden.
 
 ### 2.11 Vollbild und Adressen der Reiter
 
-- **Verbindung zum Arduino:** In der Kopfzeile, links neben **Vollbild**, steht für **alle Reiter** der Knopf **Mit ARDUINO verbinden**. Er ist **rot**, solange keine Verbindung besteht, und **grün** („Mit ARDUINO verbunden“), wenn die Verbindung steht (auch wenn man im Menü ARDUINO → Verbinden oder Trennen wählt). Ein Klick auf den grünen Knopf bewirkt nichts; getrennt wird im Menü ARDUINO → Trennen. Nach dem Verbinden startet ein offener Reiter mit Direktmodus (Servo Einstellungen, DM Servo Einstellungen, Sound Test) den Direktmodus neu.
+- **Verbindung zum Arduino:** In der Kopfzeile, links neben **Vollbild**, steht für **alle Reiter** der Knopf **Mit Lichtmaschine verbinden**. Er ist **rot**, solange keine Verbindung besteht, und **grün** („Mit Lichtmaschine verbunden“), wenn die Verbindung steht (auch wenn man im Menü Lichtmaschine → Verbinden oder Trennen wählt). Ein Klick auf den grünen Knopf bewirkt nichts; getrennt wird im Menü Lichtmaschine → Trennen. Nach dem Verbinden startet ein offener Reiter mit Direktmodus (Servo Einstellungen, DM Servo Einstellungen, Sound Test) den Direktmodus neu.
 - **Version der Bibliothek:** Auf der Seite Programm Generator steht rechts in der Zeile der Funktionsknöpfe die Version der MobaLedLib, zum Beispiel **Ver.3.5.0-K** (wie in Excel). Das Feld bleibt leer, solange die Bibliothek nicht installiert ist. Die Version wird beim Aufbau der Seite, nach der Prüfung der Bibliotheken beim Start und nach jedem Befehl (zum Beispiel einer Installation der Bibliotheken) gelesen, nicht laufend.
 - **Vollbild:** Der Knopf **Vollbild** in der Kopfzeile (neben **Beenden**) blendet Titel, Menü und Reiterleiste aus. Die Statusmeldungen und die Knöpfe Vollbild und Beenden bleiben, die
   Tabelle bekommt den Platz. Wenn der Browser es erlaubt, geht er dabei auch in den Vollbildmodus (auf dem iPhone gibt es das nicht, dort wirkt nur das Ausblenden). Derselbe Knopf (dann
@@ -463,8 +667,8 @@ Der Reiter **Patterngenerator** erstellt aus einer Tabelle ein Muster für die L
 | Adresse | Reiter |
 |---|---|
 | `/ProgGenerator` | Programm Generator |
-| `/Patterngenerator` | Patterngenerator |
-| `/ProgGeneratorEinstellungen` | ProgGenerator Einstellungen |
+| `/TimelineEditor` | Timeline Editor (die alte Adresse `/Patterngenerator` gilt weiter) |
+| `/ProgGeneratorEinstellungen` | Tabelle Färben (früher ProgGenerator Einstellungen) |
 | `/Farbtest` | Farb Test |
 | `/ServoTest1` | Servo Einstellungen |
 | `/ServoTest2` | DM Servo Einstellungen (nur mit eingeschalteter Option, siehe 2.13) |
@@ -482,7 +686,7 @@ Der Reiter **Patterngenerator** erstellt aus einer Tabelle ein Muster für die L
 ### 2.12 Servo Einstellungen
 
 Der Reiter **Servo Einstellungen** (früher Servo Test 1, Adresse `/ServoTest1`) bedient die Servoplatine der MobaLedLib (Servos über LED-Befehle) und ist wie der **Excel-Dialog „Servo Test und Einstellung“** aufgebaut. Er
-arbeitet über dieselbe serielle Verbindung wie der Farb Test: zuerst mit dem Arduino **verbinden** (Knopf **Mit ARDUINO verbinden** in der Kopfzeile oder Menü ARDUINO → Verbinden).
+arbeitet über dieselbe serielle Verbindung wie der Farb Test: zuerst mit dem Arduino **verbinden** (Knopf **Mit Lichtmaschine verbinden** in der Kopfzeile oder Menü Lichtmaschine → Verbinden).
 
 - **Servo wählen:** In der Zeile **Servo Modul Auswahl** stehen **LED Nummer**, **Anschluss** (0 bis 2) und **LED Kanal**. Nach jeder Änderung wählt das Programm den Servo und lässt ihn
   **kurz wackeln**, damit man ihn erkennt. Die Werte werden gemerkt.
@@ -498,7 +702,7 @@ arbeitet über dieselbe serielle Verbindung wie der Farb Test: zuerst mit dem Ar
 ### 2.13 DM Servo Einstellungen, Sound Test und DCC Keyboard
 
 - **DM Servo Einstellungen** (früher Servo Test 2, Adresse `/ServoTest2`) steuert Servos im **Direct Mode** (ein ATtiny statt des WS2811-Chips). Parameter: **Servo Modul Adresse**, **LED Kanal**, **Servo Betriebsart** (1 Normal, 2 und 3 Training, 4 Max Speed, 5 Invers, 6 Servo zurücksetzen, 7 Werkseinstellung, 8 letzte Position zurücksetzen, 9 Oszillator trimmen, 10 Speed Legacy; 0: es wird nichts gesendet) und **Fast Refresh**. Regler 0 bis 255, **Pos 0**, **Pos 255** und die Taste **ENTER** (gedrückt halten; in den Betriebsarten 2 und 3 zweimal drücken, die Beschriftung zeigt „2nd Step“). Nach ENTER in den Betriebsarten 4 bis 8 und 10 steht die Betriebsart auf 0. Die Betriebsart wird nicht gemerkt, die Seite beginnt immer mit 1. Das Programmieren des ATtiny (Hex-Datei) und das Formular für den Programmieradapter gibt es noch nicht. **Der Reiter erscheint nur, wenn in den Programm Einstellungen die Option „DM Servo Einstellungen anzeigen“ eingeschaltet ist** (und nach dem Speichern sofort, ohne Neustart; vorher hieß die Option „Programmgenerator anzeigen“ und hatte im Web keine Wirkung). Ruft man `/ServoTest2` bei ausgeschalteter Option auf, kommt ein Hinweis, und der Programm Generator bleibt offen.
-- **Sound Test** (`/SoundTest`) prüft die MLL-Soundplatine (MP3-TF-16): **Soundmodul-Adresse**, **LED Kanal**, **Impulslänge** und die Werte **R, G, B** (Sound-Auswahl) bestimmen den Ton. **Sound an ARDUINO schicken** sendet den Wert und beendet den Impuls nach der Impulslänge; Änderungen an Adresse, Impulslänge, R, G und B senden gleich (nach kurzer Ruhe beim Tippen). Zum Verbinden dient der Knopf **Mit ARDUINO verbinden** in der Kopfzeile (siehe 2.11). Beim Verlassen des Reiters oder der Seite wird ein laufender Impuls beendet. Die Tastenkürzel Strg-R und Alt-R der Tk-Seite gibt es nicht (Strg-R lädt im Browser die Seite neu).
+- **Sound Test** (`/SoundTest`) prüft die MLL-Soundplatine (MP3-TF-16): **Soundmodul-Adresse**, **LED Kanal**, **Impulslänge** und die Werte **R, G, B** (Sound-Auswahl) bestimmen den Ton. **Sound an ARDUINO schicken** sendet den Wert und beendet den Impuls nach der Impulslänge; Änderungen an Adresse, Impulslänge, R, G und B senden gleich (nach kurzer Ruhe beim Tippen). Zum Verbinden dient der Knopf **Mit Lichtmaschine verbinden** in der Kopfzeile (siehe 2.11). Beim Verlassen des Reiters oder der Seite wird ein laufender Impuls beendet. Die Tastenkürzel Strg-R und Alt-R der Tk-Seite gibt es nicht (Strg-R lädt im Browser die Seite neu).
 - **DCC Keyboard** (`/DCCKeyboard`) schickt dem ARDUINO die Kommandos `@ AAA CC 01`, die sonst der DCC-ARDUINO an den LED-ARDUINO schickt, damit man die DCC-Schalter ausprobieren kann: 32 Adressen ab der **DCC-Basisadresse**, je ein roter (Kanal 0, mit der Adresse beschriftet) und ein grüner Knopf (Kanal 1), in vier Gruppen zu acht. Beim ersten Tastendruck verbindet die Seite selbst; das kann etwas dauern, und manchmal reagiert der ARDUINO erst auf den zweiten Tastendruck.
 - Alle drei Seiten sind für das Smartphone gebaut (Beschreibung einzeilig und aufklappbar, große Tasten) und im Vollbild (2.11) gut zu bedienen.
 
@@ -506,12 +710,11 @@ arbeitet über dieselbe serielle Verbindung wie der Farb Test: zuerst mit dem Ar
 
 Der Reiter **Z21 Simulator** (`/Z21Simulator`) gibt sich gegenüber Modellbahn-Steuerprogrammen (Rocrail, iTrain, Traincontroller, WinDigiPet, Z21-Apps) als **Roco Z21** aus. Weichen- und Lokbefehle des Steuerprogramms schickt er als DCC-Kommando an den Arduino (`@ AAA CC AA`), so lassen sich die DCC-Schalter der MobaLedLib direkt aus dem Steuerprogramm bedienen. Die Z21 zählt Adressen ab 0, die MobaLedLib ab 1; der Simulator rechnet das um.
 
-- **Einschalten:** Programm Einstellungen → **Z21 Simulator anzeigen**, dann Speichern: Der Reiter erscheint sofort (ohne Neustart).
-- **Bedienung:** Zuerst mit dem Arduino verbinden (Knopf **Mit ARDUINO verbinden** in der Kopfzeile; der Start versucht es selbst, startet aber auch ohne Verbindung). Dann **Start Simulator**. Die Seite zeigt die **IP-Adresse und den Port 21105 (UDP)**, die im Steuerprogramm als Z21 einzutragen sind. Läuft das Steuerprogramm auf demselben Rechner, genügt `127.0.0.1`. Im Fenster darunter steht jedes Paket mit Uhrzeit, Absender und dem Befehl an den Arduino. **Stop Simulator** beendet ihn. **Zeige Taster-Adressen** zeigt die Eingangskanäle aus der zuletzt erzeugten Header-Datei.
-- Der Simulator läuft weiter, wenn man den Reiter wechselt oder die Seite neu lädt. Er endet mit **Stop** oder mit dem Beenden des Programms.
-- **Firewall und Netz:** Das Steuerprogramm muss den **UDP-Port 21105** erreichen. **Windows** fragt beim ersten Start nach der Freigabe für Python: **Private Netzwerke** erlauben. **Linux** mit `ufw`: `sudo ufw allow 21105/udp`. Auf dem **Raspberry Pi** ist der Port normalerweise frei, der Simulator läuft dann dauerhaft auf dem Pi. Ist der Port schon belegt (andere Z21-Software, zweiter Simulator), erscheint eine Meldung.
-- **Rückmeldung (RMBUS):** Hat das Steuerprogramm die Rückmeldung angemeldet (Broadcast-Flag „R-Bus“, so tun es zum Beispiel Rocrail und iTrain für die Rückmelder), fragt der Simulator den Arduino alle 100 ms nach dem Stand der Taster und Eingänge und meldet **Änderungen** an das Steuerprogramm (je Gruppe von 10 Modulen). Im Fenster erscheint nur eine Zeile, wenn sich etwas ändert; die Statuszeile nennt, für wie viele Programme die Rückmeldung läuft. Das Intervall steht in der (versteckten) Einstellung `RMbusTimer` (× 100 ms; 0 oder leer = 100 ms).
-- **Noch nicht umgesetzt:** Die **Port-Liste** (bis zu drei Arduinos mit eigenen DCC-Adressbereichen); es wird der eine mit dem Programm verbundene Arduino benutzt.
+- **Einschalten:** Programm Einstellungen → Spezialeinstellungen → **Simulator anzeigen**, Speichern. In der Werkzeugleiste erscheint neben *Setup übertragen* der Knopf **Setup simulieren**. Er schickt die Konfiguration **nur an den Simulator** (keine Lichtmaschine nötig) und ändert keine Einstellung; *Setup übertragen* geht danach wie gewohnt an die Lichtmaschine. Die Option „Simulator“ der Konfigurationsseite des Excel-Programms wird mit dem Haken ignoriert. Die Umschalttaste ist nicht nötig. (Die Auswahl Kein / Nur / Mit Simulator aus 3.56 gibt es nicht mehr.)
+- **Windows:** eigenes Fenster (Datei `Configuration/x64/MobaLedLibWrapper.dll`); Doppelklick wechselt die Darstellung, Taste N zeigt die LED-Nummern, S und Z wählen die Verdrahtung der Matrix.
+- **Linux, Raspberry Pi:** `Configuration/linux_x64/libMobaLedLibWrapper.so` liegt bei (x86_64). Auf anderen Prozessoren (zum Beispiel Raspberry Pi) baut das Programm sie beim ersten Klick auf *Setup simulieren* aus `simulator_linux/` (dafür `sudo apt install build-essential` und die installierte Bibliothek MobaLedLib mit ihrem Quelltext). Fehlt etwas, nennt die Meldung den Grund. Auf einem Raspberry Pi mit PlatformIO bestätigt. Die LEDs erscheinen in einem schwebenden Feld im Browser. Übersetzt wird mit `avr-g++` aus PlatformIO (Pakete `toolchain-atmelavr`, `framework-arduino-avr` im Ordner `~/.platformio/packages`) oder der ARDUINO IDE; eigene Orte über die Umgebungsvariablen `MLL_AVR_BIN` und `MLL_AVR_PLATFORM`. macOS: noch nicht verfügbar.
+- **Testtasten:** Ist der Simulator offen und keine Lichtmaschine verbunden, schalten sie nur den Simulator; die Frage nach der Verbindung kommt höchstens einmal. Bei verbundener Lichtmaschine gehen sie an beide.
+- Das Simulatorfenster schließt sich beim Beenden des Programms. Der Simulator zeigt nur LEDs (keine Servos, kein Sound).
 
 ### 2.15 Sprache der Oberfläche
 
@@ -519,10 +722,10 @@ In den **Programm Einstellungen** wählt man unter **Sprache**: Auto (die Sprach
 
 **Aufbau der Seite Programm Einstellungen (seit 2.94):** Die Einstellungen stehen in **Gruppen mit Überschrift**: **Allgemeine Einstellungen** (Anfänger Modus, Sprache, Darstellung auf kleinen Bildschirmen, Schriftgröße, Schrift von ProgGen/PattGen, Icon Größe), **Programm Generator** (Standardansicht, versteckte Tabellen anzeigen, Bedienung der Tabelle), **Farb Test Einstellungen** (Farbauswahl, LED-Farbkorrektur), **Zugriff aus dem Netz** (Schalter und Passwort) und **Spezialeinstellungen** (alles andere: DM Servo Einstellungen anzeigen, Z21 Simulator anzeigen, IP Upload Timeout, RMBUS-Interval, Dateien für das Excel-Programm speichern). Die Option **Check for Updates** hatte keine Funktion und entfällt. Die **Beschreibungstexte** der Seiten (zum Beispiel unter der Überschrift von Programm Einstellungen, ARDUINO Einstellungen, Farb Test, DCC Keyboard, Sound Test, Servo Einstellungen 2 und Z21 Simulator) sowie die Beschriftungen der Seiten Programm Einstellungen, ARDUINO Einstellungen und Farb Test werden in der eingestellten Sprache angezeigt.
 
-**Anfänger Modus und Experten Modus (seit 2.96):** Eine **neue Installation** startet im **Anfänger Modus**. Er blendet aus, was für den Einstieg nicht nötig ist: die Reiter **Patterngenerator**, **Z21 Simulator** und **ProgGenerator Einstellungen**, den Knopf **Zeilen Färben** und die Makros der Liste `csv/Beginner_Hidden_Macros.csv` in der **Makroauswahl**, in der Suche und in der Grafik. Umschalten: **Programm Einstellungen → Allgemeine Einstellungen → Haken „Anfänger Modus“** (Haken weg = **Experten Modus**, alles sichtbar), danach **Speichern**; die Reiter und der Knopf erscheinen und verschwinden sofort, der Makrobaum beim nächsten Öffnen. **Bestehende Installationen** bleiben nach einem Update im Experten Modus. Der Z21 Simulator und der Reiter DM Servo Einstellungen erscheinen im Experten Modus wie bisher nur mit ihrer Option. Ruft man die Adresse eines ausgeblendeten Reiters auf (zum Beispiel `/Patterngenerator`), öffnet sich der Programm Generator mit einem Hinweis. **Makros**, die schon in der Tabelle stehen, bleiben und lassen sich weiter öffnen; ausgeblendet wird nur die Auswahl neuer Makros. Die **Liste** der ausgeblendeten Makros ist eine Textdatei (Zeilen `Makro;<Name>` oder `Gruppe;<Gruppe>`, Beschreibung am Anfang der Datei); sie ist zunächst **leer** (welche Makros für Anfänger fehlen, wird noch besprochen) und braucht keinen Neustart.
+**Anfänger Modus und Experten Modus (seit 2.96):** Eine **neue Installation** startet im **Anfänger Modus**. Er blendet aus, was für den Einstieg nicht nötig ist: die Reiter **Timeline Editor**, **Z21 Simulator**, **ProgGenerator Einstellungen**, **Servo Einstellungen**, **Sound Test**, **DCC Keyboard**, **Serial Monitor** und **ARDUINO Einstellungen** (seit 3.44), den Knopf **Zeilen Färben** und die Makros der Liste `csv/Beginner_Hidden_Macros.csv` in der **Makroauswahl**, in der Suche und in der Grafik. Umschalten: **Programm Einstellungen → Allgemeine Einstellungen → Haken „Anfänger Modus“** (Haken weg = **Experten Modus**, alles sichtbar), danach **Speichern**; die Reiter und der Knopf erscheinen und verschwinden sofort, der Makrobaum beim nächsten Öffnen. **Bestehende Installationen** bleiben nach einem Update im Experten Modus. Der Z21 Simulator und der Reiter DM Servo Einstellungen erscheinen im Experten Modus wie bisher nur mit ihrer Option. Ruft man die Adresse eines ausgeblendeten Reiters auf (zum Beispiel `/TimelineEditor`), öffnet sich der Programm Generator mit einem Hinweis. Im Anfänger Modus ist außerdem der **Doppelklick auf Name und Beleuchtung** (Makroauswahl) immer eingeschaltet (seit 3.44). **Verteiler in der Grafik (seit 3.45):** In der Ansicht **Ketten** zeichnet die Grafik für jede **Verteilernummer** (Spalte Verteiler-Nr., zum Beispiel V01) ein **Rechteck** mit einem **Feld je Stecker** (Spalte Stecker-Nr.). Die Kette bleibt in der Reihenfolge der Tabelle; zwischen zwei Steckern steht der Hinweis „Signal zurück zum Verteiler“. Zeilen ohne Verteilernummer zwischen Zeilen desselben Verteilers liegen im Rechteck und im Feld des davor stehenden Steckers. Typ und Sicherung stehen aus der **ID-Zeile** (Text in Verteiler-Nr. und Stecker-Nr., zum Beispiel IRM-60.1 und F1) über dem Rechteck; es gilt die nächste ID-Zeile oberhalb der ersten Zeile des Verteilers. Die Angaben sind reiner Kommentar und werden nicht geprüft. In der Kopfzeile der Ansicht Ketten schaltet der Haken **Verteiler** die Rechtecke ein und aus (aus: die Kette wie bisher); der Haken **Stecker nebeneinander** zeichnet die Stecker nebeneinander statt untereinander (seit 3.46, beides je Blatt, vorgegeben: an). In der Anlagenansicht gibt es kein Rechteck. **Makros**, die schon in der Tabelle stehen, bleiben und lassen sich weiter öffnen; ausgeblendet wird nur die Auswahl neuer Makros. Die **Liste** der ausgeblendeten Makros ist eine Textdatei (Zeilen `Makro;<Name>` oder `Gruppe;<Gruppe>`, Beschreibung am Anfang der Datei); sie ist zunächst **leer** (welche Makros für Anfänger fehlen, wird noch besprochen) und braucht keinen Neustart.
 Die Seite wird in allen Browsern neu geladen, und alle Texte erscheinen in der neuen Sprache. Ein Neustart ist nicht nötig.
 
-- **Was übersetzt wird:** alle Texte der Oberfläche: Menüs, Reiter, Knöpfe, Hinweise, die Texte und Beschreibungen in den Formularen (zum Beispiel „Verteiler und Stecker Nummer“, „Optionen und spezielle Funktionen“) und in den **Programm Einstellungen**, die Meldungen des Programm Generators und des Patterngenerators, die **Spaltenköpfe** mit ihren Hinweisen, die **Namensspalte** und die **Typen** in der Tabelle. Die Texte stehen an zwei Stellen: Die Texte, die es schon im Excel-Programm gab, kommen wie dort aus der Tabelle Languages der Excel-Datei; alles, was es nur im Web-Programm gibt, steht im Katalog `python/csv/Web_Languages.csv`. Fehlt ein Text in der Tabelle Languages, wird im Katalog nachgesehen. Stand: **English** ist vollständig (Entwurf), die anderen Sprachen sind nur dort übersetzt, wo die Tabelle Languages eine Übersetzung hat (sonst erscheint English).
+- **Was übersetzt wird:** alle Texte der Oberfläche: Menüs, Reiter, Knöpfe, Hinweise, die Texte und Beschreibungen in den Formularen (zum Beispiel „Verteiler und Stecker Nummer“, „Optionen und spezielle Funktionen“) und in den **Programm Einstellungen**, die Meldungen des Programm Generators und des Timeline Editors, die **Spaltenköpfe** mit ihren Hinweisen, die **Namensspalte** und die **Typen** in der Tabelle. Die Texte stehen an zwei Stellen: Die Texte, die es schon im Excel-Programm gab, kommen wie dort aus der Tabelle Languages der Excel-Datei; alles, was es nur im Web-Programm gibt, steht im Katalog `python/csv/Web_Languages.csv`. Fehlt ein Text in der Tabelle Languages, wird im Katalog nachgesehen. Stand: **English** ist vollständig (Entwurf), die anderen Sprachen sind nur dort übersetzt, wo die Tabelle Languages eine Übersetzung hat (sonst erscheint English).
 - **Gespeichert wird immer deutsch:** In den Zellen, in den Dateien (`.MLL_pgf`) und im erzeugten Arduino-Programm stehen die deutschen Begriffe. Ein Sprachwechsel **ändert keine Daten**; Dateien lassen sich auch in einer anderen Sprache lesen.
   Eine Datei mit den Begriffen einer anderen Sprache (zum Beispiel aus dem Excel-Programm mit niederländischer Oberfläche) wird beim Laden in die deutschen Begriffe umgewandelt. In der Spalte Typ darf man die Begriffe oder ihren
   ersten Buchstaben in der eingestellten Sprache eintippen.
@@ -710,6 +913,33 @@ Das Skript kann **mehrfach** laufen (zum Beispiel nach einem Update).
 Dateimanager (Nemo, Nautilus, Dolphin) eventuell **„Ausführen“** bzw. **„Starter vertrauen“**; sonst Rechtsklick → *Ausführen erlauben* (Mint: in den
 Eigenschaften *Als Programm ausführen*). **Beenden:** Knopf „Beenden“ in der Oberfläche. Zum Beobachten der Meldungen `install/start_linux.sh` im Terminal
 starten. Auf dem Desktop läuft die IDE mit deinem Bildschirm, es wird kein virtuelles Display gebraucht.
+
+### 5.1 Server ohne Bildschirm (seit 3.47)
+
+Auf einem Linux-Server ohne Bildschirm (Heimserver, Mini-PC, virtuelle Maschine) richtet **eine Option** alles ein: Zugriff aus dem Netz mit **Passwort** und ein **Systemdienst**, der beim Start des Servers mitstartet. Du brauchst keinen Tunnel (`ssh -L`) und musst keine Datei von Hand ändern.
+
+```bash
+cd ~/mobaledlib/python/install
+bash install_linux.sh --server
+```
+
+Das Skript **fragt nach dem Passwort** (zweimal, mindestens 4 Zeichen, nicht mit einem Leerzeichen am Anfang oder Ende). Es speichert das Passwort **nur verschlüsselt**. Der Benutzername ist **mobaledlib**. Danach richtet es den Dienst `mobaledlib-web` ein (dabei fragt `sudo` nach dem Passwort des Benutzers) und startet ihn.
+
+| Option (zusammen mit `--server`) | Wirkung |
+|---|---|
+| `--password PW` | das Passwort gleich angeben, ohne Nachfrage (auch für Skripte; Umgebungsvariable `MLL_SERVER_PASSWORD`). **Achtung:** Ein so angegebenes Passwort ist kurz im Prozessverzeichnis des Servers und in der Befehlshistorie sichtbar; das liegt in deiner Verantwortung. Ohne Eingabemöglichkeit und ohne `--password` bricht das Skript ab. |
+| `--port N` | anderer Port als 8080 |
+| `--no-service` | keinen Systemdienst einrichten (nur Passwort); das Skript nennt dann den Befehl zum Starten von Hand |
+
+**Was anders ist als auf dem Desktop:** Es gibt kein Symbol und keinen Menüeintrag. Das Programm lauscht auf **allen Adressen** (`MLL_HOST=0.0.0.0`) und fragt nach Benutzername und Passwort. Auf Debian, Ubuntu und Mint wird außerdem `xvfb` installiert (virtuelles Display für die ARDUINO IDE). Der Dienst läuft unter **deinem Benutzer** (die Dateien und deine Einstellungen gehören dir) und hat Zugriff auf die seriellen Anschlüsse (Gruppe `dialout`).
+
+**Öffnen:** Im Browser eines anderen Geräts im Heimnetz `http://<Adresse des Servers>:8080` eingeben (die Adresse nennt das Skript am Ende). Das Passwort lässt sich später im Programm ändern (**Programm Einstellungen**, Block **Zugriff über das Netz**).
+
+**Firewall:** Hat der Server eine Firewall, muss der Port im Heimnetz erreichbar sein, zum Beispiel `sudo ufw allow from 192.168.0.0/16 to any port 8080 proto tcp`. Das Skript ändert die Firewall nicht.
+
+**Wichtig:** Wer Zugriff hat, kann Programme auf deine Lichtmaschine laden. Betreibe den Server nur im **Heimnetz** und mach ihn nie ungeschützt aus dem **Internet** erreichbar.
+
+**Alltag:** Status `systemctl status mobaledlib-web`, neu starten `sudo systemctl restart mobaledlib-web`, Meldungen `journalctl -u mobaledlib-web -f`. Beim Aktualisieren den Ordner ersetzen und den Dienst neu starten. Das Skript kann **mehrfach** laufen (zum Beispiel um das Passwort neu zu setzen).
 
 ## 6. Raspberry Pi (Dauerdienst)
 
@@ -935,6 +1165,7 @@ Für Tester und für den Entwickler lädt **Hilfe → Update Testversion …** e
 - **Rückfrage:** Zuerst fragt das Programm, ob man wirklich eine Testversion installieren möchte (nicht fertig geprüft, kann Fehler enthalten). Erst nach **Testversion suchen** wird GitHub gefragt. Die Rückfrage bietet **Abbrechen** als Standard an.
 - **Anzeige:** Nach **Version laden** zeigt das Fenster, welche Version gefunden wurde (**Testversion: Name (Pre-Release oder Release, veröffentlicht am Datum)**), die neue Versionsnummer und die Liste der Dateien. Erst nach **Aktualisieren** passiert etwas; danach läuft alles **wie beim normalen Update** (Sicherung der Tabellen, Prüfliste, alles oder nichts, automatisches Zurückgehen bei einem Abbruch, Neustart).
 - **Auswahl der Version (seit 3.04):** Nach **Testversion suchen** liest das Programm die Liste der Releases (`https://api.github.com/repos/haroldlinke/WebMLL/releases`, ohne Konto, 60 Abfragen je Stunde) und zeigt **die letzten 15** in einer Auswahlliste, **das neueste zuerst und vorgewählt**: Name, **Pre-Release** oder **Release** und Datum, dazu **neueste Version**, **installiert** (die laufende Version) und **ältere Version**. **Version laden** lädt die gewählte (ein Klick, wenn man die neueste will); **Abbrechen** schließt das Fenster, ohne etwas zu ändern. Aufgeführt werden nur Releases mit dem Anhang `webmobaledlib.zip`; Entwürfe (Draft) gelten nicht. **Seit 3.12** stehen Releases, deren Name oder Tag mit **test** beginnt (zum Beispiel `test1`: Tests des Entwicklers), **am Ende der Liste** (höchstens 5), werden **nie vorgewählt** und tragen den Zusatz **Entwicklertest**; so installiert kein Tester sie aus Versehen.
+- **Eigene Quelle (seit 3.95):** In der Auswahl stehen am Ende zwei weitere Einträge: **Eigener Link zu einer ZIP-Datei …** (Adresse mit `https://`, zum Beispiel ein Test-ZIP auf einem eigenen Server oder ein Anhang auf GitHub) und **ZIP-Datei auf diesem Rechner auswählen …** (Datei auswählen oder in das Feld ziehen). Die Datei muss **dasselbe Format und denselben Inhalt wie `webmobaledlib.zip`** haben (Ordner `python`, `release_manifest.json` mit Prüfsummen) und wird genauso geprüft, verglichen und mit denselben Rückfragen installiert (auch die Warnung bei einer älteren Version). Das geht auch, wenn GitHub nicht erreichbar ist; das Fenster zeigt dann den Fehler und bietet nur die eigene Quelle an. **Nur ZIP-Dateien aus vertrauenswürdigen Quellen installieren.**
 - **Ältere Version wählen:** Wählt man eine **ältere** als die installierte Version, zeigt das Fenster nach dem Laden in **roter Schrift** die Warnung „**ACHTUNG: Dieses ZIP hat eine ÄLTERE Version als die installierte!**“ und bietet **Trotzdem auf Version … zurückgehen** an (Abbrechen ist die Vorgabe). Einstellungen und Dateien können sich beim Zurückgehen ändern; die Tabellen werden vorher gesichert.
 - **Nach einer Testversion:** Das normale Update lädt später das letzte fertige Release. Ist dessen Version **älter** als die installierte Testversion, fragt das Programm ausdrücklich zurück, ob man zurückgehen möchte (wie sonst bei einer älteren Version).
 - **Fehler:** Ohne Netz, hinter einem Proxy oder bei überschrittener Abfragegrenze (GitHub: 60 je Stunde) steht eine Meldung im Fenster; es wird nichts verändert.
@@ -967,7 +1198,7 @@ einschalten (ab Version 1.77):** Reiter **Programm Einstellungen**, Kasten **Zug
 - Ist noch kein Passwort eingerichtet, fragt ein Dialog danach (mindestens 4 Zeichen; leer lassen: ohne Passwort; *Abbrechen* schaltet den Schalter zurück). Der Benutzername ist `mobaledlib`.
   Ohne Passwort kann jeder im Heimnetz die Oberfläche benutzen und Programme auf den angeschlossenen Arduino laden. Das Passwort lässt sich im Kasten darunter jederzeit ändern.
 - Danach **Jetzt neu starten**: Das Programm sichert, startet neu, und der Browserreiter lädt sich selbst neu. Die Einstellung steht in der Datei `network.json` im Datenordner (2.6).
-- **Windows:** Das Einschalten legt gleich die Firewall-Regel „webMobaLedLib 8080“ an (nur Privatnetzwerke). Windows fragt dabei nach Administratorrechten: mit *Ja* bestätigen, mehr ist nicht zu
+- **Windows:** Das Einschalten legt gleich die Firewall-Regel „webMLL Server 8080“ an (nur Privatnetzwerke). Windows fragt dabei nach Administratorrechten: mit *Ja* bestätigen, mehr ist nicht zu
   bestätigen. Lässt die Firewall den Port schon zu, fragt es nicht. Gilt das Netzwerk als „Öffentlich“, weist das Programm darauf hin, es auf „Privat“ zu stellen. Das **Ausschalten** entfernt die
   Regel nicht (Knopf *Freigabe entfernen* im Bereich Firewall). Die Regel steht in der Windows-Firewall unter *Eingehende Regeln* (nicht unter „Zugelassene Apps“).
 - Auf dem Rechner, auf dem das Programm läuft, ist kein Passwort nötig. Von einem anderen Rechner im Browser `http://<Adresse des PCs>:8080` öffnen, Benutzername und Passwort eingeben.
@@ -991,9 +1222,9 @@ einschalten (ab Version 1.77):** Reiter **Programm Einstellungen**, Kasten **Zug
 2. **Windows-Firewall:** Das Einschalten des Schalters legt die Regel gleich an. Das Folgende gilt, wenn es nicht geklappt hat. Beim ersten Start fragt Windows, ob Python Verbindungen aus dem Netz zulassen darf. **Privatnetzwerke** anhaken und *Zugriff zulassen*. Wurde das weggeklickt oder gilt das
    Netzwerk als **Öffentlich**, antwortet der Server anderen Rechnern nicht, und deren Browser meldet einen Ladefehler. Abhilfe:
    - **Einfachster Weg (ab Version 1.67):** Reiter **Programm Einstellungen**, Bereich **Firewall**, Knopf **Zugriff aus dem Netz freigeben**. Windows fragt nach Administratorrechten (*Ja*), nach
-     einigen Sekunden steht dort „Der Port 8080 ist freigegeben, Regel „webMobaLedLib 8080“ (Privatnetzwerke)“. Der Bereich prüft nach **Wirkung**: Er erkennt jede Regel, die eingehende Verbindungen
-     auf den Port zulässt, auch eine von Hand angelegte oder die von Windows für Python angelegte. Regeln, deren Name mit `webMobaLedLib` beginnt (auch eine von Hand angelegte, zum Beispiel
-     „webMobaLedLib 8080“), ersetzt oder entfernt das Programm; andere Regeln lässt es unverändert und zeigt sie an. Er warnt außerdem vor einer **Blockierregel** (gewinnt gegen jede Zulassung), wenn der
+     einigen Sekunden steht dort „Der Port 8080 ist freigegeben, Regel „webMLL Server 8080“ (Privatnetzwerke)“. Der Bereich prüft nach **Wirkung**: Er erkennt jede Regel, die eingehende Verbindungen
+     auf den Port zulässt, auch eine von Hand angelegte oder die von Windows für Python angelegte. Regeln, deren Name mit `webMLL Server` oder dem alten Namen `webMobaLedLib` (bis 3.65) beginnt (auch eine von Hand angelegte, zum Beispiel
+     „webMLL Server 8080“), ersetzt oder entfernt das Programm; andere Regeln lässt es unverändert und zeigt sie an. Er warnt außerdem vor einer **Blockierregel** (gewinnt gegen jede Zulassung), wenn der
      Server nur auf diesem Rechner lauscht (`MLL_HOST`, Schritt 1) und wenn das Netzwerk als „Öffentlich“ eingestuft ist. **Freigabe entfernen** löscht die Regeln wieder. Die folgenden Schritte sind
      dasselbe von Hand. Das Programm liest die Firewall ohne Administratorrechte auf zwei Wegen (PowerShell-Befehle und die COM-Schnittstelle der Firewall). Steht dort „Der Zustand der Firewall
      konnte nicht gelesen werden (…)“, hat keiner der Wege geklappt; der Grund steht in Klammern und im Protokoll (**Hilfe → Logfile anzeigen**, Zeile „Firewall-Status“). Ob der Port
@@ -1002,10 +1233,10 @@ einschalten (ab Version 1.77):** Reiter **Programm Einstellungen**, Kasten **Zug
    - Regel anlegen: Eingabeaufforderung **als Administrator** öffnen und eingeben (bei einem anderen Port die Nummer ersetzen; das Programm gibt den Befehl beim Start aus):
 
      ```
-     netsh advfirewall firewall add rule name="webMobaLedLib 8080" dir=in action=allow protocol=TCP localport=8080 profile=private
+     netsh advfirewall firewall add rule name="webMLL Server 8080" dir=in action=allow protocol=TCP localport=8080 profile=private
      ```
 
-     Entfernen: `netsh advfirewall firewall delete rule name="webMobaLedLib 8080"`. Die Regel steht in der Firewall-Oberfläche unter *Eingehende Regeln* mit der Spalte *Lokaler Port* 8080.
+     Entfernen: `netsh advfirewall firewall delete rule name="webMLL Server 8080"`. Die Regel steht in der Firewall-Oberfläche unter *Eingehende Regeln* mit der Spalte *Lokaler Port* 8080.
    - **Blockierregeln für Python:** Wurde die Rückfrage der Firewall beim ersten Start mit *Abbrechen* oder *Zugriff verweigern* beantwortet, legt Windows für `python.exe` eine Regel
      **Blockieren** an. Eine Blockierregel gewinnt gegen jede Zulassungsregel, auch gegen die Regel für den Port. Anzeigen (PowerShell **als Administrator**):
 
@@ -1053,9 +1284,43 @@ MLL_PASSWORD=mobaledlib # Anfangspasswort; ohne diese Zeile ist die Oberfläche 
 Nach einer Änderung des Ports einmal `sudo bash ~/mobaledlib/python/pi/install_pi.sh --no-check` aufrufen, damit das Symbol den neuen Port kennt.
 
 **Sicherheit:** Wer die Oberfläche erreicht, kann Programme auf den angeschlossenen Arduino laden (und auf dem Pi den Rechner herunterfahren). Das Passwort wird
-ohne Verschlüsselung (kein https) übertragen, und das Standardpasswort ist allgemein bekannt. Nutze den Zugriff nur im eigenen Heimnetz, ändere das Passwort und mach den
+ohne Verschlüsselung (kein https, siehe 8.1) übertragen, und das Standardpasswort ist allgemein bekannt. Nutze den Zugriff nur im eigenen Heimnetz, ändere das Passwort und mach den
 Rechner nicht aus dem Internet erreichbar. Sicherer ist `MLL_HOST=127.0.0.1` und der Zugriff über einen SSH-Tunnel: `ssh -L 8080:localhost:8080 pi@raspberrypi.local`,
 danach im Browser `http://localhost:8080`.
+
+### 8.1 https für den Raspberry Pi (Caddy davorschalten, seit 3.57)
+
+Das Programm selbst spricht nur **http**. Das reicht im Heimnetz, hat aber zwei Folgen: Das Passwort geht unverschlüsselt durchs Netz, und der Browser (Edge, Chrome)
+gibt bei http-Adressen **keinen Zugriff auf die Zwischenablage** frei. Seit 3.57 kopiert das Programm deshalb innerhalb der Seite (Kopieren und Einfügen zwischen den
+Blättern geht), Text aus anderen Programmen lässt sich über http aber nicht einfügen. Wer https möchte, schaltet auf dem Pi das Programm **Caddy** davor. Das Programm
+bleibt dabei unverändert.
+
+**Schnelle Lösung nur für Edge am PC (ohne Einrichtung am Pi):** In Edge `edge://flags/#unsafely-treat-insecure-origin-as-secure` öffnen, die Adresse (zum Beispiel
+`http://raspberrypi.local:8080`) eintragen, auf **Enabled** stellen und Edge neu starten. Das gilt nur für diesen Browser an diesem PC.
+
+**https mit Caddy (auf dem Pi, im Terminal):**
+
+```
+sudo apt install caddy
+sudo tee /etc/caddy/Caddyfile <<'CADDY'
+raspberrypi.local {
+    tls internal
+    reverse_proxy 127.0.0.1:8080
+}
+CADDY
+sudo systemctl restart caddy
+```
+
+- `raspberrypi.local` durch den Rechnernamen des Pi ersetzen (nur dieser Name ist im Zertifikat). Der Zugriff erfolgt danach über `https://raspberrypi.local`.
+- `tls internal`: Caddy erzeugt das Zertifikat selbst und erneuert es selbst. Der Browser kennt die ausstellende Stelle nicht und zeigt zuerst eine **Zertifikatswarnung**
+  („Erweitert → Weiter“ geht).
+- **Warnung dauerhaft entfernen:** Die Datei `/var/lib/caddy/.local/share/caddy/pki/authorities/local/root.crt` vom Pi auf den PC kopieren. Unter Windows doppelklicken,
+  **Zertifikat installieren → Lokaler Computer → Alle Zertifikate in folgendem Speicher speichern → Vertrauenswürdige Stammzertifizierungsstellen**, und Edge neu starten.
+- Websockets (die Dauerverbindung der Oberfläche) und die Anmeldung leitet Caddy ohne weitere Einstellung weiter.
+- **Port 8080 schließen:** In `/etc/mobaledlib-web.env` `MLL_HOST=127.0.0.1` setzen und den Dienst neu starten (`sudo systemctl restart mobaledlib-web`). Dann ist das Programm nur
+  noch über Caddy (https) erreichbar; das Desktop-Symbol am Pi selbst funktioniert weiter. Wer den Zugriff über `http://…:8080` weiter braucht, lässt `MLL_HOST=0.0.0.0`.
+- Mit https wird auch das Passwort verschlüsselt übertragen.
+- **Nicht geprüft** (siehe Checkliste Punkt 216).
 
 ## 9. Fehlersuche
 
@@ -1071,13 +1336,13 @@ danach im Browser `http://localhost:8080`.
 | „Die Arduino Entwicklungsumgebung ist nicht … installiert“ | IDE **1.8.19** installieren (2.2), ggf. den Pfad in „ARDUINO Einstellungen“ eintragen |
 | Kompilieren: „MobaLedLib.h: No such file“ oder Bibliothek/Board fehlt | Bibliotheken installieren (2.3), in der Tabelle „Libraries“ prüfen |
 | **„Headerfileerstellung abgebrochen – Die Headerdatei wurde nicht geschrieben“** (Statuszeile, kein Fehlerfenster) direkt nach **Setup übertragen**; im Protokoll: `tkinter.messagebox.askyesno ohne Display: ARDUINOTest - Erzeugen der Headerdatei wird gestartet` (Version vor 3.22) | Im Reiter **ARDUINO Einstellungen** (neben „Programm Einstellungen“) ist der **oberste Haken „Test ARDUINO Programm Creation“** angehakt (Testmodus für Entwickler: nach jedem Schritt der Erzeugung kommt eine Frage). Bis 3.21 kam die Frage als Tk-Fenster, das es im Browser nicht gibt: Die Antwort war immer „Nein“ und die Erzeugung brach ab. **Seit 3.22** erscheint die Frage als normales Fenster (Ja/Nein, beim Kompilieren Ja/Nein/Abbrechen); **seit 3.23 wirkt der Haken sofort nach dem Speichern** (in 3.22 wurde er erst nach einem Neustart des Programms beachtet). **Sofort-Hilfe bei einer älteren Version:** den Haken **wegnehmen**, **Speichern** drücken und die Seite neu laden. |
-| Hochladen mit der ARDUINO IDE endet mit `avrdude: stk500_paged_load(): (a) protocol error, expect=0x10, resp=0x4c`, `programmer is out of sync`, `avr_read(): error reading address 0x0000` und `failed to read all of flash memory` (seit 3.09 zeigt das Programm die Meldung **„Hochladen: Prüfung fehlgeschlagen“**) | Das Programm wurde **geschrieben**; gescheitert ist nur die **Prüfung** (avrdude liest den Speicher zurück und vergleicht). Es gibt **keinen** Fehler beim Schreiben (`stk500_paged_write`) oder beim Verbinden (`stk500_getsync`). Zuerst prüfen, ob die **Heartbeat LED** blinkt (die Lichtmaschine läuft dann mit dem neuen Programm). Häufigste Ursachen: der **Bootloader** passt nicht zur Einstellung (**beide** Einstellungen **„Nano Normal (old Bootloader)“** und **„Nano (neue Version)“** in **Optionen Werkzeuge → LED ARDUINO** ausprobieren); ein schlechtes USB-Kabel oder ein wackelnder Anschluss; zu schwache Stromversorgung (die LEDs nicht über den USB-Anschluss des Computers speisen, auf dem Raspberry Pi besonders wichtig); ein Nachbau-USB-Chip. Das Protokoll enthält die Zeile „Hochladen: Das Programm wurde geschrieben, nur die Pruefung … ist gescheitert“ |
-| **Windows:** Beim Auswählen des Anschlusses (Optionen Werkzeuge → LED ARDUINO → **USB Port erkennen**) erscheint „**Der COM Port COMx wird bereits von einem anderen Programm benutzt**“, obwohl kein anderes Programm läuft; **Nein** und danach Setup übertragen geht (Protokoll: `could not open port 'COM9': PermissionError(13, 'Zugriff verweigert')`) | Das Programm hatte den Anschluss kurz zuvor **selbst** benutzt (Blink-Zeitgeber des Auswahlfensters, Versand an die LED) und **nicht geschlossen**; Windows (CH340-Treiber) gibt ihn erst nach einem Moment frei. **Seit 3.10** schließt das Programm den Anschluss nach jeder Prüfung, sichert die Zugriffe gegeneinander und **wiederholt** das Öffnen bis zu dreimal. Kommt die Meldung weiter, ist der Anschluss wirklich belegt (zum Beispiel serieller Monitor, Farb Test, ARDUINO IDE). |
+| Hochladen mit der ARDUINO IDE endet mit `avrdude: stk500_paged_load(): (a) protocol error, expect=0x10, resp=0x4c`, `programmer is out of sync`, `avr_read(): error reading address 0x0000` und `failed to read all of flash memory` (seit 3.09 zeigt das Programm die Meldung **„Hochladen: Prüfung fehlgeschlagen“**) | Das Programm wurde **geschrieben**; gescheitert ist nur die **Prüfung** (avrdude liest den Speicher zurück und vergleicht). Es gibt **keinen** Fehler beim Schreiben (`stk500_paged_write`) oder beim Verbinden (`stk500_getsync`). Zuerst prüfen, ob die **Heartbeat LED** blinkt (die Lichtmaschine läuft dann mit dem neuen Programm). Häufigste Ursachen: der **Bootloader** passt nicht zur Einstellung (**beide** Einstellungen **„Nano Normal (old Bootloader)“** und **„Nano (neue Version)“** in **Optionen Werkzeuge → Lichtmaschine** ausprobieren); ein schlechtes USB-Kabel oder ein wackelnder Anschluss; zu schwache Stromversorgung (die LEDs nicht über den USB-Anschluss des Computers speisen, auf dem Raspberry Pi besonders wichtig); ein Nachbau-USB-Chip. Das Protokoll enthält die Zeile „Hochladen: Das Programm wurde geschrieben, nur die Pruefung … ist gescheitert“ |
+| **Windows:** Beim Auswählen des Anschlusses (Optionen Werkzeuge → Lichtmaschine → **USB Port erkennen**) erscheint „**Der COM Port COMx wird bereits von einem anderen Programm benutzt**“, obwohl kein anderes Programm läuft; **Nein** und danach Setup übertragen geht (Protokoll: `could not open port 'COM9': PermissionError(13, 'Zugriff verweigert')`) | Das Programm hatte den Anschluss kurz zuvor **selbst** benutzt (Blink-Zeitgeber des Auswahlfensters, Versand an die LED) und **nicht geschlossen**; Windows (CH340-Treiber) gibt ihn erst nach einem Moment frei. **Seit 3.10** schließt das Programm den Anschluss nach jeder Prüfung, sichert die Zugriffe gegeneinander und **wiederholt** das Öffnen bis zu dreimal. Kommt die Meldung weiter, ist der Anschluss wirklich belegt (zum Beispiel serieller Monitor, Farb Test, ARDUINO IDE). |
 | **Linux/Raspberry Pi:** Der USB-Anschluss erscheint erst mit **„Unbekannte Ports anzeigen“**, danach „**Es ist kein LED Arduino an COM Port /dev/ttyUSB0 angeschlossen**“ (Protokoll: `EnumComPorts:'USB Serial' '/dev/ttyUSB0'`) | Die Liste erkannte Nanos nur an der **Beschreibung** (zum Beispiel „CH340“, „USB2.0-Ser“), der Nano meldet sich aber als „USB Serial“. **Seit 3.10** erkennt sie CH340/CH341, FTDI und Arduino zusätzlich an der **Hersteller-Kennung** (VID), und die Prüfung akzeptiert einen gewählten Anschluss bei einem Nano auch mit unbekannter Beschreibung. Welche Kennung der Anschluss hat: `python3 -m serial.tools.list_ports -v`. |
 | „**Der … am COM Port … lässt sich nicht ansprechen (Fehlercode -2 oder -3)**“ (seit 3.10) | Der Anschluss ließ sich nicht zuweisen (-2) oder der Arduino nicht zurücksetzen (-3), zum Beispiel weil ein anderer Teil des Programms die gemeinsame Verbindung gleichzeitig änderte (Protokoll: `AttributeError: 'NoneType' object has no attribute 'dtr'`). Das Programm hat es **dreimal** versucht. USB-Kabel abziehen, wieder anstecken, noch einmal versuchen. Vor 3.10 hieß der Text fälschlich „von einem anderen Programm benutzt“. |
 | Hochladen mit der ARDUINO IDE: „**Hochladen: Keine Antwort**“ (Protokoll: `stk500_getsync() attempt … not in sync: resp=0x00`, `programmer is not responding`; seit 3.10) | Der Nano antwortet dem Bootloader-Programm nicht: meist passt die Einstellung **„Nano Normal (old Bootloader)“ / „Nano (neue Version)“** nicht zum Bootloader des Nano (alt: 57600 Baud, neu: 115200 Baud). **Beide Einstellungen ausprobieren.** Sonst USB-Kabel (muss Daten übertragen), Anschluss, und dass kein anderes Programm den Anschluss benutzt. Ohne Antwort wiederholt avrdude zehnmal (je 5 Sekunden), das Hochladen dauert dann fast eine Minute. |
 | Im Protokoll (und im Fenster Kompilieren und Hochladen) stehen **tausende Zeilen** `javax.jmdns … Bad domain name`, `dns[response …` und Hexdumps (Raspberry Pi) | Meldungen der **ARDUINO IDE**: Ihre Java-Bibliothek sucht im Netz nach Boards (JmDNS) und stolpert über den Rechnernamen des Pi (zum Beispiel `RaspiMLL-fritz-box-fritz-box-…`, durch Namenskonflikte mit der FRITZ!Box verlängert). **Seit 3.10** blendet das Programm diese Zeilen aus. Ursache beheben: einen **kurzen, festen Rechnernamen** setzen (`sudo raspi-config` → System Options → Hostname). |
-| **Programm Einstellungen → Spezialeinstellungen → „Bootloader des Nano beim Prüfen erkennen“** (seit 3.10, **seit 3.13 Vorgabe an**) | **An (Vorgabe):** Das Programm spricht nach **USB Port erkennen** den Bootloader an (STK500-Sync bei 57600 und 115200 Baud), erkennt **alt und neu** und stellt das Board passend ein, **wenn der Haken „Automatisch erkennen“ gesetzt ist** (es zeigt dazu einen Hinweis). Das Zurücksetzen und die Anfragen sind seit 3.12 auf den alten Bootloader abgestimmt (150 ms Wartezeit, Puffer leeren, GET_SYNC bis zu zehnmal im Abstand von etwa 0,3 Sekunden; Ergebnis von `bootloader_test.py` auf dem Raspberry Pi). **Aus (nur auf ausdrücklichen Wunsch):** Die Prüfung öffnet nur den Anschluss und lässt die gewählte Einstellung „old Bootloader“ / „neue Version“ **unverändert** (so verhielt sich das Programm vor 3.10, nur stellte die Automatik damals jeden Nano auf „neue Version“ um, weil die Prüfung den Bootloader nicht ansprach). **ESP32** bleibt wie bisher. Der **Nano Every** wird seit 3.14 nicht mehr unterstützt (wie im Excel-Programm 3.5.0L3). In 3.10 bis 3.12 war der Haken ausgeschaltet; wer ihn damals beim Speichern der Seite mitgespeichert hat, ist nicht betroffen (der Haken hat seit 3.13 einen neuen Namen). Das Protokoll nennt die gesendeten und empfangenen Bytes (`M07.transact: gesendet 30 20, Antwort 14 10`). Zur Fehlersuche gibt es das Hilfsprogramm `bootloader_test.py`. |
+| **Programm Einstellungen → Spezialeinstellungen → „Bootloader des Nano beim Prüfen erkennen“** (seit 3.10, **seit 3.13 Vorgabe an**) | **An (Vorgabe):** Das Programm spricht nach **USB Port erkennen** den Bootloader an (STK500-Sync bei 57600 und 115200 Baud), und erkennt **alt und neu**. Das Board stellt der Knopf **Board und USB Port erkennen** (Optionen Werkzeuge, Reiter Lichtmaschine, seit 3.82) passend ein; er sucht selbst an allen USB-Anschlüssen, stellt das erste gefundene Board ein und öffnet das Fenster **USB Port erkennen** mit dem gefundenen Board, dem Anschluss und den anderen gefundenen Boards (den Haken „Automatisch erkennen“ und den Eintrag „Typ von Arduino IDE benutzen“ gibt es nicht mehr; das gespeicherte Merkmal „AutoDet“ stellt das Board beim Hochladen nicht mehr um). Das Zurücksetzen und die Anfragen sind seit 3.12 auf den alten Bootloader abgestimmt (150 ms Wartezeit, Puffer leeren, GET_SYNC bis zu zehnmal im Abstand von etwa 0,3 Sekunden; Ergebnis von `bootloader_test.py` auf dem Raspberry Pi). **Aus (nur auf ausdrücklichen Wunsch):** Die Prüfung öffnet nur den Anschluss und lässt die gewählte Einstellung „old Bootloader“ / „neue Version“ **unverändert** (so verhielt sich das Programm vor 3.10, nur stellte die Automatik damals jeden Nano auf „neue Version“ um, weil die Prüfung den Bootloader nicht ansprach). **ESP32** bleibt wie bisher. Der **Nano Every** wird seit 3.14 nicht mehr unterstützt (wie im Excel-Programm 3.5.0L3). In 3.10 bis 3.12 war der Haken ausgeschaltet; wer ihn damals beim Speichern der Seite mitgespeichert hat, ist nicht betroffen (der Haken hat seit 3.13 einen neuen Namen). Das Protokoll nennt die gesendeten und empfangenen Bytes (`M07.transact: gesendet 30 20, Antwort 14 10`). Zur Fehlersuche gibt es das Hilfsprogramm `bootloader_test.py`. |
 | „Fehler beim Lesen der Datei …/preferences.txt“ (zum Beispiel bei „Check actual versions“) | Die Einstellungsdatei der IDE fehlt auf einem frischen System (Linux, macOS, Pi). Das Programm legt sie beim Start an. Von Hand (Linux/Pi): `mkdir -p ~/.arduino15 ~/Arduino/libraries; printf 'sketchbook.path=%s/Arduino\ntarget_package=arduino\ntarget_platform=avr\nboard=uno\n' "$HOME" > ~/.arduino15/preferences.txt` |
 | Board installieren: `NullPointerException at … BaseNoGui.onBoardOrPortChange` | Die IDE hat ein nicht installiertes Board ausgewählt. Das Programm und die Skripte setzen die Auswahl auf `arduino:avr:uno` zurück. Von Hand (Linux/Pi): `sed -i -E '/^(target_package\|target_platform\|board\|custom_[A-Za-z0-9_.]+)=/d' ~/.arduino15/preferences.txt; printf 'target_package=arduino\ntarget_platform=avr\nboard=uno\n' >> ~/.arduino15/preferences.txt`, dann wiederholen |
 | Board `esp32:esp32` installieren: `Tool esptool_py is not available for your operating system` | Für diese Version des ESP32-Pakets fehlen Werkzeuge für die Prozessorart (64-Bit-ARM), siehe Kapitel 10 |
@@ -1108,7 +1373,7 @@ danach im Browser `http://localhost:8080`.
 ### 9.2a ESP32-Upload über WLAN scheitert („No response from device“)
 
 Der ESP32 meldet sich nach der Anmeldung mit einer eigenen Verbindung zurück zum PC. Eine Firewall blockiert diese eingehende Verbindung. Lösung: **eingehend TCP-Port 32323** zulassen.
-- **Windows-Firewall:** PowerShell als Administrator: `New-NetFirewallRule -DisplayName "MLL OTA" -Direction Inbound -Protocol TCP -LocalPort 32323 -Action Allow`
+- **Windows-Firewall:** PowerShell als Administrator: `New-NetFirewallRule -DisplayName "webMLL OTA 32323" -Direction Inbound -Protocol TCP -LocalPort 32323 -Action Allow`
 - **Andere Firewalls (z. B. ESET):** Neue Regel anlegen: Richtung eingehend, Protokoll TCP, lokaler Port 32323, Aktion Zulassen. Die Menünamen hängen von der Version ab (bei ESET: Einstellungen → Netzwerkschutz → Firewall → Regeln).
 
 ### 9.3 macOS
@@ -1198,7 +1463,7 @@ Ein Update kann abbrechen, wenn der Strom ausfällt, das Programm beendet wird o
   Projekt festlegen und testen. Seit Version 1.90 wählt das Programm das ESP32-Paket auf Linux mit 64-Bit-ARM nicht mehr automatisch aus (sonst scheiterte die Installation bei jedem Start).
 - **Noch nicht umgesetzte Formulare** (es gab sie in der Tk-Version): LEDAnim und der Mustereditor. Sie zeigen nichts an. **ServoAnim** gibt es seit Version 2.78 (Abschnitt 2.9f), **LEDColorAnim** seit 2.88 (Abschnitt 2.9g). **MultiLEDColorAnim** wird neu entworfen und steht **nicht mehr in der Makroliste**.
 - **Weitere Reiter:** Die Ausgabe beim Kompilieren und Hochladen (der ARDUINO Monitor der Tk-Fassung) erscheint im Protokollfenster. Von den DM Servo Einstellungen fehlen das Programmieren des ATtiny (Hex-Datei über den Bus) und das Formular für den Programmieradapter (2.13).
-- **Patterngenerator:** Das Senden an ein Modul (zurückgestellt, bis ein Tester es braucht), die Wirkung der Spezial Modes auf dem Modul und der Multiplexer fehlen noch (2.10). Test Pattern gibt es seit 2.90.
+- **Timeline Editor:** Das Senden an ein Modul (zurückgestellt, bis ein Tester es braucht), die Wirkung der Spezial Modes auf dem Modul und der Multiplexer fehlen noch (2.10). Test Pattern gibt es seit 2.90.
 - **Stand der Prüfung:** Ausprobiert sind
   - **Raspberry Pi** (Raspberry Pi OS Trixie, Python 3.13): Neuinstallation mit `install_pi.sh`, Dienst, Zugriff aus dem Netz, Desktop-Symbol, IDE, Bibliotheken,
     Boards (ohne ESP32) und das Herunterfahren.

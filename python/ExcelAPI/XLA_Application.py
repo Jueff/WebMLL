@@ -1,9 +1,9 @@
-# Datei-Version: 1.18 (2026-11-14) - XLA_Application.py
+# Datei-Version: 1.23 (2026-11-18) - XLA_Application.py
 # ----------------------------------------------------------------------------------------------
 # Name:           XLA_Application.py
 # Path:           ExcelAPI/XLA_Application.py
-# Version:        1.18
-# Last Update:    2026-11-14
+# Version:        1.23
+# Last Update:    2026-11-18
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
@@ -25,6 +25,11 @@
 #   1.16  2026-11-01  CSelection.EntireRow: die markierten Zeilen (vorher um eine Zeile nach oben verschoben: Zeile kopieren, ausblenden und loeschen wirkten auf die Zeile darueber)
 #   1.17  2026-11-08  Das Scheitern der Importe von headless_sheet und XLF_FormGenerator wird ins Protokoll geschrieben (vorher wurde der ImportError verschluckt; die eigentliche Ursache war nicht zu sehen und es folgte der Ringimport mit P01_Worksheetcalc)
 #   1.18  2026-11-14  Esp32Wlan: WLAN-Einstellungen (esp32_wlan) je Blatt in der Arbeitsmappe sichern und laden
+#   1.19  2026-11-15  GetAsyncKeyState: Umschalttaste vom Mausklick (shift_key) gilt auch ohne keyboard-Modul
+#   1.20  2026-11-15  Evt_Workbook_BeforeClose ruft das Ereignis tatsaechlich auf
+#   1.21  2026-11-17  Application.OnKey (Tastenbelegung, ohne Wirkung im Web): Beenden mit Speichern scheiterte mit AttributeError 'OnKey' (Workbook_BeforeClose)
+#   1.22  2026-11-17  Vom Anwender versteckte Blaetter (user_hidden): mit der Arbeitsmappe sichern (HiddenSheets) und laden
+#   1.23  2026-11-18  ESP-Einstellungen je Blatt sichern und laden (Beitrag von moosbewohner, Pull Request 11)
 # ----------------------------------------------------------------------------------------------
 # -*- coding: utf-8 -*-
 #
@@ -854,7 +859,9 @@ class CWorkbook(object):
             saveData["Workbookdata"]= copy.deepcopy(workbookdata)
             saveData["SheetOrder"] = [s.Name for s in self.sheets]                 # Reihenfolge der Reiter (auch der Kopien)  # v1.14
             saveData["Esp32Wlan"] = {s.Name: dict(s.esp32_wlan) for s in self.sheets if getattr(s, "esp32_wlan", None)}   # WLAN-Einstellungen des ESP32 je Blatt (ohne Passwort)  # v1.18
+            saveData["Esp32Options"] = {s.Name: dict(s.esp32_options) for s in self.sheets if getattr(s, "esp32_options", None)}  # v1.23
             saveData["TabColors"] = {s.Name: s.tab_color for s in self.sheets if getattr(s, "tab_color", "")}      # Reiterfarben  # v1.14
+            saveData["HiddenSheets"] = [s.Name for s in self.sheets if getattr(s, "user_hidden", False)]          # vom Anwender versteckte Blaetter (Kontextmenue Tabelle verstecken)  # v1.22
             def _json_default(obj):  # v1.06
                 # Funktionen (Command der Steuerelemente) und andere Objekte kennt JSON nicht: nicht mitsichern statt die ganze Datei abzubrechen
                 logger.debug("Workbook sichern: Wert vom Typ %s wird nicht gesichert", type(obj).__name__)  # v1.06
@@ -878,11 +885,21 @@ class CWorkbook(object):
             for sheet in self.sheets:  # v1.14
                 if sheet.Name in colors:  # v1.14
                     sheet.set_tab_color(colors[sheet.Name])  # v1.14
+        hidden = savedData.get("HiddenSheets") or []  # v1.22
+        if isinstance(hidden, list):  # v1.22
+            for sheet in self.sheets:  # v1.22
+                sheet.user_hidden = sheet.Name in hidden  # v1.22
         wlan = savedData.get("Esp32Wlan") or {}  # v1.18
         if isinstance(wlan, dict):  # v1.18
             for sheet in self.sheets:  # v1.18
                 if isinstance(wlan.get(sheet.Name), dict):  # v1.18
                     sheet.esp32_wlan = dict(wlan[sheet.Name])  # v1.18
+        esp32_options = savedData.get("Esp32Options")  # v1.23
+        if isinstance(esp32_options, dict):  # v1.23
+            for sheet in self.sheets:  # v1.23
+                options = esp32_options.get(sheet.Name)  # v1.23
+                if isinstance(options, dict):  # v1.23
+                    sheet.esp32_options = dict(options)  # v1.23
         order = savedData.get("SheetOrder")  # v1.14
         if isinstance(order, list) and order:  # v1.14
             self.reorder_sheets([str(n) for n in order])  # v1.14
@@ -1027,7 +1044,8 @@ class CWorkbook(object):
     
     def Evt_Workbook_BeforeClose(self):
         if Application.EnableEvents:
-            self.Call_EventProc("BeforeClose")
+            # self.Call_EventProc("BeforeClose")  # v1.20 (entfallen: Ereignis wurde nie aufgerufen)
+            self.Call_EventProc("BeforeClose")(False)  # v1.20
             return
     
     def Evt_SheetTableUpdate(self,sheet,target):
@@ -5073,6 +5091,10 @@ class CApplication(object):
         else:
             return None    
         
+    def OnKey(self, Key=None, Procedure=None):  # v1.21
+        # Excel: Taste mit einem Makro belegen (hier ohne Wirkung; im Web gibt es keine Tastenbelegung der Anwendung)  # v1.21
+        return  # v1.21
+
     def OnTime(self,time,cmd):
         #print("Application OnTime:",time,cmd)
         global_controller.after(time,cmd)
@@ -5481,6 +5503,9 @@ def Format(value,formatstring):
 
 def GetAsyncKeyState(key):
     global shift_key
+    if key == VK_SHIFT and shift_key:  # v1.19 Umschalttaste beim Klick auf den Knopf (auch ohne keyboard-Modul)
+        shift_key = False  # v1.19
+        return True  # v1.19
     try:
         if keyboard_Module_imported:
             if key==__VK_UP:

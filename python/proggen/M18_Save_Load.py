@@ -1,9 +1,9 @@
-# Datei-Version: 1.04 (2026-10-26) - M18_Save_Load.py
+# Datei-Version: 1.05 (2026-11-17) - M18_Save_Load.py
 # ----------------------------------------------------------------------------------------------
 # Name:           M18_Save_Load.py
 # Path:           proggen/M18_Save_Load.py
-# Version:        1.04
-# Last Update:    2026-10-26
+# Version:        1.05
+# Last Update:    2026-11-17
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
@@ -11,6 +11,7 @@
 #   1.02  2026-10-23  Speichern im Format MLL_PGF (Optionen - Update - Datei speichern): In der Web-Oberflaeche keine Meldung 'Datei wurde geschrieben' mit dem internen Pfad mehr vor der Abfrage, wohin die Datei gespeichert werden soll
 #   1.03  2026-10-23  Beim Laden einer PGF-Datei: Token in der Spalte Typ in irgendeiner Sprache -> neutrales (deutsches) Token (M09.Token_Canonical_Any)
 #   1.04  2026-10-26  Speichern im Format MLL_PGF: Datei wird (Programm Einstellungen, Standard an) in den Windows-Zeichensatz umgeschrieben, wenn alle Zeichen Platz haben (fuer das Excel-Programm)
+#   1.05  2026-11-17  Beim Speichern eines Blatts wird der Zwischenspeicher der Spaltennummern (M25.Col_from_Sheet) wirklich zurueckgesetzt (bisher wurde nur eine lokale Variable gesetzt)
 # ----------------------------------------------------------------------------------------------
 # -*- coding: utf-8 -*-
 #
@@ -166,7 +167,8 @@ def __Save_Sheet_to_pgf(fp, Sh, AddBoardInfo):
             rng = P01.Selection
         else:
             rng = P01.Range(P01.Cells(M02.FirstDat_Row, 1), P01.Cells(M30.LastFilledRowIn_ChkAll(Sh), 1))
-        Col_from_Sheet = ''
+        # Col_from_Sheet = ''  # v1.05 (entfallen: setzte nur eine lokale Variable)
+        M25.Col_from_Sheet = ''  # v1.05
         M25.Make_sure_that_Col_Variables_match(Sh)
         for r in rng.Rows:
             if not r.Hidden and r.Row >= M02.FirstDat_Row:

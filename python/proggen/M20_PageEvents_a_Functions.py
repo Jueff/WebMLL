@@ -1,9 +1,9 @@
-# Datei-Version: 1.09 (2026-11-14) - M20_PageEvents_a_Functions.py
+# Datei-Version: 1.12 (2026-11-18) - M20_PageEvents_a_Functions.py
 # ----------------------------------------------------------------------------------------------
 # Name:           M20_PageEvents_a_Functions.py
 # Path:           proggen/M20_PageEvents_a_Functions.py
-# Version:        1.09
-# Last Update:    2026-11-14
+# Version:        1.12
+# Last Update:    2026-11-18
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
@@ -15,7 +15,10 @@
 #   1.06  2026-10-27  Update_TestButtons: der Name einer wiederverwendeten Testtaste wird wie im VBA-Original immer neu gesetzt (sonst schaltete eine Ein/Aus-Taste mit Startwert nach dem Neuzeichnen nicht mehr um)
 #   1.07  2026-10-28  Show_Help oeffnet das Online Wiki in einem neuen Tab des Webbrowsers statt der Hilfeseite
 #   1.08  2026-10-28  logging im Aufruf importieren
+#   1.10  2026-11-16  Update_TestButtons: die Spalte der Tasten wird automatisch so breit, dass alle Tasten hineinpassen (wie im Excel-Programm); Shapes rechts davon wandern mit. Vorher wurden Tasten ausserhalb der Spalte gezeichnet und waren nicht bedienbar
 #   1.09  2026-11-14  DCC-Adressspannen: Ergebnis in Target.Value schreiben (Beitrag des Fork-Entwicklers)
+#   1.11  2026-11-17  Select_Typ_by_Dialog: Adressspannen ("5 - 8") werden geprueft, nach der Auswahl werden Adresse (InCnt), Testtasten und Startwert der Zeile aktualisiert, EnableEvents wird immer zurueckgesetzt (Pull Request 5 von moosbewohner)
+#   1.12  2026-11-18  HELP_WIKI_URL: Seite einfuehrung des webMobaLedLib-Wikis statt der Excel-Seite des Programm Generators
 # ----------------------------------------------------------------------------------------------
 # -*- coding: utf-8 -*-
 #
@@ -553,28 +556,27 @@ def Select_Typ_by_Dialog(Target):
     #------------------------------------------------------
     if not M25.Address_starts_with_a_Number(Target.Row):
         return
-    if P01.val(M25.Get_Address_String(Target.Row)) < 1:                                           # 08.12.25: Juergen don't allow 0 DCC address  # v1.03
-        return  # v1.03
-        # 03.02.20:
+    # if P01.val(M25.Get_Address_String(Target.Row)) < 1:                                           # 08.12.25: Juergen don't allow 0 DCC address  # v1.03  # v1.11 (entfallen)
+    #     return  # v1.03  # v1.11 (entfallen)
+    address = M25.Get_Address_String(Target.Row)  # v1.11
+    if P01.val(address.split(' - ', 1)[0]) < 1:  # v1.11: Adressspanne "5 - 8": nur die erste Adresse pruefen
+        return  # v1.11
     OldEvents = P01.Application.EnableEvents
     P01.Application.EnableEvents = False
-    Target.Select()
-    if M25.Page_ID == 'Selectrix':
-        F00.UserForm_Select_Typ_SX.setFocus(Target)
-        F00.UserForm_Select_Typ_SX.Show()
-        M02GV.Userform_Res = F00.UserForm_Select_Typ_SX.Userform_res
-        if F00.UserForm_Select_Typ_SX.Userform_res !="":
-            Target.set_value(F00.UserForm_Select_Typ_SX.Userform_res) #*HL        
-    else:
-        F00.UserForm_Select_Typ_DCC.setFocus(Target)
-        F00.UserForm_Select_Typ_DCC.Show()
-        M02GV.Userform_Res = F00.UserForm_Select_Typ_DCC.Userform_res
-        if F00.UserForm_Select_Typ_DCC.Userform_res !="":
-            Target.set_value(F00.UserForm_Select_Typ_DCC.Userform_res) #*HL
-    P01.Application.EnableEvents = True
-    #*HL if Userform_Res != '':
-    #*HL     Target = Userform_Res
-    P01.Application.EnableEvents = OldEvents
+    try:  # v1.11
+        Target.Select()  # v1.11
+        form = F00.UserForm_Select_Typ_SX if M25.Page_ID == 'Selectrix' else F00.UserForm_Select_Typ_DCC  # v1.11
+        form.setFocus(Target)  # v1.11
+        form.Show()  # v1.11
+        M02GV.Userform_Res = form.Userform_res  # v1.11
+        if M02GV.Userform_Res != "":  # v1.11
+            Target.set_value(M02GV.Userform_Res)  # v1.11
+            Complete_Addr_Column_with_InCnt(Target.Row)  # v1.11
+            Update_TestButtons(Target.Row)  # v1.11
+            Update_StartValue(Target.Row)  # v1.11
+    finally:  # v1.11
+        P01.Application.EnableEvents = OldEvents  # v1.11
+    # (bisheriger Block mit getrennten Zweigen fuer Selectrix und DCC ist in v1.11 durch obigen Code ersetzt; Beitrag des Fork-Entwicklers moosbewohner, PR 5)  # v1.11
 
 def Complete_Typ(Target, DialogIfEmpty=False):
     Txt = String()
@@ -724,7 +726,8 @@ def ClearSheet():
 def __set_column_width(sheet):
     M01.set_columnwidth(sheet)
 
-HELP_WIKI_URL = "https://wiki.mobaledlib.de/anleitungen/spezial/programmgenerator"        # Online Wiki: die Hilfe zum Programm Generator  # v1.07
+# HELP_WIKI_URL = "https://wiki.mobaledlib.de/anleitungen/spezial/programmgenerator"  # v1.07 (entfallen v1.12)
+HELP_WIKI_URL = "https://wiki.mobaledlib.de/anleitungen/webmobaledlib/einfuehrung"  # v1.12: das Wiki nennt die Seite einfuehrung        # Online Wiki: die Hilfe zum Programm Generator  # v1.07
 
 
 def Show_Help():
@@ -1315,6 +1318,15 @@ def Update_TestButtons(Row, onValue=0, First_Call=True, redraw=False):
     #*HLif P01.Cells(Row, TargetColumn).Width < i:
     #*HL    factor = P01.Cells(Row, TargetColumn).Width / P01.Columns(TargetColumn).ColumnWidth
     #*HL    P01.Range[P01.Cells(1, TargetColumn), P01.Cells(1, TargetColumn)].ColumnWidth = WorksheetFunction.RoundUp(i / factor, 1)
+    try:  # v1.10 Spalte vergroessern, wenn die Tasten nicht hineinpassen (Pixel wie tksheet; Excel: ColumnWidth)
+        _need = int(1 + PixelOffset + ButtonCount * Height)  # v1.10
+        _sh = P01.ActiveSheet  # v1.10
+        _cur = int(_sh.tksheet.column_width(TargetColumn - 1))  # v1.10
+        if _cur < _need:  # v1.10
+            _sh.tksheet.column_width(TargetColumn - 1, _need)  # v1.10
+            _sh.moveShapesHorizontal(top_left_cell_column=TargetColumn, deltaX=_need - _cur)  # v1.10 Shapes rechts davon mitnehmen (wie beim Ziehen der Spaltenbreite)
+    except BaseException as _e:  # noqa: BLE001  # v1.10
+        Debug.Print('Spaltenbreite der Tasten: ' + str(_e))  # v1.10
     if toggle:
         ButtonPrefix = 'B'
     else:

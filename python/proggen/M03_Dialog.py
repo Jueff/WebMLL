@@ -1,14 +1,16 @@
-# Datei-Version: 1.01 (2026-10-21) - M03_Dialog.py
+# Datei-Version: 1.03 (2026-11-17) - M03_Dialog.py
 # ----------------------------------------------------------------------------------------------
 # Name:           M03_Dialog.py
 # Path:           proggen/M03_Dialog.py
-# Version:        1.01
-# Last Update:    2026-10-21
+# Version:        1.03
+# Last Update:    2026-11-17
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
 #   1.00  2026-10-12  Stand der Umstellung (nicht erfasst)
 #   1.01  2026-10-21  Input_Address: die Spalte InCnt bekommt mit der Adresse den Wert 1 (Version K des Excel-Programms)
+#   1.02  2026-11-17  Dialog Wizard in einer Zeile mit Daten: in den Spalten A bis C startet der Dialog der Adress-Spalte statt der Meldung 'Kein Dialog vorhanden' (Entscheidung der Community)
+#   1.03  2026-11-17  Dialog Wizard in der Spalte Typ einer Zeile ohne Adresse: Dialog der Adress-Spalte statt der Typauswahl
 # ----------------------------------------------------------------------------------------------
 # -*- coding: utf-8 -*-
 #
@@ -132,7 +134,8 @@ def Dialog_Guided_Input():
         __Ask_Input_NextRow = False
         ActiveCell = P01.ActiveCell()
         r = ActiveCell.Row
-        if (ActiveCell.Column == M25.DCC_or_CAN_Add_Col) or (ActiveCell.Column == M25.SX_Channel_Col):
+        # if (ActiveCell.Column == M25.DCC_or_CAN_Add_Col) or (ActiveCell.Column == M25.SX_Channel_Col):  # v1.02 (entfallen)
+        if (ActiveCell.Column == M25.DCC_or_CAN_Add_Col) or (ActiveCell.Column == M25.SX_Channel_Col) or ActiveCell.Column < max(M25.DCC_or_CAN_Add_Col, M25.SX_Channel_Col):  # v1.02: in den Spalten A bis C startet der Dialog der Adress-Spalte
             if M25.SX_Bitposi_Col > 0:
                 SX_DataAvailable = P01.Cells(r, M25.SX_Bitposi_Col) != ''
             else:
@@ -142,7 +145,12 @@ def Dialog_Guided_Input():
             else:
                 Input_Address()
         elif (ActiveCell.Column == M25.Inp_Typ_Col):
-            Input_Typ()
+            # Input_Typ()  # v1.03 (entfallen)
+            if not M25.Address_starts_with_a_Number(r):  # v1.03: noch keine Adresse: Dialog der Adress-Spalte (wie der Doppelklick auf Typ)
+                P01.Cells(r, M25.DCC_or_CAN_Add_Col or M25.SX_Channel_Col).Select()  # v1.03
+                Dialog_Guided_Input()  # v1.03
+                return  # v1.03
+            Input_Typ()  # v1.03
         elif (ActiveCell.Column == M25.SX_Bitposi_Col):
             Input_BitPos()
         elif (ActiveCell.Column == M25.Start_V_Col):

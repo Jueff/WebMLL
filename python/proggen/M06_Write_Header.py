@@ -1,9 +1,9 @@
-# Datei-Version: 1.06 (2026-11-14) - M06_Write_Header.py
+# Datei-Version: 1.10 (2026-11-18) - M06_Write_Header.py
 # ----------------------------------------------------------------------------------------------
 # Name:           M06_Write_Header.py
 # Path:           proggen/M06_Write_Header.py
-# Version:        1.06
-# Last Update:    2026-11-14
+# Version:        1.10
+# Last Update:    2026-11-18
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
@@ -12,7 +12,11 @@
 #   1.03  2026-10-21  Version K des Excel-Programms: Makros Name_LED_Number und Name_LED_Offset (Proc_Special_Functions), Variable #ChannelOffset (Generate_Config_Line mit ChannelBaseOffset), Adresse 0 (Addr >= 1 in Create_Header_Entry, Addr >= 0 in ProcessLine), keine Pruefung des Boards bei nur Simulator, START_MSG ohne Test_Suffix, inch_t in HandleValue_t
 #   1.04  2026-10-21  Meldung 'Anzahl der verwendeten Eingangskanaele ist zu gross': MaxInput und Channel als Zeichenkette (Replace mit einer Zahl stuerzte ab) und die Klammern richtig gesetzt (MsgBox bekam nur den ersten Teil als Text, Titel und Symbol fehlten)
 #   1.05  2026-11-12  Einstellung 'Test ARDUINO Programm Creation' (ARDUINOTest): Die Fragen nach jedem Schritt kommen jetzt als Web-Dialog (P01.MsgBox) statt tk.messagebox (ohne Tk lieferte askyesno immer Nein: 'Headerfileerstellung abgebrochen - Die Headerdatei wurde nicht geschrieben', Windows 11, Log des Testers)
-#   1.06  2026-11-14  Create_HeaderFile(HeaderOnly): nur die Header-Datei erzeugen (ESP32-OTA); Display-Block des ESP32 (UI_MLLTime) nach Bearbeitung im Browser wieder auf mehrere Zeilen (Beitrag des Fork-Entwicklers)
+#   1.06  2026-11-14  Create_HeaderFile(HeaderOnly): nur die Header-Datei erzeugen (ESP32-OTA); Display-Block des ESP32 (UI_MLLTime) nach Bearbeitung im Browser wieder auf mehrere Zeilen (Beitrag von moosbewohner, Pull Request 11)
+#   1.07  2026-11-15  Umschalttaste: Simulator-Option 3 war umgekehrt (VBA: nur ohne Umschalttaste), Wert als bool
+#   1.08  2026-11-15  Simulator-Betriebsart ueber M39.Get_Sim_Mode (Auswahl Kein/Nur/Mit Simulator)
+#   1.09  2026-11-17  Fehlermeldung der House-Zeiten verweist auf die Programm Einstellungen statt auf die Seite Config (die Werte stehen dort)
+#   1.10  2026-11-18  Firmware-Defines aus den ESP-Einstellungen erzeugen (Beitrag von moosbewohner, Pull Request 11)
 # ----------------------------------------------------------------------------------------------
 # -*- coding: utf-8 -*-
 #
@@ -1215,15 +1219,19 @@ def Create_HeaderFile(CreateFilesOnly = False, *, HeaderOnly=False): #20.12.21: 
     #    return _fn_return_value
     
     # 04.03.22 Juergen: If shift key is pressed to configuration is sent to the simulator only, also if Autostart Option 3  = simulatorOnly
-    shift_pressed = P01.GetAsyncKeyState(P01.__VK_SHIFT)
+    # shift_pressed = P01.GetAsyncKeyState(P01.__VK_SHIFT)  # v1.07 (entfallen)
+    shift_pressed = bool(P01.GetAsyncKeyState(P01.VK_SHIFT))  # v1.07
     Debug.Print("Shift_pressed: %s",shift_pressed)
     
     # 17.03.22 Juergen: shift key is reverses simualtor option
     #SimulatorOnly = Get_Num_Config_Var_Range("SimAutostart", 0, 3, 0) = 3 and GetAsyncKeyState(VK_SHIFT) = 0
-    SimulatorOnly = M28.Get_Num_Config_Var_Range("SimAutostart", 0, 3, 0) == 3 and shift_pressed
+    # SimulatorOnly = M28.Get_Num_Config_Var_Range("SimAutostart", 0, 3, 0) == 3 and shift_pressed  # v1.07 (entfallen)
+    # SimulatorOnly = M28.Get_Num_Config_Var_Range("SimAutostart", 0, 3, 0) == 3 and not shift_pressed  # v1.07 (entfallen v1.08)
+    SimulatorOnly = M39.Get_Sim_Mode() == 3 and not shift_pressed  # v1.07 wie VBA: Umschalttaste kehrt die Option um  # v1.08
         
     if not SimulatorOnly:
-        SimulatorOnly = M28.Get_Num_Config_Var_Range("SimAutostart", 0, 3, 0) != 3 and shift_pressed
+        # SimulatorOnly = M28.Get_Num_Config_Var_Range("SimAutostart", 0, 3, 0) != 3 and shift_pressed  # v1.08 (entfallen)
+        SimulatorOnly = M39.Get_Sim_Mode() != 3 and shift_pressed  # v1.08
        
     # if SimulatorOnly and CreateFilesOnly == False and M02a.Get_BoardTyp() == M02.HT_AM328:  # v1.03 (entfallen)
     if SimulatorOnly and not (CreateFilesOnly or HeaderOnly):                                                  # 08.12.25: Juergen remove platform check  # v1.03
@@ -1587,10 +1595,11 @@ def Write_Header_File_and_Upload_to_Arduino(CreateFilesOnly=False, LEDsInUse=Non
         House_Max_T = 150
         # Default value used in the library
     if P01.val(House_Min_T) > P01.val(House_Max_T) or P01.val(House_Max_T) == 0:
-        PG.ThisWorkbook.Sheets(M02.ConfigSheet).Select()
-        P01.Range('MinTime_House').Select()
+        # PG.ThisWorkbook.Sheets(M02.ConfigSheet).Select()  # v1.09 (entfallen: die Zeiten stehen in den Programm Einstellungen)
+        # P01.Range('MinTime_House').Select()  # v1.09 (entfallen)
         #XLWA.Sleep(100)
-        P01.MsgBox(M09.Get_Language_Str('Fehler auf der \'Config\' Seite:' + vbCr + 'Die \'Minimale Zeit bis zur nächsten Änderung\' muss kleiner ' + 'oder gleich groß wie die Maximale Zeit sein.' + vbCr + 'Achtung: Wenn nichts eingegeben ist werden die Standard Werte vom 50/150 verwendet. ' + 'Dadurch kann es ebenfalls zu einem Konflikt kommen.'), vbCritical, M09.Get_Language_Str('Falsche Zeiten für die House() Funktion'))
+        # P01.MsgBox(M09.Get_Language_Str('Fehler auf der \'Config\' Seite:' + vbCr + 'Die \'Minimale Zeit bis zur nächsten Änderung\' muss kleiner ' + 'oder gleich groß wie die Maximale Zeit sein.' + vbCr + 'Achtung: Wenn nichts eingegeben ist werden die Standard Werte vom 50/150 verwendet. ' + 'Dadurch kann es ebenfalls zu einem Konflikt kommen.'), vbCritical, M09.Get_Language_Str('Falsche Zeiten für die House() Funktion'))  # v1.09 (entfallen)
+        P01.MsgBox(M09.Get_Language_Str('Fehler in den Programm Einstellungen (Programm Generator):' + vbCr + 'Die \'Minimale Zeit bis zur nächsten Änderung\' muss kleiner ' + 'oder gleich groß wie die Maximale Zeit sein.' + vbCr + 'Achtung: Wenn nichts eingegeben ist werden die Standard Werte vom 50/150 verwendet. ' + 'Dadurch kann es ebenfalls zu einem Konflikt kommen.'), vbCritical, M09.Get_Language_Str('Falsche Zeiten für die House() Funktion'))  # v1.09
         M30.EndProg()
     VBFiles.writeText(fp, '', '\n')
     Color_Test_Mode = M28.Get_String_Config_Var('Color_Test_Mode')
@@ -1705,11 +1714,27 @@ def Write_Header_File_and_Upload_to_Arduino(CreateFilesOnly=False, LEDsInUse=Non
     display_block = (r"(?m)^([ \t]*)#ifdef[ \t]+ESP32[ \t]+"
                      r"#define[ \t]+USE_ESP32_EXTENSIONS[ \t]+"
                      r"#define[ \t]+USE_UI[ \t]+"
-                     r"#define[ \t]+UI_MLLTime[ \t]+([0-4])[ \t]*#endif\b")
+                     # r"#define[ \t]+UI_MLLTime[ \t]+([0-4])[ \t]*#endif\b")  # v1.10 (entfallen)
+                     r"#define[ \t]+UI_MLLTime[ \t]+([0-5])[ \t]*#endif\b")  # v1.10
     ConfigTxt = re.sub(display_block,
                        r"\1#ifdef ESP32\n\1#define USE_ESP32_EXTENSIONS\n\1#define USE_UI\n"
                        r"\1#define UI_MLLTime \2\n\1#endif", ConfigTxt)
     VBFiles.writeText(fp, ConfigTxt, '\n')
+    options = getattr(P01.ActiveSheet, "esp32_options", None)  # v1.10
+    if options:  # v1.10
+        VBFiles.writeText(fp, '#ifdef ESP32', '\n')  # v1.10
+        mode = options.get("oled", 0)  # v1.10
+        if type(mode) is int and 1 <= mode <= 5:  # v1.10
+            for symbol in ("USE_ESP32_EXTENSIONS", "USE_UI"):  # v1.10
+                VBFiles.writeText(fp, f'#ifndef {symbol}\n#define {symbol}\n#endif', '\n')  # v1.10
+            VBFiles.writeText(fp, f'#undef UI_MLLTime\n#define UI_MLLTime {mode}', '\n')  # v1.10
+        for key, symbol, define in (  # v1.10
+            ("ldr", "READ_LDR", "READ_LDR"),  # v1.10
+            ("store_status", "ENABLE_STORE_STATUS", "ENABLE_STORE_STATUS()"),  # v1.10
+        ):  # v1.10
+            if options.get(key) is True:  # v1.10
+                VBFiles.writeText(fp, f'#ifndef {symbol}\n#define {define}\n#endif', '\n')  # v1.10
+        VBFiles.writeText(fp, '#endif', '\n')  # v1.10
     VBFiles.writeText(fp, '  EndCfg // End of the configuration', '\n')
     VBFiles.writeText(fp, '  };', '\n')
     VBFiles.writeText(fp, '//*******************************************************************', '\n')

@@ -1,9 +1,9 @@
-# Datei-Version: 1.10 (2026-11-14) - web_serial.py
+# Datei-Version: 1.12 (2026-11-19) - web_serial.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_serial.py
 # Path:           _web/web_serial.py
-# Version:        1.10
-# Last Update:    2026-11-14
+# Version:        1.12
+# Last Update:    2026-11-19
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
@@ -18,6 +18,8 @@
 #   1.08  2026-11-14  TcpPort: ungueltiger Hostname (UnicodeError, "label too long") wird als OSError gemeldet statt abzustuerzen
 #   1.09  2026-11-14  Automatisches Verbinden (ohne Anschlussangabe): ist fuer das Blatt eine ESP32-WLAN-Verbindung eingetragen (wifi_target_provider), wird zuerst WLAN versucht, sonst USB; connect(wlan=False) erzwingt USB
 #   1.10  2026-11-14  connect_if_not_connected (Testtasten, DCC-Tastatur, Z21 ...) versucht auch mit Anschlussangabe zuerst die eingetragene ESP32-WLAN-Verbindung
+#   1.11  2026-11-16  Protokoll: Zeilen der Lichtmaschine (Empfang) werden mit Level DEBUG protokolliert, die Startmeldung mit der Auswertung (LEDs je Kanal, Summe, Version) mit Level INFO
+#   1.12  2026-11-19  Stilles Verbinden (quiet): keine Dialoge bei Fehlern (Automatisch verbinden beim Start und nach dem Hochladen); dtr_override fuer einen gefundenen Pico (Issue 20)
 # ----------------------------------------------------------------------------------------------
 """Serielle Verbindung zum Arduino/Pico ohne Tk (Mixin fuer HeadlessAppController).
 
@@ -241,6 +243,7 @@ class SerialMixin:
                 text = data.decode("utf-8")
             except UnicodeDecodeError:
                 text = str(bytes(data))
+            logger.debug("Lichtmaschine: %r", text)  # v1.11
             if not text.startswith("****"):
                 self.queue.put(text)
         logger.info("Empfangsthread (Telnet) beendet")
@@ -286,6 +289,7 @@ class SerialMixin:
                 except UnicodeDecodeError:
                     text = str(bytes(buf))
                 buf.clear()
+                logger.debug("Lichtmaschine: %r", text)  # v1.11
                 if not text.startswith("****"):           # Debugmeldungen des Arduinos
                     self.queue.put(text)
         logger.info("Empfangsthread beendet")
@@ -389,7 +393,13 @@ class SerialMixin:
             time.sleep(0.01)
 
     # ------------------------------------------------------------------ Meldungen
+    quiet = False  # v1.12: stilles Verbinden (automatisch beim Start oder nach dem Hochladen): Fehler nur ins Protokoll, kein Dialog
+    dtr_override = None  # v1.12: True/False ueberschreibt _board_needs_dtr (zum Beispiel ein beim Start gefundener Pico, obwohl ein anderes Board eingestellt ist)
+
     def _msg(self, text: str, title: str, kind: int = 16):
+        if self.quiet:  # v1.12
+            logger.info("Stilles Verbinden, Meldung unterdrueckt: %s: %s", title, text)  # v1.12
+            return None  # v1.12
         try:
             import ExcelAPI.XLA_Application as X02
             return X02.MsgBox(text, kind, title)
@@ -422,6 +432,8 @@ class SerialMixin:
             except ValueError:
                 total = 20
         self.set_maxLEDcnt(total)
+        logger.info("Startmeldung der Lichtmaschine: %r -> Version %s, LEDs je Kanal %s, Summe %s (hoechste LED-Nummer %s)",  # v1.11
+                    startmessage.strip(), self.ARDUINO_version, self.max_ledcnt_list, total, total - 1)  # v1.11
         self.waittime_int = -1                            # Pause zwischen den Bytes haengt von der LED-Anzahl ab
 
     def set_maxLEDcnt(self, maxLEDcnt):
@@ -499,6 +511,8 @@ class SerialMixin:
         return bool(self.arduino and getattr(self.arduino, "is_open", False))
 
     def _board_needs_dtr(self) -> bool:  # v1.06
+        if self.dtr_override is not None:  # v1.12
+            return bool(self.dtr_override)  # v1.12
         """Braucht der Anschluss DTR (und RTS) an? Nur der Pico: sein serieller USB-Anschluss sendet nur mit DTR (Excel-Programm M07_COM_Port: 'pico serial USB port needs DTR to be on').
         Alle anderen (Nano, Uno, ESP32) werden von DTR zurueckgesetzt. Unbekannter Typ: wie bisher (an)."""  # v1.06
         try:  # v1.06

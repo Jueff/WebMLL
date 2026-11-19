@@ -1,0 +1,84 @@
+====== webMobaLedLib – Die Werkzeugleiste ======
+//Seitenstand 1.11 (2026-11-18), gilt für webMobaLedLib 3.98//
+
+Über der Tabelle des [[anleitungen:webmobaledlib:programmgenerator|Programmgenerators]] liegt die **Werkzeugleiste**. Jeder Knopf hat ein Symbol und einen Titel in zwei Zeilen. Wenn du mit der Maus auf einem Knopf stehen bleibst, erscheint ein kurzer Hilfetext. Solange ein Befehl läuft, bleibt der Knopf **eingedrückt**.
+
+{{:bilder:anleitungen:webmobaledlib:pg_03_werkzeugleiste.png?700|Die Werkzeugleiste des Programmgenerators}}
+
+===== Die Knöpfe =====
+
+^ Knopf ^ Was er macht ^
+| **Dialog Wizard** | Führt dich Schritt für Schritt durch das Anlegen einer Zeile: Adresse, Typ, Beschreibung, Verteiler, **Makroauswahl** und die **Werte** des Makros. Das ist der normale Weg für neue Zeilen. |
+| **Setup übertragen** | Erzeugt aus der Tabelle das **Programm für die Lichtmaschine** und lädt es auf die Lichtmaschine. Siehe [[anleitungen:webmobaledlib:pg_arduino|Verbinden und Übertragen]]. |
+| **Zeile einfügen** | Fügt eine leere Zeile ein. |
+| **Zeilen löschen** | Löscht die markierten Zeilen. |
+| **Zeilen verschieben** | Verschiebt die markierten Zeilen an eine andere Stelle. |
+| **Zeilen duplizieren** | Kopiert die markierten Zeilen. Die Kopien stehen hinter der letzten markierten Zeile. |
+| **Aus- oder Einblenden** | Versteckt die markierten Zeilen oder zeigt sie wieder. Versteckte Zeilen bleiben im Programm erhalten. |
+| **Alle Einblenden** | Zeigt alle versteckten Zeilen wieder. |
+| **Tabelle löschen** | Leert das **ganze Blatt**. **Achtung:** Beim Zeigen mit der Maus steht der Hinweis „**ACHTUNG: Gesamte Tabelle wird gelöscht!**“. Das Programm fragt vorher nach. |
+| **Neue Tabelle** | Legt ein neues Blatt an. |
+| **Optionen Werkzeuge** | Öffnet das Fenster **Optionen und spezielle Funktionen**: die Reiter und ihre Bedeutung stehen weiter unten im Abschnitt [[#das_fenster_optionen_und_spezielle_funktionen|Das Fenster Optionen und spezielle Funktionen]]. |
+| **Online Wiki** | Öffnet diese Wiki-Seiten im Browser. |
+| **Zeilen Färben** | Färbt die Zeilen nach den Einstellungen des Programmgenerators ein, damit du die Gruppen besser siehst. |
+
+Die Knöpfe zum **Löschen, Verschieben, Duplizieren und Ein- oder Ausblenden** wirken auf **alle markierten Zeilen**. Wie du Zeilen markierst, steht auf der Seite [[anleitungen:webmobaledlib:pg_tabelle|Die Tabelle bedienen]].
+
+===== Tabelle, Grafik, Beides =====
+
+Rechts in der Werkzeugleiste stehen die Knöpfe **Tabelle**, **Grafik** und **Beides**. Sie schalten die Ansicht um. Die **Grafik** zeigt deine Zeilen als Kästchen in Ketten oder auf einem Bild deiner Anlage. Mehr dazu steht auf der Seite [[anleitungen:webmobaledlib:pg_grafisch|Die grafische Ansicht]].
+
+Ganz rechts steht die **Version der MobaLedLib-Bibliothek**, zum Beispiel //Ver. 3.5.0//. Das Feld bleibt leer, solange die Bibliothek nicht installiert ist.
+
+===== Das Fenster Optionen und spezielle Funktionen =====
+
+Du öffnest es mit dem Knopf **Optionen Werkzeuge**. Oben stehen die **Reiter**, unten **Hilfe im Forum** und **Schließen**.
+
+^ Reiter ^ Wofür ^
+| **Lichtmaschine** | **Board** deiner Lichtmaschine wählen und den **USB-Anschluss** erkennen lassen. Der Knopf **Board und USB Port erkennen** (seit 3.82, oben im Reiter) sucht selbst an allen USB-Anschlüssen nach einer Lichtmaschine, stellt das erste gefundene Board ein und öffnet das Fenster **USB Port erkennen** mit dem gefundenen Board, dem Anschluss und den anderen gefundenen Boards. Das ist der wichtigste Reiter, siehe [[anleitungen:webmobaledlib:pg_arduino|Verbinden und Übertragen]]. Dazu gibt es den Knopf **Firmware installieren** (seit 3.14 bei **jedem** Board, vorher nur beim Raspberry Pico): Er schreibt eine fertige Firmware (UF2-Datei) auf einen **Raspberry Pi Pico**, zum Beispiel auf ein Sound- oder Servomodul auf Pico-Basis. Mit dem Knopf **Firmware herunterladen** (seit 3.15) holst du die Firmware aus dem Internet: Das Programm zeigt die Liste mit **Plattform**, **Name** und **Version** samt Beschreibung und lädt die gewählte Firmware in den Ordner //MobaLedLib/firmware//; danach ist sie vorgewählt. |
+| **WLAN (OTA)** | Nur bei der Zentrale **ESP32**: WLAN und OTA einschalten, Hostname, Adresse und Passwort, WLAN über USB einrichten, siehe [[anleitungen:webmobaledlib:ota|ESP32 per WLAN und OTA]]. Bis 3.82 hieß der Reiter **OTA**. |
+| **Erweiterungen** | Die **MobaLedLib Extensions (MLX)** ein- und ausschalten, optionale laden und **eigene** hinzufügen, siehe [[anleitungen:webmobaledlib:erweiterungen|Erweiterungen (MLX)]]. |
+| **DCC ARDUINO** | Dasselbe für den **zweiten ARDUINO**, der die Zentrale anbindet (Blatt **DCC**, **Selectrix** oder **LNet**; beim Blatt **CAN** gibt es den Reiter nicht). Er erscheint nur bei einer **Nano**-Lichtmaschine. Die Überschrift trägt den Namen des Blatts. |
+| **DATEIEN** | Tabelle als Datei **speichern** und wieder **laden** (siehe unten). |
+| **ENTWICKLUNGSUMGEBUNG** | Womit die Programme **übersetzt und hochgeladen** werden: **PlatformIO** oder die **ARDUINO-IDE** (siehe unten). |
+| **UPDATE** | Nur mit der **ARDUINO IDE**: Bibliotheken und Boards der IDE aktualisieren. Mit PlatformIO fehlt der Reiter. |
+| **BOOTLOADER** | Den **schnellen Bootloader** auf dem linken ARDUINO installieren (siehe unten). |
+
+==== Der Reiter DATEIEN ====
+
+Hier sicherst du deine Tabelle als **Datei** und lädst sie wieder. Das Ergebnis ist dieselbe **PGF-Datei** (Endung **.MLL_pgf**) wie im Menü **Datei**, siehe [[anleitungen:webmobaledlib:pg_speichern|Speichern und Laden]].
+
+^ Knopf ^ Wirkung ^
+| **Speichern in Datei** | Speichert deine Daten als Datei. Der Name beginnt mit //Prog_Gen_Data_// und dem Datum, zum Beispiel //Prog_Gen_Data_09_11_2026.MLL_pgf//. Die Datei wird über den **Browser heruntergeladen** und liegt danach im Download-Ordner des Rechners, an dem du sitzt. |
+| **Laden aus Datei** | Öffnet einen **Upload-Dialog**. Du wählst eine **.MLL_pgf**-Datei, und das Programm lädt sie in die Tabelle. |
+| **Importieren v. altem Prog.** | Ausgegraut: Diese Funktion gibt es in der Webversion **nicht**. |
+| **Kopiere von Seite zu Seite** | Ausgegraut: Diese Funktion gibt es in der Webversion **nicht**. Im Excel-Programm sollte sie ausgewählte Daten von einem Blatt in ein anderes kopieren. Ein ganzes Blatt kannst du über das **Duplizieren** kopieren (siehe [[anleitungen:webmobaledlib:pg_tabelle|Die Tabelle bedienen]]). |
+
+**Tipp:** Speichere vor einem größeren Umbau eine Datei. So kommst du jederzeit zum alten Stand zurück.
+
+==== Der Reiter ENTWICKLUNGSUMGEBUNG ====
+
+Hier wählst du, **womit** das Programm für die Lichtmaschine übersetzt und hochgeladen wird:
+
+  * **PlatformIO** (empfohlen, wird bei der Installation mitinstalliert) oder die **ARDUINO-IDE** (nur nötig, wenn du sie lieber benutzt, siehe [[anleitungen:webmobaledlib:arduino_ide|Zusätzlich: Arduino IDE]]).
+  * Eine Zeile zeigt, ob **PlatformIO gefunden** wurde und wo. Fehlt es, steht dort, wie du es installierst.
+  * **PlatformIO prüfen:** Zeigt, ob PlatformIO installiert ist, und seine Version.
+  * **PlatformIO-Zwischenspeicher löschen:** Löscht den Zwischenspeicher von PlatformIO und erzwingt beim nächsten Übersetzen einen **vollständigen Neuaufbau**. Das kann helfen, wenn Übersetzen oder Hochladen mit unerklärlichen Fehlern abbricht. Seit 3.16 **verknüpft** PlatformIO die Bibliothek MobaLedLib (wo dein Rechner Verknüpfungen erlaubt), statt sie zu kopieren: Eine geänderte Datei der Bibliothek gilt dann sofort, und du brauchst den Knopf dafür nicht mehr.
+  * **USB-Zugriff für den Pico einrichten** (nur **Linux**, einmalig): Richtet die Regel ein, mit der PlatformIO den Pico ansprechen darf. Das Programm fragt nach dem Passwort. Ohne sie meldet das Hochladen //picotool was unable to connect//.
+  * **Git installieren** (nur, wenn Git fehlt): PlatformIO braucht Git für den Raspberry Pico.
+
+Das Programm **webMobaLedLib** selbst aktualisierst du **nicht hier**, sondern im Menü **Hilfe → Update webMobaLedLib …**.
+
+==== Der Reiter BOOTLOADER ====
+
+**Nur für die Lichtmaschine Classic (Nano).** Der **Bootloader** ist das kleine Programm im Nano, das neue Programme annimmt. Mit dem **schnellen Bootloader** (Optiboot) schickt das Programm eine geänderte Konfiguration **deutlich schneller** zum **linken** ARDUINO. Das lohnt sich, wenn du oft etwas änderst und hochlädst.
+
+Der Knopf **Schnellen Bootloader** installiert ihn auf dem **linken** ARDUINO. Das geht **nur mit Jumpern**, die es **erst ab der Hardware-Version 1.5 der Hauptplatine** gibt. Der Ablauf:
+
+  - Das Programm zeigt einen **Hinweis zu den Jumpern**: Setze die **Jumper unter dem linken ARDUINO** (der untere Jumper verbindet den linken mit dem mittleren Pin), stecke den linken ARDUINO wieder ein und verbinde den **rechten** ARDUINO mit dem USB-Anschluss des Computers. **OK** startet, **Abbrechen** beendet. (Das Bild der Jumper aus dem Excel-Programm zeigt die Webversion noch nicht.)
+  - Das Programm lädt **ArduinoISP** auf den **rechten** ARDUINO.
+  - Über ihn wird der **linke** ARDUINO beschrieben: Zuerst liest das Programm den Mikrocontroller (ATmega328P oder ATmega328PB), dann schreibt es den Bootloader. Jeder Schritt hat im Fenster seine **eigene Überschrift** (Schritt 1 bis 3 von 3). Bei einem **ATmega328PB** fragt das Programm einmal, ob der Bootloader für den ATmega328P geschrieben werden soll.
+  - Die Frage **Noch einen ARDUINO aktualisieren?** (Vorgabe **Nein**): Bei **Ja** steckst du den nächsten ARDUINO in den **linken** Steckplatz (der rechte darf nicht entfernt werden).
+  - Am Ende lädt das Programm wieder das **DCC-, LNet- oder Selectrix-Programm** auf den rechten ARDUINO. Eine Meldung erinnert dich, die **Jumper wieder zu entfernen** (sonst geht nichts mehr) und das USB-Kabel wieder auf den **linken** ARDUINO zu stecken.
+
+Beim **WLAN-Pico** (nur wenn das Programm dafür gebaut ist) heißt der Knopf stattdessen **WLAN-Pico Konfig**: Er öffnet die **Konfigurationsseite** des WLAN-Picos im Browser (mit der IP-Adresse aus der Tabelle).

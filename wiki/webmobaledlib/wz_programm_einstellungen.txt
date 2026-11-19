@@ -1,0 +1,89 @@
+====== webMobaLedLib – Programm Einstellungen ======
+//Seitenstand 1.14 (2026-11-19), gilt für webMobaLedLib 4.17//
+
+Im Reiter **Programm Einstellungen** passt du das Programm an dich an: die **Sprache**, die **Schriftgröße**, die **Darstellung** und einiges mehr. Die Einstellungen werden **gespeichert**, wenn du auf **Geänderte Einstellungen übernehmen** (bzw. **Speichern**) klickst, und gelten danach für das Programm auf diesem Rechner. Einige wirken **sofort**, andere erst nach einem **Neustart** des Programms. Das steht bei der jeweiligen Einstellung als Hinweis, wenn du mit der Maus darauf zeigst.
+
+{{:bilder:anleitungen:webmobaledlib:wz_07_programm_einstellungen.png?600|Der Reiter Programm Einstellungen}}
+
+===== Sprache =====
+
+Unter **Sprache** wählst du **Auto** (die Sprache deines Rechners), **Deutsch**, **English**, **Nederlands**, **French**, **Italian**, **Spanish** oder **Denmark**. Nach dem **Speichern** gilt die Auswahl **sofort**: Die Seite lädt sich in allen Browsern neu, und alle Texte erscheinen in der neuen Sprache. Ein Neustart ist nicht nötig.
+
+Deine **Daten ändern sich dabei nicht**. In Dateien und im erzeugten Programm für die Lichtmaschine stehen immer die deutschen Begriffe. Du kannst Dateien in jeder Sprache lesen und weitergeben.
+
+Nicht alles ist in allen Sprachen übersetzt: Fehlt ein Text, erscheint der englische, und fehlt auch der, der deutsche. Die Übersetzungen sind Entwürfe. Verbesserungen sind willkommen.
+
+===== Die Gruppen der Seite =====
+
+Die Einstellungen stehen in **fünf Gruppen**, jede mit einer Überschrift. So findest du schnell, was du suchst.
+
+==== Allgemeine Einstellungen ====
+
+^ Einstellung ^ Bedeutung ^
+| **Anfänger Modus** | Der Haken schaltet zwischen **Anfänger Modus** (mit Haken, Voreinstellung bei einer neuen Installation) und **Experten Modus** um. Siehe [[anleitungen:webmobaledlib:modus|Anfänger Modus und Experten Modus]]. |
+| **Automatisch mit der Lichtmaschine verbinden** | Mit Haken (Voreinstellung) verbindet das Programm beim Start mit der Lichtmaschine, die beim letzten Beenden verbunden war, oder sucht eine angeschlossene Lichtmaschine. Nach **Setup übertragen** verbindet es mit der Lichtmaschine, auf die übertragen wurde (bei WLAN über WLAN). Ohne Haken verbindet nur der Knopf **Mit Lichtmaschine verbinden**. Siehe [[anleitungen:webmobaledlib:pg_arduino|Verbinden und Übertragen]]. |
+| **Tastenkombination: Inkrementell speichern** | Die Tastenkombination für //Datei → Inkrementell speichern//. Vorgabe: **Strg+Umschalt+S**. Sie muss **Strg** oder **Alt** oder eine **F-Taste** enthalten, zum Beispiel **Strg+Alt+S** oder **Strg+F9**. Ist die Vorgabe schon belegt (zum Beispiel von einem Screenshot-Programm), stelle hier eine andere ein. Siehe [[anleitungen:webmobaledlib:pg_speichern|Speichern und Laden]]. |
+| **Sprache** | Die Sprache der Oberfläche (siehe oben). |
+| **Darstellung auf kleinen Bildschirmen** | Das **Kompakte Layout** (siehe unten). |
+| **Schriftgröße anpassen** | Die Größe der Schrift in der Oberfläche. Wirkt nach einem **Neustart**. |
+| **ProgGen/PattGen DefaultFont** | Die Schriftart und die Schriftgrößen für den Programmgenerator und den Timeline Editor (**Kleine Schrift**, **Normale Schrift**, **Große Schrift**). Wirkt nach einem **Neustart**. |
+| **Icon Größe (%)** | Wie groß die Symbole in der Tabelle sind (100 % = normal). Wirkt nach einem **Neustart**. |
+
+==== Programm Generator ====
+
+^ Einstellung ^ Bedeutung ^
+| **Standardansicht des Programm Generators** | Ob ein Blatt mit **Tabelle**, **Grafik** oder **Beides** geöffnet wird. |
+| **Programmgenerator versteckte Tabellen anzeigen** | Zeigt zusätzlich die versteckten Blätter des Programmgenerators. Nur für Tester und Entwickler. |
+| **Bedienung der Tabelle** | Der Haken **Doppelklick auf Name und Beleuchtung öffnet die Makroauswahl** (siehe [[anleitungen:webmobaledlib:pg_tabelle|Die Tabelle bedienen]]). |
+
+==== Farb Test Einstellungen ====
+
+^ Einstellung ^ Bedeutung ^
+| **Farbauswahl** | Wie der [[anleitungen:webmobaledlib:wz_farbtest|Farb Test]] die Farbe auswählt: mit dem **Farbrad** oder mit dem **HSV-Farbton**. Wirkt nach einem **Neustart**. |
+| **LED-Farbkorrektur** | Gleicht die Farben der LEDs an den Bildschirm an. Sie wirkt im Farb Test. |
+
+==== Zugriff aus dem Netz ====
+
+Der Schalter **Zugriff aus dem Netz erlauben** und das **Passwort** für die Oberfläche: siehe die Seite [[anleitungen:webmobaledlib:wz_netzwerk|Zugriff aus dem Netz]].
+
+==== Spezialeinstellungen ====
+
+Hier steht alles andere. Normalerweise brauchst du nichts davon.
+
+^ Einstellung ^ Bedeutung ^
+| **DM Servo Einstellungen anzeigen** | Zeigt den Reiter [[anleitungen:webmobaledlib:wz_dmservo|DM Servo Einstellungen]]. |
+| **Z21 Simulator anzeigen** | Zeigt den Reiter [[anleitungen:webmobaledlib:wz_z21|Z21 Simulator]]. |
+| **Simulator anzeigen** (seit 3.56, Knopf seit 3.59) | Zeigt neben **Setup übertragen** den Knopf **Setup simulieren** (nur Simulator, ohne Lichtmaschine). Die Simulator-Option des Excel-Programms wird dann nicht mehr beachtet. Siehe [[anleitungen:webmobaledlib:simulator|LED Simulator]]. |
+| **IP Upload Timeout** | Wie lange das Programm beim Hochladen über das Netz (WLAN-Pico) wartet, in Sekunden. |
+| **RMBUS-Interval (x 100ms)** | Wie oft der [[anleitungen:webmobaledlib:wz_z21|Z21 Simulator]] die Lichtmaschine nach Tastern fragt (1 = alle 100 ms). Normalerweise nicht ändern. |
+| **Dateien für das Excel-Programm speichern** | Gespeicherte Dateien (**.MLL_pcf** und **.MLL_pgf**) werden im Windows-Zeichensatz geschrieben, damit das Excel-Programm sie lesen kann. |
+| **Bootloader des Nano beim Prüfen erkennen** (seit 3.10, **seit 3.13 Vorgabe an**) | **An (Vorgabe):** Beim Prüfen des angeschlossenen Nano (Optionen Werkzeuge, Knopf **Board und USB Port erkennen** und **USB Port erkennen**) spricht das Programm den Bootloader des Nano an (57600 und 115200 Baud) und erkennt **alt und neu**. Das Board stellt der Knopf **Board und USB Port erkennen** passend ein (seit 3.82; den Haken „Automatisch erkennen“ gibt es nicht mehr). **Aus (nur auf ausdrücklichen Wunsch):** Die Prüfung öffnet nur den Anschluss, deine Wahl **Nano Normal (old Bootloader)** oder **Nano (neue Version)** bleibt unverändert. **ESP32** bleibt wie bisher. Der **Nano Every** wird seit 3.14 nicht mehr unterstützt (wie im Excel-Programm 3.5.0L3). Antwortet der Nano nicht, kommt nach etwa 6 Sekunden „nicht als LED Arduino erkannt“; mit **Nein** geht es mit deiner Wahl weiter. |
+
+===== Kleine Bildschirme: Kompaktes Layout =====
+
+Auf einem kleinen Bildschirm (zum Beispiel einem Laptop mit 1366 × 768 Punkten) bleibt für die Tabelle wenig Platz. Das **Kompakte Layout** schafft ihn: Menü, Titel und Beenden stehen in einer Zeile, die Reiter sind schmaler, und die Funktionsknöpfe zeigen Text statt der großen Symbole. Du stellst es in der Karte **Darstellung auf kleinen Bildschirmen** ein:
+
+  * **Aus** (Standard): normales Layout.
+  * **Ein**: immer kompakt.
+  * **Automatisch**: kompakt, wenn das Browserfenster niedriger als 800 Pixel ist.
+
+Die Auswahl wirkt **sofort**. Zusätzlich helfen **Vollbild** (F11) und der **Browser-Zoom** (Strg + Minus).
+
+===== Zugriff aus dem Netz =====
+
+Die Einstellungen für den **Zugriff von anderen Geräten**, das **Passwort** und die **Firewall** stehen auf der Seite [[anleitungen:webmobaledlib:wz_netzwerk|Zugriff aus dem Netz]].
+
+===== ProgGenerator Einstellungen =====
+
+Der Reiter **ProgGenerator Einstellungen** enthält die **Bedingungen für Zeilenfarben**. Mit ihnen legst du fest, welche Zeilen der Knopf **Zeilen Färben** welcher Farbe einfärbt (zum Beispiel nach der Art des Makros). Eine Beschreibung steht auf der Seite [[anleitungen:webmobaledlib:pg_werkzeugleiste|Die Werkzeugleiste]].
+
+===== Wo liegen meine Daten? =====
+
+Alles, was das Programm selbst erzeugt, liegt in einem **Datenordner** deines Benutzers, getrennt von den Programmdateien. Deshalb bleiben deine Einstellungen und Tabellen bei einem **Update** erhalten.
+
+^ System ^ Datenordner ^
+| Windows | ''%APPDATA%\webMobaLedLib'' (also ''C:\Users\<Name>\AppData\Roaming\webMobaLedLib'') |
+| macOS | ''~/Library/Application Support/webMobaLedLib'' |
+| Linux, Raspberry Pi | ''~/.local/share/webMobaLedLib'' |
+
+Zum **Sichern** oder **Umziehen** kopierst du diesen Ordner. Den Ort zeigt das Menü **Hilfe → Über …**. Das **Protokoll** (''webmobaledlib.log'') liegt ebenfalls dort. Du siehst es im Menü **Hilfe → Logfile anzeigen**. Schick es im [[https://forum.mobaledlib.de/viewforum.php?f=14|Forum]] mit, wenn du Hilfe bei einem Fehler suchst.

@@ -1,0 +1,77 @@
+====== webMobaLedLib – ESP32 per WLAN und OTA ======
+//Seitenstand 1.04 (2026-11-19), gilt für webMobaLedLib 4.18//
+
+Mit einer **Lichtmaschine ESP32** musst du das USB-Kabel nicht mehr dauernd benutzen. Das Programm kann den ESP32 über das **WLAN** verbinden, die **Einstellungen** und die **Firmware** übertragen (**OTA**, //Over the Air//) und die Testseiten (Farb Test, Servo, Sound, Testschalter) ohne Kabel bedienen. Das **erste Mal** brauchst du das USB-Kabel, danach geht alles über das WLAN.
+
+**Diese Seite gilt nur für die Zentrale ESP32.** Bei Nano und Pico gibt es den Reiter **WLAN (OTA)** nicht.
+
+===== Was du brauchst =====
+
+  * Eine Lichtmaschine mit **ESP32**. In den **Optionen** (Reiter **Lichtmaschine**) ist als Board **ESP32** gewählt (siehe [[anleitungen:webmobaledlib:pg_arduino|Verbinden und Übertragen]]).
+  * Das **WLAN deines Heimnetzes** (2,4 GHz) und sein Passwort.
+  * Die **neue Firmware** für WLAN und OTA. Die Dateien sind im Programm enthalten. **Die alte Firmware** (mit WiFiManager, im Protokoll erkennst du sie an Zeilen mit ''*wm:'') **kennt das Einrichten des WLAN über USB nicht**. Den ersten Schritt unten erledigt der Knopf **Minimale WLAN Firmware per USB hochladen** für dich.
+  * Ein **OTA-Passwort**: 1 bis 64 Zeichen (Buchstaben, Ziffern, Satzzeichen, **keine** Umlaute und keine Leerzeichen). Es schützt die Lichtmaschine vor fremden Übertragungen und steckt in der Firmware. **Merke es dir**, das Programm speichert es nur auf deinem Rechner.
+
+===== Die Einstellungen: Reiter WLAN (OTA) =====
+
+Klicke in der Werkzeugleiste des Programmgenerators auf **Optionen Werkzeuge**. Im Fenster **Optionen und spezielle Funktionen** gibt es bei der Zentrale **ESP32** den Reiter **WLAN (OTA)**.
+
+^ Feld ^ Bedeutung ^
+| **WLAN am ESP32 aktivieren** | Die Firmware bekommt die WLAN-Funktion. Ohne Haken bleibt der ESP32 ohne WLAN. |
+| **OTA-Updates erlauben** | Die Firmware kann über das WLAN aktualisiert werden. Nur mit dem Haken **WLAN am ESP32 aktivieren** möglich. |
+| **Hostname des ESP32** | Der Name des ESP32 im Netz. Voreinstellung **mobaledlib**. Er darf nur Buchstaben, Ziffern und Bindestriche enthalten (bis 63 Zeichen). **Jeder ESP32 in deinem Netz braucht einen eigenen Namen.** |
+| **Adresse für WebMLL** | Die **Adresse**, unter der das Programm den ESP32 erreicht: die **IP-Adresse** (zum Beispiel ''192.168.1.50'') oder der Name (''mobaledlib.local''). Das Programm trägt sie selbst ein, wenn du das WLAN über USB einrichtest. |
+| **OTA-Passwort** | Das Passwort aus der Firmware. Ein leeres Feld behält das **gespeicherte** Passwort. |
+
+Darunter stehen vier Knöpfe in der Reihenfolge der Arbeitsschritte (rechts daneben der Knopf **Hilfe**, er öffnet diese Seite):
+
+  - **OTA-Einstellungen speichern**
+  - **Minimale WLAN Firmware per USB hochladen**
+  - **WLAN über USB einrichten**
+  - **Verbindung testen**
+
+**Die Einstellungen gelten für das Blatt.** Hat jedes deiner Tabellenblätter einen anderen ESP32, trägst du bei jedem Blatt seinen Namen und seine Adresse ein. Sie werden mit der Arbeitsmappe gespeichert, **Blatt kopieren** übernimmt sie. Das **Passwort** steht **nicht** in der Arbeitsmappe, sondern nur auf deinem Rechner, je Hostname. Gibst du eine Arbeitsmappe weiter, geht dein Passwort also nicht mit.
+
+===== Erste Einrichtung (einmal, mit USB-Kabel) =====
+
+  - Stecke den ESP32 mit dem **USB-Kabel** an den Computer und wähle den **Anschluss** (Knopf **Mit Lichtmaschine verbinden** oder Optionen, Reiter **Lichtmaschine**, siehe [[anleitungen:webmobaledlib:pg_arduino|Verbinden und Übertragen]]).
+  - Öffne den Reiter **WLAN (OTA)**. Setze die Haken **WLAN am ESP32 aktivieren** und **OTA-Updates erlauben**. Gib **Hostname** und **OTA-Passwort** ein.
+  - Klicke auf **Minimale WLAN Firmware per USB hochladen**. Das Programm speichert die Einstellungen, übersetzt eine **kleine Firmware** (eine DCC-Adresse und die **Heartbeat LED**, WLAN und OTA sind eingeschaltet) und lädt sie über USB. Das Protokoll zeigt den Fortschritt. Es dauert beim ersten Mal einige Minuten. Am Ende blinkt die Heartbeat LED.
+  - Klicke auf **WLAN über USB einrichten**. Wähle den **USB-Port** und klicke auf **WLANs suchen**. Wähle **dein WLAN** in der Liste **Gefundene WLANs**, gib das **WLAN-Passwort** ein und klicke auf **Verbinden**. Der ESP32 verbindet sich, das Programm zeigt seine **IP-Adresse** und trägt sie als **Adresse für WebMLL** ein.
+  - Klicke auf **Verbindung testen**. Die Meldung **ESP32 antwortet.** zeigt, dass alles stimmt.
+
+Der ESP32 merkt sich das WLAN. Du musst diese Schritte nur wiederholen, wenn du das WLAN wechselst oder den ESP32 mit einer **alten** Firmware überschrieben hast.
+
+**Tipp:** Notiere die **IP-Adresse** und gib dem ESP32 in deinem Router eine **feste Adresse**. Dann bleibt die Adresse im Feld **Adresse für WebMLL** richtig.
+
+===== Danach: Alles über WLAN =====
+
+  * **Verbinden:** Der Knopf **Mit Lichtmaschine verbinden** fragt, ob du per **WLAN** oder **USB** verbinden willst. Die Seiten **Farb Test**, **Servo Einstellungen**, **Sound Test** und die **Testschalter** in der Tabelle verbinden **von selbst**: Ist für das Blatt ein ESP32 mit WLAN und OTA eingetragen (mit **Adresse** und **Passwort**), versuchen sie **zuerst das WLAN**. Antwortet der ESP32 nicht, geht es nach einigen Sekunden mit **USB** weiter.
+  * **Setup übertragen:** Der Knopf **Setup übertragen** im Programmgenerator fragt bei einem ESP32 mit OTA, ob die Übertragung per **WLAN (OTA)** oder **USB** geschieht. Beide Wege erzeugen die Firmware aus deiner Tabelle neu.
+  * **Fertige Firmware hochladen:** Im Menü **Lichtmaschine** gibt es **ESP32-Firmware über WLAN hochladen …**. Du gibst die **Adresse**, das **OTA-Passwort** und die fertig übersetzte Anwendungsdatei (''.bin'') an und klickst auf **Über WLAN hochladen**.
+
+===== Die Firewall =====
+
+Beim Hochladen über WLAN meldet sich der **ESP32 beim Computer zurück**. Das blockiert oft die **Firewall** des Computers. Dann steht im Protokoll **„No response from device“**, und das Programm zeigt einen Hinweis. **Erlaube eingehend den TCP-Port 32323:**
+
+  * **Windows-Firewall:** Öffne **PowerShell als Administrator** und gib ein: ''New-NetFirewallRule -DisplayName "webMLL OTA 32323" -Direction Inbound -Protocol TCP -LocalPort 32323 -Action Allow''
+  * **Andere Firewalls** (zum Beispiel **ESET**): Lege eine Regel an: Richtung **eingehend**, Protokoll **TCP**, lokaler Port **32323**, Aktion **zulassen**. Wo das Menü liegt, hängt von der Version ab; bei ESET zum Beispiel Einstellungen, Netzwerkschutz, Firewall, Regeln.
+
+Schalte die Firewall nicht ganz aus. Die Regel genügt.
+
+===== Wenn es nicht klappt =====
+
+^ Was passiert ^ Was hilft ^
+| Der Knopf **Minimale WLAN Firmware per USB hochladen** fragt nach dem Passwort oder zeigt **Nur mit der Zentrale ESP32 möglich.** | Gib im Reiter **WLAN (OTA)** ein **OTA-Passwort** ein. Wähle als Board **ESP32** (Optionen, Reiter **Lichtmaschine**). |
+| **Keine Antwort über USB. USB-Port und Firmware mit WLAN-USB-Einrichtung prüfen.** (beim Einrichten des WLAN) | Der ESP32 hat die **alte Firmware** (im Protokoll ''*wm:'') oder der falsche **USB-Port** ist gewählt. Lade zuerst **Minimale WLAN Firmware per USB hochladen**. Steht in der Meldung **Vom ESP32 kam nichts**, prüfe das USB-Kabel (Daten, nicht nur Laden) und ob ein anderes Programm den Anschluss belegt. |
+| **WLANs suchen** findet nichts | Der ESP32 braucht ein **2,4-GHz-WLAN**. Stelle ihn näher an den Router und suche noch einmal. |
+| **No response from device** beim Hochladen über WLAN | Die **Firewall** blockiert die Rückverbindung, siehe oben (Port **32323**). Prüfe außerdem **Adresse** und **Passwort**. |
+| **Keine ESP32-WLAN-Verbindung. IP-Adresse, Firmware und OTA-Passwort prüfen.** | Der ESP32 ist aus, im anderen Netz oder die **Adresse** hat sich geändert (Router vergibt neue Adressen: feste Adresse einstellen). Das **OTA-Passwort** muss genau zu dem der Firmware passen. |
+| **Verbindung testen** meldet **Ungültiger Hostname.** | Die Adresse enthält ein Zeichen oder einen Namensteil über 63 Zeichen. Gib die **IP-Adresse** ein. |
+| Die Testseiten verbinden nicht per WLAN, sondern fragen nach USB oder dauern lange | Für das **Blatt** sind **WLAN**, **OTA**, **Adresse** und **Passwort** nicht alle eingetragen. Prüfe den Reiter **WLAN (OTA)** bei **diesem** Blatt. Ist der ESP32 aus, wartet das Programm einige Sekunden und nimmt dann USB. |
+| Es läuft noch ein Vorgang | Warte, bis das Protokollfenster fertig ist. Dann noch einmal klicken. |
+| Das **Passwort** ist vergessen | Es steht nur in der Firmware. Lade mit **Minimale WLAN Firmware per USB hochladen** (oder **Setup übertragen** über **USB**) eine Firmware mit einem **neuen** Passwort. |
+
+Das Programm speichert das **OTA-Passwort im Klartext** in einer Datei im **Datenordner des Programms** (''esp32-ota.json''). Mach diesen Ordner nicht öffentlich zugänglich. Bei einem **Zugriff aus dem Netz** (siehe [[anleitungen:webmobaledlib:wz_netzwerk|Zugriff aus dem Netz]]) schützt du die Oberfläche mit einem Passwort, denn wer sie bedienen kann, kann auch Firmware übertragen.
+
+Hilft das alles nicht, sieh im Menü **Hilfe → Logfile anzeigen** nach. Schick das Protokoll im [[https://forum.mobaledlib.de/viewforum.php?f=14|Forum]] mit.

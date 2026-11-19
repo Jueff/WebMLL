@@ -1,0 +1,104 @@
+====== webMobaLedLib – Der Timeline Editor ======
+//Seitenstand 1.01 (2026-11-15), gilt für webMobaLedLib 3.43//
+
+Mit dem **Timeline Editor** entwirfst du **eigene Lichtmuster** für LEDs: Wechselblinker, Lauflichter, Ampeln, Signale und vieles mehr. Du schreibst in einer Tabelle auf, **welche LED wie lange leuchtet**, und das Programm macht daraus ein **Makro**. Das Makro trägst du in den [[anleitungen:webmobaledlib:programmgenerator|Programmgenerator]] ein, und es geht mit auf die Lichtmaschine.
+
+Im **Anfänger Modus** fehlt der Reiter **Timeline Editor** (siehe [[anleitungen:webmobaledlib:modus|Anfänger Modus und Experten Modus]]). Schalte ihn in den Programm Einstellungen auf **Experten Modus**, wenn du ihn brauchst.
+
+{{:bilder:anleitungen:webmobaledlib:pat_01_ueberblick.png?600|Der Timeline Editor}}
+
+===== Der Aufbau der Seite =====
+
+  * **Oben** stehen die **gelben Eingabefelder** (siehe unten) und darunter das **Ergebnis**: Die Zeile **Ergebnis** (zum Beispiel ''PatternT1(0,0,SI_1,1,0,255,0,PM_SEQUENZ_NO_RESTART,…)''), der **Makro Name** und das **Makro**.
+  * **Darunter** liegt die **Tabelle**: Die Zeile **Dauer** gibt an, wie lange jede Spalte dauert. Darunter stehen die **LEDs**. Ein **x** schaltet die LED in dieser Spalte **ein**. Die **Balken** über den Zellen zeigen das Muster. Die Spalten A bis D sind gesperrt.
+  * **Unter der Werkzeugleiste** steht aufklappbar die **Beschreibung** des Blatts.
+  * Jeder **Reiter** unten ist ein **Blatt** mit einem Muster. Die Beispiele bringen viele Blätter mit.
+
+===== Die gelben Eingabefelder =====
+
+Zeige mit der Maus auf eine Beschriftung: Dann erscheint eine ausführliche Erklärung. Die wichtigsten Felder:
+
+^ Feld ^ Bedeutung ^
+| **Erste RGB LED** | Position der **ersten LED** des Musters in der LED-Kette, beginnend bei **0**. |
+| **Startkanal der RGB LED** | Startkanal innerhalb der ersten RGB LED: **0** = Rot, **1** = Grün, **2** = Blau. |
+| **Schalter Nummer** | Nummer des **Eingangskanals** (0 bis 250), der das Muster startet. Auch Namen sind möglich, zum Beispiel ''SI_1'' (= immer an). |
+| **Anzahl der Ausgabe Kanäle** | Wie viele **einzelne LEDs** das Muster steuert (1 bis 100). Eine RGB LED besteht aus drei einzelnen LEDs. |
+| **Bits pro Wert** | Wie viele Bits für einen **Helligkeitswert** benutzt werden (1 bis 8). Bei 1 Bit gibt es zwei Helligkeitsstufen (aus und an). |
+| **Wert Min**, **Wert Max** | Helligkeit für **0** und für **x** (maximale Stufe) in der Tabelle (0 bis 255). Bei 8 Bit werden sie nicht benutzt. |
+| **Wert ausgeschaltet** | Helligkeit, die ausgegeben wird, wenn der **Schalter aus** ist (0 bis 255). |
+| **Mode** | Wie das Muster abläuft. Die Modes ''PM_SEQUENZ_W_RESTART'', ''PM_SEQUENZ_W_ABORT'' und ''PM_SEQUENZ_NO_RESTART'' sind **einmalige Sequenzen**, die eine **Flanke** des Schalters startet: Bei einer neuen Flanke beginnt die Sequenz von vorn (**W_RESTART**), bricht ab (**W_ABORT**) oder läuft ungestört weiter (**NO_RESTART**). ''PM_PINGPONG'' wechselt am Ende die Richtung. Zusätzliche **Flags** (zum Beispiel ''PF_SLOW'': 4-mal langsamer, Zeiten bis zu 4 Minuten, oder ''PF_INVERT_INP'': invertiert das Eingangssignal) werden mit **+** an den Mode gehängt. |
+| **Analoges Überblenden** | **1** blendet die Helligkeit innerhalb der Zeit aus **Dauer** vom vorangegangenen auf den neuen Wert über. Ein **X** aktiviert eine besondere Überblendung, die vom tatsächlichen Wert zum neuen Wert überblendet (für Konfigurationen, bei denen **mehrere Zeilen dieselben LEDs** beeinflussen, zum Beispiel bei Lichtsignalen). **Achtung:** Das braucht zusätzlichen Speicher (1 Byte RAM pro LED). |
+| **Goto Mode**, **Goto Aktivierung** | Das Muster kann an **mehreren Stellen starten** und zwischen Spalten **springen**, je nach Ereignis (siehe unten). |
+| **Grafische Anzeige** | **1** aktualisiert die **Balken** und **Goto-Pfeile** automatisch (**L**: nur die LED-Helligkeiten, **G**: nur die Goto-Pfeile, **D**: die Spaltenbreite passt sich der Dauer an). Die Anzeige lässt sich auch mit dem Knopf **Aktualisieren** neu zeichnen. **0** löscht die Grafik. |
+| **Spezial Mode**, **RGB Modul Nummer** | Für spezielle Platinen (zum Beispiel **Charlieplexing**). Ein **Doppelklick** auf das Feld öffnet eine Auswahlliste mit Beschreibung. |
+
+===== Ein Muster eingeben =====
+
+  * **Zelle anklicken** und schreiben. **F2** oder **Doppelklick** bearbeitet eine Zelle, **Entf** leert sie.
+  * **Strg + C**, **Strg + X** und **Strg + V** kopieren, schneiden aus und fügen ein. Beim Einfügen mehrerer Zellen (zum Beispiel aus einer Tabellenkalkulation) gilt: Zeilen durch **Zeilenwechsel**, Spalten durch **Tabulator**, ab der markierten Zelle. Beim ersten Einfügen fragt der Browser, ob er die Zwischenablage lesen darf.
+  * **+** und **−** in der Werkzeugleiste **fügen** vor der markierten Zelle eine **Spalte ein** bzw. **löschen** die Spalte. Die markierte Zelle muss **in der Tabelle** liegen (LED-Tabelle, Dauer oder Goto-Zeile), sonst meldet das Programm „Cursor outside the table“.
+  * **Aktualisieren** zeichnet die Balken neu, **Neu berechnen** berechnet alle Formeln neu.
+  * **RGB LED** schaltet das Blatt auf RGB-LEDs um.
+  * Die Spalten sind **gleich breit**. Du kannst sie in dieser Tabelle nicht verstellen, weil die Balken an den Spaltenbreiten hängen.
+
+===== Dein erstes Muster: ein Beispiel ansehen =====
+
+Am schnellsten lernst du an einem fertigen Beispiel:
+
+  - Klicke in der Werkzeugleiste auf **Optionen**.
+  - Setze den Haken bei einer Sammlung, zum Beispiel **Allgemein**, **Ampeln**, **Signale** oder **Baustellenlichter** (oder **Alle Beispiele**) und klicke auf **Ausgewählte Beispiele laden**. Jede Sammlung bringt mehrere Seiten mit, sie erscheinen als **neue Reiter**.
+  - Öffne einen Reiter, zum Beispiel **Morsecode**, und sieh dir die Tabelle an: Wo steht ein **x**? Wie lange dauert jede Spalte?
+  - Klicke auf **Test Pattern** (siehe nächster Abschnitt) und sieh zu, wie das Muster abläuft.
+  - Ändere eine Zelle (**x** setzen oder löschen), klicke auf **Aktualisieren** und starte **Test Pattern** noch einmal.
+
+{{:bilder:anleitungen:webmobaledlib:pat_02_beispiele.png?500|Optionen: Beispiele laden}}
+
+===== Das Muster ansehen: Test Pattern =====
+
+Der Knopf **Test Pattern** öffnet ein Fenster, in dem das Muster **auf dem Bildschirm abläuft**, **ohne Lichtmaschine**. Es wird **nichts an eine Lichtmaschine gesendet**.
+
+  * Für **jede LED** gibt es einen **Kreis** mit dem Namen der LED (bei einer **RGB LED** je drei Kanäle ein Kreis). Er wechselt die Farbe nach den **Zeiten des Musters** (Zeile **Dauer**, die Zeiten werden der Reihe nach wiederholt).
+  * Die **Farbe** ist die Farbe der LED aus der LED-Tabelle (Spalte E), multipliziert mit der **Helligkeit** des Musters.
+  * Oben steht **„Muster n von N“**.
+  * **Wiederholen** lässt das Muster **endlos** laufen. Im Modus **PM_PINGPONG** läuft es vor und zurück (1, 2, 3, 2, 1, 2, …).
+  * Bei **Goto-Mustern** beginnt der Ablauf am Anfang, folgt den Sprüngen und **endet an der Marke E**. Mit den Knöpfen **Anfang** und **Start 1, 2 …** (je Startmarke) beginnst du neu.
+  * **Stop** hält an, **Start** setzt fort, **Schließen** beendet den Test.
+
+{{:bilder:anleitungen:webmobaledlib:pat_03_test.png?500|Das Fenster Test Pattern}}
+
+===== Goto Mode: mehrere Startpunkte und Sprünge =====
+
+Bei aktivem **Goto Mode** zeigt die Tabelle, wie das Muster **startet** und **springt**: **grüne Pfeile** mit der Nummer der Startspalte, **rote Pfeile** mit **E** am Ende des Musters und **blaue gebogene Pfeile** für die Sprünge zwischen den Spalten. Die **Goto Aktivierung** legt fest, wie die Startspalte im Betrieb gewählt wird (Taster, Zähler, Zufall …). Ein **Doppelklick** auf die Zelle öffnet eine Liste mit Kurz- und ausführlicher Beschreibung, **Löschen** leert die Zelle. Einige Einträge (zum Beispiel **Counter**, **RandButton**, **RandomTime**) fragen danach noch Parameter ab: Zeiten gibst du als Zahl in Millisekunden oder mit Einheit an (''30 Sek'', ''5 Min'', ''500 ms'').
+
+===== Das Muster in den Programmgenerator übernehmen =====
+
+  - Klicke auf **Export zu ProgGen**. Das Programm prüft vorher, ob ein **Makro Name** eingetragen ist, die LED-Tabelle nicht leer ist und die Dauer-Zeile stimmt. Sonst meldet es den Fehler.
+  - Der Browser springt zum **Programm Generator**. Über der Tabelle erscheint ein **gelbes Band**: **Klicke in die Zeile**, in der das Muster stehen soll, und drücke **OK**. **Abbrechen** bringt dich zurück.
+  - Die Haken **„gleich zum Arduino schicken“** (erzeugt die Dateien, kompiliert und lädt hoch) und **„Anschließend zurück zum Timeline Editor“** gelten für diesen Vorgang.
+  - Vorhandene Einträge in der Spalte **Beleuchtung, Sound, oder andere Effekte** werden überschrieben, Symbol und Name der Zeile kommen dazu.
+
+Umgekehrt liest **Import von ProgGen** ein Muster aus einer Zeile des Programm Generators: Klicke im gelben Band auf eine Zeile mit einem ''PatternT…''-Makro und **OK**. Das Programm fragt, ob die Daten in das **aktuelle Blatt** kommen oder ein **neues Blatt** angelegt wird.
+
+{{:bilder:anleitungen:webmobaledlib:pat_04_export.png?600|Das gelbe Band beim Export zu ProgGen}}
+
+===== Blätter, Dateien und Bilder =====
+
+  * **Neues Blatt** legt eine **Kopie** des aktuellen Blatts an (der Name wird abgefragt, ein Reiter erscheint unten).
+  * **Optionen → Aktuelle Seite speichern** und **Alle Seiten speichern** schreiben die Blätter in eine Datei (**.MLL_pcf**), die du im Browser speicherst. Gehören Bilder dazu, entsteht eine **ZIP-Datei**. **Optionen → Datei laden …** lädt eine eigene Datei oder eine ZIP-Datei mit Bildern. Dateien aus dem **Excel-Programm** lassen sich ebenfalls laden.
+  * **Optionen → Aktuelle Seite löschen** und **Alle Beispiele löschen** löschen nach einer Rückfrage. Das lässt sich **nicht rückgängig** machen.
+  * **Bild einfügen** lädt ein **PNG- oder JPG-Bild** hoch und setzt es unter die Tabelle (zum Beispiel das Signal oder die Anlage zum Muster). Das Bild lässt sich nicht verschieben. **Optionen → Bilder dieser Seite entfernen** nimmt alle Bilder der Seite weg.
+  * Die Blätter werden beim **Beenden** im Datenordner gesichert und beim nächsten Start geladen.
+
+===== Was noch nicht geht =====
+
+  * Das **Senden eines Musters an ein Modul** (zum Beispiel ein ATtiny-Modul), damit auch das Blinken der LED bei **RGB Modul Nr**. Es ist zurückgestellt, bis jemand es braucht.
+  * Die Wirkung der **Spezial Modes** auf dem Modul und der **Multiplexer**.
+
+===== Wenn etwas nicht klappt =====
+
+^ Was passiert ^ Was hilft ^
+| Die **Balken** fehlen nach einem Neustart | Jede Seite zeichnet ihre Balken beim ersten Anzeigen neu. Klicke den Reiter an. Fehlen sie trotzdem, klicke auf **Aktualisieren**. Die Tabelle selbst ist vollständig da. |
+| Meldung **„Cursor outside the table“** | Die markierte Zelle liegt nicht in der Tabelle. Klicke vor **+** oder **−** in eine Zelle der LED-Tabelle, der Dauer oder der Goto-Zeile. |
+| Ein **Bild** fehlt nach einem Neustart | Die Bilddatei wurde verschoben oder gelöscht. Die Seite merkt sich nur den Pfad. Füge das Bild noch einmal ein. |
+| **Export zu ProgGen** meldet einen Fehler | Trage einen **Makro Namen** ein, fülle die LED-Tabelle und prüfe die **Dauer**-Zeile. |
+| Der **Reiter fehlt** | Du bist im **Anfänger Modus**. Siehe [[anleitungen:webmobaledlib:modus|Anfänger Modus und Experten Modus]]. |

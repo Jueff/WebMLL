@@ -1,17 +1,20 @@
-# Datei-Version: 1.04 (2026-10-21) - M06_Write_Header_SW.py
+# Datei-Version: 1.07 (2026-11-18) - M06_Write_Header_SW.py
 # ----------------------------------------------------------------------------------------------
 # Name:           M06_Write_Header_SW.py
 # Path:           proggen/M06_Write_Header_SW.py
-# Version:        1.04
-# Last Update:    2026-10-21
+# Version:        1.07
+# Last Update:    2026-11-18
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
+#   1.07  2026-11-18  ESP-Einstellung 'Fotowiderstand aktivieren' aktiviert die LDR-Scanner-Initialisierung auch ohne Makrozeile (Beitrag moosbewohner, PR 9)
 #   1.00  2026-10-12  Stand der Umstellung (nicht erfasst)
 #   1.01  2026-10-21  Version K des Excel-Programms: Makros Name_LED_Number und Name_LED_Offset in Add_InpVars (bekannte LED-Variablen, KnownVariables); Praefix-Parameter (Get_Par_Prefix); Check_Nr_From_Var herausgezogen; Add_Undefined_Input_Var; Warnung bei mehrfach gesetzten Zielvariablen auch in Check_Detected_Variables
 #   1.02  2026-10-21  Fehlalarme: LED-Namen (Name_LED_Number, Name_LED_Offset), die mehrfach vorkommen, loesen die Warnung 'Zielvariablen werden mehrfach gesetzt' nicht mehr aus; die Warnung kommt je Liste nur einmal; Praefix-Tabelle bei jeder Erzeugung neu einlesen
 #   1.03  2026-10-21  Warnung 'Zielvariablen werden mehrfach gesetzt': nennt Blatt und Zeile beider Definitionen und steht damit im Protokoll (WARNING); dieselbe Zeile desselben Blattes noch einmal gelesen zaehlt nicht als doppelte Definition; die Frage kommt nur, wenn die Liste neu ist (nicht fuer jedes eingebundene Blatt)
 #   1.04  2026-10-21  List_Lenght und Print_DstVar_List: eine leere Liste hat 0 Eintraege (VBA: Split eines leeren Textes liefert keinen Eintrag, Python einen leeren): TOTAL_VARIABLES war 1 statt 0, und Print_DstVar_List schrieb eine #define-Zeile ohne Namen
+#   1.06  2026-11-16  Fehlbedienung: Zeile aus nur einem kurzen Bezeichner (z.B. 'r') in der Makrospalte wird vor dem Kompilieren mit Blatt/Zeile gemeldet (_Is_Stray_Token)
+#   1.05  2026-11-16  Meldung 'Pin nicht gueltig' nennt die eingestellte Zentrale und die Zentrale, zu der der Pin passt (_Board_Hint); Build-Optionen im Protokoll (Fehlermeldung eines Raspberry-Pi-Anwenders: ESP32-Pins, aber Zentrale als Nano erkannt)
 # ----------------------------------------------------------------------------------------------
 # -*- coding: utf-8 -*-
 #
@@ -346,6 +349,12 @@ def Is_Switch_Var_then_Add_to_Ctr(Var_Name):
         _fn_return_value = - 1
     return _fn_return_value
 
+import re as _re
+
+def _Is_Stray_Token(line):  # v1.06
+    # Zeile aus nur einem kurzen Bezeichner ohne Klammer (z.B. 'r' durch Tippfehler in der Makrospalte)
+    return bool(_re.fullmatch(r'[A-Za-z_][A-Za-z0-9_]{0,2}', line)) and line != line.upper()
+
 def First_Scan_of_Data_Rows():
     
     global Switch_Damping_Fact, DMX_LedChan,Read_LDR,Store_Status_Enabled,Use_WS2811, SwitchA_InpLst, SwitchB_InpLst, SwitchC_InpLst, SwitchD_InpLst, CLK_Pin_Number, RST_Pin_Number, LDR_Pin_Number, LED_PINNr_List, DMX_LedChan,Read_LDR, USE_ATTiny_CAN_GBM, DstVar_List
@@ -419,6 +428,13 @@ def First_Scan_of_Data_Rows():
                     if line == '#define USE_ATTiny_CAN_GBM':
                         USE_ATTiny_CAN_GBM = True   # Must be located at the beginning of the configuration
                         # 12.02.23: Hardi                    
+                    if _Is_Stray_Token(line):                                                            # v1.06
+                        _Msg = (M09.Get_Language_Str('Fehler: In der Konfigurationszeile steht der unbekannte Text') + " '" + line + "'\n"
+                                + M09.Get_Language_Str('Blatt') + ": " + str(P01.ActiveSheet.Name) + ", " + M09.Get_Language_Str('Zeile') + ": " + str(r) + "\n\n"
+                                + M09.Get_Language_Str('Das ist kein Makro. Vermutlich wurde in der Makrospalte versehentlich ein Zeichen eingegeben. Bitte die Zelle prüfen und leeren, sonst lässt sich das Programm nicht übersetzen.'))
+                        P01.Cells(r, M25.Config__Col).Select()
+                        P01.MsgBox(_Msg, vbCritical, M09.Get_Language_Str('Ungültiger Makroeintrag'))
+                        return _fn_return_value
                     Current_Source = (str(P01.ActiveSheet.Name), r)                                      # Version K: Fundstelle fuer die Meldung 'mehrfach gesetzt'  # v1.03
                     if Add_Inp_and_DstVars(line, r) == False:
                         return _fn_return_value
@@ -517,7 +533,8 @@ def Set_PinNrLst_if_Matching(line, Name, Dest_InpLst, PinTyp, MaxCnt):
         NrStr = ''
         for OnePin in NrArr:
             if InStr(ValidPins, ' ' + M30.AliasToPin(OnePin) + ' ') == 0:
-                P01.MsgBox(Replace(Replace(M09.Get_Language_Str('Fehler: Der Pin \'#1#\' ist nicht gültig im' + vbCr + '  \'#2#\' Befehl'), "#1#", OnePin), '#2#', Replace(line, '// ', '')), vbCritical, M09.Get_Language_Str('Ungültige Arduino Pin Nummer'))
+                # P01.MsgBox(Replace(Replace(M09.Get_Language_Str('Fehler: Der Pin \'#1#\' ist nicht gültig im' + vbCr + '  \'#2#\' Befehl'), "#1#", OnePin), '#2#', Replace(line, '// ', '')), vbCritical, M09.Get_Language_Str('Ungültige Arduino Pin Nummer'))  # v1.05 (entfallen)
+                P01.MsgBox(Replace(Replace(M09.Get_Language_Str('Fehler: Der Pin \'#1#\' ist nicht gültig im' + vbCr + '  \'#2#\' Befehl'), "#1#", OnePin), '#2#', Replace(line, '// ', '')) + _Board_Hint(OnePin, PinTyp), vbCritical, M09.Get_Language_Str('Ungültige Arduino Pin Nummer'))  # v1.05: mit Hinweis auf die eingestellte Zentrale
                 return _fn_return_value, Dest_InpLst
             # Check Duplicate Pins , not for virtual PIN 'V' - virtual pin may be used multiple times
             if OnePin != M09.Virtual_Channel_T:
@@ -540,6 +557,27 @@ def Set_PinNrLst_if_Matching(line, Name, Dest_InpLst, PinTyp, MaxCnt):
         # Debug
     return _fn_return_value, Dest_InpLst
     
+
+def _Board_Hint(Pin, PinTyp):  # v1.05
+    """Zusatz zur Meldung "Pin nicht gueltig": welche Zentrale eingestellt ist und, wenn der Pin zu einer anderen Zentrale passt, zu welcher (typischer Fall: ESP32-Pins, aber die Build-Optionen
+    der Zentrale enthalten kein esp32, dann gilt der Nano). Schreibt die Build-Optionen ausserdem ins Protokoll."""  # v1.05
+    try:  # v1.05
+        import logging  # v1.05
+        names = {M02.HT_AM328: 'Nano / Uno', M02.HT_ESP32: 'ESP32', M02.HT_PICO: 'Pico'}  # v1.05
+        cur = M02a.Get_BoardTyp()  # v1.05
+        buildopt = P01.Cells(M02.SH_VARS_ROW, M25.BUILDOP_COL).Value  # v1.05
+        others = []  # v1.05
+        for key in (M02.HT_AM328, M02.HT_ESP32, M02.HT_PICO):  # v1.05
+            if key != cur and InStr(M30.Get_Platform_String(key, PinTyp + '_Pins', False, True), ' ' + str(Pin) + ' ') > 0:  # v1.05
+                others.append(names[key])  # v1.05
+        logging.getLogger(__name__).warning("Pin %s ungueltig fuer %s (Build-Optionen der Zentrale: %r); passt zu: %s", Pin, names.get(cur, cur), buildopt, others or "keiner anderen Zentrale")  # v1.05
+        txt = vbCr + vbCr + Replace(M09.Get_Language_Str('Eingestellte Zentrale: #1#'), '#1#', names.get(cur, str(cur)))  # v1.05
+        if others:  # v1.05
+            txt = txt + vbCr + Replace(M09.Get_Language_Str('Der Pin passt zu: #1#. Bitte prüfen, ob die Zentrale in den Optionen oder bei der Port-Auswahl richtig eingestellt ist.'), '#1#', ' / '.join(others))  # v1.05
+        return txt  # v1.05
+    except Exception:  # noqa: BLE001  # v1.05
+        return ''  # v1.05
+
 
 def Get_Arguments(line):
     _fn_return_value = ""
@@ -1616,7 +1654,9 @@ def Init_HeaderFile_Generation_SW(firstRun):
     #---------------------------------------------------------
     if ( firstRun ) :
         MaxUsed_Loc_InCh = - 1
-        Read_LDR = False
+        # Read_LDR = False  # v1.07 (entfallen)
+        esp32_options = getattr(P01.ActiveSheet, "esp32_options", None) or {}  # v1.07
+        Read_LDR = M02a.Get_BoardTyp() == M02.HT_ESP32 and esp32_options.get("ldr") is True  # v1.07
         Store_Status_Enabled = False
         Use_WS2811 = False
         # The following variables are read from the data lines
