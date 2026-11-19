@@ -1,5 +1,5 @@
-Datei-Version: 1.18 (2026-11-19) - HOC_intern.md
-Stand: webMobaLedLib 4.34
+Datei-Version: 1.20 (2026-11-19) - HOC_intern.md
+Stand: webMobaLedLib 4.36
 
 # webMobaLedLib: History of Change (intern, ausführlich)
 
@@ -24,6 +24,33 @@ Release-Stand 2.12 auf Wunsch des Entwicklers („Release bauen“). **Neu im Ab
 | `archiv/` | frühere Release-Hinweise, Versionslisten und ZIP (nichts gelöscht) |
 
 **Geprüft:** Dateipaket: `testzip` in Ordnung, alle 113 Dateien gleich dem Ordner `headless`, keine `__pycache__`, alle `.py` kompilieren, Versionsprüfung „alles passt“ (50 Einträge), 11 Dateien ausführbar (`.sh`, `.command`). **Nachbau des Entwickler-Ablaufs mit seinem echten Paket (1678 Dateien, Stand 2.05):** meine 113 Dateien darübergelegt, Prüfliste, ZIP gepackt, `release_tools check --previous <sein ZIP>`: **in Ordnung** (Version 2.12, 1678 Dateien, 6 neue, 0 fehlende, ZIP 16,6 MB). Alle 15 Prüfreihen laufen (17, 26, 15, 70, 28, 19, 43, 26, 16, 27, 8, 8, 8, 5, 9 Prüfungen). **Nicht geprüft:** `zip_erstellen.bat` und die Reparaturskripte unter Windows, ein abgebrochenes Update unter Windows, das Verhalten mit Acronis, der Download von GitHub.
+
+## 4.36 (2026-11-19)
+
+Pull Request 33 von Jürgen (Issue 31) eingearbeitet: „Schnelles Update“, nur die Konfiguration auf ESP32 und Pico übertragen. Der PR baute auf 4.22 auf; zusammengeführt mit dem Stand 4.35 (drei Konflikte ohne Logik: Versionskopf und Historie `webmobaledlib.py`, `BETATEST_Checkliste.md`, `Web_Languages.csv`). Jürgens Versionsnummer 4.23 wurde zu 4.36. `test_dyn_config.py` läuft mit 146 Prüfungen ohne Fehler (nur Software, ohne Hardware). Nicht an ESP32 und Pico getestet. `release_manifest.json` aus dem PR ist nicht übernommen: Sie gehört zum Stand von Jürgens Baum und muss beim Release neu erzeugt werden.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `LEDs_AutoProg/MLLDynConfig.h` | neu | Firmware: Konfiguration aus dem Dateisystem laden, Signatur, Empfang über seriell |
+| `LEDs_AutoProg/LEDs_AutoProg.ino` | PR 33 | `MLL_DYNAMIC_CONFIG`, Tabellen über Makros `MLL_*` |
+| `headless/headless_dyn_config.py` | 1.00 | neu: Konfigurationsdatei, Signatur, Übertragung |
+| `proggen/M42_Dyn_Config.py` | 1.01 | neu: Anbindung an den Programmgenerator |
+| `proggen/M06_Write_Header.py` | 1.11 | Kopfdatei im Modus MLL_DYNAMIC_CONFIG |
+| `proggen/M06_Write_Header_LED2Var.py` | 1.02 | LED2Var-Tabelle für die Konfigurationsdatei |
+| `proggen/M08_ARDUINO.py` | 1.26 | Nur Konfiguration übertragen, sonst voller Upload; LittleFS beim Pico |
+| `_web/web_form_options.py` | 1.39 | Haken „Schnelles Update“ im Reiter Entwicklungsumgebung |
+| `csv/Web_Languages.csv` | – | 18 neue Texte in 6 Sprachen |
+| `test_dyn_config.py` | neu | Prüfung der Funktion |
+| `install/BETATEST_Checkliste.md` | 3.18 | Punkt 288 |
+| `webmobaledlib.py` | 4.36 | Version und Historie |
+
+## 4.35 (2026-11-19)
+
+Rückmeldung GerdR (4.22): Nach dem Erkennen von Board/Port (Nano, RP2040) kam beim Verbinden nur noch „Es läuft noch ein Vorgang“. Ursache im Log: der automatische Verbinden-Aufruf lief ohne Browserbezug (seit 4.26 behoben); dabei blieb aber `state["busy"]` gesetzt, weil `set_bridge` vor dem `try` stand. Jetzt innerhalb `try/finally`.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.35 | `run_in_worker`: busy wird auch bei Fehlern zurückgesetzt |
 
 ## 4.34 (2026-11-19)
 

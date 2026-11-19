@@ -29,6 +29,7 @@
 #   1.37  2026-11-19  Board und USB Port erkennen: Nano neu oder Full mit Firmware-Version und Signatur des Bootloaders (Issue 14)
 #   1.39  2026-11-19  Automatisch verbinden nach Board und USB Port erkennen: der Browserbezug (client) wird mitgegeben, sonst Fehler 'The current slot cannot be determined' (Rueckmeldung Harold, 4.22)
 #   1.38  2026-11-19  Erweiterungen: Name und Beschreibung aus libraries.json der Extension anzeigen, wenn vorhanden (Wunsch Juergen, Issue 6)
+#   1.39  2026-11-19  Reiter Entwicklungsumgebung: Haken 'Schnelles Update: nur geaenderte Konfiguration uebertragen (ESP32/Pico)' (Einstellung serial_cfg, M42_Dyn_Config; Zeilen mit '# v1.32', die Texte mit '# v1.39')
 # ----------------------------------------------------------------------------------------------
 """Web-Ersatz fuer proggen/UserForm_Options.py (Optionen und spezielle Funktionen).
 
@@ -456,6 +457,8 @@ async def _options_async(spec: dict, st: dict):
                             ui.radio({0: t["arduino_text"], 1: t["pio_text"]}, value=1 if vals.get("use_pio") else 0,  # v1.04
                                      # on_change=lambda e: vals.__setitem__("use_pio", bool(e.value)))  # v1.07 (entfallen)
                                      on_change=lambda e: (vals.__setitem__("use_pio", bool(e.value)), update_ide_tabs()))  # v1.07
+                            ui.checkbox(t["serial_cfg_text"], value=bool(vals.get("serial_cfg")),  # v1.32
+                                        on_change=lambda e: vals.__setitem__("serial_cfg", bool(e.value))).tooltip(t["serial_cfg_hint"])  # v1.32
                             ui.label(t["status"]).classes("text-grey-8").style("white-space: pre-line")  # v1.04
                             for b in t["buttons"]:  # v1.04
                                 button_row(b)  # v1.04
@@ -536,6 +539,7 @@ def make_class(Base):
             import proggen.M28_Diverse as M28  # v1.04
             # return {"L": self.rb_res["_L"].get() or None, "R": self.rb_res["_R"].get() or None,  # v1.30 (entfallen)
             from headless.headless_esp32_ota import load_settings  # v1.30
+            import proggen.M42_Dyn_Config as M42  # v1.32
             wlan = load_settings(P01.ActiveSheet)  # v1.30
             return {"esp32_options": dict(getattr(P01.ActiveSheet, "esp32_options", None) or {}),  # v1.30
                     "esp32_hostname": wlan["hostname"], "esp32_wifi": wlan["wifi"],  # v1.30
@@ -543,7 +547,8 @@ def make_class(Base):
                     "auto_L": bool(self.Autodetect_Typ_L_CheckBox_var.get()),
                     # "auto_R": bool(self.Autodetect_Typ_R_CheckBox_var.get())}  # v1.04 (entfallen)
                     "auto_R": bool(self.Autodetect_Typ_R_CheckBox_var.get()),  # v1.04
-                    "use_pio": bool(M28.Get_Bool_Config_Var("Use_PlatformIO"))}  # v1.04
+                    "use_pio": bool(M28.Get_Bool_Config_Var("Use_PlatformIO")),  # v1.04
+                    "serial_cfg": bool(M42.Option_Enabled())}  # v1.32
 
         def _is_nano_value(self, value):  # v1.06
             """Gehoert der Wert des Radioknopfes zu einem Arduino Nano oder Uno (nicht ESP32 und nicht Pico)?"""  # v1.06
@@ -620,6 +625,8 @@ def make_class(Base):
                              "intro": tr("Womit sollen die Programme übersetzt und auf den Arduino geladen werden?"),  # v1.04
                              "texts": [tr("Das Programm webMobaLedLib selbst aktualisieren: Menü Hilfe → Update webMobaLedLib …")],  # v1.07
                              "arduino_text": tr("ARDUINO-IDE (Standard)"), "pio_text": tr("PlatformIO (Ersatz für die ARDUINO-IDE)"),  # v1.04
+                             "serial_cfg_text": tr("Schnelles Update: nur geänderte Konfiguration übertragen (ESP32/Pico)"),  # v1.39
+                             "serial_cfg_hint": tr("Übertragen werden nur Änderungen an der Konfiguration, also Makros, Farben und Startwerte. Das dauert wenige Sekunden. Das Programm selbst wird nur beim ersten Mal oder nach Änderungen an Programm, Erweiterungen, LED-Anzahl oder Pins neu übertragen. Arduino Nano und Uno sind nicht betroffen. Nur mit PlatformIO und USB."),  # v1.39
                              "status": (tr("PlatformIO gefunden: {pfad}", pfad=pio) if pio else  # v1.04
                                         # tr("PlatformIO wurde nicht gefunden. Installation: https://platformio.org/install/cli (zum Beispiel mit: pip install platformio)")),  # v1.05 (entfallen)
                                         tr("PlatformIO wurde nicht gefunden. Installation: {hinweis}", hinweis=tr(M08.PIO_Install_Hint()))),  # v1.05
@@ -672,6 +679,9 @@ def make_class(Base):
                     logger.exception("Optionen: Erweiterungen konnten nicht neu eingelesen werden")  # v1.31
             if vals["esp32_options"] != initial["esp32_options"]:  # v1.30
                 P01.ActiveSheet.esp32_options = dict(vals["esp32_options"])  # v1.30
+            if "serial_cfg" in vals and vals["serial_cfg"] != initial.get("serial_cfg"):  # v1.32
+                import proggen.M42_Dyn_Config as M42  # v1.32
+                M42.Set_Option(vals["serial_cfg"])  # v1.32
             self.rb_res["_L"].set(vals["L"] or 0)
             self.rb_res["_R"].set(vals["R"] or 0)
             self.Autodetect_Typ_L_CheckBox_var.set(1 if vals["auto_L"] else 0)

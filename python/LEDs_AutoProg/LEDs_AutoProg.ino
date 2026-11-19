@@ -532,7 +532,17 @@ CRGB leds[NUM_LEDS];           // Define the array of leds
   uint8_t Handle_Command(uint8_t Type, const uint8_t* arguments, bool process);
 #endif
 
-MobaLedLib_Prepare();
+#ifdef MLL_DYNAMIC_CONFIG                                                                                     // Konfiguration liegt im Dateisystem (siehe MLLDynConfig.h)
+  #include "MLLDynConfig.h"
+#else
+  #define MLL_EXT_ADDR_TAB   Ext_Addr
+  #define MLL_EXT_ADDR_SIZE  sizeof(Ext_Addr)
+  #define MLL_STORE_TAB      Store_Values
+  #define MLL_STORE_SIZE     sizeof(Store_Values)
+  #define MLL_L2V_TAB        LED2Var_Tab
+  #define MLL_L2V_COUNT      (sizeof(LED2Var_Tab)/sizeof(LED2Var_Tab_T))
+  MobaLedLib_Prepare();
+#endif
 #define MobaLedLib (*pMobaLedLib)
 
 #if defined LED_HEARTBEAT_PIN && LED_HEARTBEAT_PIN >= 0
@@ -806,9 +816,9 @@ void Receive_LED_Color_per_RS232(Stream &port, bool network)                    
 
      uint16_t Channel = DCC_INPSTRUCT_START;
 #if defined(MLL_EXTENSIONS_COUNT) && defined (USE_EXTENSIONS_V2)
-     ReceivedAddr = extensions.onAccessoryCommand(MobaLedLib, ReceivedAddr, Direction, OutputPower, Channel, Ext_Addr, sizeof(Ext_Addr)); if (ReceivedAddr==0) return;
+     ReceivedAddr = extensions.onAccessoryCommand(MobaLedLib, ReceivedAddr, Direction, OutputPower, Channel, MLL_EXT_ADDR_TAB, MLL_EXT_ADDR_SIZE); if (ReceivedAddr==0) return;
 #endif
-     for (const uint8_t *p = (const uint8_t*)Ext_Addr, *e = p + sizeof(Ext_Addr); p < e; )
+     for (const uint8_t *p = (const uint8_t*)MLL_EXT_ADDR_TAB, *e = p + MLL_EXT_ADDR_SIZE; p < e; )
          {
          uint16_t Raw_Addr = pgm_read_word_near(p); p+=2;
          uint16_t Addr     = Raw_Addr & ADDR_MSK;
@@ -917,7 +927,7 @@ uint8_t Handle_Command(uint8_t Type, const uint8_t* arguments, bool process)
    {
      uint16_t EEPromAddr = EEPROM_START;
      uint16_t tmp;
-     for (const uint8_t *p = (const uint8_t*)Store_Values, *e = p + sizeof(Store_Values); p < e; )
+     for (const uint8_t *p = (const uint8_t*)MLL_STORE_TAB, *e = p + MLL_STORE_SIZE; p < e; )
          {
          tmp = pgm_read_word_near(p); p += 2;
          if (handler(ValueType, ValueId, Value, EEPromAddr, tmp>>8, tmp)) break;
@@ -1258,7 +1268,7 @@ uint8_t Handle_Command(uint8_t Type, const uint8_t* arguments, bool process)
 #include "ESP32WifiUsb.h"
 #endif
 
-#if defined USE_RS232_OR_SPI_AS_INPUT || defined RECEIVE_LED_COLOR_PER_RS232 || defined MLL_OTA_SAVED_WIFI
+#if defined USE_RS232_OR_SPI_AS_INPUT || defined RECEIVE_LED_COLOR_PER_RS232 || defined MLL_OTA_SAVED_WIFI || defined MLL_DYNAMIC_CONFIG
       //--------------------------------------------------------
       bool Get_Char_from_RS232_or_SPI(char &c, uint8_t &Buff_Nr)
       //--------------------------------------------------------
@@ -1308,8 +1318,11 @@ uint8_t Handle_Command(uint8_t Type, const uint8_t* arguments, bool process)
 		{
 		Buff_Nr = 0;
 		c = Serial.read();
+#ifdef MLL_DYNAMIC_CONFIG
+		if (MllCfgReceive(c)) return 0;                                                                       // Konfiguration ueber die serielle Schnittstelle (Zeilen mit '~')
+#endif
 #ifdef MLL_OTA_SAVED_WIFI
-        if (WifiUsbReceive(c)) return 0;
+		if (WifiUsbReceive(c)) return 0;
 #endif
 		//PORTB |= 3;   // Debug Speed Test
 		return 1;
@@ -1391,7 +1404,7 @@ uint8_t Handle_Command(uint8_t Type, const uint8_t* arguments, bool process)
           }
        }
    }
-#endif // USE_RS232_OR_SPI_AS_INPUT || RECEIVE_LED_COLOR_PER_RS232
+#endif // USE_RS232_OR_SPI_AS_INPUT || RECEIVE_LED_COLOR_PER_RS232 || MLL_DYNAMIC_CONFIG
 
 #ifdef USE_CAN_AS_INPUT
    #ifndef ESP32
@@ -1569,10 +1582,15 @@ void setup(){
   }
 #endif
 
-  MobaLedLibPtr_CreateEx(leds
-#if _USE_STORE_STATUS
-  #if defined(ENABLE_STORE_STATUS)                                                                             // 19.05.20: Juergen
-    , On_Callback
+  #ifdef MLL_DYNAMIC_CONFIG
+    MllDynLoad();                                                                                               // Konfiguration aus dem Dateisystem laden
+    pMobaLedLib = new MobaLedLib_C(leds, sizeof(leds)/sizeof(CRGB), mllDyn.config, mllDyn.ram, mllDyn.ramLen
+  #else
+    MobaLedLibPtr_CreateEx(leds
+  #endif
+  #if _USE_STORE_STATUS
+    #if defined(ENABLE_STORE_STATUS)                                                                             // 19.05.20: Juergen
+      , On_Callback
   #else
     , NULL
   #endif
@@ -1717,7 +1735,11 @@ void setup(){
 
   #endif
 
+  #ifdef MLL_DYNAMIC_CONFIG
+    MllDynSetStartValues(MobaLedLib);   // Startwerte aus der Konfigurationsdatei
+  #else
   Set_Start_Values(MobaLedLib); // The start values are defined in the "MobaLedLib.h" file if entered by the user
+  #endif
 
   #if defined TEST_TOGGLE_BUTTONS || defined TEST_PUSH_BUTTONS
     Setup_Toggle_Buttons();
@@ -2270,9 +2292,9 @@ void Set_Mainboard_LEDs()
   // Uses 194 bytes + 4 bytes per processed LED
   {
        {
-       for (uint8_t i = 0; i < sizeof(LED2Var_Tab)/sizeof(LED2Var_Tab_T); i++)
+       for (uint8_t i = 0; i < MLL_L2V_COUNT; i++)
            {
-           const LED2Var_Tab_T *p = &LED2Var_Tab[i];
+           const LED2Var_Tab_T *p = &MLL_L2V_TAB[i];
            uint8_t Var_Nr         = pgm_read_byte_near(&p->Var_Nr);
 #ifdef LONG_LED_ADDR
            uint16_t LED_Nr        = pgm_read_word_near(&p->LED_Nr);
@@ -2305,7 +2327,7 @@ void Set_Mainboard_LEDs()
                  char s[40];
                  sprintf(s, "%3i: V%-3i L%-3i O%i T%i V%-3i Act%-3i R%i", i, Var_Nr, LED_Nr, Offset, Typ, Val, LED_Val, Res);
                  Serial.println(s);
-                 if (i == sizeof(LED2Var_Tab)/sizeof(LED2Var_Tab_T) - 1) Disp += 1000;
+                 if (i == MLL_L2V_COUNT - 1) Disp += 1000;
                  }
            #endif
            }
@@ -2434,7 +2456,7 @@ void MLLMainLoop(){
   #ifdef MLL_OTA_SAVED_WIFI
     WifiUsbPoll();
   #endif
-  #if defined USE_RS232_OR_SPI_AS_INPUT || defined RECEIVE_LED_COLOR_PER_RS232 || defined MLL_OTA_SAVED_WIFI
+  #if defined USE_RS232_OR_SPI_AS_INPUT || defined RECEIVE_LED_COLOR_PER_RS232 || defined MLL_OTA_SAVED_WIFI || defined MLL_DYNAMIC_CONFIG
     Proc_Received_Char();               // Process characters received from the RS232 (DCC, Selectrix, ... Arduino)
   #endif
 

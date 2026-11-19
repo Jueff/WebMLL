@@ -1,9 +1,19 @@
-Datei-Version: 1.18 (2026-11-19) - HOC_Anwender.md
-Stand: webMobaLedLib 4.34
+Datei-Version: 1.20 (2026-11-19) - HOC_Anwender.md
+Stand: webMobaLedLib 4.36
 
 # webMobaLedLib: Änderungen (Kurzfassung)
 
 Gilt ab Version 1.39. Neueste Version oben.
+
+## Version 4.36 (2026-11-19)
+
+Neue Funktionen:
+- Schnelles Update für ESP32 und Pico (Beitrag von Jürgen, Issue 31): Mit dem Haken im Reiter Entwicklungsumgebung wird das Programm nur noch hochgeladen, wenn es nötig ist; sonst geht nur die Konfiguration in wenigen Sekunden zur Lichtmaschine. Bei jeder Unsicherheit wird komplett hochgeladen. Nano und Uno ändern sich nicht.
+
+## Version 4.35 (2026-11-19)
+
+Korrekturen:
+- Nach einem Fehler beim Verbinden blieb die Meldung „Es läuft noch ein Vorgang“ bestehen und blockierte alle Eingaben.
 
 ## Version 4.34 (2026-11-19)
 
