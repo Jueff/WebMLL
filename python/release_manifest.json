@@ -1,6 +1,6 @@
 {
-"created": "2026-11-15 08:39:46",
-"file_count": 2363,
+"created": "2026-11-19 09:33:04",
+"file_count": 2385,
 "files": {
 "Boards/Heartbeat.uf2": {
 "sha256": "e984b97a7858984be7a8fc6e8cf0bf594128d32c4c517c3f3b696e5ef4dfdb50",
@@ -10,13 +10,41 @@
 "sha256": "0e9c40c1bfa94e3dee563fee4a40543b5e573433de1bcf63e829c8a2073920ed",
 "size": 783
 },
+"Configuration/AddressConfig.bin": {
+"sha256": "74c2312170d4f3b467d9f642669f438a10bf4d73a88fbb60b24e9980b94fcb6a",
+"size": 6
+},
 "Configuration/Configuration.cpp": {
 "sha256": "89e98c3ef7efe2b9ddf88dc48e2608c053a77df5b730fd75c50693fdb72b4377",
 "size": 1545
 },
+"Configuration/Configuration.cpp.d": {
+"sha256": "1a40f9ae08d7fc5dc7fd805dd02da21d3716dd54c158447ac91d60e5f9ce3d36",
+"size": 1845
+},
+"Configuration/Configuration.cpp.o": {
+"sha256": "80be677f5b588789c3213b41c6968e5e1bf06cbb5eaf5b0715aebe916268e6e5",
+"size": 14484
+},
+"Configuration/Configuration.elf": {
+"sha256": "9678604ffa9a6b5c4e6f2336b0b86ef7500676ec343a32b8847e296be188a150",
+"size": 8908
+},
+"Configuration/L2VConfig.bin": {
+"sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+"size": 0
+},
+"Configuration/LEDConfig.bin": {
+"sha256": "aa15220a19d1293acc23adecbb9f7f4e591ad255edf74e3f3a056883fb3e3a49",
+"size": 549
+},
 "Configuration/build.cmd": {
-"sha256": "00c5296febcf47ec6683f1f644aa3828c6b4d7dfdfa7e7ec946d732d9f559771",
-"size": 1941
+"sha256": "6f4c81c39abda6b9324f97c91901f5c28a6894d7f20e8cfd10ddb3eaf07f2f9d",
+"size": 1917
+},
+"Configuration/linux_x64/libMobaLedLibWrapper.so": {
+"sha256": "df9cf6d9d8d4eb0e1f79d2f7b00554af7f888bf87e7805fee9f5d4ea12bdce86",
+"size": 62432
 },
 "Configuration/x64/Finished.txt": {
 "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
@@ -43,8 +71,8 @@
 "size": 15480
 },
 "ExcelAPI/XLA_Application.py": {
-"sha256": "bfba370e9889a1aac16951eaf521dbc1d2ba2539bc7a962c1d9d4e26565ba0a5",
-"size": 241311
+"sha256": "540768fa21b355bd8ea2b8f62f36571d3c600e64791276ba180845db42e32fb5",
+"size": 237696
 },
 "ExcelAPI/XLC_Excel_Consts.py": {
 "sha256": "498406148d6914e275be5cefdebc36ad665bde5b12791112dbfd038e5839f11f",
@@ -159,8 +187,8 @@
 "size": 2714
 },
 "LEDs_AutoProg/ESP32Extensions.h": {
-"sha256": "c7892657252ddf45e711cd8e24e6898ce3c4e4ca48c4007c524b4e7c08b7e328",
-"size": 7316
+"sha256": "69855314a2e69aaede26d534b53f5be14c0a3201647fff1c25e16a816a522458",
+"size": 7371
 },
 "LEDs_AutoProg/ESP32WifiUsb.h": {
 "sha256": "2ad8bd81f9871099d5ef58b5cfe5e8124e8f057352525cfa66489dca5b5c8148",
@@ -171,7 +199,7 @@
 "size": 4820
 },
 "LEDs_AutoProg/LEDs_AutoProg.h": {
-"sha256": "dd8aaab03206ff98d2a7cf843bd569ff12c8239db944870860559531da5d1d71",
+"sha256": "065cdbbe39d360bc9044b363754ab27ac4ff5767784b42fd5693103a0a7e1d09",
 "size": 7059
 },
 "LEDs_AutoProg/LEDs_AutoProg.ino": {
@@ -231,8 +259,8 @@
 "size": 447
 },
 "LEDs_AutoProg/U8G2UserInterface.h": {
-"sha256": "dc169583f13373b5d2802a4cd118ebcd637dce770e55e5e2642685bfa413be3d",
-"size": 7955
+"sha256": "c95afb9cd450d929c6ef01667b9c4695a849eab9847bd342675c47ab6fb4c3af",
+"size": 9162
 },
 "LEDs_AutoProg/UserInterface.cpp": {
 "sha256": "605ba6d2a6bff75097471e92e1a7de94986191f67d76ca37815866125d7b9b1a",
@@ -834,6 +862,10 @@
 "sha256": "adcd3aef9289b590f83709a0850e024596e95296c0bb4b0e1d6105b2ac7cb12e",
 "size": 1454
 },
+"START_HIER.txt": {
+"sha256": "0b58612bb214efee1db9e4568c367bf55874cbdd0b01ceb752a9c9d9a1eb2e02",
+"size": 1610
+},
 "Update_Libraries.cmd": {
 "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
 "size": 0
@@ -843,8 +875,8 @@
 "size": 167
 },
 "_web/mll_graph.js": {
-"sha256": "93eaffa63f5aefb580123f8a5c389dd36931b1adedf0305e82fc535b47db8b62",
-"size": 64363
+"sha256": "ff5622bd319979980f92f44a02abde8035dd16a85a0ef3251c4a5e2fee56d986",
+"size": 67755
 },
 "_web/mll_servocurve.js": {
 "sha256": "7add5eab14996a4ff6c58bbf1366513a57eee6971a9e59dd10d0bc83f6997b15",
@@ -863,32 +895,32 @@
 "size": 8072
 },
 "_web/web_colorcheck.py": {
-"sha256": "f5be2149744ed6e8f10d0444af07a686c29c450c937b0a717a406ed0a6b3c03f",
-"size": 37831
+"sha256": "cb42760cf49ce57377c62f05388bf7190f03a54a987ce0fa48934242ceb29a06",
+"size": 38346
 },
 "_web/web_dcckeyboard.py": {
-"sha256": "f959ca1906e37b3c992babd822d0a22d6ba563b190dc1d5aef329441e77ed2a8",
-"size": 10015
+"sha256": "b776afd0569d468072f7cad7cdc320f053e5f0b282caf941423c02ec90b3c50d",
+"size": 10226
 },
 "_web/web_dialogs.py": {
 "sha256": "f7b3f70f2409a8a4d30a73f03c6cf3979e4209e4140661336a0a2e788fa915db",
 "size": 35843
 },
 "_web/web_esp32_ota.py": {
-"sha256": "8988871bc0707bf5326da6d39fac2ecf3be4a58008bfaae056a5cc1416cef792",
-"size": 12698
+"sha256": "648e621d362752404d81f60804d7946aadf8f57d45d6ffc84d60ec3dab1fee2a",
+"size": 14834
 },
 "_web/web_firewall.py": {
-"sha256": "f091f2f66c7424433f84f99b6e675ea290fe407d313f7e4b1f512977f6862672",
-"size": 13252
+"sha256": "018c6f777d22fd1f35a7c9c5ee407de7e51db0698066919d48efecc2247cba2e",
+"size": 13696
 },
 "_web/web_form_comport.py": {
 "sha256": "c2bd716825c538776bea985342c494e1c32cfcaed34eafce459e05ac77025f73",
 "size": 22028
 },
 "_web/web_form_exchange.py": {
-"sha256": "ccf758c83af00e81b40cbe61b56fe9104a6463873a358763fead64f63688d410",
-"size": 9941
+"sha256": "bbf04b871268315cbfb722446bd58c3ce0bf8d8782d9f5b0584621a689c643e3",
+"size": 10047
 },
 "_web/web_form_firmware.py": {
 "sha256": "527fc9f6e1977476b41b3ad050c6fce03667f1a199930ff37f752a04e6ba811a",
@@ -907,8 +939,8 @@
 "size": 21653
 },
 "_web/web_form_options.py": {
-"sha256": "28ac0ed908d1a8892c105ac1ddb693cdbdf04f9597434c6a08507572dbab9b91",
-"size": 49840
+"sha256": "363129681f30dba69745c102431ad7bbca48ac7b482dc03ffb8df829fb5a6a09",
+"size": 79175
 },
 "_web/web_form_other.py": {
 "sha256": "dfd7131972b6137b12c413788ded8d1285cbad7c966f1db5b87017468bfd114b",
@@ -927,8 +959,8 @@
 "size": 6065
 },
 "_web/web_graph.py": {
-"sha256": "d60bb4667ae05102f8623933ef285db0131222fe3fc0ea7d700e0c111eb2a3bf",
-"size": 35338
+"sha256": "5c7b3d28c16cef064b973263f60c9f2fcd4fcc53f2e70640254942db3c2d6b8b",
+"size": 36888
 },
 "_web/web_i18n.py": {
 "sha256": "edeb4eb912dbbbea17631fdbd04f450fef16478bb94e9124cae210dc7411d5e3",
@@ -939,12 +971,12 @@
 "size": 1599
 },
 "_web/web_layout.py": {
-"sha256": "261d68de70e60914207b80984415da62986c8cdb6ce920de738ae69f1add49d4",
-"size": 13057
+"sha256": "8b33411d966e811623a615fd169108dad2ddadd13f01a9b2fcc0d125c83ea4b6",
+"size": 17700
 },
 "_web/web_log.py": {
-"sha256": "5f6448150b3889918b961e143703bacfd1f29c13cabc5286a43a2de1f3e7e2c9",
-"size": 9312
+"sha256": "69be34ac1431580196f43d0d6ac41a066e44fb0269b27282574dfd7e76f11a8f",
+"size": 9711
 },
 "_web/web_logging.py": {
 "sha256": "31dca253db0b56c193e9bd90898405a76c2aef137bf585eb394fd3f4f8be064f",
@@ -959,8 +991,8 @@
 "size": 4609
 },
 "_web/web_params.py": {
-"sha256": "439f45247def07ea81db2fb0d8d1fe09428acad6b68b8f009fdb9855a19cdd1d",
-"size": 27362
+"sha256": "3d93847873bb1a7e9b33198f420e7f172e5ae9608671e0c7eae2bc0357cfa225",
+"size": 30539
 },
 "_web/web_password.py": {
 "sha256": "2d51394d14dfd53b643154cd24bd2c8245d2fb4bb50a02b7355ac2ac731559b0",
@@ -971,16 +1003,16 @@
 "size": 6462
 },
 "_web/web_pattgen.py": {
-"sha256": "60100a99aab75bb2550288ca114f04d6e2ec2ba3cc360e45c4af4c73cda971e9",
-"size": 82729
+"sha256": "aa77bfcc135117c434891c052793cedee7d426f94e5b72e6a6da0ca035b3f1fd",
+"size": 82764
 },
 "_web/web_pi_status.py": {
 "sha256": "8c2f25285d5ed0bd76fa25336aa88aeae18701463d9228cb0522bc5c75663bc8",
 "size": 8739
 },
 "_web/web_serial.py": {
-"sha256": "54b76ee2a64b899d30bd5d2f2be80c746caaae4dd5cb7bb680e6cb53a4a28f9b",
-"size": 37458
+"sha256": "4763fa1f7137b5ae0a4066789470fa27b697911c389f7c6dbc9446bbe6ecdc0d",
+"size": 38769
 },
 "_web/web_serial_page.py": {
 "sha256": "6bd0d33d5f4f0c169144b12630718998b2087bc45cd8d7ccbee4ecdd3eeadc46",
@@ -995,32 +1027,36 @@
 "size": 26008
 },
 "_web/web_sheet_tabs.py": {
-"sha256": "bf7873a651b837d1c9f3ae5b8de56e0eab1de6067bc6f08e8996b57244e16b38",
-"size": 15618
+"sha256": "946503ead392ec9a7e2c574781c7268505f4d70e1f17349c97c40699f245e5aa",
+"size": 23322
+},
+"_web/web_simulator.py": {
+"sha256": "68de5d102ecb37f2822dbde12e611a8c53b7a4b6f883718598edd71a0fb936fd",
+"size": 4254
 },
 "_web/web_soundtest.py": {
 "sha256": "9704f3a5b101b3b5031845e35fc4df19401ff998b02b1dabf85e9f82e1295c7e",
 "size": 17613
 },
 "_web/web_tabs.py": {
-"sha256": "8e9f1d3d2c68be4ef803d3a56ccfb056041d4cff20a3e73b27c8614eb41925a5",
-"size": 16859
+"sha256": "5aa956298f11e67b045e35d11b049748e12d0ea08f8e48a17626e2ccc161a924",
+"size": 28516
 },
 "_web/web_toolbar.py": {
 "sha256": "f22b0041299211aae9642dc7469e3c21e09bad40c1f60e71220dee12f41fa457",
 "size": 6565
 },
 "_web/web_update.py": {
-"sha256": "a7efc8027fc3105a1c53af91538c82f000c46874a6d92daeb1fb3e11bd1f2c1d",
-"size": 52228
+"sha256": "c43f0959c428cbb6e40d7a43c6d696d2451ad4df5e36bdab821b60da6f3bc904",
+"size": 54947
 },
 "_web/web_viewswitch.py": {
 "sha256": "a680ca0b53fef373171beaeed2ab4ffb47fa4c18c5690fca3852a4ca19d63b42",
 "size": 3929
 },
 "_web/web_z21.py": {
-"sha256": "a2546e83776a626c807fb4dac75158bd15af5592d8d22a381263bd892ea3c217",
-"size": 35175
+"sha256": "2f009199e22c9f7466857f522f9b47af9a6767668535e32e5b7c410c6e3b6ae4",
+"size": 35471
 },
 "arduino_prefs.py": {
 "sha256": "b8f31d0994a657fc816f0e9806c6f95e9f47a57d54a0ef4ff68648608b983134",
@@ -1131,8 +1167,8 @@
 "size": 1106
 },
 "csv/Web_Languages.csv": {
-"sha256": "69adeb6d88d485484790ac52c7e66615cda94208c68811a22f0d11ba8f9f1ec4",
-"size": 539252
+"sha256": "7db9bb5a27fa63da156ef913ec456534b4a84d2d1fa11c9dbe514db31fb393e7",
+"size": 607595
 },
 "csv/xLibraries.csv": {
 "sha256": "a737fc50e763b84683b77c46c5f9a4b338362e0587400daea97f0ed0e89e2b81",
@@ -1150,9 +1186,13 @@
 "sha256": "ea59561b0f8a069638d01c334e69aff29bb6dbb41fb590d7d6c5db614642e040",
 "size": 3308
 },
+"extensions_known.json": {
+"sha256": "a1f97ec0cdf31987087aa207e7521864a5cefc029e4b6757038503ff92a89c2e",
+"size": 2042
+},
 "fast_paths.py": {
-"sha256": "a807ccd6331a935e19f97f92d8aa04c740a788c82789856388ced7feb74bf81a",
-"size": 2692
+"sha256": "a19351587709ba9fd11c803165b7699b9a738ebab528fb69a12fe33ee7cf8f20",
+"size": 3203
 },
 "headless/__init__.py": {
 "sha256": "2a965aa0b9ec4eface04a957c43778d975ba06c265a56c14dcaddf6253834b85",
@@ -1167,8 +1207,12 @@
 "size": 4689
 },
 "headless/headless_esp32_ota.py": {
-"sha256": "e856718c2d6497f7f9f9697ce936a31841d76551ccf15d989419ff05f93ed4b9",
-"size": 29256
+"sha256": "adec542a7608b5f8b84e45f69a4aeefcbc9e4fc4b4f30b1f5e4230325a57c7ae",
+"size": 29514
+},
+"headless/headless_extensions.py": {
+"sha256": "d2897b038393ae976e8b4bb7ed4fcc1229d73fafb147a639569943d8552ead52",
+"size": 17420
 },
 "headless/headless_firmware_dl.py": {
 "sha256": "661ef67e4713e8fab515e64d723a4b9bb4c4ad0bc7b45005692511624e05b41c",
@@ -1179,20 +1223,20 @@
 "size": 18648
 },
 "headless/headless_graph.py": {
-"sha256": "84fe0a79c47ca92f6ac85d399e6512ee5b4d34c972e8202356b761bf301b4da0",
-"size": 12243
+"sha256": "c5856b60149168d6f2686e085c251cfb2b446c9899472d4b706d096db95b8fb0",
+"size": 14916
 },
 "headless/headless_graph_layout.py": {
-"sha256": "f1e7906c0a93d4670e80916f2813b36ed169aa47247b408949f5a2755ded1d86",
-"size": 20493
+"sha256": "12921ac39ee93dcaba9b5f33db457d2c394a4b90ee15b292def23163c5433336",
+"size": 20867
 },
 "headless/headless_graph_ops.py": {
 "sha256": "b84f35f30bbb0e260101414fbb2f5d908c42e53bc899ac3d34434e8157ac3436",
 "size": 21230
 },
 "headless/headless_gridmodel.py": {
-"sha256": "0c809bec97e50b50050613e84356c1828681fdcccd98774897dc8ab8d071d6ec",
-"size": 11714
+"sha256": "31804234168c8fbc5202b44f67fce103b1f27a817e999fc932790046e0cb7878",
+"size": 12076
 },
 "headless/headless_hex_upload.py": {
 "sha256": "7307fb137a4247c036c86b405dc194e6b89ae300801e1bf13ff10fbf521797c3",
@@ -1211,8 +1255,8 @@
 "size": 8653
 },
 "headless/headless_pattgen.py": {
-"sha256": "34f65ce778f6ad392dfa605bee217d89358a0140924dc2a98b209c6bbddedd55",
-"size": 70799
+"sha256": "e964882e858f0fa120451f0ce7efe28391eb00fbae02367a5caa073a3683c845",
+"size": 70913
 },
 "headless/headless_pico.py": {
 "sha256": "7732830ba6f7a289e066242cd51c840f9317e1d98d23d4990227113fca000b63",
@@ -7434,10 +7478,6 @@
 "sha256": "19be03016f0db090f1690465c6f3a1786401ab4962620d6bd6a0db83c6deb68a",
 "size": 24278
 },
-"images/BW_Gleisplan - Kopie.jpg": {
-"sha256": "ba29ab0ce91c641cac6349ef2183cf64ead4cdc29a5895b3746aac9e75ee4bab",
-"size": 415243
-},
 "images/BW_Gleisplan.jpg": {
 "sha256": "ba29ab0ce91c641cac6349ef2183cf64ead4cdc29a5895b3746aac9e75ee4bab",
 "size": 415243
@@ -7555,8 +7595,8 @@
 "size": 80971
 },
 "images/ESP32_image.png": {
-"sha256": "0952d46a942d128faccd4e5cb898abcd2145b14bcd85c635a8067e0aca6a90cf",
-"size": 52638
+"sha256": "5e9985e04e8cafd135de2b141dd0beb855c63bd0a46c79953c5f958d0da7bf88",
+"size": 784410
 },
 "images/LED_Image.jpg": {
 "sha256": "86120a104b1109a5dad305a8ea7a0c4fee58b1d0ac3e373fc7b53c6d85b9cff0",
@@ -7587,8 +7627,8 @@
 "size": 127957
 },
 "images/PICO_image.png": {
-"sha256": "c1b0b482f89a4c519042107063c2de695f33c3c45136af5b4d26160db78302d3",
-"size": 90978
+"sha256": "0ed6104bfc194b01c6cd78c398eb0ef646aa11e0d6d7278bc8372246a393c090",
+"size": 133522
 },
 "images/Tiny_Image.jpg": {
 "sha256": "36e202c6bb8672979db577e10f1f3426a755cae5964a74b0fb642ebf84c476ae",
@@ -7599,56 +7639,60 @@
 "size": 56140
 },
 "images_btn/Btn_Color_Row.png": {
-"sha256": "7d09243062420442203585effcee894c84286b220123e1a1f7e2650a6e64eb82",
-"size": 4783
+"sha256": "45a39e240eabafad9dbb3d0bfdf82cc72688b2bc7264bfb07e53af500be3142b",
+"size": 10553
 },
 "images_btn/Btn_Copy_Row.png": {
-"sha256": "212e853cdb1ba7f36d36dd666765abf3e7cf847a5417df909872c15b5b38052c",
-"size": 4484
+"sha256": "e0cf6041ee579e46a8858c95c052fecd311d3e2e45f86527319c30e44768d029",
+"size": 10059
 },
 "images_btn/Btn_Delete_Row.png": {
 "sha256": "ae10e85949052bd15196dafc37707453fba877e3781a72292c7a311402c3bb30",
 "size": 5440
 },
 "images_btn/Btn_Delete_Table.png": {
-"sha256": "75db696b94b2a90b942efbcad10742b8625960799130fbf63a5f20493bfd2344",
-"size": 4729
+"sha256": "ece9c2b5549d0bd22137a029fdae022fb50fe79385e8c3f7b2362a5ed86860b3",
+"size": 10499
 },
 "images_btn/Btn_Dialog.png": {
-"sha256": "3a3380ffc39321ba68f446ecd9ad0db9215e898ee923f0e4a6d3fac9147a47b9",
-"size": 7896
+"sha256": "c257901d0e3a253633fc35335772541e7897b1f64070924a4c16b18e6733a47b",
+"size": 13666
 },
 "images_btn/Btn_Help.png": {
-"sha256": "d5bd3bdf8657dbbb3a392e9c1363bfd3560abd0b1df2d4a0b510fb8e36aae30d",
-"size": 17167
+"sha256": "6b10862866aa785fff151b4d8c08e8b89c5e457b87fe1436cc7c93d64713b11b",
+"size": 22962
 },
 "images_btn/Btn_Hide_Unhide.png": {
-"sha256": "1b0ec23356ca5b8105239d7c80aa42cf3a323609ecef7c82c46ead9df0c6c4c9",
-"size": 5065
+"sha256": "9bedc826b761e2c60733fe2e6c266398b4d8239828bc60326e4b33c16f27be7f",
+"size": 10835
 },
 "images_btn/Btn_Insert_Row.png": {
-"sha256": "0ed104035ee6d7c287c52aa3d2f530a164a1ebc94f0b651e6ca0339e2ac6c37e",
-"size": 4611
+"sha256": "51244723bc1f713e875d1d49a36b1b177b51a68554dd20c8497f04b65881de60",
+"size": 10392
 },
 "images_btn/Btn_Move_Row.png": {
-"sha256": "212e853cdb1ba7f36d36dd666765abf3e7cf847a5417df909872c15b5b38052c",
-"size": 4484
+"sha256": "88e1ae9a0400d15915fa75ae8e99cfe716f6ff10902dbd4b9afa76c739d9491f",
+"size": 10257
 },
 "images_btn/Btn_New_Table.png": {
-"sha256": "b51711e3f43651f1ab84288385839e6ad204588eab6850d0f907f9c0bc5a7a26",
-"size": 4604
+"sha256": "ca13fa5e90197585fe1ac64cda3e705968e0a2de29da1eb94df7209ad2a20d1b",
+"size": 10294
 },
 "images_btn/Btn_Options.png": {
-"sha256": "c9ef77ccd513b8e4ca17471be369a9b2156eac48ad5879dcde99dfa58b5a83df",
-"size": 12737
+"sha256": "76c463453b67584643d8ba5864755ffd5a0531c77504e289284b7160c5499810",
+"size": 18994
 },
 "images_btn/Btn_Send_to_ARDUINO.png": {
-"sha256": "bf6bb702dbc36b537a4be269ba7c0fecb2eca8f624089be5c22262d0e0ab7608",
-"size": 7807
+"sha256": "c16448d4ae14be82fe8d649da71de6829a20ab17809ba7c06bb3db664bec3764",
+"size": 14756
+},
+"images_btn/Btn_Simulate.png": {
+"sha256": "eeef0162564c92fb7a6e14dfeed1419965673f2a9c468cc3ce48c5fb7a7cd009",
+"size": 12875
 },
 "images_btn/Btn_Unhide_all.png": {
-"sha256": "7bf51f420d63b35dd0d6f43cd138060f410a04f0bf2a0353b7a9ae9dd0cae1a3",
-"size": 4767
+"sha256": "9166414c90039299b361d98b51819bb2456a8724aac6cfbd20893b7812b20f51",
+"size": 10537
 },
 "images_btn/View_both.png": {
 "sha256": "426dd2521e68c493075bf38adca5ba70768fe4c029d05a832ee72e05ee92faaa",
@@ -7663,8 +7707,8 @@
 "size": 2829
 },
 "install/ANLEITUNG_Installation.md": {
-"sha256": "8ca6ba4938f4e9dbd64e08694f9e7aef13e64e6db948aba331040cff987b699b",
-"size": 198629
+"sha256": "a6501d6da1f89b5b6f7e642577d3de027c06dadb8d62ed0c98f6fc63b46d7d18",
+"size": 223740
 },
 "install/ANLEITUNG_Linux_Desktop.pdf": {
 "sha256": "ed3bf81790dab00eb36917e8a5bbc212fbf1d70682682223210bec33bb12efec",
@@ -7679,12 +7723,12 @@
 "size": 86520
 },
 "install/BETATEST_Checkliste.md": {
-"sha256": "a7732a458ec9ddcbebf059d277c08f1873f1279d6c51bdceed471674bf95a641",
-"size": 116820
+"sha256": "b4b5e0ccfc3777361b2fc8dbdffc56cda09cfc753e062cb6d70a155e6fbd3f8b",
+"size": 140691
 },
 "install/UEBERSETZEN.md": {
-"sha256": "89d33068ec1ee883a4ebf692a6e407620aae00c538ee06b1a335bc2abbf6e1ba",
-"size": 4637
+"sha256": "56ea5f46bfb3ad7c48881fcfd5d4c39c95d9a35c4017a4121c160dce112bb45e",
+"size": 4666
 },
 "install/align_icon_names.py": {
 "sha256": "1ced0621a022bc9ace81e50a716cc9fff10c5f632de93e719bed21db3b508a95",
@@ -7699,8 +7743,8 @@
 "size": 4881
 },
 "install/favicon.png": {
-"sha256": "abc671dde2aeb82cb58e4ab60659e899227696a74b1c966016511cce79d210b8",
-"size": 13848
+"sha256": "633992f2e225ac237feddfed6c821e528ec64fec8a65ccdabf24ea7efc812179",
+"size": 13833
 },
 "install/find_mobaledlib.py": {
 "sha256": "1f5dbdadcc5bfa417d1d47bc8abc17360b5db8315d0c4d382e39694ba2fee5e9",
@@ -7711,8 +7755,8 @@
 "size": 2054
 },
 "install/install_linux.sh": {
-"sha256": "9e7a65a73dd101fee23f943dbd1fdec916ac7ecfdfadbe34998326624da3de3b",
-"size": 10970
+"sha256": "e00ffec4dd5dff712d22b487883d7ff80a07162c92300eaae7fd7077cc0d49a2",
+"size": 17157
 },
 "install/install_mac.command": {
 "sha256": "7cf6a52172eff73c491211ebda083afc20e31286765bfccbf036d8d66e0e4445",
@@ -7735,8 +7779,8 @@
 "size": 3343
 },
 "install/make_icons.py": {
-"sha256": "9e7bb54d4c8bffda9b03ddf2f996dcdb53e87e065073dc601419f36520e5f855",
-"size": 5760
+"sha256": "d756cb947e944ec3f2bf759d66933502c54db3064ddf51aa3721b881a0b0a221",
+"size": 7504
 },
 "install/make_legacy_names.py": {
 "sha256": "8aa9974669f52598634e72ef9b231ffa13f72a9bec38705c7e0e8d48dafeefb7",
@@ -7751,24 +7795,32 @@
 "size": 378
 },
 "install/mobaledlib.icns": {
-"sha256": "3a0923694a0dcd74b89043173167b22b19db43a93c1f91c98775b761503fddd4",
-"size": 776495
+"sha256": "d6bb7c310f9dcaf5fb9e8526b5b7fdf51387602d8b39406cac17fe88e427b31b",
+"size": 483045
 },
 "install/mobaledlib.ico": {
-"sha256": "715697fe605db07121769b1450be308f15247b7858db90a5da298728325696d9",
-"size": 100934
+"sha256": "fa165f8bd0f878df9a8c105c7644342a16029341de04aa98654b7e2f0d0ab723",
+"size": 95024
 },
 "install/mobaledlib.png": {
-"sha256": "8f03f4eb7881f112d4a88d9c5fa19a9ec07195f7cac1bd576a822df018c33251",
-"size": 150157
+"sha256": "3162d56c84b5491177f32ee931df2cb2747f336a4cb095eb75015cc05bed7514",
+"size": 70915
+},
+"install/mobaledlib_icon.png": {
+"sha256": "29a415581a65dc7e4cbcbde9c638565fedf2097f1bb884d17cbbdb815390a2ec",
+"size": 72907
+},
+"install/mobaledlib_icon_full.png": {
+"sha256": "98efb71f4e95e880efe27703bbbf7cd6da185f24b62c5b404239256b0220a119",
+"size": 65209
 },
 "install/mobaledlib_plain.png": {
-"sha256": "35b37e49ceaed8bb80b5078d284ac0bce6e28216a34015ac2f4576e6b9be865b",
-"size": 141635
+"sha256": "373e1e7e0f826fa4d07f0edd22a498684f511db4bbd11fdd9ebde824c33593e1",
+"size": 70915
 },
 "install/mobaledlib_source.png": {
-"sha256": "94b7aaf19475c11247deba06b7d22d3147b5cb04e7da1ffcea89ac5a245c9515",
-"size": 12210
+"sha256": "444c5ebe0a2494fa7bff372b589628f2f83b0bdf61bfec3afd39a56a89955975",
+"size": 17980
 },
 "install/repair_linux.sh": {
 "sha256": "8b15d2e6d93a4a3e0402140fb95667a03b799cb26107a3d6886459bf7f3662ee",
@@ -7803,12 +7855,12 @@
 "size": 975
 },
 "install_manual/ANLEITUNG_Installation.pdf": {
-"sha256": "f93cdd4e93069d58b6f6cccf6c8ff930aed862487ca3b1933c8022851ebbd212",
-"size": 6475946
+"sha256": "98f2ce18cd59d29bf1d62637188b9e9afd6de8d49807765a7c8183438035470c",
+"size": 481178
 },
 "install_manual/BETATEST_Checkliste.pdf": {
-"sha256": "bf8b477fa1fbc797d836ca32b5aadcde1fddd1f4868d58e3c011915502a5bf7e",
-"size": 3479285
+"sha256": "295f3bb007d5cf2f21f03fc1e2c08aa791bb8ed7d71bffb1cb4cbeae23d9359a",
+"size": 283391
 },
 "lib/05_Gerald_Prog.ico": {
 "sha256": "2d0526f0eb4a092187d0f1dab938251a4ed9ec6887409bab85d13b7ceb683d48",
@@ -8235,8 +8287,8 @@
 "size": 11115
 },
 "mlpyproggen/Prog_Generator.py": {
-"sha256": "a8d260d92f18424efa295d632d31a7266804f49ed1a76bfb594a7627a595408b",
-"size": 95155
+"sha256": "21d9cce4bfb85048c2172ebfba3a6d5b812ccbc58d79fe6914be2eedff44052e",
+"size": 96317
 },
 "mlpyproggen/SerialMonitorPage.py": {
 "sha256": "4ecef7e40cfd025318571d005ad328bdd988d8ff979725689b759d660a0b6995",
@@ -8755,16 +8807,16 @@
 "size": 2619
 },
 "proggen/DieseArbeitsmappe.py": {
-"sha256": "f21fe3439f84435b7c03dbdc066be88dabb198c5e797aae2d131f6b5314fd622",
-"size": 8152
+"sha256": "d8317206cccefbc283b305c787f86fe8f7407f0e87a9b8e0ff49692301f7dbab",
+"size": 8394
 },
 "proggen/DieseArbeitsmappe1.py": {
 "sha256": "ba8224a1c3320d4c3c52f2bf61d7a0a4526377c57fe08e151579e43fb7db57ce",
 "size": 2083
 },
 "proggen/F00_mainbuttons.py": {
-"sha256": "82ec7652ec7c1c0134ec88fe6a7b15468cd1d2e4d92513222a3f6e02e308c4c0",
-"size": 17011
+"sha256": "9f248da3f1532a98424746e6e1ffa6c74a97255c4417dda3ef0fdc0e0242b643",
+"size": 16690
 },
 "proggen/Import_Hide_Unhide.py": {
 "sha256": "c5ca44b8f5e0727aae777e12b9d258e1f107a87b3ce5cb51f4dbdc6fc0e11979",
@@ -8799,20 +8851,20 @@
 "size": 10890
 },
 "proggen/M03_Dialog.py": {
-"sha256": "bd969aee98bd038df18ce027744c8e4ecae67ca1e5d856d4b5bc4f4bd899601d",
-"size": 16291
+"sha256": "bc48bdf0bccd2108a4e09d2e81142df6db4ca2e2c529e22e6b869e64f2e4ebb0",
+"size": 16910
 },
 "proggen/M06_Write_Header.py": {
-"sha256": "6a87be91241c49766c7979966c6ee0960872cd8ef2f9ee132265795ffd40c679",
-"size": 96813
+"sha256": "74b4b1429d08fb18fae92a66915e9537df545fa9c514b225ae0cb2f77cf31d42",
+"size": 97582
 },
 "proggen/M06_Write_Header_LED2Var.py": {
 "sha256": "3bd60c21b7ec3ef8ccef62fdc1bbac9a14604d514561df15e08f85e32e17f62f",
 "size": 9940
 },
 "proggen/M06_Write_Header_SW.py": {
-"sha256": "f4cbe74cc893b60179a3c61b3274a956a0a4a7285519065f920b5d7dda683d67",
-"size": 102991
+"sha256": "274d07178e966ded1af073b1beb823db1191890434cbcf90cddede1274fa4caf",
+"size": 105094
 },
 "proggen/M06_Write_Header_Sound.py": {
 "sha256": "89bd5046d9725d3b9cf36226fcad44fd211e3bf12a370b04e582482a551c5ce5",
@@ -8827,16 +8879,16 @@
 "size": 67860
 },
 "proggen/M07_COM_Port.py": {
-"sha256": "9f29201b23456433968f4f72fbaadf9de47b1fad4057ccdb0062e5bb33752520",
-"size": 79489
+"sha256": "bd15ebbcec5e22cbf86ef224130327afec1e01153585b2721b76f83208b92767",
+"size": 79766
 },
 "proggen/M07_COM_Port_New.py": {
 "sha256": "6063a6b33c7a3425582a6cf6c01f890a6d247fa8670ea92f91c166b9652bc430",
 "size": 25772
 },
 "proggen/M08_ARDUINO.py": {
-"sha256": "2b8724df8f43db56905bd5dd658d85a9d80086796f2ca1cecd576dbde0fb129a",
-"size": 188914
+"sha256": "80d539d21df743d6d7dd00834d9a854d1b9235e4d5c73ee98121407fe8777db3",
+"size": 191398
 },
 "proggen/M08_Fast_ARDUINO.py": {
 "sha256": "e2feb5fda33f949f406f1a6b6cebb389b67ea61ccbfb54114e05b365333fa4e3",
@@ -8879,16 +8931,16 @@
 "size": 12589
 },
 "proggen/M18_Save_Load.py": {
-"sha256": "30a909c73fed3a6dadd8f1bdea2f51ddb56dd9c158c9cf15ad70df8f2c9e165b",
-"size": 37121
+"sha256": "db1ca74d0c88e8431b5bfb1430a8fe57bb520df4e1b9529397a7a76842501421",
+"size": 36672
 },
 "proggen/M18a_Load_PicoConfig.py": {
 "sha256": "d5b22e91bc1dd33eeceec06a072ef6acadaf7870718cab58ce42550646302c40",
 "size": 26276
 },
 "proggen/M20_PageEvents_a_Functions.py": {
-"sha256": "c7cc8cef52b982cfef65f5694206ef445673ac7670c65f46275a958cab088aa3",
-"size": 70706
+"sha256": "fb8a650d29e0ad3792e5be18374a8d640e696c4b26556bdf2179e077866f5a8e",
+"size": 70949
 },
 "proggen/M22_Hide_UnHide.py": {
 "sha256": "ed00d957f7ad995a43d46a61840a29287ef65f774c0e7be7f095955c349fa1fb",
@@ -8911,8 +8963,8 @@
 "size": 12434
 },
 "proggen/M28_Diverse.py": {
-"sha256": "4ce9b01ca62c44c4528091ff0fcb4973aa5a1d9a2821022e64ecab6029b6eebe",
-"size": 15337
+"sha256": "fd26ccaeb12cbda06128baf75e10bfdb824d1db1231a2432470628c69272b067",
+"size": 18826
 },
 "proggen/M30_Tools.py": {
 "sha256": "2c635a85cf92ce4ebdc9c4b0b5dd4a1d84602a379d7a81a7e70ea29aa8d15c9d",
@@ -8923,8 +8975,8 @@
 "size": 6673
 },
 "proggen/M32_DCC.py": {
-"sha256": "89061cf5eced17b4f70ee152712654cc3c270c02f396d1b6fe3bf2181ee0cf8d",
-"size": 10046
+"sha256": "1cd72dda0001ca0901ad051603303cc7e4c4f86bd817748f8fc3f58d459c4c65",
+"size": 11450
 },
 "proggen/M33_WebApi.py": {
 "sha256": "6efaedfbb00c7e9c8ffd6e0167f58d69ea45d7c65e020d8ba4c1d8756f396cb3",
@@ -8935,12 +8987,12 @@
 "size": 87492
 },
 "proggen/M38_Extensions.py": {
-"sha256": "9628d57c2943e1597be4da6677f9dde90b659a3aba610da7f5c77a1b7e543dcb",
-"size": 30045
+"sha256": "41f09a916eb03d8b0e88eeef48c87dbd011a079841f99c6e35599f4cc28d1880",
+"size": 32439
 },
 "proggen/M39_Simulator.py": {
-"sha256": "4e0c978149c474a9373ab7ad4d3431616a0c6032e1cf794693a5ba3b6df72a49",
-"size": 27175
+"sha256": "9533615f77c1310af1d3c36dd9d55e8ebdddef6fffba5c68546f621d9dc2894a",
+"size": 43947
 },
 "proggen/M40_ShellandWait.py": {
 "sha256": "f1d2786718d1efccecec1e1b22388aaf7cab7b1a9782c5bf57583adde08dea2c",
@@ -9067,8 +9119,8 @@
 "size": 2705
 },
 "proggen/UserForm_Options.py": {
-"sha256": "8e94d33e1dc5d4297278ae2c0eaa5f4e8b0a5f850e7873fca6ab73af643d542c",
-"size": 39874
+"sha256": "89a61c7bb69f467df35b554f6999265f90dcda207527b64cecba6b0626725ead",
+"size": 40393
 },
 "proggen/Userform_Animation.py": {
 "sha256": "e334c4c6cb8a193be73a3081e09be5be78e4f66c23dce6b7c937c7b8dd14596a",
@@ -9111,8 +9163,8 @@
 "size": 38111
 },
 "proggen/Userform_Other.py": {
-"sha256": "da965421394e7717f95459f9d13ae2b321c8d5f4b99dc65f6b90b846ea3d4294",
-"size": 68272
+"sha256": "30907c3571c35ed564362c01e4a68ce74bb41a4f7fd46c0bf44e67ef42c0889f",
+"size": 67764
 },
 "proggen/Userform_RowFormat.py": {
 "sha256": "da59f6242a5b603d506e3c20b7132ce210f7119ff70bacaa38e5b27e87614cb5",
@@ -9187,12 +9239,12 @@
 "size": 8181
 },
 "release_tools.py": {
-"sha256": "9dcd95cba38117084f03a5553fefafa4be3cccfe5c6d8ddbbaff496ebcecae02",
-"size": 30395
+"sha256": "52b872a65373c0043b69c85c396543642192166660bbd0e07dcff66d7b90086a",
+"size": 31371
 },
 "repair.py": {
-"sha256": "7e28b9b0be0c248f15f97bbf53c0e1f8ad234ee21f1a8658b3dde3b105742d23",
-"size": 22569
+"sha256": "05f24826b0f5b63c68c627d3d365ceae1a3c52c5b74aaec2770a7e01af1348c2",
+"size": 22830
 },
 "scrolledFrame/HorizontalScrolledFrame.py": {
 "sha256": "1425333671c7ae4dc1b8d362c6ddbdbc61665d348ff7856369f266942f269e7b",
@@ -9209,6 +9261,42 @@
 "scrolledFrame/VerticalScrolledFrame.py": {
 "sha256": "8c89f4de96b7b2d8333cb1876c8a8c43ba40579fe8fefc58b572797e0de2a325",
 "size": 6965
+},
+"simulator_linux/Arduino-stub/Arduino.cpp": {
+"sha256": "884e948fe249af3a7ad445a47bdf2467e89f0e49fa2eac5293e598d0619c208b",
+"size": 714
+},
+"simulator_linux/Arduino-stub/Arduino.h": {
+"sha256": "6030f46e877544f01124bc4ca788b32c956d7b0066c0d4044c19292d8042b17d",
+"size": 904
+},
+"simulator_linux/Arduino-stub/FASTLed.h": {
+"sha256": "f1c6ded0e92d7b305f5435b6738a6a007542ef734a1b0c97567632315471607f",
+"size": 25
+},
+"simulator_linux/Arduino-stub/FastLEDStub.cpp": {
+"sha256": "ded3f1d44de9a84c943f6ad43d32f30d15134dccf0e2962903bde777d94349ec",
+"size": 14218
+},
+"simulator_linux/Arduino-stub/FastLEDStub.h": {
+"sha256": "c5760c604d7dd81802a2ad242b4d64f3785e081d5150bc33f846856a5049d1c5",
+"size": 7713
+},
+"simulator_linux/Arduino-stub/WString.h": {
+"sha256": "85366562b5bad283a695456e674eb381bacdc3bfcfbc463b5bef6bb2a8364df0",
+"size": 8494
+},
+"simulator_linux/LIESMICH.txt": {
+"sha256": "6cc66ab11bdaba55a54920bfbe5e72e84a40d87811ae4242099b377a001c663d",
+"size": 1036
+},
+"simulator_linux/build_simulator_linux.sh": {
+"sha256": "f7e116395fb8f2da59cdc0767f4bf5f6614546e139fed5c8ce08f192c4f46a9d",
+"size": 2297
+},
+"simulator_linux/wrapper_linux.cpp": {
+"sha256": "8f71f85a1d1a326874b9554bd4fac2a3cf93c4b4212075102e1a0f1ff8d4e94d",
+"size": 5221
 },
 "test_headless_contract.py": {
 "sha256": "5f69d9c2766130c07864d57b5e785b0158025826fa5b85221bc192bb99a57832",
@@ -9419,8 +9507,8 @@
 "size": 4184
 },
 "vb2py/vbclasses.py": {
-"sha256": "0ee45211199c4032973fb5902f4dd69032e475701b4c335e949a661acd5c180c",
-"size": 21163
+"sha256": "c472c4559653d7cafd9e32a0787d6bb11295e3f5c16af61fd5d5d64db22bc28d",
+"size": 21034
 },
 "vb2py/vbconstants.py": {
 "sha256": "946ca48a4c9b2e34f349709c9144889bfe43cadfa53926633c7ce7a581c7233e",
@@ -9447,16 +9535,16 @@
 "size": 33
 },
 "version2.py": {
-"sha256": "9c3063ffcd356cd3051c2ded1565c1218bbf800ad4eff27653bd564a60a402ed",
-"size": 34
+"sha256": "7ddb923b15ddb58986d1d7b00ea7a0860624cd07d64c80e614b8ab0788c17ece",
+"size": 33
 },
 "webmobaledlib.py": {
-"sha256": "07ac5b4c80a2360966c128d2099cee7cb620e7deb4ada8bedb5ef7f4c7c9d545",
-"size": 517251
+"sha256": "661a51f54f92856d4c6dab9d4e2e3189dc6ad002f45c4cf9881140451e7ea3a6",
+"size": 616811
 }
 },
 "format": 1,
 "program": "webMobaLedLib",
 "type": "full",
-"version": "3.42 (2026-11-14)"
+"version": "4.22 (2026-11-19)"
 }

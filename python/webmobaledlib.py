@@ -1,8 +1,8 @@
-# Datei-Version: 4.22 (2026-11-19) - webmobaledlib.py
+# Datei-Version: 4.23 (2026-11-19) - webmobaledlib.py
 # ----------------------------------------------------------------------------------------------
 # Name:           webmobaledlib.py
 # Path:           webmobaledlib.py
-# Version:        4.22
+# Version:        4.23
 # Last Update:    2026-11-19
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
@@ -286,6 +286,7 @@
 #   4.20  2026-11-19  Kopfbereich (Issue 22): Reiterhoehe 36 px griff nicht (Screenshot: Reiter noch ca. 50 px hoch); jetzt mit !important und auch fuer .q-tab__content, Menuetasten ebenfalls !important
 #   4.21  2026-11-19  Erweiterungen: platformio.ini zeigt auf den Ordner der Erweiterung statt auf MobaLedLib.properties, mit symlink:// (M38_Extensions 1.07; Issue 6, Juergen)
 #   4.22  2026-11-19  Erweiterungen: Name und Beschreibung aus libraries.json anzeigen (headless_extensions 1.03, web_form_options 1.38; Issue 6, Juergen)
+#   4.23  2026-11-19  ESP32/Pico: Konfiguration getrennt von der Firmware, Programm nur bei Aenderungen hochladen (Einstellung serial_cfg; headless_dyn_config 1.00, M42_Dyn_Config 1.01, M06_Write_Header 1.11, M06_Write_Header_LED2Var 1.02, M08_ARDUINO 1.26, web_form_options 1.39, LEDs_AutoProg/MLLDynConfig.h)
 #   4.16  2026-11-19  Kopfbereich: weniger Platz zwischen Titel, Menue und Reitern (CSS, leere Zwischenspeicher-Zeile ausgeblendet; Issue 22)
 #   4.15  2026-11-19  Inkrementelles Speichern (Issue 21): Strg+Umschalt+S und Menue Datei: Workbook als <Name>_0001.json ... sichern, Sicherungsdatei oeffnen (Liste), Sicherungsort aendern
 #   4.14  2026-11-19  Verbinden beim Starten (Issue 20): letzte Verbindung wiederherstellen oder genau eine Lichtmaschine (Nano, ESP32, Pico) suchen, im Hintergrund; nach Setup uebertragen mit der hochgeladenen Lichtmaschine verbinden (WLAN ueber WLAN); Pfeilmenue am Knopf (trennen, neu verbinden, Board wechseln) und im Menue Lichtmaschine; Einstellung AutoConnect (web_tabs 1.24, web_params 1.11, web_serial 1.12, M08 1.24)
@@ -1330,7 +1331,8 @@ def font_scales(ctrl) -> dict:
 # VERSION = "3.60 (2026-11-16)"  # v3.60 (entfallen)
 # VERSION = "3.61 (2026-11-16)"  # v3.61 (entfallen)
 # VERSION = "3.62 (2026-11-16)"  # v3.62 (entfallen)
-VERSION = "4.22 (2026-11-19)"  # v3.64  # v4.22
+VERSION = "4.23 (2026-11-19)"  # v3.64  # v4.23
+# VERSION = "4.22 (2026-11-19)"  # v3.64  # v4.22 (entfallen)
 # VERSION = "4.09 (2026-11-19)"  # v3.64 (entfallen)
 # VERSION = "4.08 (2026-11-19)"  # v3.64 (entfallen)
 # VERSION = "4.07 (2026-11-19)"  # v3.64 (entfallen)
