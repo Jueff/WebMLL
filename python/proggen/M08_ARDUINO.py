@@ -1,8 +1,8 @@
-# Datei-Version: 1.24 (2026-11-19) - M08_ARDUINO.py
+# Datei-Version: 1.26 (2026-11-19) - M08_ARDUINO.py
 # ----------------------------------------------------------------------------------------------
 # Name:           M08_ARDUINO.py
 # Path:           proggen/M08_ARDUINO.py
-# Version:        1.24
+# Version:        1.26
 # Last Update:    2026-11-19
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
@@ -32,6 +32,8 @@
 #   1.22  2026-11-18  ESP32-Setup-Upload mit USB- und WLAN-Auswahl (Beitrag von moosbewohner, Pull Request 11)
 #   1.23  2026-11-19  Nano-Untertyp nach der Bootloader-Pruefung: Firmware-Version und Signatur aus M07.Get_Last_Detect_Info (Issue 14)
 #   1.24  2026-11-19  Last_Upload: merkt, ob das Hochladen der Lichtmaschine geklappt hat und ob per WLAN (Verbinden nach dem Hochladen, Issue 20)
+#   1.25  2026-11-19  ESP32/Pico: Konfiguration getrennt von der Firmware (M42_Dyn_Config): nur die Konfiguration uebertragen, wenn die Firmware im Geraet passt; nach einem vollstaendigen Hochladen die Konfiguration nachschicken; LittleFS-Groesse fuer den Pico
+#   1.26  2026-11-19  Schneller Weg (M42): Beim Rueckfall auf das ganze Programm bleibt die Begruendung im Ausgabefenster stehen (Fenster wird nicht geleert)
 # ----------------------------------------------------------------------------------------------
 # -*- coding: utf-8 -*-
 #
@@ -119,6 +121,7 @@ import proggen.M37_Inst_Libraries as M37
 import proggen.M38_Extensions as M38
 import proggen.M39_Simulator as M39
 import proggen.M40_ShellandWait as M40
+import proggen.M42_Dyn_Config as M42  # v1.25
 #import proggen.M60_CheckColors as M60
 #import proggen.M70_Exp_Libraries as M70
 #import proggen.M80_Create_Multiplexer as M80
@@ -803,6 +806,9 @@ def __Create_PIO_Build(fp, Environment, ResultName, ComPort, SrcDir, track_proje
     VBFiles.writeText(fp2, "Board = pico", '\n')
     VBFiles.writeText(fp2, "framework = arduino", '\n')
     VBFiles.writeText(fp2, "board_build.core = earlephilhower", '\n')
+    if M42.Active():  # v1.25: Platz im Flash fuer die Konfigurationsdatei (LittleFS)
+        VBFiles.writeText(fp2, "board_build.filesystem = littlefs", '\n')  # v1.25
+        VBFiles.writeText(fp2, "board_build.filesystem_size = 0.5m", '\n')  # v1.25
     VBFiles.writeText(fp2, "build_src_filter = ${env.src_filter} -<pyProg_Generator_MobaLedLib/>", '\n') # 
     # if M38.ExtensionsActiveCount() > 0:                                                    # Extensions auch fuer den Pico (wie Nano und ESP32); ohne Extension bleibt die Umgebung unveraendert  # v1.08  # v1.16 (entfallen: der Pico erbt lib_deps mit den Erweiterungen aus [env])
     # VBFiles.writeText(fp2, "lib_deps = ${env.lib_deps}", '\n')  # v1.08  # v1.16 (entfallen: der Pico erbt lib_deps mit den Erweiterungen aus [env])
@@ -2437,9 +2443,13 @@ def Compile_and_Upload_Prog_to_Arduino(InoName, ComPortColumn, BuildOptColumn, S
     #*HL Failed = Not UpdateSimulatorIfNeeded(False, Get_Num_Config_Var_Range("SimAutostart", 0, 3, 0) = 2 Or Get_Num_Config_Var_Range("SimAutostart", 0, 3, 0) = 3)
     
     # Failed = not M39.UpdateSimulatorIfNeeded(False, (M28.Get_Num_Config_Var_Range("SimAutostart", 0, 3, 0) in (2,3)))  # v1.20 (entfallen)
+    DynDone = False  # v1.25: nur die Konfiguration wurde uebertragen (ESP32/Pico, Option serial_cfg)
+    if HexFile == '' and M42.Upload_Possible(Mode, ComPort):  # v1.25
+        PG.global_controller.disconnect()  # v1.25
+        DynDone = M42.Try_Config_Only(ComPort)  # v1.25
     Failed = not M39.UpdateSimulatorIfNeeded(False, (M39.Get_Sim_Mode() in (2,3)))  # v1.20
-     
-    if not Failed:
+
+    if not Failed and not DynDone:  # v1.25
         # Change to the directory because the Arduino compiler doesn't like special characters like "ä" in the path
         SafeChDriveAndDir(SrcDir)
         # 18.01.24: Jürgen
@@ -2459,9 +2469,9 @@ def Compile_and_Upload_Prog_to_Arduino(InoName, ComPortColumn, BuildOptColumn, S
                 if Title == '' and HexFile != '':                                              # fertige Datei: nichts wird kompiliert, es dauert nur Sekunden  # v1.12
                     Title = M09.Get_Language_Str('Hochladen gestartet. Die fertig übersetzte Datei wird hochgeladen (es wird nichts übersetzt).')  # v1.12
                 if Title != '':  # v1.12
-                    Res = PG.dialog_parent.start_ARDUINO_program_cmd(CommandStr,arduino_type=Mode, title=Title)  # v1.12
+                    Res = PG.dialog_parent.start_ARDUINO_program_cmd(CommandStr,arduino_type=Mode, title=Title, empty_text=not M42.Output_Written())  # v1.26
                 else:  # v1.12
-                    Res = PG.dialog_parent.start_ARDUINO_program_cmd(CommandStr,arduino_type=Mode)  # v1.12
+                    Res = PG.dialog_parent.start_ARDUINO_program_cmd(CommandStr,arduino_type=Mode, empty_text=not M42.Output_Written())  # v1.26
             else:
                 show_intro = True
                 for command in CommandStr:
@@ -2504,7 +2514,12 @@ def Compile_and_Upload_Prog_to_Arduino(InoName, ComPortColumn, BuildOptColumn, S
     else:
         Stop_Compile_Time_Display()
         Debug.Print('Compile and upload duration: ' + P01.Format(P01.Time() - Start, 'hh:mm:ss'))
-        M30.Show_Status_for_a_while(M09.Get_Language_Str('Programm erfolgreich hochgeladen. Kompilieren und Hochladen dauerte ') + P01.Format(P01.Time() - Start, 'hh:mm:ss'), '00:02:00')
+        if DynDone:  # v1.25
+            M30.Show_Status_for_a_while(M09.Get_Language_Str('Nur die Konfiguration wurde übertragen. Das Programm in der Lichtmaschine ist unverändert. Dauer ') + P01.Format(P01.Time() - Start, 'hh:mm:ss'), '00:02:00')  # v1.25
+        else:  # v1.25
+            if HexFile == '' and M42.Upload_Possible(Mode, ComPort) and not M42.After_Full_Flash(ComPort):  # v1.25: die Konfiguration kommt nach dem Programm
+                P01.MsgBox(M09.Get_Language_Str('Das Programm wurde hochgeladen, die Konfiguration konnte aber nicht übertragen werden.\n\nDie Lichtmaschine hat noch keine Konfiguration. Bitte noch einmal hochladen (Einzelheiten im Protokoll).'), vbInformation, M09.Get_Language_Str('Konfiguration nicht übertragen'))  # v1.25
+            M30.Show_Status_for_a_while(M09.Get_Language_Str('Programm erfolgreich hochgeladen. Kompilieren und Hochladen dauerte ') + P01.Format(P01.Time() - Start, 'hh:mm:ss'), '00:02:00')
         PG.global_controller.showFramebyName("ProgGeneratorPage")
         Last_Upload.update(ok=(not CreateFilesOnly), host='')  # v1.24: Hochladen per USB geklappt
         fn_return_value = True                                                         # VBA: Compile_and_Upload_Prog_to_Arduino = True (fehlte in der Umstellung: 'R OK' wurde nie gesetzt)  # v1.10

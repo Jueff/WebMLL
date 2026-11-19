@@ -1,5 +1,5 @@
 # webMobaLedLib – Installation und Betrieb
-*Datei-Version: 4.35 (2026-11-19), gilt für webMobaLedLib 4.35*
+*Datei-Version: 4.36 (2026-11-19), gilt für webMobaLedLib 4.36*
 
 Windows · macOS · Linux-Desktop · Raspberry Pi
 
@@ -432,9 +432,14 @@ Ist unter **Optionen Werkzeuge** ein **ESP32** als LED-Zentrale gewählt, ersche
 - **Rückfrage beim Öffnen (seit 3.98):** Benutzt eine Datei eine **ausgeschaltete** Erweiterung, fragt das Programm, ob es sie einschalten soll (einmal je Erweiterung und Sitzung); ohne sie fehlen die Zeilen in der erzeugten Datei.
 - **Wiki:** eigene Seite `erweiterungen` (siehe Wiki-Paket 3.98).
 
-### 2.9k Neu seit 3.93 (3.94 bis 4.35)
+### 2.9k Neu seit 3.93 (3.94 bis 4.36)
 
 Kurzfassung der Änderungen seit dem letzten Release, neueste Version zuerst (ausführlich in `HOC_Anwender.md`):
+
+**Version 4.36**
+
+*Neue Funktionen:*
+- Schnelles Update für ESP32 und Pico (Beitrag von Jürgen, Issue 31): Mit dem Haken „Schnelles Update“ im Reiter Entwicklungsumgebung wird das Programm nur hochgeladen, wenn es nötig ist; sonst geht nur die Konfiguration in wenigen Sekunden zur Lichtmaschine. Bei jeder Unsicherheit wird komplett hochgeladen. Nano und Uno ändern sich nicht.
 
 **Version 4.35**
 

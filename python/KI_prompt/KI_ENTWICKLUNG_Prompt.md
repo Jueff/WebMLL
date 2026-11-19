@@ -55,6 +55,7 @@ Der **Datenordner** des Anwenders (Tabellen, Einstellungen) liegt **außerhalb**
 7. **Anwender dürfen nie von Hand in wichtigen Dateien editieren müssen** (zum Beispiel `start\_windows.bat`). Einstellungen gehören **in die Oberfläche** (Programm Einstellungen).
 8. **Anleitung und Checkliste** werden bei jeder sichtbaren Änderung mit angepasst (Version im Kopf, Punkt in der Checkliste mit „zu prüfen“-Fragen). Die Checkliste ist für die **Betatester**.
 9. Tonfall in Texten für Anwender: **höflich, einfach**; im **Wiki „du“**, Anfängerniveau.
+10. Behandlung von Umlauten in Dateinamen und Verzeichnisnamen: beachte wie bisher besonders auf der windows plattform mit den Shortnames gearbeitet wird, berücksichtige das Vorhandensein von Leerzeichen/Umlatuen in Dateinamen/Verzeichnisnamen
 
 ## Übersetzungen (sechs Sprachen)
 

@@ -1,11 +1,11 @@
 Datei-Version: 1.27 (2026-11-19) - LIESMICH_Wiki_Gesamt.md
-Gilt für webMobaLedLib 4.35
+Gilt für webMobaLedLib 4.36
 
-# Wiki-Kapitel „webMobaLedLib“: alle Seiten, Stand 4.35
+# Wiki-Kapitel „webMobaLedLib“: alle Seiten, Stand 4.36
 
 Dieses Paket enthält **alle 29 Seiten** in ihrer neuesten Fassung (Seitenstand jeweils um 0,01 erhöht). Es ersetzt die früheren Pakete der sechs Wellen. **Die Seiten erst veröffentlichen, wenn ein Release mit 3.04 (oder neuer) auf GitHub liegt.**
 
-## Neu seit Stand 3.93 (Stand 4.35): 39 Seiten, sieben geändert, eine neu
+## Neu seit Stand 3.93 (Stand 4.36): 39 Seiten, sieben geändert, eine neu
 
 * **`erweiterungen`** (1.01, neu): MobaLedLib Extensions (MLX) ein- und ausschalten, eigene hinzufügen, Name und Beschreibung aus der `libraries.json`.
 * **`pg_speichern`** (1.04): neuer Abschnitt **Einstellungen auf einen anderen PC übernehmen** (Datei → Einstellungen sichern / übernehmen, Issue 29; Tabellen optional, Passwort und USB-Anschluss bleiben am PC). Außerdem: Inkrementell speichern (Datei mit fortlaufender Nummer), Sicherungsdatei öffnen, Sicherungsort ändern; die Tastenkombination (Vorgabe Strg+Umschalt+S) ist in den Programm Einstellungen einstellbar.

@@ -1,5 +1,5 @@
 # webMobaLedLib – Checkliste für Betatester
-*Datei-Version: 3.17 (2026-11-19), gilt für webMobaLedLib 4.35*
+*Datei-Version: 3.18 (2026-11-19), gilt für webMobaLedLib 4.36*
 
 Danke, dass du die Web-Version testest. Ziel: **Installationsprobleme auf verschiedenen Systemen** und **Probleme der Oberfläche bei verschiedenen Arbeitsweisen** früh finden.
 Es genügt, wenn du das testest, was zu deinem System und deiner Arbeitsweise passt. Jede Rückmeldung hilft, auch „alles funktioniert“.
@@ -392,3 +392,4 @@ Rückmeldungen an den Entwickler (Kontakt siehe GitHub-Seite des Projekts: <http
 280. **Bilder bei „Überprüfung des USB Ports“ (4.25, Issue 27):** Nano (Lichtmaschine Classic): animiertes Bild „LichtMaschine Classic“; Pico: Bild „LichtMaschine PICO Zero“; ESP32: Bild der ESP32-Zentrale. Auch unter Linux und auf dem Pi sichtbar?
 281. **Fenster „Übertragen“ (4.25, Issue 28):** Während Build und Upload läuft, ist nur „Vorgang abbrechen“ aktiv und „Schließen“ ausgegraut. Nach dem Ende (auch nach einem Fehler oder Abbruch) ist es umgekehrt.
 282. **Verbinden nach „Board und USB Port erkennen“ (4.26):** Optionen → Reiter Lichtmaschine → Board und USB Port erkennen, dann das Optionsfenster schließen: Verbindet das Programm von selbst, ohne Fehlermeldung im Fenster, in dem das Programm läuft?
+288. **Schnelles Update: nur geänderte Konfiguration übertragen (4.36, Issue 31):** Nur mit **ESP32 oder Pico**, PlatformIO und USB: **Programm Einstellungen → „Schnelles Update: nur geänderte Konfiguration übertragen (ESP32/Pico)“** anhaken. Erster Upload: Das Ausgabefenster meldet, dass das komplette Programm übertragen wird (einmalig). Danach nur die Konfiguration ändern (zum Beispiel eine Farbe oder einen Startwert) und erneut hochladen: Steht im Ausgabefenster, dass **nur die Konfiguration** übertragen wird, mit **Fortschritt** und **Fertigmeldung**, und dauert es deutlich kürzer? Läuft die Beleuchtung danach mit der neuen Konfiguration, auch nach einem Reset? Eine **Erweiterung oder den Quellcode ändern** (oder die Plattform wechseln): Wird automatisch wieder das **komplette Programm** übertragen, mit Hinweis auf den Grund? Ein anderes Programm vom Gerät, das nicht zur Firmware passt: Ebenfalls Komplett-Upload? **Haken weg:** wie bisher immer komplett. **Nano/Uno (ATmega):** unverändert, immer komplett.
