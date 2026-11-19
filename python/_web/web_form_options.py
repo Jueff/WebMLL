@@ -1,8 +1,8 @@
-# Datei-Version: 1.39 (2026-11-19) - web_form_options.py
+# Datei-Version: 1.40 (2026-11-19) - web_form_options.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_form_options.py
 # Path:           _web/web_form_options.py
-# Version:        1.39
+# Version:        1.40
 # Last Update:    2026-11-19
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
@@ -29,6 +29,7 @@
 #   1.37  2026-11-19  Board und USB Port erkennen: Nano neu oder Full mit Firmware-Version und Signatur des Bootloaders (Issue 14)
 #   1.39  2026-11-19  Automatisch verbinden nach Board und USB Port erkennen: der Browserbezug (client) wird mitgegeben, sonst Fehler 'The current slot cannot be determined' (Rueckmeldung Harold, 4.22)
 #   1.38  2026-11-19  Erweiterungen: Name und Beschreibung aus libraries.json der Extension anzeigen, wenn vorhanden (Wunsch Juergen, Issue 6)
+#   1.40  2026-11-19  Board-Erkennung: bei mehreren angeschlossenen Plattformen Nano, ESP32 und Pico den gewünschten Board-Typ auswählen lassen
 # ----------------------------------------------------------------------------------------------
 """Web-Ersatz fuer proggen/UserForm_Options.py (Optionen und spezielle Funktionen).
 
@@ -121,6 +122,42 @@ def tab_buttons(buttons: dict, handlers: list[str], frame_hint: str | None = Non
 
 # ------------------------------------------------------------------ Dialog (Event-Loop)
 _TAB = {"name": None, "keep": False}  # v1.35: zuletzt gewaehlter Reiter; keep: beim naechsten Oeffnen wieder dort beginnen (nach Board erkennen)
+
+
+def _choose_detected_board_type(cands):
+    types = [typ for typ in ("Nano", "ESP32", "Pico") if any(candidate_type == typ for _, candidate_type in cands)]
+    if len(types) <= 1:
+        return types[0] if types else None
+
+    labels = {
+        "Nano": tr("Arduino Nano (Typ wird automatisch erkannt)"),
+        "ESP32": "ESP32",
+        "Pico": tr("Raspberry Pi Pico"),
+    }
+    options = {
+        typ: f"{labels[typ]} ({', '.join(dev for dev, candidate_type in cands if candidate_type == typ)})"
+        for typ in types
+    }
+
+    async def show_dialog():
+        from nicegui import ui
+        with wd._bridge["client"]:
+            with ui.dialog().props("persistent") as dlg, ui.card().classes("min-w-[380px] max-w-[640px]"):
+                ui.label(tr("Mehrere Board-Typen gefunden")).classes("text-h6")
+                ui.label(tr("Bitte wählen Sie den gewünschten Board-Typ aus:"))
+                choice = ui.radio(options, value=None).props("dense")
+                with ui.row().classes("justify-end w-full"):
+                    ui.button(tr("Abbrechen"), on_click=lambda: dlg.submit(None)).props("outline").classes("mll-cancel")
+                    confirm = ui.button("OK", on_click=lambda: dlg.submit(choice.value)).classes("mll-default")
+                    confirm.disable()
+                    choice.on_value_change(lambda event: confirm.enable() if event.value in types else confirm.disable())
+            result = await dlg
+            wd.safe_delete(dlg)
+        return result
+
+    selected = wd.call_in_loop(show_dialog, default=None)
+    return selected if selected in types else None
+
 
 async def _options_async(spec: dict, st: dict):
     from nicegui import ui
@@ -582,7 +619,7 @@ def make_class(Base):
             subtitle = M09.Get_Language_Str("Für andere Hauptplatine")
             auto_text = M09.Get_Language_Str("Automatisch erkennen")
             detect_text = tr("Board und USB Port erkennen")  # v1.25
-            detect_hint = tr("Sucht den angeschlossenen Arduino (Nano alt oder neu, ESP32, Pico) an allen USB Anschlüssen, stellt das erste gefundene Board ein und zeigt es mit dem USB Port an. Dort kann es übernommen oder ein anderer Typ gewählt werden.")  # v1.25
+            detect_hint = tr("Sucht an allen USB-Anschlüssen nach Nano, ESP32 und Pico. Werden mehrere Board-Typen gefunden, können Sie den gewünschten Typ auswählen. Anschließend wird der passende USB-Port angezeigt.")  # v1.40
             tabs = [{"name": tr("Lichtmaschine"), "kind": "arduino", "side": "left", "buttons": left}]
             # pages = {"left": {"radios": self._radios("_L"), "subtitle": subtitle, "auto_text": auto_text}}  # v1.08 (entfallen)
             esp32_value = next((d["value"] for rb, d in self.radiobuttons.items() if rb.startswith("ESP32") and rb.endswith("_L")), None)  # v1.08
@@ -711,9 +748,9 @@ def make_class(Base):
             logger.info("Optionen: Arduino-Typ links/rechts gewechselt (%s): Verbindung getrennt, COM Port zurueckgesetzt", "links" if left else "rechts")  # v1.23
 
         def _web_detect_board(self, left):  # v1.25  # v1.26  # v1.27 (Board und USB Port erkennen)
-            """Knopf 'Board und USB Port erkennen': sucht unter allen seriellen Anschluessen nach einem Arduino. Beim ersten gefundenen Board wird dieses
-            eingestellt und 'USB Port erkennen' aufgerufen; das Formular zeigt das gefundene Board mit Anschluss und wie bisher die anderen gefundenen Boards.
-            ESP32 (CP210x) und Pico nach der Beschreibung des Anschlusses, bei einem Nano ueber den Bootloader: 57600 Baud alt, 115200 Baud neu."""
+            """Knopf 'Board und USB Port erkennen': sucht unter allen seriellen Anschluessen nach Nano, ESP32 und Pico. Bei mehreren Plattformen wird vor
+            der Erkennung der Board-Typ ausgewaehlt; anschliessend wird 'USB Port erkennen' mit dem passenden Anschluss aufgerufen. Ein Nano wird ueber den
+            Bootloader erkannt: 57600 Baud alt, 115200 Baud neu."""
             import re  # v1.26
             import proggen.M07_COM_Port as M07  # v1.25
             import proggen.M08_ARDUINO as M08  # v1.25
@@ -756,6 +793,13 @@ def make_class(Base):
             rest = [c for c in cands if not (other_port and c[0].upper() == other_port.upper())]  # v1.34: den Anschluss der anderen Seite auslassen
             if rest:  # v1.34
                 cands = rest  # v1.34
+            available_types = [typ for typ in ("Nano", "ESP32", "Pico") if any(candidate_type == typ for _, candidate_type in cands)]
+            if len(available_types) > 1:
+                selected_type = _choose_detected_board_type(cands)
+                if selected_type is None:
+                    logger.info("Erkennen: Auswahl des Board-Typs abgebrochen")
+                    return
+                cands = [candidate for candidate in cands if candidate[1] == selected_type]
             own = [c for c in cands if own_port and c[0].upper() == own_port.upper()]  # v1.34: der gespeicherte eigene Anschluss hat Vorrang
             dev, typ = (own or cands)[0]  # v1.34
             if typ == "ESP32":  # v1.26
