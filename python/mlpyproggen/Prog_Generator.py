@@ -1,9 +1,9 @@
-# Datei-Version: 1.09 (2026-11-15) - Prog_Generator.py
+# Datei-Version: 1.10 (2026-11-19) - Prog_Generator.py
 # ----------------------------------------------------------------------------------------------
 # Name:           Prog_Generator.py
 # Path:           mlpyproggen/Prog_Generator.py
-# Version:        1.09
-# Last Update:    2026-11-15
+# Version:        1.10
+# Last Update:    2026-11-19
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
@@ -17,6 +17,7 @@
 #   1.07  2026-11-01  Hinweis bei fehlendem git nennt den Knopf Git installieren fuer alle Betriebssysteme und winget fuer Windows
 #   1.08  2026-11-03  start_ARDUINO_program_cmd: Parameter title ersetzt die Ueberschrift 'Kompilieren und Hochladen gestartet' (fertige Dateien werden nicht kompiliert)
 #   1.09  2026-11-15  Knopfleiste: Umschalttaste beim Klick merken (Simulator: Umschalt + Zum Arduino schicken)
+#   1.10  2026-11-19  Vorgang abbrechen beendet den ganzen Prozessbaum (Shell und arduino-cli/avrdude/pio), der COM-Port wird sofort frei (Issue 15)
 # ----------------------------------------------------------------------------------------------
 # -*- coding: utf-8 -*-
 #
@@ -385,6 +386,38 @@ def build_workbook_dict(default_font, default_smallfont, default_boldfont):
                      "JumpTable" : globalprocs
                      }
     return workbook_dict
+
+
+def _spawn_kwargs():  # v1.10
+    """Popen-Parameter, damit der Prozess samt Kindprozessen abgebrochen werden kann (POSIX: eigene Prozessgruppe)."""  # v1.10
+    return {} if platform.system() == "Windows" else {"start_new_session": True}  # v1.10
+
+
+def _kill_tree(proc):  # v1.10
+    """Beendet den Prozess UND alle seine Kindprozesse. proc.terminate() traf nur die Shell (cmd/bash), arduino-cli bzw. avrdude liefen weiter und hielten den COM-Port bis zum Ende der Timeouts."""  # v1.10
+    if proc is None or proc.poll() is not None:  # v1.10
+        return  # v1.10
+    try:  # v1.10
+        if platform.system() == "Windows":  # v1.10
+            subprocess.run(["taskkill", "/F", "/T", "/PID", str(proc.pid)], capture_output=True, timeout=15,  # v1.10
+                           creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))  # v1.10
+        else:  # v1.10
+            import signal  # v1.10
+            try:  # v1.10
+                os.killpg(os.getpgid(proc.pid), signal.SIGTERM)  # v1.10
+            except ProcessLookupError:  # v1.10
+                return  # v1.10
+            try:  # v1.10
+                proc.wait(timeout=3)  # v1.10
+            except subprocess.TimeoutExpired:  # v1.10
+                os.killpg(os.getpgid(proc.pid), signal.SIGKILL)  # v1.10
+    except Exception:  # noqa: BLE001  # v1.10
+        logging.exception("Prozessbaum nicht beendet")  # v1.10
+        try:  # v1.10
+            proc.kill()  # v1.10
+        except Exception:  # noqa: BLE001  # v1.10
+            pass  # v1.10
+
 
 
 # def _drain_output(process, page, timeout=2.0):  # v1.04 (entfallen)
@@ -1087,8 +1120,9 @@ class Prog_GeneratorPage(tk.Frame):
         self.arduinoMonitorPage.add_text_to_textwindow("\n*****************************************************\n",highlight="Error")
         self.arduinoMonitorPage.add_text_to_textwindow("\n* Program Terminated by User\n",highlight="Error")
         self.arduinoMonitorPage.add_text_to_textwindow("\n*****************************************************\n",highlight="Error")
-        self.process.terminate()
-        self.userbreak = True
+        # self.process.terminate()  # v1.10 (entfallen: beendete nur die Shell, nicht arduino-cli/avrdude)
+        self.userbreak = True  # v1.10 (vor dem Beenden setzen)
+        _kill_tree(getattr(self, "process", None))  # v1.10
     
     def execute_shell_cmd(self,cmd_str,message1,empty_text=True):
         self.userbreak = False
@@ -1125,7 +1159,8 @@ class Prog_GeneratorPage(tk.Frame):
             # rc = self.process.returncode  # v1.03 (entfallen)
             collected = []                                                 # Ausgabezeilen (fuer die Erkennung von UnknownPackageError)  # v1.03
             for attempt in (1, 2):  # v1.03
-                self.process = subprocess.Popen(cmd_str, stdout=subprocess.PIPE,stderr=subprocess.STDOUT,stdin = subprocess.DEVNULL,shell=True)  # v1.03
+                # self.process = subprocess.Popen(cmd_str, stdout=subprocess.PIPE,stderr=subprocess.STDOUT,stdin = subprocess.DEVNULL,shell=True)  # v1.03 (entfallen v1.10)
+                self.process = subprocess.Popen(cmd_str, stdout=subprocess.PIPE,stderr=subprocess.STDOUT,stdin = subprocess.DEVNULL,shell=True, **_spawn_kwargs())  # v1.10
                 self.continue_loop=True  # v1.03
                 collected.clear()  # v1.03
                 # Poll process.stdout to show stdout live
@@ -1192,7 +1227,7 @@ class Prog_GeneratorPage(tk.Frame):
     def start_ARDUINO_program_Popen(self):
         self.Update_Compile_Time(Start=True)
         try:
-            self.process = subprocess.Popen(self.startfile, stdout=subprocess.PIPE,stderr=subprocess.STDOUT,stdin = subprocess.DEVNULL,shell=True)
+            self.process = subprocess.Popen(self.startfile, stdout=subprocess.PIPE,stderr=subprocess.STDOUT,stdin = subprocess.DEVNULL,shell=True, **_spawn_kwargs())  # v1.10
             self.continue_loop=True
             self.write_stdout_to_text_window()
         except BaseException as e:

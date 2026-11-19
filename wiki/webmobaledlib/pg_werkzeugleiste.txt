@@ -1,5 +1,5 @@
 ====== webMobaLedLib – Die Werkzeugleiste ======
-//Seitenstand 1.10 (2026-11-17), gilt für webMobaLedLib 3.85//
+//Seitenstand 1.11 (2026-11-18), gilt für webMobaLedLib 3.98//
 
 Über der Tabelle des [[anleitungen:webmobaledlib:programmgenerator|Programmgenerators]] liegt die **Werkzeugleiste**. Jeder Knopf hat ein Symbol und einen Titel in zwei Zeilen. Wenn du mit der Maus auf einem Knopf stehen bleibst, erscheint ein kurzer Hilfetext. Solange ein Befehl läuft, bleibt der Knopf **eingedrückt**.
 
@@ -37,6 +37,7 @@ Du öffnest es mit dem Knopf **Optionen Werkzeuge**. Oben stehen die **Reiter**,
 ^ Reiter ^ Wofür ^
 | **Lichtmaschine** | **Board** deiner Lichtmaschine wählen und den **USB-Anschluss** erkennen lassen. Der Knopf **Board und USB Port erkennen** (seit 3.82, oben im Reiter) sucht selbst an allen USB-Anschlüssen nach einer Lichtmaschine, stellt das erste gefundene Board ein und öffnet das Fenster **USB Port erkennen** mit dem gefundenen Board, dem Anschluss und den anderen gefundenen Boards. Das ist der wichtigste Reiter, siehe [[anleitungen:webmobaledlib:pg_arduino|Verbinden und Übertragen]]. Dazu gibt es den Knopf **Firmware installieren** (seit 3.14 bei **jedem** Board, vorher nur beim Raspberry Pico): Er schreibt eine fertige Firmware (UF2-Datei) auf einen **Raspberry Pi Pico**, zum Beispiel auf ein Sound- oder Servomodul auf Pico-Basis. Mit dem Knopf **Firmware herunterladen** (seit 3.15) holst du die Firmware aus dem Internet: Das Programm zeigt die Liste mit **Plattform**, **Name** und **Version** samt Beschreibung und lädt die gewählte Firmware in den Ordner //MobaLedLib/firmware//; danach ist sie vorgewählt. |
 | **WLAN (OTA)** | Nur bei der Zentrale **ESP32**: WLAN und OTA einschalten, Hostname, Adresse und Passwort, WLAN über USB einrichten, siehe [[anleitungen:webmobaledlib:ota|ESP32 per WLAN und OTA]]. Bis 3.82 hieß der Reiter **OTA**. |
+| **Erweiterungen** | Die **MobaLedLib Extensions (MLX)** ein- und ausschalten, optionale laden und **eigene** hinzufügen, siehe [[anleitungen:webmobaledlib:erweiterungen|Erweiterungen (MLX)]]. |
 | **DCC ARDUINO** | Dasselbe für den **zweiten ARDUINO**, der die Zentrale anbindet (Blatt **DCC**, **Selectrix** oder **LNet**; beim Blatt **CAN** gibt es den Reiter nicht). Er erscheint nur bei einer **Nano**-Lichtmaschine. Die Überschrift trägt den Namen des Blatts. |
 | **DATEIEN** | Tabelle als Datei **speichern** und wieder **laden** (siehe unten). |
 | **ENTWICKLUNGSUMGEBUNG** | Womit die Programme **übersetzt und hochgeladen** werden: **PlatformIO** oder die **ARDUINO-IDE** (siehe unten). |

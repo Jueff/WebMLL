@@ -1,9 +1,9 @@
-# Datei-Version: 3.93 (2026-11-18) - webmobaledlib.py
+# Datei-Version: 4.22 (2026-11-19) - webmobaledlib.py
 # ----------------------------------------------------------------------------------------------
 # Name:           webmobaledlib.py
 # Path:           webmobaledlib.py
-# Version:        3.93
-# Last Update:    2026-11-18
+# Version:        4.22
+# Last Update:    2026-11-19
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
@@ -264,6 +264,35 @@
 #   3.91  2026-11-17  Seite Config ersetzt: House-Zeiten, DCC-Offset und Simulator-Werte stehen in den Programm Einstellungen (Gruppen Programm Generator und Simulatoreinstellungen, nur Experten Modus), Config ist versteckt (nur mit versteckte Tabellen anzeigen), einmalige Uebernahme der alten Werte (M28 1.03, M06 1.09, web_tabs 1.22, web_params 1.10)
 #   3.92  2026-11-18  Reiter ProgGenerator Einstellungen heisst Tabelle Faerben; zwei Haken: Automatisch einfaerben (nach jeder Aenderung) und Zeilen Faerben Button verstecken (web_tabs 1.23)
 #   3.93  2026-11-18  Wiki-Knopf oeffnet die Seite einfuehrung des webMobaLedLib-Wikis; release_tools 1.09, web_update 1.15, repair 1.04 (START_HIER.txt darf im obersten Ordner des ZIP liegen); Optionen/Dateien: Importieren zeigt Anleitung, Kopiere von Seite zu Seite entfaellt; Nach unten ausfuellen (Strg+D, Kontextmenue) und Reihe fortsetzen; Verteiler: reine Zahl gilt wie V+Zahl (headless_graph 1.07, M20 1.12)
+#   3.94  2026-11-18  Pull Request 11 von moosbewohner (enthaelt 9 und 10): ESP Einstellungen je Blatt (OLED-Modus 0 bis 5 mit Vorschau, Fotowiderstand, Zustaende speichern), ESP32-Setup-Upload zentral in M08_ARDUINO (Compile_and_Upload_ESP32_Setup); web_form_options 1.30, M06 1.10, M08 1.22, XLA_Application 1.23
+#   3.95  2026-11-18  Hilfe -> Update Testversion: neben den Releases auf GitHub ein eigener Link (https) zu einer ZIP-Datei oder eine ZIP-Datei auf diesem Rechner; gleiche Pruefung wie webmobaledlib.zip; auch ohne Zugriff auf GitHub (web_update 1.16)
+#   3.96  2026-11-18  MobaLedLib Extensions (MLX) Phase 1: Reiter Erweiterungen in den Optionen (bekannte Extensions mit Haken aktiv/inaktiv, Laden von GitHub beim Einschalten), P_ScheduleMLX und P_ScheduleDuoMLX im Paket und vorab aktiv (headless_extensions 1.00, M38 1.04, web_form_options 1.31)
+#   3.97  2026-11-18  Korrektur MLX: MobaLedLib.properties der Extensions wird tolerant gelesen (Schluessel ohne Anfuehrungszeichen, fehlende Kommas); ausgeschaltete Extensions werden ueber den Ordnernamen erkannt (headless_extensions 1.01, M38 1.05)
+#   3.98  2026-11-18  MLX Phase 2 und 3: eigene Erweiterungen (Name, Name@=Version, Name=Adresse, Adresse) mit Hinweis auf fremden Code; Rueckfrage beim Oeffnen einer Datei, die eine ausgeschaltete Erweiterung benutzt (headless_extensions 1.02, web_form_options 1.32)
+#   3.99  2026-11-18  Optionen: Reiterbeschriftungen zweizeilig, alle Reiter sichtbar auch mit ESP Einstellungen und WLAN (OTA) (web_form_options 1.33)
+#   4.00  2026-11-18  Korrektur Issue 13: Board und USB Port erkennen beachtet bei zwei Arduinos (Lichtmaschine und LNet/DCC) die Seite und nimmt nicht den Anschluss der anderen Seite (web_form_options 1.34)
+#   4.01  2026-11-18  Korrektur Issue 13 nach Auswertung des Protokolls: erkanntes Board wurde von USB Port erkennen mit der alten Auswahl ueberschrieben (Nano alt statt neu); nach dem Erkennen oeffnet das Optionenfenster wieder auf dem Reiter der Seite (web_form_options 1.35)
+#   4.02  2026-11-18  Rueckgaengig/Wiederholen fuer Tabellenaenderungen (Strg+Z, Strg+Y bzw. Strg+Umschalt+Z, Kontextmenue mit Name der letzten Aktion, 50 Schritte je Blatt, Zeilen einfuegen setzt den Verlauf zurueck); Beenden ohne Speichern hebt die ungesicherten Aenderungen als verworfenen Stand auf und bietet sie beim naechsten Start einmal zur Wiederherstellung an (Rueckmeldung Jan)
+#   4.03  2026-11-18  ESP32-Setup uebertragen: fehlt auf diesem Rechner das OTA-Passwort (Arbeitsmappe mit OTA von einem anderen PC), wird danach gefragt (speichern oder ohne OTA uebertragen) statt mit Fehlermeldung abzubrechen (web_esp32_ota 1.06)
+#   4.04  2026-11-18  Verbinden: Klick auf Mit Lichtmaschine verbinden ohne eingestellten USB-Anschluss oeffnet gleich Optionen (Board und USB Port erkennen); nach dem Erkennen wird automatisch verbunden (Rueckmeldung Tester; web_form_options 1.36)
+#   4.05  2026-11-18  Issue 6 (Theo, Pico): InfraredMLX uebersetzte nicht, weil PlatformIO IRremote 5.0.0 holte; Erweiterungen koennen jetzt Bibliotheken mit fester Version vorgeben (lib_deps in extensions_known.json: IRremote ^4.4.1; M38_Extensions 1.06)
+#   4.06  2026-11-18  PR 9 (moosbewohner): ESP-Einstellung Fotowiderstand aktivieren richtet den LDR-Scanner auch ohne Makrozeile ein (M06_Write_Header_SW 1.07)
+#   4.07  2026-11-19  Versteckte Tabellen: nach dem Laden einer Arbeitsmappe wurde das versteckte Startblatt (DCC) als aktives Blatt trotzdem angezeigt; jetzt wird das erste sichtbare Blatt gewaehlt
+#   4.08  2026-11-19  Issue 12 / PR 19 (moosbewohner): Spaltenbreiten auf gewaehlte Datenblaetter uebertragen (Reiter-Kontextmenue, Spalten und Zielseiten waehlbar), einstellbarer Zellinnenabstand links/rechts (web_layout 1.20, web_sheet_tabs 1.05)
+#   4.09  2026-11-19  PR 18 (moosbewohner): WLAN aktiv und OTA aus: Arduino.h und WiFi.h werden im erzeugten Sketch immer eingebunden, der Sketch uebersetzt wieder (headless_esp32_ota 1.09)
+#   4.17  2026-11-19  Tastenkombination fuers inkrementelle Speichern einstellbar (Programm Einstellungen, IncrSaveKey, Vorgabe Strg+Umschalt+S; Issue 21)
+#   4.18  2026-11-19  Tooltip Mit Lichtmaschine verbinden: Menue heisst Lichtmaschine statt ARDUINO (Rueckmeldung Harold)
+#   4.19  2026-11-19  Kopfbereich noch enger (Issue 22): Zeilenabstand 0 mit !important, Menuetasten 28 px, Titelzeile 1.3, Reiter 36 px hoch (nur normales Layout)
+#   4.20  2026-11-19  Kopfbereich (Issue 22): Reiterhoehe 36 px griff nicht (Screenshot: Reiter noch ca. 50 px hoch); jetzt mit !important und auch fuer .q-tab__content, Menuetasten ebenfalls !important
+#   4.21  2026-11-19  Erweiterungen: platformio.ini zeigt auf den Ordner der Erweiterung statt auf MobaLedLib.properties, mit symlink:// (M38_Extensions 1.07; Issue 6, Juergen)
+#   4.22  2026-11-19  Erweiterungen: Name und Beschreibung aus libraries.json anzeigen (headless_extensions 1.03, web_form_options 1.38; Issue 6, Juergen)
+#   4.16  2026-11-19  Kopfbereich: weniger Platz zwischen Titel, Menue und Reitern (CSS, leere Zwischenspeicher-Zeile ausgeblendet; Issue 22)
+#   4.15  2026-11-19  Inkrementelles Speichern (Issue 21): Strg+Umschalt+S und Menue Datei: Workbook als <Name>_0001.json ... sichern, Sicherungsdatei oeffnen (Liste), Sicherungsort aendern
+#   4.14  2026-11-19  Verbinden beim Starten (Issue 20): letzte Verbindung wiederherstellen oder genau eine Lichtmaschine (Nano, ESP32, Pico) suchen, im Hintergrund; nach Setup uebertragen mit der hochgeladenen Lichtmaschine verbinden (WLAN ueber WLAN); Pfeilmenue am Knopf (trennen, neu verbinden, Board wechseln) und im Menue Lichtmaschine; Einstellung AutoConnect (web_tabs 1.24, web_params 1.11, web_serial 1.12, M08 1.24)
+#   4.13  2026-11-19  Board und USB Port erkennen: Nano neu/Full anhand Firmware-Version und Signatur des Bootloaders (M07 1.12, M08 1.23, web_form_options 1.37, Issue 14)
+#   4.12  2026-11-19  Vorgang abbrechen beendet den ganzen Prozessbaum, COM-Port sofort frei (Prog_Generator 1.10, Issue 15)
+#   4.11  2026-11-19  Aktiv-Klick nach Verwerfen des Zwischenstands wirkungslos: Blatt der Makro-Schicht wird vor jedem Auswahl-Ereignis aktiviert (Issue 16)
+#   4.10  2026-11-19  Neues Programmsymbol (Ring aus LEDs, Weltkugel, Stift, Zahnrad) fuer Desktop-Verknuepfungen und Browserreiter (install/mobaledlib.* und favicon.png, make_icons 1.03)
 # ----------------------------------------------------------------------------------------------
 """Web-Oberflaeche (NiceGUI) fuer den Programmgenerator.
 
@@ -369,7 +398,7 @@ REQUIRED_FILES = {  # v1.75
     # "_web/web_form_select.py": "1.01", "_web/web_access.py": "1.11", "headless/headless_startup.py": "1.01", "no_tk.py": "1.01", "proggen/M37_Inst_Libraries.py": "1.06", "arduino_prefs.py": "1.02", "_web/web_dialogs.py": "1.09", "proggen/M07_COM_Port.py": "1.04", "_web/web_form_comport.py": "1.05", "mlpyproggen/Prog_Generator.py": "1.07", "proggen/M08_ARDUINO.py": "1.11", "_web/web_network.py": "1.01", "_web/web_firewall.py": "1.03", "pattgen/M08_Load_Sheet_Data.py": "1.01",  # v1.78 (web_access 1.09)  # v2.75 (entfallen)
     # "_web/web_form_select.py": "1.01", "_web/web_access.py": "1.12", "_web/web_colorcheck.py": "1.05", "headless/headless_startup.py": "1.01", "no_tk.py": "1.01", "proggen/M37_Inst_Libraries.py": "1.06", "arduino_prefs.py": "1.02", "_web/web_dialogs.py": "1.09", "proggen/M07_COM_Port.py": "1.09", "_web/web_form_comport.py": "1.05", "mlpyproggen/Prog_Generator.py": "1.08", "proggen/M08_ARDUINO.py": "1.17", "_web/web_network.py": "1.01", "_web/web_firewall.py": "1.03", "pattgen/M08_Load_Sheet_Data.py": "1.01",  # v1.78 (web_access 1.09)  # v2.75  # v3.24 (entfallen)
     # "_web/web_form_select.py": "1.01", "_web/web_access.py": "1.13", "_web/web_colorcheck.py": "1.06", "headless/headless_startup.py": "1.01", "no_tk.py": "1.01", "proggen/M37_Inst_Libraries.py": "1.06", "arduino_prefs.py": "1.02", "_web/web_dialogs.py": "1.10", "proggen/M07_COM_Port.py": "1.11", "_web/web_form_comport.py": "1.07", "mlpyproggen/Prog_Generator.py": "1.08", "proggen/M08_ARDUINO.py": "1.18", "_web/web_network.py": "1.01", "_web/web_firewall.py": "1.03", "pattgen/M08_Load_Sheet_Data.py": "1.01",  # v1.78 (web_access 1.09)  # v2.75  # v3.37 (entfallen)
-    "_web/web_form_select.py": "1.01", "_web/web_access.py": "1.13", "_web/web_esp32_ota.py": "1.04", "headless/headless_esp32_ota.py": "1.08", "ExcelAPI/XLA_Application.py": "1.22", "_web/web_sheet_tabs.py": "1.03", "proggen/M28_Diverse.py": "1.03", "proggen/M06_Write_Header.py": "1.09", "_web/web_serial.py": "1.10", "_web/web_form_options.py": "1.24", "proggen/M06_Write_Header.py": "1.09", "_web/web_colorcheck.py": "1.06", "headless/headless_startup.py": "1.01", "no_tk.py": "1.01", "proggen/M37_Inst_Libraries.py": "1.06", "arduino_prefs.py": "1.02", "_web/web_dialogs.py": "1.10", "proggen/M07_COM_Port.py": "1.11", "_web/web_form_comport.py": "1.07", "mlpyproggen/Prog_Generator.py": "1.09", "proggen/M08_ARDUINO.py": "1.20", "_web/web_network.py": "1.01", "_web/web_firewall.py": "1.03", "pattgen/M08_Load_Sheet_Data.py": "1.02",  # v1.78 (web_access 1.09)  # v2.75  # v3.37  # v3.56  # v3.91
+    "_web/web_form_select.py": "1.01", "_web/web_access.py": "1.13", "_web/web_esp32_ota.py": "1.04", "headless/headless_esp32_ota.py": "1.09", "ExcelAPI/XLA_Application.py": "1.23", "_web/web_sheet_tabs.py": "1.05", "proggen/M28_Diverse.py": "1.03", "proggen/M06_Write_Header.py": "1.09", "_web/web_serial.py": "1.10", "_web/web_form_options.py": "1.24", "proggen/M06_Write_Header.py": "1.09", "_web/web_colorcheck.py": "1.06", "headless/headless_startup.py": "1.01", "no_tk.py": "1.01", "proggen/M37_Inst_Libraries.py": "1.06", "arduino_prefs.py": "1.02", "_web/web_dialogs.py": "1.10", "proggen/M07_COM_Port.py": "1.11", "_web/web_form_comport.py": "1.07", "mlpyproggen/Prog_Generator.py": "1.09", "proggen/M08_ARDUINO.py": "1.20", "_web/web_network.py": "1.01", "_web/web_firewall.py": "1.03", "pattgen/M08_Load_Sheet_Data.py": "1.02",  # v1.78 (web_access 1.09)  # v2.75  # v3.37  # v3.56  # v3.91
     # "proggen/M06_Write_Header.py": "1.02", "proggen/M20_PageEvents_a_Functions.py": "1.02", "proggen/M18_Save_Load.py": "1.01",  # v1.98 (entfallen)
     # "proggen/M06_Write_Header.py": "1.03", "proggen/M20_PageEvents_a_Functions.py": "1.03", "proggen/M18_Save_Load.py": "1.01",  # v2.03 (entfallen)
     # "proggen/M06_Write_Header.py": "1.04", "proggen/M20_PageEvents_a_Functions.py": "1.03", "vb2py/vbfunctions.py": "1.01", "proggen/M18_Save_Load.py": "1.01",  # v2.12 (entfallen)
@@ -377,7 +406,7 @@ REQUIRED_FILES = {  # v1.75
     # "proggen/M06_Write_Header.py": "1.04", "proggen/M20_PageEvents_a_Functions.py": "1.04", "vb2py/vbfunctions.py": "1.01", "proggen/M18_Save_Load.py": "1.04",  # v2.24 (entfallen)
     # "proggen/M06_Write_Header.py": "1.04", "proggen/M20_PageEvents_a_Functions.py": "1.05", "vb2py/vbfunctions.py": "1.01", "proggen/M18_Save_Load.py": "1.04",  # v2.27 (entfallen)
     # "proggen/M06_Write_Header.py": "1.04", "proggen/M20_PageEvents_a_Functions.py": "1.06", "vb2py/vbfunctions.py": "1.01", "proggen/M18_Save_Load.py": "1.04",  # v2.54 (entfallen)
-    "proggen/M06_Write_Header.py": "1.09", "proggen/M20_PageEvents_a_Functions.py": "1.12", "vb2py/vbfunctions.py": "1.01", "proggen/M18_Save_Load.py": "1.04", "proggen/M06_Write_Header_SW.py": "1.06", "proggen/M18_Save_Load.py": "1.05", "_web/web_log.py": "1.07", "proggen/M20_PageEvents_a_Functions.py": "1.12", "proggen/M03_Dialog.py": "1.03", "_web/web_layout.py": "1.17", "_web/web_params.py": "1.10", "_web/web_form_options.py": "1.29", "_web/web_tabs.py": "1.23", "proggen/M08_ARDUINO.py": "1.21", "_web/web_z21.py": "1.04", "_web/web_dcckeyboard.py": "1.03", "_web/web_update.py": "1.15", "headless/headless_gridmodel.py": "1.07", "fast_paths.py": "1.01", "proggen/M20_PageEvents_a_Functions.py": "1.12", "proggen/Userform_Other.py": "1.03", "_web/web_firewall.py": "1.04", "_web/web_esp32_ota.py": "1.05", "proggen/UserForm_Options.py": "1.06",  # v2.54  # v3.56  # v3.91
+    "proggen/M06_Write_Header.py": "1.10", "proggen/M20_PageEvents_a_Functions.py": "1.12", "vb2py/vbfunctions.py": "1.01", "proggen/M18_Save_Load.py": "1.04", "proggen/M06_Write_Header_SW.py": "1.07", "proggen/M18_Save_Load.py": "1.05", "_web/web_log.py": "1.07", "proggen/M20_PageEvents_a_Functions.py": "1.12", "proggen/M03_Dialog.py": "1.03", "_web/web_layout.py": "1.20", "_web/web_params.py": "1.10", "_web/web_form_options.py": "1.29", "_web/web_tabs.py": "1.23", "proggen/M08_ARDUINO.py": "1.22", "_web/web_z21.py": "1.04", "_web/web_dcckeyboard.py": "1.03", "_web/web_update.py": "1.16", "headless/headless_gridmodel.py": "1.07", "fast_paths.py": "1.01", "proggen/M20_PageEvents_a_Functions.py": "1.12", "proggen/Userform_Other.py": "1.03", "_web/web_firewall.py": "1.04", "_web/web_esp32_ota.py": "1.06", "proggen/UserForm_Options.py": "1.06",  # v2.54  # v3.56  # v3.91
     "proggen/M18a_Load_PicoConfig.py": "1.01", "proggen/M17_Import_old_Data.py": "1.01",  # v1.75
     # "proggen/M02_Public.py": "1.01", "proggen/M02a_Public.py": "1.01", "proggen/M03_Dialog.py": "1.01", "proggen/M06_Write_Header_LED2Var.py": "1.01", "proggen/M06_Write_Header_SW.py": "1.01", "proggen/M07_COM_Port.py": "1.02", "proggen/M09_Language.py": "1.01", "proggen/M10_Par_Description.py": "1.01", "proggen/M30_Tools.py": "1.01", "proggen/M32_DCC.py": "1.01", "proggen/M38_Extensions.py": "1.01", "proggen/clsExtension.py": "1.01", "proggen/Userform_Other.py": "1.01", "_web/web_form_other.py": "1.04",  # v1.99 (entfallen)
     # "proggen/M02_Public.py": "1.01", "proggen/M02a_Public.py": "1.01", "proggen/M03_Dialog.py": "1.01", "proggen/M06_Write_Header_LED2Var.py": "1.01", "proggen/M06_Write_Header_SW.py": "1.02", "proggen/M07_COM_Port.py": "1.02", "proggen/M09_Language.py": "1.01", "proggen/M10_Par_Description.py": "1.02", "proggen/M30_Tools.py": "1.01", "proggen/M32_DCC.py": "1.01", "proggen/M38_Extensions.py": "1.01", "proggen/clsExtension.py": "1.01", "proggen/Userform_Other.py": "1.01", "_web/web_form_other.py": "1.04",  # v2.00 (entfallen)
@@ -449,7 +478,7 @@ REQUIRED_FILES = {  # v1.75
     # "proggen/M02_Public.py": "1.05", "proggen/M02a_Public.py": "1.02", "proggen/M03_Dialog.py": "1.01", "proggen/M06_Write_Header_LED2Var.py": "1.01", "_web/web_i18n.py": "1.11", "headless/headless_pattern_test.py": "1.00", "_web/web_pattern_test.py": "1.00", "headless/headless_ledcoloranim.py": "1.00", "_web/web_form_ledcoloranim.py": "1.00", "headless/headless_ssl.py": "1.00", "_web/mll_servocurve.js": "1.03", "headless/headless_servoanim.py": "1.02", "_web/web_form_servoanim.py": "1.04", "headless/headless_isp.py": "1.00", "headless/headless_hex_upload.py": "1.01", "_web/web_layout.py": "1.10", "_web/web_toolbar.py": "1.03", "headless/headless_pio_cache.py": "1.00", "headless/headless_git.py": "1.01", "_web/mll_tabs.js": "1.00", "_web/web_sheet_tabs.py": "1.02", "proggen/M70_Exp_Libraries.py": "1.01", "proggen/M08_Install_FastBootLoader.py": "1.03", "proggen/M07_COM_Port_New.py": "1.04", "headless/headless_pico.py": "1.02", "_web/web_form_firmware.py": "1.03", "_web/web_auth.py": "1.05", "headless/headless_graph_layout.py": "1.06", "_web/web_macro_tree.py": "1.12", "headless/headless_graph_ops.py": "1.08", "headless/headless_graph.py": "1.06", "_web/mll_graph.js": "1.16", "_web/web_graph.py": "1.16", "proggen/DieseArbeitsmappe.py": "1.02", "proggen/F00_mainbuttons.py": "1.01", "proggen/M28_Diverse.py": "1.02", "_web/web_pi_status.py": "1.00", "_web/web_logging.py": "1.05", "_web/web_log.py": "1.06", "_web/web_form_house.py": "1.06", "proggen/UserForm_Options.py": "1.04", "mlpyproggen/DefaultConstants.py": "1.01", "_web/web_form_options.py": "1.23", "vb2py/vbclasses.py": "1.03", "_web/web_params.py": "1.08", "_web/web_form_exchange.py": "1.02", "headless/headless_gridmodel.py": "1.06", "proggen/M06_Write_Header_SW.py": "1.04", "proggen/M07_COM_Port.py": "1.09", "proggen/M09_Language.py": "1.07", "proggen/M10_Par_Description.py": "1.02", "proggen/M30_Tools.py": "1.02", "proggen/M32_DCC.py": "1.01", "proggen/M38_Extensions.py": "1.03", "proggen/clsExtension.py": "1.01", "proggen/Userform_Other.py": "1.02", "_web/web_form_other.py": "1.07",  # v2.88  # v3.31 (entfallen)
     # "proggen/M02_Public.py": "1.05", "proggen/M02a_Public.py": "1.02", "proggen/M03_Dialog.py": "1.01", "proggen/M06_Write_Header_LED2Var.py": "1.01", "_web/web_i18n.py": "1.11", "headless/headless_pattern_test.py": "1.00", "_web/web_pattern_test.py": "1.00", "headless/headless_ledcoloranim.py": "1.00", "_web/web_form_ledcoloranim.py": "1.00", "headless/headless_ssl.py": "1.00", "_web/mll_servocurve.js": "1.03", "headless/headless_servoanim.py": "1.02", "_web/web_form_servoanim.py": "1.04", "headless/headless_isp.py": "1.00", "headless/headless_hex_upload.py": "1.01", "_web/web_layout.py": "1.11", "_web/web_toolbar.py": "1.03", "headless/headless_pio_cache.py": "1.00", "headless/headless_git.py": "1.01", "_web/mll_tabs.js": "1.00", "_web/web_sheet_tabs.py": "1.02", "proggen/M70_Exp_Libraries.py": "1.01", "proggen/M08_Install_FastBootLoader.py": "1.03", "proggen/M07_COM_Port_New.py": "1.04", "headless/headless_pico.py": "1.02", "_web/web_form_firmware.py": "1.03", "_web/web_auth.py": "1.05", "headless/headless_graph_layout.py": "1.06", "_web/web_macro_tree.py": "1.12", "headless/headless_graph_ops.py": "1.08", "headless/headless_graph.py": "1.06", "_web/mll_graph.js": "1.16", "_web/web_graph.py": "1.16", "proggen/DieseArbeitsmappe.py": "1.02", "proggen/F00_mainbuttons.py": "1.01", "proggen/M28_Diverse.py": "1.02", "_web/web_pi_status.py": "1.00", "_web/web_logging.py": "1.05", "_web/web_log.py": "1.06", "_web/web_form_house.py": "1.06", "proggen/UserForm_Options.py": "1.04", "mlpyproggen/DefaultConstants.py": "1.01", "_web/web_form_options.py": "1.23", "vb2py/vbclasses.py": "1.03", "_web/web_params.py": "1.08", "_web/web_form_exchange.py": "1.02", "headless/headless_gridmodel.py": "1.06", "proggen/M06_Write_Header_SW.py": "1.04", "proggen/M07_COM_Port.py": "1.09", "proggen/M09_Language.py": "1.07", "proggen/M10_Par_Description.py": "1.02", "proggen/M30_Tools.py": "1.02", "proggen/M32_DCC.py": "1.01", "proggen/M38_Extensions.py": "1.03", "proggen/clsExtension.py": "1.01", "proggen/Userform_Other.py": "1.02", "_web/web_form_other.py": "1.07",  # v2.88  # v3.32 (entfallen)
     # "proggen/M02_Public.py": "1.05", "proggen/M02a_Public.py": "1.02", "proggen/M03_Dialog.py": "1.01", "proggen/M06_Write_Header_LED2Var.py": "1.01", "_web/web_i18n.py": "1.11", "headless/headless_pattern_test.py": "1.00", "_web/web_pattern_test.py": "1.00", "headless/headless_ledcoloranim.py": "1.00", "_web/web_form_ledcoloranim.py": "1.00", "headless/headless_ssl.py": "1.00", "_web/mll_servocurve.js": "1.03", "headless/headless_servoanim.py": "1.02", "_web/web_form_servoanim.py": "1.04", "headless/headless_isp.py": "1.00", "headless/headless_hex_upload.py": "1.01", "_web/web_layout.py": "1.13", "_web/web_toolbar.py": "1.03", "headless/headless_pio_cache.py": "1.00", "headless/headless_git.py": "1.01", "_web/mll_tabs.js": "1.00", "_web/web_sheet_tabs.py": "1.02", "proggen/M70_Exp_Libraries.py": "1.01", "proggen/M08_Install_FastBootLoader.py": "1.03", "proggen/M07_COM_Port_New.py": "1.04", "headless/headless_pico.py": "1.02", "_web/web_form_firmware.py": "1.03", "_web/web_auth.py": "1.05", "headless/headless_graph_layout.py": "1.06", "_web/web_macro_tree.py": "1.12", "headless/headless_graph_ops.py": "1.08", "headless/headless_graph.py": "1.06", "_web/mll_graph.js": "1.16", "_web/web_graph.py": "1.16", "proggen/DieseArbeitsmappe.py": "1.02", "proggen/F00_mainbuttons.py": "1.01", "proggen/M28_Diverse.py": "1.02", "_web/web_pi_status.py": "1.00", "_web/web_logging.py": "1.05", "_web/web_log.py": "1.06", "_web/web_form_house.py": "1.06", "proggen/UserForm_Options.py": "1.04", "mlpyproggen/DefaultConstants.py": "1.01", "_web/web_form_options.py": "1.23", "vb2py/vbclasses.py": "1.03", "_web/web_params.py": "1.08", "_web/web_form_exchange.py": "1.02", "headless/headless_gridmodel.py": "1.06", "proggen/M06_Write_Header_SW.py": "1.04", "proggen/M07_COM_Port.py": "1.11", "proggen/M09_Language.py": "1.07", "proggen/M10_Par_Description.py": "1.02", "proggen/M30_Tools.py": "1.02", "proggen/M32_DCC.py": "1.01", "proggen/M38_Extensions.py": "1.03", "proggen/clsExtension.py": "1.01", "proggen/Userform_Other.py": "1.02", "_web/web_form_other.py": "1.07",  # v2.88  # v3.50 (entfallen)
-    "proggen/M02_Public.py": "1.05", "proggen/M02a_Public.py": "1.02", "proggen/M03_Dialog.py": "1.01", "proggen/M06_Write_Header_LED2Var.py": "1.01", "_web/web_i18n.py": "1.11", "headless/headless_pattern_test.py": "1.00", "_web/web_pattern_test.py": "1.00", "headless/headless_ledcoloranim.py": "1.00", "_web/web_form_ledcoloranim.py": "1.00", "headless/headless_ssl.py": "1.00", "_web/mll_servocurve.js": "1.03", "headless/headless_servoanim.py": "1.02", "_web/web_form_servoanim.py": "1.04", "headless/headless_isp.py": "1.00", "headless/headless_hex_upload.py": "1.01", "_web/web_layout.py": "1.13", "_web/web_toolbar.py": "1.03", "headless/headless_pio_cache.py": "1.00", "headless/headless_git.py": "1.01", "_web/mll_tabs.js": "1.00", "_web/web_sheet_tabs.py": "1.03", "proggen/M70_Exp_Libraries.py": "1.01", "proggen/M08_Install_FastBootLoader.py": "1.03", "proggen/M07_COM_Port_New.py": "1.04", "headless/headless_pico.py": "1.02", "_web/web_form_firmware.py": "1.03", "_web/web_auth.py": "1.05", "headless/headless_graph_layout.py": "1.06", "_web/web_macro_tree.py": "1.12", "headless/headless_graph_ops.py": "1.08", "headless/headless_graph.py": "1.07", "_web/mll_graph.js": "1.16", "_web/web_graph.py": "1.16", "proggen/DieseArbeitsmappe.py": "1.04", "proggen/F00_mainbuttons.py": "1.02", "proggen/M28_Diverse.py": "1.03", "_web/web_pi_status.py": "1.00", "_web/web_logging.py": "1.05", "_web/web_log.py": "1.06", "_web/web_form_house.py": "1.06", "proggen/UserForm_Options.py": "1.04", "mlpyproggen/DefaultConstants.py": "1.01", "_web/web_form_options.py": "1.23", "vb2py/vbclasses.py": "1.04", "_web/web_params.py": "1.10", "_web/web_form_exchange.py": "1.02", "headless/headless_gridmodel.py": "1.06", "proggen/M06_Write_Header_SW.py": "1.04", "proggen/M07_COM_Port.py": "1.11", "proggen/M09_Language.py": "1.07", "proggen/M10_Par_Description.py": "1.02", "proggen/M30_Tools.py": "1.02", "proggen/M32_DCC.py": "1.04", "proggen/M38_Extensions.py": "1.03", "proggen/clsExtension.py": "1.01", "proggen/Userform_Other.py": "1.02", "_web/web_form_other.py": "1.07",  # v2.88  # v3.50  # v3.56  # v3.91
+    "proggen/M02_Public.py": "1.05", "proggen/M02a_Public.py": "1.02", "proggen/M03_Dialog.py": "1.01", "proggen/M06_Write_Header_LED2Var.py": "1.01", "_web/web_i18n.py": "1.11", "headless/headless_pattern_test.py": "1.00", "_web/web_pattern_test.py": "1.00", "headless/headless_ledcoloranim.py": "1.00", "_web/web_form_ledcoloranim.py": "1.00", "headless/headless_ssl.py": "1.00", "_web/mll_servocurve.js": "1.03", "headless/headless_servoanim.py": "1.02", "_web/web_form_servoanim.py": "1.04", "headless/headless_isp.py": "1.00", "headless/headless_hex_upload.py": "1.01", "_web/web_layout.py": "1.13", "_web/web_toolbar.py": "1.03", "headless/headless_pio_cache.py": "1.00", "headless/headless_git.py": "1.01", "_web/mll_tabs.js": "1.00", "_web/web_sheet_tabs.py": "1.05", "proggen/M70_Exp_Libraries.py": "1.01", "proggen/M08_Install_FastBootLoader.py": "1.03", "proggen/M07_COM_Port_New.py": "1.04", "headless/headless_pico.py": "1.02", "_web/web_form_firmware.py": "1.03", "_web/web_auth.py": "1.05", "headless/headless_graph_layout.py": "1.06", "_web/web_macro_tree.py": "1.12", "headless/headless_graph_ops.py": "1.08", "headless/headless_graph.py": "1.07", "_web/mll_graph.js": "1.16", "_web/web_graph.py": "1.16", "proggen/DieseArbeitsmappe.py": "1.04", "proggen/F00_mainbuttons.py": "1.02", "proggen/M28_Diverse.py": "1.03", "_web/web_pi_status.py": "1.00", "_web/web_logging.py": "1.05", "_web/web_log.py": "1.06", "_web/web_form_house.py": "1.06", "proggen/UserForm_Options.py": "1.04", "mlpyproggen/DefaultConstants.py": "1.01", "_web/web_form_options.py": "1.36", "vb2py/vbclasses.py": "1.04", "_web/web_params.py": "1.10", "_web/web_form_exchange.py": "1.02", "headless/headless_gridmodel.py": "1.06", "proggen/M06_Write_Header_SW.py": "1.04", "proggen/M07_COM_Port.py": "1.11", "proggen/M09_Language.py": "1.07", "proggen/M10_Par_Description.py": "1.02", "proggen/M30_Tools.py": "1.02", "proggen/M32_DCC.py": "1.04", "proggen/M38_Extensions.py": "1.06", "headless/headless_extensions.py": "1.02", "proggen/clsExtension.py": "1.01", "proggen/Userform_Other.py": "1.02", "_web/web_form_other.py": "1.07",  # v2.88  # v3.50  # v3.56  # v3.91
     "_web/web_form_firmware_download.py": "1.02",  # v3.24
     "headless/headless_shutdown.py": "1.00",  # v3.24
     # "headless/headless_search.py": "1.00",  # v3.28 (entfallen)
@@ -1028,6 +1057,50 @@ window.mllFind = window.mllFind || {};
   }, true);
 })();
 """
+# Tastenkombination fuers inkrementelle Speichern (Issue 21): einstellbar in den Programm Einstellungen (IncrSaveKey), Vorgabe Strg+Umschalt+S.
+# window.mllIncrKey = {ctrl, shift, alt, key} wird vom Server gesetzt (Seitenaufbau und nach jeder Aenderung der Einstellung).
+# Die Tastenkombination kann vom Betriebssystem oder von einem Programm (zum Beispiel Greenshot) belegt sein: dann eine andere einstellen.  # v4.17
+JS_INCR_SAVE = """
+window.mllIncrKey = window.mllIncrKey || null;
+(function () {
+  document.addEventListener('keydown', function (e) {
+    var k = window.mllIncrKey;
+    if (!k || !e.key) { return; }
+    if (((e.ctrlKey || e.metaKey) === !!k.ctrl) && (e.shiftKey === !!k.shift) && (e.altKey === !!k.alt) && e.key.toLowerCase() === k.key) {
+      e.preventDefault(); e.stopPropagation();
+      if (typeof emitEvent === 'function') { emitEvent('mll_incr_save', {}); }
+    }
+  }, true);
+})();
+"""
+
+INCR_SAVE_PARAM = "IncrSaveKey"  # v4.17
+INCR_SAVE_DEFAULT = "Strg+Umschalt+S"  # v4.17
+
+
+def parse_shortcut(text):  # v4.17
+    """'Strg+Umschalt+S' -> {'ctrl': True, 'shift': True, 'alt': False, 'key': 's'}; None, wenn die Angabe nicht zu verstehen ist oder weder Strg noch Alt noch eine F-Taste enthaelt
+    (sonst wuerde eine einfache Buchstabentaste beim Tippen ausgeloest). Erlaubt: Strg/Ctrl/Cmd, Umschalt/Shift, Alt, dazu ein Zeichen oder F1 bis F24."""  # v4.17
+    names = {"strg": "ctrl", "ctrl": "ctrl", "control": "ctrl", "ctl": "ctrl", "cmd": "ctrl", "meta": "ctrl", "umschalt": "shift", "shift": "shift", "alt": "alt"}  # v4.17
+    mods = {"ctrl": False, "shift": False, "alt": False}  # v4.17
+    key = ""  # v4.17
+    parts = [p.strip() for p in str(text or "").replace(" ", "").split("+")]  # v4.17
+    if parts and parts[-1] == "" and len(parts) >= 2:  # v4.17: 'Strg++' = Plus-Taste
+        parts = parts[:-2] + ["+"]  # v4.17
+    for i, part in enumerate(parts):  # v4.17
+        low = part.lower()  # v4.17
+        if i < len(parts) - 1:  # v4.17
+            if low not in names:  # v4.17
+                return None  # v4.17
+            mods[names[low]] = True  # v4.17
+        else:  # v4.17
+            if re.fullmatch(r"f([1-9]|1[0-9]|2[0-4])", low) or len(part) == 1:  # v4.17
+                key = low  # v4.17
+            else:  # v4.17
+                return None  # v4.17
+    if not key or not (mods["ctrl"] or mods["alt"] or re.fullmatch(r"f\d+", key)):  # v4.17
+        return None  # v4.17
+    return {**mods, "key": key}  # v4.17
 # Zellen mit Symbol (Shape vom Typ Bild) und Testtasten: Bild/Tasten plus Text; Text nur als textContent
 # (kein HTML aus Zelleninhalten). Die Testtasten melden Maus runter/hoch mit dem Ereignis mll_tb an den Server
 # (bridge_id = Element, das das Ereignis annimmt).
@@ -1161,6 +1234,10 @@ JS_CELL_KEYDOWN = ("e => { if (e.editing || !e.event || !e.node || !e.node.data)
                    "window.mllClipGet().then(t => emitEvent('mll_cell_op', {op: 'paste', r: r, col: col, text: t})); } "
                    "else if (ctrl && !k.shiftKey && k.key.toLowerCase() === 'd') { k.preventDefault(); "  # v3.93: Nach unten ausfuellen
                    "emitEvent('mll_cell_op', {op: 'filldown', r: r, col: col}); } "  # v3.93
+                   "else if (ctrl && !k.shiftKey && k.key.toLowerCase() === 'z') { k.preventDefault(); "  # v4.02: Rueckgaengig
+                   "emitEvent('mll_cell_op', {op: 'undo', r: r, col: col}); } "  # v4.02
+                   "else if (ctrl && (k.key.toLowerCase() === 'y' || (k.shiftKey && k.key.toLowerCase() === 'z'))) { k.preventDefault(); "  # v4.02: Wiederholen
+                   "emitEvent('mll_cell_op', {op: 'redo', r: r, col: col}); } "  # v4.02
                    "else if (k.key === 'Delete') { emitEvent('mll_cell_op', {op: 'delete', r: r, col: col}); } }")
 
 # Kopfzeilen-Tooltips (Text hinter dem "§" der Ueberschrift) aus den Zeilendaten
@@ -1177,6 +1254,14 @@ CSS_GRID = """
 .q-page { display: flex; }
 .nicegui-content { width: 100%; height: 100vh; flex: 1 1 auto; flex-wrap: nowrap; overflow: auto; }
 .main-tabs { border-bottom: 1px solid #c9c9c9; margin-bottom: 4px; }
+.nicegui-content .mll-header { row-gap: 0 !important; }                 /* v4.19: !important, damit nicht der Standardabstand 16 px von NiceGUI gewinnt */
+html:not(.mll-compact) .mll-header .mll-menu .q-btn { min-height: 28px !important; }   /* v4.19: Menuetasten 36 px -> 28 px hoch */
+html:not(.mll-compact) .mll-title { line-height: 1.3; }                     /* v4.19: Titel nicht 32 px hoch */
+/* html:not(.mll-compact) .main-tabs, html:not(.mll-compact) .main-tabs .q-tab { min-height: 36px; } (v4.19, entfallen) */
+html:not(.mll-compact) .main-tabs, html:not(.mll-compact) .main-tabs .q-tab, html:not(.mll-compact) .main-tabs .q-tab__content { min-height: 32px !important; height: 32px !important; padding-top: 0 !important; padding-bottom: 0 !important; }   /* v4.20 */   /* v4.19: Reiter 48 px -> 36 px hoch */
+/* .mll-header { row-gap: 4px; }  (entfallen v4.19) */
+/* v4.16: weniger Platz zwischen Titel, Menue und Reitern (Issue 22) */
+html:not(.mll-compact) .mll-header { margin-bottom: -8px; }     /* v4.16: Abstand zur Reiterleiste 16 px -> 8 px; das kompakte Layout hat schon 2 px */
 .main-tabs .q-tab { font-size: calc(15px * var(--mll-label-scale, 1)); }
 .sheet-tabs { background: #dbe4ee; border: 1px solid #b8c7d8; border-top: 2px solid #8fa8c2; min-height: 30px; }
 .sheet-tabs .q-tab { text-transform: none; min-height: 28px; padding: 0 16px; color: #243b53; }
@@ -1245,7 +1330,16 @@ def font_scales(ctrl) -> dict:
 # VERSION = "3.60 (2026-11-16)"  # v3.60 (entfallen)
 # VERSION = "3.61 (2026-11-16)"  # v3.61 (entfallen)
 # VERSION = "3.62 (2026-11-16)"  # v3.62 (entfallen)
-VERSION = "3.93 (2026-11-18)"  # v3.64
+VERSION = "4.22 (2026-11-19)"  # v3.64  # v4.22
+# VERSION = "4.09 (2026-11-19)"  # v3.64 (entfallen)
+# VERSION = "4.08 (2026-11-19)"  # v3.64 (entfallen)
+# VERSION = "4.07 (2026-11-19)"  # v3.64 (entfallen)
+# VERSION = "4.06 (2026-11-18)"  # v3.64 (entfallen)
+# VERSION = "4.05 (2026-11-18)"  # v3.64 (entfallen)
+# VERSION = "4.04 (2026-11-18)"  # v3.64 (entfallen)
+# VERSION = "4.03 (2026-11-18)"  # v3.64 (entfallen)
+# VERSION = "4.02 (2026-11-18)"  # v3.64 (entfallen)
+# VERSION = "4.01 (2026-11-18)"  # v3.64 (entfallen)
 # VERSION = "3.23 (2026-11-12)"  # v3.24 (entfallen)
 # VERSION = "3.22 (2026-11-12)"  # v3.23 (entfallen)
 # VERSION = "3.21 (2026-11-12)"  # v3.22 (entfallen)
@@ -1822,6 +1916,7 @@ document.addEventListener('keydown', function (e) {
 # Zwischenspeichern: gemeinsamer Zustand ueber alle Browserfenster
 _AUTOSAVE = {"sig_seen": None, "sig_saved": None, "changed_at": 0.0, "saved_at": 0.0, "running": False}
 _RECOVERY = {"checked": False}
+_AUTOCONNECT = {"done": False}  # v4.14: Verbinden beim Start nur einmal je Programmlauf (nicht bei jedem neuen Browserfenster)
 AUTOSAVE_IDLE = 3.0          # Sekunden Ruhe nach der letzten Aenderung
 AUTOSAVE_INTERVAL = 30.0     # frueheste Zeit zwischen zwei Sicherungen
 
@@ -1858,9 +1953,11 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
     ui.add_head_html(JS_SPACE_KEY)  # v2.93
     ui.add_head_html("<script>" + JS_COPY_HELPER + "</script>")
     ui.add_head_html("<script>" + JS_FIND + "</script>")  # v3.28
+    ui.add_head_html("<script>" + JS_INCR_SAVE + "</script>")  # v4.15
     ui.add_css(CSS_GRID)
     from _web import web_layout                        # kompaktes Layout fuer kleine Bildschirme (Programm Einstellungen)
-    ui.add_head_html(web_layout.head_html(web_layout.get_mode(ctrl)))
+    # ui.add_head_html(web_layout.head_html(web_layout.get_mode(ctrl)))  # v4.08 (entfallen)
+    ui.add_head_html(web_layout.head_html(web_layout.get_mode(ctrl), web_layout.get_margin(ctrl)))  # v4.08 (PR 19, moosbewohner)
     from _web import web_fullscreen  # v1.80
     ui.add_head_html(web_fullscreen.head_html())       # Vollbild ein und aus (der Knopf steht in der Kopfzeile)  # v1.81
     if fullscreen:                                      # Adresse mit ?vollbild=1: ohne Titel, Menue und Reiter oeffnen, der erste Tipp schaltet auch den Browser um  # v1.82
@@ -1927,6 +2024,7 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
         # -------------------------------------------------------------- Menue (wie im Tk-Hauptfenster); im kompakten Layout in der Kopfzeile
         menu_slot = ui.row().classes("items-center gap-0 mll-menu")
     autosave_label = ui.label("").classes("text-caption text-grey-7 mll-autosave")
+    autosave_label.set_visibility(False)  # v4.16: ohne Text keine leere Zeile (mit ihrem Abstand) im Kopfbereich, Issue 22
     if FILE_PROBLEMS:                                   # rote Meldung oben auf der Seite  # v1.75
         with ui.column().classes("w-full gap-0 q-pa-sm").style("background:#ffebee;border:2px solid #c62828;border-radius:4px"):  # v1.75
             # ui.label(f"Nicht alle Dateien passen zur Version {VERSION}. Bitte alle Dateien dieses Stands einspielen, bis dahin kann etwas falsch aussehen oder fehlen:").style("color:#b71c1c;font-weight:600")  # v2.16 (entfallen)
@@ -2133,6 +2231,8 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
                         state["colorcheck"].save_config()      # letzte Farbe, LED, Palette der Seite Farb Test
                 except Exception:                  # noqa: BLE001
                     logger.debug("Farbtest-Einstellungen nicht gesichert", exc_info=True)
+            if not save:
+                keep_discarded_state()  # v4.02: verworfene Aenderungen aufheben (Angebot beim naechsten Start)
             ctrl.shutdown_program(save=save)
         except Exception as ex:                  # noqa: BLE001
             logger.exception("Beenden: Speichern fehlgeschlagen")
@@ -2220,9 +2320,19 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
         status_label = ui.label("").classes("mll-status")         # Meldung des Programms: verschwindet nach einigen Sekunden
         conn_label = ui.label("").classes("text-caption mll-conn")        # Verbindung zum Arduino: bleibt stehen
         # connect_btn = ui.button("Mit ARDUINO verbinden", on_click=lambda: connect_from_header()).props("unelevated no-caps dense color=negative").classes("mll-connect")      # fuer alle Reiter: rot ohne, gruen mit Verbindung zum Arduino  # v2.01  # v3.83 (entfallen)
-        connect_btn = ui.button(tr("Mit Lichtmaschine verbinden"), on_click=lambda: connect_from_header()).props("unelevated no-caps dense color=negative").classes("mll-connect")      # fuer alle Reiter: rot ohne, gruen mit Verbindung zum Arduino  # v2.01  # v3.83
+        # connect_btn = ui.button(tr("Mit Lichtmaschine verbinden"), on_click=lambda: connect_from_header()).props("unelevated no-caps dense color=negative").classes("mll-connect")  # v4.14 (entfallen: jetzt mit Pfeil und Menue)
+        with ui.button_group().props("unelevated"):  # v4.14: Knopf mit Pfeil: Verbindung trennen, neu verbinden, Board wechseln
+            connect_btn = ui.button(tr("Mit Lichtmaschine verbinden"), on_click=lambda: connect_from_header()).props("unelevated no-caps dense color=negative").classes("mll-connect")  # v4.14
+            connect_arrow = ui.button(icon="arrow_drop_down").props("unelevated dense color=negative")  # v4.14
+            with connect_arrow:  # v4.14
+                with ui.menu():  # v4.14
+                    ui.menu_item(tr("Verbindung trennen"), on_click=lambda: disconnect_arduino())  # v4.14
+                    ui.menu_item(tr("Neu verbinden"), on_click=lambda: reconnect_arduino())  # v4.14
+                    ui.menu_item(tr("Board wechseln …"), on_click=lambda: change_board())  # v4.14
+            connect_arrow.tooltip(tr("Verbindung trennen, neu verbinden oder das Board wechseln"))  # v4.14
         # connect_btn.tooltip("Verbindung zum Arduino herstellen (wie Lichtmaschine → Verbinden). Rot: keine Verbindung, grün: verbunden. Trennen: Menü Lichtmaschine → Trennen")  # v2.01  # v3.83  # v3.84 (entfallen)
-        connect_btn.tooltip("Verbindung zur Lichtmaschine herstellen (wie ARDUINO → Verbinden). Rot: keine Verbindung, grün: verbunden. Trennen: Menü ARDUINO → Trennen")  # v2.01  # v3.83
+        # connect_btn.tooltip("Verbindung zur Lichtmaschine herstellen (wie ARDUINO → Verbinden). Rot: keine Verbindung, grün: verbunden. Trennen: Pfeil neben dem Knopf oder Menü ARDUINO → Trennen")  # v2.01  # v3.83  # v4.14  # v4.18 (entfallen)
+        connect_btn.tooltip("Verbindung zur Lichtmaschine herstellen (wie Lichtmaschine → Verbinden). Rot: keine Verbindung, grün: verbunden. Trennen: Pfeil neben dem Knopf oder Menü Lichtmaschine → Trennen")  # v4.18
         web_fullscreen.button()                                       # Vollbild ein und aus: neben Beenden, in jedem Reiter erreichbar und auch im Vollbild sichtbar  # v1.81
         # ui.button("Beenden", on_click=quit_program, icon="power_settings_new").props("color=negative outline dense").classes("mll-quit")  # v3.78 (entfallen)
         with ui.column().classes("items-end gap-0 mll-quitcol"):  # v3.78: unter dem Knopf Beenden die Version der MobaLedLib (nur mit der ARDUINO IDE)
@@ -2257,6 +2367,22 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
             # connect_btn.set_text("Mit ARDUINO verbunden" if connected else "Mit ARDUINO verbinden")  # v2.01  # v3.83 (entfallen)
             connect_btn.set_text(tr("Mit Lichtmaschine verbunden") if connected else tr("Mit Lichtmaschine verbinden"))  # v3.83
             connect_btn.props("color=positive" if connected else "color=negative")  # v2.01
+            connect_arrow.props("color=positive" if connected else "color=negative")  # v4.14
+            if connected:  # v4.14: die Verbindung merken: beim naechsten Start wird sie wiederhergestellt
+                try:  # v4.14
+                    ctrl.setConfigData("LastConnected", "1")  # v4.14
+                except Exception:                              # noqa: BLE001  # v4.14
+                    logger.debug("LastConnected nicht gespeichert", exc_info=True)  # v4.14
+        try:  # v4.17: Tastenkombination fuers inkrementelle Speichern an den Browser melden (beim Aufbau und nach einer Aenderung der Einstellung)
+            keytext = str(ctrl.getConfigData(INCR_SAVE_PARAM) or "").strip() or INCR_SAVE_DEFAULT  # v4.17
+            if state.get("incr_key_sent") != keytext:  # v4.17
+                state["incr_key_sent"] = keytext  # v4.17
+                spec = parse_shortcut(keytext)  # v4.17
+                ui.run_javascript("window.mllIncrKey = " + json.dumps(spec) + ";")  # v4.17
+                if spec is None:  # v4.17
+                    ui.notify(tr("Die Tastenkombination „{taste}“ für das inkrementelle Speichern ist ungültig. Beispiel: Strg+Umschalt+S. Es gilt keine Tastenkombination, der Menüpunkt geht weiter.", taste=keytext), type="warning")  # v4.17
+        except Exception:                                  # noqa: BLE001  # v4.17
+            logger.debug("Tastenkombination nicht gemeldet", exc_info=True)  # v4.17
         # state["libver_tick"] = state.get("libver_tick", 0) + 1  # v2.02 (entfallen)
         # if state["libver_tick"] % 10 == 1:                              # Version der MobaLedLib rechts in der Knopfzeile (alle 5 Sekunden neu lesen: nach einer Installation aendert sie sich)  # v2.02 (entfallen)
             # update_lib_version()  # v2.02 (entfallen)
@@ -2583,6 +2709,46 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
         dlg.delete()  # v2.38
         return bool(answer)  # v2.38
 
+    ext_asked = set()  # v3.98: Erweiterungen, nach denen in dieser Sitzung schon gefragt wurde
+
+    async def offer_extensions():  # v3.98
+        """Rueckfrage, wenn eine Tabelle eine ausgeschaltete Erweiterung (MLX) benutzt: Jetzt aktivieren? Sonst fehlen die Zeilen stumm."""  # v3.98
+        import headless.headless_extensions as HE  # v3.98
+        try:  # v3.98
+            texts = []  # v3.98
+            for sheet in wb.sheets:  # v3.98
+                for row in (getattr(getattr(sheet, "tksheet", None), "_data", None) or []):  # v3.98
+                    texts.extend(v for v in row if isinstance(v, str) and "EX." in v)  # v3.98
+            hits = [e for e in HE.find_disabled_used(texts) if e["id"] not in ext_asked]  # v3.98
+        except Exception:                                                  # noqa: BLE001  # v3.98
+            logger.debug("Pruefung der Erweiterungen fehlgeschlagen", exc_info=True)  # v3.98
+            return False  # v3.98
+        changed = False  # v3.98
+        for e in hits:  # v3.98
+            ext_asked.add(e["id"])  # v3.98
+            with ui.dialog().props("persistent") as dlg, ui.card().classes("w-[480px] max-w-full"):  # v3.98
+                ui.label(tr("Erweiterung einschalten?")).classes("text-h6")  # v3.98
+                ui.label(tr("Die Datei benutzt die Erweiterung {name}, sie ist ausgeschaltet. Ohne sie fehlen die zugehörigen Zeilen in der erzeugten Datei. Jetzt einschalten?", name=e["name"])).style("white-space: pre-line")  # v3.98
+                with ui.row().classes("justify-end w-full"):  # v3.98
+                    ui.button(tr("Nein"), on_click=lambda: dlg.submit(False)).props("flat")  # v3.98
+                    ui.button(tr("Einschalten"), on_click=lambda: dlg.submit(True)).props("color=primary")  # v3.98
+            dlg.open()  # v3.98
+            answer = await dlg  # v3.98
+            dlg.delete()  # v3.98
+            if not answer:  # v3.98
+                continue  # v3.98
+            try:  # v3.98
+                if HE.status(e) == "missing":  # v3.98
+                    await run.io_bound(HE.download, e)  # v3.98
+                HE.set_enabled(e["id"], True)  # v3.98
+                changed = True  # v3.98
+            except HE.ExtensionError as ex:  # v3.98
+                ui.notify(tr("Die Erweiterung {name} konnte nicht geladen werden: {fehler}", name=e["id"], fehler=ex), type="negative")  # v3.98
+        if changed:  # v3.98
+            import proggen.M38_Extensions as M38  # v3.98
+            await run_in_worker(lambda: M38.Load_Extensions())  # v3.98
+        return changed  # v3.98
+
     def KETTE_TEXT():  # v3.21
         return tr("Verschieben nicht möglich: Eine Zeile ohne LEDs gehört zur nachfolgenden Zeile mit LEDs und würde dabei in eine andere Kette wechseln.")  # v3.21
 
@@ -2796,6 +2962,15 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
 
     def rebuild_sheet_tabs():
         """Reiter neu aufbauen (Blattliste geaendert) bzw. den aktiven Reiter nachfuehren."""
+        if getattr(state["ws"], "user_hidden", False) and not tabs_guard.get("fixing"):  # v4.07: das aktive Blatt ist versteckt (z.B. nach dem Laden einer Arbeitsmappe: Startblatt DCC): erstes sichtbares Blatt waehlen
+            first_visible = [w_ for w_ in wb.sheets if not getattr(w_, "user_hidden", False) and getattr(w_, "Visible", True) is not False  # v4.07
+                             and w_.Name != M02.ConfigSheet]  # v4.07
+            if first_visible:  # v4.07
+                tabs_guard["fixing"] = True  # v4.07
+                try:  # v4.07
+                    activate(first_visible[0])  # v4.07
+                finally:  # v4.07
+                    tabs_guard["fixing"] = False  # v4.07
         tabs_guard["on"] = True
         try:
             load_sheet_dict()  # v2.63
@@ -2880,6 +3055,8 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
             dst.setData(_copy.deepcopy(src.getData()), copyshapes=True)  # v2.63
         if getattr(src, "esp32_wlan", None):  # v3.40: gleiche WLAN-Einstellungen wie das Original
             dst.esp32_wlan = dict(src.esp32_wlan)
+        if getattr(src, "esp32_options", None):  # v3.94
+            dst.esp32_options = dict(src.esp32_options)  # v3.94
         dst.set_tab_color(getattr(src, "tab_color", ""))  # wie in Excel: die Kopie hat dieselbe Reiterfarbe  # v2.63
         return dst  # v2.63
 
@@ -2940,9 +3117,21 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
             rebuild_sheet_tabs()  # v3.90
         WT.show_hidden_dialog(ui, names, do_show)  # v3.90
 
+    def tab_copy_widths(name):  # v4.08 (PR 19, moosbewohner): Spaltenbreiten auf andere Datenblaetter uebertragen
+        source = state["sheets"].get(name)  # v4.08
+        if source is None or not is_data_sheet(source):  # v4.08
+            return  # v4.08
+        names = [n for n in visible_sheet_names() if n != name and is_data_sheet(state["sheets"][n])]  # v4.08
+
+        def apply(selected, columns):  # v4.08
+            WT.copy_column_widths(source, [state["sheets"][n] for n in selected], columns)  # v4.08
+            show(state["ws"])  # v4.08
+        WT.show_copy_widths_dialog(ui, name, names, apply, source.tksheet.get_total_columns())  # v4.08
+
     # tab_callbacks = {"rename": tab_rename, "duplicate": tab_duplicate, "step": tab_step, "color": tab_set_color, "color_custom": tab_custom_color}  # v2.63  # v3.90 (entfallen)
     tab_callbacks = {"rename": tab_rename, "duplicate": tab_duplicate, "step": tab_step, "color": tab_set_color, "color_custom": tab_custom_color,  # v2.63
                      "hide": tab_hide, "show_hidden": tab_show_hidden, "hidden_count": lambda: len(hidden_sheet_names()), "can_hide": tab_can_hide}  # v3.90
+    tab_callbacks["copy_widths"] = tab_copy_widths  # v4.08
     ui.add_body_html("<script>" + WT.load_js() + "</script>")        # Ziehen der Reiter mit Alt + Maustaste  # v2.63
     ui.on("mll_tab_move", on_tab_move)  # v2.63
 
@@ -3796,6 +3985,7 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
 
         def fire():
             try:
+                ws.Activate()  # v4.11: ActiveSheet/ActiveCell der Makros muessen zum angeklickten Blatt gehoeren (nach "Verwerfen" zeigten sie auf ein altes Blatt-Objekt, Issue 16)
                 ws.tksheet.emit("cell_select", ev)      # EventSH_cellselected: Ziel von "Verschiebe Zeilen", Linksklick-Callback
                 ws.Evt_SheetSelectionChange(ev)
             except SystemExit:
@@ -4010,6 +4200,83 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
         except Exception:                              # noqa: BLE001  # v3.92
             logger.exception("Automatisch einfaerben fehlgeschlagen")  # v3.92
 
+    # ------------------------------------------------------------------ Rueckgaengig / Wiederholen der Tabellenaenderungen  # v4.02
+    UNDO_MAX = 50  # v4.02
+    undo_stacks: dict = {}  # v4.02: Blattname -> {"ws": Blatt, "undo": [...], "redo": [...]}
+
+    def undo_cell(ws, r, c) -> str:  # v4.02
+        try:
+            v = ws.tksheet.data[r][c]
+        except (IndexError, TypeError, AttributeError):
+            return ""
+        return "" if v is None else str(v)
+
+    def undo_row_count(ws) -> int:  # v4.02
+        try:
+            return len(ws.tksheet.data)
+        except Exception:                            # noqa: BLE001
+            return 0
+
+    def undo_stack(ws) -> dict:  # v4.02
+        st = undo_stacks.get(getattr(ws, "Name", ""))
+        if st is None or st["ws"] is not ws:        # anderes Blatt-Objekt (z.B. nach Laden/Wiederherstellen): Verlauf verwerfen
+            st = {"ws": ws, "undo": [], "redo": []}
+            undo_stacks[getattr(ws, "Name", "")] = st
+        return st
+
+    def undo_record(ws, before: list, label: str, rows: int, redo_stack: bool = False):  # v4.02
+        """before: [((zeile0, spalte0), alter Text)]; der neue Text wird jetzt aus der Tabelle gelesen. Nur echte Aenderungen."""
+        cells = []
+        for (r, c), old in before:
+            new = undo_cell(ws, r, c)
+            if new != old:
+                cells.append(((r, c), old, new))
+        if not cells:
+            return
+        st = undo_stack(ws)
+        st["undo"].append({"label": f"{label}, {len(cells)} " + (tr("Zellen") if len(cells) != 1 else tr("Zelle")),
+                           "cells": cells, "rows": rows})
+        del st["undo"][:-UNDO_MAX]
+        st["redo"].clear()
+
+    async def op_undo_redo(redo: bool):  # v4.02
+        ws = state["ws"]
+        if state["busy"]:
+            ui.notify(tr("Es läuft noch ein Vorgang - bitte warten."), type="warning")
+            return
+        st = undo_stack(ws)
+        src, dst = (st["redo"], st["undo"]) if redo else (st["undo"], st["redo"])
+        if not src:
+            ui.notify(tr("Nichts zum Wiederholen") if redo else tr("Nichts zum Rückgängig machen"), type="info")
+            return
+        entry = src.pop()
+        if entry["rows"] != undo_row_count(ws):      # Zeilen wurden eingefuegt/geloescht: die Positionen stimmen nicht mehr
+            st["undo"].clear()
+            st["redo"].clear()
+            ui.notify(tr("Zeilen wurden eingefügt oder gelöscht - der Verlauf wurde zurückgesetzt."), type="warning")
+            return
+        items = [(pos, new if redo else old) for pos, old, new in entry["cells"]]
+        ok = await write_cells(items, record=False)
+        if ok:
+            dst.append(entry)
+            await refresh_icons_after_paste(items)
+            ui.notify((tr("Wiederholt: {aktion}", aktion=entry["label"]) if redo
+                       else tr("Rückgängig: {aktion}", aktion=entry["label"])), type="positive")
+        else:
+            src.append(entry)
+
+    async def op_undo(_=None):  # v4.02
+        await op_undo_redo(False)
+
+    async def op_redo(_=None):  # v4.02
+        await op_undo_redo(True)
+
+    def undo_menu_label(redo: bool) -> str:  # v4.02
+        st = undo_stack(state["ws"]) if state.get("ws") is not None else None
+        stack = (st["redo"] if redo else st["undo"]) if st else []
+        base = tr("Wiederholen") if redo else tr("Rückgängig")
+        return f"{base}: {stack[-1]['label']}" if stack else base
+
     async def on_cell_changed(e):
         a = e.args
         ws = state["ws"]
@@ -4030,6 +4297,9 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
         if M09.CANONICAL_TOKENS and col - 1 == typ_column(ws):  # v2.14
             new_value = M09.Token_Canonical(new_value)                  # in der Spalte Typ wird ein Token der Anzeigesprache als neutrales (deutsches) Token gespeichert  # v2.14
 
+        undo_before = undo_cell(ws, row - 1, col - 1)  # v4.02
+        undo_rows = undo_row_count(ws)  # v4.02
+
         def write():
             try:
                 if SHAPES_DEBUG:  # v1.51
@@ -4046,6 +4316,8 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
             logger.exception("Schreiben von %s!%s,%s fehlgeschlagen", ws.Name, row, col)
             # ui.notify(f"Fehler beim Schreiben: {ex}", type="negative")  # v2.16 (entfallen)
             ui.notify(tr('Fehler beim Schreiben: {ex}', ex=ex), type="negative")  # v2.16
+        else:  # v4.02
+            undo_record(ws, [((row - 1, col - 1), undo_before)], tr("Zelleingabe"), undo_rows)  # v4.02
         show(ws)                                 # Handler koennen weitere Zellen geaendert haben
 
     grid.on("cellValueChanged", on_cell_changed)
@@ -4096,6 +4368,11 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
         a = e.args or {}
         ctx_state.clear()
         ctx_state.update(a)
+        try:  # v4.02: Menueeintraege Rueckgaengig/Wiederholen mit dem Namen der letzten Aktion
+            undo_item_label.text = undo_menu_label(False)
+            redo_item_label.text = undo_menu_label(True)
+        except Exception:                            # noqa: BLE001
+            logger.debug("Rueckgaengig-Beschriftung nicht gesetzt", exc_info=True)
         try:                                         # wie Excel: Rechtsklick markiert die Zelle
             if str(a.get("col", "")) != "_rn":
                 r, c = int(a["r"]), col_index(a["col"])
@@ -4103,14 +4380,17 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
         except Exception:                            # noqa: BLE001
             logger.debug("Rechtsklick: Zelle nicht markierbar", exc_info=True)
 
-    async def write_cells(items: list):
-        """items: [((zeile0, spalte0), Text)] ueber den normalen Schreibweg (loest Worksheet_Change aus)."""
+    async def write_cells(items: list, label: str = "", record: bool = True) -> bool:  # v4.02: label/record/Rueckgabe
+        """items: [((zeile0, spalte0), Text)] ueber den normalen Schreibweg (loest Worksheet_Change aus).
+        label: Name der Aktion im Rueckgaengig-Verlauf; record=False beim Rueckgaengig/Wiederholen selbst. True = geschrieben."""
         ws = state["ws"]
         if state["busy"]:
             ui.notify("Es läuft noch ein Vorgang - bitte warten.", type="warning")
-            return
+            return False  # v4.02
         floor = first_data_row0()
         items = [(pos, v) for pos, v in items if pos[0] >= floor]       # Kopfzeilen bleiben unveraendert
+        undo_before = [(pos, undo_cell(ws, pos[0], pos[1])) for pos, _ in items] if record else []  # v4.02
+        undo_rows = undo_row_count(ws)  # v4.02
 
         def work():
             ws.Activate()
@@ -4135,7 +4415,12 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
             logger.exception("Schreiben fehlgeschlagen")
             # ui.notify(f"Fehler beim Schreiben: {ex}", type="negative")  # v2.16 (entfallen)
             ui.notify(tr('Fehler beim Schreiben: {ex}', ex=ex), type="negative")  # v2.16
+            show(ws)  # v4.02
+            return False  # v4.02
+        if record and undo_before:  # v4.02
+            undo_record(ws, undo_before, label or tr("Änderung"), undo_rows)  # v4.02
         show(ws)
+        return True  # v4.02
 
     async def op_clear(_=None):                      # Entf und Ausschneiden (der Text ist schon in der Zwischenablage)
         if ctx_ok():
@@ -4144,7 +4429,7 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
                 cells = [(rr, cc) for rr in await ctx_rows(int(ctx_state["r"])) for cc in range(0, ncols)]
             else:
                 cells = await target_cells(int(ctx_state["r"]), col_index(ctx_state["col"]))
-            await write_cells([(pos, "") for pos in cells])
+            await write_cells([(pos, "") for pos in cells], label=tr("Löschen"))  # v4.02
 
     async def refresh_icons_after_paste(items: list):
         """Wie M23.Proc_Copy_Row nach dem Kopieren: Symbol der Zeile aus der Beleuchtungs-Spalte neu anlegen. Der eingefuegte
@@ -4231,7 +4516,10 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
                 ui.notify(tr('Fehler beim Einfügen der Zeilen: {ex}', ex=ex), type="negative")  # v2.16
                 show(state["ws"])
                 return
-        await write_cells(items)
+            st_ = undo_stack(state["ws"])  # v4.02: Zeilen eingefuegt -> Verlauf dieses Blatts verwerfen
+            st_["undo"].clear()  # v4.02
+            st_["redo"].clear()  # v4.02
+        await write_cells(items, label=tr("Einfügen"))  # v4.02
         await refresh_icons_after_paste(items)
 
     def series_value(base: str, n: int) -> str:  # v3.93
@@ -4274,7 +4562,7 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
             for k, tr_row in enumerate(targets, start=1):  # v3.93
                 items.append(((tr_row, c), series_value(base, k) if mode == "series" else base))  # v3.93
         if items:  # v3.93
-            await write_cells(items)  # v3.93
+            await write_cells(items, label=(tr("Reihe fortsetzen") if mode == "series" else "Strg+D"))  # v3.93  # v4.02
 
     async def op_fill_down(_=None):  # v3.93
         await op_fill("copy")  # v3.93
@@ -4292,6 +4580,10 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
             await op_paste(types.SimpleNamespace(args=a))
         elif a.get("op") == "filldown":  # v3.93
             await op_fill("copy")  # v3.93
+        elif a.get("op") == "undo":  # v4.02
+            await op_undo()  # v4.02
+        elif a.get("op") == "redo":  # v4.02
+            await op_redo()  # v4.02
 
     async def op_toggle_active(r):  # v2.93
         """Haken der Spalte Aktiv der markierten Zeilen umschalten (Leertaste, Kontextmenue)"""  # v2.93
@@ -4382,7 +4674,12 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
                 "catch (e) { alert(" + json.dumps(tr("Der Zugriff auf die Zwischenablage wurde vom Browser verweigert.")) + "); } }")  # v3.06
 
     with grid_wrap:                                  # das Menue haengt am Traeger: Rechtsklick in der Tabelle oeffnet es
-        with ui.context_menu():
+        with ui.context_menu() as ctx_menu_:  # v4.02
+            with ui.menu_item(on_click=op_undo):  # v4.02
+                undo_item_label = ui.item_label(tr("Rückgängig")).classes("mll-undo-label")  # v4.02
+            with ui.menu_item(on_click=op_redo):  # v4.02
+                redo_item_label = ui.item_label(tr("Wiederholen")).classes("mll-undo-label")  # v4.02
+            ui.separator()  # v4.02
             with ui.menu_item().on("click", None, js_handler=EDIT_CELL_JS):
                 menu_row("Zelle bearbeiten", "F2")
             with ui.menu_item().on("click", None, js_handler=COPY_JS):
@@ -4521,6 +4818,9 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
             logger.exception("Suche")  # v3.28
     if hasattr(ui, "on"):  # v3.28
         ui.on("mll_find", on_find_event)  # v3.28
+        async def on_incr_save_event(e):  # v4.15
+            await incremental_save()  # v4.15
+        ui.on("mll_incr_save", on_incr_save_event)  # v4.15: Strg+Umschalt+S
 
     # ------------------------------------------------------------------ Toolbar-Aktionen
     def run_command(func, label, live=True):
@@ -4597,6 +4897,8 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
             state["ws"] = current
             rebuild_sheet_tabs()
             show(current)
+            if await offer_extensions():                   # v3.98: eine Datei (zum Beispiel per Laden) benutzt eine ausgeschaltete Erweiterung
+                show(current)  # v3.98
         return handler
 
     icon_dir = os.path.join(here, "images")
@@ -4823,25 +5125,73 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
             bar.props("indeterminate")
             await restart_program()
 
-        async def choose_release(releases):  # v3.04
-            """Hilfe -> Update Testversion: Auswahl der Version aus den Releases auf GitHub. Rueckgabe: der gewaehlte Eintrag oder None (Abbrechen)."""  # v3.04
-            choices = wu.release_choices(releases, VERSION)  # v3.04
+        async def choose_release(releases, github_error=""):  # v3.04
+            """Hilfe -> Update Testversion: Auswahl der Version aus den Releases auf GitHub, eines eigenen Links zu einer ZIP-Datei oder einer ZIP-Datei auf diesem Rechner (v3.95).
+            Rueckgabe: der gewaehlte Eintrag (bei eigener Quelle mit custom=True) oder None (Abbrechen)."""  # v3.04
+            choices = wu.release_choices(releases, VERSION) if releases else []  # v3.04
             bar.props(remove="indeterminate")  # v3.04
             bar.set_value(0)  # v3.04
-            status.set_text(tr("Welche Version soll geladen werden?\nDie neueste Version ist vorgewählt. Eine ältere Version ist ein Rücksprung; dazu werden Sie vor dem Ersetzen noch einmal gefragt."))  # v3.04
+            # status.set_text(tr("Welche Version soll geladen werden?\nDie neueste Version ist vorgewählt. Eine ältere Version ist ein Rücksprung; dazu werden Sie vor dem Ersetzen noch einmal gefragt."))  # v3.04 (entfallen v3.95)
+            text = tr("Welche Version soll geladen werden?\nDie neueste Version ist vorgewählt. Eine ältere Version ist ein Rücksprung; dazu werden Sie vor dem Ersetzen noch einmal gefragt.")  # v3.95
+            if github_error:  # v3.95
+                text = tr("GitHub ist nicht erreichbar: {fehler}", fehler=github_error) + "\n" + tr("Sie können einen eigenen Link oder eine ZIP-Datei auf diesem Rechner angeben.")  # v3.95
+            status.set_text(text)  # v3.95
             listing.clear()  # v3.04
-            listing.style("height: 72px")  # v3.04
-            with listing:  # v3.04
-                picker = ui.select({str(i): ch["label"] for i, ch in enumerate(choices)}, value="0", label=tr("Version")).props("outlined dense").classes("w-full")  # v3.04
+            listing.style("height: 215px")  # v3.95
+            options = {str(i): ch["label"] for i, ch in enumerate(choices)}  # v3.95
+            options["url"] = tr("Eigener Link zu einer ZIP-Datei …")  # v3.95
+            options["file"] = tr("ZIP-Datei auf diesem Rechner auswählen …")  # v3.95
             decision = asyncio.get_running_loop().create_future()  # v3.04
+            with listing:  # v3.04
+                # picker = ui.select({str(i): ch["label"] for i, ch in enumerate(choices)}, value="0", label=tr("Version")).props("outlined dense").classes("w-full")  # v3.04 (entfallen v3.95)
+                picker = ui.select(options, value="0" if choices else "url", label=tr("Version")).props("outlined dense").classes("w-full")  # v3.95
+                url_input = ui.input(label=tr("Adresse der ZIP-Datei (https://…)")).props("outlined dense clearable").classes("w-full")  # v3.95
+                url_input.bind_visibility_from(picker, "value", backward=lambda v: v == "url")  # v3.95
+
+                async def on_zip(e):  # v3.95
+                    try:  # v3.95
+                        name, data = await web_dialogs._read_upload(e)  # v3.95
+                        data = bytes(data) if isinstance(data, (bytes, bytearray)) else str(data).encode("utf-8")  # v3.95
+                        await run.io_bound(wu.save_upload, data, zip_path_of_update())  # v3.95
+                    except wu.UpdateError as ex:  # v3.95
+                        ui.notify(str(ex), type="negative")  # v3.95
+                        return  # v3.95
+                    if not decision.done():  # v3.95
+                        decision.set_result({"custom": True, "file": True, "tag": name, "name": name, "prerelease": False, "date": "", "url": ""})  # v3.95
+                upload = ui.upload(on_upload=on_zip, auto_upload=True, max_files=1, label=tr("ZIP-Datei hierher ziehen oder zum Auswählen klicken")).classes("w-full").props('accept=".zip"')  # v3.95
+                upload.bind_visibility_from(picker, "value", backward=lambda v: v == "file")  # v3.95
+                ui.label(tr("Eine eigene Quelle wird wie webmobaledlib.zip behandelt und muss dasselbe Format und denselben Inhalt haben (Ordner python, Prüfliste). Installieren Sie nur ZIP-Dateien aus Quellen, denen Sie vertrauen.")).classes("text-caption text-grey-8")  # v3.95
+
+            def load_selected():  # v3.95
+                if decision.done():  # v3.95
+                    return  # v3.95
+                if picker.value == "file":  # v3.95
+                    ui.notify(tr("Bitte die ZIP-Datei oben auswählen."), type="warning")  # v3.95
+                elif picker.value == "url":  # v3.95
+                    try:  # v3.95
+                        url = wu.check_custom_url(url_input.value)  # v3.95
+                    except wu.UpdateError as ex:  # v3.95
+                        ui.notify(str(ex), type="negative")  # v3.95
+                        return  # v3.95
+                    decision.set_result({"custom": True, "file": False, "tag": url, "name": url, "prerelease": False, "date": "", "url": url})  # v3.95
+                else:  # v3.95
+                    decision.set_result(choices[int(picker.value)]["entry"])  # v3.95
+
             set_buttons((tr("Abbrechen"), lambda: decision.done() or decision.set_result(None), "flat", "mll-cancel"),  # v3.04
-                        (tr("Version laden"), lambda: decision.done() or decision.set_result(choices[int(picker.value)]["entry"]), "color=primary", "mll-default"))  # v3.04
+                        # (tr("Version laden"), lambda: decision.done() or decision.set_result(choices[int(picker.value)]["entry"]), "color=primary", "mll-default"))  # v3.04 (entfallen v3.95)
+                        (tr("Version laden"), load_selected, "color=primary", "mll-default"))  # v3.95
             chosen = await decision  # v3.04
             listing.clear()  # v3.04
             listing.style("height: 0")  # v3.04
             set_buttons()  # v3.04
             bar.props("indeterminate")  # v3.04
             return chosen  # v3.04
+
+        def zip_path_of_update():  # v3.95
+            """Ort der ZIP-Datei im Arbeitsordner des Updates (Download oder ausgewaehlte Datei)"""  # v3.95
+            if not work["tmp"]:  # v3.95
+                work["tmp"] = tempfile.mkdtemp(prefix="mll_update_")  # v3.95
+            return os.path.join(work["tmp"], "webmobaledlib.zip")  # v3.95
 
         async def check():
             set_buttons()
@@ -4852,8 +5202,9 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
                 if reason:
                     finish(reason, error=True)
                     return
-                work["tmp"] = tempfile.mkdtemp(prefix="mll_update_")
-                zip_path = os.path.join(work["tmp"], "webmobaledlib.zip")
+                # work["tmp"] = tempfile.mkdtemp(prefix="mll_update_")  # (entfallen v3.95)
+                # zip_path = os.path.join(work["tmp"], "webmobaledlib.zip")  # (entfallen v3.95)
+                zip_path = zip_path_of_update()  # v3.95: legt den Arbeitsordner an; eine ausgewaehlte ZIP-Datei wird dort abgelegt
 
                 def download_progress(done, total):
                     # shared.update(done=done, total=total, text=f"Geladen: {done // 1024} KB" + (f" von {total // 1024} KB" if total else ""))  # v2.20 (entfallen)
@@ -4864,15 +5215,23 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
                     # status.set_text(tr("Suche nach der neuesten Testversion ..."))  # v2.59 (entfallen)
                     # work["source"] = await run.io_bound(wu.newest_release)                  # Pre-Release oder normales Release: das neueste  # v2.59 (entfallen)
                     status.set_text(tr("Suche nach den Testversionen ..."))  # v3.04
-                    releases = await run.io_bound(wu.available_releases)                      # die letzten Releases auf GitHub (Pre-Release oder normal)  # v3.04
-                    work["source"] = await choose_release(releases)                         # der Tester sucht die Version aus (die neueste ist vorgewaehlt)  # v3.04
+                    # releases = await run.io_bound(wu.available_releases)                      # die letzten Releases auf GitHub (Pre-Release oder normal)  # v3.04 (entfallen v3.95)
+                    # work["source"] = await choose_release(releases)                         # der Tester sucht die Version aus (die neueste ist vorgewaehlt)  # v3.04 (entfallen v3.95)
+                    releases, github_error = [], ""  # v3.95
+                    try:  # v3.95
+                        releases = await run.io_bound(wu.available_releases)                      # die letzten Releases auf GitHub (Pre-Release oder normal)  # v3.04
+                    except wu.UpdateError as ex:  # v3.95: ohne GitHub bleiben eigener Link und ZIP-Datei vom Rechner
+                        github_error = str(ex)  # v3.95
+                    work["source"] = await choose_release(releases, github_error)           # der Tester sucht die Version aus (die neueste ist vorgewaehlt) oder gibt eine eigene Quelle an  # v3.95
                     if work["source"] is None:                                              # Abbrechen  # v3.04
                         close_update()  # v3.04
                         return  # v3.04
                     url = work["source"]["url"]  # v2.59
                 else:  # v2.59
                     url = wu.update_url()  # v2.59
-                await run.io_bound(wu.download, url, zip_path, download_progress)  # v2.59
+                # await run.io_bound(wu.download, url, zip_path, download_progress)  # v2.59 (entfallen v3.95)
+                if not (work["source"] and work["source"].get("file")):  # v3.95: eine ausgewaehlte ZIP-Datei liegt schon im Arbeitsordner
+                    await run.io_bound(wu.download, url, zip_path, download_progress)  # v2.59
                 shared.update(done=0, total=0, text="")
                 status.set_text("Die Dateien werden mit dem installierten Stand verglichen ...")
                 work["release"], work["plan"] = await run.io_bound(wu.prepare, zip_path, here, VERSION)
@@ -4903,7 +5262,10 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
                         tr('\nEin Rücksprung auf eine ältere Version ist nur sinnvoll, wenn Sie ihn wollen (zum Beispiel nach einem Fehler in der neuen Version). Wurde versehentlich ein altes ZIP bereitgestellt: Abbrechen.'))  # v2.20
             if work["source"]:  # v2.59
                 src = work["source"]  # v2.59
-                head = tr('Testversion: {tag} ({art}, veröffentlicht am {datum})', tag=src["tag"] or src["name"], art=tr("Pre-Release") if src["prerelease"] else tr("Release"), datum=src["date"]) + "\n" + head  # v2.59
+                if src.get("custom"):  # v3.95
+                    head = tr("Eigene Quelle: {quelle}", quelle=src["tag"]) + "\n" + head  # v3.95
+                else:  # v3.95
+                    head = tr('Testversion: {tag} ({art}, veröffentlicht am {datum})', tag=src["tag"] or src["name"], art=tr("Pre-Release") if src["prerelease"] else tr("Release"), datum=src["date"]) + "\n" + head  # v2.59
             status.set_text(head)
             # status.style("color: #c62828; font-weight: 600" if plan.downgrade else "")  # v2.65 (entfallen)
             status.style("color: #c62828; font-weight: 600" if (plan.downgrade or plan.many_deletes) else "")  # v2.65
@@ -4920,7 +5282,9 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
                 # notes.append("Persönliche Dateien im ZIP werden ignoriert: " + ", ".join(plan.ignored))  # v2.20 (entfallen)
                 notes.append(tr('Persönliche Dateien im ZIP werden ignoriert: ') + ", ".join(plan.ignored))  # v2.20
             notes.append("Vor dem Ersetzen werden die Tabellen gesichert. Konfiguration, Passwort und Protokolle bleiben unverändert.")
-            if work["source"]:  # v2.59
+            if work["source"] and work["source"].get("custom"):  # v3.95
+                notes.append(tr("Die ZIP-Datei stammt aus einer Quelle, die Sie angegeben haben. Sie wird wie webmobaledlib.zip behandelt. Die Prüfliste und die Prüfsummen werden geprüft."))  # v3.95
+            elif work["source"]:  # v2.59
                 notes.append(tr('Das ist eine Testversion und kann Fehler enthalten. Das normale Update (Hilfe → Update webMobaLedLib …) lädt nur das letzte fertige Release.'))  # v2.59
             if plan.many_deletes:                              # mehr als 20 Dateien werden gelöscht: nachfragen statt abbrechen (zum Beispiel viele nicht mehr benutzte Symbole)  # v2.65
                 notes.insert(0, tr("Achtung: Das Update löscht {anzahl} Dateien (mehr als {grenze}). Das ist richtig, wenn sie in der neuen Version nicht mehr gebraucht werden (zum Beispiel nicht mehr benutzte Symbole). Sie werden vorher im Datenordner gesichert. Zum Beispiel: ", anzahl=len(plan.delete), grenze=wu.MAX_DELETE) + ", ".join(plan.delete[:6]) + (" ..." if len(plan.delete) > 6 else ""))  # v2.65
@@ -4967,7 +5331,8 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
     def workbook_signature():
         # return tuple((id(s), s.tksheet.version, len(getattr(s, "shapelist", []) or [])) for s in list(wb.sheets))  # v2.40 (entfallen)
         # return tuple((id(s), s.tksheet.version, len(getattr(s, "shapelist", []) or []), getattr(s, "view_layout_ver", 0)) for s in list(wb.sheets))  # v2.63 (entfallen)
-        return tuple((id(s), s.tksheet.version, len(getattr(s, "shapelist", []) or []), getattr(s, "view_layout_ver", 0), s.Name, getattr(s, "tab_color", "")) for s in list(wb.sheets))  # v2.63 Name und Reiterfarbe  # v2.63
+        # return tuple((id(s), s.tksheet.version, len(getattr(s, "shapelist", []) or []), getattr(s, "view_layout_ver", 0), s.Name, getattr(s, "tab_color", "")) for s in list(wb.sheets))  # v2.63 Name und Reiterfarbe  # v2.63  # v3.94 (entfallen)
+        return tuple((id(s), s.tksheet.version, len(getattr(s, "shapelist", []) or []), getattr(s, "view_layout_ver", 0), s.Name, getattr(s, "tab_color", ""), tuple(sorted((getattr(s, "esp32_options", None) or {}).items()))) for s in list(wb.sheets))  # v2.63 Name und Reiterfarbe  # v2.63  # v3.94
 
     def save_now():
         sync_all_sheets()
@@ -4979,6 +5344,33 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
         _AUTOSAVE["sig_saved"] = workbook_signature()
         # autosave_label.set_text("Zwischengespeichert " + time.strftime("%H:%M:%S"))  # v3.03 (entfallen)
         autosave_label.set_text(tr("Zwischengespeichert") + " " + time.strftime("%H:%M:%S"))  # v3.03
+        autosave_label.set_visibility(True)  # v4.16
+
+    def discarded_path():  # v4.02
+        return os.path.splitext(main_workbook_file())[0] + ".discarded.json"
+
+    def remove_discarded():  # v4.02
+        try:
+            if os.path.exists(discarded_path()):
+                os.remove(discarded_path())
+        except OSError:
+            logger.debug("Verworfener Stand nicht loeschbar", exc_info=True)
+
+    def keep_discarded_state():  # v4.02
+        """Beenden ohne Speichern: ungesicherte Aenderungen als 'verworfener Stand' aufheben (wird beim naechsten Start einmal angeboten)."""
+        try:
+            changed = workbook_signature() != _AUTOSAVE["sig_saved"] and _AUTOSAVE["sig_saved"] is not None
+            if changed:
+                sync_all_sheets()
+                tmp = discarded_path() + ".tmp"
+                wb.Save(filename=tmp)
+                os.replace(tmp, discarded_path())
+                logger.info("Verworfener Stand gesichert: %s", discarded_path())
+            elif os.path.exists(autosave_path()):
+                os.replace(autosave_path(), discarded_path())      # Zwischensicherung ist der letzte Stand
+                logger.info("Zwischensicherung als verworfener Stand aufgehoben")
+        except Exception:                                          # noqa: BLE001
+            logger.exception("Verworfener Stand nicht gesichert")
 
     def remove_autosave():
         try:
@@ -5026,10 +5418,32 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
         finally:
             _AUTOSAVE["running"] = state["busy"] = False
 
+    async def offer_discarded():  # v4.02
+        """Einmaliges Angebot: beim letzten Beenden ohne Speichern verworfene Aenderungen wiederherstellen."""
+        path = discarded_path()
+        if not os.path.exists(path):
+            return
+        when = time.strftime("%d.%m.%Y %H:%M:%S", time.localtime(os.path.getmtime(path)))
+        with ui.dialog().props("persistent") as dlg, ui.card().classes("w-[560px] max-w-full"):
+            ui.label(tr("Verworfene Änderungen gefunden")).classes("text-h6")
+            ui.label(tr("Die letzten verworfenen Änderungen wiederherstellen? Beim letzten Beenden ohne Speichern ({when}) wurden Änderungen nicht gespeichert.", when=when))
+            with ui.row().classes("justify-end w-full"):
+                ui.button("Nein (N)", on_click=lambda: dlg.submit("no")).props("flat data-key=N").classes("mll-cancel")
+                ui.button("Wiederherstellen (W)", on_click=lambda: dlg.submit("restore")).props("color=primary data-key=W").classes("mll-default")
+        choice = await dlg
+        web_dialogs.safe_delete(dlg)
+        logger.info("Verworfener Stand vom %s: Auswahl %s", when, choice)
+        if choice == "restore":
+            await run_command(lambda: wb.Load(filename=path), "Wiederherstellen", live=False)()
+            _AUTOSAVE["sig_saved"] = None
+        remove_discarded()                                         # nur einmal anbieten
+
     async def offer_recovery():
         path = autosave_path()
         if not os.path.exists(path):
+            await offer_discarded()  # v4.02
             return
+        remove_discarded()  # v4.02: nach einem Absturz gilt der neuere Zwischenstand
         main = main_workbook_file()
         if os.path.exists(main) and os.path.getmtime(main) >= os.path.getmtime(path):
             remove_autosave()                                  # veraltet: die normale Sicherung ist neuer
@@ -5052,6 +5466,149 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
             remove_autosave()
             M25.Col_from_Sheet = ''  # v3.70: Spaltennummern des aktiven Blatts neu einlesen
             _AUTOSAVE["sig_saved"] = None  # v3.70
+            try:  # v4.11 (Issue 16): aktives Blatt der Makro-Schicht neu setzen
+                state["ws"].Activate()  # v4.11
+            except Exception:  # noqa: BLE001  # v4.11
+                logger.debug("Activate nach Verwerfen fehlgeschlagen", exc_info=True)  # v4.11
+
+    # ------------------------------------------------------------------ Inkrementelles Speichern (v4.15, Issue 21)
+    INCR_KEY = "IncrementalSave"  # Konfiguration: {Workbook-Datei: {"dir": Ordner, "base": Basisname}}
+
+    def incr_config() -> dict:  # v4.15
+        try:  # v4.15
+            raw = ctrl.getConfigData(INCR_KEY)  # v4.15
+            data = raw if isinstance(raw, dict) else json.loads(str(raw or "{}"))  # v4.15
+            return dict(data.get(main_workbook_file(), {}))  # v4.15
+        except Exception:                                  # noqa: BLE001  # v4.15
+            return {}  # v4.15
+
+    def incr_config_save(cfg: dict):  # v4.15
+        try:  # v4.15
+            raw = ctrl.getConfigData(INCR_KEY)  # v4.15
+            data = raw if isinstance(raw, dict) else json.loads(str(raw or "{}"))  # v4.15
+        except Exception:                                  # noqa: BLE001  # v4.15
+            data = {}  # v4.15
+        data[main_workbook_file()] = cfg  # v4.15
+        ctrl.setConfigData(INCR_KEY, json.dumps(data, ensure_ascii=False))  # v4.15
+
+    def incr_default_target() -> dict:  # v4.15
+        base = os.path.splitext(os.path.basename(main_workbook_file()))[0]  # v4.15
+        return {"dir": os.path.join(ctrl.data_dir, "Sicherungen"), "base": base}  # v4.15
+
+    def incr_files(folder: str, base: str | None = None) -> list:  # v4.15
+        """Sicherungsdateien <Name>_<Nummer>.json im Ordner: [(Nummer, Pfad, Name)], mit base nur dieses Namens"""  # v4.15
+        rx = re.compile(r"^(?P<b>.+)_(?P<n>\d{4,})\.json$", re.IGNORECASE)  # v4.15
+        res = []  # v4.15
+        try:  # v4.15
+            for name in os.listdir(folder):  # v4.15
+                m = rx.match(name)  # v4.15
+                if m and (base is None or m.group("b") == base):  # v4.15
+                    res.append((int(m.group("n")), os.path.join(folder, name), name))  # v4.15
+        except OSError:  # v4.15
+            pass  # v4.15
+        return res  # v4.15
+
+    async def ask_incr_target(cfg: dict):  # v4.15
+        """Ordner und Basisname der Sicherungsdateien erfragen. Ergebnis {"dir", "base"} oder None (Abbrechen)."""  # v4.15
+        cur = {**incr_default_target(), **{k: v for k, v in cfg.items() if v}}  # v4.15
+        with ui.dialog().props("persistent") as dlg, ui.card().classes("w-[640px] max-w-full"):  # v4.15
+            ui.label(tr("Sicherungsort für das inkrementelle Speichern")).classes("text-h6")  # v4.15
+            ui.label(tr("An den Namen wird bei jedem Speichern eine vierstellige Nummer angehängt. Der Ordner liegt auf dem Rechner, auf dem das Programm läuft."))  # v4.15
+            folder_in = ui.input(tr("Ordner"), value=cur["dir"]).classes("w-full")  # v4.15
+            base_in = ui.input(tr("Name der Sicherungsdatei (ohne Nummer)"), value=cur["base"]).classes("w-full")  # v4.15
+            with ui.row().classes("justify-end w-full"):  # v4.15
+                ui.button("Abbrechen (A)", on_click=lambda: dlg.submit(None)).props("flat data-key=A").classes("mll-cancel")  # v4.15
+                ui.button("OK (O)", on_click=lambda: dlg.submit((folder_in.value, base_in.value))).props("color=primary data-key=O").classes("mll-default")  # v4.15
+        choice = await dlg  # v4.15
+        web_dialogs.safe_delete(dlg)  # v4.15
+        if not choice:  # v4.15
+            return None  # v4.15
+        folder = str(choice[0] or "").strip()  # v4.15
+        base = re.sub(r'[\\/:*?"<>|]', "_", str(choice[1] or "").strip())  # v4.15
+        if not folder or not base:  # v4.15
+            ui.notify(tr("Ordner und Name dürfen nicht leer sein."), type="warning")  # v4.15
+            return None  # v4.15
+        return {"dir": folder, "base": base}  # v4.15
+
+    async def change_incr_target():  # v4.15
+        new = await ask_incr_target(incr_config())  # v4.15
+        if new:  # v4.15
+            incr_config_save(new)  # v4.15
+            ui.notify(tr("Sicherungsort gespeichert: {ordner}", ordner=new["dir"]), type="positive")  # v4.15
+
+    async def incremental_save():  # v4.15
+        """Tastenkombination (Programm Einstellungen) oder Menue Datei: das komplette Workbook als <Name>_<Nummer>.json sichern, die Nummer steigt bei jedem Speichern um eins"""  # v4.15
+        if state["busy"]:  # v4.15
+            ui.notify(tr("Es läuft noch ein Vorgang - bitte warten."), type="warning")  # v4.15
+            return  # v4.15
+        cfg = incr_config()  # v4.15
+        if not cfg.get("dir") or not cfg.get("base"):  # v4.15: erstes Speichern: nach Ort und Namen fragen
+            cfg = await ask_incr_target(cfg)  # v4.15
+            if not cfg:  # v4.15
+                return  # v4.15
+            incr_config_save(cfg)  # v4.15
+        folder, base = cfg["dir"], cfg["base"]  # v4.15
+        try:  # v4.15
+            os.makedirs(folder, exist_ok=True)  # v4.15
+        except OSError as ex:  # v4.15
+            ui.notify(tr("Der Ordner kann nicht angelegt werden: {fehler}", fehler=ex), type="negative")  # v4.15
+            return  # v4.15
+        nxt = max([n for n, _p, _f in incr_files(folder, base)] or [0]) + 1  # v4.15: hoechste Nummer im Ordner + 1: auch nach einem Neustart und ohne Ueberschreiben
+        path = os.path.join(folder, "%s_%04d.json" % (base, nxt))  # v4.15
+        await run_command(lambda: (sync_all_sheets(), wb.Save(filename=path)), "Inkrementell speichern", live=False)()  # v4.15
+        if os.path.exists(path):  # v4.15
+            ui.notify(tr("Gesichert: {datei}", datei=os.path.basename(path)), type="positive")  # v4.15
+            logger.info("Inkrementell gespeichert: %s", path)  # v4.15
+        else:  # v4.15
+            ui.notify(tr("Das Speichern ist fehlgeschlagen. Siehe Protokoll."), type="negative")  # v4.15
+
+    async def open_backup():  # v4.15
+        """Datei -> Sicherungsdatei oeffnen: Liste der Sicherungen im Ordner (neueste zuerst), eine auswaehlen und als Workbook lesen"""  # v4.15
+        cur = {**incr_default_target(), **{k: v for k, v in incr_config().items() if v}}  # v4.15
+        columns = [{"name": "name", "label": tr("Datei"), "field": "name", "align": "left"},  # v4.15
+                   {"name": "time", "label": tr("Zeitpunkt"), "field": "time", "align": "left"},  # v4.15
+                   {"name": "size", "label": tr("Größe"), "field": "size", "align": "right"}]  # v4.15
+        with ui.dialog().props("persistent") as dlg, ui.card().classes("w-[760px] max-w-full"):  # v4.15
+            ui.label(tr("Sicherungsdatei öffnen")).classes("text-h6")  # v4.15
+            with ui.row().classes("w-full items-end no-wrap"):  # v4.15
+                folder_in = ui.input(tr("Ordner"), value=cur["dir"]).classes("grow")  # v4.15
+                ui.button(tr("Anzeigen"), on_click=lambda: refresh()).props("flat")  # v4.15
+            table = ui.table(columns=columns, rows=[], row_key="path", selection="single").classes("w-full").props("dense")  # v4.15
+            ui.label(tr("Das aktuelle Workbook wird durch die gewählte Sicherung ersetzt. Ungesicherte Änderungen gehen verloren.")).classes("text-caption")  # v4.15
+
+            def refresh():  # v4.15
+                rows = []  # v4.15
+                for _n, path, name in incr_files(str(folder_in.value or "").strip()):  # v4.15
+                    try:  # v4.15
+                        st = os.stat(path)  # v4.15
+                    except OSError:  # v4.15
+                        continue  # v4.15
+                    rows.append({"name": name, "path": path, "mtime": st.st_mtime,  # v4.15
+                                 "time": time.strftime("%d.%m.%Y %H:%M:%S", time.localtime(st.st_mtime)), "size": "%d KB" % max(1, st.st_size // 1024)})  # v4.15
+                rows.sort(key=lambda r: r["mtime"], reverse=True)  # v4.15
+                table.rows = rows[:300]  # v4.15
+                table.selected.clear()  # v4.15
+                table.update()  # v4.15
+            table.on("rowDblclick", lambda e: dlg.submit(e.args[1]["path"]) if len(e.args) > 1 else None)  # v4.15
+            folder_in.on("keydown.enter", lambda: refresh())  # v4.15
+            with ui.row().classes("justify-end w-full"):  # v4.15
+                ui.button("Abbrechen (A)", on_click=lambda: dlg.submit(None)).props("flat data-key=A").classes("mll-cancel")  # v4.15
+                ui.button("Öffnen (Ö)", on_click=lambda: dlg.submit(table.selected[0]["path"] if table.selected else None)).props("color=primary data-key=Ö").classes("mll-default")  # v4.15
+        refresh()  # v4.15
+        choice = await dlg  # v4.15
+        web_dialogs.safe_delete(dlg)  # v4.15
+        if not choice:  # v4.15
+            return  # v4.15
+        logger.info("Sicherungsdatei oeffnen: %s", choice)  # v4.15
+        await run_command(lambda: wb.Load(filename=choice), "Sicherungsdatei öffnen", live=False)()  # v4.15
+        _AUTOSAVE["sig_saved"] = None  # v4.15
+        try:  # v4.15: der gewaehlte Ordner wird der Sicherungsordner
+            cfg = incr_config()  # v4.15
+            cfg.setdefault("base", incr_default_target()["base"])  # v4.15
+            cfg["dir"] = os.path.dirname(choice)  # v4.15
+            incr_config_save(cfg)  # v4.15
+        except Exception:                                  # noqa: BLE001  # v4.15
+            logger.debug("Sicherungsordner nicht gemerkt", exc_info=True)  # v4.15
 
     import proggen.M06_Write_MLLConfig as M06cfg
     # connect_arduino = run_command(lambda: ctrl.connect(), "Verbinden")          # Menuepunkt ARDUINO -> Verbinden und die Taste Verbinden der Seite Servo Test 1  # v2.01 (entfallen)
@@ -5082,8 +5639,30 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
             except Exception:                              # noqa: BLE001  # v2.01
                 logger.warning("Reiter %s nach dem Verbinden nicht aktualisiert", tabs.value, exc_info=True)  # v2.01
 
+    def usb_port_missing() -> bool:  # v4.04
+        port = str(ctrl.getConfigData("serportname") or "").strip()
+        return port == "" or port.upper() in ("NO DEVICE", "COM?")
+
+    async def auto_connect_after_detect():  # v4.04
+        """Nach 'Board und USB Port erkennen' (Lichtmaschine): gleich per USB verbinden. Wird gestartet, wenn das Optionsfenster geschlossen ist."""
+        for _ in range(200):                           # der Befehl Optionen laeuft noch kurz weiter (busy): bis 20 s warten
+            if not state["busy"]:
+                break
+            await asyncio.sleep(0.1)
+        if state["busy"] or ctrl.is_connection_open() or usb_port_missing():
+            return
+        logger.info("Automatisch verbinden nach Board und USB Port erkennen")
+        await _connect_usb_command()
+        after_connect()
+
+    web_dialogs._bridge["auto_connect"] = auto_connect_after_detect  # v4.04
+
     async def connect_arduino():  # v2.01
         settings = headless_esp32_ota.load_settings()
+        if usb_port_missing() and not wifi_target():  # v4.04: noch kein Anschluss: gleich das Fenster Board und USB Port erkennen oeffnen (Reiter Lichtmaschine)
+            ui.notify(tr("Es ist noch kein USB-Anschluss eingestellt. Bitte „Board und USB Port erkennen“ drücken. Danach wird automatisch verbunden."), type="info")  # v4.04
+            await run_command(lambda: M20.Option_Dialog(), "Optionen")()  # v4.04
+            return  # v4.04
         if esp32_board() and settings["wifi"] and settings["ota"]:
             target = await web_esp32_ota.ask_target(web_esp32_ota.target_address(settings), allow_usb=True, connect=True, saved_password=settings["password"])
             if target is None:
@@ -5106,6 +5685,163 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
         except Exception:                                  # noqa: BLE001  # v2.01
             pass  # v2.01
         await connect_arduino()  # v2.01
+    # ------------------------------------------------------------------ Verbinden beim Start und nach dem Hochladen (v4.14, Issue 20)
+    async def disconnect_arduino():  # v4.14
+        """Verbindung trennen und merken, dass beim naechsten Start nicht automatisch verbunden werden soll"""  # v4.14
+        await run_command(lambda: ctrl.disconnect(), "Trennen")()  # v4.14
+        try:  # v4.14
+            ctrl.setConfigData("LastConnected", "0")  # v4.14
+        except Exception:                                  # noqa: BLE001  # v4.14
+            logger.debug("LastConnected nicht gespeichert", exc_info=True)  # v4.14
+
+    async def reconnect_arduino():  # v4.14
+        if ctrl.is_connection_open():  # v4.14
+            await run_command(lambda: ctrl.disconnect(), "Trennen")()  # v4.14
+        await connect_arduino()  # v4.14
+
+    async def change_board():  # v4.14
+        """Board wechseln: Fenster Optionen mit Board und USB Port erkennen (Reiter Lichtmaschine)"""  # v4.14
+        await run_command(lambda: M20.Option_Dialog(), "Optionen")()  # v4.14
+
+    def _port_present(port) -> bool:  # v4.14
+        """Gibt es den Anschluss (zum Beispiel COM3, /dev/ttyUSB0) im Rechner?"""  # v4.14
+        port = str(port or "").strip()  # v4.14
+        if port.isdigit():  # v4.14
+            port = "COM" + port  # v4.14
+        if not port or port.upper() in ("NO DEVICE", "COM?") or port.upper().startswith("IP:"):  # v4.14
+            return False  # v4.14
+        try:  # v4.14
+            from serial.tools import list_ports as _lp  # v4.14
+            return any(str(cp.device).upper() == port.upper() for cp in _lp.comports(include_links=False))  # v4.14
+        except Exception:                                  # noqa: BLE001  # v4.14
+            return False  # v4.14
+
+    def _silent_connect(port=None, wlan=None, dtr=None, esp32=None):  # v4.14
+        """Im Hintergrund-Thread: ohne Dialoge verbinden. esp32=(Adresse, Passwort): per WLAN, sonst USB (port) bzw. wie ctrl.connect."""  # v4.14
+        ctrl.quiet, ctrl.dtr_override = True, dtr  # v4.14
+        try:  # v4.14
+            if esp32:  # v4.14
+                ctrl.connect_esp32(esp32[0], esp32[1])  # v4.14
+            else:  # v4.14
+                ctrl.connect(port=port, wlan=wlan)  # v4.14
+            return bool(ctrl.is_connection_open())  # v4.14
+        except Exception:                                  # noqa: BLE001  # v4.14
+            logger.info("Stilles Verbinden fehlgeschlagen", exc_info=True)  # v4.14
+            return False  # v4.14
+        finally:  # v4.14
+            ctrl.quiet, ctrl.dtr_override = False, None  # v4.14
+
+    def _search_lichtmaschine(own_port, other_port):  # v4.14
+        """Genau eine angeschlossene Lichtmaschine (Nano, ESP32 oder Pico) suchen: (Anschluss, Typ) oder None. Der Anschluss der anderen Seite (LNet/DCC) wird ausgelassen."""  # v4.14
+        import proggen.M07_COM_Port as _M07  # v4.14
+        cands = []  # v4.14
+        try:  # v4.14
+            from serial.tools import list_ports as _lp  # v4.14
+            for cp in _lp.comports(include_links=False):  # v4.14
+                if os.name != "nt" and re.match(r"^/dev/ttyS\d+$", str(cp.device)) and str(cp.hwid).strip().lower() in ("n/a", ""):  # v4.14
+                    continue  # v4.14
+                t = _M07.Classify_Port(cp)  # v4.14
+                if t:  # v4.14
+                    cands.append((str(cp.device), t))  # v4.14
+        except Exception:                                  # noqa: BLE001  # v4.14
+            logger.debug("Anschlussliste nicht lesbar", exc_info=True)  # v4.14
+            return None  # v4.14
+        if other_port:  # v4.14
+            cands = [c for c in cands if c[0].upper() != other_port.upper()]  # v4.14
+        own = [c for c in cands if own_port and c[0].upper() == own_port.upper()]  # v4.14
+        if own:  # v4.14
+            return own[0]  # v4.14
+        return cands[0] if len(cands) == 1 else None  # v4.14: bei mehreren Geraeten nicht raten
+
+    def _stored_ports():  # v4.14
+        """(Anschluss der Lichtmaschine, Anschluss LNet/DCC) aus der Konfiguration bzw. dem Blatt, sonst ''"""  # v4.14
+        def one(col):  # v4.14
+            try:  # v4.14
+                raw = str(state["ws"].Cells(M02.SH_VARS_ROW, col)).strip().lstrip("*").strip()  # v4.14
+            except Exception:                              # noqa: BLE001  # v4.14
+                return ""  # v4.14
+            if raw.isdigit():  # v4.14
+                return ("COM" + raw) if os.name == "nt" else ""  # v4.14
+            return raw if raw.upper() not in ("COM?", "NO DEVICE") and not raw.upper().startswith("IP:") else ""  # v4.14
+        own = str(ctrl.getConfigData("serportname") or "").strip()  # v4.14
+        if own.isdigit():  # v4.14
+            own = "COM" + own  # v4.14
+        if own.upper() in ("NO DEVICE", "COM?") or own.upper().startswith("IP:"):  # v4.14
+            own = ""  # v4.14
+        return own or one(M25.COMPort_COL), one(M25.COMPrtR_COL)  # v4.14
+
+    async def startup_autoconnect():  # v4.14
+        """Beim Start (parallel zum Laden der Tabellen, im eigenen Thread): 1. die Verbindung wiederherstellen, die beim letzten Beenden aktiv war;
+        2. sonst eine angeschlossene Lichtmaschine (Nano, ESP32, Pico) suchen und, wenn es genau eine gibt, verbinden. Ohne Dialoge; abschaltbar in den Programm Einstellungen."""  # v4.14
+        if not _web_tabs.is_auto_connect(ctrl) or ctrl.is_connection_open():  # v4.14
+            return  # v4.14
+        for _ in range(50):                                # kurz warten, bis der Start (Laden der Datei) fertig ist: hoechstens 5 s  # v4.14
+            if not state["busy"]:  # v4.14
+                break  # v4.14
+            await asyncio.sleep(0.1)  # v4.14
+        last = str(ctrl.getConfigData("LastConnected") or "").strip() == "1"  # v4.14
+        own_port, other_port = _stored_ports()  # v4.14
+        target = None  # v4.14
+        try:  # v4.14
+            target = wifi_target()  # v4.14
+        except Exception:                                  # noqa: BLE001  # v4.14
+            logger.debug("WLAN-Ziel nicht ermittelbar", exc_info=True)  # v4.14
+        logger.info("Automatisch verbinden: letzte Verbindung aktiv=%s, Anschluss '%s', LNet/DCC '%s', WLAN-Ziel %s", last, own_port, other_port, target[0] if target else "-")  # v4.14
+        ok, what = False, ""  # v4.14
+        if last and (target or _port_present(own_port)):  # v4.14
+            what = target[0] if target else own_port  # v4.14
+            ok = await run.io_bound(_silent_connect, None if target else own_port, True if target else False)  # v4.14: mit WLAN-Ziel zuerst WLAN (dann USB), sonst USB am eingestellten Anschluss
+        if not ok and not ctrl.is_connection_open():  # v4.14
+            found = await run.io_bound(_search_lichtmaschine, own_port, other_port)  # v4.14
+            if found:  # v4.14
+                dev, typ = found  # v4.14
+                logger.info("Automatisch verbinden: gefunden %s (%s)", dev, typ)  # v4.14
+                what = dev  # v4.14
+                ok = await run.io_bound(_silent_connect, dev, False, True if typ == "Pico" else None)  # v4.14
+                if ok:  # v4.14
+                    try:  # v4.14
+                        ctrl.setConfigData("serportname", dev)  # v4.14
+                    except Exception:                      # noqa: BLE001  # v4.14
+                        logger.debug("Anschluss nicht gespeichert", exc_info=True)  # v4.14
+        if ok:  # v4.14
+            ui.notify(tr("Mit der Lichtmaschine verbunden ({port}).", port=what), type="positive")  # v4.14
+            after_connect()  # v4.14
+        else:  # v4.14
+            logger.info("Automatisch verbinden: keine Verbindung hergestellt")  # v4.14
+
+    async def connect_after_upload():  # v4.14
+        """Nach dem Hochladen zur Lichtmaschine: mit dieser Lichtmaschine verbinden (nach einer WLAN-Uebertragung ueber WLAN)."""  # v4.14
+        info = dict(ota_arduino.Last_Upload)  # v4.14
+        ota_arduino.Last_Upload.update(ok=False, host="")  # v4.14
+        if not info.get("ok") or not _web_tabs.is_auto_connect(ctrl):  # v4.14
+            return  # v4.14
+        for _ in range(100):                               # bis zu 10 s warten, bis der Befehl beendet ist  # v4.14
+            if not state["busy"]:  # v4.14
+                break  # v4.14
+            await asyncio.sleep(0.1)  # v4.14
+        host = info.get("host") or ""  # v4.14
+        ok = False  # v4.14
+        if host:  # v4.14: der ESP32 startet nach dem Update neu: einige Sekunden warten, dann bis zu 5 Versuche
+            password = headless_esp32_ota.load_settings().get("password", "")  # v4.14
+            await asyncio.sleep(6)  # v4.14
+            for _ in range(5):  # v4.14
+                ok = await run.io_bound(_silent_connect, None, None, None, (host, password))  # v4.14
+                if ok:  # v4.14
+                    break  # v4.14
+                await asyncio.sleep(3)  # v4.14
+        else:  # v4.14: Nano, ESP32 und Pico per USB: der Arduino startet nach dem Hochladen neu
+            await asyncio.sleep(2)  # v4.14
+            for _ in range(2):  # v4.14
+                ok = await run.io_bound(_silent_connect, None, False, None)  # v4.14
+                if ok:  # v4.14
+                    break  # v4.14
+                await asyncio.sleep(2)  # v4.14
+        if ok:  # v4.14
+            ui.notify(tr("Mit der Lichtmaschine verbunden ({port}).", port=host or str(ctrl.getConfigData("serportname") or "")), type="positive")  # v4.14
+            after_connect()  # v4.14
+        else:  # v4.14
+            ui.notify(tr("Nach dem Hochladen konnte nicht mit der Lichtmaschine verbunden werden. Bitte „Mit Lichtmaschine verbinden“ drücken."), type="warning")  # v4.14
+
     from _web import web_esp32_ota
     import proggen.M02a_Public as ota_boards
     import proggen.M06_Write_Header as ota_header
@@ -5126,7 +5862,13 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
         finally:  # v3.58
             M39.Set_Sim_Override(None)  # v3.58
 
-    async def transfer_setup():
+    async def transfer_setup():  # v4.14
+        """Setup uebertragen und danach mit der Lichtmaschine verbinden, auf die uebertragen wurde (Einstellung AutoConnect)"""  # v4.14
+        ota_arduino.Last_Upload.update(ok=False, host="")  # v4.14
+        await _transfer_setup()  # v4.14
+        await connect_after_upload()  # v4.14
+
+    async def _transfer_setup():  # v4.14 (vorher transfer_setup)
         board = esp32_board()
         usb = run_command(page.upload_to_ARDUINO_Button_click, "Setup übertragen")
         settings = headless_esp32_ota.load_settings()
@@ -5140,54 +5882,72 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
                 return
         host, upload_password = ("", "") if target == "usb" else target
         password = settings["password"]
+        if settings["ota"] and not re.fullmatch(r"[!-~]{1,64}", password or ""):  # v4.03: Passwort fehlt auf diesem Rechner (Arbeitsmappe von einem anderen PC)
+            answer = await web_esp32_ota.ask_password(allow_no_ota=(target == "usb"))  # v4.03
+            if answer is None:  # v4.03
+                return  # v4.03
+            if answer == "":  # v4.03: nur fuer diese Uebertragung ohne OTA
+                settings = dict(settings, ota=False)  # v4.03
+            else:  # v4.03
+                password = answer  # v4.03
+                try:  # v4.03
+                    headless_esp32_ota.save_settings(dict(settings, password=answer))  # v4.03
+                except (ValueError, OSError) as ex:  # v4.03
+                    ui.notify(str(ex), type="negative")  # v4.03
+                    return  # v4.03
         port = str(state["ws"].Cells(M02.SH_VARS_ROW, M25.COMPort_COL).Value)
 
         def transfer():
-            log = ctrl.weblog
-            log.set_title(tr("ESP32-Setup über WLAN übertragen") if host else tr("ESP32-Setup über USB übertragen"))
-            log.delete_text_from_textwindow()
-            log.show()
-            try:
-                if not ota_header.Create_HeaderFile(HeaderOnly=True):
-                    raise ValueError(tr("Die Projektkonfiguration konnte nicht erzeugt werden."))
-                sketch = os.path.join(ota_arduino.GetWorkbookPath(), M02.Ino_Dir_LED)
-                log.add_text_to_textwindow(tr("ESP32-Firmware wird kompiliert …"))
-                pio = None
-                if ota_options.Is_PlatformIO():
-                    pio = ota_arduino.Find_PIO()
-                    log.add_text_to_textwindow(tr("Build-Umgebung: PlatformIO"))
-                    image, partitions = headless_esp32_ota.build_platformio_project(
-                        sketch, pio, password, log.add_text_to_textwindow,
-                        lambda path: ota_arduino.Write_PIO_Project("esp32", path),
-                        hostname=settings["hostname"], ota=settings["ota"],
-                    )
-                else:
-                    log.add_text_to_textwindow(tr("Build-Umgebung: Arduino Builder"))
-                    image, partitions = headless_esp32_ota.build_project(
-                        sketch, ota_arduino.Find_ArduinoExe(), ota_boards.Get_Sketchbook_Path(),
-                        board, password, log.add_text_to_textwindow,
-                        hostname=settings["hostname"], ota=settings["ota"],
-                    )
-                if ctrl.is_connection_open():
-                    ctrl.disconnect()
-                if not host:
-                    log.add_text_to_textwindow(tr("Firmware wird per USB übertragen …"))
-                    headless_esp32_ota.flash_usb(port, image, partitions, log.add_text_to_textwindow, pio=pio)
-                    log.add_text_to_textwindow(tr("USB-Upload erfolgreich."), highlight="OK")
-                    return
-                log.add_text_to_textwindow(tr("Firmware wird per WLAN übertragen …"))
-                result, output = headless_esp32_ota.upload(host, upload_password, "LEDs_AutoProg.ino.bin", image, pio=pio)
-                log.add_text_to_textwindow(output)
-                if result and headless_esp32_ota.NO_RESPONSE in output:  # v3.38
-                    log.add_text_to_textwindow(tr(web_esp32_ota.HINT_FIREWALL, port=headless_esp32_ota.HOST_PORT), highlight="Error")
-                log.add_text_to_textwindow(
-                    tr("OTA-Upload erfolgreich.") if result == 0 else tr("OTA-Upload fehlgeschlagen."),
-                    highlight="OK" if result == 0 else "Error",
-                )
-            except ValueError as error:
-                log.add_text_to_textwindow(tr(str(error)), highlight="Error")
-            except (OSError, subprocess.TimeoutExpired):
-                log.add_text_to_textwindow(tr("Build oder Upload konnte nicht abgeschlossen werden."), highlight="Error")
+            # log = ctrl.weblog  # v3.94 (entfallen)
+            # log.set_title(tr("ESP32-Setup über WLAN übertragen") if host else tr("ESP32-Setup über USB übertragen"))  # v3.94 (entfallen)
+            # log.delete_text_from_textwindow()  # v3.94 (entfallen)
+            # log.show()  # v3.94 (entfallen)
+            # try:  # v3.94 (entfallen)
+                # if not ota_header.Create_HeaderFile(HeaderOnly=True):  # v3.94 (entfallen)
+                    # raise ValueError(tr("Die Projektkonfiguration konnte nicht erzeugt werden."))  # v3.94 (entfallen)
+                # sketch = os.path.join(ota_arduino.GetWorkbookPath(), M02.Ino_Dir_LED)  # v3.94 (entfallen)
+                # log.add_text_to_textwindow(tr("ESP32-Firmware wird kompiliert …"))  # v3.94 (entfallen)
+                # pio = None  # v3.94 (entfallen)
+                # if ota_options.Is_PlatformIO():  # v3.94 (entfallen)
+                    # pio = ota_arduino.Find_PIO()  # v3.94 (entfallen)
+                    # log.add_text_to_textwindow(tr("Build-Umgebung: PlatformIO"))  # v3.94 (entfallen)
+                    # image, partitions = headless_esp32_ota.build_platformio_project(  # v3.94 (entfallen)
+                        # sketch, pio, password, log.add_text_to_textwindow,  # v3.94 (entfallen)
+                        # lambda path: ota_arduino.Write_PIO_Project("esp32", path),  # v3.94 (entfallen)
+                        # hostname=settings["hostname"], ota=settings["ota"],  # v3.94 (entfallen)
+                    # )  # v3.94 (entfallen)
+                # else:  # v3.94 (entfallen)
+                    # log.add_text_to_textwindow(tr("Build-Umgebung: Arduino Builder"))  # v3.94 (entfallen)
+                    # image, partitions = headless_esp32_ota.build_project(  # v3.94 (entfallen)
+                        # sketch, ota_arduino.Find_ArduinoExe(), ota_boards.Get_Sketchbook_Path(),  # v3.94 (entfallen)
+                        # board, password, log.add_text_to_textwindow,  # v3.94 (entfallen)
+                        # hostname=settings["hostname"], ota=settings["ota"],  # v3.94 (entfallen)
+                    # )  # v3.94 (entfallen)
+                # if ctrl.is_connection_open():  # v3.94 (entfallen)
+                    # ctrl.disconnect()  # v3.94 (entfallen)
+                # if not host:  # v3.94 (entfallen)
+                    # log.add_text_to_textwindow(tr("Firmware wird per USB übertragen …"))  # v3.94 (entfallen)
+                    # headless_esp32_ota.flash_usb(port, image, partitions, log.add_text_to_textwindow, pio=pio)  # v3.94 (entfallen)
+                    # log.add_text_to_textwindow(tr("USB-Upload erfolgreich."), highlight="OK")  # v3.94 (entfallen)
+                    # return  # v3.94 (entfallen)
+                # log.add_text_to_textwindow(tr("Firmware wird per WLAN übertragen …"))  # v3.94 (entfallen)
+                # result, output = headless_esp32_ota.upload(host, upload_password, "LEDs_AutoProg.ino.bin", image, pio=pio)  # v3.94 (entfallen)
+                # log.add_text_to_textwindow(output)  # v3.94 (entfallen)
+                # if result and headless_esp32_ota.NO_RESPONSE in output:  # v3.38  # v3.94 (entfallen)
+                    # log.add_text_to_textwindow(tr(web_esp32_ota.HINT_FIREWALL, port=headless_esp32_ota.HOST_PORT), highlight="Error")  # v3.94 (entfallen)
+                # log.add_text_to_textwindow(  # v3.94 (entfallen)
+                    # tr("OTA-Upload erfolgreich.") if result == 0 else tr("OTA-Upload fehlgeschlagen."),  # v3.94 (entfallen)
+                    # highlight="OK" if result == 0 else "Error",  # v3.94 (entfallen)
+                # )  # v3.94 (entfallen)
+            # except ValueError as error:  # v3.94 (entfallen)
+                # log.add_text_to_textwindow(tr(str(error)), highlight="Error")  # v3.94 (entfallen)
+            # except (OSError, subprocess.TimeoutExpired):  # v3.94 (entfallen)
+                # log.add_text_to_textwindow(tr("Build oder Upload konnte nicht abgeschlossen werden."), highlight="Error")  # v3.94 (entfallen)
+            ota_arduino.Compile_and_Upload_ESP32_Setup(  # v3.94
+                ctrl, board, port, host=host, upload_password=upload_password,  # v3.94
+                password=password, hostname=settings["hostname"], ota=settings["ota"],  # v3.94
+                firewall_hint=web_esp32_ota.HINT_FIREWALL,  # v3.94
+            )  # v3.94
 
         await run_command(transfer, "ESP32-Setup übertragen")()
 
@@ -5282,6 +6042,9 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
             None,
             ("ProgrammGenerator-Workbook von Datei lesen", run_command(lambda: wb.Load(), "Workbook lesen", live=False)),
             ("ProgrammGenerator-Workbook speichern als", run_command(lambda: (sync_all_sheets(), wb.Save()), "Workbook speichern")),
+            ("Inkrementell speichern", incremental_save),  # v4.15  # v4.17 (ohne Tastenkombination: sie ist einstellbar)
+            ("Sicherungsdatei öffnen …", open_backup),  # v4.15
+            ("Sicherungsort ändern …", change_incr_target),  # v4.15
             None,
             ("ProgrammGenerator: PGF-Datei lesen", run_command(lambda: M18.Load_Data_from_File(), "PGF lesen", live=False)),
             ("ProgrammGenerator: PGF-Datei speichern", run_command(lambda: M18.Save_Data_to_File(), "PGF speichern")),
@@ -5302,7 +6065,10 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
         "Lichtmaschine": [  # v3.84
             ("ESP32-Firmware über WLAN hochladen …", lambda: web_esp32_ota.open_dialog(pio=ota_arduino.Find_PIO() if ota_options.Is_PlatformIO() else None)),
             ("Verbinden", connect_arduino),  # v1.86
-            ("Trennen", run_command(lambda: ctrl.disconnect(), "Trennen")),
+            # ("Trennen", run_command(lambda: ctrl.disconnect(), "Trennen")),  # v4.14 (entfallen: merkt jetzt, dass nicht automatisch verbunden wird)
+            ("Trennen", disconnect_arduino),  # v4.14
+            ("Neu verbinden", reconnect_arduino),  # v4.14
+            ("Board wechseln …", change_board),  # v4.14
             ("Alle LED aus", run_command(lambda: ctrl.led_off(), "Alle LED aus")),
             # ("Konfiguration vom Pico laden (experimentell)", run_command(lambda: M06cfg.download_from_Pico(), "Konfiguration laden")),  # v2.02 (entfallen)
         ],
@@ -5787,6 +6553,14 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
         update_lib_version()                           # die Pruefung der Bibliotheken beim Start ist fertig: Version der MobaLedLib lesen  # v2.02
         show(state["ws"])  # v1.79
     ui.timer(1.5, run_startup_tasks, once=True)  # v1.79
+
+    async def startup_extensions():  # v3.98
+        if await offer_extensions():  # v3.98
+            show(state["ws"])  # v3.98
+    if not _AUTOCONNECT["done"]:  # v4.14: einmal je Programmlauf, parallel zum Laden der Tabellen
+        _AUTOCONNECT["done"] = True  # v4.14
+        ui.timer(2.0, startup_autoconnect, once=True)  # v4.14
+    ui.timer(3.0, startup_extensions, once=True)  # v3.98: die geöffnete Datei benutzt eine ausgeschaltete Erweiterung?
 
     show(state["ws"])
     mark("Tabelle fuellen (show)")

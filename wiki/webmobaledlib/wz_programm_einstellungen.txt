@@ -1,5 +1,5 @@
 ====== webMobaLedLib – Programm Einstellungen ======
-//Seitenstand 1.12 (2026-11-17), gilt für webMobaLedLib 3.85//
+//Seitenstand 1.14 (2026-11-19), gilt für webMobaLedLib 4.17//
 
 Im Reiter **Programm Einstellungen** passt du das Programm an dich an: die **Sprache**, die **Schriftgröße**, die **Darstellung** und einiges mehr. Die Einstellungen werden **gespeichert**, wenn du auf **Geänderte Einstellungen übernehmen** (bzw. **Speichern**) klickst, und gelten danach für das Programm auf diesem Rechner. Einige wirken **sofort**, andere erst nach einem **Neustart** des Programms. Das steht bei der jeweiligen Einstellung als Hinweis, wenn du mit der Maus darauf zeigst.
 
@@ -21,6 +21,8 @@ Die Einstellungen stehen in **fünf Gruppen**, jede mit einer Überschrift. So f
 
 ^ Einstellung ^ Bedeutung ^
 | **Anfänger Modus** | Der Haken schaltet zwischen **Anfänger Modus** (mit Haken, Voreinstellung bei einer neuen Installation) und **Experten Modus** um. Siehe [[anleitungen:webmobaledlib:modus|Anfänger Modus und Experten Modus]]. |
+| **Automatisch mit der Lichtmaschine verbinden** | Mit Haken (Voreinstellung) verbindet das Programm beim Start mit der Lichtmaschine, die beim letzten Beenden verbunden war, oder sucht eine angeschlossene Lichtmaschine. Nach **Setup übertragen** verbindet es mit der Lichtmaschine, auf die übertragen wurde (bei WLAN über WLAN). Ohne Haken verbindet nur der Knopf **Mit Lichtmaschine verbinden**. Siehe [[anleitungen:webmobaledlib:pg_arduino|Verbinden und Übertragen]]. |
+| **Tastenkombination: Inkrementell speichern** | Die Tastenkombination für //Datei → Inkrementell speichern//. Vorgabe: **Strg+Umschalt+S**. Sie muss **Strg** oder **Alt** oder eine **F-Taste** enthalten, zum Beispiel **Strg+Alt+S** oder **Strg+F9**. Ist die Vorgabe schon belegt (zum Beispiel von einem Screenshot-Programm), stelle hier eine andere ein. Siehe [[anleitungen:webmobaledlib:pg_speichern|Speichern und Laden]]. |
 | **Sprache** | Die Sprache der Oberfläche (siehe oben). |
 | **Darstellung auf kleinen Bildschirmen** | Das **Kompakte Layout** (siehe unten). |
 | **Schriftgröße anpassen** | Die Größe der Schrift in der Oberfläche. Wirkt nach einem **Neustart**. |

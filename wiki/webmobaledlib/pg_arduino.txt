@@ -1,5 +1,5 @@
 ====== webMobaLedLib – Verbinden und Übertragen ======
-//Seitenstand 1.13 (2026-11-17), gilt für webMobaLedLib 3.85//
+//Seitenstand 1.14 (2026-11-19), gilt für webMobaLedLib 4.14//
 
 Wenn deine Tabelle fertig ist, überträgst du sie auf die **Lichtmaschine**. Auf dieser Seite steht, wie du die Lichtmaschine **einstellst**, **verbindest**, das Programm **überträgst** und was bei Problemen hilft.
 
@@ -31,7 +31,21 @@ Der Reiter **ARDUINO Einstellungen** hat damit **nichts** zu tun. Er ist nur fü
 
 {{:bilder:anleitungen:webmobaledlib:pg_09_verbinden.png?500|Oben rechts: der Status und der Knopf Mit Lichtmaschine verbinden}}
 
-Das Menü **Lichtmaschine** hat außerdem **Trennen** (löst die Verbindung) und **Alle LED aus** (schaltet alle LEDs der Kette aus).
+Das Menü **Lichtmaschine** hat außerdem **Trennen** (löst die Verbindung), **Neu verbinden**, **Board wechseln …** (öffnet die Optionen) und **Alle LED aus** (schaltet alle LEDs der Kette aus).
+
+Neben dem Knopf **Mit Lichtmaschine verbinden** steht ein **Pfeil**. Er öffnet ein kleines Menü mit **Verbindung trennen**, **Neu verbinden** und **Board wechseln …**. Es sind dieselben Einträge wie im Menü **Lichtmaschine**.
+
+==== Automatisch verbinden (seit 4.14) ====
+
+Du musst den Knopf meistens nicht mehr drücken. Das Programm verbindet sich **selbst**:
+
+  * **Beim Start:** Das Programm stellt die Verbindung wieder her, die beim **letzten Beenden** aktiv war. Das läuft im **Hintergrund**, der Start dauert nicht länger. Hast du die Verbindung vorher mit **Verbindung trennen** gelöst, bleibt sie beim nächsten Start getrennt.
+  * **Ohne frühere Verbindung:** Das Programm **sucht** eine angeschlossene Lichtmaschine (Nano, ESP32 oder Pico). Findet es **genau eine**, verbindet es sich. Stecken mehrere Geräte am Rechner, **rät** das Programm nicht. Eine zweite Lichtmaschine für LNet/DCC wird ausgelassen. Dann drückst du den Knopf selbst.
+  * **Nach dem Übertragen:** Nach **Setup übertragen** verbindet das Programm mit der Lichtmaschine, auf die du **gerade übertragen** hast. Hast du einen **ESP32 per WLAN** übertragen, verbindet es auch **per WLAN**. Der ESP32 startet nach dem Update neu, darum dauert das einige Sekunden.
+
+Das geschieht **ohne Dialoge**. Klappt es nicht, zum Beispiel weil der Anschluss von einem anderen Programm (etwa der ARDUINO IDE) benutzt wird, bleibt der Knopf **rot**, und du verbindest von Hand.
+
+Wer das nicht möchte, schaltet es in den **Programm Einstellungen** unter **Allgemeine Einstellungen** aus (**Automatisch mit der Lichtmaschine verbinden**, siehe [[anleitungen:webmobaledlib:wz_programm_einstellungen|Programm Einstellungen]]). Der Knopf funktioniert dann wie vorher.
 
 Solange die Lichtmaschine **verbunden** ist, funktionieren die **Testtasten** der Tabelle: Mit ihnen schaltest du Effekte direkt an der Anlage ein und aus. Das geht ohne Zentrale und ohne ein neues Programm auf der Lichtmaschine.
 
@@ -54,7 +68,7 @@ Die **Umschaltung** zwischen Effekt- und Direktmodus erfolgt **automatisch**: Du
   - Das **erste Mal dauert es 5 bis 10 Minuten**, weil PlatformIO noch Werkzeuge nachlädt. Danach geht es in etwa einer Minute.
   - Am Ende meldet das Fenster, dass das Hochladen geklappt hat. Die Lichtmaschine startet neu und führt dein Programm aus.
 
-Die Lichtmaschine **behält** das Programm, auch wenn du ihn vom Computer trennst oder ausschaltest. Nach dem Übertragen ist **keine Verbindung** mehr offen: Das Programm verbindet sich **erst wieder, wenn ein Werkzeug sie braucht** (zum Beispiel eine Testtaste, siehe oben).
+Die Lichtmaschine **behält** das Programm, auch wenn du ihn vom Computer trennst oder ausschaltest. Nach dem Übertragen verbindet sich das Programm **von selbst** mit dieser Lichtmaschine (siehe **Automatisch verbinden**). Ist das in den Programm Einstellungen ausgeschaltet, ist **keine Verbindung** offen: Das Programm verbindet sich dann **erst wieder, wenn ein Werkzeug sie braucht** (zum Beispiel eine Testtaste, siehe oben).
 
 ===== Entwicklungsumgebung: PlatformIO =====
 

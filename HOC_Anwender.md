@@ -1,9 +1,169 @@
-Datei-Version: 1.01 (2026-10-18) - HOC_Anwender.md
-Stand: webMobaLedLib 3.93
+Datei-Version: 1.10 (2026-11-18) - HOC_Anwender.md
+Stand: webMobaLedLib 4.22
 
 # webMobaLedLib: Änderungen (Kurzfassung)
 
 Gilt ab Version 1.39. Neueste Version oben.
+
+## Version 4.22 (2026-11-19)
+
+Neue Funktionen:
+- Erweiterungen zeigen Name und Beschreibung aus ihrer Datei libraries.json.
+
+## Version 4.21 (2026-11-19)
+
+Korrekturen:
+- Erweiterungen, die du neu importierst, lassen sich jetzt kompilieren (der Pfad in der platformio.ini war falsch).
+
+## Version 4.20 (2026-11-19)
+
+Korrekturen:
+- Die Reiter unter dem Menü sind niedriger.
+
+## Version 4.19 (2026-11-19)
+
+Korrekturen:
+- Kopfbereich (Titel, Menü, Reiter) braucht noch weniger Höhe.
+
+## Version 4.18 (2026-11-19)
+
+Korrekturen:
+- Der Tooltip von „Mit Lichtmaschine verbinden“ nennt jetzt das Menü Lichtmaschine statt ARDUINO.
+
+## Version 4.17 (2026-11-19)
+
+Neue Funktionen:
+- Die Tastenkombination für „Inkrementell speichern“ stellst du selbst ein (Programm Einstellungen, Allgemeine Einstellungen), falls Strg+Umschalt+S bei dir schon belegt ist, zum Beispiel von einem Screenshot-Programm.
+
+## Version 4.16 (2026-11-19)
+
+Korrekturen:
+- Im Kopfbereich ist weniger Platz zwischen Titel, Menü und Reitern, die Tabelle rückt etwas nach oben (Issue 22).
+
+## Version 4.15 (2026-11-19)
+
+Neue Funktionen:
+- Inkrementelles Speichern: Mit Strg+Umschalt+S (oder Datei → Inkrementell speichern) sicherst du die ganze Arbeitsmappe als Datei mit fortlaufender Nummer (Name_0001, Name_0002 …). Beim ersten Mal fragt das Programm nach Ordner und Namen.
+- Datei → Sicherungsdatei öffnen …: zeigt die Sicherungen mit Datum und Uhrzeit, die gewählte wird geladen. Datei → Sicherungsort ändern … ändert Ordner und Namen.
+
+## Version 4.14 (2026-11-19)
+
+Neue Funktionen:
+- Beim Start verbindet sich das Programm wieder mit der Lichtmaschine, die beim letzten Beenden verbunden war. War keine verbunden, sucht es eine angeschlossene Lichtmaschine (Nano, ESP32 oder Pico) und verbindet, wenn es genau eine findet. Das läuft im Hintergrund und verzögert den Start nicht.
+- Nach „Setup übertragen“ verbindet das Programm mit der Lichtmaschine, auf die gerade übertragen wurde (bei einer WLAN-Übertragung über WLAN).
+- Neben dem Knopf „Mit Lichtmaschine verbinden“ gibt es einen Pfeil: Verbindung trennen, Neu verbinden, Board wechseln. Dieselben Einträge stehen im Menü Lichtmaschine.
+- In den Programm Einstellungen (Allgemeine Einstellungen) lässt sich das automatische Verbinden abschalten.
+
+## Version 4.13 (2026-11-19)
+
+Korrekturen:
+- „Board und USB Port erkennen“ unterscheidet bei einem Nano mit neuem Bootloader jetzt zwischen „neu“ und „Full“ anhand der Bootloader-Version. Ein folgender Upload verwendet dadurch die richtige Methode (Issue 14).
+
+## Version 4.12 (2026-11-19)
+
+Korrekturen:
+- „Vorgang abbrechen“ beim Kompilieren und Hochladen beendet jetzt wirklich alles, und der COM-Port ist sofort wieder frei (Issue 15).
+
+## Version 4.11 (2026-11-19)
+
+Korrekturen:
+- Nach „Verwerfen“ beim Start (Zwischengespeicherter Stand gefunden) reagierte ein Klick auf die Spalte Aktiv nicht, erst nach einem Blattwechsel. Jetzt funktioniert er sofort (Issue 16).
+
+## Version 4.10 (2026-11-19)
+
+Neue Funktionen:
+- Neues Programmsymbol (Ring aus bunten LEDs, Weltkugel mit Stift, rotes Zahnrad) für die Verknüpfung auf dem Desktop und den Browserreiter. Für die Verknüpfung den Installer noch einmal ausführen.
+
+## Version 4.09 (2026-11-19)
+
+Korrekturen:
+- ESP32: Bei eingeschaltetem WLAN und ausgeschalteten OTA-Updates übersetzte die Firmware nicht (WiFi unbekannt). Jetzt klappt das Übertragen per USB auch ohne OTA (Beitrag von moosbewohner, PR 18).
+
+## Version 4.08 (2026-11-19)
+
+Neue Funktionen:
+- Spaltenbreiten übertragen: Im Menü der rechten Maustaste am Reiter einer Datenseite steht „Spaltenbreiten übertragen …“. Man wählt die Spalten und die Zielseiten und die Breiten werden auf diese Seiten übertragen (Wunsch aus Issue 12, Beitrag von moosbewohner, PR 19).
+- Zellinnenabstand: Der Abstand links und rechts im Text der Zellen ist in den Programm Einstellungen (Layout) in Pixeln einstellbar. Kleinere Werte geben auf kleinen Bildschirmen mehr Platz.
+
+## Version 4.07 (2026-11-19)
+
+Korrekturen:
+- Versteckte Tabellen: Nach dem Laden einer Arbeitsmappe erschien die versteckte Tabelle DCC (das Startblatt) trotzdem als Reiter. Jetzt wird die erste sichtbare Tabelle geöffnet.
+
+## Version 4.06 (2026-11-18)
+
+Korrekturen:
+- ESP32: „Fotowiderstand aktivieren“ in den ESP-Einstellungen richtet den Sensor beim Übertragen auch ohne Makrozeile ein (Beitrag von moosbewohner, PR 9).
+
+## Version 4.05 (2026-11-18)
+
+Korrekturen:
+- Erweiterung Infrarot (InfraredMLX) auf dem Pico: Das Übersetzen brach ab, weil PlatformIO die neueste IRremote-Bibliothek (5.0) holte, die nicht zur Erweiterung passt. Jetzt wird IRremote 4.x verwendet.
+
+## Version 4.04 (2026-11-18)
+
+Neu:
+- Verbinden einfacher: Klickt man auf „Mit Lichtmaschine verbinden“, obwohl noch kein USB-Anschluss eingestellt ist, öffnet sich gleich das Fenster Optionen mit „Board und USB Port erkennen“.
+- Nach „Board und USB Port erkennen“ verbindet das Programm automatisch, sobald das Fenster geschlossen ist. Die Schaltfläche wird dann grün.
+
+## Version 4.03 (2026-11-18)
+
+Korrekturen:
+- ESP32-Setup übertragen: Wurde eine Arbeitsmappe mit eingeschaltetem OTA auf einem anderen Rechner geöffnet, brach die Übertragung (auch mit „USB“) mit „Das OTA-Passwort muss 1 bis 64 druckbare ASCII-Zeichen haben“ ab, weil das Passwort nur auf dem ursprünglichen Rechner gespeichert ist. Jetzt fragt das Programm nach dem Passwort (wird gespeichert) oder überträgt per USB ohne OTA.
+
+## Version 4.02 (2026-11-18)
+
+Neu:
+- **Rückgängig und Wiederholen** in der Tabelle: **Strg+Z** nimmt die letzte Änderung zurück, **Strg+Y** (oder Strg+Umschalt+Z) stellt sie wieder her. Beides auch im Menü der rechten Maustaste, mit dem Namen der Aktion (zum Beispiel „Rückgängig: Strg+D, 12 Zellen“). Es werden die letzten 50 Änderungen je Blatt gemerkt: Eingabe in einer Zelle, Löschen, Ausschneiden, Einfügen, Nach unten ausfüllen, Reihe fortsetzen. Werden Zeilen eingefügt oder gelöscht, beginnt der Verlauf des Blatts neu.
+- **Beenden ohne Speichern:** Die nicht gespeicherten Änderungen werden aufgehoben. Beim nächsten Start fragt das Programm einmal: „Die letzten verworfenen Änderungen wiederherstellen?“
+
+## Version 4.01 (2026-11-18)
+
+Korrekturen:
+- Board und USB Port erkennen (Issue 13): Das erkannte Board (zum Beispiel „Nano neue Version“ beim LNet-Arduino) wurde sofort wieder durch die alte Auswahl ersetzt. Beim Hochladen galt dann der falsche Bootloader. Jetzt bleibt das erkannte Board eingestellt.
+- Nach „Board und USB Port erkennen“ öffnet das Fenster wieder auf dem Reiter der Seite, nicht auf „Lichtmaschine“.
+
+## Version 4.00 (2026-11-18)
+
+Korrekturen:
+- Board und USB Port erkennen: Sind eine Lichtmaschine und ein LNet-Arduino (oder DCC-Arduino) angeschlossen, nahm das Programm den falschen Anschluss und stellte das Board der anderen Seite ein (Issue 13). Jetzt wird der Anschluss der anderen Seite ausgelassen.
+
+## Version 3.99 (2026-11-18)
+
+Korrekturen:
+- Optionen: Die Reiterbeschriftungen sind bei Bedarf zweizeilig, alle Reiter sind sichtbar. Bei einem ESP32 war der Reiter „Erweiterungen“ vorher hinter dem Blätterpfeil versteckt.
+
+## Version 3.98 (2026-11-18)
+
+Neue Funktionen:
+- Im Reiter „Erweiterungen“ lassen sich eigene Erweiterungen hinzufügen: nur mit dem Namen (PlatformIO-Registry), mit Version (Name@=1.1.0), mit GitHub-Adresse oder nur mit der Adresse. Beim ersten Hinzufügen einer Adresse kommt ein Hinweis auf fremden Code. „Entfernen“ nimmt sie wieder heraus.
+- Öffnet man eine Datei, die eine ausgeschaltete Erweiterung benutzt, fragt das Programm, ob sie eingeschaltet werden soll.
+- Neue Wiki-Seite „Erweiterungen (MLX)“.
+
+## Version 3.97 (2026-11-18)
+
+Korrekturen:
+- Erweiterungen: Die Dateien der Erweiterungen AddressLearnMLX, FireplaceMLX und InfraredMLX wurden mit „load error“ abgelehnt. Sie werden jetzt wie im Excel-Programm gelesen.
+- Eine ausgeschaltete Erweiterung wird zuverlässig nicht mehr geladen.
+
+## Version 3.96 (2026-11-18)
+
+Neue Funktionen:
+- Neuer Reiter „Erweiterungen“ in den Optionen: Die MobaLedLib Extensions (MLX) lassen sich mit einem Haken ein- und ausschalten. Zeitplan (P_ScheduleMLX) und Zeitplan Duo (P_ScheduleDuoMLX) sind im Paket und vorab eingeschaltet.
+- AddressLearnMLX, FireplaceMLX und InfraredMLX sind vorab ausgeschaltet. Beim Einschalten werden sie von GitHub geladen und danach ohne Internet benutzt.
+- Eigene Erweiterungen und Rückfrage beim Öffnen einer Datei folgen in einer späteren Version.
+
+## Version 3.95 (2026-11-18)
+
+Neue Funktion:
+- Hilfe → Update Testversion: Neben den Versionen auf GitHub kann man jetzt einen **eigenen Link (https) zu einer ZIP-Datei** angeben oder eine **ZIP-Datei auf dem Rechner auswählen**. Die Datei wird wie webmobaledlib.zip geprüft und installiert. Das geht auch, wenn GitHub nicht erreichbar ist.
+
+## Version 3.94 (2026-11-18)
+
+Neue Funktionen:
+- Neuer Reiter „ESP Einstellungen“ in den Optionen (nur bei ESP32): OLED-Anzeige Modus 0 bis 5 mit Vorschau, Fotowiderstand und Zustandsspeicherung, je Blatt. Beim Übertragen erzeugt das Programm die Defines selbst (Beitrag von moosbewohner).
+- Neuer OLED-Modus 5: WLAN, IP-Adresse und Hostname.
+- Der ESP32-Upload per USB oder WLAN läuft über den zentralen Programmteil der anderen Boards.
 
 ## Version 3.93 (2026-11-18)
 
@@ -12,7 +172,7 @@ Neue Funktionen:
 - In der Spalte Verteiler genügt jetzt die Zahl (1 gilt wie V1).
 - Der Knopf „Online Wiki“ öffnet die Seite „Einführung“ der webMobaLedLib-Anleitung.
 - Neue Wiki-Seite „Häufige Fragen“.
-- Das Release-Paket enthält die Datei START_HIER.txt mit den ersten Schritten.
+- Das Update akzeptiert ein ZIP mit der Datei START_HIER.txt (erste Schritte) im obersten Ordner; sie liegt ab dem nächsten Release im ZIP.
 - Optionen, Reiter Dateien: „Importieren v. altem Prog.“ erklärt, wie Daten des Excel-Programms übernommen werden. Der Knopf „Kopiere von Seite zu Seite“ entfällt (dafür gibt es „Seite duplizieren“).
 
 ## Version 3.92 (2026-11-18)

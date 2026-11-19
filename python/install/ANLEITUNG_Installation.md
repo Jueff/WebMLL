@@ -1,5 +1,5 @@
 # webMobaLedLib – Installation und Betrieb
-*Datei-Version: 3.93 (2026-11-18), gilt für webMobaLedLib 3.93*
+*Datei-Version: 4.22 (2026-11-19), gilt für webMobaLedLib 4.22*
 
 Windows · macOS · Linux-Desktop · Raspberry Pi
 
@@ -210,8 +210,9 @@ Unter Linux zeigt `xdg-settings get default-web-browser`, welcher Browser als St
 
 ### 2.5 Das Programmsymbol
 
-Das Symbol ist das des originalen ProgrammGenerators (Ring aus bunten LEDs, Tabelle, Stift) mit einer kleinen blauen Weltkugel unten rechts. Dieselbe Datei steht als Symbol im Browserreiter. `install/make_icons.py` erzeugt daraus `mobaledlib.png`
-(Verknüpfungen, Raspberry Pi), `favicon.png`, `mobaledlib.ico` (Windows) und `mobaledlib.icns` (macOS). Ohne Weltkugel: `python make_icons.py --plain`. Die fertigen Dateien liegen bei; die Installer erzeugen sie nur neu, wenn sie fehlen. `make_icons.py` braucht Pillow (`pip install Pillow`), die Web-Oberfläche selbst nicht.
+Das Symbol (neu in 4.10) zeigt den Ring aus bunten LEDs, eine Weltkugel mit Stift und ein rotes Zahnrad. Dieselbe Vorlage steht als Symbol im Browserreiter. `install/make_icons.py` erzeugt aus `install/mobaledlib_icon.png` und `install/mobaledlib_icon_full.png` die Dateien `mobaledlib.png` (Verknüpfungen, Raspberry Pi), `favicon.png`, `mobaledlib.ico` (Windows) und `mobaledlib.icns` (macOS). Die fertigen Dateien liegen bei; die Installer erzeugen sie nur neu, wenn sie fehlen. `make_icons.py` braucht Pillow (`pip install Pillow`), die Web-Oberfläche selbst nicht.
+
+**Das neue Symbol auf dem Desktop:** Nach dem Aktualisieren steht es im Programm (Browserreiter) sofort. Für die Verknüpfung auf dem Desktop: unter Windows `install/install_windows.bat` noch einmal ausführen (legt die Verknüpfung mit dem neuen Symbol neu an, bestehende Einstellungen und Dateien bleiben), unter Linux `install/install_linux.sh`, unter macOS die Verknüpfung (Symbol) über Informationen > Symbol ersetzen. Zeigt Windows noch das alte Symbol, hilft ein Neustart des Explorers (Symbol-Zwischenspeicher).
 Die Vorlage `mobaledlib_source.png` ist nur 128 × 128 Pixel groß und wirkt vergrößert etwas weich; wer sie höher aufgelöst hat, ersetzt die Datei und startet
 `make_icons.py` noch einmal.
 
@@ -395,6 +396,11 @@ Das Makro **LEDColorAnim** (Gruppe PatternConfig, Dialog **LED Farb-Animation**)
 ### 2.9h Neu seit 3.85: Tabelle, Blätter und Einstellungen (3.88 bis 3.93)
 
 - **Nach unten ausfüllen (3.93):** Mehrere Zeilen markieren (Klick auf die Zeilennummern, mit der Umschalttaste ein Bereich), rechte Maustaste auf eine Zelle, **Nach unten ausfüllen** (oder **Strg+D**): Die **oberste** markierte Zeile ist die Quelle, ihr Inhalt steht danach in allen markierten Zeilen. Bei einem Klick auf die Zeilennummer gilt das für die ganze Zeile. Ist nur eine Zelle gewählt, kopiert **Strg+D** die Zelle darüber. **Reihe fortsetzen** (rechte Maustaste) zählt die Zahl am Ende weiter: aus `1` wird 1, 2, 3 …, aus `V1` wird V1, V2, V3 …, aus `V01` wird V01, V02 …; Text ohne Zahl am Ende wird kopiert. Das Ziehen am Ausfüllkästchen gibt es nicht (nur in der kostenpflichtigen Fassung der Tabellenkomponente).
+- **Rückgängig und Wiederholen (4.02):** **Strg+Z** nimmt die letzte Änderung in der Tabelle zurück, **Strg+Y** (oder **Strg+Umschalt+Z**) stellt sie wieder her. Beides gibt es auch im Menü der rechten Maustaste; dort steht die Aktion dabei, zum Beispiel „Rückgängig: Strg+D, 12 Zellen“. Gemerkt werden die letzten 50 Änderungen je Blatt (Eingabe in einer Zelle, Löschen, Ausschneiden, Einfügen, Nach unten ausfüllen, Reihe fortsetzen). Nicht erfasst sind das Umschalten des Aktiv-Hakens und Farben. Wenn Zeilen eingefügt oder gelöscht werden, beginnt der Verlauf des Blatts neu.
+- **Beenden ohne Speichern (4.02):** Die nicht gespeicherten Änderungen werden als „verworfener Stand“ aufgehoben. Beim nächsten Start fragt das Programm einmal: „Die letzten verworfenen Änderungen wiederherstellen?“ Mit **Wiederherstellen** ist der Stand wieder da, mit **Nein** wird er gelöscht.
+- **Verbinden (4.04):** Ist noch kein USB-Anschluss eingestellt, öffnet ein Klick auf **Mit Lichtmaschine verbinden** gleich das Fenster Optionen. Dort **Board und USB Port erkennen** wählen und das Fenster schließen: Das Programm verbindet danach von selbst, die Schaltfläche wird grün. Beim Programmstart wird nicht automatisch verbunden.
+- **Spaltenbreiten übertragen (4.08):** Rechte Maustaste auf den Reiter einer Datenseite, **Spaltenbreiten übertragen …**. Erst die Spalten wählen, dann die Zielseiten. Die Breiten werden auf diese Seiten übernommen, Bilder und Symbole rechts davon werden mitverschoben.
+- **Zellinnenabstand (4.08):** In den Programm Einstellungen (Layout) lässt sich der Abstand links und rechts im Text der Zellen in Pixeln einstellen. Kleinere Werte geben auf kleinen Bildschirmen mehr Platz für die Spalten.
 - **Spalte Verteiler (3.93):** Neben `V1` genügt die Zahl `1`; beides ist derselbe Verteiler (Grafische Ansicht, Abschnitt 2.17).
 - **Blätter verstecken (3.90):** Rechte Maustaste auf einen Blattreiter: **Tabelle verstecken** (nicht das letzte sichtbare Blatt) und **Versteckte Tabellen anzeigen**. Die Auswahl wird mit den Daten gespeichert.
 - **Die Seite Config entfällt (3.91):** Ihre Werte stehen in den **Programm Einstellungen**: Gruppe **Programm Generator** (House-Zeiten, DCC-Offset) und die neue Gruppe **Simulatoreinstellungen** (nur im Experten Modus; **Simulator anzeigen** steht am Anfang der Gruppe). Beim ersten Start nach dem Update werden die Werte der alten Seite übernommen. Die Seite ist versteckt und nur mit der Option **Versteckte Tabellen anzeigen** zu sehen.
@@ -403,6 +409,192 @@ Das Makro **LEDColorAnim** (Gruppe PatternConfig, Dialog **LED Farb-Animation**)
 - **Testtasten (3.89):** Die Tasten stehen in der Spalte Typ rechts neben dem vollständigen Typnamen.
 - **Optionen, Reiter Dateien (3.93):** **Importieren v. altem Prog.** erklärt, wie die Daten des alten Excel-Programms über eine MLL_pgf-Datei übernommen werden; **Kopiere von Seite zu Seite** entfällt (dafür gibt es **Seite duplizieren** im Blattreiter).
 - **Online Wiki (3.93):** Der Knopf öffnet die Einführung der webMobaLedLib-Anleitung.
+
+### 2.9i ESP Einstellungen je Blatt (3.94, Beitrag von moosbewohner)
+
+Ist unter **Optionen Werkzeuge** ein **ESP32** als LED-Zentrale gewählt, erscheint der Reiter **ESP Einstellungen**. Die Auswahl gilt **für das aktive Blatt**, wird mit der Arbeitsmappe gespeichert und beim Duplizieren eines Blattes mit kopiert. Bei anderen Boards ist der Reiter nicht sichtbar.
+
+- **OLED-Anzeige:** Modus 0 (aus) bis 5. Eine animierte Vorschau zeigt Beispieldaten. Modus 1 MLL-Zeit, 2 LDR-Wert, 3 MLL-Zeit und LDR-Wert, 4 WLAN, IP, LDR und Zeit, **5 WLAN, IP und Hostname** (Zeile 1 Status, Zeile 2 IP, Zeile 3 Hostname; lange Namen laufen in Zeile 4 weiter).
+- **Fotowiderstand aktivieren** setzt `READ_LDR`, **Zustände werden gespeichert** setzt `ENABLE_STORE_STATUS()`.
+- Beim **Setup übertragen** erzeugt das Programm die passenden Defines aus den Einstellungen des aktiven Blattes. Defines, die schon in der Tabelle stehen, bleiben wirksam; ein gewählter OLED-Modus hat Vorrang vor der Modusnummer aus der Tabelle. Danach kannst du die manuellen Define-Zeilen löschen.
+- Nach dem Ändern das Setup erneut auf den ESP32 übertragen, damit die Firmware die Auswahl übernimmt.
+- Der **Upload des ESP32-Setups** (USB oder WLAN) läuft jetzt über denselben zentralen Code wie die anderen Boards (`M08_ARDUINO`).
+
+### 2.9j Erweiterungen (MLX) ein- und ausschalten (3.96)
+
+**Optionen → Erweiterungen** zeigt die bekannten MobaLedLib Extensions mit einem Haken je Erweiterung. Eine eingeschaltete Erweiterung erscheint in der Makroauswahl in der Gruppe „Erweiterungen“.
+
+- **Standard (vorab eingeschaltet):** Zeitplan (P_ScheduleMLX) und Zeitplan Duo (P_ScheduleDuoMLX). Sie liegen im Programmpaket (Ordner `libraries`).
+- **Optional (vorab ausgeschaltet):** AddressLearnMLX (Adressen einlernen), FireplaceMLX (Kaminfeuer) und InfraredMLX (IR-Fernbedienung, braucht einen IR-Empfänger). Beim Einschalten lädt das Programm die Erweiterung einmal von GitHub in den Datenordner (Unterordner `extensions`); danach läuft sie auch ohne Internet.
+- Die Einstellung gilt für alle Dateien und bleibt beim Programm-Update erhalten. Erweiterungen, die man von Hand in den Ordner `libraries` gelegt hat, sind wie bisher immer eingeschaltet.
+- Nur mit **PlatformIO** (die Arduino IDE wird dafür nicht mehr unterstützt).
+- **Eigene Erweiterungen (seit 3.98):** Unten im Reiter steht ein Feld **Eigene Erweiterung hinzufügen**. Eine Zeile: `Name` (PlatformIO-Registry, aktuelle Version), `Name@=1.1.0` (genau diese Version), `Name=https://github.com/Besitzer/Repo` (Code aus dem Repository, nach `#` ein Tag oder Zweig) oder nur die Adresse. Beim ersten Hinzufügen einer Adresse kommt der Hinweis auf **fremden Code**. Das Programm lädt die Erweiterung in den Datenordner (`extensions`), liest ihre `MobaLedLib.properties` und schaltet sie ein. **Entfernen** löscht sie wieder. Zum Aktualisieren entfernen und neu hinzufügen.
+- **Rückfrage beim Öffnen (seit 3.98):** Benutzt eine Datei eine **ausgeschaltete** Erweiterung, fragt das Programm, ob es sie einschalten soll (einmal je Erweiterung und Sitzung); ohne sie fehlen die Zeilen in der erzeugten Datei.
+- **Wiki:** eigene Seite `erweiterungen` (siehe Wiki-Paket 3.98).
+
+### 2.9k Neu seit 3.93 (3.94 bis 4.22)
+
+Kurzfassung der Änderungen seit dem letzten Release, neueste Version zuerst (ausführlich in `HOC_Anwender.md`):
+
+**Version 4.22**
+
+*Neue Funktionen:*
+- Erweiterungen zeigen Name und Beschreibung aus ihrer Datei libraries.json.
+
+**Version 4.21**
+
+*Korrekturen:*
+- Erweiterungen, die du neu importierst, lassen sich jetzt kompilieren (der Pfad in der platformio.ini war falsch).
+
+**Version 4.20**
+
+*Korrekturen:*
+- Die Reiter unter dem Menü sind niedriger.
+
+**Version 4.19**
+
+*Korrekturen:*
+- Kopfbereich (Titel, Menü, Reiter) braucht noch weniger Höhe.
+
+**Version 4.18**
+
+*Korrekturen:*
+- Der Tooltip von „Mit Lichtmaschine verbinden“ nennt jetzt das Menü Lichtmaschine statt ARDUINO.
+
+**Version 4.17**
+
+*Neue Funktionen:*
+- Die Tastenkombination für „Inkrementell speichern“ stellst du selbst ein (Programm Einstellungen, Allgemeine Einstellungen), falls Strg+Umschalt+S bei dir schon belegt ist, zum Beispiel von einem Screenshot-Programm.
+
+**Version 4.16**
+
+*Korrekturen:*
+- Im Kopfbereich ist weniger Platz zwischen Titel, Menü und Reitern, die Tabelle rückt etwas nach oben (Issue 22).
+
+**Version 4.15**
+
+*Neue Funktionen:*
+- Inkrementelles Speichern: Mit Strg+Umschalt+S (oder Datei → Inkrementell speichern) sicherst du die ganze Arbeitsmappe als Datei mit fortlaufender Nummer (Name_0001, Name_0002 …). Beim ersten Mal fragt das Programm nach Ordner und Namen.
+- Datei → Sicherungsdatei öffnen …: zeigt die Sicherungen mit Datum und Uhrzeit, die gewählte wird geladen. Datei → Sicherungsort ändern … ändert Ordner und Namen.
+
+**Version 4.14**
+
+*Neue Funktionen:*
+- Beim Start verbindet sich das Programm wieder mit der Lichtmaschine, die beim letzten Beenden verbunden war. War keine verbunden, sucht es eine angeschlossene Lichtmaschine (Nano, ESP32 oder Pico) und verbindet, wenn es genau eine findet. Das läuft im Hintergrund und verzögert den Start nicht.
+- Nach „Setup übertragen“ verbindet das Programm mit der Lichtmaschine, auf die gerade übertragen wurde (bei einer WLAN-Übertragung über WLAN).
+- Neben dem Knopf „Mit Lichtmaschine verbinden“ gibt es einen Pfeil: Verbindung trennen, Neu verbinden, Board wechseln. Dieselben Einträge stehen im Menü Lichtmaschine.
+- In den Programm Einstellungen (Allgemeine Einstellungen) lässt sich das automatische Verbinden abschalten.
+
+**Version 4.13**
+
+*Korrekturen:*
+- „Board und USB Port erkennen“ unterscheidet bei einem Nano mit neuem Bootloader jetzt zwischen „neu“ und „Full“ anhand der Bootloader-Version. Ein folgender Upload verwendet dadurch die richtige Methode (Issue 14).
+
+**Version 4.12**
+
+*Korrekturen:*
+- „Vorgang abbrechen“ beim Kompilieren und Hochladen beendet jetzt wirklich alles, und der COM-Port ist sofort wieder frei (Issue 15).
+
+**Version 4.11**
+
+*Korrekturen:*
+- Nach „Verwerfen“ beim Start (Zwischengespeicherter Stand gefunden) reagierte ein Klick auf die Spalte Aktiv nicht, erst nach einem Blattwechsel. Jetzt funktioniert er sofort (Issue 16).
+
+**Version 4.10**
+
+*Neue Funktionen:*
+- Neues Programmsymbol (Ring aus bunten LEDs, Weltkugel mit Stift, rotes Zahnrad) für die Verknüpfung auf dem Desktop und den Browserreiter. Für die Verknüpfung den Installer noch einmal ausführen.
+
+**Version 4.09**
+
+*Korrekturen:*
+- ESP32: Bei eingeschaltetem WLAN und ausgeschalteten OTA-Updates übersetzte die Firmware nicht (WiFi unbekannt). Jetzt klappt das Übertragen per USB auch ohne OTA (Beitrag von moosbewohner, PR 18).
+
+**Version 4.08**
+
+*Neue Funktionen:*
+- Spaltenbreiten übertragen: Im Menü der rechten Maustaste am Reiter einer Datenseite steht „Spaltenbreiten übertragen …“. Man wählt die Spalten und die Zielseiten und die Breiten werden auf diese Seiten übertragen (Wunsch aus Issue 12, Beitrag von moosbewohner, PR 19).
+- Zellinnenabstand: Der Abstand links und rechts im Text der Zellen ist in den Programm Einstellungen (Layout) in Pixeln einstellbar. Kleinere Werte geben auf kleinen Bildschirmen mehr Platz.
+
+**Version 4.07**
+
+*Korrekturen:*
+- Versteckte Tabellen: Nach dem Laden einer Arbeitsmappe erschien die versteckte Tabelle DCC (das Startblatt) trotzdem als Reiter. Jetzt wird die erste sichtbare Tabelle geöffnet.
+
+**Version 4.06**
+
+*Korrekturen:*
+- ESP32: „Fotowiderstand aktivieren“ in den ESP-Einstellungen richtet den Sensor beim Übertragen auch ohne Makrozeile ein (Beitrag von moosbewohner, PR 9).
+
+**Version 4.05**
+
+*Korrekturen:*
+- Erweiterung Infrarot (InfraredMLX) auf dem Pico: Das Übersetzen brach ab, weil PlatformIO die neueste IRremote-Bibliothek (5.0) holte, die nicht zur Erweiterung passt. Jetzt wird IRremote 4.x verwendet.
+
+**Version 4.04**
+
+*Neu:*
+- Verbinden einfacher: Klickt man auf „Mit Lichtmaschine verbinden“, obwohl noch kein USB-Anschluss eingestellt ist, öffnet sich gleich das Fenster Optionen mit „Board und USB Port erkennen“.
+- Nach „Board und USB Port erkennen“ verbindet das Programm automatisch, sobald das Fenster geschlossen ist. Die Schaltfläche wird dann grün.
+
+**Version 4.03**
+
+*Korrekturen:*
+- ESP32-Setup übertragen: Wurde eine Arbeitsmappe mit eingeschaltetem OTA auf einem anderen Rechner geöffnet, brach die Übertragung (auch mit „USB“) mit „Das OTA-Passwort muss 1 bis 64 druckbare ASCII-Zeichen haben“ ab, weil das Passwort nur auf dem ursprünglichen Rechner gespeichert ist. Jetzt fragt das Programm nach dem Passwort (wird gespeichert) oder überträgt per USB ohne OTA.
+
+**Version 4.02**
+
+*Neu:*
+- **Rückgängig und Wiederholen** in der Tabelle: **Strg+Z** nimmt die letzte Änderung zurück, **Strg+Y** (oder Strg+Umschalt+Z) stellt sie wieder her. Beides auch im Menü der rechten Maustaste, mit dem Namen der Aktion (zum Beispiel „Rückgängig: Strg+D, 12 Zellen“). Es werden die letzten 50 Änderungen je Blatt gemerkt: Eingabe in einer Zelle, Löschen, Ausschneiden, Einfügen, Nach unten ausfüllen, Reihe fortsetzen. Werden Zeilen eingefügt oder gelöscht, beginnt der Verlauf des Blatts neu.
+- **Beenden ohne Speichern:** Die nicht gespeicherten Änderungen werden aufgehoben. Beim nächsten Start fragt das Programm einmal: „Die letzten verworfenen Änderungen wiederherstellen?“
+
+**Version 4.01**
+
+*Korrekturen:*
+- Board und USB Port erkennen (Issue 13): Das erkannte Board (zum Beispiel „Nano neue Version“ beim LNet-Arduino) wurde sofort wieder durch die alte Auswahl ersetzt. Beim Hochladen galt dann der falsche Bootloader. Jetzt bleibt das erkannte Board eingestellt.
+- Nach „Board und USB Port erkennen“ öffnet das Fenster wieder auf dem Reiter der Seite, nicht auf „Lichtmaschine“.
+
+**Version 4.00**
+
+*Korrekturen:*
+- Board und USB Port erkennen: Sind eine Lichtmaschine und ein LNet-Arduino (oder DCC-Arduino) angeschlossen, nahm das Programm den falschen Anschluss und stellte das Board der anderen Seite ein (Issue 13). Jetzt wird der Anschluss der anderen Seite ausgelassen.
+
+**Version 3.99**
+
+*Korrekturen:*
+- Optionen: Die Reiterbeschriftungen sind bei Bedarf zweizeilig, alle Reiter sind sichtbar. Bei einem ESP32 war der Reiter „Erweiterungen“ vorher hinter dem Blätterpfeil versteckt.
+
+**Version 3.98**
+
+*Neue Funktionen:*
+- Im Reiter „Erweiterungen“ lassen sich eigene Erweiterungen hinzufügen: nur mit dem Namen (PlatformIO-Registry), mit Version (Name@=1.1.0), mit GitHub-Adresse oder nur mit der Adresse. Beim ersten Hinzufügen einer Adresse kommt ein Hinweis auf fremden Code. „Entfernen“ nimmt sie wieder heraus.
+- Öffnet man eine Datei, die eine ausgeschaltete Erweiterung benutzt, fragt das Programm, ob sie eingeschaltet werden soll.
+- Neue Wiki-Seite „Erweiterungen (MLX)“.
+
+**Version 3.97**
+
+*Korrekturen:*
+- Erweiterungen: Die Dateien der Erweiterungen AddressLearnMLX, FireplaceMLX und InfraredMLX wurden mit „load error“ abgelehnt. Sie werden jetzt wie im Excel-Programm gelesen.
+- Eine ausgeschaltete Erweiterung wird zuverlässig nicht mehr geladen.
+
+**Version 3.96**
+
+*Neue Funktionen:*
+- Neuer Reiter „Erweiterungen“ in den Optionen: Die MobaLedLib Extensions (MLX) lassen sich mit einem Haken ein- und ausschalten. Zeitplan (P_ScheduleMLX) und Zeitplan Duo (P_ScheduleDuoMLX) sind im Paket und vorab eingeschaltet.
+- AddressLearnMLX, FireplaceMLX und InfraredMLX sind vorab ausgeschaltet. Beim Einschalten werden sie von GitHub geladen und danach ohne Internet benutzt.
+- Eigene Erweiterungen und Rückfrage beim Öffnen einer Datei folgen in einer späteren Version.
+
+**Version 3.95**
+
+Neue Funktion:
+- Hilfe → Update Testversion: Neben den Versionen auf GitHub kann man jetzt einen **eigenen Link (https) zu einer ZIP-Datei** angeben oder eine **ZIP-Datei auf dem Rechner auswählen**. Die Datei wird wie webmobaledlib.zip geprüft und installiert. Das geht auch, wenn GitHub nicht erreichbar ist.
+
+**Version 3.94**
+
+*Neue Funktionen:*
+- Neuer Reiter „ESP Einstellungen“ in den Optionen (nur bei ESP32): OLED-Anzeige Modus 0 bis 5 mit Vorschau, Fotowiderstand und Zustandsspeicherung, je Blatt. Beim Übertragen erzeugt das Programm die Defines selbst (Beitrag von moosbewohner).
+- Neuer OLED-Modus 5: WLAN, IP-Adresse und Hostname.
+- Der ESP32-Upload per USB oder WLAN läuft über den zentralen Programmteil der anderen Boards.
 
 ### 2.10 Der Timeline Editor
 
@@ -973,6 +1165,7 @@ Für Tester und für den Entwickler lädt **Hilfe → Update Testversion …** e
 - **Rückfrage:** Zuerst fragt das Programm, ob man wirklich eine Testversion installieren möchte (nicht fertig geprüft, kann Fehler enthalten). Erst nach **Testversion suchen** wird GitHub gefragt. Die Rückfrage bietet **Abbrechen** als Standard an.
 - **Anzeige:** Nach **Version laden** zeigt das Fenster, welche Version gefunden wurde (**Testversion: Name (Pre-Release oder Release, veröffentlicht am Datum)**), die neue Versionsnummer und die Liste der Dateien. Erst nach **Aktualisieren** passiert etwas; danach läuft alles **wie beim normalen Update** (Sicherung der Tabellen, Prüfliste, alles oder nichts, automatisches Zurückgehen bei einem Abbruch, Neustart).
 - **Auswahl der Version (seit 3.04):** Nach **Testversion suchen** liest das Programm die Liste der Releases (`https://api.github.com/repos/haroldlinke/WebMLL/releases`, ohne Konto, 60 Abfragen je Stunde) und zeigt **die letzten 15** in einer Auswahlliste, **das neueste zuerst und vorgewählt**: Name, **Pre-Release** oder **Release** und Datum, dazu **neueste Version**, **installiert** (die laufende Version) und **ältere Version**. **Version laden** lädt die gewählte (ein Klick, wenn man die neueste will); **Abbrechen** schließt das Fenster, ohne etwas zu ändern. Aufgeführt werden nur Releases mit dem Anhang `webmobaledlib.zip`; Entwürfe (Draft) gelten nicht. **Seit 3.12** stehen Releases, deren Name oder Tag mit **test** beginnt (zum Beispiel `test1`: Tests des Entwicklers), **am Ende der Liste** (höchstens 5), werden **nie vorgewählt** und tragen den Zusatz **Entwicklertest**; so installiert kein Tester sie aus Versehen.
+- **Eigene Quelle (seit 3.95):** In der Auswahl stehen am Ende zwei weitere Einträge: **Eigener Link zu einer ZIP-Datei …** (Adresse mit `https://`, zum Beispiel ein Test-ZIP auf einem eigenen Server oder ein Anhang auf GitHub) und **ZIP-Datei auf diesem Rechner auswählen …** (Datei auswählen oder in das Feld ziehen). Die Datei muss **dasselbe Format und denselben Inhalt wie `webmobaledlib.zip`** haben (Ordner `python`, `release_manifest.json` mit Prüfsummen) und wird genauso geprüft, verglichen und mit denselben Rückfragen installiert (auch die Warnung bei einer älteren Version). Das geht auch, wenn GitHub nicht erreichbar ist; das Fenster zeigt dann den Fehler und bietet nur die eigene Quelle an. **Nur ZIP-Dateien aus vertrauenswürdigen Quellen installieren.**
 - **Ältere Version wählen:** Wählt man eine **ältere** als die installierte Version, zeigt das Fenster nach dem Laden in **roter Schrift** die Warnung „**ACHTUNG: Dieses ZIP hat eine ÄLTERE Version als die installierte!**“ und bietet **Trotzdem auf Version … zurückgehen** an (Abbrechen ist die Vorgabe). Einstellungen und Dateien können sich beim Zurückgehen ändern; die Tabellen werden vorher gesichert.
 - **Nach einer Testversion:** Das normale Update lädt später das letzte fertige Release. Ist dessen Version **älter** als die installierte Testversion, fragt das Programm ausdrücklich zurück, ob man zurückgehen möchte (wie sonst bei einer älteren Version).
 - **Fehler:** Ohne Netz, hinter einem Proxy oder bei überschrittener Abfragegrenze (GitHub: 60 je Stunde) steht eine Meldung im Fenster; es wird nichts verändert.

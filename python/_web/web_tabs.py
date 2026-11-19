@@ -1,9 +1,9 @@
-# Datei-Version: 1.23 (2026-11-18) - web_tabs.py
+# Datei-Version: 1.25 (2026-11-19) - web_tabs.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_tabs.py
 # Path:           _web/web_tabs.py
-# Version:        1.23
-# Last Update:    2026-11-18
+# Version:        1.25
+# Last Update:    2026-11-19
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
@@ -31,6 +31,8 @@
 #   1.21  2026-11-17  Hinweis der Option NanoBootloaderDetection: Knopf 'Board und USB Port erkennen'
 #   1.22  2026-11-17  Neue Optionen aus der Seite Config: MinTime_House, MaxTime_House, DCC_Offset (Programm Generator) und SimLedsX, SimLedsY, SimLedSize, SimPosX, SimPosY, SimOffset (Simulatoreinstellungen)
 #   1.23  2026-11-18  Reiter ProgGenerator Einstellungen heisst Tabelle Faerben; neue Optionen AutoColorRows und HideColorButton (Seite Tabelle Faerben, vor den Bedingungen)
+#   1.24  2026-11-19  Neue Einstellung AutoConnect (Allgemeine Einstellungen): beim Start mit der Lichtmaschine verbinden und nach dem Hochladen verbinden; is_auto_connect (Issue 20)
+#   1.25  2026-11-19  Neue Einstellung IncrSaveKey: Tastenkombination fuers inkrementelle Speichern (Allgemeine Einstellungen, Issue 21)
 # ----------------------------------------------------------------------------------------------
 """Adressen der Reiter: Ein Reiter laesst sich direkt aufrufen, zum Beispiel http://localhost:8080/Farbtest. Mit dem Zusatz ?vollbild=1 oeffnet er sich gleich im Vollbild
 (Titel, Menue und Reiterleiste ausgeblendet, siehe web_fullscreen). Die Startseite / bleibt wie sie ist (Programm Generator).
@@ -152,7 +154,15 @@ PARAM_ADDITIONS = {"ColoredRowsBold": ({"ParName": "ColoredRowsBold", "Cnt": "1"
                  "BeginnerMode": ({"ParName": "BeginnerMode", "Cnt": "1", "Type": "Checkbutton", "ConfigName": "BeginnerMode", "ParamLabelWidth": "25", "Min": "0", "Max": "255", "Default": "",  # v1.12
                                    "Input Text": "Anfänger Modus",  # v1.12
                                    "Hint": "Mit Haken (Anfänger Modus) werden Funktionen ausgeblendet, die für den Einstieg nicht nötig sind: die Reiter Timeline Editor, Z21 Simulator, ProgGenerator Einstellungen, Servo Einstellungen, Sound Test, DCC Keyboard, Serial Monitor und ARDUINO Einstellungen, der Doppelklick auf Name und Beleuchtung öffnet die Makroauswahl, der Knopf Zeilen Färben und einige Makros in der Makroauswahl. Ohne Haken (Experten Modus) ist alles sichtbar. Eine neue Installation startet im Anfänger Modus."},  # v1.12
-                                  "Language")}  # v1.12
+                                  "Language"),  # v1.12  # v1.24
+                 "AutoConnect": ({"ParName": "AutoConnect", "Cnt": "1", "Type": "Checkbutton", "ConfigName": "AutoConnect", "ParamLabelWidth": "25", "Min": "0", "Max": "255", "Default": "1",  # v1.24
+                                  "Input Text": "Automatisch mit der Lichtmaschine verbinden",  # v1.24
+                                  "Hint": "Mit Haken (Vorgabe) stellt das Programm beim Start die Verbindung wieder her, die beim letzten Beenden aktiv war. War keine aktiv, sucht es eine angeschlossene Lichtmaschine (Nano, ESP32 oder Pico) und verbindet, wenn es genau eine findet. Nach „Setup übertragen“ verbindet es mit der Lichtmaschine, auf die gerade übertragen wurde (bei WLAN über WLAN). Ohne Haken verbindet nur der Knopf Mit Lichtmaschine verbinden."},  # v1.24
+                                 "BeginnerMode"),  # v1.24  # v1.25
+                 "IncrSaveKey": ({"ParName": "IncrSaveKey", "Cnt": "1", "Type": "String", "ConfigName": "IncrSaveKey", "ParamLabelWidth": "25", "Min": "0", "Max": "255", "Default": "Strg+Umschalt+S",  # v1.25
+                                  "Input Text": "Tastenkombination: Inkrementell speichern",  # v1.25
+                                  "Hint": "Tastenkombination für Datei → Inkrementell speichern, zum Beispiel Strg+Umschalt+S, Strg+Alt+S oder Strg+F9. Sie muss Strg oder Alt oder eine F-Taste enthalten. Ist die Kombination vom Betriebssystem oder von einem anderen Programm belegt (zum Beispiel für Screenshots), stelle hier eine andere ein. Leer: Vorgabe Strg+Umschalt+S. Die Änderung gilt nach dem Speichern der Einstellungen sofort."},  # v1.25
+                                 "AutoConnect")}  # v1.25
 
 
 # Optionen des Tk-Programms, die im Web keine Wirkung haben und deshalb nicht angezeigt werden: Der Reiter Patterngenerator ist immer da
@@ -163,6 +173,19 @@ PARAM_REMOVALS = ("ShowPatternGenerator", "CheckVersion")  # v1.11
 def is_enabled(value) -> bool:  # v1.04
     """Wert einer Option (Checkbutton): 1, true, ja, an, ein"""  # v1.04
     return str(value if value is not None else "").strip().lower() in ("1", "true", "ja", "yes", "an", "ein", "on")  # v1.04
+
+
+AUTO_CONNECT_PARAM = "AutoConnect"  # v1.24
+
+
+def is_auto_connect(ctrl) -> bool:  # v1.24
+    """Einstellung AutoConnect (Allgemeine Einstellungen): VORGABE AN. Ohne Eintrag oder leer: an."""  # v1.24
+    try:  # v1.24
+        value = ctrl.getConfigData(AUTO_CONNECT_PARAM)  # v1.24
+    except Exception:                                  # noqa: BLE001  # v1.24
+        return True  # v1.24
+    text = str(value if value is not None else "").strip().lower()  # v1.24
+    return True if text == "" else text in ("1", "true", "ja", "yes", "an", "ein", "on")  # v1.24
 
 
 BEGINNER_PARAM = "BeginnerMode"  # v1.12

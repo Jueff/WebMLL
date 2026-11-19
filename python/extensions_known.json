@@ -1,0 +1,70 @@
+{
+ "format": 1,
+ "comment": "Bekannte MobaLedLib Extensions (MLX). group: standard = vorab aktiv, optional = vorab aus. bundled = liegt im Paket (Ordner libraries), sonst wird sie beim Aktivieren von der Adresse geladen. types: Namen der Konstruktoren, damit eine Datei erkannt wird, die eine ausgeschaltete Erweiterung benutzt.",
+ "extensions": [
+  {
+   "id": "P_ScheduleMLX",
+   "name": "Zeitplan (P_ScheduleMLX)",
+   "url": "https://github.com/PeterVT11/P_ScheduleMLX",
+   "group": "standard",
+   "bundled": true,
+   "description": "Schaltet Beleuchtungen nach Uhrzeit (ein Zeitbereich).",
+   "hardware": "",
+   "types": [
+    "P_ScheduleExtension"
+   ]
+  },
+  {
+   "id": "P_ScheduleDuoMLX",
+   "name": "Zeitplan Duo (P_ScheduleDuoMLX)",
+   "url": "https://github.com/PeterVT11/P_ScheduleDuoMLX",
+   "group": "standard",
+   "bundled": true,
+   "description": "Schaltet Beleuchtungen nach Uhrzeit (zwei getrennte Zeitbereiche A und B).",
+   "hardware": "",
+   "types": [
+    "P_ScheduleDuoExtension"
+   ]
+  },
+  {
+   "id": "AddressLearnMLX",
+   "name": "Adressen einlernen (AddressLearnMLX)",
+   "url": "https://github.com/Jueff/AddressLearnMLX",
+   "group": "optional",
+   "bundled": false,
+   "description": "Einlernen von Adressen, zum Beispiel für den Verkehrssicherungsanhänger.",
+   "hardware": "",
+   "types": [
+    "AddressLearnExtension"
+   ]
+  },
+  {
+   "id": "FireplaceMLX",
+   "name": "Kaminfeuer (FireplaceMLX)",
+   "url": "https://github.com/Jueff/FireplaceMLX",
+   "group": "optional",
+   "bundled": false,
+   "description": "Feuer- und Kaminbeleuchtung.",
+   "hardware": "",
+   "types": [
+    "FireplaceExtension"
+   ]
+  },
+  {
+   "id": "InfraredMLX",
+   "name": "Infrarot (InfraredMLX)",
+   "url": "https://github.com/Jueff/InfraredMLX",
+   "group": "optional",
+   "bundled": false,
+   "description": "Dekodiert IR-Signale von RC5- und NEC-Fernbedienungen.",
+   "hardware": "IR-Empfänger",
+   "lib_deps": [
+    "arduino-irremote/IRremote@^4.4.1"
+   ],
+   "types": [
+    "IRReceiverNEC",
+    "IRReceiverRC5"
+   ]
+  }
+ ]
+}

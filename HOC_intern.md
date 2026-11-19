@@ -1,5 +1,5 @@
-Datei-Version: 1.01 (2026-10-18) - HOC_intern.md
-Stand: webMobaLedLib 3.93
+Datei-Version: 1.10 (2026-11-18) - HOC_intern.md
+Stand: webMobaLedLib 4.22
 
 # webMobaLedLib: History of Change (intern, ausführlich)
 
@@ -25,6 +25,320 @@ Release-Stand 2.12 auf Wunsch des Entwicklers („Release bauen“). **Neu im Ab
 
 **Geprüft:** Dateipaket: `testzip` in Ordnung, alle 113 Dateien gleich dem Ordner `headless`, keine `__pycache__`, alle `.py` kompilieren, Versionsprüfung „alles passt“ (50 Einträge), 11 Dateien ausführbar (`.sh`, `.command`). **Nachbau des Entwickler-Ablaufs mit seinem echten Paket (1678 Dateien, Stand 2.05):** meine 113 Dateien darübergelegt, Prüfliste, ZIP gepackt, `release_tools check --previous <sein ZIP>`: **in Ordnung** (Version 2.12, 1678 Dateien, 6 neue, 0 fehlende, ZIP 16,6 MB). Alle 15 Prüfreihen laufen (17, 26, 15, 70, 28, 19, 43, 26, 16, 27, 8, 8, 8, 5, 9 Prüfungen). **Nicht geprüft:** `zip_erstellen.bat` und die Reparaturskripte unter Windows, ein abgebrochenes Update unter Windows, das Verhalten mit Acronis, der Download von GitHub.
 
+## 4.22 (2026-11-19)
+
+Issue 6 (Wunsch Jürgen): Der Reiter Erweiterungen zeigt Name und Beschreibung aus der `libraries.json` (auch `library.json`) der Erweiterung, wenn die Datei vorhanden ist und die Angaben enthält; sonst die Angaben aus `extensions_known.json`. Nur die Quell-URL in die `platformio.ini` zu schreiben, ist nicht vorgesehen: Das Programm muss die Erweiterung ohnehin lokal lesen (Makros), darum bleibt es beim Cache und `symlink://`, außer Jürgen nennt einen triftigen Grund. Im Browser nicht geprüft; `library_info` mit einer Probedatei geprüft.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.22 | Versionsnummer |
+| `headless/headless_extensions.py` | 1.03 | `library_info` |
+| `_web/web_form_options.py` | 1.38 | Anzeige von Name und Beschreibung |
+| `install/BETATEST_Checkliste.md` | 3.11 | Punkte 275 und 276 |
+| `wiki/webmobaledlib/erweiterungen.txt` | 1.01 | Hinweis zur libraries.json |
+
+## 4.21 (2026-11-19)
+
+Issue 6 (Jürgen, Test-MLX): Kompilieren mit einer neu importierten Erweiterung (DummyMLX) scheiterte, weil in der `platformio.ini` `Name=file://…\DummyMLX\MobaLedLib.properties` stand statt des Ordners. Ursache: `Extension.Path = Replace(LibName, '/MobaLedLib.properties', '')` greift unter Windows nicht, weil der Pfad Rückwärtsstriche hat. Jetzt `os.path.dirname`. Dazu wie bei MobaLedLib `symlink://` (eine Quelle, keine Kopie in `.pio`), wo Verknüpfungen erlaubt sind (`M08.Lib_Link_Scheme`), sonst `file://`. Nicht auf Windows geprüft. Zur IRremote-Meldung (zweites Feedback): keine Änderung nötig, Jürgen trägt die Version in der Erweiterung ein.
+
+Offen (Wünsche, noch nicht umgesetzt): Quell-URL direkt in `lib_deps` (PlatformIO lädt selbst); Name und Beschreibung aus `libraries.json` anzeigen.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.21 | Versionsnummer |
+| `proggen/M38_Extensions.py` | 1.07 | Pfad der Erweiterung ist der Ordner, `symlink://` |
+
+## 4.20 (2026-11-19)
+
+Rückmeldung Harold: mit 4.19 keine Verbesserung. Der Screenshot zeigt: Titel zu Menü ist etwas enger, aber die Reiter sind weiter ca. 50 px hoch (Text mittig, Unterstrich 25 px darunter); die 36 px aus 4.19 griffen also nicht. Jetzt Höhe 32 px mit `!important` auch für `.q-tab__content`, Menütasten mit `!important`. Im Browser nicht geprüft.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.20 | CSS der Reiter und Menütasten |
+
+## 4.19 (2026-11-19)
+
+Rückmeldung Harold (Issue 22, Screenshot mit 4.18): Der Abstand im Kopfbereich ist noch zu groß. Vermutete Ursache: Menütasten (36 px), Reiter (48 px) und der Titel (Zeilenhöhe 32 px) sind höher als nötig, und der Standardabstand von NiceGUI kann den Zeilenabstand überstimmen. Jetzt: Zeilenabstand 0 mit `!important`, Menütasten 28 px, Titel Zeilenhöhe 1,3, Reiter 36 px (nur normales Layout, das kompakte bleibt unverändert). Im Browser nicht geprüft.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.19 | CSS des Kopfbereichs |
+
+## 4.18 (2026-11-19)
+
+Rückmeldung Harold: Im Tooltip des Knopfs „Mit Lichtmaschine verbinden“ stand noch „ARDUINO → Verbinden“ und „Menü ARDUINO → Trennen“; das Menü heißt seit 3.83 Lichtmaschine. Text korrigiert. Im Wiki hieß es in ota.txt noch „Menü ARDUINO“. Zum Abstand der Kopfzeilen (Issue 22): Der Screenshot zeigt Version 4.15, die Änderung steckt erst ab 4.16.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.18 | Tooltip des Verbinden-Knopfs |
+| `wiki/webmobaledlib/ota.txt` | 1.04 | Menü Lichtmaschine statt ARDUINO |
+
+## 4.17 (2026-11-19)
+
+Issue 21 (Harold): Strg+Umschalt+S ist bei Harold durch ein Screenshot-Programm (Greenshot) belegt; der Anwender muss die Tastenkombination selbst festlegen können. Neue Einstellung `IncrSaveKey` (Allgemeine Einstellungen, Textfeld, Vorgabe „Strg+Umschalt+S“, leer = Vorgabe). `parse_shortcut` versteht Strg/Ctrl/Cmd, Umschalt/Shift, Alt und ein Zeichen oder F1 bis F24 und verlangt Strg, Alt oder eine F-Taste (sonst würde das Tippen ausgelöst); ungültige Angaben ergeben einen Hinweis und keine Tastenkombination. `refresh_status` (0,5-s-Takt) meldet die Einstellung bei Änderung per `window.mllIncrKey` an den Browser, die Änderung gilt also gleich nach dem Speichern der Einstellungen. Das Menü heißt jetzt „Inkrementell speichern“ ohne Kombination (sie ist einstellbar). Bekannte Grenze: Umschalt plus Ziffer liefert im Browser ein anderes Zeichen und wird nicht erkannt. Im Browser nicht geprüft.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.17 | `parse_shortcut`, `JS_INCR_SAVE` dynamisch, Meldung an den Browser in `refresh_status` |
+| `_web/web_tabs.py` | 1.25 | Einstellung `IncrSaveKey` |
+| `_web/web_params.py` | 1.12 | `IncrSaveKey` in den Allgemeinen Einstellungen |
+| `csv/Web_Languages.csv` | – | neue und geänderte Texte |
+| `wiki/webmobaledlib/pg_speichern.txt` | 1.03 | Tastenkombination ändern |
+| `wiki/webmobaledlib/wz_programm_einstellungen.txt` | 1.14 | Zeile Tastenkombination: Inkrementell speichern |
+
+## 4.16 (2026-11-19)
+
+Issue 22 (Harold, Wunsch Prio 4): weniger Platz im Kopfbereich zwischen Titel, Menü und Reitern. Ursache: NiceGUIs Standardabstand von 1 rem zwischen den Zeilen der Seite, dazu die leere Zeile `autosave_label` und bei schmalem Fenster der Zeilenumbruch des Menüs in der Kopfzeile. Korrektur nur im Kopfbereich (Rest der Seite unverändert): `.mll-header` bekommt `row-gap: 4px` und im normalen Layout `margin-bottom: -8px` (Abstand zu den Reitern 16 px auf 8 px); `autosave_label` ist unsichtbar, solange kein Text da ist. Keine Einstellung (Entscheidung Harold). Im Browser nicht geprüft.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.16 | CSS `.mll-header`, `autosave_label` ausgeblendet ohne Text |
+
+## 4.15 (2026-11-19)
+
+Issue 21 (Harold): Inkrementelles Speichern. Nur kompiliert, im Browser nicht ausprobiert.
+
+- **Speichern:** Strg+Umschalt+S (JS `JS_INCR_SAVE`, Ereignis `mll_incr_save`; Strg+Alt+S entfällt, Entscheidung Harold) und Menü Datei → „Inkrementell speichern (Strg+Umschalt+S)“ rufen `incremental_save`: `sync_all_sheets()` und `wb.Save(filename=<Ordner>/<Name>_<NNNN>.json)` (Format wie „Workbook speichern als“), Nummer = höchste im Ordner vorhandene + 1 (vierstellig, danach mehr Stellen), keine Überschreibung, Meldung „Gesichert: …“.
+- **Erstes Speichern:** Dialog nach Ordner und Basisname (Vorgabe: `<Datenordner>/Sicherungen`, Name der Workbook-Datei). Gespeichert je Workbook-Datei in der Konfiguration (`IncrementalSave`, JSON). Menü „Sicherungsort ändern …“ öffnet denselben Dialog.
+- **Sicherungsdatei öffnen …:** Dialog mit Ordnerfeld und Tabelle der Dateien `<Name>_<NNNN>.json` (neueste zuerst, Zeitpunkt, Größe), Doppelklick oder „Öffnen“ lädt per `wb.Load(filename=…)` (der Dateiname des Workbooks bleibt, `keep_filename=False`). Der gewählte Ordner wird der neue Sicherungsordner. Ein Dateimanager des Servers lässt sich aus dem Browser nicht öffnen; die Liste ersetzt das (mit Harold geklärt).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.15 | `incremental_save`, `open_backup`, `change_incr_target`, `JS_INCR_SAVE`, Menü Datei |
+| `csv/Web_Languages.csv` | – | neue Texte (7 Sprachen, nicht gegengelesen) |
+| `wiki/webmobaledlib/pg_speichern.txt` | 1.02 | Abschnitt Inkrementell speichern, Menüeinträge |
+
+## 4.14 (2026-11-19)
+
+Issue 20 (Harold, Wunsch aus dem Forum): Verbinden mit der Lichtmaschine für Anfänger logischer machen. Alle Punkte bis auf den Test mit echter Hardware sind umgesetzt; geprüft wurde nur, dass alles kompiliert und `quiet` bei `_msg` greift.
+
+- **Start (Punkt 1 und 2):** Timer 2 s nach dem Seitenaufbau, einmal je Programmlauf (`_AUTOCONNECT`), Verbindung in `run.io_bound` (eigener Thread, die Tabellen werden parallel geladen; es wird höchstens 5 s auf einen laufenden Befehl gewartet). Merker `LastConnected` (Konfiguration): wird in `refresh_status` beim Übergang zu „verbunden“ auf 1 gesetzt, beim Trennen über Knopf-Pfeil oder Menü auf 0 (Beenden ändert ihn nicht). War die letzte Verbindung aktiv und gibt es WLAN-Ziel oder den Anschluss, wird verbunden (mit WLAN-Ziel zuerst WLAN, dann USB). Sonst (oder wenn das scheitert) Suche über `Classify_Port` (Nano, ESP32, Pico): der gespeicherte eigene Anschluss hat Vorrang, der Anschluss der Seite LNet/DCC wird ausgelassen, bei mehreren Treffern wird nicht geraten. Gefundener Pico bekommt DTR (`dtr_override`). Bei Erfolg wird der Anschluss in `serportname` gemerkt. Alles ohne Dialog (`quiet` in `web_serial`), ein belegter Anschluss führt nur zu einem Protokolleintrag.
+- **Nach dem Hochladen (Punkt 3):** `M08.Last_Upload` {ok, host} wird bei Nano/Pico-Upload (nur echter Upload, nicht `CreateFilesOnly`) und beim ESP32-Setup (USB: host leer, WLAN: Adresse) gesetzt. `transfer_setup` ruft danach `connect_after_upload`: WLAN: 6 s warten, bis zu 5 Versuche im Abstand von 3 s; USB: 2 s warten, 2 Versuche. Meldung bei Erfolg und Hinweis bei Misserfolg.
+- **Einstellung:** `AutoConnect` (Allgemeine Einstellungen, Vorgabe an) schaltet Start-Verbindung und Verbinden nach dem Hochladen ab; der Knopf bleibt.
+- **Bedienung:** Der Knopf „Mit Lichtmaschine verbinden“ hat einen Pfeil mit Menü (Verbindung trennen, Neu verbinden, Board wechseln …). Dieselben Punkte stehen im Menü Lichtmaschine (Trennen, Neu verbinden, Board wechseln …).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.14 | `startup_autoconnect`, `connect_after_upload`, `_silent_connect`, `_search_lichtmaschine`, Pfeilmenü, Menü Lichtmaschine |
+| `_web/web_serial.py` | 1.12 | `quiet`, `dtr_override` |
+| `_web/web_tabs.py` | 1.24 | Einstellung `AutoConnect`, `is_auto_connect` |
+| `_web/web_params.py` | 1.11 | `AutoConnect` in den Allgemeinen Einstellungen |
+| `proggen/M08_ARDUINO.py` | 1.24 | `Last_Upload` |
+| `csv/Web_Languages.csv` | – | neue Texte (7 Sprachen, nicht gegengelesen) |
+| `wiki/webmobaledlib/pg_arduino.txt` | 1.14 | Abschnitt Automatisch verbinden, Pfeilmenü, Menü Lichtmaschine |
+| `wiki/webmobaledlib/wz_programm_einstellungen.txt` | 1.13 | Einstellung Automatisch mit der Lichtmaschine verbinden |
+| `wiki/webmobaledlib/erstes_programm.txt` | 1.12 | Hinweis auf automatisches Verbinden |
+
+## 4.13 (2026-11-19)
+
+Issue 14 (Jueff): „Board und USB Port erkennen“ setzte bei einem Nano mit neuem Bootloader (115200 Baud) immer „Nano neu“, „Nano Full“ (Firmware 108.1, oder 4.4 beim ATmega328PB) wurde nie erkannt. Ursache: In der Python-Umsetzung gibt es die VBA-ByRef-Parameter von `Get_Arduino_Baudrate` nicht; `FirmwareVer` blieb leer und `DeviceSignature` 0 (`Get_New_Board_Type("", 0)`), die Firmware-Version wurde nie gelesen. Korrektur: `_DetectArduino_once` liest nach dem Sync Signatur und `STK_GET_PARAMETER` SW_MAJOR/SW_MINOR und legt sie in `_LAST_INFO` ab (`Get_Last_Detect_Info()`); `Get_New_Board_Type` bekommt jetzt diese Werte, im Knopf Board erkennen und in `Check_If_Arduino_could_be_programmed_and_set_Board_type`. Dadurch kennt `GetCPUTypeFromSignature` nun auch die echte Signatur (wie im Excel-Original). Nicht mit echter Hardware getestet; die Protokollzeile `Bootloader-Firmware …, Signatur …` zeigt die gelesenen Werte.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `proggen/M07_COM_Port.py` | 1.12 | `_LAST_INFO`, `Get_Last_Detect_Info`, Firmware-Version und Signatur auslesen |
+| `proggen/M08_ARDUINO.py` | 1.23 | Untertyp mit Firmware-Version und Signatur |
+| `_web/web_form_options.py` | 1.37 | Board erkennen mit Firmware-Version und Signatur |
+| `webmobaledlib.py` | 4.13 | Version |
+
+## 4.12 (2026-11-19)
+
+Issue 15 (Jueff): „Vorgang abbrechen“ im Log-Fenster beendete nur die Shell (`shell=True`, `proc.terminate()`), `arduino-cli`/`avrdude`/`pio` liefen weiter und hielten den COM-Port bis zum Ablauf der Upload-Timeouts. Korrektur: Prozess startet in eigener Prozessgruppe (POSIX `start_new_session`), `_kill_tree` beendet den ganzen Baum (Windows `taskkill /F /T`, POSIX `killpg` SIGTERM, nach 3 s SIGKILL). `userbreak` wird vor dem Beenden gesetzt. Geprüft unter Linux mit Shell + zwei `sleep`-Kindern (alle beendet); Windows `taskkill` nicht getestet.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `mlpyproggen/Prog_Generator.py` | 1.10 | `_spawn_kwargs`, `_kill_tree`; `terminate_process` und beide Popen-Aufrufe |
+| `webmobaledlib.py` | 4.12 | Version |
+
+## 4.11 (2026-11-19)
+
+Issue 16 (Jueff): Nach „Verwerfen“ im Dialog „Zwischengespeicherter Stand gefunden“ reagierte der Klick auf die Spalte Aktiv nicht, nach einem Blattwechsel ging er. Ursache laut Protokoll: `Worksheet_SelectionChange` schaltete den Haken, aber `ActiveCell().Offset(0,1).Activate()` arbeitete mit einem veralteten `ActiveSheet` (Zeile 16, Spalte 7, 8, 9 … statt der geklickten Zelle). Der Blattwechsel ruft `ws.Activate()`, der Start nicht. Korrektur: `fire_selection_event` ruft vor dem Ereignis `ws.Activate()`, und der Zweig Verwerfen aktiviert das Blatt neu.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.11 | `ws.Activate()` im Auswahl-Ereignis und nach Verwerfen |
+
+## 4.10 (2026-11-19)
+
+Neue Programmsymbole von Harold (`Icon_webMLL.zip`: `Icon_Outline_webMLL.png/.ico`, `Icon_webMLL.png`, `favicon_io/`). Verwendung: `install/mobaledlib_icon.png` (Outline-Fassung mit Rand, 512 px) und `install/mobaledlib_icon_full.png` (bis an den Rand, für das kleine Symbol im Browserreiter) sind die Vorlagen. `install/make_icons.py` 1.03 erzeugt daraus unverändert (ohne die frühere Weltkugel in der Ecke) `mobaledlib.png`, `mobaledlib_plain.png`, `favicon.png` (64 px), `mobaledlib.ico` (16 bis 256 px, aus dem 512-px-PNG; die mitgelieferte ICO hat nur 256 px) und `mobaledlib.icns`; ohne `mobaledlib_icon.png` gilt das alte Verfahren. Die fertigen Dateien liegen im Paket. Die Verknüpfung auf dem Desktop wird nur vom Installer angelegt: für das neue Symbol `install_windows.bat` bzw. `install_linux.sh` noch einmal ausführen. Ein Test auf Windows, Linux, macOS steht aus. Die übrigen Dateien aus `favicon_io` (Apple-Touch, Android, Manifest) werden bisher nicht benutzt.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `install/mobaledlib_icon.png`, `install/mobaledlib_icon_full.png` | – | neu (Vorlagen) |
+| `install/mobaledlib.png`, `mobaledlib_plain.png`, `mobaledlib.ico`, `mobaledlib.icns`, `favicon.png` | – | neues Symbol |
+| `install/make_icons.py` | 1.03 | nimmt die neuen Vorlagen |
+| `install/ANLEITUNG_Installation.md` | 4.10 | Abschnitt Programmsymbol |
+| `webmobaledlib.py` | 4.10 | Version |
+
+## 4.09 (2026-11-19)
+
+PR 18 (moosbewohner, Commit 19628f68; Meldung eines Testers): WLAN aktiv, OTA aus: `prepare_ota_sketch` schrieb `#include <Arduino.h>` und `<WiFi.h>` nur bei `ota=True` in den Sketch-Anfang; `ESP32WifiUsb.h` fand dadurch `WiFi` und `WL_CONNECTED` nicht. Jetzt stehen beide Includes im Präfix unabhängig vom OTA-Schalter (nur die `extern`-Deklarationen bleiben bei OTA). Aus dem PR nur diese Datei übernommen. Mit dem früheren Fehler „OTA-Passwort“ (4.03) hat das nichts zu tun. Nicht auf Hardware getestet.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `headless/headless_esp32_ota.py` | 1.09 | Includes Arduino.h und WiFi.h immer |
+| `webmobaledlib.py` | 4.09 | Version, Verweis headless_esp32_ota 1.09 |
+| `install/BETATEST_Checkliste.md` | 3.03 | Punkt 263 |
+
+## 4.08 (2026-11-19)
+
+Issue 12 (Tester, 15"-Display: zu viel Platz vor und nach den Einträgen; Spaltenbreiten der ersten Seite auf die anderen Seiten übertragen) und PR 19 (moosbewohner, Commit 88c823b5). Aus dem PR nur die Dateien dieses Commits übernommen (der übrige PR-Inhalt ist schon in unserem Stand, weitere Dateien im PR sind ältere Fassungen).
+
+1. `_web/web_sheet_tabs.py` 1.05: Reiter-Kontextmenü „Spaltenbreiten übertragen …“ (nur für Datenblätter); `copy_column_widths(source, targets, columns)` setzt die Breiten (`tksheet.column_width`), verschiebt die Shapes rechts davon (`moveShapesHorizontal`) und markiert das Blatt als geändert; zweistufiger Dialog (Spalten, dann Zielseiten).
+2. `_web/web_layout.py` 1.20: Einstellung `WebOuterMargin` (0–200 px, Vorgabe 16 px) steuert über die CSS-Variable `--mll-outer-margin` das Padding links/rechts der AG-Grid-Zellen und Kopfzellen (außer Zeilennummern); wirkt sofort beim Ändern.
+3. `webmobaledlib.py` 4.08: Callback `tab_copy_widths`, `head_html(..., margin)`.
+
+Spaltennummern im Dialog sind Buchstaben (A, B, …). Übertragen wird nur auf Datenblätter, die Spaltenzahl der Zielblätter begrenzt die Auswahl. Nicht im Browser getestet.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.08 | Callback, Zellabstand beim Start |
+| `_web/web_sheet_tabs.py` | 1.05 | Kontextmenü und Dialog Spaltenbreiten übertragen |
+| `_web/web_layout.py` | 1.20 | Einstellung Zellinnenabstand |
+| `csv/Web_Languages.csv` | – | 8 Zeilen aus dem PR |
+| `install/ANLEITUNG_Installation.md`, `install/BETATEST_Checkliste.md` | 4.08 / 3.02 | Abschnitt, Punkte 261–262 |
+
+## 4.07 (2026-11-19)
+
+Fehler (Harold): Tabellen DCC, Selectrix … versteckt, Arbeitsmappe gespeichert, Programm neu installiert, Arbeitsmappe geladen: Die eigenen Tabellen erscheinen, danach DCC als Reiter; „Tabellen verstecken“ meldet DCC als versteckt. Die Speicherung (`HiddenSheets` in XLA_Application 1.22, `apply_sheet_layout`) ist in Ordnung. Ursache: Nach dem Neustart/Laden ist das Startblatt DCC das aktive Blatt, und `visible_sheet_names()` hängt „das aktive Blatt ist immer sichtbar“ an die Liste. Korrektur: `rebuild_sheet_tabs()` wählt zuerst das erste sichtbare Blatt, wenn das aktive `user_hidden` ist (Schutz gegen Rekursion über `tabs_guard["fixing"]`; Config und programmintern ausgeblendete Blätter zählen nicht). Nicht im Browser getestet.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.07 | aktives verstecktes Blatt durch erstes sichtbares ersetzen |
+| `install/BETATEST_Checkliste.md` | 3.01 | Punkt 260 |
+
+## 4.06 (2026-11-18)
+
+PR 9 (moosbewohner), letzter Commit 768c37c5 („ESP32-Fotowiderstand über Blatteinstellung initialisieren“): Das Häkchen „Fotowiderstand aktivieren“ setzte `READ_LDR` (M06_Write_Header), ließ aber `Read_LDR` in M06_Write_Header_SW (Initialisierung des ADC-Scanners, `Read_LDR.h`) aus, weil `Init_HeaderFile_Generation_SW(firstRun)` den Wert auf False setzte. Jetzt: `Read_LDR = Board ESP32 und esp32_options["ldr"] is True`. Übernommen in unseren Stand (die übrigen Dateien der PR sind schon enthalten: ESP-Einstellungen, OLED-Vorschau). Hardwaretest offen.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `proggen/M06_Write_Header_SW.py` | 1.07 | `Read_LDR` aus der ESP-Blatteinstellung |
+| `webmobaledlib.py` | 4.06 | Version, Verweis M06_Write_Header_SW 1.07 |
+
+## 4.05 (2026-11-18)
+
+Issue 6 (Theo, Raspberry Pi 400, Pico, InfraredMLX, `DCC_PICO_RC5.MLL_pgf`): Setup übertragen bricht nach dem Kompilieren ab. Protokoll: `InfraredMLX.h:69: error: no matching function for call to 'IRrecv::begin(uint16_t&, bool)'`. Ursache: Die Erweiterung (`library.properties`, Bibliothek `IRReceiverExtension`) fordert `IRremote` ohne Version; PlatformIO löste das zu `z3t0/IRremote@5.0.0` auf (zwei weitere Treffer: arduino-irremote 4.7.1, arminjo 4.4.1). In 5.0 gibt es `begin(pin, bool)` nicht mehr (nur `begin(pin)` und `begin(pin, feedbackPin, bool)`). In Excel (Arduino IDE) liegt eine ältere Bibliothek, deshalb dort kein Fehler.
+
+Korrektur: neues optionales Feld `lib_deps` je Eintrag in `extensions_known.json`; `M38.Write_PIO_Extension` schreibt diese Zeilen (einmal je Eintrag) nach den `file://`-Zeilen in `[env] lib_deps`. Für InfraredMLX: `arduino-irremote/IRremote@^4.4.1`. **Nicht getestet** (Sandbox ohne PlatformIO/Netz): Theo soll es prüfen. Lässt sich 4.7 nicht übersetzen, auf `arminjo/IRremote@4.4.1` festlegen. Eigene Erweiterungen (Liste „eigene“) haben das Feld noch nicht.
+
+Nebenpunkte aus der Rückmeldung: „keine Aufforderung zum Speichern oder Neustarten“ nach dem Auswählen von infraredMLX ist so gewollt (Erweiterungen wirken sofort, die Makros erscheinen in der Auswahl).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.05 | Version, Verweis M38 1.06 |
+| `proggen/M38_Extensions.py` | 1.06 | `lib_deps` der Erweiterung in platformio.ini |
+| `extensions_known.json` | – | InfraredMLX: `lib_deps` IRremote ^4.4.1 |
+| `install/BETATEST_Checkliste.md` | 3.00 | Punkt 259 |
+
+## 4.04 (2026-11-18)
+
+Rückmeldung eines Testers: Beim Start rot „Mit Lichtmaschine verbinden“, obwohl der Arduino angeschlossen ist. Klick: Hinweis, Optionen/Werkzeuge zu öffnen. Nach „USB Port erkennen“ besteht weiterhin keine Verbindung, die Schaltfläche bleibt rot. Wunsch: Dialog gleich öffnen, danach automatisch verbinden.
+
+1. `connect_arduino` (webmobaledlib.py): ist `serportname` leer/„NO DEVICE“/„COM?“ und kein ESP32-WLAN-Ziel eingetragen, kommt ein Hinweis und `M20.Option_Dialog()` wird geöffnet (Reiter Lichtmaschine ist der erste Reiter) statt der Meldung „Es ist kein Port ausgewählt“.
+2. `WebOptions._web_detect_board(left=True)` (web_form_options 1.36) merkt sich, dass ein Anschluss eingetragen wurde (`serportname` gesetzt); `Show()` startet nach dem Schließen den Hook `wd._bridge["auto_connect"]` (ohne zu warten, denn der Befehl Optionen ist noch busy). Der Hook `auto_connect_after_detect` wartet bis zu 20 s auf „nicht busy“ und verbindet per USB (`_connect_usb_command`), dann `after_connect()`. Nur für die Seite Lichtmaschine, nicht für LNet/DCC; kein automatisches Verbinden beim Programmstart (Arduino-Reset, belegte Anschlüsse).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.04 | Hinweis und Optionen bei fehlendem Anschluss; Hook zum automatischen Verbinden |
+| `_web/web_form_options.py` | 1.36 | merkt erkannten Anschluss, startet Hook nach dem Schließen |
+| `csv/Web_Languages.csv` | – | 1 neue Zeile (ungeprüfte Übersetzungen) |
+| `install/BETATEST_Checkliste.md` | 2.99 | Punkt 258 |
+
+## 4.03 (2026-11-18)
+
+Fehler (Harold, neuer PC): Arbeitsmappe vom Test-PC (OTA aktiviert) geladen, „Setup übertragen“ mit Knopf USB: Abbruch „Das OTA-Passwort muss 1 bis 64 druckbare ASCII-Zeichen haben.“ (Protokoll: `prepare_ota_sketch`, ValueError). Ursache: `esp32_wlan` (wifi, ota, hostname) liegt im Blatt, das Passwort aber je Rechner in `esp32-ota.json` (`passwords`). Auf dem neuen Rechner ist ota=True mit leerem Passwort; auch USB baut die Firmware mit OTA. Korrektur: `transfer_setup` fragt in diesem Fall über `web_esp32_ota.ask_password()` (Speichern und weiter / Ohne OTA übertragen (nur bei USB) / Abbrechen); „ohne OTA“ gilt nur für diese Übertragung, die Einstellungen bleiben.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.03 | Abfrage des fehlenden OTA-Passworts in `transfer_setup` |
+| `_web/web_esp32_ota.py` | 1.06 | neu `ask_password()` |
+| `csv/Web_Languages.csv` | – | 6 neue Zeilen (ungeprüfte Übersetzungen) |
+
+## 4.02 (2026-11-18)
+
+Rückmeldung Jan (3.93): Es fehlt Rückgängig; nach „Beenden ohne Speichern“ war das Tabellenblatt samt Änderungen weg. (Seine Meldung zu Strg+C/Strg+V wartet auf Angaben: Browser, Betriebssystem, Adresse, Protokoll; Verdacht: Clipboard-API nur auf localhost/https.)
+
+1. **Rückgängig/Wiederholen:** `undo_stacks` (Blattname → ws, undo, redo; max. 50). `write_cells(items, label, record)` liest vor dem Schreiben die alten Texte aus `ws.tksheet.data`, nach dem Schreiben die neuen (`undo_record`, nur echte Änderungen) und gibt True/False zurück; `on_cell_changed` zeichnet die Direkteingabe auf. `op_undo_redo` schreibt mit `record=False` und aktualisiert Symbole (`refresh_icons_after_paste`). Zeilenzahl wird je Eintrag gemerkt; weicht sie ab (Zeilen eingefügt/gelöscht, Paste als Zeilen), wird der Verlauf verworfen. Anderes Blatt-Objekt (Laden) setzt den Verlauf zurück. Nicht erfasst: Aktiv-Haken (Leertaste), Farben, Zeilenstruktur. Tasten in `JS_CELL_KEYDOWN` (Strg+Z, Strg+Y, Strg+Umschalt+Z, Ereignis `mll_cell_op` undo/redo); Menüeinträge am Kontextmenü, Beschriftung in `on_ctx`. Die Anlagenansicht hat ihr eigenes Strg+Z (v2.45), unabhängig.
+2. **Verworfener Stand:** `close_session(save=False)` ruft `keep_discarded_state()`: hat sich das Blatt seit der letzten Sicherung geändert, wird neu nach `<Arbeitsmappe>.discarded.json` gesichert, sonst die Zwischensicherung dorthin verschoben. `offer_recovery` → `offer_discarded()` (nur wenn keine Zwischensicherung da ist, sonst wird der verworfene Stand gelöscht) fragt einmal und löscht die Datei danach in jedem Fall.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.02 | Rückgängig/Wiederholen, verworfener Stand |
+| `csv/Web_Languages.csv` | – | 10 neue Zeilen (Texte Rückgängig, Verlauf, Verworfene Änderungen); Übersetzungen von mir, ungeprüft |
+| `install/ANLEITUNG_Installation.md` | 4.02 | Abschnitte Rückgängig, Beenden ohne Speichern |
+| `install/BETATEST_Checkliste.md` | 2.98 | Punkte 255–257 |
+
+## 4.01 (2026-11-18)
+
+Issue 13, Auswertung des Protokolls von Theo (Linux, nur ein FT232-Nano `/dev/ttyUSB0` angeschlossen): Die Ursache aus 4.00 (falscher Anschluss bei zwei Arduinos) war nicht die Ursache.
+- Ablauf im Protokoll: Erkennen auf der Seite des LNet-Arduinos meldet „Bootloader antwortet mit 115200 Baud“, setzt das Board auf Nano neu (`Change_Board_Typ`), ruft dann `__Detect_Right_Port_Button_Click` auf. Dieser liest die Auswahl aus `rb_res["_R"]` (alte Auswahl aus dem Formular, Nano alt) und schreibt sie mit `Change_Board` zurück. Ergebnis: rechts bleibt „alt“ (`R=1`), der Upload der LNet-Firmware lief mit `-e nano_old` und scheiterte mit „not in sync“. Erst nach Umstellen von Hand (`R=2`) klappte es.
+- Zweiter Befund: Nach dem Erkennen öffnet das Fenster wieder auf dem ersten Reiter (Lichtmaschine, dort `L=2` = neu). Das wirkt wie ein Sprung zur anderen Seite.
+- Korrektur `web_form_options` 1.35: `_web_detect_board` setzt zusätzlich `rb_res` (`boardlist.index(new_board)`); `_TAB` merkt den zuletzt gewählten Reiter, `keep` stellt ihn nach dem Erkennen wieder ein.
+- Die Änderung aus 4.00 (Anschluss der anderen Seite auslassen) bleibt; sie hilft bei zwei gleichzeitig angeschlossenen Arduinos.
+
+## 4.00 (2026-11-18)
+
+Issue 13 (Theo): LNet-Arduino (alter Bootloader) wird mit „Board und USB Port erkennen“ nicht richtig erkannt, die Anzeige springt auf die Lichtmaschine (neuer Bootloader).
+- Ursache (aus dem Code abgeleitet, das Protokoll aus dem Issue war hier nicht abrufbar): `_web_detect_board(left)` nahm immer `cands[0]`, den ersten gefundenen Anschluss, unabhängig von der Seite. Bei zwei Nanos war das oft der Anschluss der Lichtmaschine. Dessen Bootloader (115200, neu) wurde dann für die LNet-Seite eingestellt, und „USB Port erkennen“ blieb bei diesem Board.
+- Korrektur `web_form_options` 1.34: gespeicherte Anschlüsse beider Seiten lesen (`COMPort_COL`, `COMPrtR_COL`), den der anderen Seite auslassen, den eigenen gespeicherten bevorzugen. Das Protokoll nennt Seite, beide Anschlüsse und die Kandidatenliste (`Erkennen: Seite …`).
+- Offen: Ist für die andere Seite noch kein Anschluss gespeichert und sind zwei Nanos angeschlossen, wird weiter der erste (niedrigste Nummer) genommen; das Formular zeigt die anderen gefundenen Boards.
+
+## 3.99 (2026-11-18)
+
+- `web_form_options` 1.33: Klasse `mll-opttabs` für die Reiter des Optionenfensters. CSS: `.q-tab` mit `flex: 1 1 auto; min-width: 0`, Beschriftung `white-space: normal`, kleinere Schrift (0.78rem), `.q-tabs__content` ohne Umbruch. Damit teilen die bis zu 9 Reiter die Breite, lange Namen brechen um und Quasar zeigt keine Blätterpfeile mehr. Nicht im Browser geprüft (kein NiceGUI in der Entwicklungsumgebung); bei sehr langen Wörtern (Entwicklungsumgebung) bricht `overflow-wrap: anywhere` notfalls im Wort um.
+
+## 3.98 (2026-11-18)
+
+Issue 6 (MLX), Phase 2 und 3.
+- `headless_extensions` 1.02: `parse_spec` (Name, Name@=Version, Name=https://…, https://… mit `#ref`; keine Leerzeichen oder Sonderzeichen), `add_custom` (laden, `MobaLedLib.properties` lesen, in `extensions.json` unter `custom` speichern, einschalten), `remove_custom`, `all_entries`, `warned`/`set_warned`, `type_names`, `find_disabled_used`. Download: GitHub `…/archive/<ref|HEAD>.zip` oder direkte ZIP-Adresse (nur https); Registry-Pakete über `pio pkg install --global --storage-dir … --library Name@=Version` (nicht getestet, PlatformIO-Optionen unbestätigt). Schlüssel ist der Ordnername.
+- `extensions_known.json`: neues Feld `types` (Konstruktornamen), damit auch nicht geladene Erweiterungen in einer Datei erkannt werden.
+- `web_form_options` 1.32: Gruppe „Eigene Erweiterungen“ mit Haken und „Entfernen“, Eingabefeld mit „Hinzufügen“, Hinweisdialog (einmalig), Hilfetext zur Syntax.
+- `webmobaledlib.py` 3.98: `offer_extensions` prüft die Zellen aller Blätter auf `EX.<Typ>(` einer ausgeschalteten Erweiterung und fragt (je Sitzung einmal je Erweiterung); aufgerufen 3 s nach dem Seitenaufbau und nach jedem Befehl (Laden einer Datei). Bei „Einschalten“: nötigenfalls laden, Haken setzen, `M38.Load_Extensions()`.
+- Wiki: neue Seite `erweiterungen` 1.00, `pg_werkzeugleiste` Reiterliste ergänzt.
+- 9 neue CSV-Zeilen.
+- Offen: Aktualisieren einer eigenen Erweiterung geht nur über Entfernen und neu Hinzufügen; keine Versionsprüfung der Mindestversion der MobaLedLib.
+
+## 3.97 (2026-11-18)
+
+Fehler aus dem Protokoll von Harold: „JSON Error … Expecting property name enclosed in double quotes“ für AddressLearnMLX, FireplaceMLX, InfraredMLX.
+- Ursache: Ihre `MobaLedLib.properties` ist kein strenges JSON (Schlüssel ohne Anführungszeichen, Komma vor `"macroIncludes"` fehlt). `M33.ParseJSONFile` (json.load) lehnt das ab; der VBA-Leser des Excel-Programms nahm es an.
+- `headless_extensions` 1.01: `load_properties` liest tolerant (Schlüssel quoten, fehlende Kommas ergänzen, Kommas vor `]`/`}` und Kommentare entfernen, Zeichenketten bleiben unverändert). `M38_Extensions` 1.05 nutzt sie, `M33.ParseJSONFile` nur als Rückfall.
+- Zweiter Fund: Die Id in der Datei (`AddressLearnExtension`) ist nicht der Ordnername (`AddressLearnMLX`). Die Haken hängen deshalb am Ordnernamen. Bei ausgeschalteten Erweiterungen hätte die Prüfung über die Id nie gegriffen. `Name=file://…` in `lib_deps` nutzt weiter die Id aus der Datei (wie im Excel-Programm).
+
+## 3.96 (2026-11-18)
+
+Issue 6 (MLX), Phase 1 nach den Antworten von Jürgen: nur PlatformIO, keine Arduino-IDE-Unterstützung, Schlüssel ist die Id aus MobaLedLib.properties.
+- Neu `headless/headless_extensions.py` 1.00: liest `extensions_known.json` (Paket-Wurzel; 5 Einträge, Gruppe standard/optional, bundled), Haken in `extensions.json` im Datenordner (unbekannte Extensions sind immer aktiv), `download` lädt `<url>/archive/HEAD.zip` nach `Datenordner/extensions/<Id>` (Größengrenze, Schutz gegen Pfade außerhalb, prüft MobaLedLib.properties).
+- `M38_Extensions` 1.04: `__CollectExtensions` fügt eingeschaltete Extensions aus dem Cache hinzu und überspringt ausgeschaltete bekannte; `Write_PIO_Extension` unverändert (`Name=file://Pfad`, gilt auch für den Cache).
+- `web_form_options` 1.31: Reiter „Erweiterungen“ (Haken, Status, Hardware-Hinweis, Download beim Einschalten); nach Änderung `M38.Load_Extensions()` in `_web_apply`.
+- `libraries/P_ScheduleMLX` und `libraries/P_ScheduleDuoMLX` im Paket (aus dem Stand 3.95 des Entwicklers übernommen).
+- Kein Schnappschuss der Properties für die optionalen Extensions: Sie werden erst beim Einschalten geladen, vorher braucht man ihre Makros nicht. Offen: Phase 2 (eigene Liste mit Adresse, Id aus den Properties), Phase 3 (Rückfrage beim Öffnen einer Datei mit ausgeschalteter Extension).
+- 10 neue CSV-Zeilen.
+
+## 3.95 (2026-11-18)
+
+- Update Testversion mit freier Quelle: `choose_release` bietet zusätzlich „Eigener Link zu einer ZIP-Datei …“ (nur https, `wu.check_custom_url`) und „ZIP-Datei auf diesem Rechner auswählen …“ (`ui.upload`, `wu.save_upload` schreibt nach `zip_path_of_update()`); Rückgabe-Eintrag mit `custom=True`, `file=True/False`. Danach derselbe Ablauf wie sonst: `open_release`/`prepare` (Ordner python, release_manifest.json, Prüfsummen), Plan, Rücksprung-Warnung, Rückfrage. Kein GitHub nötig (Fehler wird angezeigt, Auswahl bleibt möglich). Kopfzeile „Eigene Quelle: …“. `web_update` 1.16, 12 neue CSV-Zeilen.
+
+## 3.94 (2026-11-18)
+
+Pull Request 11 von moosbewohner (enthält die Pull Requests 9 und 10), von Hand integriert, weil die Branches auf einem älteren Stand lagen und Versionsnummern kollidierten. Nicht übernommen: `release_manifest.json` (wird von `release_tools.py` erzeugt) sowie die Einträge in README und HOC der Pull Requests.
+- ESP Einstellungen je Blatt (`esp32_options`: oled, ldr, store_status), gespeichert in `Esp32Options` der Arbeitsmappe, beim Duplizieren kopiert. Reiter nur bei Board ESP32.
+- M06 erzeugt aus den Einstellungen Defines hinter den Tabellen-Defines; UI_MLLTime 0 bis 5.
+- OLED-Modus 5 in `U8G2UserInterface.h` (WLAN, IP, Hostname).
+- ESP32-Setup-Upload nach `M08_ARDUINO.Compile_and_Upload_ESP32_Setup`; `transfer_setup` in `webmobaledlib.py` ruft sie auf.
+- Korrektur gegenüber dem Pull Request 11: `esp_tab.name` gibt es bei `ui.tab` nicht; wie im Pull Request 9 `esp_tab.props["name"]` (sonst Fehler im Timer der OLED-Vorschau).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 3.94 | `duplicate_sheet`, `workbook_signature`, `transfer_setup` ruft M08 auf |
+| `_web/web_form_options.py` | 1.30 | Reiter ESP Einstellungen mit OLED-Vorschau |
+| `proggen/M06_Write_Header.py` | 1.10 | Firmware-Defines aus den ESP-Einstellungen, UI_MLLTime 0 bis 5 |
+| `proggen/M08_ARDUINO.py` | 1.22 | `Compile_and_Upload_ESP32_Setup` |
+| `ExcelAPI/XLA_Application.py` | 1.23 | `Esp32Options` sichern und laden |
+| `LEDs_AutoProg/U8G2UserInterface.h` | – | OLED-Modus 5 |
+| `LEDs_AutoProg/ESP32Extensions.h` | – | Kommentar der Modi |
+| `csv/Web_Languages.csv` | – | 12 neue Zeilen |
+
 ## 3.93 (2026-11-18)
 
 Rückmeldung eines Einsteigers im Forum:
@@ -40,7 +354,9 @@ Rückmeldung eines Einsteigers im Forum:
 | `headless/headless_graph.py` | 1.07 | `vt_key`, reine Zahl als Verteiler |
 | `webmobaledlib.py` | 3.93 | `op_fill`, Strg+D, Kontextmenü, `REQUIRED_FILES` |
 | `release_tools.py` | 1.09 | `zip` nimmt weitere Dateien für die ZIP-Wurzel (START_HIER.txt), `check` erlaubt sie |
-| `zip_erstellen.bat` | 1.08 | übergibt START_HIER.txt (neben dem Ordner python) an `release_tools.py zip` |
+| `zip_erstellen.bat` | 1.10 | START_HIER.txt im obersten Ordner des ZIP, wenn `ROOT_IN_ZIP=1` (für 3.93 0: Update-Code bis 3.92 weist solche ZIP ab) |
+| `_web/web_update.py` | 1.15 | ignoriert START_HIER.txt im obersten Ordner des ZIP |
+| `repair.py` | 1.04 | wie `web_update` |
 | `_web/web_form_options.py` | 1.29 | Importieren-Knopf aktiv mit Anleitung, Kopieren-Knopf entfernt |
 | `proggen/UserForm_Options.py` | 1.06 | Kopieren-Knopf auskommentiert |
 | `csv/Web_Languages.csv` | – | 8 neue Zeilen (Übersetzungen ungeprüft) |

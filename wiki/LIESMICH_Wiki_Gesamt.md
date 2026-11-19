@@ -1,9 +1,19 @@
-Datei-Version: 1.24 (2026-11-17) - LIESMICH_Wiki_Gesamt.md
-Gilt für webMobaLedLib 3.87
+Datei-Version: 1.25 (2026-11-19) - LIESMICH_Wiki_Gesamt.md
+Gilt für webMobaLedLib 4.22
 
-# Wiki-Kapitel „webMobaLedLib“: alle Seiten, Stand 3.04
+# Wiki-Kapitel „webMobaLedLib“: alle Seiten, Stand 4.22
 
 Dieses Paket enthält **alle 29 Seiten** in ihrer neuesten Fassung (Seitenstand jeweils um 0,01 erhöht). Es ersetzt die früheren Pakete der sechs Wellen. **Die Seiten erst veröffentlichen, wenn ein Release mit 3.04 (oder neuer) auf GitHub liegt.**
+
+## Neu seit Stand 3.93 (Stand 4.22): 39 Seiten, sieben geändert, eine neu
+
+* **`erweiterungen`** (1.01, neu): MobaLedLib Extensions (MLX) ein- und ausschalten, eigene hinzufügen, Name und Beschreibung aus der `libraries.json`.
+* **`pg_speichern`** (1.03): Inkrementell speichern (Datei mit fortlaufender Nummer), Sicherungsdatei öffnen, Sicherungsort ändern; die Tastenkombination (Vorgabe Strg+Umschalt+S) ist in den Programm Einstellungen einstellbar.
+* **`pg_arduino`**, **`erstes_programm`**, **`pg_werkzeugleiste`**: Verbinden beim Start, Verbinden nach dem Übertragen, Pfeil neben dem Knopf (Trennen, Neu verbinden, Board wechseln), Menü **Lichtmaschine**.
+* **`wz_programm_einstellungen`** (1.14): Zeilen **Automatisch verbinden** und **Tastenkombination: Inkrementell speichern**.
+* **`ota`** (1.04): Menü **Lichtmaschine** statt **ARDUINO**.
+* **Bilder:** Die Bilder `erst_04_optionen.png` und `pg_09_verbinden.png` zeigen noch den alten Stand; neu aufnehmen (Knopf mit Pfeil, Menü Lichtmaschine).
+* **Vom Entwickler zu prüfen:** Die neuen Texte beschreiben Funktionen, die noch nicht auf Hardware oder im Browser geprüft sind.
 
 ## Neu seit 3.87 (Stand 3.93): Häufige Fragen
 

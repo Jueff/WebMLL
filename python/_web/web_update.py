@@ -1,8 +1,8 @@
-# Datei-Version: 1.15 (2026-11-17) - web_update.py
+# Datei-Version: 1.16 (2026-11-18) - web_update.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_update.py
 # Path:           _web/web_update.py
-# Version:        1.15
+# Version:        1.16
 # Last Update:    2026-11-18
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
@@ -12,6 +12,7 @@
 #   1.13  2026-11-12  Update Testversion: Releases, deren Tag oder Name mit 'test' beginnt (zum Beispiel test1: Tests des Entwicklers), stehen am Ende der Liste (hoechstens 5), werden nie vorgewaehlt und tragen den Zusatz 'Entwicklertest'; pick_release nimmt sie nur, wenn es nichts anderes gibt
 #   1.14  2026-11-17  version_key: Bei Tags wie 'V3.5.0L3-3.85' (Version der MobaLedLib vor der webMobaLedLib-Version) wird die webMobaLedLib-Version genommen; vorher stand bei neueren Releases faelschlich 'aeltere Version'
 #   1.15  2026-11-18  Ein ZIP darf neben dem Ordner python die Datei START_HIER.txt enthalten (wird ignoriert); vorher: 'Das ZIP enthaelt nicht den Ordner python mit webmobaledlib.py'
+#   1.16  2026-11-18  Update Testversion: eigener Link (https) zu einer ZIP-Datei oder ZIP-Datei vom Rechner (check_custom_url, save_upload); wird wie webmobaledlib.zip behandelt
 # ----------------------------------------------------------------------------------------------
 """Update der Web-Oberflaeche aus dem neuesten Release auf GitHub (Menue Hilfe -> Update webmobaledlib).
 
@@ -247,6 +248,26 @@ def download(url: str, dest: str, progress=None, timeout: float = 30.0) -> str:
         # raise UpdateError(f"Das Update konnte nicht geladen werden: {ex}") from ex  # v1.08 (entfallen)
         raise UpdateError(tr('Das Update konnte nicht geladen werden: {ex}', ex=ex)) from ex  # v1.08
     return dest
+
+
+# ------------------------------------------------------------------ Eigene Quelle: Link oder ZIP-Datei vom Rechner  # v1.16
+def check_custom_url(url: str) -> str:  # v1.16
+    """Eigener Link zu einer ZIP-Datei: Leerzeichen am Rand weg, nur https:// ist erlaubt. Rueckgabe: die Adresse."""  # v1.16
+    url = (url or "").strip()  # v1.16
+    if not url.lower().startswith("https://") or len(url) < 12 or any(c.isspace() for c in url):  # v1.16
+        raise UpdateError(tr("Die Adresse muss mit https:// beginnen (ohne Leerzeichen)."))  # v1.16
+    return url  # v1.16
+
+
+def save_upload(data: bytes, dest: str) -> str:  # v1.16
+    """ZIP-Datei, die der Anwender im Browser ausgewaehlt hat, nach dest schreiben (Groesse und ZIP-Kennung werden geprueft)."""  # v1.16
+    if len(data) > MAX_ZIP_BYTES:  # v1.16
+        raise UpdateError(tr('Das ZIP ist mit {groesse} MB ungewoehnlich gross (Grenze {grenze} MB).', groesse=len(data) // 1048576, grenze=MAX_ZIP_BYTES // 1048576))  # v1.16
+    with open(dest, "wb") as out:  # v1.16
+        out.write(data)  # v1.16
+    if not zipfile.is_zipfile(dest):  # v1.16
+        raise UpdateError(tr("Die gewählte Datei ist kein ZIP."))  # v1.16
+    return dest  # v1.16
 
 
 # ------------------------------------------------------------------ Testversion: das neueste Release (Pre-Release oder normal)

@@ -1,15 +1,16 @@
-# Datei-Version: 1.11 (2026-11-14) - M07_COM_Port.py
+# Datei-Version: 1.12 (2026-11-19) - M07_COM_Port.py
 # ----------------------------------------------------------------------------------------------
 # Name:           M07_COM_Port.py
 # Path:           proggen/M07_COM_Port.py
-# Version:        1.11
-# Last Update:    2026-11-12
+# Version:        1.12
+# Last Update:    2026-11-19
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
 #   1.00  2026-10-12  Stand der Umstellung (nicht erfasst)
 #   1.01  2026-10-20  EnumComPorts: FTDI-Adapter (VID 0403, Beschreibung FT232 ...) werden erkannt, sonst meldete die Pruefung beim Hochladen 'kein Arduino angeschlossen'; DetectArduino: kein Absturz, wenn die Verbindung inzwischen getrennt wurde
 #   1.11  2026-11-14  Other_Type_Port_List (Liste statt Text, fuer die anklickbaren 'Andere Typen')
+#   1.12  2026-11-19  Bootloader-Pruefung merkt sich Firmware-Version (STK_GET_PARAMETER) und Signatur (Get_Last_Detect_Info): Nano mit neuem Bootloader wird als neu bzw. Full erkannt (Issue 14)
 #   1.10  2026-11-14  EnumComPorts: CP210x/CP2102 nur noch fuer den ESP32 (der ESP32 erschien in Nano- und Pico-Liste); Classify_Port, Other_Type_Ports fuer die Zeile 'Andere Typen'
 #   1.02  2026-10-21  Pico: jede Kennung VID 2E8A und Adafruit 239A:813D (vorher nur 2E8A:000A), pyserial- und Windows-Zweig; DetectArduino schaltet RTS ein (Version K des Excel-Programms)
 #   1.03  2026-10-26  Linux: die Platzhalter-Anschluesse /dev/ttyS0 ... ttyS31 ohne Geraet erscheinen nicht mehr in der Liste der Anschluesse (auch nicht mit unbekannte Ports anzeigen)
@@ -808,7 +809,16 @@ def __TestDetect():
 # VB2PY (UntranslatedCode) Argument Passing Semantics / Decorators not supported: ComPort - ByVal 
 # VB2PY (UntranslatedCode) Argument Passing Semantics / Decorators not supported: DeviceSignatur - ByRef 
 # VB2PY (UntranslatedCode) Argument Passing Semantics / Decorators not supported: FirmwareVer - ByRef 
+_LAST_INFO = {"signature": 0, "firmware": ""}  # v1.12: Ergebnis der letzten Bootloader-Pruefung (die VBA-ByRef-Parameter gibt es in Python nicht)
+
+
+def Get_Last_Detect_Info():  # v1.12
+    """(Firmware-Version als Text wie '108.1', Signatur als Zahl) der letzten erfolgreichen Bootloader-Pruefung, sonst ('', 0)."""  # v1.12
+    return _LAST_INFO["firmware"], _LAST_INFO["signature"]  # v1.12
+
+
 def Get_Arduino_Baudrate(ComPort, Start_Baudrate, DeviceSignatur, FirmwareVer, DebugPrint=False):
+    _LAST_INFO["signature"], _LAST_INFO["firmware"] = 0, ""  # v1.12
     fn_return_value = 0
     SWMajorVersion = Byte()
 
@@ -1147,6 +1157,15 @@ def _DetectArduino_once(port, baudrate, HWVersion=255, SWMajorVersion=255, SWMin
                 message = __transact(Cmnd_STK_GET_SYNC, 2, 1)  # v1.07
                 if message == Resp_STK_INSYNC + Resp_STK_OK:  # v1.05
                     res, devicesignatur = getdeviceinformation()  # v1.05: die Signatur ist nur eine Zugabe; Erfolg heisst: der Bootloader antwortet (wie in der Tk-Fassung)
+                    try:  # v1.12: Firmware-Version und Signatur merken (Get_New_Board_Type unterscheidet damit Nano neu und Nano Full)
+                        _LAST_INFO["signature"] = int.from_bytes(devicesignatur, "big") if isinstance(devicesignatur, (bytes, bytearray)) and len(devicesignatur) == 3 else 0  # v1.12
+                        major = __transact(Cmnd_STK_GET_PARAMETER + Parm_STK_SW_MAJOR, 3, 3)  # v1.12
+                        minor = __transact(Cmnd_STK_GET_PARAMETER + Parm_STK_SW_MINOR, 3, 3)  # v1.12
+                        if len(major) == 3 and len(minor) == 3:  # v1.12: INSYNC, Wert, OK
+                            _LAST_INFO["firmware"] = str(major[1]) + "." + str(minor[1])  # v1.12
+                        logging.info("M07.detect_arduino: Bootloader-Firmware %s, Signatur 0x%06X", _LAST_INFO["firmware"] or "?", _LAST_INFO["signature"])  # v1.12
+                    except BaseException as e:                         # noqa: BLE001  # v1.12
+                        logging.debug(e, exc_info=True)  # v1.12
                     logging.info("M07.detect_arduino: Bootloader antwortet mit %s Baud (Versuch %s)", baudrate, i + 1)  # v1.07
                     return 1, devicesignatur  # v1.05
                 time.sleep(SYNC_RETRY_PAUSE)  # v1.07

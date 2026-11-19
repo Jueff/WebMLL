@@ -1,9 +1,9 @@
-# Datei-Version: 1.09 (2026-11-17) - M06_Write_Header.py
+# Datei-Version: 1.10 (2026-11-18) - M06_Write_Header.py
 # ----------------------------------------------------------------------------------------------
 # Name:           M06_Write_Header.py
 # Path:           proggen/M06_Write_Header.py
-# Version:        1.09
-# Last Update:    2026-11-17
+# Version:        1.10
+# Last Update:    2026-11-18
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
@@ -12,10 +12,11 @@
 #   1.03  2026-10-21  Version K des Excel-Programms: Makros Name_LED_Number und Name_LED_Offset (Proc_Special_Functions), Variable #ChannelOffset (Generate_Config_Line mit ChannelBaseOffset), Adresse 0 (Addr >= 1 in Create_Header_Entry, Addr >= 0 in ProcessLine), keine Pruefung des Boards bei nur Simulator, START_MSG ohne Test_Suffix, inch_t in HandleValue_t
 #   1.04  2026-10-21  Meldung 'Anzahl der verwendeten Eingangskanaele ist zu gross': MaxInput und Channel als Zeichenkette (Replace mit einer Zahl stuerzte ab) und die Klammern richtig gesetzt (MsgBox bekam nur den ersten Teil als Text, Titel und Symbol fehlten)
 #   1.05  2026-11-12  Einstellung 'Test ARDUINO Programm Creation' (ARDUINOTest): Die Fragen nach jedem Schritt kommen jetzt als Web-Dialog (P01.MsgBox) statt tk.messagebox (ohne Tk lieferte askyesno immer Nein: 'Headerfileerstellung abgebrochen - Die Headerdatei wurde nicht geschrieben', Windows 11, Log des Testers)
-#   1.06  2026-11-14  Create_HeaderFile(HeaderOnly): nur die Header-Datei erzeugen (ESP32-OTA); Display-Block des ESP32 (UI_MLLTime) nach Bearbeitung im Browser wieder auf mehrere Zeilen (Beitrag des Fork-Entwicklers)
+#   1.06  2026-11-14  Create_HeaderFile(HeaderOnly): nur die Header-Datei erzeugen (ESP32-OTA); Display-Block des ESP32 (UI_MLLTime) nach Bearbeitung im Browser wieder auf mehrere Zeilen (Beitrag von moosbewohner, Pull Request 11)
 #   1.07  2026-11-15  Umschalttaste: Simulator-Option 3 war umgekehrt (VBA: nur ohne Umschalttaste), Wert als bool
 #   1.08  2026-11-15  Simulator-Betriebsart ueber M39.Get_Sim_Mode (Auswahl Kein/Nur/Mit Simulator)
 #   1.09  2026-11-17  Fehlermeldung der House-Zeiten verweist auf die Programm Einstellungen statt auf die Seite Config (die Werte stehen dort)
+#   1.10  2026-11-18  Firmware-Defines aus den ESP-Einstellungen erzeugen (Beitrag von moosbewohner, Pull Request 11)
 # ----------------------------------------------------------------------------------------------
 # -*- coding: utf-8 -*-
 #
@@ -1713,11 +1714,27 @@ def Write_Header_File_and_Upload_to_Arduino(CreateFilesOnly=False, LEDsInUse=Non
     display_block = (r"(?m)^([ \t]*)#ifdef[ \t]+ESP32[ \t]+"
                      r"#define[ \t]+USE_ESP32_EXTENSIONS[ \t]+"
                      r"#define[ \t]+USE_UI[ \t]+"
-                     r"#define[ \t]+UI_MLLTime[ \t]+([0-4])[ \t]*#endif\b")
+                     # r"#define[ \t]+UI_MLLTime[ \t]+([0-4])[ \t]*#endif\b")  # v1.10 (entfallen)
+                     r"#define[ \t]+UI_MLLTime[ \t]+([0-5])[ \t]*#endif\b")  # v1.10
     ConfigTxt = re.sub(display_block,
                        r"\1#ifdef ESP32\n\1#define USE_ESP32_EXTENSIONS\n\1#define USE_UI\n"
                        r"\1#define UI_MLLTime \2\n\1#endif", ConfigTxt)
     VBFiles.writeText(fp, ConfigTxt, '\n')
+    options = getattr(P01.ActiveSheet, "esp32_options", None)  # v1.10
+    if options:  # v1.10
+        VBFiles.writeText(fp, '#ifdef ESP32', '\n')  # v1.10
+        mode = options.get("oled", 0)  # v1.10
+        if type(mode) is int and 1 <= mode <= 5:  # v1.10
+            for symbol in ("USE_ESP32_EXTENSIONS", "USE_UI"):  # v1.10
+                VBFiles.writeText(fp, f'#ifndef {symbol}\n#define {symbol}\n#endif', '\n')  # v1.10
+            VBFiles.writeText(fp, f'#undef UI_MLLTime\n#define UI_MLLTime {mode}', '\n')  # v1.10
+        for key, symbol, define in (  # v1.10
+            ("ldr", "READ_LDR", "READ_LDR"),  # v1.10
+            ("store_status", "ENABLE_STORE_STATUS", "ENABLE_STORE_STATUS()"),  # v1.10
+        ):  # v1.10
+            if options.get(key) is True:  # v1.10
+                VBFiles.writeText(fp, f'#ifndef {symbol}\n#define {define}\n#endif', '\n')  # v1.10
+        VBFiles.writeText(fp, '#endif', '\n')  # v1.10
     VBFiles.writeText(fp, '  EndCfg // End of the configuration', '\n')
     VBFiles.writeText(fp, '  };', '\n')
     VBFiles.writeText(fp, '//*******************************************************************', '\n')

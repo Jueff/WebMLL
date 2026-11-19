@@ -1,5 +1,5 @@
 ====== webMobaLedLib – Dein erstes Programm ======
-//Seitenstand 1.11 (2026-11-17), gilt für webMobaLedLib 3.85//
+//Seitenstand 1.12 (2026-11-19), gilt für webMobaLedLib 4.14//
 
 Auf dieser Seite bringst du eine LED zum Leuchten. Das dauert etwa **15 Minuten**, beim ersten Mal etwas länger. Danach weißt du, wie alles zusammenhängt.
 
@@ -83,7 +83,7 @@ Fehlt die Zeile (zum Beispiel, weil du sie gelöscht hast), legst du sie neu an:
 
 Die **LED auf der Platine** wechselt jetzt ihre Farbe. Die Lichtmaschine hat das Programm gespeichert und steuert die LED von jetzt an allein, auch wenn du den Computer ausschaltest oder das USB-Kabel abziehst. Sie braucht dafür natürlich weiter Strom.
 
-Jetzt läuft auf der Lichtmaschine ein MobaLedLib-Programm. Darum funktioniert ab jetzt auch **Mit Lichtmaschine verbinden** (oben rechts, der Knopf wird dann grün). Damit kannst du zum Beispiel die Testtasten der Tabelle benutzen, siehe [[anleitungen:webmobaledlib:pg_arduino|Verbinden und Übertragen]].
+Jetzt läuft auf der Lichtmaschine ein MobaLedLib-Programm. Darum funktioniert ab jetzt auch **Mit Lichtmaschine verbinden** (oben rechts, der Knopf wird dann grün). Seit 4.14 verbindet das Programm nach dem Übertragen **von selbst** und stellt die Verbindung auch beim nächsten Start wieder her. Damit kannst du zum Beispiel die Testtasten der Tabelle benutzen, siehe [[anleitungen:webmobaledlib:pg_arduino|Verbinden und Übertragen]].
 
 **Glückwunsch!** Du hast dein erstes MobaLedLib-Programm erstellt.
 

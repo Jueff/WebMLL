@@ -1,9 +1,9 @@
-# Datei-Version: 1.22 (2026-11-17) - XLA_Application.py
+# Datei-Version: 1.23 (2026-11-18) - XLA_Application.py
 # ----------------------------------------------------------------------------------------------
 # Name:           XLA_Application.py
 # Path:           ExcelAPI/XLA_Application.py
-# Version:        1.22
-# Last Update:    2026-11-17
+# Version:        1.23
+# Last Update:    2026-11-18
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
@@ -29,6 +29,7 @@
 #   1.20  2026-11-15  Evt_Workbook_BeforeClose ruft das Ereignis tatsaechlich auf
 #   1.21  2026-11-17  Application.OnKey (Tastenbelegung, ohne Wirkung im Web): Beenden mit Speichern scheiterte mit AttributeError 'OnKey' (Workbook_BeforeClose)
 #   1.22  2026-11-17  Vom Anwender versteckte Blaetter (user_hidden): mit der Arbeitsmappe sichern (HiddenSheets) und laden
+#   1.23  2026-11-18  ESP-Einstellungen je Blatt sichern und laden (Beitrag von moosbewohner, Pull Request 11)
 # ----------------------------------------------------------------------------------------------
 # -*- coding: utf-8 -*-
 #
@@ -858,6 +859,7 @@ class CWorkbook(object):
             saveData["Workbookdata"]= copy.deepcopy(workbookdata)
             saveData["SheetOrder"] = [s.Name for s in self.sheets]                 # Reihenfolge der Reiter (auch der Kopien)  # v1.14
             saveData["Esp32Wlan"] = {s.Name: dict(s.esp32_wlan) for s in self.sheets if getattr(s, "esp32_wlan", None)}   # WLAN-Einstellungen des ESP32 je Blatt (ohne Passwort)  # v1.18
+            saveData["Esp32Options"] = {s.Name: dict(s.esp32_options) for s in self.sheets if getattr(s, "esp32_options", None)}  # v1.23
             saveData["TabColors"] = {s.Name: s.tab_color for s in self.sheets if getattr(s, "tab_color", "")}      # Reiterfarben  # v1.14
             saveData["HiddenSheets"] = [s.Name for s in self.sheets if getattr(s, "user_hidden", False)]          # vom Anwender versteckte Blaetter (Kontextmenue Tabelle verstecken)  # v1.22
             def _json_default(obj):  # v1.06
@@ -892,6 +894,12 @@ class CWorkbook(object):
             for sheet in self.sheets:  # v1.18
                 if isinstance(wlan.get(sheet.Name), dict):  # v1.18
                     sheet.esp32_wlan = dict(wlan[sheet.Name])  # v1.18
+        esp32_options = savedData.get("Esp32Options")  # v1.23
+        if isinstance(esp32_options, dict):  # v1.23
+            for sheet in self.sheets:  # v1.23
+                options = esp32_options.get(sheet.Name)  # v1.23
+                if isinstance(options, dict):  # v1.23
+                    sheet.esp32_options = dict(options)  # v1.23
         order = savedData.get("SheetOrder")  # v1.14
         if isinstance(order, list) and order:  # v1.14
             self.reorder_sheets([str(n) for n in order])  # v1.14

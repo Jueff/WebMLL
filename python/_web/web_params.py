@@ -1,9 +1,9 @@
-# Datei-Version: 1.10 (2026-11-17) - web_params.py
+# Datei-Version: 1.12 (2026-11-19) - web_params.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_params.py
 # Path:           _web/web_params.py
-# Version:        1.10
-# Last Update:    2026-11-17
+# Version:        1.12
+# Last Update:    2026-11-19
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
@@ -12,6 +12,8 @@
 #   1.08  2026-11-14  Option ColoredRowsBold in der Gruppe Programm Generator
 #   1.09  2026-11-17  build_settings_page: save_buttons (mehrere Speichern-Knoepfe mit eigener Nacharbeit, zum Beispiel aktuelle Seite / alle Seiten faerben)
 #   1.10  2026-11-17  Programm Generator: House-Zeiten und DCC-Offset; neue Gruppe Simulatoreinstellungen (nur im Experten Modus, EXPERT_GROUPS, apply_beginner)
+#   1.11  2026-11-19  Einstellung AutoConnect in den Allgemeinen Einstellungen (Issue 20)
+#   1.12  2026-11-19  IncrSaveKey in den Allgemeinen Einstellungen (Issue 21)
 # ----------------------------------------------------------------------------------------------
 """Web-Version von create_macroparam_frame/create_macroparam_content (pyMobaLedLib.py) fuer die Einstellungsseiten.
 
@@ -51,7 +53,8 @@ logger = logging.getLogger(__name__)
 SETTINGS_GROUPS = {  # v1.06
     "ConfigurationPage": [  # v1.06
         # ("Allgemeine Einstellungen", ["Language", "@layout", "FontConfig", "FontConfig_PattGen", "PGIconSize"]),  # v1.06 (entfallen)
-        ("Allgemeine Einstellungen", ["BeginnerMode", "Language", "@layout", "FontConfig", "FontConfig_PattGen", "PGIconSize"]),  # v1.07
+        # ("Allgemeine Einstellungen", ["BeginnerMode", "Language", "@layout", "FontConfig", "FontConfig_PattGen", "PGIconSize"]),  # v1.07  # v1.11 (entfallen)
+        ("Allgemeine Einstellungen", ["BeginnerMode", "AutoConnect", "IncrSaveKey", "Language", "@layout", "FontConfig", "FontConfig_PattGen", "PGIconSize"]),  # v1.11
         # ("Programm Generator", ["GraphDefaultView", "ShowHiddentables", "@table"]),  # v1.06 (entfallen v1.08)
         # ("Programm Generator", ["GraphDefaultView", "ColoredRowsBold", "ShowHiddentables", "@table"]),  # v1.08  # v1.10 (entfallen)
         ("Programm Generator", ["GraphDefaultView", "ColoredRowsBold", "ShowHiddentables", "MinTime_House", "MaxTime_House", "DCC_Offset", "@table"]),  # v1.10

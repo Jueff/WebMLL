@@ -1,5 +1,5 @@
 @echo off
-REM Datei-Version: 1.10 (2026-11-18) - zip_erstellen.bat
+REM Datei-Version: 1.11 (2026-11-19) - zip_erstellen.bat
 REM Erstellt webmobaledlib.zip aus dem Ordner python. Dieses Skript liegt im Ordner NEBEN dem Ordner python
 REM (also im Ordner, der python enthaelt) und wird dort gestartet (Doppelklick). Vorher werden alle
 REM __pycache__-Ordner im Ordner python geloescht. Die ZIP-Datei bekommt denselben Platz wie das Skript;
@@ -14,6 +14,7 @@ REM Seit 1.10: START_HIER.txt (liegt neben dem Ordner python) kommt in den obers
 REM ACHTUNG: Der Update-Code bis Version 3.92 weist ein ZIP mit Dateien ausserhalb des Ordners python ab ("Das ZIP enthaelt nicht den Ordner python mit
 REM webmobaledlib.py"). Ab Version 3.93 (web_update 1.15) wird START_HIER.txt ignoriert. Deshalb bleibt ROOT_IN_ZIP=0 fuer Release 3.93 (Anwender mit 3.92 oder aelter
 REM koennen sonst nicht ueber das Programm aktualisieren) und wird erst fuer das ERSTE Release NACH 3.93 auf 1 gestellt.
+REM Seit 1.11: ROOT_IN_ZIP=1 (erstes Release nach 3.93): START_HIER.txt kommt in den obersten Ordner des ZIP; web_update 1.15 und repair 1.04 (ab 3.93) ignorieren die Datei.
 REM Seit 1.07 baut Python das ZIP (release_tools.py zip), nicht mehr tar oder PowerShell: Dateinamen mit Umlauten (zum Beispiel vorsignal_grün.png) bekommen dabei das
 REM UTF-8-Kennzeichen. Ohne es entpackte der Raspberry Pi diese Dateien mit falschem Namen, und das Programm meldete beim Start fehlende Dateien.
 REM Seit 1.06 nicht im ZIP: der Ordner .pio (PlatformIO legt ihn im Ordner python an, mehrere hundert MB).
