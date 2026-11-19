@@ -639,17 +639,13 @@ class CUserForm_Options:
          
                 rbutton=tk.Radiobutton(self.right_frame, text=rb_text, variable=self.rb_res.get(side), value=self.radiobuttons[rb]["value"], command=rb_command)
                 row = self.radiobuttons[rb]["value"]
-                if row > 3:
-                    row+=1
                 rbutton.grid(row=row,column=0,sticky="nw",padx=10,pady=0)
                 self.radiobuttons[rb]["button"]=rbutton
                 self.Controls[rb]=P01.CControl(False)
                 
         self.right_frame.grid(row=0,column=1)
         
-        subtitle_txt = M09.Get_Language_Str("Für andere Hauptplatine")
-        self.subtitle_Label = ttk.Label(self.right_frame, text=subtitle_txt,font=self.default_fontsmall,width=40,wraplength=350,relief=tk.FLAT, borderwidth=1)
-        self.subtitle_Label.grid(row=4,column=0,sticky="w",padx=10,pady=0)
+
    
     def __UserForm_Initialize(self, first_page_only=False):
         #--------------------------------

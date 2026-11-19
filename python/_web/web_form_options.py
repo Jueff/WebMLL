@@ -124,7 +124,7 @@ def tab_buttons(buttons: dict, handlers: list[str], frame_hint: str | None = Non
 _TAB = {"name": None, "keep": False}  # v1.35: zuletzt gewaehlter Reiter; keep: beim naechsten Oeffnen wieder dort beginnen (nach Board erkennen)
 
 
-def _choose_detected_board_type(cands):
+def _choose_detected_board_type(cands, *, light_machine):
     types = [typ for typ in ("Nano", "ESP32", "Pico") if any(candidate_type == typ for _, candidate_type in cands)]
     if len(types) <= 1:
         return types[0] if types else None
@@ -143,8 +143,10 @@ def _choose_detected_board_type(cands):
         from nicegui import ui
         with wd._bridge["client"]:
             with ui.dialog().props("persistent") as dlg, ui.card().classes("min-w-[380px] max-w-[640px]"):
-                ui.label(tr("Mehrere Board-Typen gefunden")).classes("text-h6")
-                ui.label(tr("Bitte wählen Sie den gewünschten Board-Typ aus:"))
+                title = tr("Unterschiedliche Lichtmaschinen-Modelle gefunden") if light_machine else tr("Mehrere Board-Typen gefunden")
+                prompt = tr("Bitte wählen Sie das gewünschte Modell aus:") if light_machine else tr("Bitte wählen Sie den gewünschten Board-Typ aus:")
+                ui.label(title).classes("text-h6")
+                ui.label(prompt)
                 choice = ui.radio(options, value=None).props("dense")
                 with ui.row().classes("justify-end w-full"):
                     ui.button(tr("Abbrechen"), on_click=lambda: dlg.submit(None)).props("outline").classes("mll-cancel")
@@ -399,56 +401,35 @@ async def _options_async(spec: dict, st: dict):
                 else:  # v1.06
                     set_tab_visible(tab, vals["L"] in nano_values)  # v1.06
 
-            boards = []                                                # (Seite der Spezifikation, Radiogruppen) fuer refresh_boards  # v1.08
+            boards = []
 
-            def board_second(p):  # v1.08
-                """Boards ab Wert 4 (Uno, IDE, ESP32, Pico ...): ESP32 nur, wenn PlatformIO eingestellt ist oder die ARDUINO IDE das ESP32-Paket hat"""  # v1.08
-                esp = p.get("esp32_value")  # v1.08
-                hide_esp = esp is not None and not (vals.get("use_pio") or p.get("esp32_lib"))  # v1.08
-                return {v: t for v, t in p["radios"] if v > 3 and not (hide_esp and v == esp)}  # v1.08
+            def board_options(p):
+                esp = p.get("esp32_value")
+                hide_esp = esp is not None and not (vals.get("use_pio") or p.get("esp32_lib"))
+                return {v: t for v, t in p["radios"] if not (hide_esp and v == esp)}
 
-            def refresh_boards():  # v1.08
-                """Nach dem Wechsel der Entwicklungsumgebung im Dialog die Boardliste anpassen (ESP32 erscheint oder verschwindet sofort, ohne den Dialog neu zu oeffnen)"""  # v1.08
-                for p, g in boards:  # v1.08
-                    if g.get("b") is not None:  # v1.08
-                        g["b"].set_options(board_second(p))  # v1.08
+            def refresh_boards():
+                for p, key, radio in boards:
+                    options = board_options(p)
+                    radio.set_options(options, value=vals[key] if vals[key] in options else None)
 
-            def board_group(side, tab):
+            def board_group(side):
                 p = spec["pages"][side]
                 key = "L" if side == "left" else "R"
-                # with ui.column().classes("gap-0"):  # v1.20 (entfallen)
-                with ui.column().classes("gap-0 shrink-0").style("min-width: 20rem"):  # v1.20: behaelt ihre Breite, die Beschriftungen (zum Beispiel Nano Normal (old Bootloader)) brechen nicht um
-                    # ui.checkbox(p["auto_text"], value=bool(vals["auto_" + key]),  # v1.25 (entfallen: Knopf Erkennen statt Haken)
-                                # on_change=lambda e, k=key: vals.__setitem__("auto_" + k, bool(e.value)))  # v1.06 (entfallen)
-                                # on_change=lambda e, k=key: (vals.__setitem__("auto_" + k, bool(e.value)), update_dcc_tab()))  # v1.06  # v1.25 (entfallen)
-                    # ui.button(p["detect_text"], on_click=action("__Detect_Board_" + key)).props("outline no-caps dense").classes("q-mb-xs").tooltip(p["detect_hint"])  # v1.25: erkennt das angeschlossene Board einmalig (statt des Hakens Automatisch erkennen)  # v1.28 (entfallen: der Knopf steht jetzt ueber USB Port erkennen)
-                    first = {v: t for v, t in p["radios"] if v <= 3}
-                    # second = {v: t for v, t in p["radios"] if v > 3}  # v1.08 (entfallen)
-                    second = board_second(p)  # v1.08
-                    g = {}
+                options = board_options(p)
 
-                    def pick(which, e, k=key):
-                        if e.value is None:
-                            return
-                        vals[k] = e.value
-                        update_pico_buttons()
-                        ota_tab.set_visibility(vals.get("L") == esp32_value and esp32_value is not None)  # v1.09
-                        esp_tab.set_visibility(vals.get("L") == esp32_value and esp32_value is not None)  # v1.30
-                        update_dcc_tab()  # v1.06
-                        other = g["b"] if which == "a" else g["a"]
-                        if other is not None:
-                            other.value = None
-                    # g["a"] = ui.radio(first, value=vals[key] if vals[key] in first else None)  # v1.12 (entfallen)
-                    g["a"] = ui.radio(first, value=vals[key] if vals[key] in first else None).props("dense")  # v1.12
-                    g["a"].on_value_change(lambda e: pick("a", e))
-                    ui.label(p["subtitle"]).classes("text-caption q-ml-md")
-                    # g["b"] = ui.radio(second, value=vals[key] if vals[key] in second else None) if second else None  # v1.12 (entfallen)
-                    g["b"] = ui.radio(second, value=vals[key] if vals[key] in second else None).props("dense") if second else None  # v1.12
-                    if g["b"] is not None:
-                        g["b"].on_value_change(lambda e: pick("b", e))
-                    if not second:
-                        g["b"] = None
-                    boards.append((p, g))  # v1.08
+                def pick(e):
+                    if e.value is None:
+                        return
+                    vals[key] = e.value
+                    update_pico_buttons()
+                    ota_tab.set_visibility(vals.get("L") == esp32_value and esp32_value is not None)
+                    esp_tab.set_visibility(vals.get("L") == esp32_value and esp32_value is not None)
+                    update_dcc_tab()
+
+                with ui.column().classes("gap-0 shrink-0").style("min-width: 20rem"):
+                    radio = ui.radio(options, value=vals[key] if vals[key] in options else None, on_change=pick).props("dense")
+                boards.append((p, key, radio))
 
             esp32_value = spec["pages"]["left"].get("esp32_value")
             # with ui.tabs().classes("w-full") as tabs:  # v1.33 (entfallen)
@@ -487,7 +468,7 @@ async def _options_async(spec: dict, st: dict):
                                     ui.button(_dp["detect_text"], on_click=action("__Detect_Board_" + ("L" if t["side"] == "left" else "R"))).props("outline no-caps").classes("w-64").tooltip(_dp["detect_hint"])  # v1.28: Board und USB Port erkennen steht ueber USB Port erkennen
                                     for b in t["buttons"]:
                                         button_row(b, compact=True)  # v1.20
-                                board_group(t["side"], tab)
+                                board_group(t["side"])
                         elif t["kind"] == "ide":  # v1.04
                             ui.label(t["intro"]).classes("text-grey-8").style("white-space: pre-line")  # v1.04
                             ui.radio({0: t["arduino_text"], 1: t["pio_text"]}, value=1 if vals.get("use_pio") else 0,  # v1.04
@@ -616,15 +597,14 @@ def make_class(Base):
                 left.append(dict(buttons["__Detect_LED_IP_Button_Click"][0], handler="__Detect_LED_IP_Button_Click"))
             left.append({"text": tr("Firmware installieren"), "handler": "__Boot_Firmware_Button_Click", "disabled": False,  # v1.18: nicht mehr nur Pico (pico_only entfallen),       # nur mit dem Pico (wie im Excel-Programm)  # v1.09
                          "label": tr("Schreibt eine fertige Firmware (UF2-Datei aus dem Ordner MobaLedLib/firmware) auf den Raspberry Pi Pico")})  # v1.09
-            subtitle = M09.Get_Language_Str("Für andere Hauptplatine")
             auto_text = M09.Get_Language_Str("Automatisch erkennen")
             detect_text = tr("Board und USB Port erkennen")  # v1.25
             detect_hint = tr("Sucht an allen USB-Anschlüssen nach Nano, ESP32 und Pico. Werden mehrere Board-Typen gefunden, können Sie den gewünschten Typ auswählen. Anschließend wird der passende USB-Port angezeigt.")  # v1.40
             tabs = [{"name": tr("Lichtmaschine"), "kind": "arduino", "side": "left", "buttons": left}]
-            # pages = {"left": {"radios": self._radios("_L"), "subtitle": subtitle, "auto_text": auto_text}}  # v1.08 (entfallen)
+
             esp32_value = next((d["value"] for rb, d in self.radiobuttons.items() if rb.startswith("ESP32") and rb.endswith("_L")), None)  # v1.08
-            pages = {"left": {"radios": self._radios("_L"), "subtitle": subtitle, "auto_text": auto_text, "detect_text": detect_text, "detect_hint": detect_hint,  # v1.08  # v1.25
-                              # "esp32_value": esp32_value, "esp32_lib": bool(M37.ESP32_Lib_Installed())}}  # v1.09 (entfallen)
+            light_machine_hint = tr("Sucht an allen USB-Anschlüssen nach Lichtmaschinen (Nano, ESP32, Pico). Werden unterschiedliche Typen gefunden, können Sie die gewünschte Lichtmaschine auswählen. Anschließend wird der passende USB-Port angezeigt.")
+            pages = {"left": {"radios": self._radios("_L"), "auto_text": auto_text, "detect_text": detect_text, "detect_hint": light_machine_hint,  # v1.08  # v1.25
                               "esp32_value": esp32_value, "esp32_lib": bool(M37.ESP32_Lib_Installed()),  # v1.09
                               # "pico_values": [d["value"] for rb, d in self.radiobuttons.items() if rb.startswith("PICO") and rb.endswith("_L")]}}  # v1.11 (entfallen)
                               "pico_values": [d["value"] for rb, d in self.radiobuttons.items() if rb.startswith("PICO") and rb.endswith("_L")],  # v1.11
@@ -637,7 +617,7 @@ def make_class(Base):
                                  # "buttons": tab_buttons(buttons, ["__Detect_Right_Port_Button_Click", "__ProInstall_Button_Click"])})  # v1.06 (entfallen)
                                  "buttons": tab_buttons(buttons, ["__Detect_Right_Port_Button_Click", "__ProInstall_Button_Click"]),  # v1.06
                                  "nano_only": True, "visible": M02a.Get_BoardTyp() == M02.HT_AM328})  # v1.06
-                    pages["right"] = {"radios": self._radios("_R"), "subtitle": subtitle, "auto_text": auto_text, "detect_text": detect_text, "detect_hint": detect_hint}  # v1.25
+                    pages["right"] = {"radios": self._radios("_R"), "auto_text": auto_text, "detect_text": detect_text, "detect_hint": detect_hint}  # v1.25
                     pages["left"]["nano_values"] = [v for v, _text in pages["left"]["radios"] if self._is_nano_value(v)]  # v1.06
                 files = tab_buttons(buttons, ["__Import_Button_Click", "__Save_Button_Click", "__Load_Button_Click", "__Copy_Page_Button_Click"])
                 files = [b for b in files if b["handler"] != "__Copy_Page_Button_Click"]  # v1.29: ersetzt durch Seite duplizieren
@@ -795,7 +775,7 @@ def make_class(Base):
                 cands = rest  # v1.34
             available_types = [typ for typ in ("Nano", "ESP32", "Pico") if any(candidate_type == typ for _, candidate_type in cands)]
             if len(available_types) > 1:
-                selected_type = _choose_detected_board_type(cands)
+                selected_type = _choose_detected_board_type(cands, light_machine=left)
                 if selected_type is None:
                     logger.info("Erkennen: Auswahl des Board-Typs abgebrochen")
                     return
