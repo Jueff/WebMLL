@@ -1,12 +1,13 @@
-# Datei-Version: 1.09 (2026-11-18) - headless_esp32_ota.py
+# Datei-Version: 1.10 (2026-11-19) - headless_esp32_ota.py
 # ----------------------------------------------------------------------------------------------
 # Name:           headless_esp32_ota.py
 # Path:           headless/headless_esp32_ota.py
-# Version:        1.09
-# Last Update:    2026-11-18
+# Version:        1.10
+# Last Update:    2026-11-19
 # Author:         Harold Linke (Beitrag des Fork-Entwicklers, uebernommen in 3.37)
 # Licence:        LGPL V2.1
 # History of Change:
+#   1.10  2026-11-19  run_streaming: Build (PlatformIO, Arduino Builder) und Flashen geben die Ausgabe zeilenweise ins Protokoll, sobald sie kommt; cancel_running() beendet den laufenden Vorgang (Vorgang abbrechen im Protokoll-Fenster)
 #   1.09  2026-11-18  WLAN ohne OTA: Arduino.h und WiFi.h fuer USB-WLAN-Einrichtung immer einbinden
 #   1.00  2026-11-14  Neu: ESP32-WLAN und OTA ohne Oberflaeche (OTA-Upload mit espota, Build mit PlatformIO oder Arduino Builder, USB-Upload, WLAN-Einrichtung ueber USB, Einstellungen esp32-ota.json)
 #   1.01  2026-11-14  wifi_usb: nach dem Oeffnen des Anschlusses 2,5 s warten (ESP32 startet neu) und den Scan-Befehl bis zur ersten Antwort alle 6 s wiederholen
@@ -30,9 +31,74 @@ import subprocess
 import struct
 import sys
 import tempfile
-from threading import Lock
+from threading import Lock, Timer  # v1.10
 
 MAX_IMAGE_SIZE = 16 * 1024 * 1024
+
+
+# ------------------------------------------------------------------ v1.10: Ausgabe sofort ins Protokoll, Abbrechen
+_current = {"proc": None, "cancelled": False}  # v1.10
+
+
+def _kill_tree(proc):  # v1.10
+    """Prozess samt Kindprozessen beenden (PlatformIO startet scons und die Compiler als eigene Prozesse)."""
+    try:
+        if os.name == "nt":
+            subprocess.run(["taskkill", "/PID", str(proc.pid), "/T", "/F"], capture_output=True, timeout=15)
+        else:
+            proc.terminate()
+    except Exception:  # noqa: BLE001
+        try:
+            proc.kill()
+        except Exception:  # noqa: BLE001
+            pass
+
+
+def cancel_running():  # v1.10
+    """Beendet den gerade laufenden Build- oder Flash-Vorgang. True, wenn einer lief."""
+    proc = _current.get("proc")
+    if proc is None or proc.poll() is not None:
+        return False
+    _current["cancelled"] = True
+    _kill_tree(proc)
+    return True
+
+
+def run_streaming(command, report, timeout, secrets=()):  # v1.10
+    """Wie subprocess.run mit Ausgabe, aber zeilenweise: jede Zeile geht sofort an report (Geheimnisse maskiert).
+    Rueckgabe: Rueckgabewert des Programms. Bei Abbruch ValueError, bei Zeitueberschreitung ebenfalls."""
+    _current["cancelled"] = False
+    secrets = [s for s in secrets if s]
+    proc = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, errors="replace", bufsize=1)
+    _current["proc"] = proc
+    timed_out = []
+
+    def on_timeout():
+        timed_out.append(True)
+        _kill_tree(proc)
+    timer = Timer(timeout, on_timeout)
+    timer.daemon = True
+    timer.start()
+    try:
+        for line in proc.stdout:
+            line = line.rstrip("\r\n")
+            for secret in secrets:
+                line = line.replace(secret, "********")
+            if line.strip():
+                report(line)
+        proc.wait()
+    finally:
+        timer.cancel()
+        _current["proc"] = None
+        try:
+            proc.stdout.close()
+        except Exception:  # noqa: BLE001
+            pass
+    if _current["cancelled"]:
+        raise ValueError("Der Vorgang wurde abgebrochen.")
+    if timed_out:
+        raise ValueError("Der Vorgang hat zu lange gedauert und wurde beendet.")
+    return proc.returncode
 
 
 def find_uploader():
@@ -175,9 +241,10 @@ def build_project(sketch_dir, ide, sketchbook, fqbn, password, report, *, hostna
             "-libraries", str(libraries), "-fqbn", fqbn,
             "-build-path", str(build), str(sketch / "LEDs_AutoProg.ino"),
         ]
-        result = subprocess.run(command, capture_output=True, text=True, errors="replace", timeout=600)
-        report((result.stdout + result.stderr).replace(password, "********").replace(secret, "********") if password else result.stdout + result.stderr)
-        if result.returncode:
+        # result = subprocess.run(command, capture_output=True, text=True, errors="replace", timeout=600)  # v1.10 (entfallen)
+        # report((result.stdout + result.stderr).replace(password, "********").replace(secret, "********") if password else result.stdout + result.stderr)  # v1.10 (entfallen)
+        returncode = run_streaming(command, report, 600, (password, secret) if password else ())  # v1.10
+        if returncode:  # v1.10
             raise ValueError("ESP32-Kompilierung fehlgeschlagen.")
         return (
             (build / "LEDs_AutoProg.ino.bin").read_bytes(),
@@ -237,12 +304,13 @@ def build_platformio_project(sketch_dir, pio, password, report, write_config, *,
         if not ini.is_file() or ini.read_bytes() != config:
             ini.write_bytes(config)
         sync_build_tree(Path(sketch_dir).parent / "libraries", project / "libraries")
-        result = subprocess.run(
-            [str(pio), "run", "--project-dir", str(project), "-e", "esp32"],
-            capture_output=True, text=True, errors="replace", timeout=900,
-        )
-        report((result.stdout + result.stderr).replace(password, "********").replace(secret, "********") if password else result.stdout + result.stderr)
-        if result.returncode:
+        # result = subprocess.run(  # v1.10 (entfallen)
+        #     [str(pio), "run", "--project-dir", str(project), "-e", "esp32"],  # v1.10 (entfallen)
+        #     capture_output=True, text=True, errors="replace", timeout=900,  # v1.10 (entfallen)
+        # )  # v1.10 (entfallen)
+        # report((result.stdout + result.stderr).replace(password, "********").replace(secret, "********") if password else result.stdout + result.stderr)  # v1.10 (entfallen)
+        returncode = run_streaming([str(pio), "run", "--project-dir", str(project), "-e", "esp32"], report, 900, (password, secret) if password else ())  # v1.10
+        if returncode:  # v1.10
             raise ValueError("ESP32-Kompilierung mit PlatformIO fehlgeschlagen.")
         build = project / ".pio/build/esp32"
         return (build / "firmware.bin").read_bytes(), (build / "partitions.bin").read_bytes()
@@ -308,13 +376,14 @@ def flash_usb(port, image, partition_table, report, *, pio=None):
             raise ValueError("Die OTA-Partitionen des ESP32 passen nicht zum Projekt. Zuerst den normalen USB-Upload ausführen.")
         app = work / "application.bin"
         app.write_bytes(image)
-        result = subprocess.run(
-            [*base, "write_flash", "-z", "0xe000", str(core / "tools/partitions/boot_app0.bin"),
-             "0x10000", str(app)],
-            capture_output=True, text=True, errors="replace", timeout=120,
-        )
-        report(result.stdout + result.stderr)
-        if result.returncode:
+        # result = subprocess.run(  # v1.10 (entfallen)
+        #     [*base, "write_flash", "-z", "0xe000", str(core / "tools/partitions/boot_app0.bin"),  # v1.10 (entfallen)
+        #      "0x10000", str(app)],  # v1.10 (entfallen)
+        #     capture_output=True, text=True, errors="replace", timeout=120,  # v1.10 (entfallen)
+        # )  # v1.10 (entfallen)
+        # report(result.stdout + result.stderr)  # v1.10 (entfallen)
+        returncode = run_streaming([*base, "write_flash", "-z", "0xe000", str(core / "tools/partitions/boot_app0.bin"), "0x10000", str(app)], report, 120)  # v1.10
+        if returncode:  # v1.10
             raise ValueError("ESP32-Upload über USB fehlgeschlagen.")
 
 # v1.08: Die Einstellungen gehoeren zum Blatt (jedes Blatt kann einen anderen ESP32 meinen): wifi, ota, hostname, address stehen im Blatt (Attribut esp32_wlan,

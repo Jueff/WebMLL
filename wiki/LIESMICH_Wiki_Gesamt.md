@@ -1,14 +1,14 @@
-Datei-Version: 1.25 (2026-11-19) - LIESMICH_Wiki_Gesamt.md
-Gilt für webMobaLedLib 4.22
+Datei-Version: 1.27 (2026-11-19) - LIESMICH_Wiki_Gesamt.md
+Gilt für webMobaLedLib 4.35
 
-# Wiki-Kapitel „webMobaLedLib“: alle Seiten, Stand 4.22
+# Wiki-Kapitel „webMobaLedLib“: alle Seiten, Stand 4.35
 
 Dieses Paket enthält **alle 29 Seiten** in ihrer neuesten Fassung (Seitenstand jeweils um 0,01 erhöht). Es ersetzt die früheren Pakete der sechs Wellen. **Die Seiten erst veröffentlichen, wenn ein Release mit 3.04 (oder neuer) auf GitHub liegt.**
 
-## Neu seit Stand 3.93 (Stand 4.22): 39 Seiten, sieben geändert, eine neu
+## Neu seit Stand 3.93 (Stand 4.35): 39 Seiten, sieben geändert, eine neu
 
 * **`erweiterungen`** (1.01, neu): MobaLedLib Extensions (MLX) ein- und ausschalten, eigene hinzufügen, Name und Beschreibung aus der `libraries.json`.
-* **`pg_speichern`** (1.03): Inkrementell speichern (Datei mit fortlaufender Nummer), Sicherungsdatei öffnen, Sicherungsort ändern; die Tastenkombination (Vorgabe Strg+Umschalt+S) ist in den Programm Einstellungen einstellbar.
+* **`pg_speichern`** (1.04): neuer Abschnitt **Einstellungen auf einen anderen PC übernehmen** (Datei → Einstellungen sichern / übernehmen, Issue 29; Tabellen optional, Passwort und USB-Anschluss bleiben am PC). Außerdem: Inkrementell speichern (Datei mit fortlaufender Nummer), Sicherungsdatei öffnen, Sicherungsort ändern; die Tastenkombination (Vorgabe Strg+Umschalt+S) ist in den Programm Einstellungen einstellbar.
 * **`pg_arduino`**, **`erstes_programm`**, **`pg_werkzeugleiste`**: Verbinden beim Start, Verbinden nach dem Übertragen, Pfeil neben dem Knopf (Trennen, Neu verbinden, Board wechseln), Menü **Lichtmaschine**.
 * **`wz_programm_einstellungen`** (1.14): Zeilen **Automatisch verbinden** und **Tastenkombination: Inkrementell speichern**.
 * **`ota`** (1.04): Menü **Lichtmaschine** statt **ARDUINO**.
@@ -107,7 +107,7 @@ Dieses Paket enthält **alle 29 Seiten** in ihrer neuesten Fassung (Seitenstand 
 | `patterngenerator.txt` | `anleitungen:webmobaledlib:patterngenerator` | 1.00 |
 | `pg_arduino.txt` | `anleitungen:webmobaledlib:pg_arduino` | 1.09 |
 | `pg_grafisch.txt` | `anleitungen:webmobaledlib:pg_grafisch` | 1.02 |
-| `pg_speichern.txt` | `anleitungen:webmobaledlib:pg_speichern` | 1.01 |
+| `pg_speichern.txt` | `anleitungen:webmobaledlib:pg_speichern` | 1.04 |
 | `pg_tabelle.txt` | `anleitungen:webmobaledlib:pg_tabelle` | 1.05 |
 | `pg_werkzeugleiste.txt` | `anleitungen:webmobaledlib:pg_werkzeugleiste` | 1.09 |
 | `programmgenerator.txt` | `anleitungen:webmobaledlib:programmgenerator` | 1.06 |

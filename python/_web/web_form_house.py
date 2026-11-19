@@ -1,12 +1,13 @@
-# Datei-Version: 1.06 (2026-11-10) - web_form_house.py
+# Datei-Version: 1.07 (2026-11-19) - web_form_house.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_form_house.py
 # Path:           _web/web_form_house.py
-# Version:        1.06
-# Last Update:    2026-11-10
+# Version:        1.07
+# Last Update:    2026-11-19
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
+#   1.07  2026-11-19  Tooltips wie im Excel-Programm: an den Knoepfen der Raumeffekte (House, GasLights) und an den Feldern des Dialogs (Texte in web_house_tips.py, uebersetzt ueber die Tabelle Languages)
 #   1.06  2026-11-10  Der Schalter Einfuegen/Ersetzen (ui.toggle) wird uebersetzt: 'Einfuegen' mit dem Kontext Raum (nicht 'aus der Zwischenablage einfuegen'), der Wert bleibt der deutsche Text (fruehere Versionen ohne Eintrag)
 # ----------------------------------------------------------------------------------------------
 """Web-Ersatz fuer proggen/Userform_House.py (House und GasLights).
@@ -238,13 +239,30 @@ def harvest(Base, M09) -> dict:
                 key = _const_str(node.args[0])
                 if key is not None:
                     out["gas"].append(M09.Get_Language_Str(key))
+    out["tips"] = {"buttons": {}, "fields": {}}  # v1.07
+    try:  # v1.07: Tooltips (deutsche Schluessel der Tabelle Languages -> Sprache des Programms)
+        from _web import web_house_tips as _ht  # v1.07
+        out["tips"]["buttons"] = {k: M09.Get_Language_Str(v) for k, v in _ht.BUTTON_TIPS.items()}  # v1.07
+        out["tips"]["fields"] = {k: M09.Get_Language_Str(v) for k, v in _ht.FIELD_TIPS.items()}  # v1.07
+    except Exception:  # noqa: BLE001  # v1.07
+        logger.debug("Tooltips des Dialogs nicht geladen", exc_info=True)  # v1.07
     return out
 
 
 # ------------------------------------------------------------------ Dialog (Event-Loop)
+def _tip(ui, element, text):  # v1.07
+    """Tooltip an ein Element haengen (Aufruf im Browserbezug); ohne Text passiert nichts."""
+    if text:
+        with element:
+            ui.tooltip(text).props("max-width=480px delay=300").style("font-size: 0.85rem; white-space: pre-line")
+    return element
+
+
 async def _house_async(spec: dict, st: dict):
     from nicegui import ui
     T = spec["texts"]
+    TIP_B = spec.get("tips", {}).get("buttons", {})  # v1.07
+    TIP_F = spec.get("tips", {}).get("fields", {})  # v1.07
     mode = spec["mode"]
     chan_of = spec["channels"]
     flags = {"min_changed": st.get("min_changed", False), "max_changed": st.get("max_changed", False)}
@@ -256,7 +274,8 @@ async def _house_async(spec: dict, st: dict):
             ui.label(spec["title"]).classes("text-h6")
             ui.label(spec["description"]).classes("mll-desc").style("white-space: pre-line; border: 1px solid #ccc; padding: 6px")
             with ui.row().classes("items-center gap-4"):
-                ui.label(T.get("Label_Beleuchtungstypen_txt", "")).classes("text-bold")
+                _tip(ui, ui.label(T.get("Label_Beleuchtungstypen_txt", "")).classes("text-bold"), TIP_F.get("on_limit"))  # v1.07
+                # ui.label(T.get("Label_Beleuchtungstypen_txt", "")).classes("text-bold")  # v1.07 (entfallen)
                 # edit_mode = ui.toggle(["Einfügen", "Ersetzen"], value="Einfügen").props("dense no-caps")     # nicht "mode": das ist House/GasLights  # v1.06 (entfallen)
                 edit_mode = ui.toggle({"Einfügen": tr_ctx("Einfügen", "Raum"), "Ersetzen": tr("Ersetzen")}, value="Einfügen").props("dense no-caps")  # v1.06: der Wert bleibt der deutsche Text (edit_mode.value == "Ersetzen"), angezeigt wird die Übersetzung; nicht "mode": das ist House/GasLights
                 ui.label("Ersetzen: der markierte Raum wird durch den gewählten Typ ersetzt (nur bei gleichem LED-Kanal)."
@@ -265,21 +284,25 @@ async def _house_async(spec: dict, st: dict):
                 for row_i, labels in enumerate(spec["button_rows"]):
                     with ui.row().classes("gap-1 items-center"):
                         for lab in labels:
-                            ui.button(lab, on_click=lambda l=lab: add_room(l)).props("dense outline no-caps size=sm")
+                            _tip(ui, ui.button(lab, on_click=lambda l=lab: add_room(l)).props("dense outline no-caps size=sm"), TIP_B.get(lab))  # v1.07
+                            # ui.button(lab, on_click=lambda l=lab: add_room(l)).props("dense outline no-caps size=sm")  # v1.07 (entfallen)
                         if row_i in (0, 2) and mode == "House":
                             ui.label("*")
             if mode == "House":
                 ui.label(T.get("Label_NotchangableCol_txt", "")).classes("text-caption").style("white-space: pre-line")
             with ui.row().classes("items-center w-full"):
-                ui.label(T.get("label4_txt", "")).classes("text-bold")
+                _tip(ui, ui.label(T.get("label4_txt", "")).classes("text-bold"), TIP_F.get("on_limit"))  # v1.07
+                # ui.label(T.get("label4_txt", "")).classes("text-bold")  # v1.07 (entfallen)
                 ui.label(T.get("label5_txt", "")).classes("text-caption")
                 ui.space()
-                count_lbl = ui.label("")
+                count_lbl = _tip(ui, ui.label(""), TIP_F.get("on_limit"))  # v1.07
+                # count_lbl = ui.label("")  # v1.07 (entfallen)
             rooms_box = ui.row().classes("gap-1 w-full").style("min-height: 3.5em; border: 1px solid #ccc; padding: 4px")
             with ui.row().classes("items-center w-full"):
                 ui.button(T.get("button_delete_room_txt", "Lösche Raum"), on_click=lambda: del_room()).props("outline")
                 ui.space()
-                rgb_lbl = ui.label("").classes("text-caption")
+                rgb_lbl = _tip(ui, ui.label("").classes("text-caption"), TIP_F.get("on_limit"))  # v1.07
+                # rgb_lbl = ui.label("").classes("text-caption")  # v1.07 (entfallen)
             with ui.grid(columns=2).classes("w-full gap-x-8"):
                 w = {}
                 if mode == "House":
@@ -291,6 +314,10 @@ async def _house_async(spec: dict, st: dict):
                     ui.label("")
                 w["led_channel"] = ui.input(label=T.get("Label9_LED_Channel_txt", "LED Kanal"), value=str(st["led_channel"])).props("outlined dense")
                 w["inv"] = ui.checkbox(T.get("InpInversBox_txt", ""), value=st["inv"])
+            for _k, _tk in (("min_cnt", "min_cnt"), ("max_cnt", "max_cnt"), ("min_time", "min_time"), ("max_time", "max_time"),  # v1.07: Tooltips der Felder
+                            ("indiv", "indiv"), ("led_channel", "led_channel"), ("inv", "inv")):  # v1.07
+                if _k in w:  # v1.07
+                    _tip(ui, w[_k], TIP_F.get(_tk))  # v1.07
             if mode == "House":
                 def toggle_times():
                     for k in ("min_time", "max_time"):
@@ -420,7 +447,7 @@ def make_factory(Base):
                     st["min_changed"] = str(calc_min_cnt(led_cnt)) != str(st["min_cnt"])
                     st["max_changed"] = str(calc_max_cnt(led_cnt)) != str(st["max_cnt"])
             spec = {"mode": mode, "title": title, "description": descr, "texts": texts,
-                    "channels": info["channels"],
+                    "channels": info["channels"], "tips": info.get("tips", {"buttons": {}, "fields": {}}),  # v1.07
                     "button_rows": split_button_rows(ns["house_button_list_str"] if mode == "House"
                                                      else ns["gaslights_button_list_str"]),
                     "patch": CV_Adress is not None and CV_Adress != 0}

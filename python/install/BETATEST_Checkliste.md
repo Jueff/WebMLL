@@ -1,5 +1,5 @@
 # webMobaLedLib – Checkliste für Betatester
-*Datei-Version: 3.11 (2026-11-19), gilt für webMobaLedLib 4.22*
+*Datei-Version: 3.17 (2026-11-19), gilt für webMobaLedLib 4.35*
 
 Danke, dass du die Web-Version testest. Ziel: **Installationsprobleme auf verschiedenen Systemen** und **Probleme der Oberfläche bei verschiedenen Arbeitsweisen** früh finden.
 Es genügt, wenn du das testest, was zu deinem System und deiner Arbeitsweise passt. Jede Rückmeldung hilft, auch „alles funktioniert“.
@@ -270,6 +270,11 @@ Trage das Ergebnis in die Tabelle am Ende ein.
 213. **Simulator und Lichtmaschine (3.59):** Lichtmaschine verbunden, erst „Setup simulieren“, dann „Setup übertragen“: Geht das zweite Programm an die Lichtmaschine? Schalten die Testtasten bei offenem Simulator und verbundener Lichtmaschine beide?
 214. **Simulator schließen (3.59):** Fenster (Linux: das X im Feld) schließen: Verschwindet der Simulator? Programm beenden, während der Simulator offen ist: Schließt sich das Fenster mit? Ein zweites „Setup simulieren“ bei offenem Simulator: Wird er aktualisiert statt doppelt geöffnet?
 215. **Simulator unter Linux (3.55):** Auf einem Rechner ohne `libMobaLedLibWrapper.so` für den Prozessor (zum Beispiel Raspberry Pi) mit `build-essential`: Baut das Programm die Bibliothek selbst? Fehlen PlatformIO-Pakete oder `g++`: Kommt eine verständliche Meldung? Haken „LED-Nummern“ und „S-Verdrahtung“ im Feld: Wirken sie?
+283. **Minimale Firmware per USB (4.27 bis 4.29):** Reiter OTA → Minimale Firmware per USB übertragen, auch mit anderen Zeilen in der DCC-Tabelle: Erscheint die Ausgabe des Kompilierens sofort Zeile für Zeile im Protokoll (4.33), und nimmt die Firmware nichts aus der Tabelle (nur Heartbeat-LED)? Ist „Schließen“ nach dem Upload aktiv?
+284. **Vorgang abbrechen beim ESP32-Build (4.33):** Beim Kompilieren oder Hochladen auf den ESP32 „Vorgang abbrechen“ drücken: Endet der Vorgang mit der Meldung „Der Vorgang wurde abgebrochen.“, und ist das Programm danach wieder bedienbar?
+285. **Zeilen mit Zielvariablen (4.31, 4.32):** Eine Zeile wie `Counter(CM_NORMAL, #InCh, SI_1, 5 Sek, Out1)` mit Zielvariable und eine ohne: Kommt „Setup übertragen“ in beiden Fällen ohne Hänger und Absturz bis zur Fehlermeldung beziehungsweise zum Ergebnis?
+286. **Tooltips im Dialog Haus/Straßenbeleuchtung (4.34):** Dialog „Haus“ öffnen und mit der Maus über einen Effekt-Knopf (zum Beispiel ROOM_DARK, CANDLE1) und über die Felder (Min/Max Anzahl, Zeiten, RGB LED Kanäle) fahren: Erscheint nach kurzer Zeit der Tooltip, in der Sprache des Programms? Auch im Dialog der Straßenbeleuchtung die Effekt-Knöpfe prüfen.
+287. **Fehler beim Verbinden (4.35):** Nach „Board und USB Port erkennen“ und dem automatischen Verbinden (Nano, Pico): Bleibt nach einem eventuellen Fehler die Meldung „Es läuft noch ein Vorgang“ aus, sind weitere Eingaben möglich?
 
 ## 4. Ergebnis
 
@@ -381,3 +386,9 @@ Rückmeldungen an den Entwickler (Kontakt siehe GitHub-Seite des Projekts: <http
 274. **Tastenkombination einstellen (4.17, Issue 21):** Programm Einstellungen, Allgemeine Einstellungen, „Tastenkombination: Inkrementell speichern“, zum Beispiel Strg+Alt+S eintragen und die Einstellungen speichern: Löst die neue Kombination sofort das inkrementelle Speichern aus, und die alte nicht mehr? Eine ungültige Eingabe (zum Beispiel nur „S“) zeigt einen Hinweis.
 275. **Erweiterung mit libraries.json (4.22, Issue 6):** Eine Erweiterung mit Datei `libraries.json` (name, description) einfügen, zum Beispiel DummyMLX von Jürgen: Zeigt der Reiter Erweiterungen den Namen und die Beschreibung aus der Datei? Ohne die Datei erscheinen die bisherigen Angaben.
 276. **Kompilieren mit neuer Erweiterung (4.21, Issue 6):** Eigene Erweiterung hinzufügen und ein Programm damit übersetzen: Steht in der platformio.ini `Name=symlink://…\Ordner` (ohne MobaLedLib.properties), und läuft der Build durch?
+277. **Kontextmenü bei niedrigem Fenster (4.23):** Das Browserfenster nicht maximieren und niedrig machen (zum Beispiel halbe Bildschirmhöhe), mit der rechten Maustaste in die Tabelle oder auf eine Spaltenüberschrift klicken: Ist das Menü ganz sichtbar (oder bis zum Fensterrand begrenzt und mit der Maus blätterbar), und fängt es oben mit „Rückgängig“ an?
+278. **Einstellungen sichern (4.24, Issue 29):** Datei → Einstellungen sichern … → ZIP-Datei erstellen: Wird eine ZIP-Datei `webMobaLedLib_Einstellungen_….zip` geladen, und enthält sie die Programm Einstellungen und die Erweiterungen, aber kein Passwort?
+279. **Einstellungen übernehmen (4.24, Issue 29):** Auf einem zweiten PC (oder nach einer Änderung einer Einstellung) Datei → Einstellungen übernehmen … mit der ZIP-Datei: Zeigt der Dialog Datum, Rechner und Version, startet das Programm neu, und gelten danach die Einstellungen der ZIP-Datei (bei den Erweiterungen auch die Haken)? Bleibt der USB-Anschluss des Zielrechners erhalten? Eine beliebige andere ZIP-Datei wird abgelehnt.
+280. **Bilder bei „Überprüfung des USB Ports“ (4.25, Issue 27):** Nano (Lichtmaschine Classic): animiertes Bild „LichtMaschine Classic“; Pico: Bild „LichtMaschine PICO Zero“; ESP32: Bild der ESP32-Zentrale. Auch unter Linux und auf dem Pi sichtbar?
+281. **Fenster „Übertragen“ (4.25, Issue 28):** Während Build und Upload läuft, ist nur „Vorgang abbrechen“ aktiv und „Schließen“ ausgegraut. Nach dem Ende (auch nach einem Fehler oder Abbruch) ist es umgekehrt.
+282. **Verbinden nach „Board und USB Port erkennen“ (4.26):** Optionen → Reiter Lichtmaschine → Board und USB Port erkennen, dann das Optionsfenster schließen: Verbindet das Programm von selbst, ohne Fehlermeldung im Fenster, in dem das Programm läuft?

@@ -1,12 +1,15 @@
-# Datei-Version: 1.07 (2026-11-17) - web_log.py
+# Datei-Version: 1.10 (2026-11-19) - web_log.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_log.py
 # Path:           _web/web_log.py
-# Version:        1.07
-# Last Update:    2026-11-17
+# Version:        1.10
+# Last Update:    2026-11-19
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
+#   1.10  2026-11-19  Vorgang abbrechen beendet zuerst einen laufenden ESP32-Build oder -Upload (headless_esp32_ota.cancel_running), sonst wie bisher
+#   1.09  2026-11-19  run_id: Nummer des Laufs im Fenster; Schliessen wird auch dann aktiv, wenn ein umgebendes Formular (OTA) noch als beschaeftigt gilt (Minimale Firmware per USB)
+#   1.08  2026-11-19  Schliessen erst aktiv, wenn der Vorgang fertig ist; Vorgang abbrechen nur, solange er laeuft (set_running; Issue 28, Juergen)
 #   1.07  2026-11-17  Kein Fehler mehr in der Ereignisschleife, wenn die Browserseite beim Kompilieren geschlossen oder neu geladen wurde (Log-Element gehoert zu einem geloeschten Client)
 #   1.06  2026-11-11  Meldungen der ARDUINO IDE zum Netzwerk (JmDNS: javax.jmdns, dns[response, Hexdump, Steuerzeichen) werden weder angezeigt noch ins Protokoll geschrieben (tausende Zeilen je Minute auf einem Raspberry Pi mit verlaengertem Rechnernamen); eine Zeile im Protokoll nennt es je Lauf (fruehere Versionen ohne Eintrag)
 # ----------------------------------------------------------------------------------------------
@@ -62,12 +65,19 @@ class WebLog:
         self.last_result = None                       # "OK" oder "Error": Ergebnis der letzten Befehlszeile (execute_shell_cmd)
         self.title = DEFAULT_TITLE
         self._title_label = None
+        self._running = False                         # v1.08: laeuft gerade ein Vorgang? (steuert Schliessen und Vorgang abbrechen)
+        self._btn_cancel = None  # v1.08
+        self._btn_close = None  # v1.08
+        self.run_id = 0  # v1.09: wird mit jedem neuen Lauf (delete_text_from_textwindow) hochgezaehlt
 
     # ------------------------------------------------------------------ Schnittstelle der Tk-Seite
     def delete_text_from_textwindow(self):
         self.lines.clear()
         self._noise_count = 0  # v1.06
         arduino_log.info("----- %s: neuer Lauf -----", self.title)
+        self._running = True  # v1.08: neuer Lauf
+        self.run_id += 1  # v1.09
+        self._on_loop(self._apply_running)  # v1.08
         self._on_loop(self._cancel_close)
         self._on_loop(lambda: self._log.clear() if self._log is not None else None)
 
@@ -114,6 +124,7 @@ class WebLog:
             logger.info("Log-Fenster ohne Bruecke nicht anzeigbar")
             return
         self._loop = wd._bridge["loop"]
+        self._running = True  # v1.08: show() kommt aus dem Worker-Thread eines laufenden Vorgangs
         wd.call_in_loop(self._show_async, default=None)
 
     async def _show_async(self):
@@ -126,14 +137,34 @@ class WebLog:
                     with ui.row().classes("items-center w-full"):
                         self._title_label = ui.label(self.title).classes("text-h6")
                         ui.space()
-                        ui.button("Vorgang abbrechen", on_click=self._terminate).props("color=negative outline dense")
-                        ui.button("Schließen", on_click=self._dialog.close).props("flat dense")
+                        # ui.button("Vorgang abbrechen", on_click=self._terminate).props("color=negative outline dense")  # v1.08 (entfallen)
+                        # ui.button("Schließen", on_click=self._dialog.close).props("flat dense")  # v1.08 (entfallen)
+                        self._btn_cancel = ui.button("Vorgang abbrechen", on_click=self._terminate).props("color=negative outline dense")  # v1.08
+                        self._btn_close = ui.button("Schließen", on_click=self._dialog.close).props("flat dense")  # v1.08
                     self._log = ui.log(max_lines=3000).classes("w-full mll-log").style(
                         "height: 36vh; min-height: 8rem; max-height: calc(100vh - 16rem); font-family: monospace; font-size: 12px; white-space: pre")
                 for line, classes in self.lines:
                     self._log.push(line, classes=classes or None)
+        self._apply_running()  # v1.08
         self._cancel_close()
         self._dialog.open()
+
+    def set_running(self, running):  # v1.08
+        """Laeuft ein Vorgang? Dann ist nur Vorgang abbrechen aktiv, sonst nur Schliessen (Aufruf aus dem Zeitgeber der Seite, im Ereignis-Thread)."""
+        running = bool(running)
+        if running == self._running:
+            return
+        self._running = running
+        self._apply_running()
+
+    def _apply_running(self):  # v1.08
+        try:
+            if self._btn_cancel is not None:
+                self._btn_cancel.set_enabled(self._running)
+            if self._btn_close is not None:
+                self._btn_close.set_enabled(not self._running)
+        except RuntimeError:                           # Browserseite wurde geschlossen/neu geladen
+            self._btn_cancel = self._btn_close = None
 
     def close_later_if_ok(self):
         """Nach einem Befehl: Fenster schliessen, wenn die letzte Ausgabe ein Erfolg war (z. B. Bibliotheken installieren).
@@ -181,6 +212,13 @@ class WebLog:
         loop.call_soon_threadsafe(fn)
 
     def _terminate(self):
+        try:  # v1.10: laufender ESP32-Build oder -Upload?
+            from headless import headless_esp32_ota as _ota  # v1.10
+            if _ota.cancel_running():  # v1.10
+                logger.info("ESP32-Build/Upload wird abgebrochen")  # v1.10
+                return  # v1.10
+        except Exception:  # noqa: BLE001  # v1.10
+            logger.debug("cancel_running nicht verfuegbar", exc_info=True)  # v1.10
         cb = getattr(self.ctrl, "bindings", {}).get("Control-c")
         if cb:
             cb()

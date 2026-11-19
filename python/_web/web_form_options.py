@@ -1,8 +1,8 @@
-# Datei-Version: 1.38 (2026-11-19) - web_form_options.py
+# Datei-Version: 1.39 (2026-11-19) - web_form_options.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_form_options.py
 # Path:           _web/web_form_options.py
-# Version:        1.38
+# Version:        1.39
 # Last Update:    2026-11-19
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
@@ -27,6 +27,7 @@
 #   1.35  2026-11-18  Korrektur Issue 13 (nach Protokoll): Board und USB Port erkennen setzt auch die Auswahl des Formulars (rb_res), sonst ueberschrieb 'USB Port erkennen' das erkannte Board wieder mit der alten Auswahl; nach dem Erkennen oeffnet das Fenster wieder auf dem Reiter der Seite (nicht auf Lichtmaschine)
 #   1.36  2026-11-18  Board und USB Port erkennen (Lichtmaschine): nach dem Schliessen des Fensters verbindet das Programm automatisch (Hook wd._bridge['auto_connect'] aus webmobaledlib 4.04)
 #   1.37  2026-11-19  Board und USB Port erkennen: Nano neu oder Full mit Firmware-Version und Signatur des Bootloaders (Issue 14)
+#   1.39  2026-11-19  Automatisch verbinden nach Board und USB Port erkennen: der Browserbezug (client) wird mitgegeben, sonst Fehler 'The current slot cannot be determined' (Rueckmeldung Harold, 4.22)
 #   1.38  2026-11-19  Erweiterungen: Name und Beschreibung aus libraries.json der Extension anzeigen, wenn vorhanden (Wunsch Juergen, Issue 6)
 # ----------------------------------------------------------------------------------------------
 """Web-Ersatz fuer proggen/UserForm_Options.py (Optionen und spezielle Funktionen).
@@ -506,10 +507,11 @@ def make_class(Base):
                 if getattr(self, "_web_auto_connect", False):  # v1.36: Anschluss der Lichtmaschine erkannt: danach gleich verbinden
                     self._web_auto_connect = False  # v1.36
                     hook, loop = wd._bridge.get("auto_connect"), wd._bridge.get("loop")  # v1.36
+                    client = wd._bridge.get("client")  # v1.39: die Seite, zu der der Befehl gehoert (die Bruecke wird nach dem Befehl geleert)
                     if hook is not None and loop is not None:  # v1.36
                         try:  # v1.36
                             import asyncio  # v1.36
-                            asyncio.run_coroutine_threadsafe(hook(), loop)  # v1.36: nicht warten: der Befehl Optionen ist erst nach diesem Aufruf fertig
+                            asyncio.run_coroutine_threadsafe(hook(client), loop)  # v1.39 (v1.36: hook()): nicht warten: der Befehl Optionen ist erst nach diesem Aufruf fertig
                         except Exception:                          # noqa: BLE001  # v1.36
                             logger.warning("Automatisches Verbinden nicht gestartet", exc_info=True)  # v1.36
 

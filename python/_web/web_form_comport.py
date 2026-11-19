@@ -1,13 +1,14 @@
-# Datei-Version: 1.07 (2026-11-14) - web_form_comport.py
+# Datei-Version: 1.08 (2026-11-19) - web_form_comport.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_form_comport.py
 # Path:           _web/web_form_comport.py
-# Version:        1.07
-# Last Update:    2026-11-14
+# Version:        1.08
+# Last Update:    2026-11-19
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
 #   1.02  2026-10-15  Web-Ersatz fuer Select_COM_Port_Userform (Original, nicht erfasst)
+#   1.08  2026-11-19  Bilddatei unabhaengig von Gross- und Kleinschreibung suchen (LED_Image heisst LED_image.png: unter Linux und auf dem Pi fehlte das Bild; Issue 27, Juergen)
 #   1.07  2026-11-14  'Andere Typen' anklickbar: Rueckfrage, Typwechsel (zuletzt benutzte Variante), Anschluss waehlen; Abbrechen stellt den alten Typ wieder her
 #   1.06  2026-11-14  Zeile 'Andere Typen: COM3(ESP32), COM5(Pico)' wie in Excel
 #   1.03  2026-10-21  Update_SpinButton: ohne offenen Dialog den Zeitgeber der blinkenden LEDs beenden (stand 10 Minuten lang auf COM6 und blockierte esptool)
@@ -337,9 +338,16 @@ def make_class(Base):
                     hint = hints[2]
                 hint = M09.Get_Language_Str(hint)
             image = ""
-            img_file = os.path.join(here, "images", Picture + ".png")
-            if os.path.exists(img_file):
-                image = "/mll_images/" + Picture + ".png"
+            # img_file = os.path.join(here, "images", Picture + ".png")  # v1.08 (entfallen)
+            # if os.path.exists(img_file):  # v1.08 (entfallen)
+            #     image = "/mll_images/" + Picture + ".png"  # v1.08 (entfallen)
+            try:  # v1.08: Dateiname ohne Beachtung der Gross-/Kleinschreibung (LED_Image -> LED_image.png), sonst fehlt das Bild unter Linux
+                wanted = (Picture + ".png").lower()  # v1.08
+                found = next((f for f in os.listdir(os.path.join(here, "images")) if f.lower() == wanted), None)  # v1.08
+            except OSError:  # v1.08
+                found = None  # v1.08
+            if found:  # v1.08
+                image = "/mll_images/" + found  # v1.08
             self.title = M09.Get_Language_Str(Caption)
             self._old_spin = -1
             self._sel_index = -1

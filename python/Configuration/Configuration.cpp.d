@@ -14,10 +14,10 @@ D:\Development\github\WebMLL\WebMLL\python\Configuration\Configuration.cpp.o: \
  c:\program\ files\ (x86)\arduino\hardware\arduino\avr\variants\standard\pins_arduino.h \
  d:\development\github\webmll\webmll\python\leds_autoprog\mp3.h \
  d:\development\github\webmll\webmll\python\leds_autoprog\leds_autoprog.h \
- C:\Users\harol\Documents\Arduino/libraries\MobaLedLib\src/MobaLedLib.h \
- C:\Users\harol\Documents\Arduino/libraries\MobaLedLib\src/Dprintf.h \
- C:\Users\harol\Documents\Arduino/libraries\MobaLedLib\src/Lib_Config.h \
+ D:/Development/github/WebMLL/WebMLL/python/libraries\MobaLedLib\src/MobaLedLib.h \
+ D:/Development/github/WebMLL/WebMLL/python/libraries\MobaLedLib\src/Dprintf.h \
+ D:/Development/github/WebMLL/WebMLL/python/libraries\MobaLedLib\src/Lib_Config.h \
  c:\program\ files\ (x86)\arduino\hardware\arduino\avr\cores\arduino\wstring.h \
- C:\Users\harol\Documents\Arduino/libraries\MobaLedLib\src/IntDefs.h \
- C:\Users\harol\Documents\Arduino/libraries\MobaLedLib\src/LED_HeartBeat.h \
- C:\Users\harol\Documents\Arduino/libraries\MobaLedLib\src/Macros.h
+ D:/Development/github/WebMLL/WebMLL/python/libraries\MobaLedLib\src/IntDefs.h \
+ D:/Development/github/WebMLL/WebMLL/python/libraries\MobaLedLib\src/LED_HeartBeat.h \
+ D:/Development/github/WebMLL/WebMLL/python/libraries\MobaLedLib\src/Macros.h

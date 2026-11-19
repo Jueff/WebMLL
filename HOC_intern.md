@@ -1,5 +1,5 @@
-Datei-Version: 1.10 (2026-11-18) - HOC_intern.md
-Stand: webMobaLedLib 4.22
+Datei-Version: 1.18 (2026-11-19) - HOC_intern.md
+Stand: webMobaLedLib 4.34
 
 # webMobaLedLib: History of Change (intern, ausführlich)
 
@@ -24,6 +24,125 @@ Release-Stand 2.12 auf Wunsch des Entwicklers („Release bauen“). **Neu im Ab
 | `archiv/` | frühere Release-Hinweise, Versionslisten und ZIP (nichts gelöscht) |
 
 **Geprüft:** Dateipaket: `testzip` in Ordnung, alle 113 Dateien gleich dem Ordner `headless`, keine `__pycache__`, alle `.py` kompilieren, Versionsprüfung „alles passt“ (50 Einträge), 11 Dateien ausführbar (`.sh`, `.command`). **Nachbau des Entwickler-Ablaufs mit seinem echten Paket (1678 Dateien, Stand 2.05):** meine 113 Dateien darübergelegt, Prüfliste, ZIP gepackt, `release_tools check --previous <sein ZIP>`: **in Ordnung** (Version 2.12, 1678 Dateien, 6 neue, 0 fehlende, ZIP 16,6 MB). Alle 15 Prüfreihen laufen (17, 26, 15, 70, 28, 19, 43, 26, 16, 27, 8, 8, 8, 5, 9 Prüfungen). **Nicht geprüft:** `zip_erstellen.bat` und die Reparaturskripte unter Windows, ein abgebrochenes Update unter Windows, das Verhalten mit Acronis, der Download von GitHub.
+
+## 4.34 (2026-11-19)
+
+Wunsch (Harold): Beim Dialog der Raumeffekte (House) und der Straßenbeleuchtung (GasLights) fehlten die Tooltips des Excel-Programms. Die Texte (ControlTipText der 65 Knöpfe und der Felder, Formular `UserForm_House` in `Prog_Generator_MobaLedLib.xlsm`) wurden aus dem Formular (`f`-Datenstrom der VBA-Datei) gelesen und den Knopfnamen nach Reihenfolge zugeordnet (geprüft gegen `house_button_list_str`/`gaslights_button_list_str` und den Inhalt). Alle Texte stehen unverändert als deutsche Schlüssel in `csv/Languages.csv` (6 Sprachen), die Übersetzung holt `M09.Get_Language_Str`. Drei Texte hatten Füllzeichen am Ende (Feuers, Licht, (R)), entfernt; alle 65 Schlüssel stimmen mit der Tabelle überein. Die Excel-Tooltips der Felder sind teils kopiert (dieselbe On_Limit-Erklärung an „Mögliche Beleuchtungstypen“, „Ausgewählte Beleuchtungen“, „Anzahl“ und „RGB LED Kanäle“); sie wurden so übernommen. Nicht im Browser geprüft.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_house_tips.py` | 1.00 | neu: Tooltip-Texte (Knöpfe und Felder) |
+| `_web/web_form_house.py` | 1.07 | Tooltips an Knöpfen und Feldern |
+| `webmobaledlib.py` | 4.34 | Version und Historie |
+
+## 4.33 (2026-11-19)
+
+Wunsch (Harold): Beim Kompilieren des ESP32 (Minimale Firmware, ESP32-Setup per WLAN/USB) blieb das Protokoll-Fenster leer, bis PlatformIO fertig war (`subprocess.run` mit `capture_output`), und „Vorgang abbrechen“ wirkte nicht. Neu: `run_streaming` in `headless_esp32_ota.py` (Popen, Ausgabe zeilenweise an das Protokoll, Passwort maskiert, Zeitgrenze wie bisher) für PlatformIO-Build, Arduino-Builder und `write_flash`; `cancel_running()` beendet den Prozess samt Kindprozessen (Windows: `taskkill /T /F`); `web_log._terminate` ruft es zuerst auf. Bei Abbruch kommt die Meldung „Der Vorgang wurde abgebrochen.“. Nicht an Hardware geprüft.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `headless/headless_esp32_ota.py` | 1.10 | `run_streaming`, `cancel_running` |
+| `_web/web_log.py` | 1.10 | Abbrechen beendet Build/Upload |
+| `webmobaledlib.py` | 4.33 | Version und Historie |
+
+## 4.32 (2026-11-19)
+
+Fehler (Harold, 4.31): Der Hänger kam von einer Counter-Zeile ohne Zielvariable (jetzt Fehlermeldung). Mit Zielvariable stürzt „Setup übertragen“ ab: `Add_VarArgCnt_to_DstVars` (`M06_Write_Header_SW.py`, Zeile 828) benutzt `proggen.clsExtensionParameter.Name = _idx0`; der Name `proggen` ist in der Datei nicht bekannt (NameError, die Meldung im Auszug war abgeschnitten, daher vermutet), vermutlich eine fehlerhafte Umsetzung. Jetzt wird die Schleifenvariable direkt in `Add_Variable_to_DstVar_List` eingetragen. Nicht getestet; die Fehlermeldung am Ende des Tracebacks fehlte.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `proggen/M06_Write_Header_SW.py` | 1.09 | `Add_VarArgCnt_to_DstVars` |
+| `webmobaledlib.py` | 4.32 | Version und Historie |
+
+## 4.31 (2026-11-19)
+
+Fehler (Harold, 4.30): „Setup übertragen“ blieb ohne Meldung stehen, Protokoll leer. `hang_dump.txt` zeigt den Thread in `Get_Matching_Arg` (`M06_Write_Header_SW.py`, über `Add_VarArgCnt_to_DstVars`, also eine Zeile mit Ausgabeanzahl „n..“; in Harolds Tabelle die Zeile `Counter(CM_NORMAL, #InCh, SI_1, 5 Sek, )`). Ursache: Bei den Argumenten `...` und `OutList` wurde die Schleifenvariable in der `while`-Schleife nicht weitergezählt (`new_i = i + 1` änderte `i` nicht): Endlosschleife. Die Makros `Set_SwitchA_InpLst(1)` waren nicht die Ursache; die Statusmeldung zeigte nur die Zeile davor. Jetzt zählt eine eigene Variable `j` weiter. Nicht an Hardware geprüft; möglicherweise war dieser Fehler schon in früheren Ständen drin und trat nur mit dieser Zeile auf.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `proggen/M06_Write_Header_SW.py` | 1.08 | `Get_Matching_Arg`: Endlosschleife behoben |
+| `webmobaledlib.py` | 4.31 | nur Version und Historie |
+
+## 4.30 (2026-11-19)
+
+Fehler (Harold, 4.29): „ESP32-Setup über WLAN übertragen“ hängt weiter bei `// Set_SwitchA_InpLst(1)` (Zeile 12), Protokoll-Fenster bleibt leer, nur Task beenden hilft. Der Hänger liegt in der Programmzeilenanalyse, nicht im Upload; im Log steht weder eine „MsgBox“-Zeile noch die Warnung aus `_Board_Hint`, die Stelle ist also noch nicht gefunden. Die Diagnose aus 4.28 (nur Minimale Firmware) wird auf alle Befehle ausgeweitet: `run_command` startet `hang_watch_start`, nach 25 s schreibt `faulthandler` den Stand aller Threads mit dem Befehlsnamen an `hang_dump.txt` (Datenordner, wird bei über 1 MB neu begonnen). Keine Funktionsänderung.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.30 | `hang_watch_start/stop`, Aufruf in `run_command` |
+
+## 4.29 (2026-11-19)
+
+Fehler/Wunsch (Harold): Die Minimale ESP32-Firmware darf keine Daten aus der DCC-Tabelle nehmen, nur eine Heartbeat-LED. Sie hing, weil `Create_HeaderFile(HeaderOnly=True)` die Tabelle analysierte (Zeile 12: `// Set_SwitchA_InpLst(1)`; Pin 1 ist auf dem ESP32 ungültig, `M06_Write_Header_SW.Set_PinNrLst_if_Matching` zeigt dann eine Fehlermeldung, die hier nicht beantwortet wurde; nicht bestätigt) und die Header-Datei danach doch durch den festen Minimal-Text ersetzt wurde. Der Aufruf entfällt. Die eigene `LEDs_AutoProg.h` wird wie bisher gesichert und danach wiederhergestellt. Die Diagnose aus 4.28 bleibt.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.29 | `minimal_firmware`: kein `Create_HeaderFile` mehr |
+
+## 4.28 (2026-11-19)
+
+Fehler (Harold, 4.27): Minimale Firmware per USB: Das Log-Fenster öffnet sich, danach steht alles. Log: Der Vorgang bleibt in der Programmzeilenanalyse nach „Macrozeile: 11“ stehen (in früheren Läufen ging es bis Zeile 22 und weiter), die Ereignisschleife lebt (Autosave, Klick auf „Vorgang abbrechen“ werden protokolliert). Ursache nicht erkennbar. Diagnose: `work()` schreibt nach 25 s mit `faulthandler.dump_traceback_later` den Stand aller Threads in `hang_dump.txt` im Datenordner. Keine Funktionsänderung.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.28 | Diagnose in `minimal_firmware.work()` |
+
+## 4.27 (2026-11-19)
+
+Fehler (Tester): Minimale Firmware per USB (Reiter OTA): Nach dem Upload ließ sich das Log-Fenster nicht schließen. Ursache (aus 4.25): „Schließen“ ist nur aktiv, wenn weder `state["busy"]` noch der Upload läuft; das OTA-Formular läuft selbst als Befehl und hält `busy` weiter. Jetzt merkt sich `minimal_firmware` am Ende die Nummer des Laufs (`done_id = weblog.run_id`); `refresh_status` behandelt diesen Lauf als beendet, bis ein neuer Lauf beginnt. Nicht an Hardware geprüft.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.27 | `minimal_done()`, `minimal_state["done_id"]`, `refresh_status` |
+| `_web/web_log.py` | 1.09 | `run_id` (wird pro Lauf hochgezählt) |
+
+## 4.26 (2026-11-19)
+
+Fehler (Harold, 4.22): Nach „Board und USB Port erkennen“ und dem Schließen der Optionen brach das Programm mit `RuntimeError: The current slot cannot be determined because the slot stack for this task is empty` ab (Zeile `run_in_worker` → `context.client` in `auto_connect_after_detect`). Ursache: Der Aufruf kommt aus dem Worker-Thread per `run_coroutine_threadsafe` und läuft ohne Browserbezug (NiceGUI-Slot). Jetzt gibt `web_form_options` den Bezug (`client` aus der Brücke) mit, und `auto_connect_after_detect(client)` verbindet innerhalb von `with client:`. Fehler aus 4.04/4.14 von mir. Im Browser nicht geprüft.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.26 | `auto_connect_after_detect(client)` |
+| `_web/web_form_options.py` | 1.39 | übergibt den Browserbezug |
+| `install/BETATEST_Checkliste.md` | 3.15 | Punkt 282 |
+
+## 4.25 (2026-11-19)
+
+Issues 26, 27, 28 (Jürgen, Test 4.22).
+- **Issue 28:** Im Log-Fenster (Kompilieren, Hochladen, Installieren) ist „Schließen“ erst nach dem Vorgang aktiv, „Vorgang abbrechen“ nur, solange er läuft. `WebLog.set_running` (web_log 1.08), gesetzt vom 0,5-s-Takt der Seite aus `state["busy"]` und, für „Minimale Firmware per USB“ (läuft nicht über busy), aus `minimal_state`. Beim Öffnen und bei einem neuen Lauf gilt „läuft“.
+- **Issue 27:** In 3.87 hatte ich das neue animierte Bild „LichtMaschine Classic“ (Nano) als `PICO_image.png` abgelegt. Jetzt: `images/LED_image.png` = animiertes Classic-Bild, `images/PICO_image.png` = Pico-Zero-Bild aus dem Repo (Stand 14.11.). Dazu `web_form_comport` 1.08: Der Bildname wird ohne Beachtung der Groß-/Kleinschreibung gesucht (`LED_Image` → `LED_image.png`); unter Linux und auf dem Pi fehlte vorher das Bild.
+- **Issue 26:** Prüfung der Dateiliste gegen den Code, Ergebnis in `DATEIEN_IM_PAKET_Issue26.md` (A: entfernen, B: bleibt, C: unklar). Die meisten `.cmd` werden vom Programm erzeugt. `fastBuild.cmd` und `fastBuild2.cmd` nicht. Beim Update löscht das Programm die entfernten Dateien, mit Rückfrage bei mehr als 20. Keine Code-Änderung.
+Im Browser nicht geprüft.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.25 | Zustand an das Log-Fenster melden |
+| `_web/web_log.py` | 1.08 | `set_running`, Knöpfe |
+| `_web/web_form_comport.py` | 1.08 | Bildsuche ohne Groß-/Kleinschreibung |
+| `images/LED_image.png`, `images/PICO_image.png` | – | Bilder getauscht |
+| `install/BETATEST_Checkliste.md` | 3.14 | Punkte 280 und 281 |
+| `DATEIEN_IM_PAKET_Issue26.md` | 1.00 | neu |
+
+## 4.24 (2026-11-19)
+
+Issue 29 (Wunsch): Einstellungen und Daten auf einen anderen PC übernehmen. Neu: `_web/web_settings_transfer.py` und die Menüpunkte **Datei → Einstellungen sichern …** und **Einstellungen übernehmen …**. Die ZIP enthält `MobaLedTest_param.json` (Programm Einstellungen), `MobaLedTest_config.json` (Farbtest, Palette), `extensions.json`, den Ordner `extensions` und `esp32-ota.json`, dazu `mll_settings.json` (Format, Version, Datum, Rechnername). Nicht enthalten: `web_password.json`, `network.json`, Protokolle, Zwischenspeicher. Die Tabellen kommen weiter über das Workbook: Die Sicherung im Datenordner entsteht erst beim Beenden und wäre veraltet. Übernahme: Die ZIP wird geprüft (Format, Dateinamen nur aus einer Liste, kein `..`, höchstens 300 MB), nach `settings_import_pending` entpackt und beim **nächsten Start vor dem Laden der Konfiguration** übernommen (`apply_pending` in `start_backend`), weil das Programm beim Beenden sonst die alten Einstellungen wieder darüberschreibt. Vorher werden die vorhandenen Dateien nach `settings_backup_<Zeit>` gesichert (die letzten 3 bleiben). In der Konfiguration bleiben die Schlüssel des PCs erhalten (`serportnumber`, `serportname`, `Z21Data`, `pos_x`, `pos_y`, `win_height`, `win_width`). Das Modul ist mit Probedateien geprüft (Sichern, Prüfen, Übernehmen, Ablehnen von `../`); die Dialoge sind im Browser nicht geprüft. Offen: Ob die Schlüsselliste vollständig ist, zeigt erst der Test auf zwei PCs.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.24 | Dialoge, Menüpunkte, Übernahme beim Start |
+| `_web/web_settings_transfer.py` | 1.00 | neu |
+| `csv/Web_Languages.csv` | – | 14 neue Texte (Übersetzungen ungeprüft) |
+| `install/BETATEST_Checkliste.md` | 3.13 | Punkte 278 und 279 |
+| `wiki/webmobaledlib/pg_speichern.txt` | 1.04 | Abschnitt „Einstellungen auf einen anderen PC übernehmen“ |
+
+## 4.23 (2026-11-19)
+
+Rückmeldung Harold zu 4.22: Rechtsklick auf die blaue Kopfzeile der Tabelle (Browser nicht im Vollbild) öffnet das Kontextmenü so, dass sein Anfang oberhalb des Fensters liegt (erster sichtbarer Eintrag „Einfügen“). Ursache: Das Menü ist seit 4.02 (Rückgängig, Wiederholen) länger als das niedrige Fenster. Neu: `JS_MENU_FIT` (Kopfbereich der Seite) beobachtet neu erscheinende Quasar-Menüs (`.q-menu`) und begrenzt sie nach 30, 150 und 400 ms auf die Fensterhöhe (mit Rollbalken) und schiebt sie in den sichtbaren Bereich. Gilt für alle Menüs, auch Reiter- und Untermenüs. Im Browser nicht geprüft; Skript auf Syntax geprüft.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.23 | `JS_MENU_FIT` |
+| `install/BETATEST_Checkliste.md` | 3.12 | Punkt 277 |
 
 ## 4.22 (2026-11-19)
 

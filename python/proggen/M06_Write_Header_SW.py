@@ -1,12 +1,14 @@
-# Datei-Version: 1.07 (2026-11-18) - M06_Write_Header_SW.py
+# Datei-Version: 1.09 (2026-11-19) - M06_Write_Header_SW.py
 # ----------------------------------------------------------------------------------------------
 # Name:           M06_Write_Header_SW.py
 # Path:           proggen/M06_Write_Header_SW.py
-# Version:        1.07
-# Last Update:    2026-11-18
+# Version:        1.09
+# Last Update:    2026-11-19
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
+#   1.09  2026-11-19  Add_VarArgCnt_to_DstVars: NameError 'proggen' (fehlerhafte Umsetzung: proggen.clsExtensionParameter.Name statt der Schleifenvariablen) behoben; die Zielvariablen aus '...'/'OutList' werden wieder in die Liste eingetragen
+#   1.08  2026-11-19  Get_Matching_Arg: Endlosschleife bei den Argumenten '...' und 'OutList' (die Schleifenvariable wurde nicht weitergezaehlt): 'Setup uebertragen' und die Minimale-Firmware-Pruefung blieben bei einer Counter-Zeile ohne Rueckmeldung stehen (hang_dump.txt von Harold)
 #   1.07  2026-11-18  ESP-Einstellung 'Fotowiderstand aktivieren' aktiviert die LDR-Scanner-Initialisierung auch ohne Makrozeile (Beitrag moosbewohner, PR 9)
 #   1.00  2026-10-12  Stand der Umstellung (nicht erfasst)
 #   1.01  2026-10-21  Version K des Excel-Programms: Makros Name_LED_Number und Name_LED_Offset in Add_InpVars (bekannte LED-Variablen, KnownVariables); Praefix-Parameter (Get_Par_Prefix); Check_Nr_From_Var herausgezogen; Add_Undefined_Input_Var; Warnung bei mehrfach gesetzten Zielvariablen auch in Check_Detected_Variables
@@ -628,9 +630,14 @@ def Get_Matching_Arg(Org_Macro, line, DestVarName):
                         if Org_Args(i) == DestVarName:
                             _select3 = DestVarName
                             if (_select3 == '...') or (_select3 == 'OutList'):
-                                while i <= UBound(Act_Args):
-                                    _fn_return_value = _fn_return_value + Act_Args(i) + ','
-                                    new_i = i + 1
+                                j = i  # v1.08
+                                while j <= UBound(Act_Args):
+                                    _fn_return_value = _fn_return_value + Act_Args(j) + ','  # v1.08
+                                    j = j + 1  # v1.08
+                                new_i = j  # v1.08
+                                # while i <= UBound(Act_Args):  # v1.08 (entfallen: i wurde nie weitergezaehlt, Endlosschleife)
+                                    # _fn_return_value = _fn_return_value + Act_Args(i) + ','  # v1.08 (entfallen)
+                                    # new_i = i + 1  # v1.08 (entfallen)
                                 _fn_return_value = M30.DelLast(_fn_return_value)
                             else:
                                 _fn_return_value = Act_Args(i)
@@ -819,8 +826,9 @@ def Add_VarArgCnt_to_DstVars(Org_Macro, line):
     # Old: "...")
     if Arg != '':
         for _idx0 in Split(Arg, ','):
-            proggen.clsExtensionParameter.Name = _idx0
-            if not Add_Variable_to_DstVar_List(proggen.clsExtensionParameter.Name):
+            # proggen.clsExtensionParameter.Name = _idx0  # v1.09 (entfallen: 'proggen' ist hier nicht bekannt, NameError)
+            # if not Add_Variable_to_DstVar_List(proggen.clsExtensionParameter.Name):  # v1.09 (entfallen)
+            if not Add_Variable_to_DstVar_List(Trim(_idx0)):  # v1.09
                 return _fn_return_value
         _fn_return_value = True
     return _fn_return_value
