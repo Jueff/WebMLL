@@ -1,9 +1,9 @@
-Datei-Version: 1.03 (2026-11-19) - RELEASE_Hinweise_4.35.md
-Gilt für webMobaLedLib 4.35
+Datei-Version: 1.05 (2026-11-20) - RELEASE_Hinweise_4.40.md
+Gilt für webMobaLedLib 4.40
 
-# webMobaLedLib 4.35
+# webMobaLedLib 4.40
 
-Anhänge dieses Releases: `webmobaledlib.zip` (Programm, mit `zip_erstellen.bat` Version 1.11 gebaut, `ROOT_IN_ZIP=1`), `START_HIER.txt` (erste Schritte), `ANLEITUNG_Installation.pdf` (Anleitung, Version 4.35) und `BETATEST_Checkliste.pdf` (Checkliste für Betatester, Version 3.17).
+Anhänge dieses Releases: `webmobaledlib.zip` (Programm, mit `zip_erstellen.bat` Version 1.11 gebaut, `ROOT_IN_ZIP=1`), `START_HIER.txt` (erste Schritte), `ANLEITUNG_Installation.pdf` (Anleitung, Version 4.40) und `BETATEST_Checkliste.pdf` (Checkliste für Betatester, Version 3.22).
 Installation: siehe `START_HIER.txt` und den Schnellstart der Anleitung. Aktualisieren: Menü **Hilfe → Update webMobaLedLib …**, danach das Programm **neu starten** und die Seite mit Strg+F5 neu laden.
 
 ## Wichtig beim Aktualisieren
@@ -12,7 +12,7 @@ Installation: siehe `START_HIER.txt` und den Schnellstart der Anleitung. Aktuali
 - **Nach dem Update das Programm neu starten** und die Seite neu laden. Oben darf keine rote Meldung stehen.
 - **Neues Programmsymbol (4.10):** Für die Verknüpfung auf dem Desktop den Installer noch einmal ausführen.
 
-## Neu seit Version 3.93 (3.94 bis 4.35)
+## Neu seit Version 3.93 (3.94 bis 4.40)
 
 **Verbinden:**
 - Beim Start verbindet sich das Programm wieder mit der Lichtmaschine, die zuletzt verbunden war, sonst sucht es eine angeschlossene (Nano, ESP32, Pico) und verbindet, wenn es genau eine findet. Das läuft im Hintergrund. In den Programm Einstellungen abschaltbar (4.14).
@@ -45,6 +45,12 @@ Installation: siehe `START_HIER.txt` und den Schnellstart der Anleitung. Aktuali
 - Fehler „slot stack … is empty“ nach „Board und USB Port erkennen“ behoben (4.26).
 - **Paketliste (Issue 26):** `DATEIEN_IM_PAKET_Issue26.md` nennt Dateien, die das Programm selbst erzeugt und nicht ins Paket gehören; offene Punkte entscheidet der Entwickler.
 
+- **Makro in Spalte L direkt bearbeiten (4.40, Beitrag von Jürgen, Issue 42):** Der Makrotext wird beim Bearbeiten sofort geprüft (Klammern, leere Parameter, Parameterzahl). Bei einem Fehler: „Originaltext wiederherstellen“ oder „Weiter editieren“. Nach einer gültigen Änderung werden Name und Symbol und die Felder LEDs, InCnt, LocInCh, Adressen, Testtasten und Start-LEDs neu gesetzt. Rückgängig und Wiederholen funktionieren.
+- **Übertragungsfenster schließt automatisch (4.40, Issue 41):** Programm Einstellungen, Allgemeine Einstellungen: nach Erfolg (Vorgabe 5 Sekunden) und nach Fehler (Vorgabe 30 Sekunden), wählbar sofort, 5, 10, 30 Sekunden oder nie.
+- **Fehler „Adresse mit zwei Typen“ (4.39, Issue 48):** Eine Adresse, die mit zwei verschiedenen Typen benutzt wird (zum Beispiel AnAus und Rot), wird beim Erzeugen der Kopfdatei wieder gemeldet; das Kompilieren startet dann nicht. Das gilt auch für andere Fehler in der Tabelle (zum Beispiel Adresse außerhalb des Bereichs), die bisher unbemerkt blieben.
+- **Tastenkürzel (4.38, Issue 49):** Strg+Z (Rückgängig), Strg+Y oder Strg+Umschalt+Z (Wiederholen) gelten auf der ganzen Seite. Strg+S speichert dauerhaft (Menü Datei → Speichern), wie im Excel-Programm.
+- **Schnelles Update: LED-Pins und LED-Gruppen (4.37, Beitrag von Jürgen, Issue 46):** Auch die Controller-Zuordnung gehört zur Konfiguration; eine Änderung braucht keinen vollständigen Upload.
+- **Schnelles Update für ESP32 und Pico (4.36, Beitrag von Jürgen, Issue 31):** Neuer Haken „Schnelles Update“ im Reiter Entwicklungsumgebung. Mit Haken wird das Programm nur noch hochgeladen, wenn es nötig ist (erster Upload, geänderter Quellcode, Erweiterung oder Einstellung); sonst geht nur die Konfiguration in wenigen Sekunden zur Lichtmaschine. Bei Abweichung, fehlender Antwort oder Ablehnung wird komplett hochgeladen. Ohne Haken wie bisher; Nano und Uno unverändert. Auf ESP32 und Pico getestet.
 - **Tooltips (4.34):** Im Dialog der Raumeffekte (Haus) und der Straßenbeleuchtung erscheinen die Tooltips wie im Excel-Programm, an den Effekt-Knöpfen und an den Feldern, in der Sprache des Programms.
 - Nach einem Fehler beim Verbinden blieb „Es läuft noch ein Vorgang“ dauerhaft stehen und blockierte alle Eingaben; behoben (4.35, Rückmeldung zu 4.22).
 
@@ -64,7 +70,7 @@ Installation: siehe `START_HIER.txt` und den Schnellstart der Anleitung. Aktuali
 
 **Noch nicht an Hardware oder im Browser geprüft:** Alles ab 4.11 (Einstellungen sichern/übernehmen, Ausgabe und Abbrechen beim ESP32-Build, Verbinden beim Start, inkrementelles Speichern und seine Tastenkombination, Kopfbereich (Abstand in Issue 22 nicht bestätigt), Erweiterungen mit `symlink://`, Name und Beschreibung aus `libraries.json`) wurde nur gebaut und kompiliert, nicht auf Hardware oder im Browser getestet. IRremote 4.x für InfraredMLX ist nicht mit einem Pico geprüft. Die Übersetzungen der neuen Texte (CSV) sind ungeprüft.
 
-**Wiki:** Paket `webmobaledlib_Wiki_Gesamt_Stand_4.35.zip` (39 Seiten, Hinweise in `LIESMICH_Wiki_Gesamt.md`). Die Bilder `erst_04_optionen.png` und `pg_09_verbinden.png` zeigen noch den alten Stand.
+**Wiki:** Paket `webmobaledlib_Wiki_Gesamt_Stand_4.40.zip` (39 Seiten, Hinweise in `LIESMICH_Wiki_Gesamt.md`). Die Bilder `erst_04_optionen.png` und `pg_09_verbinden.png` zeigen noch den alten Stand.
 
 **Geplant:** Quell-URL direkt in der `platformio.ini` (Issue 6) ist nicht vorgesehen (Cache und `symlink://` bleiben); Rückfragen dazu stehen im Issue.
 

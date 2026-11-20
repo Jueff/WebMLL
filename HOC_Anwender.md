@@ -1,14 +1,9 @@
-Datei-Version: 1.25 (2026-11-20) - HOC_Anwender.md
-Stand: webMobaLedLib 4.41
+Datei-Version: 1.24 (2026-11-20) - HOC_Anwender.md
+Stand: webMobaLedLib 4.40
 
 # webMobaLedLib: Änderungen (Kurzfassung)
 
 Gilt ab Version 1.39. Neueste Version oben.
-
-## Version 4.41 (2026-11-20)
-
-Korrekturen:
-- Die Seite baute sich in 4.38 bis 4.40 nicht mehr auf (Fehler bei den neuen Tastenkürzeln); behoben.
 
 ## Version 4.40 (2026-11-20)
 

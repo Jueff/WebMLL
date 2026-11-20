@@ -1,5 +1,5 @@
-Datei-Version: 1.25 (2026-11-20) - HOC_intern.md
-Stand: webMobaLedLib 4.41
+Datei-Version: 1.24 (2026-11-20) - HOC_intern.md
+Stand: webMobaLedLib 4.40
 
 # webMobaLedLib: History of Change (intern, ausführlich)
 
@@ -24,14 +24,6 @@ Release-Stand 2.12 auf Wunsch des Entwicklers („Release bauen“). **Neu im Ab
 | `archiv/` | frühere Release-Hinweise, Versionslisten und ZIP (nichts gelöscht) |
 
 **Geprüft:** Dateipaket: `testzip` in Ordnung, alle 113 Dateien gleich dem Ordner `headless`, keine `__pycache__`, alle `.py` kompilieren, Versionsprüfung „alles passt“ (50 Einträge), 11 Dateien ausführbar (`.sh`, `.command`). **Nachbau des Entwickler-Ablaufs mit seinem echten Paket (1678 Dateien, Stand 2.05):** meine 113 Dateien darübergelegt, Prüfliste, ZIP gepackt, `release_tools check --previous <sein ZIP>`: **in Ordnung** (Version 2.12, 1678 Dateien, 6 neue, 0 fehlende, ZIP 16,6 MB). Alle 15 Prüfreihen laufen (17, 26, 15, 70, 28, 19, 43, 26, 16, 27, 8, 8, 8, 5, 9 Prüfungen). **Nicht geprüft:** `zip_erstellen.bat` und die Reparaturskripte unter Windows, ein abgebrochenes Update unter Windows, das Verhalten mit Acronis, der Download von GitHub.
-
-## 4.41 (2026-11-20)
-
-Blockierender Fehler (Rückmeldung Harold, Protokoll mit 4.40): Die Seite baute sich nicht mehr auf, `UnboundLocalError: cannot access local variable 'on_hotkey'` in `build_page`. Ursache: In 4.38 (Tastenkürzel, Issue 49) stand `ui.on("mll_hotkey", on_hotkey)` vor der Definition von `on_hotkey` (die Funktion steht weiter unten bei `autosave_manual`). Betroffen sind 4.38, 4.39 und 4.40; 4.36 und 4.37 sind in Ordnung. Die Registrierung steht jetzt direkt hinter der Definition. Zusätzlich eine statische Prüfung auf weitere Verwendungen von Funktionen in `build_page` vor ihrer Definition (keine weiteren gefunden); ein Test mit NiceGUI war in der Entwicklungsumgebung nicht möglich.
-
-| Datei | Version | Änderung |
-|---|---|---|
-| `webmobaledlib.py` | 4.41 | Registrierung `mll_hotkey` hinter die Definition |
 
 ## 4.40 (2026-11-20), Pull Request 44 von Jürgen (Issues 41 und 42)
 

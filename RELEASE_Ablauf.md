@@ -1,5 +1,5 @@
 Datei-Version: 1.07 (2026-11-19) - RELEASE_Ablauf.md
-Gilt für webMobaLedLib 4.35
+Gilt für webMobaLedLib 4.40
 
 # Release erstellen und veröffentlichen (Ablauf für den Entwickler)
 
