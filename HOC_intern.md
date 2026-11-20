@@ -1,5 +1,5 @@
-Datei-Version: 1.20 (2026-11-19) - HOC_intern.md
-Stand: webMobaLedLib 4.36
+Datei-Version: 1.21 (2026-11-20) - HOC_intern.md
+Stand: webMobaLedLib 4.37
 
 # webMobaLedLib: History of Change (intern, ausführlich)
 
@@ -24,6 +24,35 @@ Release-Stand 2.12 auf Wunsch des Entwicklers („Release bauen“). **Neu im Ab
 | `archiv/` | frühere Release-Hinweise, Versionslisten und ZIP (nichts gelöscht) |
 
 **Geprüft:** Dateipaket: `testzip` in Ordnung, alle 113 Dateien gleich dem Ordner `headless`, keine `__pycache__`, alle `.py` kompilieren, Versionsprüfung „alles passt“ (50 Einträge), 11 Dateien ausführbar (`.sh`, `.command`). **Nachbau des Entwickler-Ablaufs mit seinem echten Paket (1678 Dateien, Stand 2.05):** meine 113 Dateien darübergelegt, Prüfliste, ZIP gepackt, `release_tools check --previous <sein ZIP>`: **in Ordnung** (Version 2.12, 1678 Dateien, 6 neue, 0 fehlende, ZIP 16,6 MB). Alle 15 Prüfreihen laufen (17, 26, 15, 70, 28, 19, 43, 26, 16, 27, 8, 8, 8, 5, 9 Prüfungen). **Nicht geprüft:** `zip_erstellen.bat` und die Reparaturskripte unter Windows, ein abgebrochenes Update unter Windows, das Verhalten mit Acronis, der Download von GitHub.
+
+## 4.37 (2026-11-20), Pull Request 47 von Jürgen (Issue 46)
+
+Die LED-Controller-Tabelle (je FastLED-Controller: Pin, erste LED, LED-Anzahl) gehört jetzt zur Konfigurationsdatei (Format 5, Abschnitt „Parameter“). Pins und LED-Aufteilung ändern die Firmware-Signatur nicht mehr, es genügt die Konfigurationsübertragung. Die Firmware legt die Controller in einer Schleife an; FastLED braucht den Pin als Konstante, deshalb enthält die Firmware einen Zweig je Pin aus `MLL_LED_PINS` (je Plattform fest, wird in die Kopfdatei geschrieben). Ein unbekannter Pin liefert NULL, die LEDs dort bleiben dunkel. Geprüft: Kompilieren, `test_dyn_config.py` (162 Prüfungen, 0 Fehler); auf ESP32 und Pico nicht getestet.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `LEDs_AutoProg/MLLDynConfig.h` | 1.02 | Format 5, Controller-Tabelle, `MllAddLeds` |
+| `headless/headless_dyn_config.py` | 1.01 | Format 5, Controller in `parse_params` / `pack_params`, `SIG_SALT mlldyn-5` |
+| `proggen/M06_Write_Header.py` | 1.12 | `MLL_P_CONTROLLER_COUNT`, `MLL_P_CONTROLLER_CONFIG` |
+| `proggen/M06_Write_Header_SW.py` | 1.10 | `MLL_LED_PINS`, Controller aus der Konfiguration |
+| `test_dyn_config.py` | PR 47 | Prüfungen für Format 5 |
+| `webmobaledlib.py` | 4.37 | Version und Historie |
+
+## 4.36 Nachtrag (2026-11-19): LED-Anzahl, Starttext und Send-Inputs gehören zur Konfiguration
+
+Wunsch von Jürgen: Das Hinzufügen oder Abschalten einer Makrozeile löste einen kompletten Upload aus, weil `NUM_LEDS`, `LEDS_PER_CHANNEL`, `START_MSG`, `SETUP_FASTLED` (LEDs je Kanal) und `START/TOTAL_SEND_INPUTS` in der Firmware-Signatur standen. Jetzt stehen sie im neuen Abschnitt „Parameter“ der Konfigurationsdatei (Format 3, Kopf 52 Bytes, `SIG_SALT` `mlldyn-3`). `TOTAL_SWITCHES_*` und `TOTAL_VARIABLES` (nirgends im Programm benutzt) zählen nicht mehr zur Signatur. `ENABLE_SEND_INPUT` schaltet den Send-Inputs-Code der `.ino` ein, Start und Anzahl kommen aus der Konfiguration. `SETUP_FASTLED` nutzt `mllChOff[n]` und `mllChCnt[n]`; die Pins bleiben fest (FastLED braucht sie als Vorlagenparameter), ebenso die Menge der benutzten LED-Kanäle. **ATmega und die klassische Kopfdatei sind unverändert.** Die `INCH_`-Defines gehörten schon vorher nicht zur Signatur. Jedes Gerät braucht einmalig einen kompletten Upload.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `headless/headless_dyn_config.py` | 1.01 | Format 3, `parse_params`, `pack_params`, Signatur ohne `TOTAL_SWITCHES_*` / `TOTAL_VARIABLES` |
+| `proggen/M06_Write_Header.py` | 1.12 | Parameter-Block für `NUM_LEDS`, `LEDS_PER_CHANNEL`, `START_MSG` (nur dynamisch) |
+| `proggen/M06_Write_Header_SW.py` | 1.10 | `ENABLE_SEND_INPUT`, `SETUP_FASTLED` und DMX mit `mllChOff` / `mllChCnt` |
+| `LEDs_AutoProg/MLLDynConfig.h` | 1.01 | Format 3 lesen, `MllParseParams` |
+| `LEDs_AutoProg/LEDs_AutoProg.ino` | | `leds[]`, Effektpuffer und Send_Inputs zur Laufzeit (nur mit `MLL_DYNAMIC_CONFIG`) |
+| `headless/headless_esp32_ota.py` | 1.11 | Datum-Vergleich auch für `MLL_P_START_MSG` |
+| `test_dyn_config.py` | 1.02 | 173 Prüfungen, 0 Fehler (Format 3, Parameter, Signaturstabilität) |
+
+**Geprüft:** `py_compile`, `test_dyn_config.py`, Syntaxprüfung von `MLLDynConfig.h` mit avr-g++ und Ersatzdeklarationen. **Nicht geprüft:** Übersetzen und Lauf auf ESP32 und Pico, FastLED mit per `malloc` angelegtem `leds[]`, `addLeds` mit Anzahl 0, DMX, OTA, Farbtest, Erzeugung einer vollständigen Kopfdatei aus einer Tabelle. `START_SWITCHES_*` zählen weiter zur Signatur (Nutzung in der Bibliothek nicht geprüft).
 
 ## 4.36 (2026-11-19)
 

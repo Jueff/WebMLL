@@ -1,12 +1,13 @@
-# Datei-Version: 1.10 (2026-11-19) - headless_esp32_ota.py
+# Datei-Version: 1.11 (2026-11-19) - headless_esp32_ota.py
 # ----------------------------------------------------------------------------------------------
 # Name:           headless_esp32_ota.py
 # Path:           headless/headless_esp32_ota.py
-# Version:        1.10
+# Version:        1.11
 # Last Update:    2026-11-19
 # Author:         Harold Linke (Beitrag des Fork-Entwicklers, uebernommen in 3.37)
 # Licence:        LGPL V2.1
 # History of Change:
+#   1.11  2026-11-19  Zeitstempel-Vergleich der Kopfdatei: auch MLL_P_START_MSG (dynamische Konfiguration) wird ohne Datum verglichen
 #   1.10  2026-11-19  run_streaming: Build (PlatformIO, Arduino Builder) und Flashen geben die Ausgabe zeilenweise ins Protokoll, sobald sie kommt; cancel_running() beendet den laufenden Vorgang (Vorgang abbrechen im Protokoll-Fenster)
 #   1.09  2026-11-18  WLAN ohne OTA: Arduino.h und WiFi.h fuer USB-WLAN-Einrichtung immer einbinden
 #   1.00  2026-11-14  Neu: ESP32-WLAN und OTA ohne Oberflaeche (OTA-Upload mit espota, Build mit PlatformIO oder Arduino Builder, USB-Upload, WLAN-Einrichtung ueber USB, Einstellungen esp32-ota.json)
@@ -293,7 +294,8 @@ def build_platformio_project(sketch_dir, pio, password, report, write_config, *,
         if generated.is_file() and cached.is_file():
             def without_timestamp(data):
                 data = re.sub(rb"(?m)^// File creation: [^\r\n]*", b"", data)
-                return re.sub(rb'(?m)^(#define START_MSG "[^\r\n"]*) \d{2}\.\d{2}\.\d{2} \d{2}:\d{2}"', rb'\1"', data)
+                # return re.sub(rb'(?m)^(#define START_MSG "[^\r\n"]*) \d{2}\.\d{2}\.\d{2} \d{2}:\d{2}"', rb'\1"', data)  # v1.11 (entfallen)
+                return re.sub(rb'(?m)^(#define (?:MLL_P_)?START_MSG "[^\r\n"]*) \d{2}\.\d{2}\.\d{2} \d{2}:\d{2}"', rb'\1"', data)  # v1.11 (dynamische Konfiguration: MLL_P_START_MSG)
 
             previous = cached.read_bytes()
             if without_timestamp(previous) == without_timestamp(generated.read_bytes()):
