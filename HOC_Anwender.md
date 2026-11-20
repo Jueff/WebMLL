@@ -1,9 +1,30 @@
-Datei-Version: 1.21 (2026-11-20) - HOC_Anwender.md
-Stand: webMobaLedLib 4.37
+Datei-Version: 1.25 (2026-11-20) - HOC_Anwender.md
+Stand: webMobaLedLib 4.41
 
 # webMobaLedLib: Änderungen (Kurzfassung)
 
 Gilt ab Version 1.39. Neueste Version oben.
+
+## Version 4.41 (2026-11-20)
+
+Korrekturen:
+- Die Seite baute sich in 4.38 bis 4.40 nicht mehr auf (Fehler bei den neuen Tastenkürzeln); behoben.
+
+## Version 4.40 (2026-11-20)
+
+Neue Funktionen:
+- Makrotext direkt in Spalte L ändern (Beitrag von Jürgen, Issue 42): Der Text wird sofort geprüft; bei einem Fehler kannst du den ursprünglichen Text wiederherstellen oder weiter bearbeiten. Nach einer gültigen Änderung werden Name, Symbol, LEDs, InCnt, LocInCh, Adressen, Testtasten und Start-LEDs neu gesetzt.
+- Das Übertragungsfenster schließt sich automatisch (Beitrag von Jürgen, Issue 41): Programm Einstellungen, Allgemeine Einstellungen, „Fenster nach Erfolg automatisch schließen“ (Vorgabe 5 Sekunden) und „Fenster nach Fehler automatisch schließen“ (Vorgabe 30 Sekunden); wählbar sofort, 5, 10, 30 Sekunden oder nie.
+
+## Version 4.39 (2026-11-20)
+
+Korrekturen:
+- Eine Adresse, die mit zwei verschiedenen Typen benutzt wird (und andere Fehler in der Tabelle), wird beim Erzeugen der Kopfdatei wieder gemeldet; das Kompilieren startet dann nicht (Issue 48).
+
+## Version 4.38 (2026-11-20)
+
+Neue Funktionen:
+- Strg+S speichert die Tabellen dauerhaft (wie im Excel-Programm; Menü Datei → Speichern): Beim Beenden mit „Ohne Speichern“ und beim nächsten Start ist dieser Stand wieder da. Strg+Z (Rückgängig) und Strg+Y oder Strg+Umschalt+Z (Wiederholen) gelten jetzt überall auf der Seite, nicht nur mit markierter Zelle (Wunsch von Jürgen, Issue 49).
 
 ## Version 4.37 (2026-11-20)
 

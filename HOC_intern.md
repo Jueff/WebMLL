@@ -1,5 +1,5 @@
-Datei-Version: 1.21 (2026-11-20) - HOC_intern.md
-Stand: webMobaLedLib 4.37
+Datei-Version: 1.25 (2026-11-20) - HOC_intern.md
+Stand: webMobaLedLib 4.41
 
 # webMobaLedLib: History of Change (intern, ausführlich)
 
@@ -24,6 +24,48 @@ Release-Stand 2.12 auf Wunsch des Entwicklers („Release bauen“). **Neu im Ab
 | `archiv/` | frühere Release-Hinweise, Versionslisten und ZIP (nichts gelöscht) |
 
 **Geprüft:** Dateipaket: `testzip` in Ordnung, alle 113 Dateien gleich dem Ordner `headless`, keine `__pycache__`, alle `.py` kompilieren, Versionsprüfung „alles passt“ (50 Einträge), 11 Dateien ausführbar (`.sh`, `.command`). **Nachbau des Entwickler-Ablaufs mit seinem echten Paket (1678 Dateien, Stand 2.05):** meine 113 Dateien darübergelegt, Prüfliste, ZIP gepackt, `release_tools check --previous <sein ZIP>`: **in Ordnung** (Version 2.12, 1678 Dateien, 6 neue, 0 fehlende, ZIP 16,6 MB). Alle 15 Prüfreihen laufen (17, 26, 15, 70, 28, 19, 43, 26, 16, 27, 8, 8, 8, 5, 9 Prüfungen). **Nicht geprüft:** `zip_erstellen.bat` und die Reparaturskripte unter Windows, ein abgebrochenes Update unter Windows, das Verhalten mit Acronis, der Download von GitHub.
+
+## 4.41 (2026-11-20)
+
+Blockierender Fehler (Rückmeldung Harold, Protokoll mit 4.40): Die Seite baute sich nicht mehr auf, `UnboundLocalError: cannot access local variable 'on_hotkey'` in `build_page`. Ursache: In 4.38 (Tastenkürzel, Issue 49) stand `ui.on("mll_hotkey", on_hotkey)` vor der Definition von `on_hotkey` (die Funktion steht weiter unten bei `autosave_manual`). Betroffen sind 4.38, 4.39 und 4.40; 4.36 und 4.37 sind in Ordnung. Die Registrierung steht jetzt direkt hinter der Definition. Zusätzlich eine statische Prüfung auf weitere Verwendungen von Funktionen in `build_page` vor ihrer Definition (keine weiteren gefunden); ein Test mit NiceGUI war in der Entwicklungsumgebung nicht möglich.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.41 | Registrierung `mll_hotkey` hinter die Definition |
+
+## 4.40 (2026-11-20), Pull Request 44 von Jürgen (Issues 41 und 42)
+
+Makro-Edit in Spalte L (Issue 42): Prüfung des Makrotextes beim direkten Bearbeiten (`headless_macro_edit.py`: Klammern, leere Parameter, Parameterzahl); bei Fehler Dialog „Originaltext wiederherstellen“ oder „Weiter editieren“; bei gültigem Text werden Name und Symbol (bei Makrowechsel) und danach LEDs, InCnt, LocInCh, Adressen, Testtasten und Start-LEDs wie nach dem Auswahldialog neu gesetzt; Rückgängig und Wiederholen eingebunden (`undo_record(include_unchanged=...)`). Auto-Close des Übertragungsfensters (Issue 41): Einstellungen `SetupCloseOnSuccess` (Vorgabe 5 s) und `SetupCloseOnError` (Vorgabe 30 s) mit „sofort, 5, 10, 30 Sekunden, nie“ in `web_tabs.py`, Zeitsteuerung in `web_log.py` 1.11. Der erste PR-Stand vom Vormittag ohne `headless_macro_edit.py` wurde nicht übernommen. Jürgens Versionsnummern 4.37 und 4.38 im PR kollidierten mit 4.37 (PR 47) und 4.38 (Tastenkürzel) und wurden zu 4.40 zusammengefasst. Die Übersetzungen der Einstellungstexte (Beschriftung, Hinweis, Werte) fehlten im PR und wurden in `Web_Languages.csv` ergänzt. `test_macro_edit.py` (17 Tests) und `test_dyn_config.py` (162 Prüfungen) laufen durch; im Browser nicht geprüft.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `headless/headless_macro_edit.py` | 1.01 | neu: Prüfung des Makrotextes |
+| `_web/web_log.py` | 1.11 | automatisches Schließen |
+| `_web/web_tabs.py` | 1.26 | Einstellungen `SetupCloseOnSuccess` und `SetupCloseOnError` |
+| `csv/Web_Languages.csv` | – | Texte zum Makro-Edit (PR) und zu den Einstellungen (ergänzt) |
+| `test_macro_edit.py` | neu | 17 Tests |
+| `webmobaledlib.py` | 4.40 | Makro-Edit, Version und Historie |
+
+## 4.39 (2026-11-20)
+
+Fehler von Jürgen (Issue 48): Eine Adresse mit zwei verschiedenen Typen (zum Beispiel Zeile 4 AnAus und Zeile 5 Rot, beide Adresse 1) wurde nicht gemeldet, das Kompilieren startete und lieferte viele Compilerfehler; im Excel-Programm erscheint stattdessen die Fehlermeldung „Ein neues Header file wurde nicht generiert!“. Ursache: `Write_Header_File_and_Upload_to_Arduino` setzte `ErrorText` gleich zu Beginn auf '' zurück, danach wurden die in `ProcessSheet` gesammelten Fehler nie angezeigt. Die Zeile entfällt (`Init_HeaderFile_Generation` setzt `ErrorText` bei jedem Lauf schon zurück). Folge: Auch andere Fehler aus `ProcessSheet` (zum Beispiel Adresse außerhalb des Bereichs, immer aktive Funktion mit Adresse) erscheinen jetzt wie im Excel-Programm und verhindern das Erzeugen der Kopfdatei. Nicht im Programm geprüft (ohne Beispieldatei `OnOffTast.zip`).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `proggen/M06_Write_Header.py` | 1.13 | `ErrorText`-Rücksetzung entfernt |
+| `webmobaledlib.py` | 4.39 | Version und Historie |
+
+## 4.38 (2026-11-20)
+
+Wunsch von Jürgen (Issue 49): Tastenkürzel. Strg+Z und Strg+Y gab es seit 4.02, sie wirkten aber nur mit Fokus auf einer Tabellenzelle (nicht im Bearbeiten-Modus). Jetzt gilt ein globaler Handler (`JS_HOTKEYS`, Capture auf `document`): Strg+Z Rückgängig, Strg+Y und Strg+Umschalt+Z Wiederholen, neu Strg+S Speichern. Nicht in Eingabefeldern und Zellen im Bearbeiten-Modus (dort gilt das Rückgängig des Browsers), und nicht, solange ein Dialog offen ist; Strg+S unterdrückt immer den Browser-Dialog „Seite speichern“. Strg+S schreibt wie im Excel-Programm dauerhaft in die Hauptdatei des Workbooks (über eine Hilfsdatei, mit Konfiguration und Parametern), setzt den Stand als gesichert, löscht die Zwischensicherung und den verworfenen Stand. Nach „Beenden ohne Speichern“ und Neustart ist dieser Stand wieder da. Zwischenspeichern bleibt unverändert. Nicht im Browser geprüft (JS-Syntax mit node geprüft).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.38 | `JS_HOTKEYS`, `on_hotkey`, `permanent_save`, Menü „Speichern (Strg+S)“ |
+| `csv/Web_Languages.csv` | – | 2 neue Texte in 6 Sprachen |
+| `install/ANLEITUNG_Installation.md` | 4.38 | Eintrag |
+| `install/BETATEST_Checkliste.md` | 3.20 | Punkt 289 |
+| Wiki `pg_speichern.txt` | – | Abschnitt Strg+S |
 
 ## 4.37 (2026-11-20), Pull Request 47 von Jürgen (Issue 46)
 

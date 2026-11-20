@@ -1,8 +1,8 @@
-# Datei-Version: 4.40 (2026-11-20) - webmobaledlib.py
+# Datei-Version: 4.41 (2026-11-20) - webmobaledlib.py
 # ----------------------------------------------------------------------------------------------
 # Name:           webmobaledlib.py
 # Path:           webmobaledlib.py
-# Version:        4.40
+# Version:        4.41
 # Last Update:    2026-11-19
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
@@ -286,6 +286,7 @@
 #   4.20  2026-11-19  Kopfbereich (Issue 22): Reiterhoehe 36 px griff nicht (Screenshot: Reiter noch ca. 50 px hoch); jetzt mit !important und auch fuer .q-tab__content, Menuetasten ebenfalls !important
 #   4.21  2026-11-19  Erweiterungen: platformio.ini zeigt auf den Ordner der Erweiterung statt auf MobaLedLib.properties, mit symlink:// (M38_Extensions 1.07; Issue 6, Juergen)
 #   4.22  2026-11-19  Erweiterungen: Name und Beschreibung aus libraries.json anzeigen (headless_extensions 1.03, web_form_options 1.38; Issue 6, Juergen)
+#   4.41  2026-11-20  Fehler in 4.38 bis 4.40: Seitenaufbau brach mit UnboundLocalError (on_hotkey) ab, die Registrierung der Tastenkuerzel stand vor der Definition; jetzt dahinter
 #   4.40  2026-11-20  Pull Request 44 von Juergen (Issues 41, 42): Makrotext bei direkter Eingabe pruefen (Fehler korrigieren oder wiederherstellen), bei Makrowechsel Name und Symbol aktualisieren, danach LEDs, InCnt, LocInCh, Adressen, Testtasten und Start-LEDs neu setzen (headless_macro_edit 1.01); Uebertragungsfenster schliesst sich automatisch (web_log 1.11)
 #   4.39  2026-11-20  Issue 48: Fehlerpruefung beim Erzeugen der Kopfdatei (zum Beispiel Adresse mit zwei verschiedenen Typen) wirkte nicht, das Kompilieren startete trotzdem (M06_Write_Header 1.13)
 #   4.38  2026-11-20  Tastenkuerzel ueberall auf der Seite (Issue 49, Juergen): Strg+Z Rueckgaengig, Strg+Y / Strg+Umschalt+Z Wiederholen, neu Strg+S = dauerhaft speichern in die Hauptdatei (Menue Datei: Speichern); nicht in Eingabefeldern und Dialogen
@@ -1398,7 +1399,7 @@ def font_scales(ctrl) -> dict:
 # VERSION = "3.60 (2026-11-16)"  # v3.60 (entfallen)
 # VERSION = "3.61 (2026-11-16)"  # v3.61 (entfallen)
 # VERSION = "3.62 (2026-11-16)"  # v3.62 (entfallen)
-VERSION = "4.40 (2026-11-20)"  # v3.64  # v4.26  # v4.27  # v4.28  # v4.29  # v4.30  # v4.31  # v4.32  # v4.33  # v4.34  # v4.35  # v4.36  # v4.37  # v4.38  # v4.39  # v4.40
+VERSION = "4.41 (2026-11-20)"  # v3.64  # v4.26  # v4.27  # v4.28  # v4.29  # v4.30  # v4.31  # v4.32  # v4.33  # v4.34  # v4.35  # v4.36  # v4.37  # v4.38  # v4.39  # v4.40  # v4.41
 # VERSION = "4.09 (2026-11-19)"  # v3.64 (entfallen)
 # VERSION = "4.08 (2026-11-19)"  # v3.64 (entfallen)
 # VERSION = "4.07 (2026-11-19)"  # v3.64 (entfallen)
@@ -4956,7 +4957,7 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
     ui.on("mll_ctx", on_ctx)
     ui.on("mll_dblmacro", on_dblmacro)
     ui.on("mll_cell_op", on_cell_op)
-    ui.on("mll_hotkey", on_hotkey)  # v4.38 (Issue 49)
+    # ui.on("mll_hotkey", on_hotkey)  # v4.40.1 (entfallen: on_hotkey ist an dieser Stelle noch nicht definiert, Registrierung steht jetzt hinter der Definition)
     ui.on("mll_space", on_space)  # v2.93
 
     # ------------------------------------------------------------------ Testtasten (DCCSend)
@@ -5684,6 +5685,8 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
             await op_undo_redo(True)
         elif op == "save":
             await permanent_save()
+
+    ui.on("mll_hotkey", on_hotkey)  # v4.41 (Issue 49): Registrierung hinter der Definition von on_hotkey
 
     async def autosave_manual():
         if state["busy"]:

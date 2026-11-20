@@ -8,6 +8,7 @@ Das Programm speichert deine Arbeit **automatisch**. Zusätzlich kannst du sie a
   * Beim **Beenden** (Knopf **Beenden** oder Menü //Datei → Beenden …//) fragt das Programm: **Speichern und beenden**, **Beenden ohne Speichern** oder **Abbrechen**. Wähle normalerweise **Speichern und beenden**: Dann sind deine Tabellen und Einstellungen beim nächsten Start wieder da.
   * Zwischendurch macht das Programm eine **Zwischensicherung**, wenn du etwas geändert hast und eine Weile nicht weiterarbeitest. Oben rechts im Menü steht dann „Zwischengespeichert <Uhrzeit>“. Wurde das Programm einmal **nicht normal beendet** (Absturz, Stromausfall), fragt es beim nächsten Start, ob die Zwischensicherung wiederhergestellt werden soll.
   * Mit //Datei → Jetzt zwischenspeichern// löst du die Zwischensicherung selbst aus.
+  * Mit **Strg+S** (oder //Datei → Speichern//) speicherst du wie im Excel-Programm **dauerhaft**: Beendest du danach mit „Beenden ohne Speichern“, ist beim nächsten Start dieser Stand wieder da. Die Zwischensicherung wird dabei nicht gebraucht. **Strg+Z** macht rückgängig, **Strg+Y** oder **Strg+Umschalt+Z** wiederholt, überall auf der Seite (nicht beim Tippen in einem Feld).
 
 Deine Daten liegen im **Datenordner** des Programms, getrennt von den Programmdateien. Sie bleiben bei einem Update erhalten.
 
