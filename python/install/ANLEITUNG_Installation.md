@@ -439,7 +439,7 @@ Kurzfassung der Änderungen seit dem letzten Release, neueste Version zuerst (au
 **Version 4.36**
 
 *Neue Funktionen:*
-- Schnelles Update für ESP32 und Pico (Beitrag von Jürgen, Issue 31): Mit dem Haken „Schnelles Update“ im Reiter Entwicklungsumgebung wird das Programm nur hochgeladen, wenn es nötig ist; sonst geht nur die Konfiguration in wenigen Sekunden zur Lichtmaschine. Bei jeder Unsicherheit wird komplett hochgeladen. Nano und Uno ändern sich nicht.
+- Schnelles Update für ESP32 und Pico (Beitrag von Jürgen, Issue 31): Mit dem Haken „Schnelles Update“ im Reiter Entwicklungsumgebung wird das Programm nur hochgeladen, wenn es nötig ist; sonst geht nur die Konfiguration in wenigen Sekunden zur Lichtmaschine. Bei jeder Unsicherheit wird komplett hochgeladen. Nano und Uno ändern sich nicht. Zur Konfiguration gehören auch die Zahl der LEDs (gesamt und je LED-Kanal), der Starttext und die Send-Inputs (Schalter `ENABLE_SEND_INPUT`): Ändert sich nur das, geht ebenfalls nur die Konfiguration zum Gerät. Ein neuer oder entfallener LED-Kanal, andere Pins, `CTR_CHANNELS_*` und `ADDR_OFFSET` ändern weiterhin die Firmware. Nach der Aktualisierung auf diese Version ist einmal ein kompletter Upload je Gerät nötig.
 
 **Version 4.35**
 

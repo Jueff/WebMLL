@@ -1,12 +1,13 @@
-# Datei-Version: 1.01 (2026-11-19) - test_dyn_config.py
+# Datei-Version: 1.02 (2026-11-19) - test_dyn_config.py
 # ----------------------------------------------------------------------------------------------
 # Name:           test_dyn_config.py
 # Path:           test_dyn_config.py
-# Version:        1.01
+# Version:        1.02
 # Last Update:    2026-11-19
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
+#   1.02  2026-11-19  Format 3 (Kopf 52 Bytes, Abschnitt Parameter): Rundlauf von LED-Anzahl, LEDs je Kanal, Texten und Send-Inputs; LED-Anzahl, Starttext, TOTAL_SWITCHES_*, TOTAL_VARIABLES und die Parameter aendern die Signatur nicht mehr; SETUP_FASTLED/DMX-Zeilen
 #   1.01  2026-11-19  Neu: Ausgabefenster des schnellen Wegs (M42: Pruefung, Fortschritt, Fertigstellung, Rueckfall, nach dem Flashen) mit Ersatzgeraet; neue Texte in allen Sprachen
 #   1.00  2026-11-19  Neu: Test der Konfiguration getrennt von der Firmware (headless_dyn_config): Dateiformat, Signatur, Pfade mit Umlauten und Leerzeichen, Protokoll mit einem Ersatzgeraet, Uebersetzung
 # ----------------------------------------------------------------------------------------------
@@ -42,12 +43,22 @@ def check(name, cond, info=""):
 # ---------------------------------------------------------------- Dateiformat
 def test_format():
     blob = DC.pack_blob(b"\x01\x02\x03", b"\x04", b"", b"\x05\x06", b"\x2c\x01\x01", 9, SIG)
-    magic, ver, _, ram, l0, l1, l2, l3, l4, crc, sig = DC.BLOB_HEADER.unpack(blob[:DC.BLOB_HEADER.size])
-    check("Kopf 48 Bytes", DC.BLOB_HEADER.size == 48)
-    check("Kennung, Version, RAM", magic == b"MLLC" and ver == 2 and ram == 9)
-    check("Laengen", (l0, l1, l2, l3, l4) == (3, 1, 0, 2, 3))
-    check("CRC ueber die Nutzdaten", crc == zlib.crc32(blob[48:]) & 0xFFFFFFFF)
-    check("Signatur im Kopf", sig.decode() == SIG)
+    magic, ver, _, ram, l0, l1, l2, l3, l4, l5, crc, sig = DC.BLOB_HEADER.unpack(blob[:DC.BLOB_HEADER.size])
+    check("Kopf 52 Bytes", DC.BLOB_HEADER.size == 52)
+    check("Kennung, Version, RAM", magic == b"MLLC" and ver == 3 and ram == 9)
+    check("Laengen", (l0, l1, l2, l3, l4, l5) == (3, 1, 0, 2, 3, 0))
+    check("CRC ueber die Nutzdaten", crc == zlib.crc32(blob[52:]) & 0xFFFFFFFF)
+    check("Signatur im Kopf an Position 36", sig.decode() == SIG and blob[36:52].decode() == SIG)
+    params = DC.pack_params({"num_leds": 123, "channels": [100, 20, 3], "leds_per_channel": ",100,20,3", "start_msg": "Ver 3 x", "start_send": 7, "total_send": 40})
+    blob = DC.pack_blob(b"\x01", b"", b"", b"", b"", 1, SIG, params)
+    check("Parameter im Kopf und am Ende", DC.BLOB_HEADER.unpack(blob[:52])[9] == len(params) and blob.endswith(params))
+    check("Parameter: Aufbau", params == struct.pack("<HHHB3H", 123, 7, 40, 3, 100, 20, 3) + b",100,20,3\0Ver 3 x\0", params)
+    for bad in ({"num_leds": 70000}, {"channels": [1] * 17}, {"channels": [70000]}):
+        try:
+            DC.pack_params(bad)
+            check("ungueltige Parameter werden abgelehnt: %s" % list(bad)[0], False)
+        except DC.DynConfigError:
+            check("ungueltige Parameter werden abgelehnt: %s" % list(bad)[0], True)
     try:
         DC.pack_blob(b"", b"", b"", b"", b"", 0, "zu kurz")
         DC.build_blob(".", ".", {"bin": ".", "plat": "."}, tempfile.gettempdir(), "zu kurz")
@@ -61,7 +72,21 @@ HEADER = """// File creation: 1.1.2026
 #define START_MSG "x"
 #define MLL_FIRMWARE_SIG "@@MLLSIG@@"
 #define INCH_A 5
-#define NUM_LEDS 20
+#define NUM_LEDS mllNumLeds
+#define LEDS_PER_CHANNEL MllLedsPerChannel()
+#define ENABLE_SEND_INPUT
+#define TOTAL_SWITCHES_B  8                                        // Number of used inputs for keyboard 1
+#define TOTAL_VARIABLES   3                                        // Number of used variables
+//MLLDYN_BEGIN
+#define MLL_P_START_MSG "LEDs_AutoProg Ver 3: ESP32 1.1.26 12:00"
+#define MLL_P_LEDS_PER_CHANNEL ",20,0,5"
+#define MLL_P_CHANNEL_LEDS 20,0,5,0,0,0,0,0,0,0
+#define MLL_P_START_SEND_INPUTS 0
+#define MLL_P_TOTAL_SEND_INPUTS 11
+#ifdef CONFIG_ONLY
+#define NUM_LEDS 25
+#endif
+//MLLDYN_END
 //MLLDYN_BEGIN
 #ifdef CONFIG_ONLY
 const uint8_t Config[] = {1, 2, 3};
@@ -75,8 +100,11 @@ def test_signature():
     n1 = DC.normalize_header(HEADER)
     n2 = DC.normalize_header(HEADER.replace("{1, 2, 3}", "{9, 9, 9}").replace("1.1.2026", "2.2.2026").replace("// Kommentar", "// anders"))
     check("Tabellen, Zeitstempel und Kommentare aendern die Signatur nicht", n1 == n2)
-    n3 = DC.normalize_header(HEADER.replace("NUM_LEDS 20", "NUM_LEDS 21"))
-    check("LED-Anzahl aendert die Signatur", n1 != n3)
+    n3 = DC.normalize_header(HEADER.replace("#define NUM_LEDS 25", "#define NUM_LEDS 40").replace("CHANNEL_LEDS 20,0,5", "CHANNEL_LEDS 30,0,10").replace("\",20,0,5\"", "\",30,0,10\"").replace("Ver 3: ESP32", "Ver 3: Pico").replace("TOTAL_SEND_INPUTS 11", "TOTAL_SEND_INPUTS 19"))
+    check("LED-Anzahl, LEDs je Kanal, Starttext und Send-Inputs aendern die Signatur nicht", n1 == n3)
+    n4 = DC.normalize_header(HEADER.replace("TOTAL_SWITCHES_B  8", "TOTAL_SWITCHES_B  16").replace("TOTAL_VARIABLES   3", "TOTAL_VARIABLES   4"))
+    check("TOTAL_SWITCHES_* und TOTAL_VARIABLES aendern die Signatur nicht", n1 == n4)
+    check("ENABLE_SEND_INPUT aendert die Signatur", DC.normalize_header(HEADER.replace("#define ENABLE_SEND_INPUT\n", "")) != n1)
     with tempfile.TemporaryDirectory() as t:
         sk = os.path.join(t, "Lib mit Ümlaut", "LEDs_AutoProg")
         os.makedirs(sk)
@@ -111,9 +139,30 @@ def test_paths():
         check("ini: Pfad mit Leerzeichen/Umlaut gefunden, unbekannter ohne Absturz", len(dirs) == 2 and all(os.path.isdir(x) for x in dirs), dirs)
 
 
+# ---------------------------------------------------------------- Parameter
+def test_params():
+    p = DC.parse_params(HEADER)
+    check("parse_params: LED-Anzahl, Kanaele, Texte, Send-Inputs", p == {"num_leds": 25, "channels": [20, 0, 5, 0, 0, 0, 0, 0, 0, 0], "leds_per_channel": ",20,0,5",
+                                                                      "start_msg": "LEDs_AutoProg Ver 3: ESP32 1.1.26 12:00", "start_send": 0, "total_send": 11}, p)
+    check("parse_params: klassische Kopfdatei ohne Parameter", DC.parse_params("#define NUM_LEDS mllNumLeds\n") == {"num_leds": 0, "channels": [], "leds_per_channel": "", "start_msg": "", "start_send": 0, "total_send": 0})
+    blob = DC.pack_blob(b"\x01", b"", b"", b"", b"", 1, SIG, DC.pack_params(p))
+    raw = blob[52 + 1:]  # nach dem einen Config-Byte
+    num, _, _, n_ch = struct.unpack("<HHHB", raw[:7])
+    chans = struct.unpack("<%dH" % n_ch, raw[7:7 + 2 * n_ch])
+    check("Rundlauf: LED-Anzahl und Kanaele aus dem Blob", num == 25 and n_ch == 10 and chans[:3] == (20, 0, 5), (num, n_ch, chans))
+
+
 # ---------------------------------------------------------------- Konfigurationsdatei bauen (AVR-Werkzeuge)
 MINI_H = """#include <Arduino.h>
 #define MLL_DYNAMIC_CONFIG
+//MLLDYN_BEGIN
+#define MLL_P_START_MSG "Ver 3 mini"
+#define MLL_P_LEDS_PER_CHANNEL ",5"
+#define MLL_P_CHANNEL_LEDS 5,0,0,0,0,0,0,0,0,0
+#ifdef CONFIG_ONLY
+#define NUM_LEDS 5
+#endif
+//MLLDYN_END
 //MLLDYN_BEGIN
 #ifdef CONFIG_ONLY
 const uint8_t Config[] __attribute__ ((section (".MLLLedConfig"))) = {1, 2, 3, 4, 5};
@@ -138,10 +187,11 @@ def test_build():
             fh.write(MINI_H)
         lib = os.path.join(ROOT, "libraries", "MobaLedLib", "src")
         blob = DC.build_blob(sk, lib, tools, os.path.join(sk, "dyn"), SIG)
-        head = DC.BLOB_HEADER.unpack(blob[:48])
+        head = DC.BLOB_HEADER.unpack(blob[:52])
         check("Bau im Pfad mit Umlaut/Leerzeichen: Laengen Config 5, Startwerte 6", head[4] == 5 and head[8] == 6, head)
-        check("RAM-Groesse 7 und Signatur", head[3] == 7 and head[10].decode() == SIG)
-        check("Nutzdaten: Config und Startwerte", blob[48:53] == bytes([1, 2, 3, 4, 5]) and blob[53:] == struct.pack("<HBHB", 300, 1, 301, 1))
+        check("RAM-Groesse 7 und Signatur", head[3] == 7 and head[11].decode() == SIG)
+        check("Nutzdaten: Config und Startwerte", blob[52:57] == bytes([1, 2, 3, 4, 5]) and blob[57:63] == struct.pack("<HBHB", 300, 1, 301, 1))
+        check("Parameter aus der Kopfdatei im Blob", blob[63:] == DC.pack_params(DC.parse_params(MINI_H)) and head[9] == len(blob) - 63 and b"Ver 3 mini\0" in blob[63:], blob[63:])
 
 
 # ---------------------------------------------------------------- Protokoll mit Ersatzgeraet
@@ -191,7 +241,7 @@ class FakeDevice:
             self.say("~MLLCFG ACK %d" % self.rx["pos"])
         elif line == "END":
             r = self.rx
-            if not r or r["pos"] != r["size"] or self.crc(r["data"]) != r["crc"] or r["data"][32:48].decode() != self.sig:
+            if not r or r["pos"] != r["size"] or self.crc(r["data"]) != r["crc"] or r["data"][36:52].decode() != self.sig:
                 return self.say("~MLLCFG ERR check")
             self.file = r["data"]
             self.say("~MLLCFG OK")
@@ -315,7 +365,7 @@ def test_translation():
 
 
 if __name__ == "__main__":
-    for f in (test_format, test_signature, test_paths, test_build, test_protocol, test_output, test_translation):
+    for f in (test_format, test_signature, test_params, test_paths, test_build, test_protocol, test_output, test_translation):
         try:
             f()
         except Exception as e:                              # noqa: BLE001

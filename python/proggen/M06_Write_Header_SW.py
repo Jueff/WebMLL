@@ -1,12 +1,13 @@
-# Datei-Version: 1.09 (2026-11-19) - M06_Write_Header_SW.py
+# Datei-Version: 1.10 (2026-11-19) - M06_Write_Header_SW.py
 # ----------------------------------------------------------------------------------------------
 # Name:           M06_Write_Header_SW.py
 # Path:           proggen/M06_Write_Header_SW.py
-# Version:        1.09
+# Version:        1.10
 # Last Update:    2026-11-19
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
+#   1.10  2026-11-19  Konfiguration getrennt von der Firmware (ESP32/Pico): SETUP_FASTLED und die DMX-Defines benutzen die Zahl der LEDs je Kanal aus der Konfigurationsdatei (mllChOff/mllChCnt); START_SEND_INPUTS/TOTAL_SEND_INPUTS werden durch ENABLE_SEND_INPUT und Parameter der Konfigurationsdatei ersetzt. ATmega und klassische Kopfdatei unveraendert (Zeilen mit '# v1.10')
 #   1.09  2026-11-19  Add_VarArgCnt_to_DstVars: NameError 'proggen' (fehlerhafte Umsetzung: proggen.clsExtensionParameter.Name statt der Schleifenvariablen) behoben; die Zielvariablen aus '...'/'OutList' werden wieder in die Liste eingetragen
 #   1.08  2026-11-19  Get_Matching_Arg: Endlosschleife bei den Argumenten '...' und 'OutList' (die Schleifenvariable wurde nicht weitergezaehlt): 'Setup uebertragen' und die Minimale-Firmware-Pruefung blieben bei einer Counter-Zeile ohne Rueckmeldung stehen (hang_dump.txt von Harold)
 #   1.07  2026-11-18  ESP-Einstellung 'Fotowiderstand aktivieren' aktiviert die LDR-Scanner-Initialisierung auch ohne Makrozeile (Beitrag moosbewohner, PR 9)
@@ -71,6 +72,8 @@ import proggen.M09_Select_Macro as M09SM
 import proggen.M25_Columns as M25
 import proggen.M30_Tools as M30
 import proggen.M38_Extensions as M38
+import proggen.M42_Dyn_Config as M42  # v1.10
+import headless.headless_dyn_config as DC  # v1.10
 import proggen.M70_Exp_Libraries as M70
 import mlpyproggen.Prog_Generator as PG
 import ExcelAPI.XLWF_Worksheetfunction as WorksheetFunction
@@ -1363,8 +1366,16 @@ def Write_Switches_Header_File_Part_A(fp, Channel):
     VBFiles.writeText(fp, '', '\n')
     # 21.03.23 Juergen write also TOTAL_...
     if Min_Channel != 99999999:
-        VBFiles.writeText(fp, '#define START_SEND_INPUTS ' + M30.AddSpaceToLen(Min_Channel, 41) + '// Start address of all switches/variables', '\n')
-        VBFiles.writeText(fp, '#define TOTAL_SEND_INPUTS ' + M30.AddSpaceToLen(To_Eight(Used_AButton_Channels * 16) + To_Eight(CTR_Channels_1 * List_Lenght(But_Inp_List_1)) + To_Eight(CTR_Channels_2 * List_Lenght(But_Inp_List_2)) + SwitchD_InpCnt + List_Lenght(DstVar_List), 41) + '// Number of used switches/variables', '\n')
+        Total_Send_Inputs = To_Eight(Used_AButton_Channels * 16) + To_Eight(CTR_Channels_1 * List_Lenght(But_Inp_List_1)) + To_Eight(CTR_Channels_2 * List_Lenght(But_Inp_List_2)) + SwitchD_InpCnt + List_Lenght(DstVar_List)  # v1.10
+        if M42.Active():  # v1.10: Start und Anzahl kommen aus der Konfigurationsdatei, in der Firmware steht nur der Schalter
+            VBFiles.writeText(fp, '#define ENABLE_SEND_INPUT                         // Send_Inputs() is part of the firmware. Start address and number of the inputs are loaded from the configuration file', '\n')  # v1.10
+            VBFiles.writeText(fp, DC.MARK_BEGIN, '\n')  # v1.10
+            VBFiles.writeText(fp, '#define MLL_P_START_SEND_INPUTS ' + str(Min_Channel), '\n')  # v1.10
+            VBFiles.writeText(fp, '#define MLL_P_TOTAL_SEND_INPUTS ' + str(Total_Send_Inputs), '\n')  # v1.10
+            VBFiles.writeText(fp, DC.MARK_END, '\n')  # v1.10
+        else:  # v1.10
+            VBFiles.writeText(fp, '#define START_SEND_INPUTS ' + M30.AddSpaceToLen(Min_Channel, 41) + '// Start address of all switches/variables', '\n')
+            VBFiles.writeText(fp, '#define TOTAL_SEND_INPUTS ' + M30.AddSpaceToLen(Total_Send_Inputs, 41) + '// Number of used switches/variables', '\n')  # v1.10
     
     VBFiles.writeText(fp, '#define TOTAL_SWITCHES_A  ' + M30.AddSpaceToLen(To_Eight(Used_AButton_Channels * 16), 41) + '// Number of used inputs for analog keyboard', '\n')
     if Right(CTR_Cha_Name_1, 1) == 'B':
@@ -1386,6 +1397,7 @@ def Write_Switches_Header_File_Part_A(fp, Channel):
         VBFiles.writeText(fp, '#define SETUP_FASTLED()                                                      \\', '\n')
         VBFiles.writeText(fp, '/*********************/                                                      \\', '\n')
         cnt = 0 #*HL
+        DynLed = M42.Active()  # v1.10: Zahl der LEDs je Kanal kommt aus der Konfigurationsdatei
         for LEDCh in vbForRange(0, M02.LED_CHANNELS - 1):
             if M06.LEDs_per_Channel(LEDCh) > 0:
                 ExpOutPins = LEDCh
@@ -1394,19 +1406,28 @@ def Write_Switches_Header_File_Part_A(fp, Channel):
                         if LED_PINNr_Arr(LEDCh) != M09.Virtual_Channel_T:   
                             #   18.02.22 Juergen Virtual Channel
                             # Generate: CLEDController& controller0 = FastLED.addLeds<NEOPIXEL,  6 >(leds+   0, 200); \"
+                            if DynLed:  # v1.10
+                                LedArgs = 'leds+mllChOff[' + str(LEDCh) + '], mllChCnt[' + str(LEDCh) + ']'  # v1.10
+                            else:  # v1.10
+                                LedArgs = 'leds+' + M30.AddSpaceToLenLeft(str(cnt), 3) + ',' + M30.AddSpaceToLenLeft(str(M06.LEDs_per_Channel(LEDCh)), 3)  # v1.10
                             if Use_WS2811:
                                 # 19.01.21 Juergen
-                                VBFiles.writeText(fp, '  CLEDController& controller' + str(LEDCh) + ' = FastLED.addLeds<WS2811, ' + M30.AddSpaceToLenLeft(LED_PINNr_Arr(LEDCh), 2) + ', RGB>(leds+' + M30.AddSpaceToLenLeft(str(cnt), 3) + ',' + M30.AddSpaceToLenLeft(str(M06.LEDs_per_Channel(LEDCh)), 3) + '); \\', '\n')
+                                # VBFiles.writeText(fp, '  CLEDController& controller' + str(LEDCh) + ' = FastLED.addLeds<WS2811, ' + M30.AddSpaceToLenLeft(LED_PINNr_Arr(LEDCh), 2) + ', RGB>(leds+' + M30.AddSpaceToLenLeft(str(cnt), 3) + ',' + M30.AddSpaceToLenLeft(str(M06.LEDs_per_Channel(LEDCh)), 3) + '); \\', '\n')  # v1.10 (entfallen)
+                                VBFiles.writeText(fp, '  CLEDController& controller' + str(LEDCh) + ' = FastLED.addLeds<WS2811, ' + M30.AddSpaceToLenLeft(LED_PINNr_Arr(LEDCh), 2) + ', RGB>(' + LedArgs + '); \\', '\n')  # v1.10
                                 # 19.01.21 Juergen
                             else:
-                                VBFiles.writeText(fp, '  CLEDController& controller' + str(LEDCh) + ' = FastLED.addLeds<NEOPIXEL, ' + M30.AddSpaceToLenLeft(LED_PINNr_Arr(LEDCh), 2) + '>(leds+' + M30.AddSpaceToLenLeft(str(cnt), 3) + ',' + M30.AddSpaceToLenLeft(str(M06.LEDs_per_Channel(LEDCh)), 3) + '); \\', '\n')
+                                # VBFiles.writeText(fp, '  CLEDController& controller' + str(LEDCh) + ' = FastLED.addLeds<NEOPIXEL, ' + M30.AddSpaceToLenLeft(LED_PINNr_Arr(LEDCh), 2) + '>(leds+' + M30.AddSpaceToLenLeft(str(cnt), 3) + ',' + M30.AddSpaceToLenLeft(str(M06.LEDs_per_Channel(LEDCh)), 3) + '); \\', '\n')  # v1.10 (entfallen)
+                                VBFiles.writeText(fp, '  CLEDController& controller' + str(LEDCh) + ' = FastLED.addLeds<NEOPIXEL, ' + M30.AddSpaceToLenLeft(LED_PINNr_Arr(LEDCh), 2) + '>(' + LedArgs + '); \\', '\n')  # v1.10
                     else:
                         # 19.01.21 Juergen
                         if not M30.Get_Current_Platform_Bool("SupportsDMX"): #                               ' 21.05.25: check if DMX is supported
                             P01.MsgBox(Replace(M09.Get_Language_Str("Das Protokoll #1# wird auf dieser Plattform nicht unterstützt."), "#1#", "DMX"), vbOK + vbExclamation, M09.Get_Language_Str("Steuerung über ") + "DMX")
                             return _fn_return_value, Channel
 
-                        dmxDefines = '#define DMX_LED_OFFSET ' + str(cnt) + vbCrLf + '#define DMX_CHANNEL_COUNT ' + str(M06.LEDs_per_Channel(LEDCh) * 3)
+                        if DynLed:  # v1.10
+                            dmxDefines = '#define DMX_LED_OFFSET mllChOff[' + str(LEDCh) + ']' + vbCrLf + '#define DMX_CHANNEL_COUNT (mllChCnt[' + str(LEDCh) + '] * 3)'  # v1.10
+                        else:  # v1.10
+                            dmxDefines = '#define DMX_LED_OFFSET ' + str(cnt) + vbCrLf + '#define DMX_CHANNEL_COUNT ' + str(M06.LEDs_per_Channel(LEDCh) * 3)
                         DMX_Pin_Number = LED_PINNr_Arr(LEDCh)
                         if ( M06.LEDs_per_Channel(LEDCh) > 100 ) :
                             P01.MsgBox(M09.Get_Language_Str('Fehler: Das DMX Senden ist auf 100 Leds (300 DMX Kanäle) limitiert.'), vbCritical, P01.ActiveSheet.Name)
@@ -1424,10 +1445,14 @@ def Write_Switches_Header_File_Part_A(fp, Channel):
         VBFiles.writeText(fp, '/*End*/', '\n')
         VBFiles.writeText(fp, '', '\n')
         if DMX_Pin_Number != '' and dmxDefines != '':
+            if DynLed:  # v1.10: der AVR-Compiler, der die Konfiguration uebersetzt, kennt die DMX-Bibliothek nicht
+                VBFiles.writeText(fp, '#ifndef CONFIG_ONLY', '\n')  # v1.10
             VBFiles.writeText(fp, '#include "DmxInterface.h"     // DMX512 Interface', '\n')
             VBFiles.writeText(fp, '#define USE_DMX_PIN ' + str(DMX_Pin_Number), '\n')
             VBFiles.writeText(fp, dmxDefines, '\n')
             VBFiles.writeText(fp, 'DMXInterface dmxInterface;', '\n')
+            if DynLed:  # v1.10
+                VBFiles.writeText(fp, '#endif // CONFIG_ONLY', '\n')  # v1.10
     # Additional Setup proc
     if SwitchA_InpCnt > 0 or Read_LDR or Channel1InpCnt > 0 or SwitchD_InpCnt > 0:
         VBFiles.writeText(fp, '#define USE_ADDITIONAL_SETUP_PROC                                  // Activate the usage of the Additional_Setup_Proc()', '\n')

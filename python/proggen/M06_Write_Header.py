@@ -1,8 +1,8 @@
-# Datei-Version: 1.11 (2026-11-19) - M06_Write_Header.py
+# Datei-Version: 1.12 (2026-11-19) - M06_Write_Header.py
 # ----------------------------------------------------------------------------------------------
 # Name:           M06_Write_Header.py
 # Path:           proggen/M06_Write_Header.py
-# Version:        1.11
+# Version:        1.12
 # Last Update:    2026-11-19
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
@@ -18,6 +18,7 @@
 #   1.09  2026-11-17  Fehlermeldung der House-Zeiten verweist auf die Programm Einstellungen statt auf die Seite Config (die Werte stehen dort)
 #   1.10  2026-11-18  Firmware-Defines aus den ESP-Einstellungen erzeugen (Beitrag von moosbewohner, Pull Request 11)
 #   1.11  2026-11-19  Konfiguration getrennt von der Firmware (ESP32/Pico, Option serial_cfg, M42_Dyn_Config): MLL_DYNAMIC_CONFIG, Tabellen zwischen //MLLDYN_BEGIN und //MLLDYN_END nur fuer CONFIG_ONLY (die Zeilen sind mit '# v1.07' markiert), Finalize mit Rueckfall auf die klassische Kopfdatei; die Startwerte (Set_Start_Values) gehen als Tabelle Start_Values_Tab in die Konfigurationsdatei
+#   1.12  2026-11-19  Konfiguration getrennt von der Firmware: NUM_LEDS, LEDS_PER_CHANNEL und START_MSG kommen aus der Konfigurationsdatei (Abschnitt Parameter), die Kopfdatei enthaelt sie nur noch zwischen den Marken; ohne die Funktion (ATmega, klassisch) bleibt alles wie bisher (Zeilen mit '# v1.12')
 # ----------------------------------------------------------------------------------------------
 # -*- coding: utf-8 -*-
 #
@@ -1561,7 +1562,9 @@ def Write_Header_File_and_Upload_to_Arduino(CreateFilesOnly=False, LEDsInUse=Non
     VBFiles.writeText(fp, '', '\n')
     # 30.03.25 Juergen/Harold: add board type to version information
     # VBFiles.writeText(fp, '#define START_MSG "LEDs_AutoProg Ver 3: ' + M02a.Get_BoardTyp() + " " + M37.Get_Lib_Version("MobaLedLib") + M02.Test_Suffix + " " + P01.Format(P01.Date_str(), 'dd.mm.yy') + ' ' + P01.Format(P01.Time_str(), 'hh:mm') + '"', '\n')  # v1.03 (entfallen)
-    VBFiles.writeText(fp, '#define START_MSG "LEDs_AutoProg Ver 3: ' + M02a.Get_BoardTyp() + " " + M37.Get_Lib_Version("MobaLedLib") + " " + P01.Format(P01.Date_str(), 'dd.mm.yy') + ' ' + P01.Format(P01.Time_str(), 'hh:mm') + '"', '\n')  # v1.03
+    Start_Msg = 'LEDs_AutoProg Ver 3: ' + M02a.Get_BoardTyp() + " " + M37.Get_Lib_Version("MobaLedLib") + " " + P01.Format(P01.Date_str(), 'dd.mm.yy') + ' ' + P01.Format(P01.Time_str(), 'hh:mm')  # v1.12
+    if not DynMode:  # v1.12: ESP32/Pico mit Konfigurationsdatei: der Text steht in der Konfigurationsdatei (siehe unten)
+        VBFiles.writeText(fp, '#define START_MSG "' + Start_Msg + '"', '\n')  # v1.03
     # The version could be read out in a future version of this tool
     VBFiles.writeText(fp, '', '\n')
     if M25.Page_ID == 'Selectrix':
@@ -1570,13 +1573,31 @@ def Write_Header_File_and_Upload_to_Arduino(CreateFilesOnly=False, LEDsInUse=Non
     else:
         VBFiles.writeText(fp, '#define TWO_BUTTONS_PER_ADDRESS 1      // Two buttons (Red/Green) are used (DCC/LNet/CAN)', '\n')
     VBFiles.writeText(fp, '#ifdef NUM_LEDS', '\n')
-    VBFiles.writeText(fp, '  #warning "\'NUM_LEDS\' definition in the main program is replaced by the included \'' + M30.FileNameExt(Name) + '\' with ' + str(NumLeds) + '"', '\n')
+    if DynMode:  # v1.12: die LED Anzahl darf nicht im Text stehen (Firmware-Signatur)
+        VBFiles.writeText(fp, '  #warning "\'NUM_LEDS\' definition in the main program is replaced by the included \'' + M30.FileNameExt(Name) + '\'"', '\n')  # v1.12
+    else:  # v1.12
+        VBFiles.writeText(fp, '  #warning "\'NUM_LEDS\' definition in the main program is replaced by the included \'' + M30.FileNameExt(Name) + '\' with ' + str(NumLeds) + '"', '\n')
     VBFiles.writeText(fp, '  #undef NUM_LEDS', '\n')
     VBFiles.writeText(fp, '#endif', '\n')
     VBFiles.writeText(fp, '', '\n')
-    VBFiles.writeText(fp, '#define NUM_LEDS ' + M30.AddSpaceToLen(str(NumLeds), 22) + '// Number of LEDs (Maximal 256 RGB LEDs could be used)', '\n')
-    VBFiles.writeText(fp, '', '\n')
-    VBFiles.writeText(fp, '#define LEDS_PER_CHANNEL ",' + str(LEDs_per_ChannelList) + '"', '\n')
+    if DynMode:  # v1.12: LED Anzahl, LEDs je Kanal und Starttext gehen in die Konfigurationsdatei (Abschnitt Parameter), nicht in die Firmware
+        VBFiles.writeText(fp, DC.MARK_BEGIN, '\n')  # v1.12
+        VBFiles.writeText(fp, '#define MLL_P_START_MSG "' + Start_Msg + '"', '\n')  # v1.12
+        VBFiles.writeText(fp, '#define MLL_P_LEDS_PER_CHANNEL ",' + str(LEDs_per_ChannelList) + '"', '\n')  # v1.12
+        VBFiles.writeText(fp, '#define MLL_P_CHANNEL_LEDS ' + ','.join(str(int(LEDs_per_Channel(Nr))) for Nr in range(M02.LED_CHANNELS)), '\n')  # v1.12
+        VBFiles.writeText(fp, '#ifdef CONFIG_ONLY', '\n')  # v1.12
+        VBFiles.writeText(fp, '#define NUM_LEDS ' + str(NumLeds) + '                      // Number of LEDs: only used to check the LED numbers when the configuration is compiled', '\n')  # v1.12
+        VBFiles.writeText(fp, '#endif', '\n')  # v1.12
+        VBFiles.writeText(fp, DC.MARK_END, '\n')  # v1.12
+        VBFiles.writeText(fp, '#ifndef CONFIG_ONLY', '\n')  # v1.12
+        VBFiles.writeText(fp, '#define NUM_LEDS mllNumLeds                // Number of LEDs: read from the configuration file (variable in MLLDynConfig.h)', '\n')  # v1.12
+        VBFiles.writeText(fp, '#define LEDS_PER_CHANNEL MllLedsPerChannel()', '\n')  # v1.12
+        VBFiles.writeText(fp, '#define START_MSG MllStartMsg()', '\n')  # v1.12
+        VBFiles.writeText(fp, '#endif', '\n')  # v1.12
+    else:  # v1.12
+        VBFiles.writeText(fp, '#define NUM_LEDS ' + M30.AddSpaceToLen(str(NumLeds), 22) + '// Number of LEDs (Maximal 256 RGB LEDs could be used)', '\n')
+        VBFiles.writeText(fp, '', '\n')
+        VBFiles.writeText(fp, '#define LEDS_PER_CHANNEL ",' + str(LEDs_per_ChannelList) + '"', '\n')
     # 13.03.21 Juergen - for new Farbtest initialisation
     VBFiles.writeText(fp, '', '\n')
     VBFiles.writeText(fp, '#define USE_PROTOCOL_' + UCase(M25.Page_ID), '\n')

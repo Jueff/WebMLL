@@ -25,6 +25,22 @@ Release-Stand 2.12 auf Wunsch des Entwicklers („Release bauen“). **Neu im Ab
 
 **Geprüft:** Dateipaket: `testzip` in Ordnung, alle 113 Dateien gleich dem Ordner `headless`, keine `__pycache__`, alle `.py` kompilieren, Versionsprüfung „alles passt“ (50 Einträge), 11 Dateien ausführbar (`.sh`, `.command`). **Nachbau des Entwickler-Ablaufs mit seinem echten Paket (1678 Dateien, Stand 2.05):** meine 113 Dateien darübergelegt, Prüfliste, ZIP gepackt, `release_tools check --previous <sein ZIP>`: **in Ordnung** (Version 2.12, 1678 Dateien, 6 neue, 0 fehlende, ZIP 16,6 MB). Alle 15 Prüfreihen laufen (17, 26, 15, 70, 28, 19, 43, 26, 16, 27, 8, 8, 8, 5, 9 Prüfungen). **Nicht geprüft:** `zip_erstellen.bat` und die Reparaturskripte unter Windows, ein abgebrochenes Update unter Windows, das Verhalten mit Acronis, der Download von GitHub.
 
+## 4.36 Nachtrag (2026-11-19): LED-Anzahl, Starttext und Send-Inputs gehören zur Konfiguration
+
+Wunsch von Jürgen: Das Hinzufügen oder Abschalten einer Makrozeile löste einen kompletten Upload aus, weil `NUM_LEDS`, `LEDS_PER_CHANNEL`, `START_MSG`, `SETUP_FASTLED` (LEDs je Kanal) und `START/TOTAL_SEND_INPUTS` in der Firmware-Signatur standen. Jetzt stehen sie im neuen Abschnitt „Parameter“ der Konfigurationsdatei (Format 3, Kopf 52 Bytes, `SIG_SALT` `mlldyn-3`). `TOTAL_SWITCHES_*` und `TOTAL_VARIABLES` (nirgends im Programm benutzt) zählen nicht mehr zur Signatur. `ENABLE_SEND_INPUT` schaltet den Send-Inputs-Code der `.ino` ein, Start und Anzahl kommen aus der Konfiguration. `SETUP_FASTLED` nutzt `mllChOff[n]` und `mllChCnt[n]`; die Pins bleiben fest (FastLED braucht sie als Vorlagenparameter), ebenso die Menge der benutzten LED-Kanäle. **ATmega und die klassische Kopfdatei sind unverändert.** Die `INCH_`-Defines gehörten schon vorher nicht zur Signatur. Jedes Gerät braucht einmalig einen kompletten Upload.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `headless/headless_dyn_config.py` | 1.01 | Format 3, `parse_params`, `pack_params`, Signatur ohne `TOTAL_SWITCHES_*` / `TOTAL_VARIABLES` |
+| `proggen/M06_Write_Header.py` | 1.12 | Parameter-Block für `NUM_LEDS`, `LEDS_PER_CHANNEL`, `START_MSG` (nur dynamisch) |
+| `proggen/M06_Write_Header_SW.py` | 1.10 | `ENABLE_SEND_INPUT`, `SETUP_FASTLED` und DMX mit `mllChOff` / `mllChCnt` |
+| `LEDs_AutoProg/MLLDynConfig.h` | 1.01 | Format 3 lesen, `MllParseParams` |
+| `LEDs_AutoProg/LEDs_AutoProg.ino` | | `leds[]`, Effektpuffer und Send_Inputs zur Laufzeit (nur mit `MLL_DYNAMIC_CONFIG`) |
+| `headless/headless_esp32_ota.py` | 1.11 | Datum-Vergleich auch für `MLL_P_START_MSG` |
+| `test_dyn_config.py` | 1.02 | 173 Prüfungen, 0 Fehler (Format 3, Parameter, Signaturstabilität) |
+
+**Geprüft:** `py_compile`, `test_dyn_config.py`, Syntaxprüfung von `MLLDynConfig.h` mit avr-g++ und Ersatzdeklarationen. **Nicht geprüft:** Übersetzen und Lauf auf ESP32 und Pico, FastLED mit per `malloc` angelegtem `leds[]`, `addLeds` mit Anzahl 0, DMX, OTA, Farbtest, Erzeugung einer vollständigen Kopfdatei aus einer Tabelle. `START_SWITCHES_*` zählen weiter zur Signatur (Nutzung in der Bibliothek nicht geprüft).
+
 ## 4.36 (2026-11-19)
 
 Pull Request 33 von Jürgen (Issue 31) eingearbeitet: „Schnelles Update“, nur die Konfiguration auf ESP32 und Pico übertragen. Der PR baute auf 4.22 auf; zusammengeführt mit dem Stand 4.35 (drei Konflikte ohne Logik: Versionskopf und Historie `webmobaledlib.py`, `BETATEST_Checkliste.md`, `Web_Languages.csv`). Jürgens Versionsnummer 4.23 wurde zu 4.36. `test_dyn_config.py` läuft mit 146 Prüfungen ohne Fehler (nur Software, ohne Hardware). Nicht an ESP32 und Pico getestet. `release_manifest.json` aus dem PR ist nicht übernommen: Sie gehört zum Stand von Jürgens Baum und muss beim Release neu erzeugt werden.
