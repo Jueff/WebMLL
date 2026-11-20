@@ -1,5 +1,5 @@
-Datei-Version: 1.20 (2026-11-19) - HOC_intern.md
-Stand: webMobaLedLib 4.36
+Datei-Version: 1.21 (2026-11-20) - HOC_intern.md
+Stand: webMobaLedLib 4.37
 
 # webMobaLedLib: History of Change (intern, ausführlich)
 
@@ -24,6 +24,19 @@ Release-Stand 2.12 auf Wunsch des Entwicklers („Release bauen“). **Neu im Ab
 | `archiv/` | frühere Release-Hinweise, Versionslisten und ZIP (nichts gelöscht) |
 
 **Geprüft:** Dateipaket: `testzip` in Ordnung, alle 113 Dateien gleich dem Ordner `headless`, keine `__pycache__`, alle `.py` kompilieren, Versionsprüfung „alles passt“ (50 Einträge), 11 Dateien ausführbar (`.sh`, `.command`). **Nachbau des Entwickler-Ablaufs mit seinem echten Paket (1678 Dateien, Stand 2.05):** meine 113 Dateien darübergelegt, Prüfliste, ZIP gepackt, `release_tools check --previous <sein ZIP>`: **in Ordnung** (Version 2.12, 1678 Dateien, 6 neue, 0 fehlende, ZIP 16,6 MB). Alle 15 Prüfreihen laufen (17, 26, 15, 70, 28, 19, 43, 26, 16, 27, 8, 8, 8, 5, 9 Prüfungen). **Nicht geprüft:** `zip_erstellen.bat` und die Reparaturskripte unter Windows, ein abgebrochenes Update unter Windows, das Verhalten mit Acronis, der Download von GitHub.
+
+## 4.37 (2026-11-20), Pull Request 47 von Jürgen (Issue 46)
+
+Die LED-Controller-Tabelle (je FastLED-Controller: Pin, erste LED, LED-Anzahl) gehört jetzt zur Konfigurationsdatei (Format 5, Abschnitt „Parameter“). Pins und LED-Aufteilung ändern die Firmware-Signatur nicht mehr, es genügt die Konfigurationsübertragung. Die Firmware legt die Controller in einer Schleife an; FastLED braucht den Pin als Konstante, deshalb enthält die Firmware einen Zweig je Pin aus `MLL_LED_PINS` (je Plattform fest, wird in die Kopfdatei geschrieben). Ein unbekannter Pin liefert NULL, die LEDs dort bleiben dunkel. Geprüft: Kompilieren, `test_dyn_config.py` (162 Prüfungen, 0 Fehler); auf ESP32 und Pico nicht getestet.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `LEDs_AutoProg/MLLDynConfig.h` | 1.02 | Format 5, Controller-Tabelle, `MllAddLeds` |
+| `headless/headless_dyn_config.py` | 1.01 | Format 5, Controller in `parse_params` / `pack_params`, `SIG_SALT mlldyn-5` |
+| `proggen/M06_Write_Header.py` | 1.12 | `MLL_P_CONTROLLER_COUNT`, `MLL_P_CONTROLLER_CONFIG` |
+| `proggen/M06_Write_Header_SW.py` | 1.10 | `MLL_LED_PINS`, Controller aus der Konfiguration |
+| `test_dyn_config.py` | PR 47 | Prüfungen für Format 5 |
+| `webmobaledlib.py` | 4.37 | Version und Historie |
 
 ## 4.36 Nachtrag (2026-11-19): LED-Anzahl, Starttext und Send-Inputs gehören zur Konfiguration
 

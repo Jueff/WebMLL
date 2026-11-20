@@ -1,8 +1,8 @@
-# Datei-Version: 1.12 (2026-11-19) - M06_Write_Header.py
+# Datei-Version: 1.13 (2026-11-20) - M06_Write_Header.py
 # ----------------------------------------------------------------------------------------------
 # Name:           M06_Write_Header.py
 # Path:           proggen/M06_Write_Header.py
-# Version:        1.12
+# Version:        1.13
 # Last Update:    2026-11-19
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
@@ -18,7 +18,9 @@
 #   1.09  2026-11-17  Fehlermeldung der House-Zeiten verweist auf die Programm Einstellungen statt auf die Seite Config (die Werte stehen dort)
 #   1.10  2026-11-18  Firmware-Defines aus den ESP-Einstellungen erzeugen (Beitrag von moosbewohner, Pull Request 11)
 #   1.11  2026-11-19  Konfiguration getrennt von der Firmware (ESP32/Pico, Option serial_cfg, M42_Dyn_Config): MLL_DYNAMIC_CONFIG, Tabellen zwischen //MLLDYN_BEGIN und //MLLDYN_END nur fuer CONFIG_ONLY (die Zeilen sind mit '# v1.07' markiert), Finalize mit Rueckfall auf die klassische Kopfdatei; die Startwerte (Set_Start_Values) gehen als Tabelle Start_Values_Tab in die Konfigurationsdatei
-#   1.12  2026-11-19  Konfiguration getrennt von der Firmware: NUM_LEDS, LEDS_PER_CHANNEL und START_MSG kommen aus der Konfigurationsdatei (Abschnitt Parameter), die Kopfdatei enthaelt sie nur noch zwischen den Marken; ohne die Funktion (ATmega, klassisch) bleibt alles wie bisher (Zeilen mit '# v1.12')
+#   1.12  2026-11-19  Konfiguration getrennt von der Firmware: NUM_LEDS, LEDS_PER_CHANNEL, START_MSG, LEDs je Kanal und die Controller-Tabelle (MLL_P_CONTROLLER_COUNT, MLL_P_CONTROLLER_CONFIG: Pin, erste LED, LED-Anzahl)
+#                     kommen aus der Konfigurationsdatei (Abschnitt Parameter), die Kopfdatei enthaelt sie nur noch zwischen den Marken; ohne die Funktion (ATmega, klassisch) bleibt alles wie bisher (Zeilen mit '# v1.12')
+#   1.13  2026-11-20  Issue 48: Fehler aus ProcessSheet (zum Beispiel 'Die Adresse ... wird bereits mit einem anderen Typ benutzt') gingen verloren, weil Write_Header_File_and_Upload_to_Arduino ErrorText vor der Pruefung leerte; Kompilieren startete trotz Fehler
 # ----------------------------------------------------------------------------------------------
 # -*- coding: utf-8 -*-
 #
@@ -1489,7 +1491,7 @@ def Write_Header_File_and_Upload_to_Arduino(CreateFilesOnly=False, LEDsInUse=Non
     # 20.12.21: Jürgen add CreateFilesOnly for programatically generation of header files
     #----------------------------------------------------
     
-    ErrorText=""
+    # ErrorText=""   # v1.13 (entfallen): loeschte die Fehler aus ProcessSheet (Init_HeaderFile_Generation setzt ErrorText schon zu Beginn zurueck)
     MaxLed = M30.Get_Current_Platform_Int('MaxLed')
     MaxInput = M30.Get_Current_Platform_Int("MaxInput")            #26.11.25: Juergen, max Inputs depends on board type
     for Nr in vbForRange(0, M02.LED_CHANNELS - 1):
@@ -1580,11 +1582,14 @@ def Write_Header_File_and_Upload_to_Arduino(CreateFilesOnly=False, LEDsInUse=Non
     VBFiles.writeText(fp, '  #undef NUM_LEDS', '\n')
     VBFiles.writeText(fp, '#endif', '\n')
     VBFiles.writeText(fp, '', '\n')
-    if DynMode:  # v1.12: LED Anzahl, LEDs je Kanal und Starttext gehen in die Konfigurationsdatei (Abschnitt Parameter), nicht in die Firmware
+    if DynMode:  # v1.12: LED Anzahl, LEDs je Kanal, Pins und Starttext gehen in die Konfigurationsdatei (Abschnitt Parameter), nicht in die Firmware
         VBFiles.writeText(fp, DC.MARK_BEGIN, '\n')  # v1.12
         VBFiles.writeText(fp, '#define MLL_P_START_MSG "' + Start_Msg + '"', '\n')  # v1.12
         VBFiles.writeText(fp, '#define MLL_P_LEDS_PER_CHANNEL ",' + str(LEDs_per_ChannelList) + '"', '\n')  # v1.12
         VBFiles.writeText(fp, '#define MLL_P_CHANNEL_LEDS ' + ','.join(str(int(LEDs_per_Channel(Nr))) for Nr in range(M02.LED_CHANNELS)), '\n')  # v1.12
+        Controllers = M06SW.Get_LED_Controller_List()  # v1.12: je FastLED-Controller Pin, erste LED, LED-Anzahl (SETUP_FASTLED, mllControllerConfig)
+        VBFiles.writeText(fp, '#define MLL_P_CONTROLLER_COUNT ' + str(len(Controllers)), '\n')  # v1.12
+        VBFiles.writeText(fp, '#define MLL_P_CONTROLLER_CONFIG ' + ', '.join(str(Pin) + ',' + str(Off) + ',' + str(Cnt) for _Ch, Pin, Off, Cnt in Controllers) + '   // Pin,LEDOffset,LEDCount per controller', '\n')  # v1.12
         VBFiles.writeText(fp, '#ifdef CONFIG_ONLY', '\n')  # v1.12
         VBFiles.writeText(fp, '#define NUM_LEDS ' + str(NumLeds) + '                      // Number of LEDs: only used to check the LED numbers when the configuration is compiled', '\n')  # v1.12
         VBFiles.writeText(fp, '#endif', '\n')  # v1.12

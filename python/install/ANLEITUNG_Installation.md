@@ -1,5 +1,5 @@
 # webMobaLedLib – Installation und Betrieb
-*Datei-Version: 4.38 (2026-11-19), gilt für webMobaLedLib 4.38*
+*Datei-Version: 4.40 (2026-11-20), gilt für webMobaLedLib 4.40*
 
 Windows · macOS · Linux-Desktop · Raspberry Pi
 
@@ -433,9 +433,30 @@ Ist unter **Optionen Werkzeuge** ein **ESP32** als LED-Zentrale gewählt, ersche
 - **Rückfrage beim Öffnen (seit 3.98):** Benutzt eine Datei eine **ausgeschaltete** Erweiterung, fragt das Programm, ob es sie einschalten soll (einmal je Erweiterung und Sitzung); ohne sie fehlen die Zeilen in der erzeugten Datei.
 - **Wiki:** eigene Seite `erweiterungen` (siehe Wiki-Paket 3.98).
 
-### 2.9k Neu seit 3.93 (3.94 bis 4.36)
+### 2.9k Neu seit 3.93 (3.94 bis 4.40)
 
 Kurzfassung der Änderungen seit dem letzten Release, neueste Version zuerst (ausführlich in `HOC_Anwender.md`):
+
+**Version 4.40**
+
+*Neue Funktionen:*
+- Makrotext direkt in Spalte L ändern (Beitrag von Jürgen, Issue 42): Der Text wird sofort geprüft; bei einem Fehler kannst du den ursprünglichen Text wiederherstellen oder weiter bearbeiten. Nach einer gültigen Änderung werden Name, Symbol, LEDs, InCnt, LocInCh, Adressen, Testtasten und Start-LEDs neu gesetzt.
+- Das Übertragungsfenster schließt sich automatisch (Beitrag von Jürgen, Issue 41): Programm Einstellungen, Allgemeine Einstellungen, „Fenster nach Erfolg automatisch schließen“ (Vorgabe 5 Sekunden) und „Fenster nach Fehler automatisch schließen“ (Vorgabe 30 Sekunden); wählbar sofort, 5, 10, 30 Sekunden oder nie.
+
+**Version 4.39**
+
+*Korrekturen:*
+- Eine Adresse, die mit zwei verschiedenen Typen benutzt wird (und andere Fehler in der Tabelle), wird beim Erzeugen der Kopfdatei wieder gemeldet; das Kompilieren startet dann nicht (Issue 48).
+
+**Version 4.38**
+
+*Neue Funktionen:*
+- Strg+S speichert die Tabellen dauerhaft (wie im Excel-Programm; Menü Datei → Speichern): Beim Beenden mit „Ohne Speichern“ und beim nächsten Start ist dieser Stand wieder da. Strg+Z (Rückgängig) und Strg+Y oder Strg+Umschalt+Z (Wiederholen) gelten jetzt überall auf der Seite, nicht nur mit markierter Zelle (Wunsch von Jürgen, Issue 49).
+
+**Version 4.37**
+
+*Neue Funktionen:*
+- Schnelles Update (ESP32/Pico): Auch die Zuordnung von LED-Pins und LED-Gruppen gehört jetzt zur Konfiguration (Beitrag von Jürgen, Issue 46); eine Änderung daran braucht keinen vollständigen Upload.
 
 **Version 4.36**
 
