@@ -1,9 +1,14 @@
-Datei-Version: 1.20 (2026-11-19) - HOC_Anwender.md
-Stand: webMobaLedLib 4.36
+Datei-Version: 1.21 (2026-11-20) - HOC_Anwender.md
+Stand: webMobaLedLib 4.37
 
 # webMobaLedLib: Änderungen (Kurzfassung)
 
 Gilt ab Version 1.39. Neueste Version oben.
+
+## Version 4.37 (2026-11-20)
+
+Neue Funktionen:
+- Schnelles Update (ESP32/Pico): Auch die Zuordnung von LED-Pins und LED-Gruppen gehört jetzt zur Konfiguration (Beitrag von Jürgen, Issue 46); eine Änderung daran braucht keinen vollständigen Upload.
 
 ## Version 4.36 (2026-11-19)
 

@@ -1,8 +1,8 @@
-# Datei-Version: 1.12 (2026-11-19) - M06_Write_Header.py
+# Datei-Version: 1.13 (2026-11-20) - M06_Write_Header.py
 # ----------------------------------------------------------------------------------------------
 # Name:           M06_Write_Header.py
 # Path:           proggen/M06_Write_Header.py
-# Version:        1.12
+# Version:        1.13
 # Last Update:    2026-11-19
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
@@ -20,6 +20,7 @@
 #   1.11  2026-11-19  Konfiguration getrennt von der Firmware (ESP32/Pico, Option serial_cfg, M42_Dyn_Config): MLL_DYNAMIC_CONFIG, Tabellen zwischen //MLLDYN_BEGIN und //MLLDYN_END nur fuer CONFIG_ONLY (die Zeilen sind mit '# v1.07' markiert), Finalize mit Rueckfall auf die klassische Kopfdatei; die Startwerte (Set_Start_Values) gehen als Tabelle Start_Values_Tab in die Konfigurationsdatei
 #   1.12  2026-11-19  Konfiguration getrennt von der Firmware: NUM_LEDS, LEDS_PER_CHANNEL, START_MSG, LEDs je Kanal und die Controller-Tabelle (MLL_P_CONTROLLER_COUNT, MLL_P_CONTROLLER_CONFIG: Pin, erste LED, LED-Anzahl)
 #                     kommen aus der Konfigurationsdatei (Abschnitt Parameter), die Kopfdatei enthaelt sie nur noch zwischen den Marken; ohne die Funktion (ATmega, klassisch) bleibt alles wie bisher (Zeilen mit '# v1.12')
+#   1.13  2026-11-20  Issue 48: Fehler aus ProcessSheet (zum Beispiel 'Die Adresse ... wird bereits mit einem anderen Typ benutzt') gingen verloren, weil Write_Header_File_and_Upload_to_Arduino ErrorText vor der Pruefung leerte; Kompilieren startete trotz Fehler
 # ----------------------------------------------------------------------------------------------
 # -*- coding: utf-8 -*-
 #
@@ -1490,7 +1491,7 @@ def Write_Header_File_and_Upload_to_Arduino(CreateFilesOnly=False, LEDsInUse=Non
     # 20.12.21: Jürgen add CreateFilesOnly for programatically generation of header files
     #----------------------------------------------------
     
-    ErrorText=""
+    # ErrorText=""   # v1.13 (entfallen): loeschte die Fehler aus ProcessSheet (Init_HeaderFile_Generation setzt ErrorText schon zu Beginn zurueck)
     MaxLed = M30.Get_Current_Platform_Int('MaxLed')
     MaxInput = M30.Get_Current_Platform_Int("MaxInput")            #26.11.25: Juergen, max Inputs depends on board type
     for Nr in vbForRange(0, M02.LED_CHANNELS - 1):
