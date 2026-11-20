@@ -521,7 +521,13 @@ Benoetig als 142 byte
   #include <SPI.h>
 #endif // USE_SPI_COM
 
+#ifdef MLL_DYNAMIC_CONFIG                                                                                     // v1.01: LED Anzahl aus der Konfigurationsdatei (MLLDynConfig.h), das Feld wird nach MllDynLoad() angelegt
+  uint16_t mllNumLeds = 0;
+  CRGB *leds = NULL;
+#else
+// CRGB leds[NUM_LEDS];           // Define the array of leds                                                      // v1.01 (entfallen: jetzt im #else)
 CRGB leds[NUM_LEDS];           // Define the array of leds
+#endif
 //int dcc=0; // Debug                                                                                           // 19.01.21: Juergen
 
 #if defined(ENABLE_STORE_STATUS) && defined(_USE_STORE_STATUS)                                                // 19.05.20: Juergen
@@ -654,13 +660,26 @@ void Receive_LED_Color_per_RS232(Stream &port, bool network)                    
   char usbBuffer[32] = "";
   bool usbOverflow = false;
 #if defined(MLL_OTA_SAVED_WIFI) && defined(USE_OTA)
+#ifdef MLL_DYNAMIC_CONFIG                                                                                     // v1.01
+  static CRGB *effectPixels = NULL;
+  #define EFFECT_PIXELS_BYTES (mllNumLeds * sizeof(CRGB))
+  #define EFFECT_PIXELS_OK    (effectPixels != NULL)
+#else
   static CRGB effectPixels[NUM_LEDS];
+  #define EFFECT_PIXELS_BYTES sizeof(effectPixels)
+  #define EFFECT_PIXELS_OK    true
+#endif
   static char networkBuffer[32] = "";
   static bool networkOverflow = false;
   static unsigned long networkLastUpdate = 0;
   if (network && !mllNetworkDirect)
   {
+#ifdef MLL_DYNAMIC_CONFIG                                                                                     // v1.01
+    if (!effectPixels) effectPixels = (CRGB*)malloc(EFFECT_PIXELS_BYTES + sizeof(CRGB));
+    if (effectPixels) memcpy(effectPixels, leds, EFFECT_PIXELS_BYTES);
+#else
     memcpy(effectPixels, leds, sizeof(effectPixels));
+#endif
     networkBuffer[0] = 0;
     networkOverflow = false;
     mllNetworkDirect = true;
@@ -684,7 +703,7 @@ void Receive_LED_Color_per_RS232(Stream &port, bool network)                    
 #if defined(MLL_OTA_SAVED_WIFI) && defined(USE_OTA)
      if (network && !static_cast<WiFiClient &>(port).connected())
      {
-         memcpy(leds, effectPixels, sizeof(effectPixels));
+         if (EFFECT_PIXELS_OK) memcpy(leds, effectPixels, EFFECT_PIXELS_BYTES);                              // v1.01 (vorher: memcpy(leds, effectPixels, sizeof(effectPixels)))
          mllNetworkDirect = false;
          return;
      }
@@ -734,7 +753,7 @@ void Receive_LED_Color_per_RS232(Stream &port, bool network)                    
 #if defined(MLL_OTA_SAVED_WIFI) && defined(USE_OTA)
                                        if (network)
                                        {
-                                         memcpy(leds, effectPixels, sizeof(effectPixels));
+                                         if (EFFECT_PIXELS_OK) memcpy(leds, effectPixels, EFFECT_PIXELS_BYTES);   // v1.01 (vorher: memcpy(leds, effectPixels, sizeof(effectPixels)))
                                          mllNetworkDirect = false;
                                        }
 #endif
@@ -1099,12 +1118,23 @@ uint8_t Handle_Command(uint8_t Type, const uint8_t* arguments, bool process)
 
 
 #if defined SEND_INPUTS
-	#ifndef START_SEND_INPUTS                                                                            // 27.04.23 Juergen
-        #define START_SEND_INPUTS 0
-    #endif
-    #ifndef TOTAL_SEND_INPUTS
-        #define TOTAL_SEND_INPUTS 0
+#if defined(MLL_DYNAMIC_CONFIG)                                                                                // v1.01: ENABLE_SEND_INPUT schaltet das Senden ein, Start und Anzahl stehen in der Konfigurationsdatei
+	#define START_SEND_INPUTS mllStartSend
+	#define TOTAL_SEND_INPUTS mllTotalSend
+	#if defined(ENABLE_SEND_INPUT)
+		#define MLL_SEND_INPUTS_ON
 	#endif
+#else
+	#ifndef START_SEND_INPUTS                                                                            // 27.04.23 Juergen
+		#define START_SEND_INPUTS 0
+	#endif
+	#ifndef TOTAL_SEND_INPUTS
+		#define TOTAL_SEND_INPUTS 0
+	#endif
+	#if TOTAL_SEND_INPUTS != 0                                                                               // v1.01
+		#define MLL_SEND_INPUTS_ON
+	#endif
+#endif
                                                                                                         // 12.11.21 Juergen remove debug output
 //	#define STRINGIFY(s) XSTRINGIFY(s)
 //	#define XSTRINGIFY(s) #s
@@ -1113,15 +1143,24 @@ uint8_t Handle_Command(uint8_t Type, const uint8_t* arguments, bool process)
 
  	void Send_Inputs(char type, bool forceSend)
 	{
-		#if TOTAL_SEND_INPUTS!= 0
+		// #if TOTAL_SEND_INPUTS!= 0                                                                              // v1.01 (entfallen)
+		#if defined(MLL_SEND_INPUTS_ON)                                                                           // v1.01
+		  #if defined(MLL_DYNAMIC_CONFIG)                                                                         // v1.01: Puffer fuer die groesstmoegliche Anzahl, die Laenge wird zur Laufzeit berechnet
+			if (TOTAL_SEND_INPUTS == 0) return;
+			const uint8_t SEND_LEN = (uint8_t)(((TOTAL_SEND_INPUTS+6)/7)+1);                                    // add one byte for checksum
+			static uint8_t send_buffer[(MLL_MAX_SEND_INPUTS+6)/7+3];
+			uint16_t i;
+		  #else
 			#define SEND_LEN (uint8_t)((((TOTAL_SEND_INPUTS+6)/7))+1)                                   // add one byte for checksum
-            static uint8_t send_buffer[SEND_LEN+2];
+			static uint8_t send_buffer[SEND_LEN+2];
+			uint8_t i;                                                                                      // v1.01 (vorher in der for Schleife)
+		  #endif
 			uint8_t outByte = 0;
 			uint8_t chkSum = (uint8_t)~(SEND_LEN^0xD0);												    // compiler will make correct value out of it (saves memory)
 
 			send_buffer[0]=0xD0;
 			send_buffer[1]=SEND_LEN;
-			for (uint8_t i=0;;) {                                                       // align to 7 bits
+			for (i=0;;) {                                                       // align to 7 bits  // v1.01: i ist oben deklariert (vorher: for (uint8_t i=0;;))
 				outByte = outByte<<1;
 				if ((MobaLedLib.Get_Input(START_SEND_INPUTS+i) & 0x01) && i<TOTAL_SEND_INPUTS)
 					outByte |= 1;
@@ -1584,7 +1623,9 @@ void setup(){
 
   #ifdef MLL_DYNAMIC_CONFIG
     MllDynLoad();                                                                                               // Konfiguration aus dem Dateisystem laden
-    pMobaLedLib = new MobaLedLib_C(leds, sizeof(leds)/sizeof(CRGB), mllDyn.config, mllDyn.ram, mllDyn.ramLen
+    leds = (CRGB*)calloc(mllNumLeds ? mllNumLeds : 1, sizeof(CRGB));                                            // v1.01: LED Anzahl steht in der Konfigurationsdatei
+    // pMobaLedLib = new MobaLedLib_C(leds, sizeof(leds)/sizeof(CRGB), mllDyn.config, mllDyn.ram, mllDyn.ramLen  // v1.01 (entfallen)
+    pMobaLedLib = new MobaLedLib_C(leds, mllNumLeds, mllDyn.config, mllDyn.ram, mllDyn.ramLen
   #else
     MobaLedLibPtr_CreateEx(leds
   #endif
@@ -1638,7 +1679,11 @@ void setup(){
   #endif
 
   #if defined(START_MSG) && !defined(NO_SERIAL_OPTPUT)
-    Serial.println(F(START_MSG));
+    #ifdef MLL_DYNAMIC_CONFIG                                                                                 // v1.01: START_MSG ist eine Funktion (Text aus der Konfigurationsdatei), F() braucht ein Literal
+      Serial.println(START_MSG);
+    #else
+      Serial.println(F(START_MSG));
+    #endif
   #endif
   // Debug_Print_Fuses();
 

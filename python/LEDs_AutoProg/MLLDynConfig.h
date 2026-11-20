@@ -1,4 +1,6 @@
 // MLLDynConfig.h - Konfiguration getrennt vom Programm (nur ESP32 und Pico)
+// Version 1.01 (2026-11-19): Dateiformat 3 mit Abschnitt 'Parameter': LED Anzahl (NUM_LEDS), LEDs je LED Kanal, LEDS_PER_CHANNEL, START_MSG und Start/Anzahl der Send-Inputs
+//                           kommen aus der Konfigurationsdatei. Zeilen mit '// v1.01'. Die ATmega Varianten benutzen diese Datei nicht (nur mit MLL_DYNAMIC_CONFIG).
 //
 // Ist MLL_DYNAMIC_CONFIG gesetzt (der Programm Generator schreibt es in LEDs_AutoProg.h), dann stehen die Datentabellen
 //   Config[], Ext_Addr[], Store_Values[] und LED2Var_Tab[]
@@ -8,7 +10,7 @@
 //
 // Dateiformat (little endian):
 //   0  "MLLC"
-//   4  Version (2)
+//   4  Version (3)                                                                                              // v1.01
 //   5  reserviert
 //   6  Groesse von Config_RAM (u16)
 //   8  Laenge Config (u32)
@@ -16,9 +18,13 @@
 //  16  Laenge Store_Values (u32)
 //  20  Laenge LED2Var_Tab (u32)
 //  24  Laenge Startwerte (u32, Eintraege zu 3 Bytes: Kanal u16, Wert u8)
-//  28  CRC32 ueber die Nutzdaten (u32)
-//  32  Signatur der Firmware (16 Zeichen, MLL_FIRMWARE_SIG): die Datei wird nur geladen, wenn sie zu dieser Firmware gehoert
-//  48  Nutzdaten: Config, Ext_Addr, Store_Values, LED2Var_Tab, Startwerte
+//  28  Laenge Parameter (u32)                                                                                   // v1.01
+//  32  CRC32 ueber die Nutzdaten (u32)                                                                          // v1.01
+//  36  Signatur der Firmware (16 Zeichen, MLL_FIRMWARE_SIG): die Datei wird nur geladen, wenn sie zu dieser Firmware gehoert  // v1.01
+//  52  Nutzdaten: Config, Ext_Addr, Store_Values, LED2Var_Tab, Startwerte, Parameter                           // v1.01
+//
+// Parameter: u16 LED Anzahl, u16 Start der Send-Inputs, u16 Anzahl der Send-Inputs, u8 Zahl der LED Kanaele N,    // v1.01
+//            N mal u16 LEDs je Kanal, LEDS_PER_CHANNEL (Text, mit 0 abgeschlossen), START_MSG (Text, mit 0 abgeschlossen)  // v1.01
 //
 // Serielles Protokoll (Zeilen, die mit '~' beginnen; Antworten ebenfalls):
 //   ~MLLCFG INFO                      -> ~MLLCFG INFO proto=2 sig=<Signatur> cfg=<CRC32 der Datei> valid=<0|1> free=<Bytes>
@@ -41,11 +47,18 @@
 
 #define MLL_CFG_PATH         "/mllcfg.bin"
 #define MLL_CFG_TMP          "/mllcfg.tmp"
-#define MLL_CFG_HEADER_SIZE  48
-#define MLL_CFG_VERSION      2
 #define MLL_CFG_SIG_LEN      16
-#define MLL_CFG_PARTS        5
+// #define MLL_CFG_HEADER_SIZE  48                                                                                  // v1.01 (entfallen)
+// #define MLL_CFG_VERSION      2                                                                                   // v1.01 (entfallen)
+// #define MLL_CFG_PARTS        5                                                                                   // v1.01 (entfallen)
+#define MLL_CFG_VERSION      3                                                                                   // v1.01
+#define MLL_CFG_PARTS        6                                                                                   // v1.01
+#define MLL_CFG_CRC_OFS      (8 + 4 * MLL_CFG_PARTS)                                                             // v1.01
+#define MLL_CFG_SIG_OFS      (MLL_CFG_CRC_OFS + 4)                                                               // v1.01
+#define MLL_CFG_HEADER_SIZE  (MLL_CFG_SIG_OFS + MLL_CFG_SIG_LEN)                                                 // v1.01
 #define MLL_CFG_LINE_MAX     260
+#define MLL_MAX_LED_CH       16                                                                                  // v1.01 (headless_dyn_config.MAX_LED_CHANNELS)
+#define MLL_MAX_SEND_INPUTS  1778                                                                                // v1.01 (Laenge des Sendepuffers: (n+6)/7+1 muss in ein Byte passen)
 
 typedef struct
     {
@@ -61,6 +74,15 @@ typedef struct
 
 static MllDynConfig_T mllDyn;
 static const uint8_t  mllEmptyConfig[] = { EndCfg };
+
+// Parameter aus der Konfigurationsdatei (v1.01). mllNumLeds und das Feld leds[] stehen in LEDs_AutoProg.ino (die LED Anzahl ist erst nach MllDynLoad() bekannt)
+static uint16_t    mllChCnt[MLL_MAX_LED_CH];                       // LEDs je LED Kanal
+static uint16_t    mllChOff[MLL_MAX_LED_CH];                       // erste LED des Kanals (Summe der LEDs der Kanaele davor)
+static uint16_t    mllStartSend = 0, mllTotalSend = 0;             // Start und Anzahl der Send-Inputs (ENABLE_SEND_INPUT)
+static const char *mllLedsPerChannelTxt = ",0";
+static const char *mllStartMsgTxt = "LEDs_AutoProg: no configuration";
+#define MllLedsPerChannel()  (mllLedsPerChannelTxt)
+#define MllStartMsg()        (mllStartMsgTxt)
 
 MobaLedLib_C* pMobaLedLib;
 
@@ -122,13 +144,49 @@ static bool MllCfgParseHeader(const uint8_t *h, size_t fileSize, uint32_t *len /
 {
   if (fileSize < MLL_CFG_HEADER_SIZE) return false;
   if (memcmp(h, "MLLC", 4) != 0 || h[4] != MLL_CFG_VERSION) return false;
-  if (strlen(MLL_FIRMWARE_SIG) != MLL_CFG_SIG_LEN || memcmp(h + 32, MLL_FIRMWARE_SIG, MLL_CFG_SIG_LEN) != 0) return false;
+  if (strlen(MLL_FIRMWARE_SIG) != MLL_CFG_SIG_LEN || memcmp(h + MLL_CFG_SIG_OFS, MLL_FIRMWARE_SIG, MLL_CFG_SIG_LEN) != 0) return false;  // v1.01
   memcpy(ramLen, h + 6, 2);
   memcpy(len,    h + 8, 4 * MLL_CFG_PARTS);
-  memcpy(crc,    h + 28, 4);
+  memcpy(crc,    h + MLL_CFG_CRC_OFS, 4);                                                                         // v1.01
   uint64_t Sum = 0;
   for (uint8_t i = 0; i < MLL_CFG_PARTS; i++) Sum += len[i];
   return Sum + MLL_CFG_HEADER_SIZE == fileSize;
+}
+
+//-------------------------
+static bool MllParseParams(const uint8_t *p, uint32_t len)                                                       // v1.01
+//-------------------------
+// Abschnitt Parameter lesen (Aufbau siehe oben). Bei einem Fehler bleiben die Vorgabewerte (keine LEDs).
+{
+  if (len < 7) return false;
+  uint16_t Num, Start, Total;
+  memcpy(&Num, p, 2); memcpy(&Start, p + 2, 2); memcpy(&Total, p + 4, 2);
+  uint8_t N = p[6];
+  uint32_t Pos = 7;
+  if (N > MLL_MAX_LED_CH || Total > MLL_MAX_SEND_INPUTS || len < Pos + 2UL * N + 2) return false;
+  uint16_t Cnt[MLL_MAX_LED_CH], Off[MLL_MAX_LED_CH];
+  memset(Cnt, 0, sizeof(Cnt)); memset(Off, 0, sizeof(Off));
+  uint32_t Sum = 0;
+  for (uint8_t i = 0; i < N; i++)
+     {
+     memcpy(&Cnt[i], p + Pos, 2); Pos += 2;
+     Off[i] = (uint16_t)Sum;
+     Sum += Cnt[i];
+     }
+  if (Sum > 0xFFFF) return false;
+  const char *Txt[2];
+  for (uint8_t t = 0; t < 2; t++)                                                                                // zwei Texte, mit 0 abgeschlossen
+     {
+     Txt[t] = (const char*)p + Pos;
+     while (Pos < len && p[Pos]) Pos++;
+     if (Pos >= len) return false;
+     Pos++;
+     }
+  memcpy(mllChCnt, Cnt, sizeof(Cnt)); memcpy(mllChOff, Off, sizeof(Off));
+  mllNumLeds = Num < Sum ? (uint16_t)Sum : Num;
+  mllStartSend = Start; mllTotalSend = Total;
+  mllLedsPerChannelTxt = Txt[0]; mllStartMsgTxt = Txt[1];
+  return true;
 }
 
 //-------------------------
@@ -167,7 +225,8 @@ static bool MllDynLoad()
   mllDyn.extAddr  = p; mllDyn.extAddrLen = Len[1]; p += Len[1];
   mllDyn.store    = p; mllDyn.storeLen   = Len[2]; p += Len[2];
   mllDyn.l2v      = p; mllDyn.l2vLen     = Len[3]; p += Len[3];
-  mllDyn.start    = p; mllDyn.startLen   = Len[4];
+  mllDyn.start    = p; mllDyn.startLen   = Len[4]; p += Len[4];
+  if (!MllParseParams(p, Len[5])) { free(Buf); free(Ram); memset(&mllDyn, 0, sizeof(mllDyn)); mllDyn.config = mllEmptyConfig; mllDyn.configLen = sizeof(mllEmptyConfig); return false; }  // v1.01
   mllDyn.ram      = Ram;
   mllDyn.ramLen   = RamLen;
   mllDyn.id       = MllCrc32(0, Buf, Size);
