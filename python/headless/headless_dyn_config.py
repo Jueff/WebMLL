@@ -7,8 +7,9 @@
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
-#   1.01  2026-11-19  Konfigurationsdatei Format 3: neuer Abschnitt 'Parameter' mit LED-Anzahl (NUM_LEDS), LEDs je LED-Kanal, LEDS_PER_CHANNEL und START_MSG. Diese Werte stehen nicht mehr in der Firmware:
-#                     eine andere LED-Anzahl, andere LED-Gruppen oder ein anderer Starttext aendern die Firmware-Signatur nicht mehr (parse_params, pack_params; Zeilen mit '# v1.01'). Kopf 52 Bytes, SIG_SALT mlldyn-3
+#   1.01  2026-11-19  Konfigurationsdatei Format 5: neuer Abschnitt 'Parameter' mit LED-Anzahl (NUM_LEDS), LEDs je LED-Kanal, ControllerCount und Controller-Tabelle (je FastLED-Controller: Pin, erste LED, LED-Anzahl),
+#                     LEDS_PER_CHANNEL und START_MSG. Diese Werte stehen nicht mehr in der Firmware:
+#                     eine andere LED-Anzahl, andere LED-Gruppen, andere Pins oder ein anderer Starttext aendern die Firmware-Signatur nicht mehr (parse_params, pack_params; Zeilen mit '# v1.01'). Kopf 52 Bytes, SIG_SALT mlldyn-5
 #                     Auch Start und Anzahl der Send-Inputs (ENABLE_SEND_INPUT) kommen aus den Parametern; TOTAL_SWITCHES_* und TOTAL_VARIABLES zaehlen in normalize_header nicht mehr zur Signatur
 
 #   1.00  2026-11-19  Neu: Konfiguration getrennt von der Firmware (ESP32 und Pico): Konfigurationsdatei (mllcfg.bin) mit den AVR-Werkzeugen erzeugen, Firmware-Signatur berechnen,
@@ -44,10 +45,10 @@ SIG_PLACEHOLDER = "@@MLLSIG@@"
 MARK_BEGIN = "//MLLDYN_BEGIN"
 MARK_END = "//MLLDYN_END"
 # SIG_SALT = "mlldyn-2"                       # v1.01 (entfallen)
-SIG_SALT = "mlldyn-3"                       # bei Aenderungen am Format der Konfigurationsdatei oder am Protokoll erhoehen  # v1.01
+SIG_SALT = "mlldyn-5"                       # bei Aenderungen am Format der Konfigurationsdatei oder am Protokoll erhoehen  # v1.01
 BLOB_MAGIC = b"MLLC"
 # BLOB_VERSION = 2  # v1.01 (entfallen)
-BLOB_VERSION = 3  # v1.01
+BLOB_VERSION = 5  # v1.01
 SIG_LEN = 16
 # BLOB_HEADER = struct.Struct("<4sBBH5II16s")  # v1.01 (entfallen)
 BLOB_HEADER = struct.Struct("<4sBBH6II16s")  # Kennung, Version, reserviert, RAM, Laenge Config/Ext/Store/L2V/Startwerte/Parameter, CRC32 der Nutzdaten, Signatur der Firmware  # v1.01
@@ -142,7 +143,8 @@ def _run(cmd, cwd, env=None):
 
 def parse_params(header_text):  # v1.01
     """Die Werte, die nicht in die Firmware gehen, aus der Kopfdatei (Zeilen im Block //MLLDYN_BEGIN ... //MLLDYN_END):
-    NUM_LEDS, MLL_P_CHANNEL_LEDS (LEDs je LED-Kanal), MLL_P_LEDS_PER_CHANNEL, MLL_P_START_MSG sowie MLL_P_START_SEND_INPUTS und MLL_P_TOTAL_SEND_INPUTS. Fehlende Werte: 0 / leer."""  # v1.01
+    NUM_LEDS, MLL_P_CHANNEL_LEDS (LEDs je LED-Kanal), MLL_P_CONTROLLER_COUNT, MLL_P_CONTROLLER_CONFIG (je FastLED-Controller: Pin, erste LED, LED-Anzahl), MLL_P_LEDS_PER_CHANNEL, MLL_P_START_MSG
+    sowie MLL_P_START_SEND_INPUTS und MLL_P_TOTAL_SEND_INPUTS. Fehlende Werte: 0 / leer."""  # v1.01
     def number(name):  # v1.01
         m = re.search(r'^[ \t]*#[ \t]*define[ \t]+' + name + r'[ \t]+(\d+)\b', header_text, re.M)  # v1.01
         return int(m.group(1)) if m else 0  # v1.01
@@ -150,20 +152,37 @@ def parse_params(header_text):  # v1.01
     def text(name):  # v1.01
         m = re.search(r'^[ \t]*#[ \t]*define[ \t]+' + name + r'[ \t]+"([^"\r\n]*)"', header_text, re.M)  # v1.01
         return m.group(1) if m else ""  # v1.01
-    m = re.search(r'^[ \t]*#[ \t]*define[ \t]+MLL_P_CHANNEL_LEDS[ \t]+([0-9 ,\t]*)', header_text, re.M)  # v1.01
-    channels = [int(x) for x in re.sub(r"\s", "", m.group(1)).split(",") if x] if m else []  # v1.01
-    return {"num_leds": number("NUM_LEDS"), "channels": channels, "leds_per_channel": text("MLL_P_LEDS_PER_CHANNEL"), "start_msg": text("MLL_P_START_MSG"),  # v1.01
+    def numbers(name):  # v1.01
+        m = re.search(r'^[ \t]*#[ \t]*define[ \t]+' + name + r'[ \t]+([0-9 ,\t]*)', header_text, re.M)  # v1.01
+        return [int(x) for x in re.sub(r"\s", "", m.group(1)).split(",") if x] if m else []  # v1.01
+    channels = numbers("MLL_P_CHANNEL_LEDS")  # v1.01
+    flat = numbers("MLL_P_CONTROLLER_CONFIG")  # v1.01
+    if len(flat) % 3:  # v1.01
+        raise DynConfigError("MLL_P_CONTROLLER_CONFIG: je Controller werden drei Werte erwartet (Pin, erste LED, LED-Anzahl)")  # v1.01
+    controllers = [flat[i:i + 3] for i in range(0, len(flat), 3)]  # v1.01
+    return {"num_leds": number("NUM_LEDS"), "channels": channels, "controller_count": number("MLL_P_CONTROLLER_COUNT"), "controllers": controllers,  # v1.01
+            "leds_per_channel": text("MLL_P_LEDS_PER_CHANNEL"), "start_msg": text("MLL_P_START_MSG"),  # v1.01
             "start_send": number("MLL_P_START_SEND_INPUTS"), "total_send": number("MLL_P_TOTAL_SEND_INPUTS")}  # v1.01
 
 
 def pack_params(params):  # v1.01
-    """Abschnitt 'Parameter': u16 LED-Anzahl, u16 Start der Send-Inputs, u16 Anzahl der Send-Inputs, u8 Zahl der LED-Kanaele, u16 LEDs je Kanal, LEDS_PER_CHANNEL (0-terminiert), START_MSG (0-terminiert)"""  # v1.01
+    """Abschnitt 'Parameter': u16 LED-Anzahl, u16 Start der Send-Inputs, u16 Anzahl der Send-Inputs, u8 Zahl der LED-Kanaele N, N mal u16 LEDs je Kanal,
+    u8 ControllerCount, ControllerCount mal (u8 Pin, u16 erste LED, u16 LED-Anzahl), LEDS_PER_CHANNEL (0-terminiert), START_MSG (0-terminiert)"""  # v1.01
     channels = list(params.get("channels") or [])  # v1.01
+    controllers = [list(c) for c in (params.get("controllers") or [])]  # v1.01
     num_leds = int(params.get("num_leds") or 0)  # v1.01
+    controller_count = int(params.get("controller_count") or len(controllers))  # v1.01
     start_send, total_send = int(params.get("start_send") or 0), int(params.get("total_send") or 0)  # v1.01
     if len(channels) > MAX_LED_CHANNELS or any(not 0 <= v <= 0xFFFF for v in channels + [num_leds, start_send, total_send]):  # v1.01
         raise DynConfigError("Parameter der Konfiguration sind ungueltig (LED-Anzahl %s, %d LED-Kanaele)" % (num_leds, len(channels)))  # v1.01
+    if controller_count != len(controllers) or controller_count > MAX_LED_CHANNELS:  # v1.01
+        raise DynConfigError("Parameter der Konfiguration sind ungueltig (ControllerCount %d, %d Eintraege in MLL_P_CONTROLLER_CONFIG)" % (controller_count, len(controllers)))  # v1.01
+    led_total = max(num_leds, sum(channels))  # v1.01
+    for pin, offset, count in controllers:  # v1.01
+        if not 0 <= pin <= 0xFF or not 0 <= offset <= 0xFFFF or not 0 <= count <= 0xFFFF or offset + count > led_total:  # v1.01
+            raise DynConfigError("Parameter der Konfiguration sind ungueltig (Controller Pin %s, erste LED %s, LED-Anzahl %s, LEDs gesamt %d)" % (pin, offset, count, led_total))  # v1.01
     out = struct.pack("<HHHB", num_leds, start_send, total_send, len(channels)) + b"".join(struct.pack("<H", c) for c in channels)  # v1.01
+    out += struct.pack("<B", controller_count) + b"".join(struct.pack("<BHH", pin, offset, count) for pin, offset, count in controllers)  # v1.01
     for key in ("leds_per_channel", "start_msg"):  # v1.01
         out += str(params.get(key) or "").encode("utf-8") + b"\0"  # v1.01
     return out  # v1.01

@@ -1,6 +1,7 @@
 // MLLDynConfig.h - Konfiguration getrennt vom Programm (nur ESP32 und Pico)
-// Version 1.01 (2026-11-19): Dateiformat 3 mit Abschnitt 'Parameter': LED Anzahl (NUM_LEDS), LEDs je LED Kanal, LEDS_PER_CHANNEL, START_MSG und Start/Anzahl der Send-Inputs
-//                           kommen aus der Konfigurationsdatei. Zeilen mit '// v1.01'. Die ATmega Varianten benutzen diese Datei nicht (nur mit MLL_DYNAMIC_CONFIG).
+// Version 1.02 (2026-11-19): Dateiformat 5 mit Abschnitt 'Parameter': LED Anzahl, LEDs je LED Kanal, ControllerCount und Controller-Tabelle (Pin, erste LED, LED-Anzahl je FastLED-Controller),
+//                           LEDS_PER_CHANNEL, START_MSG und Start/Anzahl der Send-Inputs kommen aus der Konfigurationsdatei. SETUP_FASTLED() legt die Controller in einer Schleife
+//                           ueber mllControllerConfig[] an (MllAddLeds). Zeilen mit '// v1.02'. Die ATmega Varianten benutzen diese Datei nicht (nur mit MLL_DYNAMIC_CONFIG).
 //
 // Ist MLL_DYNAMIC_CONFIG gesetzt (der Programm Generator schreibt es in LEDs_AutoProg.h), dann stehen die Datentabellen
 //   Config[], Ext_Addr[], Store_Values[] und LED2Var_Tab[]
@@ -10,7 +11,7 @@
 //
 // Dateiformat (little endian):
 //   0  "MLLC"
-//   4  Version (3)                                                                                              // v1.01
+//   4  Version (5)                                                                                              // v1.02
 //   5  reserviert
 //   6  Groesse von Config_RAM (u16)
 //   8  Laenge Config (u32)
@@ -23,8 +24,9 @@
 //  36  Signatur der Firmware (16 Zeichen, MLL_FIRMWARE_SIG): die Datei wird nur geladen, wenn sie zu dieser Firmware gehoert  // v1.01
 //  52  Nutzdaten: Config, Ext_Addr, Store_Values, LED2Var_Tab, Startwerte, Parameter                           // v1.01
 //
-// Parameter: u16 LED Anzahl, u16 Start der Send-Inputs, u16 Anzahl der Send-Inputs, u8 Zahl der LED Kanaele N,    // v1.01
-//            N mal u16 LEDs je Kanal, LEDS_PER_CHANNEL (Text, mit 0 abgeschlossen), START_MSG (Text, mit 0 abgeschlossen)  // v1.01
+// Parameter: u16 LED Anzahl, u16 Start der Send-Inputs, u16 Anzahl der Send-Inputs, u8 Zahl der LED Kanaele N, N mal u16 LEDs je Kanal,                   // v1.02
+//            u8 ControllerCount, ControllerCount mal { u8 Pin, u16 LEDOffset, u16 LEDCount },                                                              // v1.02
+//            LEDS_PER_CHANNEL (Text, mit 0 abgeschlossen), START_MSG (Text, mit 0 abgeschlossen)                                                          // v1.02
 //
 // Serielles Protokoll (Zeilen, die mit '~' beginnen; Antworten ebenfalls):
 //   ~MLLCFG INFO                      -> ~MLLCFG INFO proto=2 sig=<Signatur> cfg=<CRC32 der Datei> valid=<0|1> free=<Bytes>
@@ -51,7 +53,7 @@
 // #define MLL_CFG_HEADER_SIZE  48                                                                                  // v1.01 (entfallen)
 // #define MLL_CFG_VERSION      2                                                                                   // v1.01 (entfallen)
 // #define MLL_CFG_PARTS        5                                                                                   // v1.01 (entfallen)
-#define MLL_CFG_VERSION      3                                                                                   // v1.01
+#define MLL_CFG_VERSION      5                                                                                   // v1.02
 #define MLL_CFG_PARTS        6                                                                                   // v1.01
 #define MLL_CFG_CRC_OFS      (8 + 4 * MLL_CFG_PARTS)                                                             // v1.01
 #define MLL_CFG_SIG_OFS      (MLL_CFG_CRC_OFS + 4)                                                               // v1.01
@@ -76,8 +78,18 @@ static MllDynConfig_T mllDyn;
 static const uint8_t  mllEmptyConfig[] = { EndCfg };
 
 // Parameter aus der Konfigurationsdatei (v1.01). mllNumLeds und das Feld leds[] stehen in LEDs_AutoProg.ino (die LED Anzahl ist erst nach MllDynLoad() bekannt)
-static uint16_t    mllChCnt[MLL_MAX_LED_CH];                       // LEDs je LED Kanal
+static uint16_t    mllChCnt[MLL_MAX_LED_CH];                       // LEDs je LED Kanal (DMX_LED_OFFSET/DMX_CHANNEL_COUNT)
 static uint16_t    mllChOff[MLL_MAX_LED_CH];                       // erste LED des Kanals (Summe der LEDs der Kanaele davor)
+
+typedef struct                                                                                                   // v1.02
+    {
+    uint8_t  Pin;                                                  // Arduino Pin (muss in MLL_LED_PINS stehen)
+    uint16_t LEDOffset;                                            // erste LED in leds[]
+    uint16_t LEDCount;                                             // Zahl der LEDs an diesem Pin
+    } MllControllerConfig_T;
+
+static MllControllerConfig_T mllControllerConfig[MLL_MAX_LED_CH];   // ein Eintrag je FastLED-Controller (SETUP_FASTLED)                // v1.02
+static uint8_t     mllControllerCount = 0;                          // Zahl der benutzten Eintraege in mllControllerConfig[]           // v1.02
 static uint16_t    mllStartSend = 0, mllTotalSend = 0;             // Start und Anzahl der Send-Inputs (ENABLE_SEND_INPUT)
 static const char *mllLedsPerChannelTxt = ",0";
 static const char *mllStartMsgTxt = "LEDs_AutoProg: no configuration";
@@ -154,16 +166,16 @@ static bool MllCfgParseHeader(const uint8_t *h, size_t fileSize, uint32_t *len /
 }
 
 //-------------------------
-static bool MllParseParams(const uint8_t *p, uint32_t len)                                                       // v1.01
+static bool MllParseParams(const uint8_t *p, uint32_t len)                                                       // v1.02
 //-------------------------
 // Abschnitt Parameter lesen (Aufbau siehe oben). Bei einem Fehler bleiben die Vorgabewerte (keine LEDs).
 {
   if (len < 7) return false;
   uint16_t Num, Start, Total;
-  memcpy(&Num, p, 2); memcpy(&Start, p + 2, 2); memcpy(&Total, p + 4, 2);
-  uint8_t N = p[6];
+  uint8_t N;
+  memcpy(&Num, p, 2); memcpy(&Start, p + 2, 2); memcpy(&Total, p + 4, 2); N = p[6];
   uint32_t Pos = 7;
-  if (N > MLL_MAX_LED_CH || Total > MLL_MAX_SEND_INPUTS || len < Pos + 2UL * N + 2) return false;
+  if (N > MLL_MAX_LED_CH || Total > MLL_MAX_SEND_INPUTS || len < Pos + 2UL * N + 1) return false;
   uint16_t Cnt[MLL_MAX_LED_CH], Off[MLL_MAX_LED_CH];
   memset(Cnt, 0, sizeof(Cnt)); memset(Off, 0, sizeof(Off));
   uint32_t Sum = 0;
@@ -174,6 +186,19 @@ static bool MllParseParams(const uint8_t *p, uint32_t len)                      
      Sum += Cnt[i];
      }
   if (Sum > 0xFFFF) return false;
+  uint16_t Leds = Num < Sum ? (uint16_t)Sum : Num;
+  uint8_t ControllerCount = p[Pos++];
+  if (ControllerCount > MLL_MAX_LED_CH || len < Pos + 5UL * ControllerCount + 2) return false;
+  MllControllerConfig_T Ctrl[MLL_MAX_LED_CH];
+  memset(Ctrl, 0, sizeof(Ctrl));
+  for (uint8_t i = 0; i < ControllerCount; i++)
+     {
+     Ctrl[i].Pin = p[Pos];
+     memcpy(&Ctrl[i].LEDOffset, p + Pos + 1, 2);
+     memcpy(&Ctrl[i].LEDCount,  p + Pos + 3, 2);
+     Pos += 5;
+     if ((uint32_t)Ctrl[i].LEDOffset + Ctrl[i].LEDCount > Leds) return false;
+     }
   const char *Txt[2];
   for (uint8_t t = 0; t < 2; t++)                                                                                // zwei Texte, mit 0 abgeschlossen
      {
@@ -183,11 +208,32 @@ static bool MllParseParams(const uint8_t *p, uint32_t len)                      
      Pos++;
      }
   memcpy(mllChCnt, Cnt, sizeof(Cnt)); memcpy(mllChOff, Off, sizeof(Off));
-  mllNumLeds = Num < Sum ? (uint16_t)Sum : Num;
+  memcpy(mllControllerConfig, Ctrl, sizeof(Ctrl));
+  mllControllerCount = ControllerCount;
+  mllNumLeds = Leds;
   mllStartSend = Start; mllTotalSend = Total;
   mllLedsPerChannelTxt = Txt[0]; mllStartMsgTxt = Txt[1];
   return true;
 }
+
+#if defined(MLL_LED_PINS) && defined(MLL_ADD_LEDS)                                                              // v1.02
+//-----------------------------------------------------------------
+static CLEDController *MllAddLeds(const MllControllerConfig_T &Cfg)
+//-----------------------------------------------------------------
+// FastLED braucht den Pin als Konstante (Template-Argument). Die Firmware enthaelt deshalb einen Zweig fuer jeden
+// Pin aus MLL_LED_PINS (LEDs_AutoProg.h, fest je Plattform); welcher benutzt wird, steht in der Konfigurationsdatei.
+// Unbekannter Pin: NULL (die LEDs an diesem Pin bleiben dunkel).
+{
+  CRGB *Data = leds + Cfg.LEDOffset;
+  switch (Cfg.Pin)
+     {
+     #define MLL_ADD_LEDS_CASE(P) case P: return &MLL_ADD_LEDS(P, Data, Cfg.LEDCount);
+     MLL_LED_PINS(MLL_ADD_LEDS_CASE)
+     #undef MLL_ADD_LEDS_CASE
+     default: return NULL;
+     }
+}
+#endif
 
 //-------------------------
 static bool MllDynLoad()
