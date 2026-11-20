@@ -1,5 +1,5 @@
 # webMobaLedLib – Installation und Betrieb
-*Datei-Version: 4.36 (2026-11-19), gilt für webMobaLedLib 4.36*
+*Datei-Version: 4.38 (2026-11-19), gilt für webMobaLedLib 4.38*
 
 Windows · macOS · Linux-Desktop · Raspberry Pi
 
@@ -297,6 +297,7 @@ Minus) Platz.
 - **Ein Klick auf das Symbol** (Spalte „Icon“) öffnet die Makroauswahl.
 - **Zellen von Hand bearbeiten:** **F2** oder **Enter** auf der markierten Zelle, ein **Doppelklick** (siehe unten) oder im Kontextmenü (Rechtsklick auf die Zelle) **Zelle bearbeiten**.
   Das ist zum Beispiel in der Spalte „Beleuchtung, Sound, oder andere Effekte“ oft schneller als der Dialog, um einen Parameter zu ändern.
+  Bei einem erkannten Syntaxfehler kannst du den ursprünglichen Makrotext wiederherstellen oder den Text im Dialog weiter bearbeiten. Beim Wechsel auf ein anderes Makro werden Name und Symbol aktualisiert. Nach jeder Änderung des Makrotexts werden außerdem **LEDs, InCnt, LocInCh**, die Adressspalten, die Testtasten und die **Start-LEDs** neu gesetzt, wie nach dem Auswahldialog (zum Beispiel ändert sich die LED-Zahl von 6 auf 1, wenn du `ConstrWarnLightRGB6(…)` durch `ConstRGB(…)` ersetzt). Eine von Hand eingetragene Zahl in der Spalte LEDs wird dabei überschrieben; der LED Kanal und die Spalte Aktiv bleiben unverändert. Makros mit eigenem Dialog (z. B. House, ColTab, Pattern) werden nicht neu berechnet. Alle Felder werden zusammen mit dem Makrotext durch Rückgängig wiederhergestellt. Die Prüfung kontrolliert die Struktur und bei passenden Bibliotheksmakros die Parameterzahl, ersetzt aber nicht das Kompilieren.
 - **Doppelklick auf Name und Beleuchtung:** Wie in der Excel-Version kann ein Doppelklick auf diese beiden Spalten die **Makroauswahl** öffnen. Das ist **standardmäßig aus**
   (ein Doppelklick bearbeitet die Zelle). Einschalten: Reiter **Programm Einstellungen**, Karte **Bedienung der Tabelle**, Haken **„Doppelklick auf Name und Beleuchtung öffnet die
   Makroauswahl“**, dann **Speichern**. Er gilt nur in Datenzeilen der Datenblätter, die Kopfzeilen bleiben unverändert.
@@ -439,7 +440,7 @@ Kurzfassung der Änderungen seit dem letzten Release, neueste Version zuerst (au
 **Version 4.36**
 
 *Neue Funktionen:*
-- Schnelles Update für ESP32 und Pico (Beitrag von Jürgen, Issue 31): Mit dem Haken „Schnelles Update“ im Reiter Entwicklungsumgebung wird das Programm nur hochgeladen, wenn es nötig ist; sonst geht nur die Konfiguration in wenigen Sekunden zur Lichtmaschine. Bei jeder Unsicherheit wird komplett hochgeladen. Nano und Uno ändern sich nicht. Zur Konfiguration gehören auch die Zahl der LEDs (gesamt und je LED-Kanal), der Starttext und die Send-Inputs (Schalter `ENABLE_SEND_INPUT`): Ändert sich nur das, geht ebenfalls nur die Konfiguration zum Gerät. Ein neuer oder entfallener LED-Kanal, andere Pins, `CTR_CHANNELS_*` und `ADDR_OFFSET` ändern weiterhin die Firmware. Nach der Aktualisierung auf diese Version ist einmal ein kompletter Upload je Gerät nötig.
+- Schnelles Update für ESP32 und Pico (Beitrag von Jürgen, Issue 31): Mit dem Haken „Schnelles Update“ im Reiter Entwicklungsumgebung wird das Programm nur hochgeladen, wenn es nötig ist; sonst geht nur die Konfiguration in wenigen Sekunden zur Lichtmaschine. Bei jeder Unsicherheit wird komplett hochgeladen. Nano und Uno ändern sich nicht.
 
 **Version 4.35**
 
