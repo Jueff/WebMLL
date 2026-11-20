@@ -1,8 +1,8 @@
-# Datei-Version: 1.25 (2026-11-19) - web_tabs.py
+# Datei-Version: 1.26 (2026-11-20) - web_tabs.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_tabs.py
 # Path:           _web/web_tabs.py
-# Version:        1.25
+# Version:        1.26
 # Last Update:    2026-11-19
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
@@ -33,6 +33,7 @@
 #   1.23  2026-11-18  Reiter ProgGenerator Einstellungen heisst Tabelle Faerben; neue Optionen AutoColorRows und HideColorButton (Seite Tabelle Faerben, vor den Bedingungen)
 #   1.24  2026-11-19  Neue Einstellung AutoConnect (Allgemeine Einstellungen): beim Start mit der Lichtmaschine verbinden und nach dem Hochladen verbinden; is_auto_connect (Issue 20)
 #   1.25  2026-11-19  Neue Einstellung IncrSaveKey: Tastenkombination fuers inkrementelle Speichern (Allgemeine Einstellungen, Issue 21)
+#   1.26  2026-11-20  Neue Einstellungen SetupCloseOnSuccess und SetupCloseOnError (Allgemeine Einstellungen): Uebertragungsfenster nach Erfolg/Fehler automatisch schliessen (Issue 41, Pull Request 44)
 # ----------------------------------------------------------------------------------------------
 """Adressen der Reiter: Ein Reiter laesst sich direkt aufrufen, zum Beispiel http://localhost:8080/Farbtest. Mit dem Zusatz ?vollbild=1 oeffnet er sich gleich im Vollbild
 (Titel, Menue und Reiterleiste ausgeblendet, siehe web_fullscreen). Die Startseite / bleibt wie sie ist (Programm Generator).
@@ -162,7 +163,15 @@ PARAM_ADDITIONS = {"ColoredRowsBold": ({"ParName": "ColoredRowsBold", "Cnt": "1"
                  "IncrSaveKey": ({"ParName": "IncrSaveKey", "Cnt": "1", "Type": "String", "ConfigName": "IncrSaveKey", "ParamLabelWidth": "25", "Min": "0", "Max": "255", "Default": "Strg+Umschalt+S",  # v1.25
                                   "Input Text": "Tastenkombination: Inkrementell speichern",  # v1.25
                                   "Hint": "Tastenkombination für Datei → Inkrementell speichern, zum Beispiel Strg+Umschalt+S, Strg+Alt+S oder Strg+F9. Sie muss Strg oder Alt oder eine F-Taste enthalten. Ist die Kombination vom Betriebssystem oder von einem anderen Programm belegt (zum Beispiel für Screenshots), stelle hier eine andere ein. Leer: Vorgabe Strg+Umschalt+S. Die Änderung gilt nach dem Speichern der Einstellungen sofort."},  # v1.25
-                                 "AutoConnect")}  # v1.25
+                                 "AutoConnect"),  # v1.25
+                 "SetupCloseOnSuccess": ({"ParName": "SetupCloseOnSuccess", "Cnt": "1", "Type": "Combo", "Values": ["sofort", "5 Sekunden", "10 Sekunden", "30 Sekunden", "nie"], "ValuesText": ["sofort", "5 Sekunden", "10 Sekunden", "30 Sekunden", "nie"], "ConfigName": ["SetupCloseOnSuccess", "SetupCloseOnSuccessIdx"], "ParamLabelWidth": "25", "Min": "0", "Max": "255", "Default": "5 Sekunden",  # v1.26
+                                           "Input Text": "Fenster nach Erfolg automatisch schließen",  # v1.26
+                                           "Hint": "Legt fest, wie lange das Übertragungsfenster nach einem erfolgreichen Setup-Upload offen bleibt. 'nie' lässt es offen."},  # v1.26
+                                          "IncrSaveKey"),  # v1.26
+                 "SetupCloseOnError": ({"ParName": "SetupCloseOnError", "Cnt": "1", "Type": "Combo", "Values": ["sofort", "5 Sekunden", "10 Sekunden", "30 Sekunden", "nie"], "ValuesText": ["sofort", "5 Sekunden", "10 Sekunden", "30 Sekunden", "nie"], "ConfigName": ["SetupCloseOnError", "SetupCloseOnErrorIdx"], "ParamLabelWidth": "25", "Min": "0", "Max": "255", "Default": "30 Sekunden",  # v1.26
+                                       "Input Text": "Fenster nach Fehler automatisch schließen",  # v1.26
+                                       "Hint": "Legt fest, wie lange das Übertragungsfenster nach einem Fehler offen bleibt. 'nie' hält das Fenster offen, damit die Meldung gelesen werden kann."},  # v1.26
+                                      "SetupCloseOnSuccess")}  # v1.26
 
 
 # Optionen des Tk-Programms, die im Web keine Wirkung haben und deshalb nicht angezeigt werden: Der Reiter Patterngenerator ist immer da

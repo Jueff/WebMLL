@@ -1,12 +1,13 @@
-# Datei-Version: 1.10 (2026-11-19) - web_log.py
+# Datei-Version: 1.11 (2026-11-20) - web_log.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_log.py
 # Path:           _web/web_log.py
-# Version:        1.10
-# Last Update:    2026-11-19
+# Version:        1.11
+# Last Update:    2026-11-20
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
+#   1.11  2026-11-20  Erfolgsfenster schliesst sich nach konfigurierbarer Verzögerung automatisch (MLL_WEBLOG_CLOSE_DELAY, 0 = sofort)
 #   1.10  2026-11-19  Vorgang abbrechen beendet zuerst einen laufenden ESP32-Build oder -Upload (headless_esp32_ota.cancel_running), sonst wie bisher
 #   1.09  2026-11-19  run_id: Nummer des Laufs im Fenster; Schliessen wird auch dann aktiv, wenn ein umgebendes Formular (OTA) noch als beschaeftigt gilt (Minimale Firmware per USB)
 #   1.08  2026-11-19  Schliessen erst aktiv, wenn der Vorgang fertig ist; Vorgang abbrechen nur, solange er laeuft (set_running; Issue 28, Juergen)
@@ -26,6 +27,7 @@ Jede Zeile steht ausserdem im Protokoll (Logger webmobaledlib.arduino, Stufe INF
 from __future__ import annotations
 
 import logging
+import os
 import re  # v1.06
 
 from _web import web_dialogs as wd
@@ -49,7 +51,10 @@ def is_ide_network_noise(line) -> bool:  # v1.06
 
 
 HIGHLIGHT_CLASSES = {"Error": "text-red-8", "OK": "text-green-8", "O": "text-green-8"}
-CLOSE_DELAY = 10          # Sekunden, die die Erfolgsmeldung nach einem erfolgreichen Lauf lesbar bleibt
+try:
+    CLOSE_DELAY = max(0, min(300, int(os.environ.get("MLL_WEBLOG_CLOSE_DELAY", "5"))))
+except ValueError:
+    CLOSE_DELAY = 5
 DEFAULT_TITLE = "Kompilieren und Hochladen"
 INSTALL_TITLE = "Installation der Boards und Bibliotheken"
 
@@ -62,7 +67,9 @@ class WebLog:
         self._dialog = None
         self._loop = None
         self._close_handle = None
+        self._close_note = None                       # verhindert doppelte Meldungen beim mehrfachen Aufruf
         self.last_result = None                       # "OK" oder "Error": Ergebnis der letzten Befehlszeile (execute_shell_cmd)
+        self.close_delay = CLOSE_DELAY                # v1.11: konfigurierbar per ENV MLL_WEBLOG_CLOSE_DELAY (0 = sofort schliessen)
         self.title = DEFAULT_TITLE
         self._title_label = None
         self._running = False                         # v1.08: laeuft gerade ein Vorgang? (steuert Schliessen und Vorgang abbrechen)
@@ -166,22 +173,82 @@ class WebLog:
         except RuntimeError:                           # Browserseite wurde geschlossen/neu geladen
             self._btn_cancel = self._btn_close = None
 
-    def close_later_if_ok(self):
-        """Nach einem Befehl: Fenster schliessen, wenn die letzte Ausgabe ein Erfolg war (z. B. Bibliotheken installieren).
-        Nach einem Fehler bleibt es offen, damit man die Meldung lesen kann."""
-        if self.last_result == "OK":
-            self.close_later()
+    def _close_delay_for(self, setting_name, fallback=None):
+        """Wert der Auto-Close-Option aus den Programm Einstellungen: 'sofort', '5 Sekunden', ..., 'nie' -> None."""
+        if self.ctrl is None:
+            return fallback
+        try:
+            raw = self.ctrl.getConfigData(setting_name)
+            if raw is None or raw == "":
+                raw = self.ctrl.getConfigData(setting_name + "Idx")
+        except Exception:                                  # noqa: BLE001
+            raw = None
+        if raw is None or raw == "":
+            return fallback
+        if isinstance(raw, str):
+            text = raw.strip()
+            if text.lower() in ("sofort", "0"):
+                return 0
+            if text.lower() in ("5 sekunden", "5"):
+                return 5
+            if text.lower() in ("10 sekunden", "10"):
+                return 10
+            if text.lower() in ("30 sekunden", "30"):
+                return 30
+            if text.lower() in ("nie", "never", "no"):
+                return None
+            try:
+                return max(0, int(float(text)))
+            except ValueError:
+                return fallback
+        try:
+            value = int(raw)
+        except (TypeError, ValueError):
+            return fallback
+        if value == 0:
+            return 0
+        if value == 1:
+            return 5
+        if value == 2:
+            return 10
+        if value == 3:
+            return 30
+        if value == 4:
+            return None
+        return fallback
 
-    def close_later(self, seconds=CLOSE_DELAY):
+    def close_later_if_ok(self, *, on_error=False):
+        """Nach einem Befehl: Fenster schliessen, wenn die letzte Ausgabe ein Erfolg war (z. B. Bibliotheken installieren).
+        Bei Fehler wird nur dann automatisch geschlossen, wenn in den Einstellungen eine Zeit gesetzt wurde."""
+        if self.last_result == "OK":
+            self.close_later(self._close_delay_for("SetupCloseOnSuccess", self.close_delay))
+        elif on_error:
+            delay = self._close_delay_for("SetupCloseOnError", 30)
+            if delay is not None:
+                self.close_later(delay)
+
+    def close_later(self, seconds=None):
         """Nach einem erfolgreichen Lauf: Fenster nach einigen Sekunden schliessen (Zeit zum Lesen)."""
+        if seconds is None:
+            seconds = self.close_delay
+        else:
+            seconds = max(0, seconds)
+        if seconds is None:
+            return
+        note = tr('Dieses Fenster schließt sich in {seconds} Sekunden.', seconds=seconds) if seconds > 0 else None
+        if note is not None and self._close_note == note and self._close_handle is not None:
+            return
         def schedule():
             self._cancel_close()
             if self._dialog is None or not self._dialog.value:        # nicht vorhanden oder schon geschlossen
                 return
-            # note = f"Dieses Fenster schließt sich in {seconds} Sekunden."  # v1.05 (entfallen)
-            note = tr('Dieses Fenster schließt sich in {seconds} Sekunden.', seconds=seconds)  # v1.05
-            self.lines.append((note, "text-grey-7"))
-            self._push(note, "text-grey-7")
+            if note is not None:
+                if not self.lines or self.lines[-1][0] != note:
+                    self.lines.append((note, "text-grey-7"))
+                    self._push(note, "text-grey-7")
+                self._close_note = note
+            else:
+                self._close_note = None
             self._close_handle = self._loop.call_later(seconds, self._close_now)
         loop = self._loop or wd._bridge.get("loop")
         if loop is not None:
@@ -190,6 +257,7 @@ class WebLog:
 
     def _close_now(self):
         self._close_handle = None
+        self._close_note = None
         if self._dialog is not None:
             self._dialog.close()
 
@@ -197,6 +265,7 @@ class WebLog:
         if self._close_handle is not None:
             self._close_handle.cancel()
             self._close_handle = None
+        self._close_note = None
 
     def _push(self, line, classes):
         if self._log is not None:

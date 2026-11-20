@@ -1,8 +1,8 @@
-# Datei-Version: 4.37 (2026-11-20) - webmobaledlib.py
+# Datei-Version: 4.40 (2026-11-20) - webmobaledlib.py
 # ----------------------------------------------------------------------------------------------
 # Name:           webmobaledlib.py
 # Path:           webmobaledlib.py
-# Version:        4.37
+# Version:        4.40
 # Last Update:    2026-11-19
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
@@ -286,6 +286,9 @@
 #   4.20  2026-11-19  Kopfbereich (Issue 22): Reiterhoehe 36 px griff nicht (Screenshot: Reiter noch ca. 50 px hoch); jetzt mit !important und auch fuer .q-tab__content, Menuetasten ebenfalls !important
 #   4.21  2026-11-19  Erweiterungen: platformio.ini zeigt auf den Ordner der Erweiterung statt auf MobaLedLib.properties, mit symlink:// (M38_Extensions 1.07; Issue 6, Juergen)
 #   4.22  2026-11-19  Erweiterungen: Name und Beschreibung aus libraries.json anzeigen (headless_extensions 1.03, web_form_options 1.38; Issue 6, Juergen)
+#   4.40  2026-11-20  Pull Request 44 von Juergen (Issues 41, 42): Makrotext bei direkter Eingabe pruefen (Fehler korrigieren oder wiederherstellen), bei Makrowechsel Name und Symbol aktualisieren, danach LEDs, InCnt, LocInCh, Adressen, Testtasten und Start-LEDs neu setzen (headless_macro_edit 1.01); Uebertragungsfenster schliesst sich automatisch (web_log 1.11)
+#   4.39  2026-11-20  Issue 48: Fehlerpruefung beim Erzeugen der Kopfdatei (zum Beispiel Adresse mit zwei verschiedenen Typen) wirkte nicht, das Kompilieren startete trotzdem (M06_Write_Header 1.13)
+#   4.38  2026-11-20  Tastenkuerzel ueberall auf der Seite (Issue 49, Juergen): Strg+Z Rueckgaengig, Strg+Y / Strg+Umschalt+Z Wiederholen, neu Strg+S = dauerhaft speichern in die Hauptdatei (Menue Datei: Speichern); nicht in Eingabefeldern und Dialogen
 #   4.37  2026-11-20  Pull Request 47 von Juergen (Issue 46): LED-Controller-Tabelle (Pin, erste LED, LED-Anzahl je FastLED-Controller) kommt aus der Konfigurationsdatei, Format 5; geaenderte Pins oder LED-Aufteilung brauchen keinen vollen Upload mehr (headless_dyn_config 1.01, M06_Write_Header 1.12, M06_Write_Header_SW 1.10, MLLDynConfig.h 1.02)
 #   4.36  2026-11-19  (Pull Request 33 von Juergen, Issue 31)    ESP32/Pico: Konfiguration getrennt von der Firmware, Programm nur bei Aenderungen hochladen (Einstellung serial_cfg; headless_dyn_config 1.00, M42_Dyn_Config 1.01, M06_Write_Header 1.11, M06_Write_Header_LED2Var 1.02, M08_ARDUINO 1.26, web_form_options 1.39, LEDs_AutoProg/MLLDynConfig.h)
 #   4.23  2026-11-19  Kontextmenue in der Tabelle: Ist das Browserfenster niedriger als das Menue (seit 4.02 mit Rueckgaengig/Wiederholen laenger), lag der Anfang ausserhalb des Fensters; JS_MENU_FIT haelt jedes Quasar-Menue im sichtbaren Bereich (Rueckmeldung Harold, 4.22)
@@ -1103,6 +1106,28 @@ JS_MENU_FIT = """
 })();
 """
 
+# Tastenkuerzel ueberall auf der Seite (Issue 49): Strg+Z Rueckgaengig, Strg+Y / Strg+Umschalt+Z Wiederholen, Strg+S Speichern.
+# Nicht in Eingabefeldern und Zellen im Bearbeitungsmodus (dort gilt Rueckgaengig des Browsers) und nicht, solange ein Dialog offen ist.
+JS_HOTKEYS = """
+(function () {
+  document.addEventListener('keydown', function (e) {
+    if (!e.key || !(e.ctrlKey || e.metaKey) || e.altKey) { return; }
+    var key = e.key.toLowerCase(), op = null;
+    if (key === 'z' && !e.shiftKey) { op = 'undo'; }
+    else if (key === 'y' || (key === 'z' && e.shiftKey)) { op = 'redo'; }
+    else if (key === 's' && !e.shiftKey) { op = 'save'; }
+    if (!op) { return; }
+    var t = e.target, tag = t && t.tagName ? t.tagName.toUpperCase() : '';
+    var editing = tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || (t && t.isContentEditable);
+    if (op === 'save') { e.preventDefault(); }      // nie der Browser-Dialog 'Seite speichern'
+    if (editing || document.querySelector('.q-dialog')) { return; }
+    e.preventDefault(); e.stopPropagation();
+    if (typeof emitEvent === 'function') { emitEvent('mll_hotkey', {op: op}); }
+  }, true);
+})();
+"""
+
+
 JS_INCR_SAVE = """
 window.mllIncrKey = window.mllIncrKey || null;
 (function () {
@@ -1373,7 +1398,7 @@ def font_scales(ctrl) -> dict:
 # VERSION = "3.60 (2026-11-16)"  # v3.60 (entfallen)
 # VERSION = "3.61 (2026-11-16)"  # v3.61 (entfallen)
 # VERSION = "3.62 (2026-11-16)"  # v3.62 (entfallen)
-VERSION = "4.37 (2026-11-20)"  # v3.64  # v4.26  # v4.27  # v4.28  # v4.29  # v4.30  # v4.31  # v4.32  # v4.33  # v4.34  # v4.35  # v4.36  # v4.37
+VERSION = "4.40 (2026-11-20)"  # v3.64  # v4.26  # v4.27  # v4.28  # v4.29  # v4.30  # v4.31  # v4.32  # v4.33  # v4.34  # v4.35  # v4.36  # v4.37  # v4.38  # v4.39  # v4.40
 # VERSION = "4.09 (2026-11-19)"  # v3.64 (entfallen)
 # VERSION = "4.08 (2026-11-19)"  # v3.64 (entfallen)
 # VERSION = "4.07 (2026-11-19)"  # v3.64 (entfallen)
@@ -1997,6 +2022,7 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
     ui.add_head_html("<script>" + JS_COPY_HELPER + "</script>")
     ui.add_head_html("<script>" + JS_FIND + "</script>")  # v3.28
     ui.add_head_html("<script>" + JS_INCR_SAVE + "</script>")  # v4.15
+    ui.add_head_html("<script>" + JS_HOTKEYS + "</script>")  # v4.38 (Issue 49)
     ui.add_head_html("<script>" + JS_MENU_FIT + "</script>")  # v4.23
     ui.add_css(CSS_GRID)
     from _web import web_layout                        # kompaktes Layout fuer kleine Bildschirme (Programm Einstellungen)
@@ -4284,17 +4310,19 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
             undo_stacks[getattr(ws, "Name", "")] = st
         return st
 
-    def undo_record(ws, before: list, label: str, rows: int, redo_stack: bool = False):  # v4.02
-        """before: [((zeile0, spalte0), alter Text)]; der neue Text wird jetzt aus der Tabelle gelesen. Nur echte Aenderungen."""
+    def undo_record(ws, before: list, label: str, rows: int, redo_stack: bool = False, include_unchanged: bool = False):  # v4.02
+        """before: [((zeile0, spalte0), alter Text)]; der neue Text wird jetzt aus der Tabelle gelesen."""
         cells = []
+        changed = 0  # v4.37
         for (r, c), old in before:
             new = undo_cell(ws, r, c)
-            if new != old:
+            changed += new != old  # v4.37
+            if new != old or include_unchanged:
                 cells.append(((r, c), old, new))
-        if not cells:
+        if not changed:
             return
         st = undo_stack(ws)
-        st["undo"].append({"label": f"{label}, {len(cells)} " + (tr("Zellen") if len(cells) != 1 else tr("Zelle")),
+        st["undo"].append({"label": f"{label}, {changed} " + (tr("Zellen") if changed != 1 else tr("Zelle")),  # v4.37
                            "cells": cells, "rows": rows})
         del st["undo"][:-UNDO_MAX]
         st["redo"].clear()
@@ -4337,6 +4365,85 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
         base = tr("Wiederholen") if redo else tr("Rückgängig")
         return f"{base}: {stack[-1]['label']}" if stack else base
 
+    from headless import headless_macro_edit as macro_edit
+    def validate_macro_text(ws, text):
+        parsed = macro_edit.parse_call(text)
+        if parsed is None:
+            return
+        ws.Activate()
+        lib_row = M09SM.Find_Macro_in_Lib_Macros_Sheet(parsed[0] + "(")
+        if not lib_row:
+            return  # Custom macros can be defined outside Lib_Macros.
+        lib = wb.Sheets(M02.LIBMACROS_SH)
+        if str(lib.Cells(lib_row, M02.SM_Typ___COL)).strip() or str(lib.Cells(lib_row, M02.SM_Mode__COL)).strip():
+            return  # Special forms have their own, sometimes variable syntax.
+        template = str(lib.Cells(lib_row, M02.SM_Macro_COL))
+        param_sheet = wb.Sheets(M02.PAR_DESCR_SH)
+        types = {str(r[0]).strip(): str(r[2]).strip() for r in param_sheet.tksheet.data if len(r) > 2}
+        count = macro_edit.expected_argument_count(template, types)
+        if count is not None and len(parsed[1]) != count:
+            raise macro_edit.MacroSyntaxError(tr("Das Makro erwartet {expected} Parameter, angegeben wurden {actual}.",
+                                                  expected=count, actual=len(parsed[1])))
+    def macro_field_values(ws, text):  # v4.38
+        """(Zeile in Lib_Macros, Werte fuer LEDs/InCnt/LocInCh) wie im Auswahldialog; Werte None bei Makros mit eigenem Dialog."""  # v4.38
+        parsed = macro_edit.parse_call(text)  # v4.38
+        if parsed is None:  # v4.38
+            return 0, None  # v4.38
+        lib_row = M09SM.Find_Macro_in_Lib_Macros_Sheet(parsed[0] + "(")  # v4.38
+        if not lib_row:  # v4.38
+            return 0, None  # v4.38
+        lib = wb.Sheets(M02.LIBMACROS_SH)  # v4.38
+        types = {str(r[0]).strip(): str(r[2]).strip() for r in wb.Sheets(M02.PAR_DESCR_SH).tksheet.data if len(r) > 2}  # v4.38
+        cells = {"typ": lib.Cells(lib_row, M02.SM_Typ___COL), "leds": lib.Cells(lib_row, M02.SM_LEDS__COL),  # v4.38
+                 "incnt": lib.Cells(lib_row, M02.SM_InCnt_COL), "locinch": lib.Cells(lib_row, M02.SM_LocInCCOL),  # v4.38
+                 "sngled": lib.Cells(lib_row, M02.SM_SngLEDCOL), "template": lib.Cells(lib_row, M02.SM_Macro_COL)}  # v4.38
+        count_inch = getattr(M09SM, "__Get_Number_of_used_InCh_in_Par")  # v4.38
+        return lib_row, macro_edit.macro_row_fields(cells, text, types, count_inch)  # v4.38
+    def apply_macro_fields(ws, row, fields):  # v4.38
+        """Schreibt LEDs, InCnt und LocInCh wie der Auswahldialog und berechnet Adressen, Testtasten und Start-LEDs neu."""  # v4.38
+        old_leds = str(X02.CRange(row, M25.LEDs____Col, ws=ws).Value or "")  # v4.38
+        leds = fields["leds"]  # v4.38
+        if leds is not None:  # v4.38
+            if old_leds.lstrip().startswith("^") and M20.Check_IsSingleChannelCmd(leds):  # v4.38: Kennzeichnung 'gleicher Kanal wie vorher' bleibt
+                leds = "^ " + leds  # v4.38
+            X02.CRange(row, M25.LEDs____Col, ws=ws).Value = leds  # v4.38
+        if fields["incnt"] is not None:  # v4.38
+            X02.CRange(row, M25.InCnt___Col, ws=ws).Value = fields["incnt"]  # v4.38
+        X02.CRange(row, M25.LocInCh_Col, ws=ws).Value = fields["locinch"]  # v4.38
+        old_events = X02.Application.EnableEvents  # v4.38
+        X02.Application.EnableEvents = False  # v4.38
+        try:  # v4.38
+            M20.Complete_Addr_Column_with_InCnt(row)  # v4.38
+            M20.Update_TestButtons(row)  # v4.38
+            M20.Update_Start_LedNr()  # v4.38
+        finally:  # v4.38
+            X02.Application.EnableEvents = old_events  # v4.38
+    async def correct_macro_text(ws, text, error):
+        with ui.dialog().props("persistent") as dlg, ui.card().classes("w-[720px] max-w-full"):
+            ui.label(tr("Ungültiger Makrotext")).classes("text-h6 text-negative")
+            message = ui.label(error).classes("text-negative")
+            editor = ui.textarea(tr("Makrotext"), value=text).props("outlined autogrow").classes("w-full")
+            with ui.row().classes("w-full justify-end"):
+                ui.button(tr("Ursprünglichen Makrotext wiederherstellen"), on_click=lambda: dlg.submit(None)).props("flat")
+                ui.button(tr("Änderung prüfen"), on_click=lambda: dlg.submit(editor.value)).props("color=primary")
+        while True:
+            candidate = await dlg
+            if candidate is None:
+                return None
+            try:
+                await run_in_worker(lambda: validate_macro_text(ws, candidate))
+            except macro_edit.MacroSyntaxError as ex:
+                message.set_text(tr(str(ex)))
+            except Exception as ex:
+                logger.exception("Makrotext konnte nicht geprüft werden")
+                message.set_text(tr("Fehler beim Prüfen des Makrotexts: {ex}", ex=ex))
+            else:
+                return candidate
+    def restore_grid_row(ws, row):
+        show(ws)
+        original = next((r for r in grid.options.get("rowData", []) if r.get("_r") == row - 1), None)
+        if original is not None:
+            grid.run_grid_method("applyTransaction", {"update": [original]})
     async def on_cell_changed(e):
         a = e.args
         ws = state["ws"]
@@ -4359,12 +4466,59 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
 
         undo_before = undo_cell(ws, row - 1, col - 1)  # v4.02
         undo_rows = undo_row_count(ws)  # v4.02
+        data_sheet = M28.Is_Data_Sheet(ws)
+        if data_sheet:
+            M25.Make_sure_that_Col_Variables_match(ws)
+        is_macro = data_sheet and col == int(M25.Config__Col)
+        before = [((row - 1, col - 1), undo_before)]
+        if is_macro:
+            # Felder, die mit dem Makro neu gefuellt werden, gehoeren zum Rueckgaengig  # v4.38
+            for extra in (M25.LanName_Col, M25.LEDs____Col, M25.InCnt___Col, M25.LocInCh_Col, M25.DCC_or_CAN_Add_Col, M25.SX_Channel_Col,
+                          M25.SX_Bitposi_Col, M25.Inp_Typ_Col):  # v4.38
+                if int(extra) > 0 and ((row - 1, int(extra) - 1), undo_cell(ws, row - 1, int(extra) - 1)) not in before:  # v4.38
+                    before.append(((row - 1, int(extra) - 1), undo_cell(ws, row - 1, int(extra) - 1)))  # v4.38
+            # before.append(((row - 1, int(M25.LanName_Col) - 1), undo_cell(ws, row - 1, int(M25.LanName_Col) - 1)))  # v4.38 (entfallen)
+            try:
+                await run_in_worker(lambda: validate_macro_text(ws, str(new_value)))
+            except macro_edit.MacroSyntaxError as ex:
+                restore_grid_row(ws, row)
+                new_value = await correct_macro_text(ws, str(new_value), tr(str(ex)))
+                if new_value is None:
+                    return
+            except Exception as ex:
+                logger.exception("Makrotext konnte nicht geprüft werden")
+                ui.notify(tr("Fehler beim Prüfen des Makrotexts: {ex}", ex=ex), type="negative")
+                restore_grid_row(ws, row)
+                return
+            macro_name = str(new_value).split("(", 1)[0].strip()  # v4.38
+            if macro_name in ("BlueLight1", "BlueLight2", "Leuchtfeuer") and " C_ALL," in str(new_value):  # v4.38: wie im Auswahldialog
+                ui.notify(M09.Get_Language_Str("Fehler: Das Makro '#1#' kann nur mit einer oder zwei LEDs benutzt werden.").replace("#1#", macro_name), type="negative")  # v4.38
+                new_value = str(new_value).replace(" C_ALL,", " C12,")  # v4.38
 
         def write():
             try:
                 if SHAPES_DEBUG:  # v1.51
                     logger.info("SHAPES: vor dem Schreiben von %s!%s,%s: %s", ws.Name, row, col, shapes_report(ws))  # v1.51
+                ws.Activate()
                 X02.CRange(row, col, ws=ws).Value = new_value     # loest wie in Excel Worksheet_Change aus
+                if is_macro:
+                    old_lib = M09SM.Find_Macro_in_Lib_Macros_Sheet(undo_before) if undo_before else 0
+                    parsed = macro_edit.parse_call(str(new_value))
+                    new_lib = M09SM.Find_Macro_in_Lib_Macros_Sheet(parsed[0] + "(") if parsed else (M09SM.Find_Macro_in_Lib_Macros_Sheet(new_value) if new_value else 0)
+                    old_name = undo_before.split("(", 1)[0].strip()
+                    new_name = parsed[0] if parsed else str(new_value).split("(", 1)[0].strip()
+                    if old_lib != new_lib or (not new_lib and old_name != new_name):
+                        M27.Del_one_Icon_in_IconCol(row, ws)
+                        if new_lib:
+                            M09SM.Add_Icon_and_Name(new_lib, row, ws)
+                        else:
+                            X02.CRange(row, M25.LanName_Col, ws=ws).Value = new_name
+                            if new_value:
+                                M27.FindMacro_and_Add_Icon_and_Name(new_value, row, ws)
+                    if new_lib:  # v4.38: LEDs, InCnt, LocInCh und Start-LEDs wie nach dem Auswahldialog
+                        fields = macro_field_values(ws, str(new_value))[1]  # v4.38
+                        if fields:  # v4.38
+                            apply_macro_fields(ws, row, fields)  # v4.38
                 auto_color_rows(ws)  # v3.92
                 if SHAPES_DEBUG:  # v1.51
                     logger.info("SHAPES: nach dem Schreiben: %s", shapes_report(ws))  # v1.51
@@ -4377,7 +4531,7 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
             # ui.notify(f"Fehler beim Schreiben: {ex}", type="negative")  # v2.16 (entfallen)
             ui.notify(tr('Fehler beim Schreiben: {ex}', ex=ex), type="negative")  # v2.16
         else:  # v4.02
-            undo_record(ws, [((row - 1, col - 1), undo_before)], tr("Zelleingabe"), undo_rows)  # v4.02
+            undo_record(ws, before, tr("Zelleingabe"), undo_rows, include_unchanged=is_macro)  # v4.02
         show(ws)                                 # Handler koennen weitere Zellen geaendert haben
 
     grid.on("cellValueChanged", on_cell_changed)
@@ -4802,6 +4956,7 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
     ui.on("mll_ctx", on_ctx)
     ui.on("mll_dblmacro", on_dblmacro)
     ui.on("mll_cell_op", on_cell_op)
+    ui.on("mll_hotkey", on_hotkey)  # v4.38 (Issue 49)
     ui.on("mll_space", on_space)  # v2.93
 
     # ------------------------------------------------------------------ Testtasten (DCCSend)
@@ -4968,8 +5123,11 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
                 # ui.notify(f"{label.replace(chr(13), ' ').replace(chr(10), ' ')}: Fehler {type(ex).__name__}: {ex}\n"  # v2.16 (entfallen)
                           # "Einzelheiten im Protokoll (Hilfe → Logfile anzeigen).", type="negative", multi_line=True, timeout=0, close_button="OK")  # v2.16 (entfallen)
                 ui.notify(tr('{befehl}: Fehler {typ}: {ex}\nEinzelheiten im Protokoll (Hilfe → Logfile anzeigen).', befehl=label.replace(chr(13), ' ').replace(chr(10), ' '), typ=type(ex).__name__, ex=ex), type="negative", multi_line=True, timeout=0, close_button="OK")  # v2.16
-            if weblog is not None and not failed:
-                weblog.close_later_if_ok()      # Log-Fenster (z. B. Bibliotheken installieren) nach Erfolg nach 10 s schliessen
+            if weblog is not None:
+                if failed:
+                    weblog.close_later_if_ok(on_error=True)  # Log-Fenster nach Fehlern nach der Einstellung bei Fehler schliessen
+                else:
+                    weblog.close_later_if_ok()      # Log-Fenster (z. B. Bibliotheken installieren) nach Erfolg nach der Einstellung schliessen
             dismiss_move_note()
             if getattr(state["ws"], "Flag_move", False):
                 state["move_note"] = ui.notification("Zeilen verschieben: Bitte die Zielzeile anklicken. Mit Esc abbrechen.",
@@ -5489,6 +5647,43 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
             logger.exception("Zwischenspeichern fehlgeschlagen")
         finally:
             _AUTOSAVE["running"] = state["busy"] = False
+
+    async def permanent_save(_=None):  # v4.38 (Issue 49): Strg+S wie im Excel-Programm: dauerhaft in die Hauptdatei, nicht nur in die Zwischensicherung
+        if state["busy"]:
+            ui.notify(tr("Es läuft noch ein Vorgang - bitte warten."), type="warning")
+            return
+        _AUTOSAVE["running"] = state["busy"] = True
+        try:
+            def work():
+                sync_all_sheets()
+                ctrl.SaveConfigData()
+                ctrl.SaveParamData()
+                path = main_workbook_file()
+                tmp = path + ".tmp"
+                wb.Save(filename=tmp)                # erst in eine Hilfsdatei: ein Abbruch beschaedigt die letzte gute Datei nicht
+                os.replace(tmp, path)
+                _AUTOSAVE["sig_saved"] = workbook_signature()
+                _AUTOSAVE["saved_at"] = time.monotonic()
+                remove_autosave()                    # die Zwischensicherung ist jetzt veraltet
+                remove_discarded()
+            await run.io_bound(work)
+            autosave_label.set_text(tr("Gespeichert") + " " + time.strftime("%H:%M:%S"))
+            autosave_label.set_visibility(True)
+            ui.notify(tr("Gespeichert"), type="positive")
+        except Exception as ex:                      # noqa: BLE001
+            logger.exception("Speichern fehlgeschlagen")
+            ui.notify(tr("Fehler beim Speichern: {ex}", ex=ex), type="negative")
+        finally:
+            _AUTOSAVE["running"] = state["busy"] = False
+
+    async def on_hotkey(e):  # v4.38 (Issue 49)
+        op = (getattr(e, "args", None) or {}).get("op")
+        if op == "undo":
+            await op_undo_redo(False)
+        elif op == "redo":
+            await op_undo_redo(True)
+        elif op == "save":
+            await permanent_save()
 
     async def autosave_manual():
         if state["busy"]:
@@ -6229,6 +6424,7 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
 
     MENU = {
         "Datei": [
+            ("Speichern (Strg+S)", permanent_save),  # v4.38 (Issue 49)
             ("Jetzt zwischenspeichern", autosave_manual),
             None,
             ("ProgrammGenerator-Workbook von Datei lesen", run_command(lambda: wb.Load(), "Workbook lesen", live=False)),
