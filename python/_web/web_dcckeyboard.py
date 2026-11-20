@@ -1,9 +1,9 @@
-# Datei-Version: 1.03 (2026-11-17) - web_dcckeyboard.py
+# Datei-Version: 1.04 (2026-11-20) - web_dcckeyboard.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_dcckeyboard.py
 # Path:           _web/web_dcckeyboard.py
-# Version:        1.03
-# Last Update:    2026-11-17
+# Version:        1.04
+# Last Update:    2026-11-20
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
@@ -11,6 +11,7 @@
 #   1.01  2026-10-23  Texte mit eingesetzten Werten (f-Strings) mit tr("... {name}", name=...) umgestellt, damit sie uebersetzt werden
 #   1.02  2026-11-05  Beschreibungstext der Seite wird uebersetzt (description_text)
 #   1.03  2026-11-17  Hinweis: Menue Lichtmaschine statt ARDUINO
+#   1.04  2026-11-20  Issue 51: Hinweisbox mit hellem Hintergrund bekommt dunkle Schrift (im Dunklen Modus war weisser Text auf hellem Grund nicht lesbar)
 # ----------------------------------------------------------------------------------------------
 """Web-Version der Seite "DCC Keyboard" (mlpyproggen/DCC_KeyboardPage.py, Klasse DCCKeyboardPage, ohne Tk).
 
@@ -155,7 +156,8 @@ def build(ctrl, is_active=None):
         opened = desc["open"]
         refs["description"].set_text(description if opened else description.split("\n")[0])
         shape = "white-space: pre-line; overflow: visible; text-overflow: clip" if opened else "white-space: nowrap; overflow: hidden; text-overflow: ellipsis"
-        refs["description"].style(f"background: #f0f0f0; padding: 6px 10px; border: 1px solid #aaa; min-width: 0; {shape}")
+        refs["description"].style(f"background: #f0f0f0; color: #212121; padding: 6px 10px; border: 1px solid #aaa; min-width: 0; {shape}")  # 1.04
+        # refs["description"].style(f"background: #f0f0f0; padding: 6px 10px; border: 1px solid #aaa; min-width: 0; {shape}")  # 1.04 (entfallen)
         refs["desc_toggle"].props(f"icon={'expand_less' if opened else 'expand_more'}")
 
     def toggle_description(_=None):

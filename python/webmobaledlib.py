@@ -1,9 +1,9 @@
-# Datei-Version: 4.41 (2026-11-20) - webmobaledlib.py
+# Datei-Version: 4.46 (2026-11-20) - webmobaledlib.py
 # ----------------------------------------------------------------------------------------------
 # Name:           webmobaledlib.py
 # Path:           webmobaledlib.py
-# Version:        4.41
-# Last Update:    2026-11-19
+# Version:        4.46
+# Last Update:    2026-11-20
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
@@ -287,6 +287,11 @@
 #   4.21  2026-11-19  Erweiterungen: platformio.ini zeigt auf den Ordner der Erweiterung statt auf MobaLedLib.properties, mit symlink:// (M38_Extensions 1.07; Issue 6, Juergen)
 #   4.22  2026-11-19  Erweiterungen: Name und Beschreibung aus libraries.json anzeigen (headless_extensions 1.03, web_form_options 1.38; Issue 6, Juergen)
 #   4.41  2026-11-20  Fehler in 4.38 bis 4.40: Seitenaufbau brach mit UnboundLocalError (on_hotkey) ab, die Registrierung der Tastenkuerzel stand vor der Definition; jetzt dahinter
+#   4.42  2026-11-20  Issue 50 (Kein ESP-Port gewaehlt): Beim Hochladen ohne Anschluss in der Tabelle wird der Anschluss der aktiven Verbindung (bei ESP32/Pico auch das Board) eingetragen; Einstellung UploadPortMode fuer mehrere Boards (M07_COM_Port 1.13, web_tabs 1.27)
+#   4.43  2026-11-20  Issue 50 (Fortsetzung): auch beim ESP32-Setup per USB (WLAN-Weg) wird der Anschluss geprueft, leer: aktive Verbindung uebernehmen oder Dialog (M08_ARDUINO 1.27)
+#   4.44  2026-11-20  Issue 51: Einstellung Darstellung der Oberflaeche (Hell, Dunkel, Wie System; Vorgabe Hell), Tabelle bleibt hell; Blattreiter kontrastreicher (aktiver Reiter deutlich abgesetzt)
+#   4.45  2026-11-20  Fehler 4.44: Dunkler Modus ging beim Wechsel des Reiters verloren (das Element ui.dark_mode setzte den Server-Wert wieder durch); jetzt wird der Wert des Elements beim Speichern der Einstellungen gesetzt
+#   4.46  2026-11-20  Dunkler Modus (Rueckmeldung Harold, Screenshots): graue Hinweistexte (text-grey) heller, Hinweisboxen mit hellem Grund mit dunkler Schrift (DCC Keyboard, Servo/Sound/Z21, Austausch); web_dcckeyboard 1.04, web_servotest2 1.03, web_soundtest 1.03, web_z21 1.05, web_form_exchange 1.03
 #   4.40  2026-11-20  Pull Request 44 von Juergen (Issues 41, 42): Makrotext bei direkter Eingabe pruefen (Fehler korrigieren oder wiederherstellen), bei Makrowechsel Name und Symbol aktualisieren, danach LEDs, InCnt, LocInCh, Adressen, Testtasten und Start-LEDs neu setzen (headless_macro_edit 1.01); Uebertragungsfenster schliesst sich automatisch (web_log 1.11)
 #   4.39  2026-11-20  Issue 48: Fehlerpruefung beim Erzeugen der Kopfdatei (zum Beispiel Adresse mit zwei verschiedenen Typen) wirkte nicht, das Kompilieren startete trotzdem (M06_Write_Header 1.13)
 #   4.38  2026-11-20  Tastenkuerzel ueberall auf der Seite (Issue 49, Juergen): Strg+Z Rueckgaengig, Strg+Y / Strg+Umschalt+Z Wiederholen, neu Strg+S = dauerhaft speichern in die Hauptdatei (Menue Datei: Speichern); nicht in Eingabefeldern und Dialogen
@@ -503,6 +508,8 @@ REQUIRED_FILES = {  # v1.75
     # "headless/headless_search.py": "1.00",  # v3.28 (entfallen)
     "headless/headless_search.py": "1.01",  # v3.29
     "proggen/M39_Simulator.py": "1.11", "_web/web_simulator.py": "1.00",  # v3.56
+    "proggen/M07_COM_Port.py": "1.13", "_web/web_tabs.py": "1.28",  # v4.42  # v4.44
+    "proggen/M08_ARDUINO.py": "1.27",  # v4.43
 }  # v1.75
 FILE_PROBLEMS = []                                      # Zeilen der Abweichungen, gefuellt in main()  # v1.75
 
@@ -1319,6 +1326,21 @@ CSS_GRID = """
 .ag-header-cell { font-family: var(--mll-grid-font, Arial), Helvetica, sans-serif; font-size: calc(12px * var(--mll-grid-scale, 1)); background: #f3f3f3; }
 .ag-pinned-left-cols-container .ag-cell { background: #f3f3f3; }
 .mll-center { text-align: center; }
+/* v4.44 (Issue 51): Dunkler Modus: Tabellen (AG Grid) bleiben hell, damit die Zellfarben lesbar bleiben */
+body.body--dark .ag-theme-balham, body.body--dark .ag-theme-balham-dark, body.body--dark .nicegui-aggrid {
+    --ag-background-color: #ffffff !important; --ag-foreground-color: #181d1f !important; --ag-header-background-color: #f3f3f3 !important; --ag-header-foreground-color: #181d1f !important;
+    --ag-odd-row-background-color: #ffffff !important; --ag-border-color: #d4d4d4 !important; --ag-secondary-border-color: #e3e3e3 !important; --ag-row-border-color: #e3e3e3 !important;
+    --ag-row-hover-color: #eef3f8 !important; --ag-selected-row-background-color: #d6e6f7 !important; --ag-control-panel-background-color: #f3f3f3 !important;
+    --ag-input-border-color: #999999 !important; --ag-disabled-foreground-color: #666666 !important; --ag-chip-background-color: #e3e3e3 !important;
+    --ag-range-selection-border-color: #1976d2 !important; --ag-modal-overlay-background-color: rgba(255,255,255,0.66) !important;
+    background-color: #ffffff !important; color: #181d1f !important; color-scheme: light; }
+body.body--dark .ag-root-wrapper, body.body--dark .ag-root, body.body--dark .ag-center-cols-viewport { background-color: #ffffff; color: #181d1f; }
+body.body--dark .ag-header-cell, body.body--dark .ag-header-cell-text { color: #181d1f; }
+body.body--dark .ag-pinned-left-cols-container .ag-cell { color: #181d1f; }
+body.body--dark .mll-grid-wrap { background: #ffffff; }
+/* v4.46 (Issue 51): Dunkler Modus: graue Hinweistexte (Quasar text-grey-*) waren auf dunklem Grund kaum lesbar */
+body.body--dark .text-grey, body.body--dark .text-grey-5, body.body--dark .text-grey-6, body.body--dark .text-grey-7, body.body--dark .text-grey-8, body.body--dark .text-grey-9 { color: #d0d7de !important; }
+body.body--dark .q-field__label, body.body--dark .q-field__hint { color: #c4ccd4; }
 /* Seite fuellt genau das Fenster: Kopfzeile, Menue, Reiter und Werkzeugleiste behalten ihre Groesse, die Tabelle nimmt den Rest */
 .q-page { display: flex; }
 .nicegui-content { width: 100%; height: 100vh; flex: 1 1 auto; flex-wrap: nowrap; overflow: auto; }
@@ -1332,9 +1354,12 @@ html:not(.mll-compact) .main-tabs, html:not(.mll-compact) .main-tabs .q-tab, htm
 /* v4.16: weniger Platz zwischen Titel, Menue und Reitern (Issue 22) */
 html:not(.mll-compact) .mll-header { margin-bottom: -8px; }     /* v4.16: Abstand zur Reiterleiste 16 px -> 8 px; das kompakte Layout hat schon 2 px */
 .main-tabs .q-tab { font-size: calc(15px * var(--mll-label-scale, 1)); }
-.sheet-tabs { background: #dbe4ee; border: 1px solid #b8c7d8; border-top: 2px solid #8fa8c2; min-height: 30px; }
-.sheet-tabs .q-tab { text-transform: none; min-height: 28px; padding: 0 16px; color: #243b53; }
-.sheet-tabs .q-tab--active { background: #ffffff; color: #102a43; font-weight: 600; box-shadow: inset 0 3px 0 #1976d2; }
+/* .sheet-tabs { background: #dbe4ee; border: 1px solid #b8c7d8; border-top: 2px solid #8fa8c2; min-height: 30px; }  (v4.44, entfallen) */
+.sheet-tabs { background: #c3d0de; border: 1px solid #5b7490; border-top: 2px solid #5b7490; min-height: 30px; }  /* v4.44 (Issue 51): kraeftiger Rand und dunklerer Streifen */
+/* .sheet-tabs .q-tab { text-transform: none; min-height: 28px; padding: 0 16px; color: #243b53; }  (v4.44, entfallen) */
+.sheet-tabs .q-tab { text-transform: none; min-height: 28px; padding: 0 16px; color: #0b1f33; border-right: 1px solid #5b7490; }  /* v4.44: dunklere Schrift, Trennlinie zwischen den Reitern */
+/* .sheet-tabs .q-tab--active { background: #ffffff; color: #102a43; font-weight: 600; box-shadow: inset 0 3px 0 #1976d2; }  (v4.44, entfallen) */
+.sheet-tabs .q-tab--active { background: #ffffff; color: #000000; font-weight: 700; box-shadow: inset 0 4px 0 #0d47a1, inset 0 -3px 0 #0d47a1; }  /* v4.44: aktiver Reiter weiss mit dickem Balken oben und unten */
 .sheet-tabs { position: relative; }
 .sheet-tabs .q-tab[data-tabc] { background: var(--tab-color); color: var(--tab-fg); }
 .sheet-tabs .q-tab--active[data-tabc] { background: linear-gradient(to bottom, var(--tab-mid), var(--tab-light) 55%, #ffffff); color: #102a43; box-shadow: inset 0 3px 0 var(--tab-color); }
@@ -1399,7 +1424,12 @@ def font_scales(ctrl) -> dict:
 # VERSION = "3.60 (2026-11-16)"  # v3.60 (entfallen)
 # VERSION = "3.61 (2026-11-16)"  # v3.61 (entfallen)
 # VERSION = "3.62 (2026-11-16)"  # v3.62 (entfallen)
-VERSION = "4.41 (2026-11-20)"  # v3.64  # v4.26  # v4.27  # v4.28  # v4.29  # v4.30  # v4.31  # v4.32  # v4.33  # v4.34  # v4.35  # v4.36  # v4.37  # v4.38  # v4.39  # v4.40  # v4.41
+# VERSION = "4.41 (2026-11-20)"  # v4.42 (entfallen)
+# VERSION = "4.42 (2026-11-20)"  # v4.43 (entfallen)
+# VERSION = "4.43 (2026-11-20)"  # v4.44 (entfallen)
+# VERSION = "4.44 (2026-11-20)"  # v4.45 (entfallen)
+# VERSION = "4.45 (2026-11-20)"  # v4.46 (entfallen)
+VERSION = "4.46 (2026-11-20)"  # v3.64  # v4.26  # v4.27  # v4.28  # v4.29  # v4.30  # v4.31  # v4.32  # v4.33  # v4.34  # v4.35  # v4.36  # v4.37  # v4.38  # v4.39  # v4.40  # v4.41  # v4.42  # v4.43  # v4.44  # v4.45  # v4.46
 # VERSION = "4.09 (2026-11-19)"  # v3.64 (entfallen)
 # VERSION = "4.08 (2026-11-19)"  # v3.64 (entfallen)
 # VERSION = "4.07 (2026-11-19)"  # v3.64 (entfallen)
@@ -2003,6 +2033,25 @@ def safe_shutdown():  # v3.24
     nicegui_app.shutdown()  # v3.24
 
 
+def theme_value(ctrl):  # v4.44 (Issue 51)
+    """Einstellung Darstellung der Oberflaeche: False = hell (Vorgabe), True = dunkel, None = wie System"""
+    try:  # v4.44
+        raw = str(ctrl.getConfigData("ThemeMode") or "").strip().lower()  # v4.44
+        if raw in ("", "none"):  # v4.44
+            raw = str(ctrl.getConfigData("ThemeModeIdx") or "").strip().lower()  # v4.44
+    except Exception:                                      # noqa: BLE001  # v4.44
+        raw = ""  # v4.44
+    if raw in ("dunkel", "dark", "1"):  # v4.44
+        return True  # v4.44
+    if raw in ("wie system", "system", "auto", "2"):  # v4.44
+        return None  # v4.44
+    return False  # v4.44
+
+
+def theme_js(value):  # v4.44: JavaScript, das die Darstellung im Browser umschaltet (nach dem Speichern der Einstellungen)
+    return "if (window.Quasar && Quasar.Dark) { Quasar.Dark.set(%s); }" % ("true" if value is True else ("'auto'" if value is None else "false"))  # v4.44
+
+
 def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
     """Die Seite aufbauen. start_tab: Schluessel des Reiters, der sich oeffnet (Adressen siehe web_tabs); fullscreen: gleich im Vollbild (?vollbild=1)"""  # v1.82
     t_page = time.monotonic()
@@ -2033,6 +2082,8 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
     ui.add_head_html(web_fullscreen.head_html())       # Vollbild ein und aus (der Knopf steht in der Kopfzeile)  # v1.81
     if fullscreen:                                      # Adresse mit ?vollbild=1: ohne Titel, Menue und Reiter oeffnen, der erste Tipp schaltet auch den Browser um  # v1.82
         ui.add_head_html("<script>document.addEventListener('DOMContentLoaded', function () { window.mllSetFull(true); window.mllArmTapFullscreen(); });</script>")  # v1.82
+    # ui.dark_mode(theme_value(ctrl))  # v4.45 (entfallen)
+    dark_mode_el = ui.dark_mode(theme_value(ctrl))  # v4.45: Element merken, Wert beim Speichern der Einstellungen setzen (Issue 51)
     ui.add_head_html(SCROLL_JS)
     ui.add_head_html(DROP_JS)
     ui.add_head_html(CLIP_JS)  # v3.57
@@ -6664,6 +6715,8 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
         ui.run_javascript("let s=document.getElementById('mll-fonts'); if(!s){s=document.createElement('style'); "
                           "s.id='mll-fonts'; document.head.appendChild(s);} s.textContent=%s; window.mllGridScale=%.3f;"
                           % (json.dumps(font_css(ctrl)), scales["grid"]))
+        # ui.run_javascript(theme_js(theme_value(ctrl)))  # v4.45 (entfallen: der Server-Wert des Elements setzte beim Reiterwechsel wieder hell)
+        dark_mode_el.value = theme_value(ctrl)  # v4.45: Darstellung der Oberflaeche (Hell, Dunkel, Wie System)
         apply_icon_size()                              # Groesse der Symbole der Funktionsknoepfe (PGIconSize)
         ui.run_javascript(web_layout.apply_js(web_layout.get_mode(ctrl)))          # kompaktes Layout (Programm Einstellungen, Darstellung)
         update_dbl(state["ws"], force=True)            # Doppelklick auf Name und Beleuchtung (Programm Einstellungen, Bedienung der Tabelle)

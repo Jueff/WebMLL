@@ -1,9 +1,9 @@
-# Datei-Version: 1.26 (2026-11-19) - M08_ARDUINO.py
+# Datei-Version: 1.27 (2026-11-20) - M08_ARDUINO.py
 # ----------------------------------------------------------------------------------------------
 # Name:           M08_ARDUINO.py
 # Path:           proggen/M08_ARDUINO.py
-# Version:        1.26
-# Last Update:    2026-11-19
+# Version:        1.27
+# Last Update:    2026-11-20
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
@@ -34,6 +34,7 @@
 #   1.24  2026-11-19  Last_Upload: merkt, ob das Hochladen der Lichtmaschine geklappt hat und ob per WLAN (Verbinden nach dem Hochladen, Issue 20)
 #   1.25  2026-11-19  ESP32/Pico: Konfiguration getrennt von der Firmware (M42_Dyn_Config): nur die Konfiguration uebertragen, wenn die Firmware im Geraet passt; nach einem vollstaendigen Hochladen die Konfiguration nachschicken; LittleFS-Groesse fuer den Pico
 #   1.26  2026-11-19  Schneller Weg (M42): Beim Rueckfall auf das ganze Programm bleibt die Begruendung im Ausgabefenster stehen (Fenster wird nicht geleert)
+#   1.27  2026-11-20  Issue 50: ESP32-Setup per USB (Compile_and_Upload_ESP32_Setup): Anschluss wird vor dem Build mit Check_USB_Port_with_Dialog geprueft (aktive Verbindung uebernehmen oder Dialog), Anschluss danach neu aus der Tabelle gelesen
 # ----------------------------------------------------------------------------------------------
 # -*- coding: utf-8 -*-
 #
@@ -2556,6 +2557,11 @@ def Compile_and_Upload_ESP32_Setup(ctrl, board, port, *, host, upload_password, 
     log.delete_text_from_textwindow()  # v1.22
     log.show()  # v1.22
     try:  # v1.22
+        if not host:  # v1.27 (Issue 50): USB: Anschluss vor dem langen Build pruefen; leer: aktive Verbindung uebernehmen oder Dialog Board und USB Port erkennen
+            if not M07.Check_USB_Port_with_Dialog(M25.COMPort_COL):  # v1.27
+                raise ValueError(tr("Es ist kein USB-Anschluss gewählt."))  # v1.27
+            _raw = str(P01.Cells(M02.SH_VARS_ROW, M25.COMPort_COL)).strip().lstrip("*").strip()  # v1.27
+            port = ("COM" + _raw) if (_raw.isdigit() and os.name == "nt") else _raw  # v1.27
         if not M06.Create_HeaderFile(HeaderOnly=True):  # v1.22
             raise ValueError(tr("Die Projektkonfiguration konnte nicht erzeugt werden."))  # v1.22
         sketch = os.path.join(GetWorkbookPath(), M02.Ino_Dir_LED)  # v1.22

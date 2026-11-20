@@ -1,5 +1,5 @@
-Datei-Version: 1.24 (2026-11-20) - HOC_intern.md
-Stand: webMobaLedLib 4.40
+Datei-Version: 1.30 (2026-11-20) - HOC_intern.md
+Stand: webMobaLedLib 4.46
 
 # webMobaLedLib: History of Change (intern, ausführlich)
 
@@ -24,6 +24,76 @@ Release-Stand 2.12 auf Wunsch des Entwicklers („Release bauen“). **Neu im Ab
 | `archiv/` | frühere Release-Hinweise, Versionslisten und ZIP (nichts gelöscht) |
 
 **Geprüft:** Dateipaket: `testzip` in Ordnung, alle 113 Dateien gleich dem Ordner `headless`, keine `__pycache__`, alle `.py` kompilieren, Versionsprüfung „alles passt“ (50 Einträge), 11 Dateien ausführbar (`.sh`, `.command`). **Nachbau des Entwickler-Ablaufs mit seinem echten Paket (1678 Dateien, Stand 2.05):** meine 113 Dateien darübergelegt, Prüfliste, ZIP gepackt, `release_tools check --previous <sein ZIP>`: **in Ordnung** (Version 2.12, 1678 Dateien, 6 neue, 0 fehlende, ZIP 16,6 MB). Alle 15 Prüfreihen laufen (17, 26, 15, 70, 28, 19, 43, 26, 16, 27, 8, 8, 8, 5, 9 Prüfungen). **Nicht geprüft:** `zip_erstellen.bat` und die Reparaturskripte unter Windows, ein abgebrochenes Update unter Windows, das Verhalten mit Acronis, der Download von GitHub.
+
+## 4.46 (2026-11-20), Dunkler Modus: Lesbarkeit (Screenshots Harold)
+
+Rückmeldung: Die ausklappbaren Beschreibungen (DCC Keyboard) waren nicht lesbar, die Beschreibung beim Farb Test schlecht. Ursachen: (1) Hinweisbox mit festem hellem Hintergrund (`#f0f0f0`) erbte im Dunklen Modus weiße Schrift; jetzt dunkle Schrift gesetzt (auch Servo Test 2, Sound Test, Z21, Austausch-Hinweis). (2) Texte mit Quasar-Klassen `text-grey-5` bis `text-grey-9` (dunkelgrau) auf dunklem Grund; sie werden unter `body.body--dark` hellgrau (`#d0d7de`), ebenso Feldbeschriftungen. Nicht im Browser getestet; weitere Stellen bitte per Screenshot melden.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.46 | CSS für Grautexte im Dunklen Modus |
+| `_web/web_dcckeyboard.py` | 1.04 | Hinweisbox: dunkle Schrift |
+| `_web/web_servotest2.py` | 1.03 | Hinweisbox: dunkle Schrift |
+| `_web/web_soundtest.py` | 1.03 | Hinweisbox: dunkle Schrift |
+| `_web/web_z21.py` | 1.05 | Hinweisbox: dunkle Schrift |
+| `_web/web_form_exchange.py` | 1.03 | Hinweiskarte: dunkle Schrift |
+| `install/ANLEITUNG_Installation.md` | 4.46 | Kurzfassung |
+| `install/BETATEST_Checkliste.md` | 3.28 | Punkt 293 ergänzt |
+
+## 4.45 (2026-11-20), Fehler in 4.44 (Dunkler Modus)
+
+Rückmeldung Harold: „Dunkel“ wirkte nach dem Speichern, aber beim nächsten Reiterwechsel war alles wieder hell, obwohl die Einstellung erhalten blieb. Ursache: 4.44 schaltete per `Quasar.Dark.set(...)` im Browser um, das Element `ui.dark_mode(...)` behielt aber den beim Seitenaufbau gesetzten Wert (hell) und schrieb ihn beim nächsten Update zurück. Jetzt wird das Element gemerkt (`dark_mode_el`) und sein `value` beim Speichern der Einstellungen gesetzt. Nicht im Browser getestet.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.45 | `dark_mode_el.value` statt JavaScript |
+| `install/ANLEITUNG_Installation.md` | 4.45 | Kurzfassung |
+| `install/BETATEST_Checkliste.md` | 3.27 | Punkt 293 ergänzt |
+
+## 4.44 (2026-11-20), Issue 51 „Farbgestaltung und Dark Mode“
+
+Neue Einstellung `ThemeMode` (Programm Einstellungen, Allgemeine Einstellungen, „Darstellung der Oberfläche“): Hell (Vorgabe), Dunkel, Wie System. Beim Seitenaufbau `ui.dark_mode(theme_value(ctrl))`; nach dem Speichern der Einstellungen schaltet `Quasar.Dark.set(...)` sofort um. Auf Wunsch von Harold bleibt die Tabelle auch im Dunklen Modus hell: CSS-Variablen von AG Grid (`--ag-background-color` usw.) werden unter `body.body--dark` auf helle Werte gesetzt (gilt für alle AG-Grid-Tabellen, auch Timeline Editor). Blattreiter: dunklerer Streifen mit kräftigem Rand, dunklere Schrift, Trennlinien, aktiver Reiter weiß mit dickem Balken oben und unten (bisher blassblauer Streifen, Jan fand das duplizierte Blatt nicht). Nicht im Browser getestet; offen: Farben fester Hintergründe in einzelnen Dialogen und Reitern (Farbtest, Simulator, Timeline Editor) im Dunklen Modus.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.44 | `theme_value`, `theme_js`, `ui.dark_mode`, CSS für helle Tabelle und kontrastreiche Blattreiter |
+| `_web/web_tabs.py` | 1.28 | Einstellung `ThemeMode` |
+| `csv/Web_Languages.csv` | - | Texte in 6 Sprachen |
+| `install/ANLEITUNG_Installation.md` | 4.44 | Kurzfassung 4.44 |
+| `install/BETATEST_Checkliste.md` | 3.26 | Punkt 293 |
+
+## 4.43 (2026-11-20), Issue 50 (Fortsetzung)
+
+Die Korrektur aus 4.42 wirkte nur im normalen Weg. Die Meldung „zuerst einen ESP32-COM-Port wählen“ aus Issue 50 kommt aus `headless_esp32_ota.flash_usb` (ESP32 mit WLAN, Ziel USB); dieser Weg rief `Check_USB_Port_with_Dialog` nie auf. Jetzt prüft `Compile_and_Upload_ESP32_Setup` bei USB-Ziel vor dem Build den Anschluss (aktive Verbindung übernehmen, sonst Dialog „Board und USB Port erkennen“) und liest ihn danach neu aus der Tabelle. Nicht auf Hardware getestet.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.43 | Version, Mindestversion M08_ARDUINO 1.27 |
+| `proggen/M08_ARDUINO.py` | 1.27 | Anschlussprüfung in `Compile_and_Upload_ESP32_Setup` |
+| `csv/Web_Languages.csv` | - | Text „Es ist kein USB-Anschluss gewählt.“ (6 Sprachen) |
+| `install/ANLEITUNG_Installation.md` | 4.43 | Kurzfassung 4.43 |
+| `install/BETATEST_Checkliste.md` | 3.25 | Punkt 292 ergänzt |
+
+## 4.42 (2026-11-20), Issue 50 „Kein ESP-Port gewählt“
+
+Hochladen schlug mit „Kein ESP-Port gewählt“ fehl, wenn die Lichtmaschine verbunden war, in der Tabelle aber kein Anschluss stand. Jetzt ruft `Check_USB_Port_with_Dialog` vor dem Dialog `Fill_Port_From_Active_Connection` auf: Ist die Verbindung der Lichtmaschine aktiv (nicht WLAN), wird deren Anschluss in die Tabelle eingetragen (bei ESP32/Pico, wenn noch kein Board eingetragen ist, auch das Board; der Typ kommt aus `Classify_Port`). Regeln nach Vorgabe Harold: Ist ein Board eingetragen, wird nur eingetragen, wenn sein Typ zur aktiven Verbindung passt; sind Board und Anschluss eingetragen, ändert sich nichts. Mehrere Boards (Anzahl erkannter Anschlüsse > 1): neue Einstellung `UploadPortMode` (Allgemeine Einstellungen): „Aktive Verbindung verwenden“ (Vorgabe) oder „Erkennen-Fenster öffnen“ (bisheriger Dialog). Texte in 6 Sprachen. Nicht auf Hardware getestet.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.42 | Version, Mindestversionen M07_COM_Port 1.13 und web_tabs 1.27 |
+| `proggen/M07_COM_Port.py` | 1.13 | `Fill_Port_From_Active_Connection`, Aufruf in `Check_USB_Port_with_Dialog`, `logger` |
+| `_web/web_tabs.py` | 1.27 | Einstellung `UploadPortMode` |
+| `csv/Web_Languages.csv` | - | Texte der Einstellung (6 Sprachen) |
+| `install/ANLEITUNG_Installation.md` | 4.42 | Kurzfassung 4.42 |
+| `install/BETATEST_Checkliste.md` | 3.24 | Punkt 292 |
+
+## 4.41 (2026-11-20)
+
+Blockierender Fehler (Rückmeldung Harold, Protokoll mit 4.40): Die Seite baute sich nicht mehr auf, `UnboundLocalError: cannot access local variable 'on_hotkey'` in `build_page`. Ursache: In 4.38 (Tastenkürzel, Issue 49) stand `ui.on("mll_hotkey", on_hotkey)` vor der Definition von `on_hotkey` (die Funktion steht weiter unten bei `autosave_manual`). Betroffen sind 4.38, 4.39 und 4.40; 4.36 und 4.37 sind in Ordnung. Die Registrierung steht jetzt direkt hinter der Definition. Zusätzlich eine statische Prüfung auf weitere Verwendungen von Funktionen in `build_page` vor ihrer Definition (keine weiteren gefunden); ein Test mit NiceGUI war in der Entwicklungsumgebung nicht möglich.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.41 | Registrierung `mll_hotkey` hinter die Definition |
 
 ## 4.40 (2026-11-20), Pull Request 44 von Jürgen (Issues 41 und 42)
 

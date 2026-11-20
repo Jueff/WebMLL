@@ -1,9 +1,42 @@
-Datei-Version: 1.24 (2026-11-20) - HOC_Anwender.md
-Stand: webMobaLedLib 4.40
+Datei-Version: 1.30 (2026-11-20) - HOC_Anwender.md
+Stand: webMobaLedLib 4.46
 
 # webMobaLedLib: Änderungen (Kurzfassung)
 
 Gilt ab Version 1.39. Neueste Version oben.
+
+## Version 4.46 (2026-11-20)
+
+Korrekturen:
+- Dunkler Modus: Beschreibungstexte (zum Beispiel DCC Keyboard, Farb Test, Servo Test, Sound Test, Z21) sind jetzt lesbar.
+
+## Version 4.45 (2026-11-20)
+
+Korrekturen:
+- Der Dunkle Modus blieb nur bis zum nächsten Reiterwechsel erhalten; behoben.
+
+## Version 4.44 (2026-11-20)
+
+Neue Funktionen:
+- Dunkler Modus (Issue 51): Programm Einstellungen, Allgemeine Einstellungen, „Darstellung der Oberfläche“: Hell (Vorgabe), Dunkel oder Wie System. Menüs, Dialoge und Formulare werden dunkel, die Tabelle bleibt hell.
+
+Korrekturen:
+- Blattreiter besser lesbar: kräftigerer Streifen, dunklere Schrift, Trennlinien und ein deutlich abgesetzter aktiver Reiter.
+
+## Version 4.43 (2026-11-20)
+
+Korrekturen:
+- „Kein ESP-Port gewählt“ (Issue 50) auch beim ESP32-Setup per USB mit eingeschaltetem WLAN: Ist kein Anschluss eingetragen, nimmt das Programm den der aktiven Verbindung oder zeigt „Board und USB Port erkennen“.
+
+## Version 4.42 (2026-11-20)
+
+Korrekturen:
+- „Kein ESP-Port gewählt“ beim Hochladen (Issue 50): Ist die Lichtmaschine verbunden, aber in der Tabelle kein Anschluss eingetragen, nimmt das Programm den Anschluss der aktiven Verbindung (bei ESP32 und Pico auch das Board) und lädt dorthin hoch. Bereits eingetragene Board- und Anschlusswerte bleiben unverändert. Bei mehreren angeschlossenen Boards legt die neue Einstellung „Kein Anschluss in der Tabelle: bei mehreren Boards“ (Allgemeine Einstellungen) fest, ob die aktive Verbindung genommen oder das Fenster „Board und USB Port erkennen“ geöffnet wird.
+
+## Version 4.41 (2026-11-20)
+
+Korrekturen:
+- Die Seite baute sich in 4.38 bis 4.40 nicht mehr auf (Fehler bei den neuen Tastenkürzeln); behoben.
 
 ## Version 4.40 (2026-11-20)
 

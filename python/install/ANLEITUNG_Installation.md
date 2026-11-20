@@ -1,5 +1,5 @@
 # webMobaLedLib – Installation und Betrieb
-*Datei-Version: 4.41 (2026-11-20), gilt für webMobaLedLib 4.41*
+*Datei-Version: 4.46 (2026-11-20), gilt für webMobaLedLib 4.46*
 
 Windows · macOS · Linux-Desktop · Raspberry Pi
 
@@ -433,9 +433,37 @@ Ist unter **Optionen Werkzeuge** ein **ESP32** als LED-Zentrale gewählt, ersche
 - **Rückfrage beim Öffnen (seit 3.98):** Benutzt eine Datei eine **ausgeschaltete** Erweiterung, fragt das Programm, ob es sie einschalten soll (einmal je Erweiterung und Sitzung); ohne sie fehlen die Zeilen in der erzeugten Datei.
 - **Wiki:** eigene Seite `erweiterungen` (siehe Wiki-Paket 3.98).
 
-### 2.9k Neu seit 3.93 (3.94 bis 4.41)
+### 2.9k Neu seit 3.93 (3.94 bis 4.46)
 
 Kurzfassung der Änderungen seit dem letzten Release, neueste Version zuerst (ausführlich in `HOC_Anwender.md`):
+
+**Version 4.46**
+
+*Korrekturen:*
+- Dunkler Modus: Beschreibungstexte (DCC Keyboard, Farb Test, Servo Test, Sound Test, Z21) sind lesbar.
+
+**Version 4.45**
+
+*Korrekturen:*
+- Der Dunkle Modus blieb nur bis zum nächsten Reiterwechsel erhalten; behoben.
+
+**Version 4.44**
+
+*Neue Funktionen:*
+- Dunkler Modus (Issue 51): Programm Einstellungen, Allgemeine Einstellungen, „Darstellung der Oberfläche“: Hell (Vorgabe), Dunkel oder Wie System. Die Tabelle bleibt hell.
+
+*Korrekturen:*
+- Blattreiter kontrastreicher: aktiver Reiter deutlich abgesetzt.
+
+**Version 4.43**
+
+*Korrekturen:*
+- „Kein ESP-Port gewählt“ (Issue 50) auch beim ESP32-Setup per USB mit eingeschaltetem WLAN: leerer Anschluss wird aus der aktiven Verbindung übernommen oder über „Board und USB Port erkennen“ gewählt.
+
+**Version 4.42**
+
+*Korrekturen:*
+- „Kein ESP-Port gewählt“ beim Hochladen (Issue 50): Bei verbundener Lichtmaschine und leerem Anschluss in der Tabelle wird der Anschluss der aktiven Verbindung (bei ESP32/Pico auch das Board) eingetragen. Bei mehreren Boards bestimmt die Einstellung „Kein Anschluss in der Tabelle: bei mehreren Boards“, ob die aktive Verbindung genommen oder das Erkennen-Fenster geöffnet wird.
 
 **Version 4.41**
 

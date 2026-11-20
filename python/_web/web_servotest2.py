@@ -1,15 +1,16 @@
-# Datei-Version: 1.02 (2026-11-05) - web_servotest2.py
+# Datei-Version: 1.03 (2026-11-20) - web_servotest2.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_servotest2.py
 # Path:           _web/web_servotest2.py
-# Version:        1.02
-# Last Update:    2026-11-05
+# Version:        1.03
+# Last Update:    2026-11-20
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
 #   1.00  2026-10-20  Neu: Seite Servo Test 2 (ServoTestPage2.py ohne Tk), Teil A: direkte Steuerung von Direct Mode Servos (Betriebsarten 1 bis 10, ENTER, Regler 0 bis 255, Zeitgeber mit CRC4). Ohne Programmieren des ATtiny (Teil B und C)
 #   1.01  2026-10-21  Neu Servo2Page.on_connected: nach dem Verbinden (Taste Mit ARDUINO verbinden in der Kopfzeile oder Menue) den Direktmodus neu starten
 #   1.02  2026-11-05  Beschreibungstext der Seite wird uebersetzt (description_text; zugeklappt steht die erste Zeile der uebersetzten Beschreibung)
+#   1.03  2026-11-20  Issue 51: Hinweisbox mit hellem Hintergrund bekommt dunkle Schrift (im Dunklen Modus war weisser Text auf hellem Grund nicht lesbar)
 # ----------------------------------------------------------------------------------------------
 """Web-Version der Seite "Servo Test 2" (mlpyproggen/ServoTestPage2.py, Klasse ServoTestPage2, ohne Tk): Servos im Direct Mode (Variante von Eckhart, ein ATtiny
 statt des WS2811-Chips, Kommandos mit CRC4-Pruefsumme).
@@ -387,7 +388,8 @@ def build(ctrl, is_active=None):
         opened = desc["open"]
         refs["description"].set_text(description if opened else description.split("\n")[0])
         shape = "white-space: pre-line; overflow: visible; text-overflow: clip" if opened else "white-space: nowrap; overflow: hidden; text-overflow: ellipsis"
-        refs["description"].style(f"background: #f0f0f0; padding: 6px 10px; border: 1px solid #aaa; min-width: 0; {shape}")
+        refs["description"].style(f"background: #f0f0f0; color: #212121; padding: 6px 10px; border: 1px solid #aaa; min-width: 0; {shape}")  # 1.03
+        # refs["description"].style(f"background: #f0f0f0; padding: 6px 10px; border: 1px solid #aaa; min-width: 0; {shape}")  # 1.03 (entfallen)
         refs["desc_toggle"].props(f"icon={'expand_less' if opened else 'expand_more'}")
 
     def toggle_description(_=None):

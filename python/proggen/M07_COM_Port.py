@@ -1,13 +1,14 @@
-# Datei-Version: 1.12 (2026-11-19) - M07_COM_Port.py
+# Datei-Version: 1.13 (2026-11-20) - M07_COM_Port.py
 # ----------------------------------------------------------------------------------------------
 # Name:           M07_COM_Port.py
 # Path:           proggen/M07_COM_Port.py
-# Version:        1.12
-# Last Update:    2026-11-19
+# Version:        1.13
+# Last Update:    2026-11-20
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
 #   1.00  2026-10-12  Stand der Umstellung (nicht erfasst)
+#   1.13  2026-11-20  Issue 50: Ist kein Anschluss eingetragen, aber eine Verbindung zur Lichtmaschine aktiv, wird deren Anschluss (und Board) vor dem Hochladen in die Tabelle uebernommen (Fill_Port_From_Active_Connection, Einstellung UploadPortMode)
 #   1.01  2026-10-20  EnumComPorts: FTDI-Adapter (VID 0403, Beschreibung FT232 ...) werden erkannt, sonst meldete die Pruefung beim Hochladen 'kein Arduino angeschlossen'; DetectArduino: kein Absturz, wenn die Verbindung inzwischen getrennt wurde
 #   1.11  2026-11-14  Other_Type_Port_List (Liste statt Text, fuer die anklickbaren 'Andere Typen')
 #   1.12  2026-11-19  Bootloader-Pruefung merkt sich Firmware-Version (STK_GET_PARAMETER) und Signatur (Get_Last_Detect_Info): Nano mit neuem Bootloader wird als neu bzw. Full erkannt (Issue 14)
@@ -58,6 +59,7 @@
 # 2021-01-07 v4.02 HL: - Else: check done, first PoC release
 import serial.tools.list_ports as portlist
 import logging
+logger = logging.getLogger(__name__)  # v1.13
 import os  # v1.03
 import re  # v1.03
 import serial
@@ -298,12 +300,60 @@ def ComPortPage():
         fn_return_value = P01.ActiveSheet
     return fn_return_value
 
+def Fill_Port_From_Active_Connection(ComPortColumn):  # v1.13 (Issue 50)
+    """Kein Anschluss in der Tabelle, aber eine aktive Verbindung zur Lichtmaschine: deren Anschluss (bei ESP32 und Pico auch das Board) eintragen.
+    Gibt True zurueck, wenn ein Anschluss eingetragen wurde. Regeln:
+    - Anschluss und Board stehen schon in der Tabelle: nichts aendern (der Aufrufer ruft diese Routine nur ohne Anschluss auf).
+    - Board steht in der Tabelle, aber kein Anschluss: nur eintragen, wenn der Typ der aktiven Verbindung zum Board passt.
+    - Mehrere Boards angeschlossen (Anzahl erkannter Anschluesse): Einstellung UploadPortMode; 'Erkennen-Fenster' oeffnet stattdessen das Fenster Board und USB Port erkennen."""
+    try:  # v1.13
+        ctrl = PG.global_controller  # v1.13
+        if ComPortColumn != M25.COMPort_COL or not ctrl.is_connection_open():  # v1.13: nur Lichtmaschine mit aktiver Verbindung
+            return False  # v1.13
+        port = str(ctrl.getConfigData("serportname") or "").strip()  # v1.13
+        if port == "" or port.upper() in ("NO DEVICE", "COM?") or port.upper().startswith("IP:"):  # v1.13: WLAN: nicht hier
+            return False  # v1.13
+        typ = ""  # v1.13: Typ der aktiven Verbindung und Anzahl der angeschlossenen Boards
+        count = 0  # v1.13
+        for cp in portlist.comports(include_links=False):  # v1.13
+            if os.name != 'nt' and re.match(r'^/dev/ttyS\d+$', str(cp.device)) and str(cp.hwid).strip().lower() in ('n/a', ''):  # v1.13
+                continue  # v1.13
+            t = Classify_Port(cp)  # v1.13
+            if not t:  # v1.13
+                continue  # v1.13
+            count += 1  # v1.13
+            if str(cp.device).upper() == port.upper():  # v1.13
+                typ = t  # v1.13
+        if count > 1:  # v1.13: mehrere Boards angeschlossen
+            mode = str(ctrl.getConfigData("UploadPortMode") or "").strip()  # v1.13
+            if mode.lower().startswith("erkennen") or mode == "1" or mode.lower().startswith("detect"):  # v1.13: Fenster Board und USB Port erkennen
+                logger.info("Issue 50: %d Boards angeschlossen, Einstellung %s: Erkennen-Fenster", count, mode)  # v1.13
+                return False  # v1.13
+        entered = str(P01.Cells(M02.SH_VARS_ROW, M25.BUILDOP_COL)).strip() != ""  # v1.13: ein Board ist schon eingetragen
+        if entered:  # v1.13
+            cur = M02a.Get_BoardTyp()  # v1.13
+            cur_typ = 'Pico' if cur == M02.HT_PICO else ('ESP32' if cur == M02.HT_ESP32 else 'Nano')  # v1.13
+            if typ != cur_typ:  # v1.13: anderes Board: nichts ueberschreiben
+                logger.info("Issue 50: eingetragenes Board (%s) passt nicht zur Verbindung (%s): kein Eintrag", cur_typ, typ)  # v1.13
+                return False  # v1.13
+        elif typ in ('ESP32', 'Pico'):  # v1.13: kein Board eingetragen: ESP32 und Pico mit eintragen
+            import proggen.M28_Diverse as M28pio  # v1.13
+            M28pio.Change_Board_Typ(True, M02.BOARD_ESP32 if typ == 'ESP32' else M02.BOARD_PICO)  # v1.13
+        ComPortPage().CellDict[M02.SH_VARS_ROW, ComPortColumn] = port  # v1.13
+        logger.info("Issue 50: Anschluss %s (%s) der aktiven Verbindung in die Tabelle eingetragen", port, typ)  # v1.13
+        return True  # v1.13
+    except Exception:                                      # noqa: BLE001  # v1.13
+        logger.warning("Anschluss der aktiven Verbindung nicht uebernommen", exc_info=True)  # v1.13
+        return False  # v1.13
+
 def Check_USB_Port_with_Dialog(ComPortColumn):
     fn_return_value = False
     #---------------------------------------------------------------------------
     #if P01.val(ComPortPage().Cells(M02.SH_VARS_ROW, ComPortColumn)) <= 0:
     if True: #HL not PG.global_controller.arduino or not PG.global_controller.arduino.is_open:
-        if not F00.port_is_available(ComPortPage().Cells(M02.SH_VARS_ROW, ComPortColumn)):
+        if not F00.port_is_available(ComPortPage().Cells(M02.SH_VARS_ROW, ComPortColumn)) and Fill_Port_From_Active_Connection(ComPortColumn):  # v1.13 (Issue 50)
+            fn_return_value = True  # v1.13
+        elif not F00.port_is_available(ComPortPage().Cells(M02.SH_VARS_ROW, ComPortColumn)):  # v1.13
             fn_return_value = M07New.USB_Port_Dialog(ComPortColumn)
             # 04.05.20: Prior Check_USB_Port_with_Dialog ends the program in case of an error
         else:

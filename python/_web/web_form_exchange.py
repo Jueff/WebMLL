@@ -1,15 +1,16 @@
-# Datei-Version: 1.02 (2026-11-15) - web_form_exchange.py
+# Datei-Version: 1.03 (2026-11-20) - web_form_exchange.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_form_exchange.py
 # Path:           _web/web_form_exchange.py
-# Version:        1.02
-# Last Update:    2026-11-15
+# Version:        1.03
+# Last Update:    2026-11-20
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
 #   1.00  2026-10-17  Neu: Zeilenauswahl fuer Export zu ProgGen und Import von ProgGen als Hinweisband im Reiter Programm Generator
 #   1.01  2026-10-23  Texte mit eingesetzten Werten (f-Strings) mit tr("... {name}", name=...) umgestellt, damit sie uebersetzt werden
 #   1.02  2026-11-15  Reiter und Texte "Patterngenerator" heissen jetzt "Timeline Editor"
+#   1.03  2026-11-20  Issue 51: Hinweisbox mit hellem Hintergrund bekommt dunkle Schrift (im Dunklen Modus war weisser Text auf hellem Grund nicht lesbar)
 # ----------------------------------------------------------------------------------------------
 """Web-Ersatz fuer proggen/Select_ProgGen_Dest_Form.py und Select_ProgGen_Src_Form.py.
 
@@ -132,7 +133,7 @@ class ExchangeBanner:
         self.get_workbook = get_workbook                 # () -> Arbeitsbuch des Programm Generators
         self.form = None
         loop = asyncio.get_running_loop()
-        with ui.card().classes("w-full").style("background: #fff8e1; border: 2px solid #f9a825; padding: 8px 14px; gap: 6px") as self.card:
+        with ui.card().classes("w-full").style("background: #fff8e1; color: #212121; border: 2px solid #f9a825; padding: 8px 14px; gap: 6px") as self.card:  # 1.03
             self.title = ui.label("").style("color: #c62828; font-weight: 600")
             self.text = ui.label("").style("white-space: pre-line")
             with ui.row().classes("items-center gap-4"):

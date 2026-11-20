@@ -1,9 +1,9 @@
-# Datei-Version: 1.26 (2026-11-20) - web_tabs.py
+# Datei-Version: 1.28 (2026-11-20) - web_tabs.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_tabs.py
 # Path:           _web/web_tabs.py
-# Version:        1.26
-# Last Update:    2026-11-19
+# Version:        1.28
+# Last Update:    2026-11-20
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
@@ -34,6 +34,8 @@
 #   1.24  2026-11-19  Neue Einstellung AutoConnect (Allgemeine Einstellungen): beim Start mit der Lichtmaschine verbinden und nach dem Hochladen verbinden; is_auto_connect (Issue 20)
 #   1.25  2026-11-19  Neue Einstellung IncrSaveKey: Tastenkombination fuers inkrementelle Speichern (Allgemeine Einstellungen, Issue 21)
 #   1.26  2026-11-20  Neue Einstellungen SetupCloseOnSuccess und SetupCloseOnError (Allgemeine Einstellungen): Uebertragungsfenster nach Erfolg/Fehler automatisch schliessen (Issue 41, Pull Request 44)
+#   1.27  2026-11-20  Neue Einstellung UploadPortMode (Allgemeine Einstellungen): Anschluss der aktiven Verbindung fuers Hochladen verwenden oder Fenster Board und USB Port erkennen oeffnen, wenn mehrere Boards angeschlossen sind (Issue 50)
+#   1.28  2026-11-20  Neue Einstellung ThemeMode (Allgemeine Einstellungen): Darstellung Hell, Dunkel oder Wie System, Vorgabe Hell (Issue 51)
 # ----------------------------------------------------------------------------------------------
 """Adressen der Reiter: Ein Reiter laesst sich direkt aufrufen, zum Beispiel http://localhost:8080/Farbtest. Mit dem Zusatz ?vollbild=1 oeffnet er sich gleich im Vollbild
 (Titel, Menue und Reiterleiste ausgeblendet, siehe web_fullscreen). Die Startseite / bleibt wie sie ist (Programm Generator).
@@ -171,7 +173,15 @@ PARAM_ADDITIONS = {"ColoredRowsBold": ({"ParName": "ColoredRowsBold", "Cnt": "1"
                  "SetupCloseOnError": ({"ParName": "SetupCloseOnError", "Cnt": "1", "Type": "Combo", "Values": ["sofort", "5 Sekunden", "10 Sekunden", "30 Sekunden", "nie"], "ValuesText": ["sofort", "5 Sekunden", "10 Sekunden", "30 Sekunden", "nie"], "ConfigName": ["SetupCloseOnError", "SetupCloseOnErrorIdx"], "ParamLabelWidth": "25", "Min": "0", "Max": "255", "Default": "30 Sekunden",  # v1.26
                                        "Input Text": "Fenster nach Fehler automatisch schließen",  # v1.26
                                        "Hint": "Legt fest, wie lange das Übertragungsfenster nach einem Fehler offen bleibt. 'nie' hält das Fenster offen, damit die Meldung gelesen werden kann."},  # v1.26
-                                      "SetupCloseOnSuccess")}  # v1.26
+                                      "SetupCloseOnSuccess"),  # v1.26  # v1.27
+                 "UploadPortMode": ({"ParName": "UploadPortMode", "Cnt": "1", "Type": "Combo", "Values": ["Aktive Verbindung verwenden", "Erkennen-Fenster öffnen"], "ValuesText": ["Aktive Verbindung verwenden", "Erkennen-Fenster öffnen"], "ConfigName": ["UploadPortMode", "UploadPortModeIdx"], "ParamLabelWidth": "25", "Min": "0", "Max": "255", "Default": "Aktive Verbindung verwenden",  # v1.27
+                                     "Input Text": "Kein Anschluss in der Tabelle: bei mehreren Boards",  # v1.27
+                                     "Hint": "Ist beim Hochladen kein USB-Anschluss in der Tabelle eingetragen, aber die Lichtmaschine verbunden, trägt das Programm deren Anschluss ein (bei ESP32 und Pico auch das Board) und lädt dorthin hoch. Sind mehrere Boards angeschlossen, legt diese Einstellung fest: 'Aktive Verbindung verwenden' (Vorgabe) nimmt die aktive Verbindung, 'Erkennen-Fenster öffnen' zeigt das Fenster Board und USB Port erkennen. Ist ein Board eingetragen, das nicht zur Verbindung passt, oder sind Board und Anschluss eingetragen, ändert das Programm nichts."},  # v1.27
+                                    "SetupCloseOnError"),  # v1.27  # v1.28
+                 "ThemeMode": ({"ParName": "ThemeMode", "Cnt": "1", "Type": "Combo", "Values": ["Hell", "Dunkel", "Wie System"], "ValuesText": ["Hell", "Dunkel", "Wie System"], "ConfigName": ["ThemeMode", "ThemeModeIdx"], "ParamLabelWidth": "25", "Min": "0", "Max": "255", "Default": "Hell",  # v1.28
+                                "Input Text": "Darstellung der Oberfläche",  # v1.28
+                                "Hint": "Hell (Vorgabe), Dunkel oder Wie System (folgt der Einstellung des Betriebssystems oder Browsers). Der Dunkle Modus gilt für Menüs, Dialoge und Formulare, die Tabelle mit den Blattreitern bleibt zur besseren Lesbarkeit der Zellfarben hell. Die Änderung gilt nach dem Speichern der Einstellungen sofort."},  # v1.28
+                               "UploadPortMode")}  # v1.28
 
 
 # Optionen des Tk-Programms, die im Web keine Wirkung haben und deshalb nicht angezeigt werden: Der Reiter Patterngenerator ist immer da
