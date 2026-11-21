@@ -45,7 +45,7 @@ Die IDE wird heruntergeladen (rund 130 bis 200 MB) und danach werden die Bibliot
 
 ===== Schritt 2: Im Programm auf die Arduino IDE umstellen =====
 
-  - Klicke in der Werkzeugleiste auf den Knopf **Optionen Werkzeuge**.
+  - Klicke in der Werkzeugleiste auf den Knopf **Hardware Optionen**.
   - Öffne den Reiter **ENTWICKLUNGSUMGEBUNG**.
   - Wähle **ARDUINO-IDE** und schließe den Dialog.
 
@@ -56,7 +56,7 @@ Wenn du wieder **PlatformIO** benutzen willst, stellst du es an derselben Stelle
 ===== Wenn etwas nicht klappt =====
 
 ^ Was passiert ^ Was hilft ^
-| „ARDUINO IDE nicht gefunden“ | Öffne **Optionen Werkzeuge**, Reiter **Entwicklungsumgebung**, Knopf **ARDUINO-IDE Einstellungen** und klicke auf **IDE suchen**. Oder trage den Pfad der Startdatei ein. |
+| „ARDUINO IDE nicht gefunden“ | Öffne **Hardware Optionen**, Reiter **Entwicklungsumgebung**, Knopf **ARDUINO-IDE Einstellungen** und klicke auf **IDE suchen**. Oder trage den Pfad der Startdatei ein. |
 | Beim Kompilieren fehlt „MobaLedLib.h“ | Die Bibliotheken fehlen. Öffne den Reiter **UPDATE** (er erscheint nur mit der ARDUINO IDE) und lasse die Bibliotheken installieren. |
 | Windows: Die Installation der IDE bricht ab | Lade die IDE 1.8.19 von Hand von [[https://www.arduino.cc/en/software/OldSoftwareReleases/|arduino.cc]] und starte die Installation noch einmal mit ''install_windows.bat /libs''. |
 | Der schnelle Bootloader geht nicht | Diese Funktion läuft in der webMobaLedLib nur mit PlatformIO. |

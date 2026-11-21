@@ -17,7 +17,7 @@ Starte die webMobaLedLib mit dem Symbol **webMobaLedLib** (Desktop). Nach 20 bis
 
 ===== Schritt 2: Den Programmgenerator öffnen =====
 
-Mit dem **Programmgenerator** erstellst du das Programm für die Lichtmaschine. Er ist der erste Reiter oben und beim Start meist schon offen. Hast du einen anderen Reiter geöffnet (zum Beispiel **Programm Einstellungen**), klicke oben auf **Programm Generator**.
+Mit dem **Programmgenerator** erstellst du das Programm für die Lichtmaschine. Er ist der erste Reiter oben und beim Start meist schon offen. Hast du eine andere Seite geöffnet (zum Beispiel über das Menü **Einstellungen**), klicke oben auf den Reiter **Programm Generator**.
 
 {{:bilder:anleitungen:webmobaledlib:erst_02_programmgenerator.png?600|Der Reiter Programm Generator}}
 
@@ -42,7 +42,7 @@ Jetzt sagst du dem Programm, **welche Lichtmaschine** du hast und **an welchem U
 **Wichtig:** Der Knopf **Mit Lichtmaschine verbinden** (oben rechts) funktioniert nur, wenn auf der Lichtmaschine **schon ein MobaLedLib-Programm** läuft. Bei einer **neuen** Lichtmaschine klappt das **nicht**. Stelle sie deshalb so ein:
 
   - Stecke die Lichtmaschine mit dem USB-Kabel an den Computer.
-  - Klicke in der Werkzeugleiste auf **Optionen Werkzeuge**.
+  - Klicke in der Werkzeugleiste auf **Hardware Optionen**.
   - Öffne den Reiter **Lichtmaschine**.
   - Klicke auf **Board und USB Port erkennen** (der Knopf steht über **USB Port erkennen**). Das Programm sucht an **allen USB-Anschlüssen** nach einer Lichtmaschine und stellt das **erste gefundene Board** ein. Danach öffnet sich das Fenster **USB Port erkennen**. Es zeigt das **gefundene Board mit seinem Anschluss** und, wie bisher, auch die **anderen gefundenen Boards**.
   - **Übernimm** das gefundene Board mit dem Anschluss oder wähle einen **anderen Typ**. Du musst vorher **kein Board** auswählen.
@@ -51,7 +51,7 @@ Jetzt sagst du dem Programm, **welche Lichtmaschine** du hast und **an welchem U
 
 **Hinweis:** Der Knopf **Board und USB Port erkennen** ersetzt seit **3.82** den Haken **Automatisch erkennen**. Er sucht selbst an **allen USB-Anschlüssen** (es muss vorher weder ein Board noch ein Anschluss eingestellt sein) und erkennt **Nano**, **ESP32** und **Raspberry Pico**. Bei einem Nano spricht das Programm den **Bootloader** an und erkennt **alt (57600 Baud)** und **neu (115200 Baud)**; es stellt **Nano Normal (old Bootloader)** oder **Nano (neue Version)** passend ein. Findet es mehrere Boards, nimmt es das **erste** und zeigt die anderen im Fenster von **USB Port erkennen** mit an. Das Fenster sagt dir also, was gefunden wurde; du kannst es übernehmen oder einen anderen Typ wählen. Eine Datei, in der noch das alte Merkmal „AutoDet“ gespeichert ist, stellt das Board beim Hochladen **nicht mehr** selbst um. Wer die Abfrage des Bootloaders **nicht** möchte, nimmt den Haken **Bootloader des Nano beim Prüfen erkennen** in den [[anleitungen:webmobaledlib:wz_programm_einstellungen|Programm Einstellungen]] (Spezialeinstellungen) weg.
 
-{{:bilder:anleitungen:webmobaledlib:erst_04_optionen.png?500|Optionen Werkzeuge, Reiter Lichtmaschine: Board und USB Port erkennen}}
+{{:bilder:anleitungen:webmobaledlib:erst_04_optionen.png?500|Hardware Optionen, Reiter Lichtmaschine: Board und USB Port erkennen}}
 
 ===== Schritt 5: Das Makro prüfen =====
 
@@ -92,7 +92,7 @@ Jetzt läuft auf der Lichtmaschine ein MobaLedLib-Programm. Darum funktioniert a
 ^ Was passiert ^ Was hilft ^
 | **Mit Lichtmaschine verbinden** klappt nicht, oben steht **Nicht verbunden** | Bei einer **neuen** Lichtmaschine ist das normal: Es läuft noch kein MobaLedLib-Programm. Mache Schritt 4 bis 6. Danach klappt das Verbinden. |
 | Bei **USB Port erkennen** erscheint kein Anschluss | Prüfe das USB-Kabel (Daten, nicht nur Laden) und stecke die Lichtmaschine neu an. Klicke dann noch einmal auf **USB Port erkennen**. Unter Windows kann bei Nachbauten ein [[https://www.wch-ic.com/downloads/CH341SER_EXE.html|CH340-Treiber]] fehlen. Unter Linux musst du in der Gruppe //dialout// sein (siehe [[anleitungen:webmobaledlib:linux|Linux]]). |
-| Das Übertragen bricht mit einer Meldung zum **Hochladen** ab | Prüfe das **Board** in **Optionen Werkzeuge → Lichtmaschine**. Bei vielen Nano-Nachbauten (China-Nano) hilft **Nano Normal (old Bootloader)**. Dann noch einmal **Setup übertragen**. |
+| Das Übertragen bricht mit einer Meldung zum **Hochladen** ab | Prüfe das **Board** in **Hardware Optionen → Lichtmaschine**. Bei vielen Nano-Nachbauten (China-Nano) hilft **Nano Normal (old Bootloader)**. Dann noch einmal **Setup übertragen**. |
 | Eine Meldung nennt **PlatformIO nicht gefunden** | Die Installation wurde nicht ganz beendet. Starte das Installationsskript noch einmal (Seite für dein System unter [[anleitungen:webmobaledlib:installation|Installation]]). |
 | Das Übertragen dauert sehr lange | Beim ersten Mal ist das normal (bis zu 10 Minuten). Prüfe die Internetverbindung. |
 | Die LED auf der Platine blinkt nicht | Prüfe die Stromversorgung (USB-Kabel) und ob das **Übertragen** ohne Fehlermeldung zu Ende ging. Prüfe in der Tabelle, ob die erste Zeile den **Haken** in **Aktiv** hat und das Makro **Heartbeat LED** enthält: Die erste Zeile steuert die LED mit der Nummer 0, die Heartbeat LED. Weitere LEDs: Kabel, Stromversorgung und Anschlussbelegung der Platine ([[anleitungen:ueberblick_platinen|Platinen-Überblick]]). |

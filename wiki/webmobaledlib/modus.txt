@@ -27,7 +27,7 @@ Hast du die webMobaLedLib **schon vor dem Anfänger Modus** benutzt, bleibt sie 
 
   * **Zeilen mit einem ausgeblendeten Makro**, die schon in der Tabelle stehen, bleiben, wie sie sind, und lassen sich weiter öffnen und ändern. Ausgeblendet wird nur die **Auswahl neuer** Makros.
   * Rufst du die **Adresse** eines ausgeblendeten Reiters auf (zum Beispiel ''localhost:8080/TimelineEditor''), öffnet sich der Programm Generator mit einem Hinweis.
-  * Den **Z21 Simulator** und die **DM Servo Einstellungen** zeigt auch der Experten Modus nur, wenn du sie in den Programm Einstellungen eingeschaltet hast (Gruppe **Spezialeinstellungen**).
+  * Den **Z21 Simulator** und die **DM Servo Einstellungen** zeigt auch der Experten Modus nur, wenn du sie in den Programm Einstellungen eingeschaltet hast (Menü **Einstellungen, Spezial**).
   * Welche Makros im Anfänger Modus fehlen, steht in der Textdatei ''csv/Beginner_Hidden_Macros.csv'' im Programmordner. Wer sich auskennt, kann dort Makros oder Gruppen eintragen. Die Datei beschreibt am Anfang, wie das geht. Die Liste braucht keinen Neustart.
 
 Mehr zu den Einstellungen: [[anleitungen:webmobaledlib:wz_programm_einstellungen|Programm Einstellungen]].

@@ -19,7 +19,7 @@ In der Makroauswahl stehen **alle Makros**, nach Gruppen sortiert (zum Beispiel 
 
   * **F2** oder **Enter** auf der markierten Zelle, oder ein **Doppelklick**, öffnet die Zelle zum Bearbeiten. Das geht schneller als der Dialog, wenn du nur einen Wert ändern willst, zum Beispiel in der Spalte //Beleuchtung, Sound, oder andere Effekte//.
   * **Aktiv:** Klicke in das Kästchen der Spalte **Aktiv**, um den **Haken** zu setzen oder zu entfernen. Nur Zeilen **mit Haken** kommen ins Programm für die Lichtmaschine.
-  * Der **Doppelklick** bearbeitet standardmäßig die Zelle. Wenn er stattdessen die **Makroauswahl** öffnen soll (wie im Excel-Programm), schalte das im Reiter **Programm Einstellungen** ein: Karte **Bedienung der Tabelle**, Haken **„Doppelklick auf Name und Beleuchtung öffnet die Makroauswahl“**, dann **Speichern**.
+  * Der **Doppelklick** bearbeitet standardmäßig die Zelle. Wenn er stattdessen die **Makroauswahl** öffnen soll (wie im Excel-Programm), schalte das im Menü **Einstellungen, Allgemein** ein: Karte **Bedienung der Tabelle**, Haken **„Doppelklick auf Name und Beleuchtung öffnet die Makroauswahl“**, dann **Speichern**.
 
 ===== Das Kontextmenü (rechte Maustaste) =====
 
@@ -27,12 +27,14 @@ Mit der **rechten Maustaste** (auf dem Tablet: lange drücken) auf eine Zelle er
 
 ^ Eintrag ^ Wirkung ^
 | Zelle bearbeiten (F2) | Wie F2 |
-| Kopieren (Strg + C), Ausschneiden (Strg + X), Einfügen (Strg + V) | Wie in anderen Programmen |
+| Kopieren (Strg + C), Ausschneiden (Strg + X), Einfügen (Strg + V) | Wie in Excel: übertragen werden Text **und Feldfarbe** (nur von Hand gesetzte Farben). Sind mehrere Zeilen markiert, wird das kopierte Muster wiederholt |
+| Nur Text einfügen (Strg + Umschalt + V) | Fügt nur den Text ein, ohne Farbe |
 | Als Zeilen einfügen | Fügt kopierte Zeilen als neue Zeilen ein |
 | Löschen (Entf) | Löscht den Inhalt |
 | Nach unten ausfüllen (Strg + D) | Kopiert die oberste markierte Zelle in die markierten Zeilen darunter; bei einer Zelle die Zelle darüber |
 | Reihe fortsetzen | Wie Nach unten ausfüllen, aber die Zahl am Ende zählt weiter (1, 2, 3 oder V1, V2, V3) |
-| Farbe setzen, Farbe entfernen | Färbt die Zelle ein oder entfernt die Farbe |
+| Farbe setzen, Farbe entfernen | Färbt die Zelle ein oder entfernt die Farbe. Von Hand gesetzte Farben bleiben bei „Tabelle färben“ und „Automatisch einfärben“ erhalten und werden mit der Tabelle gespeichert. Strg + Z nimmt sie zurück |
+| Farbe mit Mini-Farbtest ändern … (**F3**) | Für das Makro **ConstRGB**: Zelle **Beleuchtung** anklicken. Der Mini-Farbtest startet mit der Farbe bei Ein (R1, G1, B1), mit dem Umschalter wählst du die Farbe bei Aus (R0, G0, B0). Die Farbe leuchtet live an der LED, mit **OK** ersetzt das Programm die Zahlen im Makrotext (Strg + Z macht es rückgängig) |
 
 ===== Mehrere Zeilen auf einmal =====
 
@@ -73,7 +75,8 @@ Die Knöpfe **Neue Tabelle** und **Tabelle löschen** in der Werkzeugleiste lege
 
 ===== Wenn die Tabelle nicht stimmt =====
 
-Im Menü **Tabelle** gibt es zwei Befehle:
+Im Menü **Tabelle** gibt es drei Befehle:
 
+  * **Tabelle färben …:** Öffnet das Fenster **Tabelle färben** mit den Bedingungen für die Zeilenfarben; nach dem Färben wechselt das Programm in den Programm Generator (siehe [[anleitungen:webmobaledlib:wz_programm_einstellungen|Programm Einstellungen]]). Der Knopf **Zeilen Färben** der Werkzeugleiste und der Reiter **Tabelle Färben** entfallen seit 4.51.
   * **Tabelle neu berechnen:** Rechnet alle Blätter neu, also die LED-Zahlen und Start-LED-Nummern. Das Programm macht das vor dem Übertragen ohnehin. Nötig ist es zum Beispiel, wenn du eine Tabelle aus einer älteren Version geladen hast.
   * **Tabelle reparieren (Symbole und Testtasten neu aufbauen) …:** Hilft, wenn **Symbole oder Testtasten fehlen** oder an der falschen Zeile stehen. Das Programm fragt vorher nach.

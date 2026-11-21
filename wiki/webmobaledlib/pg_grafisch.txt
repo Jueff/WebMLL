@@ -11,7 +11,7 @@ Neben der Tabelle zeigt die webMobaLedLib deine Zeilen auch **als Bild**. Du sie
   * **Grafik:** nur das Bild.
   * **Beides:** das Bild oben, die Tabelle unten. Die **Trennlinie** dazwischen ziehst du mit der Maus oder dem Finger. Ein **Doppelklick** auf die Trennlinie stellt sie zurück.
 
-Welche Ansicht beim Start gilt, stellst du im Reiter **Programm Einstellungen** ein (**Standardansicht des Programm Generators**).
+Welche Ansicht beim Start gilt, stellst du im Menü **Einstellungen, Programm Generator** ein (**Standardansicht des Programm Generators**).
 
 ===== Ketten =====
 

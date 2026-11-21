@@ -1,11 +1,11 @@
-====== webMobaLedLib – ARDUINO Einstellungen ======
+====== webMobaLedLib – ARDUINO-IDE Einstellungen ======
 //Seitenstand 1.05 (2026-11-17), gilt für webMobaLedLib 3.85//
 
-**Mit PlatformIO (Standard) brauchst du diese Seite nicht.** Das Fenster **ARDUINO-IDE Einstellungen** (Optionen Werkzeuge, Reiter Entwicklungsumgebung, Knopf **ARDUINO-IDE Einstellungen**, mit **Speichern** und **Abbrechen**) ist nur für die **ARDUINO IDE** da, die Programmierumgebung der Arduino-Welt. Du brauchst ihn nur, wenn du die ARDUINO IDE **statt PlatformIO** benutzt (siehe [[anleitungen:webmobaledlib:arduino_ide|Zusätzlich: Arduino IDE]]).
+**Mit PlatformIO (Standard) brauchst du diese Seite nicht.** Das Fenster **ARDUINO-IDE Einstellungen** (Hardware Optionen, Reiter Entwicklungsumgebung, Knopf **ARDUINO-IDE Einstellungen**, mit **Speichern** und **Abbrechen**) ist nur für die **ARDUINO IDE** da, die Programmierumgebung der Arduino-Welt. Du brauchst ihn nur, wenn du die ARDUINO IDE **statt PlatformIO** benutzt (siehe [[anleitungen:webmobaledlib:arduino_ide|Zusätzlich: Arduino IDE]]).
 
-**Board und USB-Anschluss** deiner Lichtmaschine stellst du **nicht hier** ein, sondern im Programmgenerator: Werkzeugleiste **Optionen Werkzeuge**, Reiter **Lichtmaschine**. Wie das geht, steht auf der Seite [[anleitungen:webmobaledlib:pg_arduino|Verbinden und Übertragen]] und im [[anleitungen:webmobaledlib:erstes_programm|ersten Programm]].
+**Board und USB-Anschluss** deiner Lichtmaschine stellst du **nicht hier** ein, sondern im Programmgenerator: Werkzeugleiste **Hardware Optionen**, Reiter **Lichtmaschine**. Wie das geht, steht auf der Seite [[anleitungen:webmobaledlib:pg_arduino|Verbinden und Übertragen]] und im [[anleitungen:webmobaledlib:erstes_programm|ersten Programm]].
 
-{{:bilder:anleitungen:webmobaledlib:wz_06_arduino_einstellungen.png?600|Der Reiter ARDUINO Einstellungen}}
+{{:bilder:anleitungen:webmobaledlib:wz_06_arduino_einstellungen.png?600|Das Fenster ARDUINO-IDE Einstellungen}}
 
 ===== Was die Seite enthält =====
 
@@ -17,7 +17,7 @@
 | **Individuellen Pfad zu ARDUINO Resourcen (libraries, examples) verwenden (nur MAC)** | Nur für den Mac: der Pfad zu den Bibliotheken und Beispielen der ARDUINO IDE, wenn sie nicht am Standardort liegen. |
 | **Pfad zu ARDUINO Resourcen auswählen** | Das Feld für diesen Pfad (nur Mac). |
 
-Mit **Geänderte Einstellungen übernehmen** speicherst du deine Änderungen.
+Mit **Speichern (S)** übernimmst du deine Änderungen und schließt das Fenster, mit **Abbrechen (A)** verwirfst du sie.
 
 ===== Wenn die ARDUINO IDE nicht gefunden wird =====
 

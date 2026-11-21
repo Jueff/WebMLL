@@ -13,7 +13,7 @@ Normalerweise bedienst du die webMobaLedLib auf dem Rechner, auf dem sie läuft.
 
 ===== Zugriff einschalten (Windows, Mac, Linux) =====
 
-  - Öffne den Reiter **Programm Einstellungen**.
+  - Öffne das Menü **Einstellungen, Netzzugriff**.
   - Schalte im Kasten **Zugriff aus dem Netz erlauben** den **Schalter** ein.
   - Wenn noch kein Passwort eingerichtet ist, fragt ein Fenster danach. Gib ein **Passwort** ein (mindestens 4 Zeichen). Lässt du es leer, gibt es **keinen Schutz**. **Abbrechen** schaltet den Schalter wieder aus.
   - Klicke auf **Jetzt neu starten**. Das Programm sichert, startet neu, und der Browser lädt die Seite neu.
@@ -31,7 +31,7 @@ Du musst dafür **keine Datei von Hand ändern**.
 
 ===== Das Passwort ändern =====
 
-  - Öffne **Programm Einstellungen**.
+  - Öffne das Menü **Einstellungen, Netzzugriff**.
   - Gib im Block **Zugriff über das Netz (Web-Oberfläche)** das neue Passwort **zweimal** ein (mindestens 4 Zeichen).
   - Klicke auf **Passwort ändern**. Es gilt **sofort**. Das Programm speichert es nicht im Klartext, sondern nur verschlüsselt.
 
@@ -42,7 +42,7 @@ Solange das Standardpasswort gilt, zeigt der Block eine **Warnung**.
 ===== Wenn es nicht klappt =====
 
 ^ Was passiert ^ Was hilft ^
-| Das andere Gerät zeigt einen Ladefehler | Meist blockiert die **Firewall** des Rechners. Unter **Windows**: Reiter **Programm Einstellungen**, Bereich **Firewall**, Knopf **Zugriff aus dem Netz freigeben**. Das Netzwerk muss als **Privat** eingestellt sein (nicht „Öffentlich“). |
+| Das andere Gerät zeigt einen Ladefehler | Meist blockiert die **Firewall** des Rechners. Unter **Windows**: Menü **Einstellungen, Netzzugriff**, Bereich **Firewall**, Knopf **Zugriff aus dem Netz freigeben**. Das Netzwerk muss als **Privat** eingestellt sein (nicht „Öffentlich“). |
 | ''raspberrypi.local'' wird nicht gefunden | Das geht nicht in jedem Netz (Gastnetz, manche Router, Android). Nimm statt des Namens die **IP-Adresse** und hänge ''**:8080**'' an. |
 | Der Schalter ist grau und lässt sich nicht einschalten | Die Adresse ist von außen vorgegeben (Startparameter oder Umgebungsvariable). Die Seite nennt den Grund. |
 | Auf dem **iPad oder iPhone** bricht die Verbindung ab, zum Beispiel beim Wechsel der **Tabelle** (Meldung //Connection lost//) | Aktualisiere das Programm auf Version **3.05 oder neuer**. Seit dieser Version merkt sich das Programm die Anmeldung mit einem **Cookie**; Safari, Chrome und Firefox auf dem iPad senden die Anmeldung sonst nicht mit der Dauerverbindung. **Cookies müssen erlaubt sein.** Nach einem Neustart des Programms oder einer Passwortänderung meldest du dich neu an. |

@@ -23,7 +23,7 @@ Der Simulator zeigt **nur die LEDs**. Servos und Sound gibt es dort nicht.
 
 Der Knopf zum Simulieren ist normalerweise **ausgeblendet**:
 
-  - Öffne **Programm Einstellungen**, Gruppe **Spezialeinstellungen**.
+  - Öffne das Menü **Einstellungen, Spezial**.
   - Setze den Haken **Simulator anzeigen** und sichere die Einstellungen.
   - In der Werkzeugleiste erscheint **neben „Setup übertragen“** der Knopf **Setup simulieren**.
 
@@ -56,7 +56,7 @@ Ist der Simulator offen und **keine Lichtmaschine verbunden**, schalten die Test
 ===== Wenn etwas nicht klappt =====
 
 ^ Was passiert ^ Was hilft ^
-| Der Knopf **Setup simulieren** fehlt | Setze in den **Programm Einstellungen** (Spezialeinstellungen) den Haken **Simulator anzeigen** und sichere. |
+| Der Knopf **Setup simulieren** fehlt | Setze im Menü **Einstellungen, Spezial** den Haken **Simulator anzeigen** und sichere. |
 | Nichts geht auf, nur eine Meldung zum Übersetzen | Die **Werkzeuge** fehlen. Auf Linux brauchst du PlatformIO mit den AVR-Paketen oder die ARDUINO IDE. Die Meldung zeigt die letzten Zeilen der Ausgabe. Eigene Orte kannst du mit den Umgebungsvariablen ''MLL_AVR_BIN'' (Ordner mit ''avr-g++'') und ''MLL_AVR_PLATFORM'' (Ordner //framework-arduino-avr//) angeben. |
 | Auf Linux: kein Simulator, keine Meldung | Die Bibliothek fehlt für deinen Prozessor und es gibt keinen C++-Übersetzer. Installiere ''build-essential'' und starte das Programm neu. |
 | Die Testtasten fragen nach der Verbindung | Die Frage kommt höchstens einmal. Ohne Lichtmaschine lehnst du sie ab, dann schalten die Testtasten nur den Simulator. |

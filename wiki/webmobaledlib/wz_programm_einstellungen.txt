@@ -1,9 +1,25 @@
 ====== webMobaLedLib – Programm Einstellungen ======
-//Seitenstand 1.14 (2026-11-19), gilt für webMobaLedLib 4.17//
+//Seitenstand 1.15 (2026-11-21), gilt für webMobaLedLib 4.56//
 
-Im Reiter **Programm Einstellungen** passt du das Programm an dich an: die **Sprache**, die **Schriftgröße**, die **Darstellung** und einiges mehr. Die Einstellungen werden **gespeichert**, wenn du auf **Geänderte Einstellungen übernehmen** (bzw. **Speichern**) klickst, und gelten danach für das Programm auf diesem Rechner. Einige wirken **sofort**, andere erst nach einem **Neustart** des Programms. Das steht bei der jeweiligen Einstellung als Hinweis, wenn du mit der Maus darauf zeigst.
+Im Menü **Einstellungen** (seit 4.51, vorher der Reiter **Programm Einstellungen**) passt du das Programm an dich an: die **Sprache**, die **Schriftgröße**, die **Darstellung** und einiges mehr. Die Einstellungen werden **gespeichert**, wenn du auf **Geänderte Einstellungen übernehmen** (bzw. **Speichern**) klickst, und gelten danach für das Programm auf diesem Rechner. Einige wirken **sofort**, andere erst nach einem **Neustart** des Programms. Das steht bei der jeweiligen Einstellung als Hinweis, wenn du mit der Maus darauf zeigst.
 
-{{:bilder:anleitungen:webmobaledlib:wz_07_programm_einstellungen.png?600|Der Reiter Programm Einstellungen}}
+{{:bilder:anleitungen:webmobaledlib:wz_07_programm_einstellungen.png?600|Die Seite Programm Einstellungen}}
+
+===== Das Menü „Einstellungen“ =====
+
+Das Menü **Einstellungen** steht zwischen **Tabelle** und **Hilfe**. Jeder Eintrag öffnet ein **eigenes Fenster** nur mit der jeweiligen Gruppe. Der Hintergrund wird abgedunkelt, die Knöpfe **Speichern (S)** und **Abbrechen (A)** unten bleiben immer sichtbar:
+
+^ Eintrag ^ Gruppe ^
+| **Allgemein** | Allgemeine Einstellungen |
+| **Programm Generator** | Programm Generator |
+| **Farb Test** | Farb Test Einstellungen |
+| **Simulator** | Simulatoreinstellungen (nur im Experten Modus) |
+| **Netzzugriff** | Zugriff aus dem Netz |
+| **Spezial** | Spezialeinstellungen |
+| **Erweiterungen …** | Öffnet das Fenster [[anleitungen:webmobaledlib:erweiterungen|Erweiterungen]] |
+| **Einstellungen sichern …** / **Einstellungen übernehmen …** | Siehe [[anleitungen:webmobaledlib:pg_speichern|Speichern und Laden]] |
+
+**Speichern** sichert die Gruppe und schließt das Fenster, **Abbrechen** verwirft die Änderungen.
 
 ===== Sprache =====
 
@@ -22,8 +38,11 @@ Die Einstellungen stehen in **fünf Gruppen**, jede mit einer Überschrift. So f
 ^ Einstellung ^ Bedeutung ^
 | **Anfänger Modus** | Der Haken schaltet zwischen **Anfänger Modus** (mit Haken, Voreinstellung bei einer neuen Installation) und **Experten Modus** um. Siehe [[anleitungen:webmobaledlib:modus|Anfänger Modus und Experten Modus]]. |
 | **Automatisch mit der Lichtmaschine verbinden** | Mit Haken (Voreinstellung) verbindet das Programm beim Start mit der Lichtmaschine, die beim letzten Beenden verbunden war, oder sucht eine angeschlossene Lichtmaschine. Nach **Setup übertragen** verbindet es mit der Lichtmaschine, auf die übertragen wurde (bei WLAN über WLAN). Ohne Haken verbindet nur der Knopf **Mit Lichtmaschine verbinden**. Siehe [[anleitungen:webmobaledlib:pg_arduino|Verbinden und Übertragen]]. |
+| **Beim Trennen alle LEDs ausschalten** (seit 4.50) | Mit Haken sendet das Programm beim Trennen den Befehl **Alle LEDs aus**. Ohne Haken (Vorgabe) bleibt die Anlage unverändert, zum Beispiel leuchten die schwach leuchtenden LEDs der Pushbutton-Kanäle weiter. |
+| **Kein Anschluss in der Tabelle: bei mehreren Boards** (seit 4.42) | Ist beim Hochladen kein USB-Anschluss eingetragen, aber die Lichtmaschine verbunden, nimmt das Programm deren Anschluss. Bei mehreren Boards entscheidet diese Einstellung: **Aktive Verbindung verwenden** (Vorgabe) oder **Erkennen-Fenster öffnen**. |
 | **Tastenkombination: Inkrementell speichern** | Die Tastenkombination für //Datei → Inkrementell speichern//. Vorgabe: **Strg+Umschalt+S**. Sie muss **Strg** oder **Alt** oder eine **F-Taste** enthalten, zum Beispiel **Strg+Alt+S** oder **Strg+F9**. Ist die Vorgabe schon belegt (zum Beispiel von einem Screenshot-Programm), stelle hier eine andere ein. Siehe [[anleitungen:webmobaledlib:pg_speichern|Speichern und Laden]]. |
 | **Sprache** | Die Sprache der Oberfläche (siehe oben). |
+| **Darstellung der Oberfläche** (seit 4.44) | **Hell** (Vorgabe, bisheriger Stil), **Hell mit Kontrast** (kräftigere Blattreiter und dunklere Hinweistexte), **Dunkel**, **Dunkel mit Tabelle** (zeigt auch die Tabellen dunkel, fest eingestellte Farben bleiben, wie sie sind) oder **Wie System**. Bei **Dunkel** bleibt die Tabelle zur besseren Lesbarkeit der Zellfarben hell. Die Änderung gilt nach dem Speichern sofort. |
 | **Darstellung auf kleinen Bildschirmen** | Das **Kompakte Layout** (siehe unten). |
 | **Schriftgröße anpassen** | Die Größe der Schrift in der Oberfläche. Wirkt nach einem **Neustart**. |
 | **ProgGen/PattGen DefaultFont** | Die Schriftart und die Schriftgrößen für den Programmgenerator und den Timeline Editor (**Kleine Schrift**, **Normale Schrift**, **Große Schrift**). Wirkt nach einem **Neustart**. |
@@ -57,7 +76,7 @@ Hier steht alles andere. Normalerweise brauchst du nichts davon.
 | **IP Upload Timeout** | Wie lange das Programm beim Hochladen über das Netz (WLAN-Pico) wartet, in Sekunden. |
 | **RMBUS-Interval (x 100ms)** | Wie oft der [[anleitungen:webmobaledlib:wz_z21|Z21 Simulator]] die Lichtmaschine nach Tastern fragt (1 = alle 100 ms). Normalerweise nicht ändern. |
 | **Dateien für das Excel-Programm speichern** | Gespeicherte Dateien (**.MLL_pcf** und **.MLL_pgf**) werden im Windows-Zeichensatz geschrieben, damit das Excel-Programm sie lesen kann. |
-| **Bootloader des Nano beim Prüfen erkennen** (seit 3.10, **seit 3.13 Vorgabe an**) | **An (Vorgabe):** Beim Prüfen des angeschlossenen Nano (Optionen Werkzeuge, Knopf **Board und USB Port erkennen** und **USB Port erkennen**) spricht das Programm den Bootloader des Nano an (57600 und 115200 Baud) und erkennt **alt und neu**. Das Board stellt der Knopf **Board und USB Port erkennen** passend ein (seit 3.82; den Haken „Automatisch erkennen“ gibt es nicht mehr). **Aus (nur auf ausdrücklichen Wunsch):** Die Prüfung öffnet nur den Anschluss, deine Wahl **Nano Normal (old Bootloader)** oder **Nano (neue Version)** bleibt unverändert. **ESP32** bleibt wie bisher. Der **Nano Every** wird seit 3.14 nicht mehr unterstützt (wie im Excel-Programm 3.5.0L3). Antwortet der Nano nicht, kommt nach etwa 6 Sekunden „nicht als LED Arduino erkannt“; mit **Nein** geht es mit deiner Wahl weiter. |
+| **Bootloader des Nano beim Prüfen erkennen** (seit 3.10, **seit 3.13 Vorgabe an**) | **An (Vorgabe):** Beim Prüfen des angeschlossenen Nano (Hardware Optionen, Knopf **Board und USB Port erkennen** und **USB Port erkennen**) spricht das Programm den Bootloader des Nano an (57600 und 115200 Baud) und erkennt **alt und neu**. Das Board stellt der Knopf **Board und USB Port erkennen** passend ein (seit 3.82; den Haken „Automatisch erkennen“ gibt es nicht mehr). **Aus (nur auf ausdrücklichen Wunsch):** Die Prüfung öffnet nur den Anschluss, deine Wahl **Nano Normal (old Bootloader)** oder **Nano (neue Version)** bleibt unverändert. **ESP32** bleibt wie bisher. Der **Nano Every** wird seit 3.14 nicht mehr unterstützt (wie im Excel-Programm 3.5.0L3). Antwortet der Nano nicht, kommt nach etwa 6 Sekunden „nicht als LED Arduino erkannt“; mit **Nein** geht es mit deiner Wahl weiter. |
 
 ===== Kleine Bildschirme: Kompaktes Layout =====
 
@@ -73,9 +92,9 @@ Die Auswahl wirkt **sofort**. Zusätzlich helfen **Vollbild** (F11) und der **Br
 
 Die Einstellungen für den **Zugriff von anderen Geräten**, das **Passwort** und die **Firewall** stehen auf der Seite [[anleitungen:webmobaledlib:wz_netzwerk|Zugriff aus dem Netz]].
 
-===== ProgGenerator Einstellungen =====
+===== Tabelle färben =====
 
-Die Seite **Tabelle färben** (Menü **Tabelle, Tabelle färben …**) enthält die **Bedingungen für Zeilenfarben**. Mit ihnen legst du fest, welche Zeilen beim Färben welche Farbe bekommen (zum Beispiel nach der Art des Makros). Eine Beschreibung steht auf der Seite [[anleitungen:webmobaledlib:pg_werkzeugleiste|Die Werkzeugleiste]].
+Das Fenster **Tabelle färben** (Menü **Tabelle, Tabelle färben …**) enthält die **Bedingungen für Zeilenfarben**. Mit ihnen legst du fest, welche Zeilen beim Färben welche Farbe bekommen (zum Beispiel nach der Art des Makros). Mit **Speichern und aktuelle Seite färben** oder **Speichern und ALLE Seiten färben** wird gefärbt und das Programm wechselt automatisch in den **Programm Generator**. Eine Beschreibung steht auf der Seite [[anleitungen:webmobaledlib:pg_werkzeugleiste|Die Werkzeugleiste]].
 
 ===== Wo liegen meine Daten? =====
 

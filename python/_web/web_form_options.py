@@ -1,8 +1,8 @@
-# Datei-Version: 1.42 (2026-11-21) - web_form_options.py
+# Datei-Version: 1.43 (2026-11-21) - web_form_options.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_form_options.py
 # Path:           _web/web_form_options.py
-# Version:        1.42
+# Version:        1.43
 # Last Update:    2026-11-21
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
@@ -33,6 +33,7 @@
 #   1.40  2026-11-21  Version 4.52: Reiter Entwicklungsumgebung: Knopf ARDUINO-IDE Einstellungen (oeffnet das Fenster der Hauptseite); Reiter WLAN (OTA): Knopf ESP32-Firmware ueber WLAN hochladen
 #   1.41  2026-11-21  Version 4.53: Erweiterungen sind ein eigenes Fenster (open_extensions_window, Schliessen) statt eines Reiters im Optionenfenster; ext_panel auf Modulebene
 #   1.42  2026-11-21  Version 4.54: Reiter Dateien entfaellt (Importieren v. altem Prog. steht im Menue Datei); Fenster Erweiterungen: Hinweis, dass alle Aenderungen sofort wirksam sind
+#   1.43  2026-11-21  Version 4.67: Reiter Bootloader heisst Firmware Installation; der Knopf Firmware installieren (mit Beschreibungstext) ist vom Reiter Lichtmaschine dorthin umgezogen
 # ----------------------------------------------------------------------------------------------
 """Web-Ersatz fuer proggen/UserForm_Options.py (Optionen und spezielle Funktionen).
 
@@ -714,8 +715,8 @@ def make_class(Base):
             left = [dict(port_btn, handler="__Detect_LED_Port_Button_Click")]
             if wlan_device and buttons.get("__Detect_LED_IP_Button_Click"):
                 left.append(dict(buttons["__Detect_LED_IP_Button_Click"][0], handler="__Detect_LED_IP_Button_Click"))
-            left.append({"text": tr("Firmware installieren"), "handler": "__Boot_Firmware_Button_Click", "disabled": False,  # v1.18: nicht mehr nur Pico (pico_only entfallen),       # nur mit dem Pico (wie im Excel-Programm)  # v1.09
-                         "label": tr("Schreibt eine fertige Firmware (UF2-Datei aus dem Ordner MobaLedLib/firmware) auf den Raspberry Pi Pico")})  # v1.09
+            # left.append({"text": tr("Firmware installieren"), "handler": "__Boot_Firmware_Button_Click", "disabled": False,  # v1.18: nicht mehr nur Pico (pico_only entfallen),       # nur mit dem Pico (wie im Excel-Programm)  # v1.09  # v1.43 (entfallen: Knopf steht jetzt im Reiter Firmware Installation)
+            # "label": tr("Schreibt eine fertige Firmware (UF2-Datei aus dem Ordner MobaLedLib/firmware) auf den Raspberry Pi Pico")})  # v1.09  # v1.43 (entfallen: Knopf steht jetzt im Reiter Firmware Installation)
             subtitle = M09.Get_Language_Str("Für andere Hauptplatine")
             auto_text = M09.Get_Language_Str("Automatisch erkennen")
             detect_text = tr("Board und USB Port erkennen")  # v1.25
@@ -784,7 +785,11 @@ def make_class(Base):
                     "texts": ["Das Programm webMobaLedLib selbst aktualisieren: Menü Hilfe → Update webMobaLedLib …"],  # v1.07
                     "ide_only": True})                               # nur mit der ARDUINO IDE (Bibliotheken und Boards aktualisieren)  # v1.07
                 wlan_inst = "WLAN" in buildopt
-                tabs.append({"name": M09.Get_Language_Str("Bootloader"), "kind": "list", "buttons": tab_buttons(
+                fw_btn = {"text": tr("Firmware installieren"), "handler": "__Boot_Firmware_Button_Click", "disabled": False,  # v1.43 (vorher im Reiter Lichtmaschine)
+                          "label": tr("Schreibt eine fertige Firmware (UF2-Datei aus dem Ordner MobaLedLib/firmware) auf den Raspberry Pi Pico")}  # v1.43
+                # tabs.append({"name": M09.Get_Language_Str("Bootloader"), "kind": "list", "buttons": tab_buttons(  # v1.43 (entfallen)
+                tabs.append({"name": tr("Firmware Installation"), "kind": "list", "buttons": [fw_btn] + tab_buttons(  # v1.43
+
                     # buttons, ["__WLAN_Pico_Button_Click"] if wlan_inst else ["__FastBootloader_Button_Click"])})  # v1.07 (entfallen)
                     buttons, ["__WLAN_Pico_Button_Click"] if wlan_inst else ["__FastBootloader_Button_Click"]),  # v1.07
                     # "ide_only": not wlan_inst})                      # der schnelle Bootloader braucht ArduinoISP und avrdude der IDE; der Knopf fuer den WLAN-Pico nur eine Webseite  # v1.17 (entfallen)

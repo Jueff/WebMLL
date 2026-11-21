@@ -8,7 +8,7 @@ Wenn deine Tabelle fertig ist, überträgst du sie auf die **Lichtmaschine**. Au
 Das Programm muss wissen, **welche Lichtmaschine** du hast und **an welchem USB-Anschluss** sie steckt. Das stellst du in den **Optionen** ein. Bei einer **neuen** Lichtmaschine ist das der erste Schritt (siehe unten, **Mit Lichtmaschine verbinden** geht dann noch nicht).
 
   - Stecke die Lichtmaschine mit einem **USB-Kabel** an den Computer. Es muss ein Kabel sein, das **Daten** überträgt, kein reines Ladekabel.
-  - Klicke in der Werkzeugleiste auf **Optionen Werkzeuge**. Es öffnet sich das Fenster **Optionen und spezielle Funktionen**.
+  - Klicke in der Werkzeugleiste auf **Hardware Optionen**. Es öffnet sich das Fenster **Optionen und spezielle Funktionen**.
   - Öffne den Reiter **Lichtmaschine**.
   - Klicke auf **Board und USB Port erkennen** (der Knopf steht über **USB Port erkennen**). Das Programm sucht an **allen USB-Anschlüssen** nach einer Lichtmaschine (Nano, ESP32, Raspberry Pico) und stellt das **erste gefundene Board** ein. Es muss vorher **weder ein Board noch ein Anschluss** eingestellt sein.
   - Danach öffnet sich das Fenster **USB Port erkennen**. Es zeigt das **gefundene Board mit seinem Anschluss** und, wie bisher, die **anderen gefundenen Boards**. **Übernimm** das gefundene Board mit dem Anschluss oder wähle einen **anderen Typ**.
@@ -31,7 +31,7 @@ Das Fenster **ARDUINO-IDE Einstellungen** (Optionen, Reiter Entwicklungsumgebung
 
 {{:bilder:anleitungen:webmobaledlib:pg_09_verbinden.png?500|Oben rechts: der Status und der Knopf Mit Lichtmaschine verbinden}}
 
-Der Pfeil neben dem Knopf hat außerdem **Verbindung trennen** (löst die Verbindung), **Neu verbinden**, **Board wechseln …** (öffnet die Optionen) und **Alle LED aus** (schaltet alle LEDs der Kette aus). Ein Menü **Lichtmaschine** gibt es seit Version 4.51 nicht mehr.
+Der Pfeil neben dem Knopf hat außerdem **Verbindung trennen** (löst die Verbindung), **Neu verbinden**, **Board wechseln …** (öffnet die Optionen) und **Alle LED aus** (schaltet alle LEDs der Kette aus). Beim **Trennen** bleibt die Anlage unverändert (die LEDs leuchten weiter, wie die Lichtmaschine sie zuletzt gesetzt hat). Willst du, dass beim Trennen alle LEDs ausgehen, setze im Menü **Einstellungen, Allgemein** den Haken **Beim Trennen alle LEDs ausschalten** (seit 4.50). Ein Menü **Lichtmaschine** gibt es seit Version 4.51 nicht mehr.
 
 Neben dem Knopf **Mit Lichtmaschine verbinden** steht ein **Pfeil**. Er öffnet ein kleines Menü mit **Verbinden**, **Verbindung trennen**, **Neu verbinden**, **Board wechseln …** und **Alle LED aus**.
 
@@ -72,7 +72,7 @@ Die Lichtmaschine **behält** das Programm, auch wenn du ihn vom Computer trenns
 
 ===== Entwicklungsumgebung: PlatformIO =====
 
-Zum Übersetzen und Hochladen benutzt das Programm **PlatformIO**. Es wird bei der Installation automatisch mitinstalliert. Die ältere **Arduino IDE** ist nur noch eine Zusatzmöglichkeit (siehe [[anleitungen:webmobaledlib:arduino_ide|Zusätzlich: Arduino IDE]]). Die Entwicklungsumgebung wählst du in **Optionen Werkzeuge** im Reiter **Entwicklungsumgebung**.
+Zum Übersetzen und Hochladen benutzt das Programm **PlatformIO**. Es wird bei der Installation automatisch mitinstalliert. Die ältere **Arduino IDE** ist nur noch eine Zusatzmöglichkeit (siehe [[anleitungen:webmobaledlib:arduino_ide|Zusätzlich: Arduino IDE]]). Die Entwicklungsumgebung wählst du in **Hardware Optionen** im Reiter **Entwicklungsumgebung**.
 
 ===== Ohne Lichtmaschine ausprobieren: der LED Simulator =====
 
@@ -86,7 +86,7 @@ Mit einer **Lichtmaschine ESP32** kannst du nach einer ersten Einrichtung ohne U
 
 ^ Was passiert ^ Was hilft ^
 | Oben rechts steht **Nicht verbunden** | Bei einer **neuen** Lichtmaschine ist das normal: Es läuft noch kein MobaLedLib-Programm (siehe oben). Sonst: Prüfe das USB-Kabel (Daten, nicht nur Laden) und stecke die Lichtmaschine neu an. Dann noch einmal **Mit Lichtmaschine verbinden**. Unter Windows kann bei Nachbauten ein [[https://www.wch-ic.com/downloads/CH341SER_EXE.html|CH340-Treiber]] fehlen. Unter Linux musst du in der Gruppe //dialout// sein. |
-| Meldung **„Hochladen: Prüfung fehlgeschlagen“** (im Protokoll ''stk500_paged_load'' … ''failed to read all of flash memory'') | Das Programm wurde **geschrieben**, nur die anschließende **Prüfung** (Rücklesen des Speichers) ist gescheitert. Prüfe zuerst, ob die **Heartbeat LED** blinkt: Dann läuft die Lichtmaschine mit dem neuen Programm. Hilfen: Probiere **beide** Einstellungen **Nano Normal (old Bootloader)** und **Nano (neue Version)** (Optionen Werkzeuge → Lichtmaschine) und übertrage noch einmal. Probiere ein anderes **USB-Kabel** und einen anderen **USB-Anschluss**. Versorge die **LEDs nicht über den USB-Anschluss** des Computers (auf dem Raspberry Pi besonders wichtig). |
+| Meldung **„Hochladen: Prüfung fehlgeschlagen“** (im Protokoll ''stk500_paged_load'' … ''failed to read all of flash memory'') | Das Programm wurde **geschrieben**, nur die anschließende **Prüfung** (Rücklesen des Speichers) ist gescheitert. Prüfe zuerst, ob die **Heartbeat LED** blinkt: Dann läuft die Lichtmaschine mit dem neuen Programm. Hilfen: Probiere **beide** Einstellungen **Nano Normal (old Bootloader)** und **Nano (neue Version)** (Hardware Optionen → Lichtmaschine) und übertrage noch einmal. Probiere ein anderes **USB-Kabel** und einen anderen **USB-Anschluss**. Versorge die **LEDs nicht über den USB-Anschluss** des Computers (auf dem Raspberry Pi besonders wichtig). |
 | Meldung **„Hochladen: Keine Antwort“** (im Protokoll ''stk500_getsync … not in sync'', ''programmer is not responding''; seit 3.10) | Der Nano antwortet dem Bootloader-Programm nicht. Meist passt die Einstellung **Nano Normal (old Bootloader)** / **Nano (neue Version)** nicht zum Bootloader des Nano (alt: 57600 Baud, neu: 115200 Baud): **Probiere beide.** Sonst: USB-Kabel (es muss Daten übertragen), anderer Anschluss, und der Anschluss darf von keinem anderen Programm benutzt werden (zum Beispiel dem Seriellen Monitor). Ohne Antwort versucht es avrdude zehnmal, das dauert fast eine Minute. |
 | Bei **USB Port erkennen** erscheint kein Anschluss | Prüfe das USB-Kabel und stecke die Lichtmaschine neu an. Seit 3.10 erkennt die Liste **CH340, FTDI und Arduino** an der Hersteller-Kennung, auch wenn der Anschluss „USB Serial“ heißt. Erscheint er trotzdem nicht, setze den Haken **Unbekannte Ports anzeigen**. Unter Windows kann bei Nachbauten ein CH340-Treiber fehlen, unter Linux musst du in der Gruppe //dialout// sein. |
 | Das Hochladen bricht mit einer Fehlermeldung ab | Prüfe das **Board** (siehe oben). Bei Nano-Nachbauten hilft **Nano Normal (old Bootloader)**. |

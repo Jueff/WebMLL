@@ -1,9 +1,72 @@
-Datei-Version: 1.38 (2026-11-21) - HOC_Anwender.md
-Stand: webMobaLedLib 4.54
+Datei-Version: 1.51 (2026-11-21) - HOC_Anwender.md
+Stand: webMobaLedLib 4.67
 
 # webMobaLedLib: Änderungen (Kurzfassung)
 
 Gilt ab Version 1.39. Neueste Version oben.
+
+## Version 4.67 (2026-11-21)
+
+Neue Funktionen:
+- Die Werkzeugleiste: Der Knopf „Optionen Werkzeuge“ heißt jetzt „Hardware Optionen“. Der Reiter „Bootloader“ heißt „Firmware Installation“ und enthält auch den Knopf „Firmware installieren“ (vorher im Reiter Lichtmaschine).
+
+## Version 4.66 (2026-11-21)
+
+Korrekturen:
+- F3 öffnet den Mini-Farbtest wieder (Fehler aus 4.65).
+
+## Version 4.65 (2026-11-21)
+
+Korrekturen:
+- F3 (Mini-Farbtest) öffnet nicht mehr die Suche des Browsers.
+
+## Version 4.64 (2026-11-21)
+
+Neue Funktionen:
+- Tabelle drucken: Du kannst alle Zeilen, die markierten Zeilen oder einen Zeilenbereich (von Zeile bis Zeile, Nummern wie in der Tabelle) drucken.
+
+## Version 4.63 (2026-11-21)
+
+Korrekturen:
+- Tabelle drucken: Die zuletzt gewählten Spalten (je Tabelle), die Zeilennummer und die Farben werden gemerkt.
+
+## Version 4.62 (2026-11-21)
+
+Neue Funktionen:
+- Tabelle drucken: Menü Datei, „Tabelle drucken …“. Du wählst die Spalten, das Programm öffnet eine Druckansicht mit allen Zeilen der aktuellen Tabelle (Querformat A4, Kopfzeile auf jeder Seite, mit Zeilenfarben). Gedruckt wird über den Druckdialog des Browsers, dort geht auch „Als PDF speichern“.
+
+## Version 4.61 (2026-11-21)
+
+Korrekturen:
+- Mini-Farbtest: Die Start LedNr darf auch den LED-Kanal enthalten (17, 0-17 oder 2-17); bei 2-17 ist der Kanal 2 und die LED 17.
+
+## Version 4.60 (2026-11-21)
+
+Korrekturen:
+- Mini-Farbtest: Er benutzt die LED der Tabellenzeile (Start LedNr, LEDs, LED Channel) und nicht mehr die zuletzt im Farbtest eingestellte LED.
+
+## Version 4.59 (2026-11-21)
+
+Neue Funktionen:
+- Mini-Farbtest für das Makro ConstRGB: Zelle Beleuchtung anklicken, F3 drücken oder im Rechtsklick-Menü „Farbe mit Mini-Farbtest ändern …“ wählen. Das Fenster startet mit der Farbe bei Ein (R1, G1, B1), mit dem Umschalter wählst du die Farbe bei Aus (R0, G0, B0). Die Farbe leuchtet live an der LED, mit OK ersetzt das Programm die Zahlen im Makrotext (Strg+Z nimmt es zurück).
+
+## Version 4.57 (2026-11-21)
+
+Korrekturen:
+- Farbe einer Zelle oder Zeile entfernen: die Zelle wird nach den Färberegeln wieder gefärbt (vorher blieb sie weiß).
+
+## Version 4.56 (2026-11-21)
+
+Neue Funktionen:
+- Menü Einstellungen (Allgemein, Programm Generator, Farb Test, Simulator, Netzzugriff, Spezial): jeder Eintrag öffnet nur seine Gruppe in einem eigenen Fenster mit Speichern (S) und Abbrechen (A), die immer sichtbar bleiben. Die lange Seite entfällt.
+- „Tabelle färben …“ öffnet ebenfalls ein Fenster. Nach „Speichern und aktuelle Seite färben“ oder „Speichern und ALLE Seiten färben“ springt das Programm in den Programm Generator.
+
+## Version 4.55 (2026-11-21)
+
+Neue Funktionen:
+- Tabelle: Kopieren und Einfügen (Strg+C, Strg+X, Strg+V) überträgt auch die Feldfarbe, bei Zellen und ganzen Zeilen. Ist das Ziel größer (mehrere Zeilen markiert), wird das Muster wiederholt, wie in Excel.
+- „Nur Text einfügen“ (Strg+Umschalt+V oder Rechtsklick) fügt ohne Farbe ein.
+- Von Hand gesetzte Farben („Farbe setzen“, Einfügen) sind vor den Färberegeln geschützt, bleiben mit der Tabelle gespeichert und lassen sich mit Rückgängig zurücknehmen.
 
 ## Version 4.54 (2026-11-21)
 

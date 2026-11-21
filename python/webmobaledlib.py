@@ -1,8 +1,8 @@
-# Datei-Version: 4.54 (2026-11-21) - webmobaledlib.py
+# Datei-Version: 4.67 (2026-11-21) - webmobaledlib.py
 # ----------------------------------------------------------------------------------------------
 # Name:           webmobaledlib.py
 # Path:           webmobaledlib.py
-# Version:        4.54
+# Version:        4.67
 # Last Update:    2026-11-21
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
@@ -300,6 +300,19 @@
 #   4.52  2026-11-21  Rueckmeldung Harold zu 4.51: Seite Tabelle faerben (Titel, erste Beschreibungszeile weg); ESP32-Firmware ueber WLAN hochladen als Knopf auf dem Reiter WLAN (OTA) der Optionen statt im Pfeilmenue; ARDUINO Einstellungen als Fenster mit Speichern und Abbrechen, Knopf ARDUINO-IDE Einstellungen auf dem Reiter Entwicklungsumgebung (web_params 1.16, web_form_options 1.40)
 #   4.53  2026-11-21  Rueckmeldung Harold: Menue Einstellungen, Erweiterungen oeffnet ein eigenes Fenster Erweiterungen (Haken sofort wirksam, Schliessen) statt des Optionenfensters; der Reiter Erweiterungen entfaellt in den Optionen (web_form_options 1.41)
 #   4.54  2026-11-21  Rueckmeldung Harold: Menue Datei, Importieren v. altem Programm (zeigt das Fenster des bisherigen Knopfs); der Reiter Dateien entfaellt in den Optionen; Fenster Erweiterungen mit Hinweis auf sofort wirksame Aenderungen (web_form_options 1.42)
+#   4.55  2026-11-21  Wunsch Harold: Kopieren und Einfuegen in der Tabelle uebertraegt auch die Feldfarbe (Zellen und ganze Zeilen, Muster wird bei groesserem Ziel wiederholt, wie Excel); Nur Text einfuegen (Strg+Umschalt+V, Kontextmenue); manuell gesetzte Farben sind vor den Faerberegeln geschuetzt und bleiben mit der Tabelle gespeichert; Farbaenderungen sind rueckgaengig zu machen (headless_sheet 1.03, XLA_Application 1.24, M20 1.13)
+#   4.56  2026-11-21  Wunsch Michael: Einstellungen (Allgemein, Programm Generator, Farb Test, Simulator, Netzzugriff, Spezial) und Tabelle faerben als eigene Fenster mit fest sichtbaren Knoepfen; nach Speichern und ... Seiten faerben springt das Programm in den Programm Generator
+#   4.57  2026-11-21  Korrektur: Wird die manuelle Farbe einer Zelle oder Zeile entfernt (Farbe entfernen, Einfuegen ohne Farbe, Rueckgaengig), faerben die Faerberegeln diese Zeilen sofort neu (vorher blieb die Zelle weiss)
+#   4.58  2026-11-21  Anwender-Idee: Mini-Farbtest in der Tabelle (F3 oder Kontextmenue Farbe mit Mini-Farbtest aendern ...): Farbe live an die LED, OK schreibt R,G,B in die markierte(n) Zelle(n), rueckgaengig moeglich (web_colorcheck 1.08)
+#   4.59  2026-11-21  Mini-Farbtest richtig: er gilt fuer das Makro ConstRGB(#LED, #InCh, R0, G0, B0, R1, G1, B1) in der Zelle Beleuchtung; F3/Kontextmenue oeffnet ihn mit der Ein-Farbe (R1, G1, B1), Umschalter fuer die Aus-Farbe (R0, G0, B0); OK ersetzt die Zahlen im Makrotext (web_colorcheck 1.09)
+#   4.60  2026-11-21  Korrektur Mini-Farbtest: er nimmt die LED der Tabellenzeile (Spalten Start LedNr, LEDs, LED Channel) statt der zuletzt im Farbtest benutzten LED (web_colorcheck 1.10)
+#   4.61  2026-11-21  Korrektur Mini-Farbtest: Start LedNr kann 17, 0-17 oder 2-17 lauten (Kanal-LedNr); der Teil vor dem Minus ist der LED-Kanal
+#   4.62  2026-11-21  Anwender-Wunsch: Tabelle drucken (Menue Datei, Tabelle drucken ...): Auswahl der Spalten, Druckansicht in neuem Tab (alle Zeilen, Querformat A4, Kopfzeile auf jeder Seite, Zeilenfarben), Drucken ueber den Druckdialog des Browsers (auch als PDF)
+#   4.63  2026-11-21  Tabelle drucken: die zuletzt gewaehlten Spalten (je Tabelle), Zeilennummer und Farben werden gemerkt (Konfigurationswert PrintSettings, ohne Einstellung in der Oberflaeche)
+#   4.64  2026-11-21  Tabelle drucken: Zeilen waehlbar: alle, die markierten Zeilen oder ein Zeilenbereich (von/bis, Zeilennummern wie in der Tabelle)
+#   4.65  2026-11-21  F3 (Mini-Farbtest) oeffnete bei fehlendem Zellfokus die Browser-Suche: F3 wird seitenweit abgefangen
+#   4.66  2026-11-21  Fehler aus 4.65: F3 oeffnete den Mini-Farbtest nicht mehr, weil AG Grid bereits abgefangene Tasten ignoriert; F3-Abfang jetzt in der Bubble-Phase (nach der Tabelle)
+#   4.67  2026-11-21  Menue-Umstellung Teil 2: Knopf Optionen Werkzeuge heisst Hardware Optionen; Reiter Bootloader heisst Firmware Installation und enthaelt jetzt auch den Knopf Firmware installieren mit Beschreibung (web_form_options 1.43)
 #   4.40  2026-11-20  Pull Request 44 von Juergen (Issues 41, 42): Makrotext bei direkter Eingabe pruefen (Fehler korrigieren oder wiederherstellen), bei Makrowechsel Name und Symbol aktualisieren, danach LEDs, InCnt, LocInCh, Adressen, Testtasten und Start-LEDs neu setzen (headless_macro_edit 1.01); Uebertragungsfenster schliesst sich automatisch (web_log 1.11)
 #   4.39  2026-11-20  Issue 48: Fehlerpruefung beim Erzeugen der Kopfdatei (zum Beispiel Adresse mit zwei verschiedenen Typen) wirkte nicht, das Kompilieren startete trotzdem (M06_Write_Header 1.13)
 #   4.38  2026-11-20  Tastenkuerzel ueberall auf der Seite (Issue 49, Juergen): Strg+Z Rueckgaengig, Strg+Y / Strg+Umschalt+Z Wiederholen, neu Strg+S = dauerhaft speichern in die Hauptdatei (Menue Datei: Speichern); nicht in Eingabefeldern und Dialogen
@@ -411,7 +424,7 @@ REQUIRED_FILES = {  # v1.75
     # "ExcelAPI/headless_sheet.py": "1.02", "ExcelAPI/XLA_Application.py": "1.16", "headless/headless_pattgen.py": "1.22", "_web/web_pattgen.py": "1.21", "_web/web_fullscreen.py": "1.02", "_web/web_tabs.py": "1.17", "_web/web_update.py": "1.10", "release_tools.py": "1.07", "recover.py": "1.00", "repair.py": "1.04", "_web/web_z21.py": "1.02", "headless/headless_gridmodel.py": "1.04", "_web/web_soundtest.py": "1.01", "_web/web_dcckeyboard.py": "1.01", "_web/web_servotest.py": "2.06", "_web/web_servotest2.py": "1.01", "_web/web_serial.py": "1.04",  # v1.76 (headless_pattgen 1.13)  # v2.78 (entfallen)
     # "ExcelAPI/headless_sheet.py": "1.02", "ExcelAPI/XLA_Application.py": "1.16", "headless/headless_pattgen.py": "1.22", "_web/web_pattgen.py": "1.24", "_web/web_fullscreen.py": "1.02", "_web/web_tabs.py": "1.17", "_web/web_update.py": "1.13", "release_tools.py": "1.07", "recover.py": "1.00", "repair.py": "1.04", "_web/web_z21.py": "1.03", "headless/headless_gridmodel.py": "1.05", "_web/web_soundtest.py": "1.02", "_web/web_dcckeyboard.py": "1.02", "_web/web_servotest.py": "2.08", "_web/web_servotest2.py": "1.02", "_web/web_serial.py": "1.05",  # v1.76 (headless_pattgen 1.13)  # v2.78  # v3.24 (entfallen)
     # "ExcelAPI/headless_sheet.py": "1.02", "ExcelAPI/XLA_Application.py": "1.16", "headless/headless_pattgen.py": "1.22", "_web/web_pattgen.py": "1.24", "_web/web_fullscreen.py": "1.02", "_web/web_tabs.py": "1.17", "_web/web_update.py": "1.13", "release_tools.py": "1.07", "recover.py": "1.00", "repair.py": "1.04", "_web/web_z21.py": "1.03", "headless/headless_gridmodel.py": "1.05", "_web/web_soundtest.py": "1.02", "_web/web_dcckeyboard.py": "1.02", "_web/web_servotest.py": "2.08", "_web/web_servotest2.py": "1.02", "_web/web_serial.py": "1.06",  # v1.76 (headless_pattgen 1.13)  # v2.78  # v3.27 (entfallen)
-    "ExcelAPI/headless_sheet.py": "1.02", "ExcelAPI/XLA_Application.py": "1.22", "headless/headless_pattgen.py": "1.22", "_web/web_pattgen.py": "1.24", "_web/web_fullscreen.py": "1.02", "_web/web_tabs.py": "1.23", "_web/web_update.py": "1.13", "release_tools.py": "1.09", "recover.py": "1.00", "repair.py": "1.04", "_web/web_z21.py": "1.03", "headless/headless_gridmodel.py": "1.05", "_web/web_soundtest.py": "1.02", "_web/web_dcckeyboard.py": "1.02", "_web/web_servotest.py": "2.08", "_web/web_servotest2.py": "1.02", "_web/web_serial.py": "1.06",  # v1.76 (headless_pattgen 1.13)  # v2.78  # v3.56  # v3.91
+    "ExcelAPI/headless_sheet.py": "1.03", "ExcelAPI/XLA_Application.py": "1.22", "headless/headless_pattgen.py": "1.22", "_web/web_pattgen.py": "1.24", "_web/web_fullscreen.py": "1.02", "_web/web_tabs.py": "1.23", "_web/web_update.py": "1.13", "release_tools.py": "1.09", "recover.py": "1.00", "repair.py": "1.04", "_web/web_z21.py": "1.03", "headless/headless_gridmodel.py": "1.05", "_web/web_soundtest.py": "1.02", "_web/web_dcckeyboard.py": "1.02", "_web/web_servotest.py": "2.08", "_web/web_servotest2.py": "1.02", "_web/web_serial.py": "1.06",  # v1.76 (headless_pattgen 1.13)  # v2.78  # v3.56  # v3.91
     # "_web/web_form_select.py": "1.01", "_web/web_access.py": "1.11", "headless/headless_startup.py": "1.00", "no_tk.py": "1.01", "proggen/M37_Inst_Libraries.py": "1.05", "arduino_prefs.py": "1.02", "_web/web_dialogs.py": "1.06", "proggen/M07_COM_Port.py": "1.01", "_web/web_form_comport.py": "1.03", "mlpyproggen/Prog_Generator.py": "1.02", "proggen/M08_ARDUINO.py": "1.02", "_web/web_network.py": "1.01", "_web/web_firewall.py": "1.03", "pattgen/M08_Load_Sheet_Data.py": "1.01",  # v1.78 (web_access 1.09)  # v2.21 (entfallen)
     # "_web/web_form_select.py": "1.01", "_web/web_access.py": "1.11", "headless/headless_startup.py": "1.00", "no_tk.py": "1.01", "proggen/M37_Inst_Libraries.py": "1.05", "arduino_prefs.py": "1.02", "_web/web_dialogs.py": "1.06", "proggen/M07_COM_Port.py": "1.03", "_web/web_form_comport.py": "1.04", "mlpyproggen/Prog_Generator.py": "1.02", "proggen/M08_ARDUINO.py": "1.03", "_web/web_network.py": "1.01", "_web/web_firewall.py": "1.03", "pattgen/M08_Load_Sheet_Data.py": "1.01",  # v1.78 (web_access 1.09)  # v2.27 (entfallen)
     # "_web/web_form_select.py": "1.01", "_web/web_access.py": "1.11", "headless/headless_startup.py": "1.00", "no_tk.py": "1.01", "proggen/M37_Inst_Libraries.py": "1.05", "arduino_prefs.py": "1.02", "_web/web_dialogs.py": "1.06", "proggen/M07_COM_Port.py": "1.04", "_web/web_form_comport.py": "1.04", "mlpyproggen/Prog_Generator.py": "1.02", "proggen/M08_ARDUINO.py": "1.04", "_web/web_network.py": "1.01", "_web/web_firewall.py": "1.03", "pattgen/M08_Load_Sheet_Data.py": "1.01",  # v1.78 (web_access 1.09)  # v2.28 (entfallen)
@@ -430,7 +443,7 @@ REQUIRED_FILES = {  # v1.75
     # "_web/web_form_select.py": "1.01", "_web/web_access.py": "1.11", "headless/headless_startup.py": "1.01", "no_tk.py": "1.01", "proggen/M37_Inst_Libraries.py": "1.06", "arduino_prefs.py": "1.02", "_web/web_dialogs.py": "1.09", "proggen/M07_COM_Port.py": "1.04", "_web/web_form_comport.py": "1.05", "mlpyproggen/Prog_Generator.py": "1.07", "proggen/M08_ARDUINO.py": "1.11", "_web/web_network.py": "1.01", "_web/web_firewall.py": "1.03", "pattgen/M08_Load_Sheet_Data.py": "1.01",  # v1.78 (web_access 1.09)  # v2.75 (entfallen)
     # "_web/web_form_select.py": "1.01", "_web/web_access.py": "1.12", "_web/web_colorcheck.py": "1.05", "headless/headless_startup.py": "1.01", "no_tk.py": "1.01", "proggen/M37_Inst_Libraries.py": "1.06", "arduino_prefs.py": "1.02", "_web/web_dialogs.py": "1.09", "proggen/M07_COM_Port.py": "1.09", "_web/web_form_comport.py": "1.05", "mlpyproggen/Prog_Generator.py": "1.08", "proggen/M08_ARDUINO.py": "1.17", "_web/web_network.py": "1.01", "_web/web_firewall.py": "1.03", "pattgen/M08_Load_Sheet_Data.py": "1.01",  # v1.78 (web_access 1.09)  # v2.75  # v3.24 (entfallen)
     # "_web/web_form_select.py": "1.01", "_web/web_access.py": "1.13", "_web/web_colorcheck.py": "1.06", "headless/headless_startup.py": "1.01", "no_tk.py": "1.01", "proggen/M37_Inst_Libraries.py": "1.06", "arduino_prefs.py": "1.02", "_web/web_dialogs.py": "1.10", "proggen/M07_COM_Port.py": "1.11", "_web/web_form_comport.py": "1.07", "mlpyproggen/Prog_Generator.py": "1.08", "proggen/M08_ARDUINO.py": "1.18", "_web/web_network.py": "1.01", "_web/web_firewall.py": "1.03", "pattgen/M08_Load_Sheet_Data.py": "1.01",  # v1.78 (web_access 1.09)  # v2.75  # v3.37 (entfallen)
-    "_web/web_form_select.py": "1.01", "_web/web_access.py": "1.13", "_web/web_esp32_ota.py": "1.04", "headless/headless_esp32_ota.py": "1.09", "ExcelAPI/XLA_Application.py": "1.23", "_web/web_sheet_tabs.py": "1.05", "proggen/M28_Diverse.py": "1.03", "proggen/M06_Write_Header.py": "1.09", "_web/web_serial.py": "1.10", "_web/web_form_options.py": "1.24", "proggen/M06_Write_Header.py": "1.09", "_web/web_colorcheck.py": "1.06", "headless/headless_startup.py": "1.01", "no_tk.py": "1.01", "proggen/M37_Inst_Libraries.py": "1.06", "arduino_prefs.py": "1.02", "_web/web_dialogs.py": "1.10", "proggen/M07_COM_Port.py": "1.11", "_web/web_form_comport.py": "1.07", "mlpyproggen/Prog_Generator.py": "1.09", "proggen/M08_ARDUINO.py": "1.20", "_web/web_network.py": "1.01", "_web/web_firewall.py": "1.03", "pattgen/M08_Load_Sheet_Data.py": "1.02",  # v1.78 (web_access 1.09)  # v2.75  # v3.37  # v3.56  # v3.91
+    "_web/web_form_select.py": "1.01", "_web/web_access.py": "1.13", "_web/web_esp32_ota.py": "1.04", "headless/headless_esp32_ota.py": "1.09", "ExcelAPI/XLA_Application.py": "1.24", "_web/web_sheet_tabs.py": "1.05", "proggen/M28_Diverse.py": "1.03", "proggen/M06_Write_Header.py": "1.09", "_web/web_serial.py": "1.10", "_web/web_form_options.py": "1.24", "proggen/M06_Write_Header.py": "1.09", "_web/web_colorcheck.py": "1.10", "headless/headless_startup.py": "1.01", "no_tk.py": "1.01", "proggen/M37_Inst_Libraries.py": "1.06", "arduino_prefs.py": "1.02", "_web/web_dialogs.py": "1.10", "proggen/M07_COM_Port.py": "1.11", "_web/web_form_comport.py": "1.07", "mlpyproggen/Prog_Generator.py": "1.09", "proggen/M08_ARDUINO.py": "1.20", "_web/web_network.py": "1.01", "_web/web_firewall.py": "1.03", "pattgen/M08_Load_Sheet_Data.py": "1.02",  # v1.78 (web_access 1.09)  # v2.75  # v3.37  # v3.56  # v3.91
     # "proggen/M06_Write_Header.py": "1.02", "proggen/M20_PageEvents_a_Functions.py": "1.02", "proggen/M18_Save_Load.py": "1.01",  # v1.98 (entfallen)
     # "proggen/M06_Write_Header.py": "1.03", "proggen/M20_PageEvents_a_Functions.py": "1.03", "proggen/M18_Save_Load.py": "1.01",  # v2.03 (entfallen)
     # "proggen/M06_Write_Header.py": "1.04", "proggen/M20_PageEvents_a_Functions.py": "1.03", "vb2py/vbfunctions.py": "1.01", "proggen/M18_Save_Load.py": "1.01",  # v2.12 (entfallen)
@@ -439,7 +452,7 @@ REQUIRED_FILES = {  # v1.75
     # "proggen/M06_Write_Header.py": "1.04", "proggen/M20_PageEvents_a_Functions.py": "1.05", "vb2py/vbfunctions.py": "1.01", "proggen/M18_Save_Load.py": "1.04",  # v2.27 (entfallen)
     # "proggen/M06_Write_Header.py": "1.04", "proggen/M20_PageEvents_a_Functions.py": "1.06", "vb2py/vbfunctions.py": "1.01", "proggen/M18_Save_Load.py": "1.04",  # v2.54 (entfallen)
     # "proggen/M06_Write_Header.py": "1.10", "proggen/M20_PageEvents_a_Functions.py": "1.12", "vb2py/vbfunctions.py": "1.01", "proggen/M18_Save_Load.py": "1.04", "proggen/M06_Write_Header_SW.py": "1.07", "proggen/M18_Save_Load.py": "1.05", "_web/web_log.py": "1.07", "proggen/M20_PageEvents_a_Functions.py": "1.12", "proggen/M03_Dialog.py": "1.03", "_web/web_layout.py": "1.20", "_web/web_params.py": "1.10", "_web/web_form_options.py": "1.29", "_web/web_tabs.py": "1.23", "proggen/M08_ARDUINO.py": "1.22", "_web/web_z21.py": "1.04", "_web/web_dcckeyboard.py": "1.03", "_web/web_update.py": "1.16", "headless/headless_gridmodel.py": "1.07", "fast_paths.py": "1.01", "proggen/M20_PageEvents_a_Functions.py": "1.12", "proggen/Userform_Other.py": "1.03", "_web/web_firewall.py": "1.04", "_web/web_esp32_ota.py": "1.06", "proggen/UserForm_Options.py": "1.06",  # v2.54  # v3.56  # v3.91  # v4.51 (entfallen)
-    "proggen/M06_Write_Header.py": "1.10", "proggen/M20_PageEvents_a_Functions.py": "1.12", "vb2py/vbfunctions.py": "1.01", "proggen/M18_Save_Load.py": "1.04", "proggen/M06_Write_Header_SW.py": "1.07", "proggen/M18_Save_Load.py": "1.05", "_web/web_log.py": "1.07", "proggen/M20_PageEvents_a_Functions.py": "1.12", "proggen/M03_Dialog.py": "1.03", "_web/web_layout.py": "1.20", "_web/web_params.py": "1.10", "_web/web_form_options.py": "1.29", "_web/web_tabs.py": "1.23", "proggen/M08_ARDUINO.py": "1.22", "_web/web_z21.py": "1.04", "_web/web_dcckeyboard.py": "1.05", "_web/web_update.py": "1.16", "headless/headless_gridmodel.py": "1.07", "fast_paths.py": "1.01", "proggen/M20_PageEvents_a_Functions.py": "1.12", "proggen/Userform_Other.py": "1.03", "_web/web_firewall.py": "1.04", "_web/web_esp32_ota.py": "1.06", "proggen/UserForm_Options.py": "1.06",  # v2.54  # v3.56  # v3.91  # v4.51
+    "proggen/M06_Write_Header.py": "1.10", "proggen/M20_PageEvents_a_Functions.py": "1.12", "vb2py/vbfunctions.py": "1.01", "proggen/M18_Save_Load.py": "1.04", "proggen/M06_Write_Header_SW.py": "1.07", "proggen/M18_Save_Load.py": "1.05", "_web/web_log.py": "1.07", "proggen/M20_PageEvents_a_Functions.py": "1.12", "proggen/M03_Dialog.py": "1.03", "_web/web_layout.py": "1.20", "_web/web_params.py": "1.10", "_web/web_form_options.py": "1.29", "_web/web_tabs.py": "1.23", "proggen/M08_ARDUINO.py": "1.22", "_web/web_z21.py": "1.04", "_web/web_dcckeyboard.py": "1.05", "_web/web_update.py": "1.16", "headless/headless_gridmodel.py": "1.07", "fast_paths.py": "1.01", "proggen/M20_PageEvents_a_Functions.py": "1.13", "proggen/Userform_Other.py": "1.03", "_web/web_firewall.py": "1.04", "_web/web_esp32_ota.py": "1.06", "proggen/UserForm_Options.py": "1.06",  # v2.54  # v3.56  # v3.91  # v4.51
     "proggen/M18a_Load_PicoConfig.py": "1.01", "proggen/M17_Import_old_Data.py": "1.01",  # v1.75
     # "proggen/M02_Public.py": "1.01", "proggen/M02a_Public.py": "1.01", "proggen/M03_Dialog.py": "1.01", "proggen/M06_Write_Header_LED2Var.py": "1.01", "proggen/M06_Write_Header_SW.py": "1.01", "proggen/M07_COM_Port.py": "1.02", "proggen/M09_Language.py": "1.01", "proggen/M10_Par_Description.py": "1.01", "proggen/M30_Tools.py": "1.01", "proggen/M32_DCC.py": "1.01", "proggen/M38_Extensions.py": "1.01", "proggen/clsExtension.py": "1.01", "proggen/Userform_Other.py": "1.01", "_web/web_form_other.py": "1.04",  # v1.99 (entfallen)
     # "proggen/M02_Public.py": "1.01", "proggen/M02a_Public.py": "1.01", "proggen/M03_Dialog.py": "1.01", "proggen/M06_Write_Header_LED2Var.py": "1.01", "proggen/M06_Write_Header_SW.py": "1.02", "proggen/M07_COM_Port.py": "1.02", "proggen/M09_Language.py": "1.01", "proggen/M10_Par_Description.py": "1.02", "proggen/M30_Tools.py": "1.01", "proggen/M32_DCC.py": "1.01", "proggen/M38_Extensions.py": "1.01", "proggen/clsExtension.py": "1.01", "proggen/Userform_Other.py": "1.01", "_web/web_form_other.py": "1.04",  # v2.00 (entfallen)
@@ -518,11 +531,11 @@ REQUIRED_FILES = {  # v1.75
     "headless/headless_search.py": "1.01",  # v3.29
     "proggen/M39_Simulator.py": "1.11", "_web/web_simulator.py": "1.00",  # v3.56
     # "proggen/M07_COM_Port.py": "1.13", "_web/web_tabs.py": "1.32",  # v4.42  # v4.44  # v4.47  # v4.48  # v4.49  # v4.50  # v4.51 (entfallen)
-    "proggen/M07_COM_Port.py": "1.13", "_web/web_tabs.py": "1.33",  # v4.42  # v4.44  # v4.47  # v4.48  # v4.49  # v4.50  # v4.51
+    "proggen/M07_COM_Port.py": "1.13", "_web/web_tabs.py": "1.34",  # v4.42  # v4.44  # v4.47  # v4.48  # v4.49  # v4.50  # v4.51
     # "_web/web_serial.py": "1.13", "_web/web_dialogs.py": "1.11", "_web/web_params.py": "1.14",  # v4.50  # v4.51 (entfallen)
     # "_web/web_serial.py": "1.13", "_web/web_dialogs.py": "1.11", "_web/web_params.py": "1.15",  # v4.50  # v4.51  # v4.52 (entfallen)
-    "_web/web_serial.py": "1.13", "_web/web_dialogs.py": "1.11", "_web/web_params.py": "1.16", "_web/web_form_options.py": "1.42",  # v4.50  # v4.51  # v4.52  # v4.53  # v4.54
-    "proggen/M08_ARDUINO.py": "1.27",  # v4.43
+    "_web/web_serial.py": "1.13", "_web/web_dialogs.py": "1.11", "_web/web_params.py": "1.17", "_web/web_form_options.py": "1.43",  # v4.50  # v4.51  # v4.52  # v4.53  # v4.54
+    "proggen/M08_ARDUINO.py": "1.28",  # v4.43
 }  # v1.75
 FILE_PROBLEMS = []                                      # Zeilen der Abweichungen, gefuellt in main()  # v1.75
 
@@ -681,7 +694,7 @@ def tr(text, **values):  # v2.16
 
 
 from headless.headless_app_controller import HeadlessAppController     # noqa: E402
-from headless.headless_gridmodel import build_grid, row_number_width                      # noqa: E402  # v1.96
+from headless.headless_gridmodel import build_grid, col_letter, row_number_width                      # noqa: E402  # v1.96
 from _web import web_dialogs                                    # noqa: E402
 from ExcelAPI.headless_sheet import Selected                    # noqa: E402  (liegt im Ordner ExcelAPI)
 
@@ -1049,7 +1062,8 @@ def toolbar_buttons():
         ("Btn_Delete_Table.png", "Tabelle\nlöschen", "Tabelle löschen. ACHTUNG: Gesamte Tabelle wird gelöscht!", F00.ClearSheet_Button_Click),  # v3.08: Warnung im Tooltip
         ("Btn_New_Table.png", "Neue\nTabelle", "Neue Tabelle einfügen", F00.NewSheet_Button_Click),
         # ("Btn_Options.png", "Optionen", "Optionen anzeigen", F00.Options_Button_Click),  # v2.76 (entfallen)
-        ("Btn_Options.png", "Optionen\nWerkzeuge", "Optionen anzeigen", F00.Options_Button_Click),  # v2.76
+        # ("Btn_Options.png", "Optionen\nWerkzeuge", "Optionen anzeigen", F00.Options_Button_Click),  # v2.76  # v4.67 (entfallen)
+        ("Btn_Options.png", "Hardware\nOptionen", "Optionen anzeigen", F00.Options_Button_Click),  # v4.67
         # ("Btn_Help.png", "Hilfe", "Hilfe aufrufen", F00.Help_Button_Click),  # v2.54 (entfallen)
         # ("Btn_Help.png", "Online Wiki", "Online Wiki im Webbrowser öffnen", F00.Help_Button_Click),  # v2.76 (entfallen)
         # ("Btn_Color_Row.png", "Zeilen Färben", "Zeilen entsprechend den ProgrammGenerator-Einstellungen einfärben",  # v2.76 (entfallen)
@@ -1293,13 +1307,26 @@ window.mllCopyText = function (api, node, colId, value) {
   }
   return cell;
 };
+// v4.55: welche Zeilen (_r) und Spalten (Index) der Text enthaelt: der Server ordnet ihnen beim Kopieren die Feldfarben zu
+window.mllCopyMeta = function (api, node, colId) {
+  let rows = api.getSelectedRows();
+  const inSel = rows.some(d => d._r === node.data._r);
+  if (colId === '_rn' || (inSel && rows.length > 1)) {
+    if (!inSel) rows = [node.data];
+    rows = rows.slice().sort((a, b) => a._r - b._r);
+    const cols = api.getAllDisplayedColumns().map(c => c.getColId()).filter(id => /^c\\d+$/.test(id)).map(id => parseInt(id.slice(1)));
+    return {rows: rows.map(d => d._r), cols: cols};
+  }
+  return {rows: [node.data._r], cols: [parseInt(String(colId).slice(1))]};
+};
 """
 
 # Rechtsklick auf eine Zelle: merkt sich die Zelle (fuer die Menueeintraege im Browser) und meldet sie dem Server.
 JS_CELL_CONTEXT = ("e => { if (!e.node || !e.node.data) return; "
                    "window.mllCtxApi = e.api; "
                    "window.mllCtx = {r: e.node.data._r, col: e.column.getColId(), rowIndex: e.rowIndex, "
-                   "pinned: e.node.rowPinned || null, text: window.mllCopyText(e.api, e.node, e.column.getColId(), e.value)}; "
+                   "pinned: e.node.rowPinned || null, text: window.mllCopyText(e.api, e.node, e.column.getColId(), e.value), "
+                   "meta: window.mllCopyMeta(e.api, e.node, e.column.getColId())}; "  # v4.55
                    "emitEvent('mll_ctx', window.mllCtx); }")
 
 # Kontextmenue "Zelle bearbeiten": Das Bearbeiten wird im Browser gestartet, ERST NACHDEM sich das Menue geschlossen hat. Gibt das Menue beim Schliessen
@@ -1316,17 +1343,24 @@ EDIT_CELL_JS = ("() => { const c = window.mllCtx, api = window.mllCtxApi; if (!c
 JS_CELL_KEYDOWN = ("e => { if (e.editing || !e.event || !e.node || !e.node.data) return; const k = e.event; "
                    "const ctrl = k.ctrlKey || k.metaKey; const col = e.column.getColId(); const r = e.node.data._r; "
                    "const txt = window.mllCopyText(e.api, e.node, col, e.value); "
-                   "if (ctrl && k.key.toLowerCase() === 'c') { window.mllClipSet(txt); } "  # v3.57
+                   # "if (ctrl && k.key.toLowerCase() === 'c') { window.mllClipSet(txt); } "  # v3.57  # v4.55 (entfallen)
+                   # "else if (ctrl && k.key.toLowerCase() === 'x') { window.mllClipSet(txt); "  # v3.57  # v4.55 (entfallen)
+                   # "emitEvent('mll_cell_op', {op: 'cut', r: r, col: col}); } "  # v4.55 (entfallen)
+                   # "else if (ctrl && k.key.toLowerCase() === 'v') { k.preventDefault(); "  # v4.55 (entfallen)
+                   # "window.mllClipGet().then(t => emitEvent('mll_cell_op', {op: 'paste', r: r, col: col, text: t})); } "  # v4.55 (entfallen)
+                   "if (ctrl && k.key.toLowerCase() === 'c') { window.mllClipSet(txt); "  # v4.55: Text und Feldfarben (Server merkt sich die Farben zum Text)
+                   "emitEvent('mll_cell_op', {op: 'copy', r: r, col: col, text: txt, meta: window.mllCopyMeta(e.api, e.node, col)}); } "  # v4.55
                    "else if (ctrl && k.key.toLowerCase() === 'x') { window.mllClipSet(txt); "  # v3.57
-                   "emitEvent('mll_cell_op', {op: 'cut', r: r, col: col}); } "
-                   "else if (ctrl && k.key.toLowerCase() === 'v') { k.preventDefault(); "
-                   "window.mllClipGet().then(t => emitEvent('mll_cell_op', {op: 'paste', r: r, col: col, text: t})); } "
+                   "emitEvent('mll_cell_op', {op: 'cut', r: r, col: col, text: txt, meta: window.mllCopyMeta(e.api, e.node, col)}); } "  # v4.55
+                   "else if (ctrl && k.key.toLowerCase() === 'v') { k.preventDefault(); "  # v4.55: mit Umschalt nur der Text
+                   "window.mllClipGet().then(t => emitEvent('mll_cell_op', {op: 'paste', r: r, col: col, text: t, text_only: !!k.shiftKey})); } "  # v4.55
                    "else if (ctrl && !k.shiftKey && k.key.toLowerCase() === 'd') { k.preventDefault(); "  # v3.93: Nach unten ausfuellen
                    "emitEvent('mll_cell_op', {op: 'filldown', r: r, col: col}); } "  # v3.93
                    "else if (ctrl && !k.shiftKey && k.key.toLowerCase() === 'z') { k.preventDefault(); "  # v4.02: Rueckgaengig
                    "emitEvent('mll_cell_op', {op: 'undo', r: r, col: col}); } "  # v4.02
                    "else if (ctrl && (k.key.toLowerCase() === 'y' || (k.shiftKey && k.key.toLowerCase() === 'z'))) { k.preventDefault(); "  # v4.02: Wiederholen
                    "emitEvent('mll_cell_op', {op: 'redo', r: r, col: col}); } "  # v4.02
+                   "else if (k.key === 'F3') { k.preventDefault(); emitEvent('mll_cell_op', {op: 'minicolor', r: r, col: col}); } "  # v4.58: Mini-Farbtest
                    "else if (k.key === 'Delete') { emitEvent('mll_cell_op', {op: 'delete', r: r, col: col}); } }")
 
 # Kopfzeilen-Tooltips (Text hinter dem "§" der Ueberschrift) aus den Zeilendaten
@@ -1450,7 +1484,7 @@ def font_scales(ctrl) -> dict:
 # VERSION = "4.47 (2026-11-21)"  # v4.48 (entfallen)
 # VERSION = "4.48 (2026-11-21)"  # v4.49 (entfallen)
 # VERSION = "4.49 (2026-11-21)"  # v4.50 (entfallen)
-VERSION = "4.54 (2026-11-21)"  # v3.64  # v4.26  # v4.27  # v4.28  # v4.29  # v4.30  # v4.31  # v4.32  # v4.33  # v4.34  # v4.35  # v4.36  # v4.37  # v4.38  # v4.39  # v4.40  # v4.41  # v4.42  # v4.43  # v4.44  # v4.45  # v4.46  # v4.47  # v4.48  # v4.49  # v4.50  # v4.51  # v4.52  # v4.53  # v4.54
+VERSION = "4.67 (2026-11-21)"  # v3.64  # v4.26  # v4.27  # v4.28  # v4.29  # v4.30  # v4.31  # v4.32  # v4.33  # v4.34  # v4.35  # v4.36  # v4.37  # v4.38  # v4.39  # v4.40  # v4.41  # v4.42  # v4.43  # v4.44  # v4.45  # v4.46  # v4.47  # v4.48  # v4.49  # v4.50  # v4.51  # v4.52  # v4.53  # v4.54  # v4.55  # v4.56  # v4.57  # v4.58  # v4.59  # v4.60  # v4.61  # v4.62  # v4.63  # v4.64  # v4.65  # v4.66  # v4.67
 # VERSION = "4.09 (2026-11-19)"  # v3.64 (entfallen)
 # VERSION = "4.08 (2026-11-19)"  # v3.64 (entfallen)
 # VERSION = "4.07 (2026-11-19)"  # v3.64 (entfallen)
@@ -2104,6 +2138,7 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
     ui.add_head_html("<script>" + JS_FIND + "</script>")  # v3.28
     ui.add_head_html("<script>" + JS_INCR_SAVE + "</script>")  # v4.15
     ui.add_head_html("<script>" + JS_HOTKEYS + "</script>")  # v4.38 (Issue 49)
+    ui.add_head_html("<script>document.addEventListener('keydown', e => { if (e.key === 'F3') e.preventDefault(); });</script>")  # v4.65: F3 oeffnet sonst die Browser-Suche  # v4.66 (Bubble-Phase: AG Grid ignoriert bereits abgefangene Tasten, Capture blockierte den Mini-Farbtest)
     ui.add_head_html("<script>" + JS_MENU_FIT + "</script>")  # v4.23
     ui.add_css(CSS_GRID)
     from _web import web_layout                        # kompaktes Layout fuer kleine Bildschirme (Programm Einstellungen)
@@ -4412,8 +4447,36 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
             undo_stacks[getattr(ws, "Name", "")] = st
         return st
 
-    def undo_record(ws, before: list, label: str, rows: int, redo_stack: bool = False, include_unchanged: bool = False):  # v4.02
-        """before: [((zeile0, spalte0), alter Text)]; der neue Text wird jetzt aus der Tabelle gelesen."""
+    def cell_manual(ws, r, c):  # v4.55
+        """Manuell gesetzte Hintergrundfarbe der Zelle (nur die Zelle selbst) oder None."""  # v4.55
+        sh = ws.tksheet  # v4.55
+        if (r, c) in getattr(sh, "_manual_cells", ()):  # v4.55
+            hl = sh._cell_hl.get((r, c))  # v4.55
+            return hl.bg if hl is not None and hl.bg else None  # v4.55
+        return None  # v4.55
+
+    def apply_manual_colors(ws, colors: dict):  # v4.55
+        """colors: {(zeile0, spalte0): Farbe}. "#rrggbb": manuell faerben (vor den Faerberegeln geschuetzt); None: nur die manuelle Farbe
+        wegnehmen (die Regeln faerben die Zelle dann neu); "": die Farbe der Zelle in jedem Fall entfernen."""  # v4.55
+        sh = ws.tksheet  # v4.55
+        if not hasattr(sh, "set_manual_color"):  # v4.55
+            return  # v4.55
+        recolor = set()  # v4.57: Zeilen, aus denen eine Farbe entfernt wurde: die Regeln faerben sie neu
+        for (r, c), col in colors.items():  # v4.55
+            if col:  # v4.55
+                sh.set_manual_color(r, c, col)  # v4.55
+            elif col == "" or (r, c) in sh._manual_cells:  # v4.55
+                sh.set_manual_color(r, c, None)  # v4.55
+                recolor.add(r)  # v4.57
+        for r in sorted(recolor):  # v4.57: wie nach einer Textaenderung (unabhaengig von Automatisch einfaerben)
+            try:  # v4.57
+                M20.check_conditionalformating(ws.Cells(r + 1, 1), allcolumns=True)  # v4.57
+            except Exception:                          # noqa: BLE001  # v4.57
+                logger.debug("Faerberegeln fuer Zeile %s nicht angewandt", r + 1, exc_info=True)  # v4.57
+
+    # def undo_record(ws, before: list, label: str, rows: int, redo_stack: bool = False, include_unchanged: bool = False):  # v4.02  # v4.55 (entfallen: mit Farben)
+    def undo_record(ws, before: list, label: str, rows: int, redo_stack: bool = False, include_unchanged: bool = False, colors_before: dict | None = None):  # v4.02  # v4.55
+        """before: [((zeile0, spalte0), alter Text)]; der neue Text wird jetzt aus der Tabelle gelesen. colors_before: {(zeile0, spalte0): alte manuelle Farbe}."""  # v4.55
         cells = []
         changed = 0  # v4.37
         for (r, c), old in before:
@@ -4421,11 +4484,20 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
             changed += new != old  # v4.37
             if new != old or include_unchanged:
                 cells.append(((r, c), old, new))
-        if not changed:
+        ccells = []  # v4.55
+        for (r, c), old in (colors_before or {}).items():  # v4.55
+            new = cell_manual(ws, r, c)  # v4.55
+            if new != old:  # v4.55
+                ccells.append(((r, c), old, new))  # v4.55
+        # if not changed:  # v4.55 (entfallen)
+        if not changed and not ccells:  # v4.55
             return
+        count = len({pos for pos, _, _ in cells if pos} | {pos for pos, _, _ in ccells})  # v4.55: geaenderte Zellen (Text oder Farbe)
         st = undo_stack(ws)
-        st["undo"].append({"label": f"{label}, {changed} " + (tr("Zellen") if changed != 1 else tr("Zelle")),  # v4.37
-                           "cells": cells, "rows": rows})
+        # st["undo"].append({"label": f"{label}, {changed} " + (tr("Zellen") if changed != 1 else tr("Zelle")),  # v4.37  # v4.55 (entfallen)
+        #                    "cells": cells, "rows": rows})  # v4.55 (entfallen)
+        st["undo"].append({"label": f"{label}, {count} " + (tr("Zellen") if count != 1 else tr("Zelle")),  # v4.37  # v4.55
+                           "cells": cells, "colors": ccells, "rows": rows})  # v4.55
         del st["undo"][:-UNDO_MAX]
         st["redo"].clear()
 
@@ -4446,7 +4518,8 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
             ui.notify(tr("Zeilen wurden eingefügt oder gelöscht - der Verlauf wurde zurückgesetzt."), type="warning")
             return
         items = [(pos, new if redo else old) for pos, old, new in entry["cells"]]
-        ok = await write_cells(items, record=False)
+        # ok = await write_cells(items, record=False)  # v4.55 (entfallen)
+        ok = await write_cells(items, record=False, colors={pos: ((new if redo else old) if (new if redo else old) else "") for pos, old, new in entry.get("colors", [])})  # v4.55: Farben mit zurueck/wiederholen
         if ok:
             dst.append(entry)
             await refresh_icons_after_paste(items)
@@ -4696,7 +4769,8 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
         except Exception:                            # noqa: BLE001
             logger.debug("Rechtsklick: Zelle nicht markierbar", exc_info=True)
 
-    async def write_cells(items: list, label: str = "", record: bool = True) -> bool:  # v4.02: label/record/Rueckgabe
+    # async def write_cells(items: list, label: str = "", record: bool = True) -> bool:  # v4.02: label/record/Rueckgabe  # v4.55 (entfallen)
+    async def write_cells(items: list, label: str = "", record: bool = True, colors: dict | None = None) -> bool:  # v4.02: label/record/Rueckgabe  # v4.55: colors
         """items: [((zeile0, spalte0), Text)] ueber den normalen Schreibweg (loest Worksheet_Change aus).
         label: Name der Aktion im Rueckgaengig-Verlauf; record=False beim Rueckgaengig/Wiederholen selbst. True = geschrieben."""
         ws = state["ws"]
@@ -4705,6 +4779,8 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
             return False  # v4.02
         floor = first_data_row0()
         items = [(pos, v) for pos, v in items if pos[0] >= floor]       # Kopfzeilen bleiben unveraendert
+        colors = {pos: v for pos, v in (colors or {}).items() if pos[0] >= floor}  # v4.55
+        colors_before = {pos: cell_manual(ws, pos[0], pos[1]) for pos in colors} if record else {}  # v4.55
         undo_before = [(pos, undo_cell(ws, pos[0], pos[1])) for pos, _ in items] if record else []  # v4.02
         undo_rows = undo_row_count(ws)  # v4.02
 
@@ -4720,6 +4796,8 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
             try:
                 for (r, c), v in items:
                     X02.CRange(r + 1, c + 1, ws=ws).Value = v
+                if colors:  # v4.55: Feldfarben nach dem Schreiben setzen (vor dem Einfaerben nach den Regeln, das manuelle Farben auslaesst)
+                    apply_manual_colors(ws, colors)  # v4.55
                 auto_color_rows(ws)  # v3.92
             except SystemExit:
                 raise RuntimeError("Das Makro wurde mit EndProg beendet") from None
@@ -4733,10 +4811,41 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
             ui.notify(tr('Fehler beim Schreiben: {ex}', ex=ex), type="negative")  # v2.16
             show(ws)  # v4.02
             return False  # v4.02
-        if record and undo_before:  # v4.02
-            undo_record(ws, undo_before, label or tr("Änderung"), undo_rows)  # v4.02
+        # if record and undo_before:  # v4.02  # v4.55 (entfallen)
+        #     undo_record(ws, undo_before, label or tr("Änderung"), undo_rows)  # v4.02  # v4.55 (entfallen)
+        if record and (undo_before or colors_before):  # v4.02  # v4.55
+            undo_record(ws, undo_before, label or tr("Änderung"), undo_rows, colors_before=colors_before)  # v4.02  # v4.55
         show(ws)
         return True  # v4.02
+
+    clip_buf: dict = {}  # v4.55: zuletzt kopierter Text mit den Feldfarben seiner Zellen {"text": ..., "colors": [[Farbe je Spalte] je Zeile]}
+
+    def clip_norm(t) -> str:  # v4.55
+        return str(t or "").replace("\r\n", "\n").replace("\r", "\n").rstrip("\n")  # v4.55
+
+    def record_clip(a):  # v4.55
+        """Kopieren/Ausschneiden: die manuellen Feldfarben der kopierten Zellen zum Text merken (Einfuegen setzt sie wieder)."""  # v4.55
+        if isinstance(a, (list, tuple)) and a:  # v4.55
+            a = a[0]  # v4.55
+        clip_buf.clear()  # v4.55
+        if not isinstance(a, dict):  # v4.55
+            return  # v4.55
+        try:  # v4.55
+            sh = state["ws"].tksheet  # v4.55
+            meta = a.get("meta") or {}  # v4.55
+            if not hasattr(sh, "manual_color_at") or not meta.get("rows") or not meta.get("cols"):  # v4.55
+                return  # v4.55
+            colors = [[sh.manual_color_at(int(r), int(c)) for c in meta["cols"]] for r in meta["rows"]]  # v4.55
+            clip_buf.update({"text": clip_norm(a.get("text", "")), "colors": colors})  # v4.55
+        except Exception:                            # noqa: BLE001  # v4.55
+            logger.debug("Feldfarben beim Kopieren nicht gemerkt", exc_info=True)  # v4.55
+
+    async def op_copy(e):  # v4.55: Kontextmenue Kopieren
+        record_clip(e.args)  # v4.55
+
+    async def op_cut(e):  # v4.55: Kontextmenue Ausschneiden
+        record_clip(e.args)  # v4.55
+        await op_clear()  # v4.55
 
     async def op_clear(_=None):                      # Entf und Ausschneiden (der Text ist schon in der Zwischenablage)
         if ctx_ok():
@@ -4784,11 +4893,17 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
     async def op_paste_insert(e):                    # Paste (Zeilen einfuegen): neue Zeilen statt Ueberschreiben
         await op_paste(e, insert=True)
 
-    async def op_paste(e, insert=False):
+    async def op_paste_text(e):  # v4.55: Nur Text einfuegen (ohne Feldfarben)
+        await op_paste(e, text_only=True)  # v4.55
+
+    # async def op_paste(e, insert=False):  # v4.55 (entfallen)
+    async def op_paste(e, insert=False, text_only=False):  # v4.55
         a = e.args
         if isinstance(a, (list, tuple)) and a:
             a = a[0]
         text = a.get("text", "") if isinstance(a, dict) else ""
+        if isinstance(a, dict) and a.get("text_only"):  # v4.55: Strg+Umschalt+V
+            text_only = True  # v4.55
         if not ctx_ok() or text == "":
             return
         rn = ctx_is_rn()
@@ -4806,9 +4921,26 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
         if lines.endswith("\n"):
             lines = lines[:-1]
         items = []
-        for i, line in enumerate(lines.split("\n")):
-            for j, v in enumerate(line.split("\t")):
-                items.append(((r0 + i, c0 + j), v))
+        text_lines = lines.split("\n")  # v4.55
+        # Wie Excel: ist das Ziel (mehrere markierte Zeilen) ein Vielfaches des kopierten Blocks, wird das Muster wiederholt  # v4.55
+        reps = 1  # v4.55
+        if not insert and len(text_lines) >= 1:  # v4.55
+            sel = await ctx_rows(r0)  # v4.55
+            if len(sel) > len(text_lines) and len(sel) % len(text_lines) == 0 and sel == list(range(sel[0], sel[0] + len(sel))):  # v4.55
+                r0, reps = sel[0], len(sel) // len(text_lines)  # v4.55
+        use_colors = (not text_only) and bool(clip_buf) and clip_buf.get("text") == clip_norm(text)  # v4.55: Farben nur, wenn der Text der zuletzt kopierte ist
+        colmap: dict = {}  # v4.55
+        # for i, line in enumerate(lines.split("\n")):  # v4.55 (entfallen)
+        #     for j, v in enumerate(line.split("\t")):  # v4.55 (entfallen)
+        #         items.append(((r0 + i, c0 + j), v))  # v4.55 (entfallen)
+        for k in range(reps):  # v4.55
+            for i, line in enumerate(text_lines):  # v4.55
+                for j, v in enumerate(line.split("\t")):  # v4.55
+                    pos = (r0 + k * len(text_lines) + i, c0 + j)  # v4.55
+                    items.append((pos, v))  # v4.55
+                    if use_colors:  # v4.55
+                        src = clip_buf["colors"]  # v4.55
+                        colmap[pos] = src[i][j] if i < len(src) and j < len(src[i]) else None  # v4.55
         if insert:
             n_rows = len({pos[0] for pos, _ in items})
             if r0 < first_data_row0():
@@ -4835,7 +4967,8 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
             st_ = undo_stack(state["ws"])  # v4.02: Zeilen eingefuegt -> Verlauf dieses Blatts verwerfen
             st_["undo"].clear()  # v4.02
             st_["redo"].clear()  # v4.02
-        await write_cells(items, label=tr("Einfügen"))  # v4.02
+        # await write_cells(items, label=tr("Einfügen"))  # v4.02  # v4.55 (entfallen)
+        await write_cells(items, label=tr("Einfügen"), colors=colmap or None)  # v4.02  # v4.55
         await refresh_icons_after_paste(items)
 
     def series_value(base: str, n: int) -> str:  # v3.93
@@ -4886,16 +5019,108 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
     async def op_fill_series(_=None):  # v3.93
         await op_fill("series")  # v3.93
 
+    # RGB_RE = re.compile(r"^\s*(\d{1,3})(\s*,\s*)(\d{1,3})\s*,\s*(\d{1,3})\s*$")  # v4.58: Farbwert R,G,B in einer Zelle  # v4.59 (entfallen)
+
+    # async def op_mini_color(_=None):  # v4.58  # v4.59 (entfallen)
+    # """F3 / Kontextmenue: Mini-Farbtest fuer die Zelle(n) mit einem Farbwert R,G,B; OK schreibt den neuen Wert (rueckgaengig moeglich)"""  # v4.58  # v4.59 (entfallen)
+    # if not ctx_ok() or state["busy"]:  # v4.58  # v4.59 (entfallen)
+    # return  # v4.58  # v4.59 (entfallen)
+    # ws = state["ws"]  # v4.58  # v4.59 (entfallen)
+    # r = int(ctx_state["r"])  # v4.58  # v4.59 (entfallen)
+    # c = 0 if ctx_is_rn() else col_index(ctx_state["col"])  # v4.58  # v4.59 (entfallen)
+    # cells = [pos for pos in await (target_cells(r, c) if not ctx_is_rn() else color_cells(r, c, True)) if pos[0] >= first_data_row0()]  # v4.58  # v4.59 (entfallen)
+    # found = [(pos, RGB_RE.match(undo_cell(ws, pos[0], pos[1]))) for pos in cells]  # v4.58  # v4.59 (entfallen)
+    # found = [(pos, m) for pos, m in found if m and all(int(m.group(i)) <= 255 for i in (1, 3, 4))]  # v4.58  # v4.59 (entfallen)
+    # empty_single = len(cells) == 1 and undo_cell(ws, cells[0][0], cells[0][1]).strip() == ""  # v4.58: leere Zelle: mit der letzten Farbe beginnen  # v4.59 (entfallen)
+    # if not found and not empty_single:  # v4.58  # v4.59 (entfallen)
+    # ui.notify(tr("Die markierte Zelle enthält keinen Farbwert (R,G,B)."), type="warning")  # v4.58  # v4.59 (entfallen)
+    # return  # v4.58  # v4.59 (entfallen)
+    # start = tuple(int(found[0][1].group(i)) for i in (1, 3, 4)) if found else None  # v4.58  # v4.59 (entfallen)
+    # sep = found[0][1].group(2) if found else ","  # v4.58: Schreibweise der Zelle beibehalten (mit oder ohne Leerzeichen)  # v4.59 (entfallen)
+    # result = await web_colorcheck.open_mini(ctrl, start, title=tr("Mini-Farbtest"))  # v4.58  # v4.59 (entfallen)
+    # if result:  # v4.58  # v4.59 (entfallen)
+    # value = sep.join(str(x) for x in result)  # v4.58  # v4.59 (entfallen)
+    # items = [(pos, value) for pos, _ in found] if found else [(cells[0], value)]  # v4.58  # v4.59 (entfallen)
+    # await write_cells(items, label=tr("Farbe (Mini-Farbtest)"))  # v4.58  # v4.59 (entfallen)
+
+
+    CONSTRGB_RE = re.compile(r"^(\s*ConstRGB\s*\()(.*)(\)\s*)$", re.I | re.S)  # v4.59: Makro ConstRGB(LED, InCh, R0, G0, B0, R1, G1, B1)
+
+    def constrgb_parts(text):  # v4.59
+        """Zerlegt den Text eines ConstRGB-Makros: (Anfang, [Argumente], Ende, Zahlen R0 G0 B0 R1 G1 B1) oder None (anderes Makro, Variablen statt Zahlen)"""  # v4.59
+        m = CONSTRGB_RE.match(text or "")  # v4.59
+        if not m:  # v4.59
+            return None  # v4.59
+        args = m.group(2).split(",")  # v4.59
+        if len(args) != 8:  # v4.59
+            return None  # v4.59
+        try:  # v4.59
+            nums = [int(a.strip()) for a in args[2:]]  # v4.59
+        except ValueError:  # v4.59
+            return None  # v4.59
+        if any(n < 0 or n > 255 for n in nums):  # v4.59
+            return None  # v4.59
+        return m.group(1), args, m.group(3), nums  # v4.59
+
+    def constrgb_text(parts, nums):  # v4.59
+        """Makrotext mit neuen Zahlen; Leerzeichen um die Argumente bleiben wie sie waren"""  # v4.59
+        head, args, tail, _ = parts  # v4.59
+        out = list(args[:2])  # v4.59
+        for old, n in zip(args[2:], nums):  # v4.59
+            out.append(old.replace(old.strip(), str(n), 1) if old.strip() else str(n))  # v4.59
+        return head + ",".join(out) + tail  # v4.59
+
+    async def op_mini_color(_=None):  # v4.59
+        """F3 / Kontextmenue: Mini-Farbtest fuer die Zelle(n) mit dem Makro ConstRGB; OK ersetzt die Farbzahlen im Makrotext (rueckgaengig moeglich)"""  # v4.59
+        if not ctx_ok() or state["busy"]:  # v4.59
+            return  # v4.59
+        ws = state["ws"]  # v4.59
+        r = int(ctx_state["r"])  # v4.59
+        c = 0 if ctx_is_rn() else col_index(ctx_state["col"])  # v4.59
+        cells = [pos for pos in await (target_cells(r, c) if not ctx_is_rn() else color_cells(r, c, True)) if pos[0] >= first_data_row0()]  # v4.59
+        found = [(pos, constrgb_parts(undo_cell(ws, pos[0], pos[1]))) for pos in cells]  # v4.59
+        found = [(pos, p) for pos, p in found if p]  # v4.59
+        if not found:  # v4.59
+            ui.notify(tr("Der Mini-Farbtest gilt für das Makro ConstRGB mit festen Zahlen für die Farben. Bitte die Zelle Beleuchtung mit diesem Makro anklicken."), type="warning")  # v4.59
+            return  # v4.59
+        nums = found[0][1][3]  # v4.59: R0 G0 B0 R1 G1 B1 des ersten Makros
+        led = None  # v4.60: LED der Zeile aus den Spalten Start LedNr, LEDs und LED Channel
+        try:  # v4.60
+            M25.Make_sure_that_Col_Variables_match(ws)  # v4.60
+            row0 = found[0][0][0]  # v4.60
+            num = lambda col, default: (lambda m: int(m.group(1)) if m else default)(re.match(r"^\s*(\d+)", undo_cell(ws, row0, int(col) - 1)))  # noqa: E731  # v4.60
+            # first = re.match(r"^\s*(\d+)", undo_cell(ws, row0, int(M25.LED_Nr__Col) - 1))  # v4.60  # v4.61 (entfallen)
+            first = re.match(r"^\s*(?:(\d+)\s*-\s*)?(\d+)", undo_cell(ws, row0, int(M25.LED_Nr__Col) - 1))  # v4.61: 17, 0-17 oder 2-17 (Kanal-LedNr)
+            if first:  # v4.60
+                # led = (int(first.group(1)), max(num(M25.LEDs____Col, 1), 1), num(M25.LED_Cha_Col, 0))  # v4.60  # v4.61 (entfallen)
+                led = (int(first.group(2)), max(num(M25.LEDs____Col, 1), 1), int(first.group(1)) if first.group(1) is not None else num(M25.LED_Cha_Col, 0))  # v4.61
+        except Exception:                              # noqa: BLE001  # v4.60
+            logger.debug("Mini-Farbtest: LED der Zeile nicht gelesen", exc_info=True)  # v4.60
+        # result = await web_colorcheck.open_mini(ctrl, None, title=tr("Mini-Farbtest"),  # v4.59  # v4.60 (entfallen)
+        #                                         slots=[("Farbe bei Ein (R1, G1, B1)", tuple(nums[3:6])), ("Farbe bei Aus (R0, G0, B0)", tuple(nums[0:3]))])  # v4.59  # v4.60 (entfallen)
+        result = await web_colorcheck.open_mini(ctrl, None, title=tr("Mini-Farbtest"), led=led,  # v4.60
+                                                slots=[("Farbe bei Ein (R1, G1, B1)", tuple(nums[3:6])), ("Farbe bei Aus (R0, G0, B0)", tuple(nums[0:3]))])  # v4.60
+        if result:  # v4.59
+            new = [*result[1], *result[0]]  # v4.59: R0 G0 B0 (Aus) dann R1 G1 B1 (Ein)
+            items = [(pos, constrgb_text(p, new)) for pos, p in found]  # v4.59
+            await write_cells(items, label=tr("Farbe (Mini-Farbtest)"))  # v4.59
+
     async def on_cell_op(e):                         # Tastenkuerzel aus der Tabelle (Strg+X, Strg+V, Entf)
         a = e.args or {}
         ctx_state.clear()
         ctx_state.update({"r": a.get("r"), "col": a.get("col")})
-        if a.get("op") in ("cut", "delete"):
+        if a.get("op") == "copy":  # v4.55
+            record_clip(a)  # v4.55
+        elif a.get("op") in ("cut", "delete"):  # v4.55
+            if a.get("op") == "cut":  # v4.55
+                record_clip(a)  # v4.55
             await op_clear()
         elif a.get("op") == "paste":
             await op_paste(types.SimpleNamespace(args=a))
         elif a.get("op") == "filldown":  # v3.93
             await op_fill("copy")  # v3.93
+        elif a.get("op") == "minicolor":  # v4.58
+            await op_mini_color()  # v4.58
         elif a.get("op") == "undo":  # v4.02
             await op_undo()  # v4.02
         elif a.get("op") == "redo":  # v4.02
@@ -4950,7 +5175,7 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
         c = 0 if rn else col_index(ctx_state["col"])
         hl = sh._row_hl.get(r) if rn else sh._cell_hl.get((r, c))
         initial = (hl.bg if hl is not None and hl.bg else None) or "#FFFFFF"
-        cells = await ctx_rows(r) if rn else await target_cells(r, c)
+        # cells = await ctx_rows(r) if rn else await target_cells(r, c)  # v4.55 (entfallen: color_cells)
         with ui.dialog().props("persistent") as dlg, ui.card().classes("w-[420px] max-w-full"):
             ui.label("Hintergrundfarbe der Zelle").classes("text-h6")
             # color = ui.color_input(label="Farbe", value=initial).classes("w-full")  # v2.67 (entfallen)
@@ -4961,18 +5186,27 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
         chosen = await dlg
         web_dialogs.safe_delete(dlg)
         if chosen:
-            for pos in cells:
-                sh.highlight(pos, bg=chosen)         # Zeilen (int): ganze Zeile; (Zeile, Spalte): eine Zelle
-            show(state["ws"])
+            # for pos in cells:  # v4.55 (entfallen)
+            #     sh.highlight(pos, bg=chosen)         # Zeilen (int): ganze Zeile; (Zeile, Spalte): eine Zelle  # v4.55 (entfallen)
+            # show(state["ws"])  # v4.55 (entfallen)
+            await write_cells([], label=tr("Feldfarbe"), colors={pos: chosen for pos in await color_cells(r, c, rn)})  # v4.55: manuell gesetzt: vor den Faerberegeln geschuetzt, rueckgaengig moeglich
+
+    async def color_cells(r, c, rn) -> list:  # v4.55
+        """Zellen (zeile0, spalte0), die Farbe setzen/entfernen betrifft: die Zelle, bei der Zeilennummer alle Zellen der markierten Zeilen."""  # v4.55
+        if rn:  # v4.55
+            ncols = last_column(state["ws"]) or state["ws"].tksheet.get_total_columns()  # v4.55
+            return [(rr, cc) for rr in await ctx_rows(r) for cc in range(0, ncols)]  # v4.55
+        return await target_cells(r, c)  # v4.55
 
     async def op_remove_color():
         if not ctx_ok():
             return
-        sh = state["ws"].tksheet
+        # sh = state["ws"].tksheet  # v4.55 (entfallen)
         r = int(ctx_state["r"])
-        for pos in (await ctx_rows(r) if ctx_is_rn() else await target_cells(r, col_index(ctx_state["col"]))):
-            sh.dehighlight(pos)
-        show(state["ws"])
+        # for pos in (await ctx_rows(r) if ctx_is_rn() else await target_cells(r, col_index(ctx_state["col"]))):  # v4.55 (entfallen)
+        #     sh.dehighlight(pos)  # v4.55 (entfallen)
+        # show(state["ws"])  # v4.55 (entfallen)
+        await write_cells([], label=tr("Farbe entfernen"), colors={pos: "" for pos in await color_cells(r, 0 if ctx_is_rn() else col_index(ctx_state["col"]), ctx_is_rn())})  # v4.55
 
     def menu_row(label, shortcut=""):
         with ui.item_section():
@@ -4981,13 +5215,18 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
             with ui.item_section().props("side"):          # (ItemSection kennt kein Argument side: Quasar-Eigenschaft)
                 ui.item_label(shortcut).classes("text-grey-6")
 
-    COPY_JS = "() => window.mllClipSet(window.mllCtx ? window.mllCtx.text : '')"  # v3.57
-    CUT_JS = ("async () => { try { window.mllClipSet(window.mllCtx ? window.mllCtx.text : ''); } "
-              "catch (e) {} emit(); }")
+    # COPY_JS = "() => window.mllClipSet(window.mllCtx ? window.mllCtx.text : '')"  # v3.57  # v4.55 (entfallen)
+    COPY_JS = ("() => { const c = window.mllCtx; window.mllClipSet(c ? c.text : ''); emit({text: c ? c.text : '', meta: c ? c.meta : null}); }")  # v4.55: auch die Feldfarben merken
+    # CUT_JS = ("async () => { try { window.mllClipSet(window.mllCtx ? window.mllCtx.text : ''); } "  # v4.55 (entfallen)
+    #           "catch (e) {} emit(); }")  # v4.55 (entfallen)
+    CUT_JS = ("async () => { const c = window.mllCtx; try { window.mllClipSet(c ? c.text : ''); } "  # v4.55
+              "catch (e) {} emit({text: c ? c.text : '', meta: c ? c.meta : null}); }")  # v4.55
     # PASTE_JS = ("async () => { try { const t = await navigator.clipboard.readText(); emit({text: t}); } "  # v3.06 (entfallen)
     #             "catch (e) { alert('Der Zugriff auf die Zwischenablage wurde vom Browser verweigert.'); } }")  # v3.06 (entfallen)
     PASTE_JS = ("async () => { try { const t = await window.mllClipGet(); emit({text: t}); } "  # v3.57 (v3.06: der Text der Meldung in der eingestellten Sprache
                 "catch (e) { alert(" + json.dumps(tr("Der Zugriff auf die Zwischenablage wurde vom Browser verweigert.")) + "); } }")  # v3.06
+
+    PASTE_TEXT_JS = PASTE_JS.replace("emit({text: t})", "emit({text: t, text_only: true})")  # v4.55: Nur Text einfuegen
 
     with grid_wrap:                                  # das Menue haengt am Traeger: Rechtsklick in der Tabelle oeffnet es
         with ui.context_menu() as ctx_menu_:  # v4.02
@@ -4998,12 +5237,16 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
             ui.separator()  # v4.02
             with ui.menu_item().on("click", None, js_handler=EDIT_CELL_JS):
                 menu_row("Zelle bearbeiten", "F2")
-            with ui.menu_item().on("click", None, js_handler=COPY_JS):
+            # with ui.menu_item().on("click", None, js_handler=COPY_JS):  # v4.55 (entfallen)
+            with ui.menu_item().on("click", op_copy, js_handler=COPY_JS):  # v4.55
                 menu_row("Kopieren", "Strg+C")
-            with ui.menu_item().on("click", op_clear, js_handler=CUT_JS):
+            # with ui.menu_item().on("click", op_clear, js_handler=CUT_JS):  # v4.55 (entfallen)
+            with ui.menu_item().on("click", op_cut, js_handler=CUT_JS):  # v4.55
                 menu_row("Ausschneiden", "Strg+X")
             with ui.menu_item().on("click", op_paste, js_handler=PASTE_JS):
                 menu_row("Einfügen", "Strg+V")
+            with ui.menu_item().on("click", op_paste_text, js_handler=PASTE_TEXT_JS):  # v4.55
+                menu_row("Nur Text einfügen", "Strg+Umschalt+V")  # v4.55
             with ui.menu_item().on("click", op_paste_insert, js_handler=PASTE_JS):
                 menu_row("Als Zeilen einfügen")
             with ui.menu_item(on_click=op_clear):
@@ -5020,6 +5263,9 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
                 menu_row("Farbe setzen")
             with ui.menu_item(on_click=op_remove_color):
                 menu_row("Farbe entfernen")
+            ui.separator()  # v4.58
+            with ui.menu_item(on_click=op_mini_color):  # v4.58
+                menu_row("Farbe mit Mini-Farbtest ändern …", "F3")  # v4.58
 
     async def on_dblmacro(e):
         # """Doppelklick auf Name oder Beleuchtung (nur mit dem Schalter in den Programm Einstellungen): wie in Excel die Makroauswahl"""  # v3.71 (entfallen)
@@ -6548,15 +6794,172 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
         from _web import web_form_options  # v4.53
         await web_form_options.open_extensions_window()  # v4.53: eigenes Fenster, Haken sofort wirksam, Schliessen
 
+    async def open_settings_window(macro, group=None, extra=None, on_save=None, after_save=None, buttons=None, width=900):  # v4.56
+        """Einstellungen als Fenster: Inhalt scrollt, die Knoepfe unten bleiben sichtbar.
+        buttons: [(Text, Nacharbeit)]; ohne Angabe Abbrechen (A) und Speichern (S). Rueckgabe: True (gespeichert), False (abgebrochen) oder "pg" (Knopf mit Nacharbeit: danach in den Programm Generator)"""  # v4.56
+        with ui.dialog().props("persistent") as dlg, ui.card().classes("max-w-full").style(f"width: {width}px; max-height: 96vh; display: flex; flex-direction: column; flex-wrap: nowrap"):  # v4.56
+            with ui.column().classes("w-full").style("overflow-y: auto; flex: 1 1 auto; min-height: 0; flex-wrap: nowrap"):  # v4.56
+                cfg_page = web_params.build_settings_page(ctrl, macro, on_save=on_save, after_save=after_save, extra=extra, embedded=True, group=group)  # v4.56
+            with ui.row().classes("justify-end w-full").style("flex: 0 0 auto"):  # v4.56
+                ui.button("Abbrechen (A)", on_click=lambda: dlg.submit(False)).props("flat data-key=A").classes("mll-cancel")  # v4.56
+                if buttons:  # v4.56
+                    for text, follow_up in buttons:  # v4.56
+                        ui.button(text, on_click=lambda f=follow_up: (cfg_page.save(f), dlg.submit("pg"))).props("color=primary no-caps")  # v4.56
+                else:  # v4.56
+                    ui.button("Speichern (S)", on_click=lambda: (cfg_page.save(), dlg.submit(True))).props("color=primary data-key=S").classes("mll-default")  # v4.56
+        result = await dlg  # v4.56
+        web_dialogs.safe_delete(dlg)  # v4.56
+        return result  # v4.56
+
+    async def open_settings_group(group):  # v4.56
+        """Menue Einstellungen: eine Gruppe der Programm Einstellungen als Fenster (vorher die lange Seite)"""  # v4.56
+        await open_settings_window("ConfigurationPage", group=group, extra=web_access.WebAccess(ctrl), on_save=on_settings_save, after_save=after_settings_save)  # v4.56
+
+    async def open_progcfg():  # v4.56
+        """Menue Tabelle, Tabelle faerben ...: Regelseite als Fenster; nach dem Faerben in den Programm Generator"""  # v4.56
+        result = await open_settings_window("ProgGenConfigPage", buttons=[(tr("Speichern und aktuelle Seite färben"), after_progcfg_save),  # v4.56
+                                                                         (tr("Speichern und ALLE Seiten färben"), after_progcfg_save_all)], width=1000)  # v4.56
+        if result == "pg":  # v4.56
+            tabs.set_value("pg")  # v4.56
+
     async def open_arduino_settings():  # v4.52
         """Fenster ARDUINO-IDE Einstellungen (vorher Reiter ARDUINO Einstellungen) mit Speichern und Abbrechen; oeffnet ueber dem Optionenfenster"""  # v4.52
-        with ui.dialog().props("persistent") as dlg, ui.card().classes("w-[900px] max-w-full").style("max-height: 96vh; overflow-y: auto"):  # v4.52
-            cfg_page = web_params.build_settings_page(ctrl, "ARDUINOConfigPage", extra=web_params.ArduinoPaths(ctrl), embedded=True)  # v4.52
-            with ui.row().classes("justify-end w-full"):  # v4.52
-                ui.button("Abbrechen (A)", on_click=lambda: dlg.submit(False)).props("flat data-key=A").classes("mll-cancel")  # v4.52
-                ui.button("Speichern (S)", on_click=lambda: (cfg_page.save(), dlg.submit(True))).props("color=primary data-key=S").classes("mll-default")  # v4.52
-        await dlg  # v4.52
-        web_dialogs.safe_delete(dlg)  # v4.52
+        await open_settings_window("ARDUINOConfigPage", extra=web_params.ArduinoPaths(ctrl))  # v4.56
+
+    def print_grid(ws):  # v4.62
+        """Spalten und Zeilen der Tabelle wie im Raster (ohne Symbole): (Spaltenliste [(Index, Titel)], Kopfzeile, Zeilen)"""  # v4.62
+        type_col_ = typ_column(ws)  # v4.62
+        column_defs, rows, pinned, _ = build_grid(ws.tksheet, {}, max_col=last_column(ws),  # v4.62
+                                                  display_cols=({type_col_: M09.Token_Display} if M09.CANONICAL_TOKENS and type_col_ is not None else None),  # v4.62
+                                                  display_cells=M09.Get_Display_Cells(ws))  # v4.62
+        head = next((p for p in pinned if p.get("_r") == 1), None)  # v4.62: Zeile 2 enthaelt die Ueberschriften
+        cols = []  # v4.62
+        for d in column_defs:  # v4.62
+            if d.get("hide") or not d.get("field"):  # v4.62
+                continue  # v4.62
+            c = int(d["field"][1:])  # v4.62
+            title = str((head or {}).get(d["field"], "") or "").replace("\n", " ").strip() or d.get("headerName", "")  # v4.62
+            cols.append((c, title, bool(head and str(head.get(d["field"], "")).strip())))  # v4.62
+        return cols, rows  # v4.62
+
+    # def print_html(ws, wanted, with_color, with_rn):  # v4.62  # v4.64 (entfallen)
+    def print_html(ws, wanted, with_color, with_rn, row_numbers=None):  # v4.62  # v4.64: row_numbers: Zeilennummern wie in der Tabelle oder None (alle)
+        import html as _html  # v4.62
+        import datetime  # v4.62
+        cols, rows = print_grid(ws)  # v4.62
+        pick = [(c, t) for c, t, _ in cols if c in set(wanted)]  # v4.62
+        ec_ = enable_column(ws)  # v4.62
+        out = ["<!doctype html><html><head><meta charset='utf-8'><title>%s</title><style>" % _html.escape(str(ws.Name)),  # v4.62
+               "@page{size:A4 landscape;margin:10mm}body{font:9pt Arial,sans-serif;margin:8px}",  # v4.62
+               "table{border-collapse:collapse;width:100%}th,td{border:1px solid #999;padding:2px 4px;vertical-align:top;white-space:pre-wrap;word-break:break-word}",  # v4.62
+               "th{background:#1A75D2;color:#fff;text-align:left}thead{display:table-header-group}tr{page-break-inside:avoid}td.n{text-align:right;background:#e9e9e9;color:#555}",  # v4.62
+               "*{-webkit-print-color-adjust:exact;print-color-adjust:exact}.bar{margin-bottom:8px}@media print{.bar{display:none}}</style></head><body>",  # v4.62
+               "<div class='bar'><button onclick='window.print()'>%s</button> &nbsp; %s</div>" % (_html.escape(tr("Drucken")), _html.escape(tr("Im Druckdialog des Browsers kann auch als PDF gespeichert werden. Tipp: Querformat, Hintergrundgrafiken einschalten."))),  # v4.62
+               "<h3 style='margin:4px 0'>%s &nbsp; <small>%s</small></h3>" % (_html.escape(str(ws.Name)), datetime.date.today().isoformat()),  # v4.62
+               "<table><thead><tr>"]  # v4.62
+        if with_rn:  # v4.62
+            out.append("<th>%s</th>" % _html.escape(tr("Zeile")))  # v4.62
+        out += ["<th>%s</th>" % _html.escape(t) for _, t in pick]  # v4.62
+        out.append("</tr></thead><tbody>")  # v4.62
+        for row in rows:  # v4.62
+            if row_numbers is not None and int(row["_r"]) + 1 not in row_numbers:  # v4.64
+                continue  # v4.64
+            out.append("<tr>")  # v4.62
+            if with_rn:  # v4.62
+                out.append("<td class='n'>%d</td>" % (int(row["_r"]) + 1))  # v4.62
+            for c, _ in pick:  # v4.62
+                v = row.get(f"c{c}", "")  # v4.62
+                v = "" if v is None else str(v)  # v4.62
+                if c == ec_ and v == "*":  # v4.62
+                    v = "\u2713"  # v4.62
+                st = row.get("_st", {}).get(f"c{c}", {}) if with_color else {}  # v4.62
+                css = ";".join(f"{ {'backgroundColor': 'background', 'color': 'color', 'fontWeight': 'font-weight'}[k] }:{x}" for k, x in st.items() if k in ("backgroundColor", "color", "fontWeight"))  # v4.62
+                out.append("<td%s>%s</td>" % ((" style='%s'" % _html.escape(css, quote=True)) if css else "", _html.escape(v)))  # v4.62
+            out.append("</tr>")  # v4.62
+        out.append("</tbody></table></body></html>")  # v4.62
+        return "".join(out)  # v4.62
+
+    async def open_print_dialog():  # v4.62
+        """Menue Datei, Tabelle drucken ...: Spalten waehlen, dann die Druckansicht (alle Zeilen der aktuellen Tabelle) in einem neuen Tab oeffnen"""  # v4.62
+        import uuid  # v4.62
+        ws = state["ws"]  # v4.62
+        try:  # v4.62
+            cols, rows = print_grid(ws)  # v4.62
+        except Exception as exc:                       # noqa: BLE001  # v4.62
+            logger.exception("Tabelle drucken")  # v4.62
+            ui.notify(tr("Die Tabelle kann nicht gedruckt werden: {fehler}", fehler=exc), type="negative")  # v4.62
+            return  # v4.62
+        used = {c for c, _, _ in cols if any(str(r.get(f"c{c}", "") or "").strip() for r in rows)}  # v4.62: Spalten mit Inhalt
+        try:  # v4.64: markierte Zeilen (Zeilennummern wie in der Tabelle)
+            selected = sorted({int(d["_r"]) + 1 for d in await grid.get_selected_rows()} & {int(r["_r"]) + 1 for r in rows})  # v4.64
+        except Exception:                              # noqa: BLE001  # v4.64
+            selected = []  # v4.64
+        all_numbers = [int(r["_r"]) + 1 for r in rows]  # v4.64
+        saved = ctrl.getConfigData("PrintSettings")  # v4.63: zuletzt gewaehlt: {"Blattname": [Spalten], "_rn": 1, "_color": 1}
+        saved = saved if isinstance(saved, dict) else {}  # v4.63
+        saved_cols = saved.get(str(ws.Name))  # v4.63
+        token = uuid.uuid4().hex  # v4.62
+        while len(PRINT_JOBS) > 20:  # v4.62
+            PRINT_JOBS.pop(next(iter(PRINT_JOBS)))  # v4.62
+        # PRINT_JOBS[token] = lambda wanted, color, rn: print_html(ws, wanted, color, rn)  # v4.62  # v4.64 (entfallen)
+        PRINT_JOBS[token] = lambda wanted, color, rn, numbers=None: print_html(ws, wanted, color, rn, numbers)  # v4.64
+        checks: dict = {}  # v4.62
+        opts: dict = {}  # v4.62
+        link = {}  # v4.62
+
+        def update_link(_=None):  # v4.62
+            wanted = ",".join(str(c) for c, cb in checks.items() if cb.value)  # v4.62
+            rows_arg = ""  # v4.64
+            if opts["mode"].value == "sel":  # v4.64
+                rows_arg = ",".join(str(n) for n in selected)  # v4.64
+            elif opts["mode"].value == "range":  # v4.64
+                lo, hi = sorted((int(opts["from"].value or 0), int(opts["to"].value or 0)))  # v4.64
+                rows_arg = f"{lo}-{hi}"  # v4.64
+            opts["from"].set_visibility(opts["mode"].value == "range")  # v4.64
+            opts["to"].set_visibility(opts["mode"].value == "range")  # v4.64
+            # href = f"/mll-print/{token}?cols={wanted}&color={int(opts['color'].value)}&rn={int(opts['rn'].value)}"  # v4.62  # v4.64 (entfallen)
+            href = f"/mll-print/{token}?cols={wanted}&color={int(opts['color'].value)}&rn={int(opts['rn'].value)}&rows={rows_arg}"  # v4.64
+            link["btn"].props('href="%s" target=_blank' % href)  # v4.62
+
+        def set_all(value):  # v4.62
+            for cb in checks.values():  # v4.62
+                cb.set_value(value)  # v4.62
+            update_link()  # v4.62
+
+        with ui.dialog().props("persistent") as dlg, ui.card().classes("max-w-full gap-2").style("width: 640px; max-height: 96vh; display: flex; flex-direction: column; flex-wrap: nowrap"):  # v4.62
+            ui.label(tr("Tabelle drucken")).classes("text-h6")  # v4.62
+            ui.label(tr("Gedruckt werden alle Zeilen der aktuellen Tabelle. Spalten wählen:")).classes("text-caption text-grey-8")  # v4.62
+            with ui.row().classes("gap-2"):  # v4.62
+                ui.button(tr("Alle"), on_click=lambda: set_all(True)).props("flat dense no-caps")  # v4.62
+                ui.button(tr("Keine"), on_click=lambda: set_all(False)).props("flat dense no-caps")  # v4.62
+            with ui.column().classes("w-full gap-0").style("overflow-y: auto; flex: 1 1 auto; min-height: 0; flex-wrap: nowrap"):  # v4.62
+                for c, title, has_head in cols:  # v4.62
+                    checks[c] = ui.checkbox(f"{title} ({col_letter(c)})" if has_head else col_letter(c), value=((c in saved_cols) if isinstance(saved_cols, list) else (has_head and c in used)), on_change=update_link).props("dense")  # v4.62  # v4.63
+            ui.separator()  # v4.64
+            modes = {"all": tr("Alle Zeilen")}  # v4.64
+            if selected:  # v4.64: nur wenn Zeilen markiert sind
+                modes["sel"] = tr("Markierte Zeilen ({anzahl})", anzahl=len(selected))  # v4.64
+            modes["range"] = tr("Zeilenbereich")  # v4.64
+            opts["mode"] = ui.radio(modes, value=("sel" if len(selected) > 1 else "all"), on_change=update_link).props("inline dense")  # v4.64
+            with ui.row().classes("items-center gap-2"):  # v4.64: Zeilennummern wie in der Tabelle
+                opts["from"] = ui.number(tr("von Zeile"), value=(all_numbers[0] if all_numbers else 1), min=1, format="%d", on_change=update_link).props("dense outlined").classes("w-32")  # v4.64
+                opts["to"] = ui.number(tr("bis Zeile"), value=(all_numbers[-1] if all_numbers else 1), min=1, format="%d", on_change=update_link).props("dense outlined").classes("w-32")  # v4.64
+            opts["rn"] = ui.checkbox(tr("Zeilennummer"), value=bool(saved.get("_rn", 1)), on_change=update_link).props("dense")  # v4.62
+            opts["color"] = ui.checkbox(tr("Mit Farben"), value=bool(saved.get("_color", 1)), on_change=update_link).props("dense")  # v4.62
+            with ui.row().classes("justify-end w-full").style("flex: 0 0 auto"):  # v4.62
+                ui.button("Abbrechen (A)", on_click=lambda: dlg.submit(False)).props("flat data-key=A").classes("mll-cancel")  # v4.62
+                link["btn"] = ui.button(tr("Druckansicht öffnen"), on_click=lambda: dlg.submit(True)).props("color=primary no-caps")  # v4.62
+        update_link()  # v4.62
+        result = await dlg  # v4.63
+        if result:  # v4.63: Auswahl merken (je Tabelle)
+            try:  # v4.63
+                saved[str(ws.Name)] = [c for c, cb in checks.items() if cb.value]  # v4.63
+                saved["_rn"], saved["_color"] = int(opts["rn"].value), int(opts["color"].value)  # v4.63
+                ctrl.setConfigData("PrintSettings", saved)  # v4.63
+                ctrl.SaveConfigData()  # v4.63
+            except Exception:                          # noqa: BLE001  # v4.63
+                logger.debug("Druckauswahl nicht gesichert", exc_info=True)  # v4.63
+        web_dialogs.safe_delete(dlg)  # v4.62
 
     from _web import web_form_options as _wfo  # v4.52
     _wfo.arduino_settings_handler = open_arduino_settings  # v4.52: Knopf auf dem Reiter Entwicklungsumgebung der Optionen
@@ -6580,6 +6983,7 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
             ("Importieren v. altem Programm …", run_command(lambda: __import__("proggen.F00_mainbuttons", fromlist=["x"]).UserForm_Options._web_import_info(), "Importieren v. altem Programm", live=False)),  # v4.54 (vorher Reiter Dateien in den Optionen)
             ("ProgrammGenerator: Anlagenansicht laden ...", layout_import),  # v2.40
             ("ProgrammGenerator: Anlagenansicht speichern ...", layout_export),  # v2.40
+            ("Tabelle drucken …", open_print_dialog),  # v4.62
             None,
             ("Beenden ...", quit_program),
         ],
@@ -6588,7 +6992,7 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
             # ("Symbole aktualisieren", run_command(lambda: X02.ActiveSheet.refreshicons(), "Symbole aktualisieren")),  # v2.11 (entfallen)
             # ("Testtasten neu aufbauen", run_command(lambda: M20.ResetTestButtons(False), "Testtasten")),  # v2.11 (entfallen)
             # ("Symbole und Testtasten neu aufbauen (Reparatur)", run_command(rebuild_decorations, "Symbole und Testtasten")),  # v2.11 (entfallen)
-            ("Tabelle färben …", lambda: open_settings("progcfg"), "progcfg"),  # v4.51: die Regelseite (vorher Reiter Tabelle Faerben)
+            ("Tabelle färben …", open_progcfg, "progcfg"),  # v4.51: die Regelseite (vorher Reiter Tabelle Faerben)
             ("Tabelle neu berechnen", run_command(recalc_table, "Tabelle neu berechnen")),  # v2.11
             ("Tabelle reparieren (Symbole und Testtasten neu aufbauen) ...", run_command(repair_table, "Tabelle reparieren")),  # v2.11
         ],
@@ -6604,12 +7008,12 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
         # # ("Konfiguration vom Pico laden (experimentell)", run_command(lambda: M06cfg.download_from_Pico(), "Konfiguration laden")),  # v2.02 (entfallen)  # v4.51 (entfallen: der Pfeil neben dem Knopf Mit Lichtmaschine verbinden enthaelt alle Eintraege)
         # ],  # v4.51 (entfallen: der Pfeil neben dem Knopf Mit Lichtmaschine verbinden enthaelt alle Eintraege)
         "Einstellungen": [  # v4.51 (Vorschlag Michael): die Seiten Programm Einstellungen als Menueeintraege
-            ("Allgemein", lambda: open_settings("config", "Allgemeine Einstellungen")),  # v4.51
-            ("Programm Generator", lambda: open_settings("config", "Programm Generator")),  # v4.51
-            ("Farb Test", lambda: open_settings("config", "Farb Test Einstellungen")),  # v4.51
-            ("Simulator", lambda: open_settings("config", "Simulatoreinstellungen"), "sim"),  # v4.51: nur im Experten Modus
-            ("Netzzugriff", lambda: open_settings("config", "Zugriff aus dem Netz")),  # v4.51
-            ("Spezial", lambda: open_settings("config", "Spezialeinstellungen")),  # v4.51
+            ("Allgemein", lambda: open_settings_group("Allgemeine Einstellungen")),  # v4.51
+            ("Programm Generator", lambda: open_settings_group("Programm Generator")),  # v4.51
+            ("Farb Test", lambda: open_settings_group("Farb Test Einstellungen")),  # v4.51
+            ("Simulator", lambda: open_settings_group("Simulatoreinstellungen"), "sim"),  # v4.51: nur im Experten Modus
+            ("Netzzugriff", lambda: open_settings_group("Zugriff aus dem Netz")),  # v4.51
+            ("Spezial", lambda: open_settings_group("Spezialeinstellungen")),  # v4.51
             ("Erweiterungen …", open_extensions),  # v4.51: Schritt 2 verschiebt die Erweiterungen hierher, bis dahin das Optionenfenster auf dem Reiter Erweiterungen
             None,  # v4.51
             ("Einstellungen sichern …", export_settings),  # v4.24  # v4.51 (aus dem Menue Datei)
@@ -6785,7 +7189,9 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
 
     def on_settings_save(values):                      # ConfigurationPage.save_config (vor dem Sichern)
         try:
-            ctrl.set_maxLEDcnt(int(values.get("maxLEDcount", 20)))
+            # ctrl.set_maxLEDcnt(int(values.get("maxLEDcount", 20)))  # v4.56 (entfallen: ein Fenster sichert nur seine Gruppe)
+            if "maxLEDcount" in values:  # v4.56
+                ctrl.set_maxLEDcnt(int(values["maxLEDcount"]))  # v4.56
         except (TypeError, ValueError):
             logger.debug("maxLEDcount nicht numerisch: %r", values.get("maxLEDcount"))
 
@@ -7135,6 +7541,29 @@ def _tab_page(tab: str, name: str):  # v1.82
 from _web import web_tabs as _web_tabs                    # noqa: E402  Adressen der Reiter: /Farbtest, /Patterngenerator ... (?vollbild=1: im Vollbild)  # v1.82
 for _name, _tab in _web_tabs.TAB_URLS.items():  # v1.82
     ui.page("/" + _name)(_tab_page(_tab, _name))  # v1.82
+
+
+PRINT_JOBS: dict = {}  # v4.62: Druckansichten (Kennung -> Funktion(Spaltenliste, mit_farben) -> HTML)
+
+
+@nicegui_app.get("/mll-print/{token}")  # v4.62
+# def print_view(token: str, cols: str = "", color: int = 1, rn: int = 1):  # v4.62  # v4.64 (entfallen)
+def print_view(token: str, cols: str = "", color: int = 1, rn: int = 1, rows: str = ""):  # v4.62  # v4.64: rows: leer = alle, sonst Zeilennummern "5,6,9" oder Bereiche "12-40"
+    """Druckansicht der Tabelle (Menue Datei, Tabelle drucken ...): alle Zeilen, die gewaehlten Spalten (cols: Spaltenindizes durch Komma)"""  # v4.62
+    from fastapi.responses import HTMLResponse  # v4.62
+    job = PRINT_JOBS.get(token)  # v4.62
+    if job is None:  # v4.62
+        return HTMLResponse("<!doctype html><meta charset='utf-8'><p>Die Druckansicht ist nicht mehr gültig. Bitte im Programm neu öffnen (Datei, Tabelle drucken …).</p>", status_code=404)  # v4.62
+    wanted = [int(x) for x in cols.split(",") if x.strip().isdigit()]  # v4.62
+    numbers = None  # v4.64
+    if rows.strip():  # v4.64
+        numbers = set()  # v4.64
+        for part in rows.split(","):  # v4.64
+            lo, _, hi = part.strip().partition("-")  # v4.64
+            if lo.isdigit():  # v4.64
+                numbers.update(range(int(lo), (int(hi) if hi.isdigit() else int(lo)) + 1))  # v4.64
+    # return HTMLResponse(job(wanted, bool(color), bool(rn)))  # v4.62  # v4.64 (entfallen)
+    return HTMLResponse(job(wanted, bool(color), bool(rn), numbers))  # v4.64
 
 
 @nicegui_app.exception_handler(404)  # v1.82

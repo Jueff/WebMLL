@@ -18,7 +18,7 @@
 | **Alle Einblenden** | Zeigt alle versteckten Zeilen wieder. |
 | **Tabelle löschen** | Leert das **ganze Blatt**. **Achtung:** Beim Zeigen mit der Maus steht der Hinweis „**ACHTUNG: Gesamte Tabelle wird gelöscht!**“. Das Programm fragt vorher nach. |
 | **Neue Tabelle** | Legt ein neues Blatt an. |
-| **Optionen Werkzeuge** | Öffnet das Fenster **Optionen und spezielle Funktionen**: die Reiter und ihre Bedeutung stehen weiter unten im Abschnitt [[#das_fenster_optionen_und_spezielle_funktionen|Das Fenster Optionen und spezielle Funktionen]]. |
+| **Hardware Optionen** | Öffnet das Fenster **Optionen und spezielle Funktionen**: die Reiter und ihre Bedeutung stehen weiter unten im Abschnitt [[#das_fenster_optionen_und_spezielle_funktionen|Das Fenster Optionen und spezielle Funktionen]]. |
 | **Online Wiki** | Öffnet diese Wiki-Seiten im Browser. |
 | **Zeilen färben** (ab Version 4.51 kein Knopf mehr) | Menü **Tabelle, Tabelle färben …** öffnet die Seite mit den Bedingungen für die Zeilenfarben. Dort färben **Speichern und aktuelle Seite färben** und **Speichern und ALLE Seiten färben** die Zeilen ein. Mit dem Haken **Automatisch einfärben** geschieht das nach jeder Änderung von selbst. |
 
@@ -32,10 +32,10 @@ Ganz rechts steht die **Version der MobaLedLib-Bibliothek**, zum Beispiel //Ver.
 
 ===== Das Fenster Optionen und spezielle Funktionen =====
 
-Du öffnest es mit dem Knopf **Optionen Werkzeuge**. Oben stehen die **Reiter**, unten **Hilfe im Forum** und **Schließen**.
+Du öffnest es mit dem Knopf **Hardware Optionen**. Oben stehen die **Reiter**, unten **Hilfe im Forum** und **Schließen**.
 
 ^ Reiter ^ Wofür ^
-| **Lichtmaschine** | **Board** deiner Lichtmaschine wählen und den **USB-Anschluss** erkennen lassen. Der Knopf **Board und USB Port erkennen** (seit 3.82, oben im Reiter) sucht selbst an allen USB-Anschlüssen nach einer Lichtmaschine, stellt das erste gefundene Board ein und öffnet das Fenster **USB Port erkennen** mit dem gefundenen Board, dem Anschluss und den anderen gefundenen Boards. Das ist der wichtigste Reiter, siehe [[anleitungen:webmobaledlib:pg_arduino|Verbinden und Übertragen]]. Dazu gibt es den Knopf **Firmware installieren** (seit 3.14 bei **jedem** Board, vorher nur beim Raspberry Pico): Er schreibt eine fertige Firmware (UF2-Datei) auf einen **Raspberry Pi Pico**, zum Beispiel auf ein Sound- oder Servomodul auf Pico-Basis. Mit dem Knopf **Firmware herunterladen** (seit 3.15) holst du die Firmware aus dem Internet: Das Programm zeigt die Liste mit **Plattform**, **Name** und **Version** samt Beschreibung und lädt die gewählte Firmware in den Ordner //MobaLedLib/firmware//; danach ist sie vorgewählt. |
+| **Lichtmaschine** | **Board** deiner Lichtmaschine wählen und den **USB-Anschluss** erkennen lassen. Der Knopf **Board und USB Port erkennen** (seit 3.82, oben im Reiter) sucht selbst an allen USB-Anschlüssen nach einer Lichtmaschine, stellt das erste gefundene Board ein und öffnet das Fenster **USB Port erkennen** mit dem gefundenen Board, dem Anschluss und den anderen gefundenen Boards. Das ist der wichtigste Reiter, siehe [[anleitungen:webmobaledlib:pg_arduino|Verbinden und Übertragen]]. Der Knopf **Firmware installieren** (Firmware auf einen Pico schreiben und herunterladen) steht seit 4.67 im Reiter **Firmware Installation**. |
 | **WLAN (OTA)** | Nur bei der Zentrale **ESP32**: WLAN und OTA einschalten, Hostname, Adresse und Passwort, WLAN über USB einrichten, siehe [[anleitungen:webmobaledlib:ota|ESP32 per WLAN und OTA]]. Bis 3.82 hieß der Reiter **OTA**. |
 | **Erweiterungen** | Die **MobaLedLib Extensions (MLX)** ein- und ausschalten, optionale laden und **eigene** hinzufügen, siehe [[anleitungen:webmobaledlib:erweiterungen|Erweiterungen (MLX)]]. |
 | **DCC ARDUINO** | Dasselbe für den **zweiten ARDUINO**, der die Zentrale anbindet (Blatt **DCC**, **Selectrix** oder **LNet**; beim Blatt **CAN** gibt es den Reiter nicht). Er erscheint nur bei einer **Nano**-Lichtmaschine. Die Überschrift trägt den Namen des Blatts. |
@@ -69,7 +69,9 @@ Hier wählst du, **womit** das Programm für die Lichtmaschine übersetzt und ho
 
 Das Programm **webMobaLedLib** selbst aktualisierst du **nicht hier**, sondern im Menü **Hilfe → Update webMobaLedLib …**.
 
-==== Der Reiter BOOTLOADER ====
+==== Der Reiter FIRMWARE INSTALLATION ====
+
+Der Knopf **Firmware installieren** steht hier (bis 4.66 im Reiter Lichtmaschine). Er schreibt eine fertige Firmware (UF2-Datei) auf einen **Raspberry Pi Pico**; mit **Firmware herunterladen** holst du sie aus dem Internet. Darunter folgt der Bootloader (nur Lichtmaschine Classic, Nano):
 
 **Nur für die Lichtmaschine Classic (Nano).** Der **Bootloader** ist das kleine Programm im Nano, das neue Programme annimmt. Mit dem **schnellen Bootloader** (Optiboot) schickt das Programm eine geänderte Konfiguration **deutlich schneller** zum **linken** ARDUINO. Das lohnt sich, wenn du oft etwas änderst und hochlädst.
 

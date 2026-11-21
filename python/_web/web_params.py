@@ -1,8 +1,8 @@
-# Datei-Version: 1.16 (2026-11-21) - web_params.py
+# Datei-Version: 1.17 (2026-11-21) - web_params.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_params.py
 # Path:           _web/web_params.py
-# Version:        1.16
+# Version:        1.17
 # Last Update:    2026-11-21
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
@@ -18,6 +18,7 @@
 #   1.14  2026-11-21  LedOffOnDisconnect in den Allgemeinen Einstellungen
 #   1.15  2026-11-21  Version 4.51: jede Gruppe der Einstellungsseite traegt data-group (das Menue Einstellungen springt zur Gruppe)
 #   1.16  2026-11-21  Version 4.52: Seite Tabelle faerben: Titel Tabelle faerben, erste Zeile der Beschreibung entfaellt (TITLE_OVERRIDES, DESCRIPTION_OVERRIDES); build_settings_page(embedded=True) baut den Inhalt ohne Karte und Knoepfe fuer ein Fenster (ARDUINO-IDE Einstellungen)
+#   1.17  2026-11-21  Version 4.56: Einstellungsgruppe einzeln als Fenster (ParamPanel.only_group, build_settings_page(group=...)); eingebettete Seite mit Gruppen und Zusatzkarten (slots)
 # ----------------------------------------------------------------------------------------------
 """Web-Version von create_macroparam_frame/create_macroparam_content (pyMobaLedLib.py) fuer die Einstellungsseiten.
 
@@ -99,6 +100,7 @@ class ParamPanel:
         self.macrodata = ctrl.MacroDef.data.get(macro, {}) if getattr(ctrl, "MacroDef", None) else {}
         self.old_values: dict = {}
         self.expert_blocks: list = []             # Gruppen, die nur im Experten Modus sichtbar sind  # v1.10
+        self.only_group: str | None = None        # v1.17: nur diese Gruppe aufbauen (Fenster je Gruppe)
 
     def apply_beginner(self):  # v1.10
         """Gruppen in EXPERT_GROUPS im Anfaenger Modus ausblenden, sonst einblenden"""  # v1.10
@@ -119,7 +121,7 @@ class ParamPanel:
         # description = self.macrodata.get("Ausführliche Beschreibung") or self.macrodata.get("Kurzbeschreibung") or ""  # v1.06 (entfallen)
         # description = description_text(self.macrodata.get("Ausführliche Beschreibung") or self.macrodata.get("Kurzbeschreibung"))  # v1.06
         description = description_text(DESCRIPTION_OVERRIDES.get(self.macro) or self.macrodata.get("Ausführliche Beschreibung") or self.macrodata.get("Kurzbeschreibung"))  # v1.16
-        if description:
+        if description and not self.only_group:  # v1.17: im Fenster einer Gruppe ohne die Beschreibung der ganzen Seite
             ui.label(description).style("white-space: pre-line; font-size: 13px").classes("w-full")
         groups = SETTINGS_GROUPS.get(self.macro)  # v1.06
         if groups:  # v1.06
@@ -135,6 +137,8 @@ class ParamPanel:
         keys = [k for k in self.macrodata.get("Params", []) if not str(k).startswith("!")]  # v1.06
         named = {m for _, members in groups if members is not None for m in members if not m.startswith("@")}  # v1.06
         for heading, members in groups:  # v1.06
+            if self.only_group and heading != self.only_group:  # v1.17
+                continue  # v1.17
             wanted = [k for k in keys if k not in named] if members is None else members  # v1.06
             parts = [m for m in wanted if (m in slots if m.startswith("@") else m in keys)]  # v1.06
             if not parts:  # v1.06
@@ -394,7 +398,8 @@ class ParamPanel:
 # --------------------------------------------------------------------------- Seiten
 # def build_settings_page(ctrl, macro: str, on_save=None, buttons=None, extra=None, after_save=None):  # v1.09 (entfallen)
 # def build_settings_page(ctrl, macro: str, on_save=None, buttons=None, extra=None, after_save=None, save_buttons=None):  # v1.09  # v1.16 (entfallen)
-def build_settings_page(ctrl, macro: str, on_save=None, buttons=None, extra=None, after_save=None, save_buttons=None, embedded=False):  # v1.16: embedded: Inhalt ohne Karte und Knoepfe (Fenster mit eigenen Knoepfen)
+# def build_settings_page(ctrl, macro: str, on_save=None, buttons=None, extra=None, after_save=None, save_buttons=None, embedded=False):  # v1.16  # v1.17 (entfallen)
+def build_settings_page(ctrl, macro: str, on_save=None, buttons=None, extra=None, after_save=None, save_buttons=None, embedded=False, group=None):  # v1.16  # v1.17: group: nur diese Gruppe: embedded: Inhalt ohne Karte und Knoepfe (Fenster mit eigenen Knoepfen)  # v1.17 (entfallen)
     """Baut eine komplette Einstellungsseite (Titel, Speichern-Knopf, Parameter) und gibt ein Objekt mit
     panel, save(), changed(), mark_saved() zurueck.
 
@@ -407,6 +412,7 @@ def build_settings_page(ctrl, macro: str, on_save=None, buttons=None, extra=None
     title = tr(TITLE_OVERRIDES[macro]) if macro in TITLE_OVERRIDES else macrodata.get("Title", macro)  # v1.16
     save_text = macrodata.get("Button_1", "Speichern")
     panel = ParamPanel(ctrl, macro, buttons)
+    panel.only_group = group  # v1.17
     state = {"old_extra": {}}
 
     def all_values():
@@ -438,9 +444,13 @@ def build_settings_page(ctrl, macro: str, on_save=None, buttons=None, extra=None
         return panel.collect() != panel.old_values or (extra is not None and extra.collect() != state["old_extra"])
 
     if embedded:  # v1.16: Inhalt fuer ein Fenster: Titel, Parameter, Zusatzfelder; Speichern und Abbrechen stellt das Fenster
-        ui.label(title.replace("\n", " ")).classes("text-h6")  # v1.16
-        panel.build()  # v1.16
-        if extra is not None:  # v1.16
+        if not group:  # v1.17: eine Gruppe bringt ihre Ueberschrift selbst mit
+            ui.label(title.replace("\n", " ")).classes("text-h6")  # v1.16
+        grouped = bool(SETTINGS_GROUPS.get(macro)) and extra is not None and hasattr(extra, "slots")  # v1.17
+        # panel.build()  # v1.16  # v1.17 (entfallen)
+        panel.build(slots=extra.slots() if grouped else None)  # v1.17
+        # if extra is not None:  # v1.16  # v1.17 (entfallen)
+        if extra is not None and not grouped:  # v1.17
             extra.build()  # v1.16
         panel.load_from_config()  # v1.16
         mark_saved()  # v1.16

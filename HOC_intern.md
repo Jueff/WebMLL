@@ -1,5 +1,5 @@
-Datei-Version: 1.38 (2026-11-21) - HOC_intern.md
-Stand: webMobaLedLib 4.54
+Datei-Version: 1.51 (2026-11-21) - HOC_intern.md
+Stand: webMobaLedLib 4.67
 
 # webMobaLedLib: History of Change (intern, ausführlich)
 
@@ -24,6 +24,144 @@ Release-Stand 2.12 auf Wunsch des Entwicklers („Release bauen“). **Neu im Ab
 | `archiv/` | frühere Release-Hinweise, Versionslisten und ZIP (nichts gelöscht) |
 
 **Geprüft:** Dateipaket: `testzip` in Ordnung, alle 113 Dateien gleich dem Ordner `headless`, keine `__pycache__`, alle `.py` kompilieren, Versionsprüfung „alles passt“ (50 Einträge), 11 Dateien ausführbar (`.sh`, `.command`). **Nachbau des Entwickler-Ablaufs mit seinem echten Paket (1678 Dateien, Stand 2.05):** meine 113 Dateien darübergelegt, Prüfliste, ZIP gepackt, `release_tools check --previous <sein ZIP>`: **in Ordnung** (Version 2.12, 1678 Dateien, 6 neue, 0 fehlende, ZIP 16,6 MB). Alle 15 Prüfreihen laufen (17, 26, 15, 70, 28, 19, 43, 26, 16, 27, 8, 8, 8, 5, 9 Prüfungen). **Nicht geprüft:** `zip_erstellen.bat` und die Reparaturskripte unter Windows, ein abgebrochenes Update unter Windows, das Verhalten mit Acronis, der Download von GitHub.
+
+## 4.67 (2026-11-21), Menü-Umstellung Teil 2
+
+Werkzeugleiste: Knopf „Optionen Werkzeuge“ → „Hardware Optionen“ (Tooltip unverändert). Fenster Hardware Optionen: Reiter „Bootloader“ → „Firmware Installation“; der Knopf „Firmware installieren“ samt Beschreibungstext ist vom Reiter Lichtmaschine in diesen Reiter umgezogen (steht dort vor dem Bootloader-Knopf; Handler `__Boot_Firmware_Button_Click` unverändert). Hinweistexte, Anleitung, Checkliste und Wiki nennen jetzt „Hardware Optionen“; die deutschen Schlüssel in `Web_Languages.csv` wurden entsprechend geändert, neue Zeile „Firmware Installation“. Nicht im Browser getestet. Offen aus Teil 2: restliche versteckte Reiter und die URL /ARDUINOEinstellungen aufräumen.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.67 | Knopftitel Hardware Optionen |
+| `_web/web_form_options.py` | 1.43 | Reiter Firmware Installation mit Knopf Firmware installieren |
+| `_web/web_tabs.py`, `proggen/M08_ARDUINO.py`, `csv/Web_Languages.csv` | – | Texte „Hardware Optionen“, neue Zeile |
+| Anleitung, Checkliste (3.49, Punkt 312), Wiki | – | Begriffe angepasst |
+
+## 4.66 (2026-11-21), F3 öffnet den Mini-Farbtest wieder
+
+Fehler aus 4.65: der seitenweite F3-Listener lief in der Capture-Phase und rief `preventDefault` vor der Tabelle auf; AG Grid ignoriert bereits abgefangene Tasten, daher kam das Zellereignis nicht mehr an. Der Listener läuft jetzt in der Bubble-Phase (nach der Tabelle); der Browser-Standard (Suche) wird weiterhin verhindert.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.66 | F3-Listener in Bubble-Phase |
+
+## 4.65 (2026-11-21), F3 öffnet Browser-Suche
+
+Ein Anwender sah beim Mini-Farbtest ein kleines Suchfenster des Browsers: F3 war nur im Tabellenereignis (Zelle fokussiert) abgefangen, sonst löst der Browser „Weitersuchen“ aus. Jetzt fängt ein seitenweiter `keydown`-Listener (Capture-Phase, nur `preventDefault`) F3 ab; der Zelltastendruck funktioniert unverändert. Das Log des Anwenders (Version 4.22) zeigt den Fehler „current slot cannot be determined“ bei „Verbinden“; er ist seit 4.35 behoben (set_bridge im try), im Log keine neuen Fehler.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.65 | F3 seitenweit abgefangen |
+| `install/BETATEST_Checkliste.md` | 3.47 | Punkt 310 ergänzt |
+
+## 4.64 (2026-11-21), Tabelle drucken: Zeilen wählen
+
+Wunsch: die gedruckten Zeilen per Zeilenbereich oder markierter Auswahl bestimmen. Dialog: Auswahl „Alle Zeilen“, „Markierte Zeilen (n)“ (nur wenn Zeilen markiert sind, aus `grid.get_selected_rows()`, vorgewählt bei mehr als einer markierten Zeile) und „Zeilenbereich“ mit „von Zeile“/„bis Zeile“ (vertauschte Werte werden geordnet). Die Zeilennummern sind die der Tabelle (`_r + 1`). Die Route erhält den neuen Parameter `rows` (leer = alle, sonst Liste und Bereiche wie `5,6,9` oder `12-40`); `print_html(..., row_numbers)` lässt andere Zeilen aus, versteckte Zeilen bleiben ohnehin außen vor. Die Zeilenauswahl wird nicht gemerkt (hängt von der aktuellen Markierung ab). Nicht im Browser getestet.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.64 | Zeilenauswahl im Druckdialog und in der Route |
+| `csv/Web_Languages.csv` | - | fünf neue Texte |
+| `install/BETATEST_Checkliste.md` | 3.46 | Punkt 311 ergänzt |
+
+## 4.63 (2026-11-21), Tabelle drucken: Auswahl merken
+
+Wunsch: die letzte Spaltenauswahl soll gespeichert werden. `open_print_dialog` liest beim Öffnen den Konfigurationswert `PrintSettings` (`{Blattname: [Spaltenindizes], "_rn": 0/1, "_color": 0/1}`) und setzt die Haken danach; für ein Blatt ohne gespeicherte Auswahl gilt die bisherige Voreinstellung. Mit „Druckansicht öffnen“ wird die Auswahl über `setConfigData`/`SaveConfigData` gesichert (Abbrechen sichert nichts). Keine Einstellung in der Oberfläche. Nicht im Browser getestet.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.63 | `PrintSettings` lesen und sichern |
+| `install/BETATEST_Checkliste.md` | 3.45 | Punkt 311 ergänzt |
+
+## 4.62 (2026-11-21), Tabelle drucken
+
+Anwender: Der Browserdruck der Tabelle schneidet rechts ab und druckt nur die sichtbaren 10 bis 15 Zeilen, weil AG Grid nur die sichtbaren Zeilen und Spalten zeichnet. Lösung: eigene Druckansicht. Menü Datei, „Tabelle drucken …“ (`open_print_dialog`): Dialog mit Haken je Spalte (Voreinstellung: Spalten mit Überschrift in Zeile 2 und mit Inhalt), Zeilennummer, Mit Farben, „Alle“/„Keine“. Der Knopf „Druckansicht öffnen“ ist ein Link (`href`, `target=_blank`; kein Popup-Blocker, weil es ein echter Klick ist) auf die Route `/mll-print/{token}?cols=…&color=…&rn=…` (`print_view`, Modul-Wörterbuch `PRINT_JOBS`, höchstens 20, Kennung zufällig). `print_grid` nutzt `build_grid` (ohne Symbole, mit denselben Übersetzungen wie `show`), `print_html` baut eine HTML-Tabelle: A4 quer, `thead` wiederholt sich je Seite, Zeilen nicht über Seiten geteilt, Hintergrund-/Schriftfarben und Fettdruck aus `_st`, Spalte Aktiv als Haken, Kopfleiste mit „Drucken“ (nur am Bildschirm). Drucken über den Druckdialog des Browsers (auch PDF). Nur die aktuelle Tabelle; Symbole der Spalte Typ werden nicht gedruckt; die Seite gibt den Stand beim Öffnen wieder. Keine neue Programmeinstellung. Nicht im Browser getestet.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.62 | Menüpunkt, Dialog, Route, HTML-Druckansicht |
+| `csv/Web_Languages.csv` | - | Texte des Dialogs und der Druckansicht |
+| `install/ANLEITUNG_Installation.md` | 4.62 | Kurzfassung |
+| `install/BETATEST_Checkliste.md` | 3.44 | Punkt 311 |
+| `wiki/webmobaledlib/pg_speichern.txt` | - | Eintrag im Menü Datei |
+
+## 4.61 (2026-11-21), Mini-Farbtest: Kanal in der Start LedNr
+
+Rückmeldung: Die Start LedNr kann `17`, `0-17` oder `2-17` lauten (Kanal-LedNr), 4.60 las bei `2-17` die 2 als LED. Der Ausdruck in `op_mini_color` ist jetzt `^\s*(?:(\d+)\s*-\s*)?(\d+)`: Gruppe 2 ist die LED-Nummer, Gruppe 1 (falls vorhanden) der Kanal, sonst gilt die Spalte LED Channel (oder 0). Nicht im Browser getestet.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.61 | Start LedNr mit Kanalteil lesen |
+| `install/BETATEST_Checkliste.md` | 3.43 | Punkt 310 ergänzt |
+
+## 4.60 (2026-11-21), Mini-Farbtest: LED der Zeile
+
+Rückmeldung: Das Fenster zeigte die zuletzt im Farbtest benutzte LED-Adresse (4) statt der Start LedNr der Zeile (17). `op_mini_color` liest jetzt nach `M25.Make_sure_that_Col_Variables_match` die Spalten `LED_Nr__Col` (Start LedNr, führende Zahl), `LEDs____Col` (Anzahl, mindestens 1, sonst 1) und `LED_Cha_Col` (Kanal, sonst 0) der ersten ConstRGB-Zeile und übergibt sie als `led=(Nr, Anzahl, Kanal)` an `open_mini` (web_colorcheck 1.10). Ist die Start LedNr nicht lesbar, bleibt die zuletzt benutzte LED. Nicht im Browser getestet.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.60 | LED der Zeile lesen |
+| `_web/web_colorcheck.py` | 1.10 | `open_mini(led=...)` |
+| `install/BETATEST_Checkliste.md` | 3.42 | Punkt 310 ergänzt |
+
+## 4.59 (2026-11-21), Mini-Farbtest für ConstRGB (ersetzt die Zellenvariante aus 4.58)
+
+Rückmeldung: Die Farbzahlen stehen nicht als „R,G,B“ in einer Zelle, sondern im Makrotext `ConstRGB(#LED, #InCh, R0, G0, B0, R1, G1, B1)` (Zelle Beleuchtung); das ist das einzige Makro, bei dem der Mini-Farbtest sinnvoll ist. `op_mini_color` erkennt das Makro (`CONSTRGB_RE`, `constrgb_parts`: genau 8 Argumente, die letzten 6 ganze Zahlen 0 bis 255, sonst Meldung), öffnet `web_colorcheck.open_mini(..., slots=[Ein (R1,G1,B1), Aus (R0,G0,B0)])` mit Umschalter und ersetzt bei OK nur die sechs Zahlen (`constrgb_text`, die Leerzeichen bleiben); geschrieben wird mit `write_cells` (Strg+Z). Mehrere markierte Zeilen: alle ConstRGB-Zellen bekommen die neuen Farben, Startfarben aus der ersten. Die Zellenvariante „R,G,B“ aus 4.58 (`RGB_RE`) entfällt, ebenso die Startfarbe „leere Zelle“. Nicht im Browser getestet.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.59 | `op_mini_color` für ConstRGB |
+| `_web/web_colorcheck.py` | 1.09 | `open_mini(slots=...)`, `tr` |
+| `csv/Web_Languages.csv` | - | drei Texte (Ein, Aus, Meldung) |
+| `install/BETATEST_Checkliste.md` | 3.41 | Punkt 310 neu |
+
+## 4.58 (2026-11-21), Mini-Farbtest in der Tabelle (durch 4.59 ersetzt)
+
+Anwender-Idee: Farbe und Helligkeit einer LED „on the fly“ ändern und in die Tabelle übernehmen. `web_colorcheck.open_mini(ctrl, rgb, title)` (neu): Fenster mit Farbrad, Helligkeitsleiste, R/G/B, HEXA, LED Adresse/Kanal/Anzahl und Blinken, auf Basis von `ColorCheckModel` (gleiche Umrechnung und LED-Korrektur wie der Farb Test). Direktmodus (`tab_selected`) beim Öffnen, danach LED aus und `tab_unselected`; die zuletzt benutzte LED-Adresse, Anzahl und Kanal werden gemerkt. Weil `update_preview` nur alle 200 ms sendet, schickt ein Zeitgeber 0,3 s nach der letzten Änderung die endgültige Farbe. Tabelle: F3 (`JS_CELL_KEYDOWN`, op `minicolor`) und Kontextmenü „Farbe mit Mini-Farbtest ändern …“ rufen `op_mini_color`: es wirkt auf die markierte Zelle bzw. alle Zellen der markierten Zeilen, die einen Wert `R,G,B` (0 bis 255) enthalten; Startfarbe ist der erste Wert, eine leere Einzelzelle beginnt mit der letzten Farbe, sonst Meldung. Die Schreibweise (mit/ohne Leerzeichen) bleibt, geschrieben wird mit `write_cells` (rückgängig mit Strg+Z). Keine neue Programmeinstellung. Nicht im Browser getestet.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.58 | F3 und Kontextmenü, `op_mini_color` |
+| `_web/web_colorcheck.py` | 1.08 | `open_mini` |
+| `csv/Web_Languages.csv` | - | vier neue Texte |
+| `install/ANLEITUNG_Installation.md` | 4.58 | Kurzfassung |
+| `install/BETATEST_Checkliste.md` | 3.40 | Punkt 310 |
+| `wiki/webmobaledlib/pg_tabelle.txt` | - | F3 und Kontextmenü |
+
+## 4.57 (2026-11-21), Farbe entfernen färbt nach Regeln neu
+
+Rückmeldung Michael: Zelle in einer Regelzeile rot gefärbt, Farbe entfernt: Zelle blieb weiß. Ursache: `apply_manual_colors` entfernte nur die Zellfarbe und färbte nur bei „Automatisch einfärben“ neu. Jetzt ruft es für jede Zeile, aus der eine manuelle Farbe entfernt wurde, `M20.check_conditionalformating(ws.Cells(r+1,1), allcolumns=True)` auf, wie nach einer Textänderung, unabhängig von der Option (gilt auch für Rückgängig und Einfügen einer Zelle ohne Farbe).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.57 | Regeln färben nach dem Entfernen der manuellen Farbe neu |
+| `install/BETATEST_Checkliste.md` | 3.39 | Punkt 309 |
+
+## 4.56 (2026-11-21), Einstellungen als Fenster, Springen in den Programm Generator
+
+Wunsch von Michael. `open_settings_window(macro, group, extra, on_save, after_save, buttons, width)` (neu) baut `build_settings_page(..., embedded=True, group=...)` in einen Dialog: der Inhalt scrollt, die Knöpfe stehen außerhalb des Scrollbereichs. `open_arduino_settings` nutzt es ebenfalls. `open_settings_group(group)`: die sechs Einträge des Menüs Einstellungen (Fenster je Gruppe von `ConfigurationPage`, mit `WebAccess`-Zusatzkarten über `slots`); gesichert werden nur die Werte der Gruppe (`setConfigDataDict` mischt), deshalb setzt `on_settings_save` `maxLEDcount` nur, wenn der Wert in der Gruppe steht (sonst wäre er auf 20 gefallen). `open_progcfg`: Fenster „Tabelle färben“ mit „Speichern und aktuelle Seite färben“ / „… ALLE Seiten färben“; Rückgabe „pg“ → `tabs.set_value("pg")`. web_params 1.17: `ParamPanel.only_group`, `group`-Parameter, eingebettete Seite mit Gruppen und Zusatzkarten. Die alten Reiter `config` und `progcfg` bleiben unsichtbar im Code (Aufräumen in Schritt 2). Nicht im Browser getestet.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.56 | Fenster je Einstellungsgruppe, Fenster Tabelle färben, Sprung in den Programm Generator |
+| `_web/web_params.py` | 1.17 | only_group, group, Gruppen im eingebetteten Modus |
+| `install/ANLEITUNG_Installation.md` | 4.56 | Kurzfassung |
+| `install/BETATEST_Checkliste.md` | 3.38 | Punkt 308 |
+| `wiki/webmobaledlib/wz_programm_einstellungen.txt`, `pg_tabelle.txt` | - | Beschreibung der Fenster |
+
+## 4.55 (2026-11-21), Feldfarbe kopieren und einfügen, Nur Text einfügen
+
+Wunsch des Entwicklers: Zellen-/Zeilenattribute wie in Excel kopieren und einfügen; übertragen wird nur, was der Anwender selbst ändern kann, bisher die Feldfarbe. **Manuelle Farbe:** `HeadlessSheet` führt `_manual_cells` und `_manual_rows` (mit `_shift` bei Zeilen einfügen/löschen, `reset`); API `set_manual_color`, `set_manual_row_color`, `manual_color_at`, `manual_snapshot(row)`, `manual_restore`. `check_conditionalformating` (M20 1.13) merkt die manuellen Farben der Zeile vor dem Löschen und stellt sie danach wieder her (ganze Zeile manuell: Regeln überspringen die Zeile); `apply_formatting` (XLA 1.24, Speichern und aktuelle/ALLE Seiten färben, Automatisch einfärben) tut dasselbe für das ganze Blatt. Die Markierung wird mit dem Blatt gesichert (`TKSHEET_manual_cells`, `TKSHEET_manual_rows` in `getData`/`setData`). **Kopieren:** Strg+C/X und Kontextmenü melden Text und Meta (Zeilen, Spalten, `mllCopyMeta`) an den Server, `record_clip` merkt die manuellen Farben zum Text (`clip_buf`). **Einfügen:** Farben nur, wenn der eingefügte Text dem zuletzt kopierten entspricht (sonst bleibt es Text). Nur manuelle Farben werden übertragen; Regelfarben entstehen am Ziel durch die Regeln neu. Eine Quelle ohne Farbe nimmt dem Ziel die manuelle Farbe. **Muster:** sind mehrere zusammenhängende Zeilen markiert und ein Vielfaches des kopierten Blocks, wird der Block wiederholt (Text und Farbe). **Nur Text einfügen:** Strg+Umschalt+V und Kontextmenü, keine Programmeinstellung. **Farbe setzen/entfernen** laufen über `write_cells(colors=…)`: manuell markiert, rückgängig machbar (`undo_record` mit `colors`); bei der Zeilennummer wirkt es auf alle Zellen der Zeilen. Nicht im Browser getestet.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.55 | Kopieren/Einfügen mit Farbe, Nur Text einfügen, Farbe setzen/entfernen mit Rückgängig |
+| `ExcelAPI/headless_sheet.py` | 1.03 | Marke manuelle Farbe, Snapshot/Restore |
+| `ExcelAPI/XLA_Application.py` | 1.24 | apply_formatting schützt manuelle Farben, Sichern/Laden der Marke |
+| `proggen/M20_PageEvents_a_Functions.py` | 1.13 | check_conditionalformating überspringt manuelle Farben |
+| `csv/Web_Languages.csv` | - | zwei neue Texte (6 Sprachen) |
+| `install/ANLEITUNG_Installation.md` | 4.55 | Kurzfassung |
+| `install/BETATEST_Checkliste.md` | 3.37 | Punkt 307 |
+| `wiki/webmobaledlib/pg_tabelle.txt` | - | Kopieren, Einfügen und Farben |
 
 ## 4.54 (2026-11-21), Importieren im Menü Datei
 

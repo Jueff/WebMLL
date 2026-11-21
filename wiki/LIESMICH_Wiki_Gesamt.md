@@ -1,9 +1,20 @@
-Datei-Version: 1.27 (2026-11-19) - LIESMICH_Wiki_Gesamt.md
-Gilt für webMobaLedLib 4.36
+Datei-Version: 1.40 (2026-11-21) - LIESMICH_Wiki_Gesamt.md
+Gilt für webMobaLedLib 4.67
 
-# Wiki-Kapitel „webMobaLedLib“: alle Seiten, Stand 4.36
+# Wiki-Kapitel „webMobaLedLib“: alle Seiten, Stand 4.67
 
 Dieses Paket enthält **alle 29 Seiten** in ihrer neuesten Fassung (Seitenstand jeweils um 0,01 erhöht). Es ersetzt die früheren Pakete der sechs Wellen. **Die Seiten erst veröffentlichen, wenn ein Release mit 3.04 (oder neuer) auf GitHub liegt.**
+
+## Neu seit Stand 4.36 (Stand 4.67): Menüs neu geordnet
+
+* **Tabelle drucken (4.62):** `pg_speichern`: neuer Menüpunkt Datei, Tabelle drucken … (Druckansicht mit allen Zeilen).
+* **Mini-Farbtest (4.59):** `pg_tabelle`: F3 oder Kontextmenü bei der Zelle Beleuchtung mit dem Makro ConstRGB.
+* **Einstellungen als Fenster (4.56):** `wz_programm_einstellungen`, `pg_tabelle`: Jeder Eintrag im Menü Einstellungen und „Tabelle färben …“ öffnet ein Fenster mit festen Knöpfen; nach dem Färben springt das Programm in den Programm Generator. Bilder `wz_07_programm_einstellungen.png` und die Seite Tabelle färben neu aufnehmen.
+* **Tabelle (4.55):** `pg_tabelle`: Kopieren und Einfügen überträgt auch die Feldfarbe (Muster wird wiederholt), neu „Nur Text einfügen“ (Strg+Umschalt+V), von Hand gesetzte Farben sind vor den Färberegeln geschützt.
+* **Menüs (4.51 bis 4.54):** Neues Menü **Einstellungen** (Allgemein, Programm Generator, Farb Test, Simulator, Netzzugriff, Spezial, Erweiterungen …, Einstellungen sichern / übernehmen). Die Seiten **Programm Einstellungen** und **Tabelle färben** sind keine Reiter mehr. Menü **Lichtmaschine** entfällt (Pfeil neben dem grünen Knopf). Knopf **Zeilen Färben** entfällt (Menü **Tabelle, Tabelle färben …**). **Importieren v. altem Programm …** steht im Menü **Datei**, der Reiter **Dateien** in den Optionen entfällt.
+* **Fenster:** **Erweiterungen** (eigenes Fenster, Schließen), **ARDUINO-IDE Einstellungen** (Optionen, Reiter Entwicklungsumgebung, mit Speichern und Abbrechen), **ESP32-Firmware über WLAN hochladen …** (Optionen, Reiter WLAN (OTA)).
+* **Geändert:** `wz_programm_einstellungen` (Menü Einstellungen, Darstellung der Oberfläche, LEDs beim Trennen, Anschluss bei mehreren Boards, Tabelle färben), `pg_speichern` (Dateiname mit Datum und Uhrzeit, Importieren, Einstellungen sichern im Menü Einstellungen), `pg_arduino`, `pg_tabelle`, `pg_werkzeugleiste`, `modus`, `werkzeuge`, `programmgenerator`, `erstes_programm`, `pg_grafisch`, `simulator`, `wz_netzwerk`, `wz_arduino_einstellungen`, `arduino_ide`, `fehlersuche`, `ota`, `faq`, `erweiterungen`.
+* **Bilder neu aufnehmen:** Das Menüband (neues Menü **Einstellungen**, kein Menü **Lichtmaschine**), `wz_07_programm_einstellungen.png`, `wz_06_arduino_einstellungen.png` (jetzt ein Fenster), `erst_04_optionen.png`, `pg_09_verbinden.png`, `pg_08_dateimenue.png`, die Optionen (ohne Reiter Dateien und Erweiterungen).
 
 ## Neu seit Stand 3.93 (Stand 4.36): 39 Seiten, sieben geändert, eine neu
 
@@ -42,10 +53,10 @@ Dieses Paket enthält **alle 29 Seiten** in ihrer neuesten Fassung (Seitenstand 
 3. **Python:** Die Installationsseiten beschreiben jetzt, was die Skripte wirklich tun: Das Skript **prüft** Python 3.10 oder neuer. **Windows:** installiert nach Rückfrage „Python 3.12 jetzt mit winget installieren [J,N]“ (ohne winget: Hinweis auf python.org). **Linux und Raspberry Pi:** installieren Python mit venv und pip und die anderen Pakete selbst über die Paketverwaltung (Passwort nötig; zu alte Systeme melden es). **macOS:** nur nach Rückfrage mit Homebrew, sonst muss Python vorher von python.org installiert werden. Im Begriffsblatt gibt es den Eintrag „Python“.
 
 4. **Korrekturen vom 2026-11-09 (Hinweise des Entwicklers):**
-   * **`erstes_programm` (1.03)** neu geschrieben. Neu: den **Programmgenerator öffnen** (Reiter **Programm Generator**, falls nicht offen); das **richtige Tabellenblatt** wählen (**DCC**, **Selectrix**, **CAN** = alle Märklin-Zentralen, **LNet** = LocoNet); die **Lichtmaschine einstellen** vor dem Übertragen: **Optionen Werkzeuge → Reiter LED Arduino → Board → USB Port erkennen → Anschluss wählen**; der Hinweis, dass **Mit ARDUINO verbinden nur geht, wenn auf der Lichtmaschine schon ein MobaLedLib-Programm läuft** (bei neuen Boards nicht). Die Tabelle enthält die Zeile **Heartbeat LED** schon (Zeile „LED auf dem Mainboard“); das Makro wird nur geprüft und bei Bedarf neu eingetragen.
+   * **`erstes_programm` (1.03)** neu geschrieben. Neu: den **Programmgenerator öffnen** (Reiter **Programm Generator**, falls nicht offen); das **richtige Tabellenblatt** wählen (**DCC**, **Selectrix**, **CAN** = alle Märklin-Zentralen, **LNet** = LocoNet); die **Lichtmaschine einstellen** vor dem Übertragen: **Hardware Optionen → Reiter LED Arduino → Board → USB Port erkennen → Anschluss wählen**; der Hinweis, dass **Mit ARDUINO verbinden nur geht, wenn auf der Lichtmaschine schon ein MobaLedLib-Programm läuft** (bei neuen Boards nicht). Die Tabelle enthält die Zeile **Heartbeat LED** schon (Zeile „LED auf dem Mainboard“); das Makro wird nur geprüft und bei Bedarf neu eingetragen.
    * **`wz_arduino_einstellungen` (1.03)** neu geschrieben: Der Reiter **ARDUINO Einstellungen** ist **nur für die ARDUINO IDE** nötig (mit PlatformIO nicht). Die Seite beschreibt nur noch, was sie wirklich enthält (Haken **Test ARDUINO Programm Creation**, Pfad zur ARDUINO IDE, **IDE suchen**, Pfad zu den Resourcen nur Mac). Die frühere Beschreibung (Anschluss, Board-Typ, Baudrate, Gefundene Geräte …) war falsch und ist entfernt.
-   * **`pg_arduino` (1.03):** Abschnitt **Die Lichtmaschine einstellen** (Board und USB-Anschluss in **Optionen Werkzeuge**) steht jetzt **vor** dem Verbinden; das Verbinden mit dem Hinweis zu neuen Boards; der falsche Satz zum Reiter **ARDUINO Einstellungen** entfällt.
-   * **`werkzeuge` (1.02)** und **`pg_werkzeugleiste` (1.02):** Zeile **ARDUINO Einstellungen** und **Optionen Werkzeuge** angeglichen (die Reiter des Optionenfensters: LED Arduino, Entwicklungsumgebung, Dateien, Update, Bootloader).
+   * **`pg_arduino` (1.03):** Abschnitt **Die Lichtmaschine einstellen** (Board und USB-Anschluss in **Hardware Optionen**) steht jetzt **vor** dem Verbinden; das Verbinden mit dem Hinweis zu neuen Boards; der falsche Satz zum Reiter **ARDUINO Einstellungen** entfällt.
+   * **`werkzeuge` (1.02)** und **`pg_werkzeugleiste` (1.02):** Zeile **ARDUINO Einstellungen** und **Hardware Optionen** angeglichen (die Reiter des Optionenfensters: LED Arduino, Entwicklungsumgebung, Dateien, Update, Bootloader).
 
    * **Antworten des Entwicklers eingearbeitet:** Das Blatt (DCC, Selectrix, CAN, LNet) spielt beim ersten Test **keine Rolle**, weil noch keine Verbindung zu einer Modellbahnzentrale gebraucht wird. Die **erste LED einer Kette** ist immer eine **Heartbeat LED** (zeigt, dass der Prozessor arbeitet) und sitzt bei **allen vier Lichtmaschinen fest auf der Platine** (neuer Eintrag **Heartbeat LED** in `begriffe`). **Automatisch erkennen** versucht nur den Typ des **ARDUINO Nano** zu erkennen und das geht **nur unter Windows**; unter Linux (auch Raspberry Pi) und macOS muss der Typ immer selbst angegeben werden (`erstes_programm`, `pg_arduino`). Der Hinweis **„Mit ARDUINO verbinden“ geht nur, wenn auf der Lichtmaschine schon ein MobaLedLib-Programm läuft** steht jetzt auch auf den Seiten `wz_servo`, `wz_dmservo`, `wz_sound`, `wz_dcckeyboard`, `wz_z21`, `wz_farbtest`, `wz_monitor`, `servo_animation`, `werkzeuge` und `programmgenerator`.
 
@@ -132,7 +143,7 @@ Dieses Paket enthält **alle 29 Seiten** in ihrer neuesten Fassung (Seitenstand 
 
 Die Bilder liegen weiter im Namensraum `bilder:anleitungen:webmobaledlib`. Dateinamen **genau** wie unten.
 
-Das Bildschirmfoto des Entwicklers (Optionen und spezielle Funktionen, Reiter LED ARDUINO) ist als Vorlage für `erst_04_optionen.png` geeignet; bitte auf das Fenster zuschneiden. **Neu für `erstes_programm`:** `erst_02_programmgenerator.png` (der Reiter Programm Generator), `erst_03_blatt.png` (die Tabellenblätter DCC, Selectrix, CAN, LNet), `erst_04_optionen.png` (Optionen Werkzeuge, Reiter LED Arduino mit Board und USB Port erkennen), `erst_05_makro.png` (die Tabelle mit der Zeile Heartbeat LED), `erst_06_uebertragen.png`. **Entfallen:** `erst_02_verbinden.png`, `erst_03_makro.png`, `erst_04_uebertragen.png`. `wz_06_arduino_einstellungen.png` sollte die **echte** Seite zeigen (Haken Test ARDUINO Programm Creation, Pfad zur ARDUINO IDE).
+Das Bildschirmfoto des Entwicklers (Optionen und spezielle Funktionen, Reiter LED ARDUINO) ist als Vorlage für `erst_04_optionen.png` geeignet; bitte auf das Fenster zuschneiden. **Neu für `erstes_programm`:** `erst_02_programmgenerator.png` (der Reiter Programm Generator), `erst_03_blatt.png` (die Tabellenblätter DCC, Selectrix, CAN, LNet), `erst_04_optionen.png` (Hardware Optionen, Reiter LED Arduino mit Board und USB Port erkennen), `erst_05_makro.png` (die Tabelle mit der Zeile Heartbeat LED), `erst_06_uebertragen.png`. **Entfallen:** `erst_02_verbinden.png`, `erst_03_makro.png`, `erst_04_uebertragen.png`. `wz_06_arduino_einstellungen.png` sollte die **echte** Seite zeigen (Haken Test ARDUINO Programm Creation, Pfad zur ARDUINO IDE).
 
 | Dateiname | Seite | Inhalt |
 |---|---|---|
@@ -140,7 +151,7 @@ Das Bildschirmfoto des Entwicklers (Optionen und spezielle Funktionen, Reiter LE
 | `erst_01_start.png` | erstes_programm | Das Programm nach dem Start |
 | `erst_02_programmgenerator.png` | erstes_programm | Der Reiter Programm Generator |
 | `erst_03_blatt.png` | erstes_programm | Die Tabellenblätter unter der Tabelle: DCC, Selectrix, CAN, LNet |
-| `erst_04_optionen.png` | erstes_programm | Optionen Werkzeuge, Reiter LED ARDUINO: Board wählen und USB Port erkennen |
+| `erst_04_optionen.png` | erstes_programm | Hardware Optionen, Reiter LED ARDUINO: Board wählen und USB Port erkennen |
 | `erst_05_makro.png` | erstes_programm | Die Tabelle mit der Zeile Heartbeat LED |
 | `erst_06_uebertragen.png` | erstes_programm | Das Fenster beim Übertragen |
 | `led_01_dialog.png` | led_farbanimation | Der Dialog LED Farb-Animation mit den Einstellungen links und den drei Kurven rechts |

@@ -13,12 +13,12 @@ Neben dem [[anleitungen:webmobaledlib:programmgenerator|Programmgenerator]] hat 
 | [[anleitungen:webmobaledlib:wz_dcckeyboard|DCC Keyboard]] | Schalter ausprobieren, auch ohne Digitalzentrale | ja |
 | [[anleitungen:webmobaledlib:wz_z21|Z21 Simulator]] | Die MobaLedLib aus einem Modellbahnprogramm steuern (nur wenn eingeschaltet) | ja |
 | [[anleitungen:webmobaledlib:wz_monitor|Serial Monitor]] | Sehen, was die Lichtmaschine meldet, und Befehle senden | ja |
-| [[anleitungen:webmobaledlib:wz_arduino_einstellungen|ARDUINO Einstellungen]] | Pfad zur **ARDUINO IDE** und Test des Programmerzeugens (nur nötig, wenn du die ARDUINO IDE statt PlatformIO benutzt; Board und Anschluss stellst du in **Optionen Werkzeuge** ein) | nein |
-| [[anleitungen:webmobaledlib:wz_programm_einstellungen|Programm Einstellungen]] | Sprache, Schrift, Darstellung und weitere Einstellungen | nein |
+
+Kein Reiter mehr (seit 4.51): [[anleitungen:webmobaledlib:wz_programm_einstellungen|Programm Einstellungen]] (Menü **Einstellungen**: Sprache, Schrift, Darstellung und weitere Einstellungen) und [[anleitungen:webmobaledlib:wz_arduino_einstellungen|ARDUINO-IDE Einstellungen]] (Fenster in **Hardware Optionen**, Reiter **Entwicklungsumgebung**; nur nötig, wenn du die ARDUINO IDE statt PlatformIO benutzt).
 
 Die Seiten [[anleitungen:webmobaledlib:patterngenerator|Timeline Editor]] und [[anleitungen:webmobaledlib:programmgenerator|Programm Generator]] haben eigene Beschreibungen.
 
-**Im Anfänger Modus** fehlen die Reiter **Timeline Editor**, **Z21 Simulator** und **ProgGenerator Einstellungen**. Siehe [[anleitungen:webmobaledlib:modus|Anfänger Modus und Experten Modus]].
+**Im Anfänger Modus** fehlen die Reiter **Timeline Editor** und **Z21 Simulator**, der Menüpunkt **Tabelle färben …** und die Gruppe **Simulator** im Menü **Einstellungen**. Siehe [[anleitungen:webmobaledlib:modus|Anfänger Modus und Experten Modus]].
 
 ===== Gemeinsam für alle Werkzeuge =====
 

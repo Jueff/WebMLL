@@ -1,9 +1,9 @@
-# Datei-Version: 1.12 (2026-11-18) - M20_PageEvents_a_Functions.py
+# Datei-Version: 1.13 (2026-11-21) - M20_PageEvents_a_Functions.py
 # ----------------------------------------------------------------------------------------------
 # Name:           M20_PageEvents_a_Functions.py
 # Path:           proggen/M20_PageEvents_a_Functions.py
-# Version:        1.12
-# Last Update:    2026-11-18
+# Version:        1.13
+# Last Update:    2026-11-21
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
@@ -19,6 +19,7 @@
 #   1.09  2026-11-14  DCC-Adressspannen: Ergebnis in Target.Value schreiben (Beitrag des Fork-Entwicklers)
 #   1.11  2026-11-17  Select_Typ_by_Dialog: Adressspannen ("5 - 8") werden geprueft, nach der Auswahl werden Adresse (InCnt), Testtasten und Startwert der Zeile aktualisiert, EnableEvents wird immer zurueckgesetzt (Pull Request 5 von moosbewohner)
 #   1.12  2026-11-18  HELP_WIKI_URL: Seite einfuehrung des webMobaLedLib-Wikis statt der Excel-Seite des Programm Generators
+#   1.13  2026-11-21  check_conditionalformating: manuell gesetzte Feldfarben (Zelle oder ganze Zeile) bleiben erhalten und werden nicht von den Faerberegeln ueberschrieben
 # ----------------------------------------------------------------------------------------------
 # -*- coding: utf-8 -*-
 #
@@ -918,7 +919,11 @@ def check_conditionalformating(Target, allcolumns=False):
     # Die Farbe einer Zeile haengt von allen Bedingungen ab, nicht nur von der geaenderten Spalte: Zuerst alle Farben der Zeile loeschen (Zellen und ganze Zeile),
     # dann alle Spalten pruefen. Vorher blieb die Farbe einer frueheren Bedingung (zum Beispiel "ganze Zeile") stehen, wenn das Macro geaendert wurde oder
     # "ganze Zeile" abgeschaltet war (dehighlight(row-1) loeschte die Zellfarben nicht).
+    _manual = sheet.manual_snapshot(row-1) if hasattr(sheet, "manual_snapshot") else None  # v1.13: manuelle Farben dieser Zeile merken
     sheet.dehighlight(f"{row}:{row}")  # v1.05
+    if _manual is not None and _manual[1]:  # v1.13: ganze Zeile manuell gefaerbt: die Regeln faerben diese Zeile nicht
+        sheet.manual_restore(_manual)  # v1.13
+        return  # v1.13
     controller = Target.Worksheet.Workbook.controller  # v1.05
     RowFormatInput = controller.getConfigData("RowFormatInput") or {}  # v1.05
     changed_col = None if allcolumns else Target.currentcell[1]  # v1.05
@@ -957,6 +962,8 @@ def check_conditionalformating(Target, allcolumns=False):
                 else:  # v1.05
                     sheet[row-1, column-1].bg = compColor  # v1.05
                 break  # v1.05
+    if _manual is not None:  # v1.13
+        sheet.manual_restore(_manual)  # v1.13: manuelle Zellfarben wieder setzen
     return
 
 def Global_Worksheet_ConditionalFormating(Target):

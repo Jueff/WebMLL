@@ -1,9 +1,9 @@
-Datei-Version: 1.07 (2026-11-21) - RELEASE_Hinweise_4.54.md
-Gilt für webMobaLedLib 4.54
+Datei-Version: 1.08 (2026-11-21) - RELEASE_Hinweise_4.67.md
+Gilt für webMobaLedLib 4.67
 
-# webMobaLedLib 4.54
+# webMobaLedLib 4.67
 
-Anhänge dieses Releases: `webmobaledlib.zip` (Programm, mit `zip_erstellen.bat` Version 1.11 gebaut, `ROOT_IN_ZIP=1`), `START_HIER.txt` (erste Schritte), `ANLEITUNG_Installation.pdf` (Anleitung, Version 4.54) und `BETATEST_Checkliste.pdf` (Checkliste für Betatester, Version 3.36).
+Anhänge dieses Releases: `webmobaledlib.zip` (Programm, mit `zip_erstellen.bat` Version 1.11 gebaut, `ROOT_IN_ZIP=1`), `START_HIER.txt` (erste Schritte), `ANLEITUNG_Installation.pdf` (Anleitung, Version 4.67) und `BETATEST_Checkliste.pdf` (Checkliste für Betatester, Version 3.49).
 Installation: siehe `START_HIER.txt` und den Schnellstart der Anleitung. Aktualisieren: Menü **Hilfe → Update webMobaLedLib …**, danach das Programm **neu starten** und die Seite mit Strg+F5 neu laden.
 
 ## Wichtig beim Aktualisieren
@@ -12,14 +12,14 @@ Installation: siehe `START_HIER.txt` und den Schnellstart der Anleitung. Aktuali
 - **Nach dem Update das Programm neu starten** und die Seite neu laden. Oben darf keine rote Meldung stehen.
 - **Neues Programmsymbol (4.10):** Für die Verknüpfung auf dem Desktop den Installer noch einmal ausführen.
 
-## Neu seit Version 3.93 (3.94 bis 4.54)
+## Neu seit Version 3.93 (3.94 bis 4.67)
 
-**Menüs neu geordnet (4.51 bis 4.54, Vorschlag von Michael aus dem Forum):**
+**Menüs neu geordnet (4.51 bis 4.67, Vorschlag von Michael aus dem Forum):**
 - Neues Menü **Einstellungen** zwischen **Tabelle** und **Hilfe**: Allgemein, Programm Generator, Farb Test, Simulator (nur Experten Modus), Netzzugriff, Spezial, Erweiterungen …, Einstellungen sichern …, Einstellungen übernehmen …. Die Seite **Programm Einstellungen** ist kein Reiter mehr, die Einträge springen zur Gruppe.
 - **Tabelle, Tabelle färben …** öffnet die Seite mit den Bedingungen für die Zeilenfarben (früher Reiter **Tabelle Färben**, Titel jetzt „Tabelle färben“). Der Knopf **Zeilen Färben** und die Option „Zeilen Färben Button verstecken“ entfallen.
 - Das Menü **Lichtmaschine** entfällt: Der Pfeil neben **Mit Lichtmaschine verbinden** enthält Verbinden, Verbindung trennen, Neu verbinden, Board wechseln …, Alle LED aus.
 - **ARDUINO Einstellungen** ist ein Fenster mit Speichern und Abbrechen (Optionen, Reiter Entwicklungsumgebung, Knopf **ARDUINO-IDE Einstellungen**). **ESP32-Firmware über WLAN hochladen …** steht als Knopf auf dem Reiter WLAN (OTA) der Optionen. **Erweiterungen** ist ein eigenes Fenster (Haken sofort wirksam, Schließen), der Reiter in den Optionen entfällt. **Importieren v. altem Programm …** steht im Menü **Datei**, der Reiter **Dateien** in den Optionen entfällt.
-- Schritt 2 (Optionen Werkzeuge in **Hardware Optionen** umbenennen, Reste der alten Reiter entfernen) folgt in einem späteren Release.
+- Schritt 2 (ab 4.67): Der Knopf **Optionen Werkzeuge** heißt **Hardware Optionen**, der Reiter **Bootloader** heißt **Firmware Installation** und enthält auch den Knopf **Firmware installieren** (vorher im Reiter Lichtmaschine). Reste der alten Reiter werden später entfernt.
 
 **Darstellung (4.44 bis 4.49, Issue 51):**
 - **Darstellung der Oberfläche** (Programm Einstellungen, Allgemeine Einstellungen, unter Sprache): Hell (Vorgabe, bisheriger Stil), Hell mit Kontrast (kräftigere Blattreiter, dunklere Hinweistexte), Dunkel (die Tabelle bleibt hell), Dunkel mit Tabelle (auch Tabellen dunkel, fest eingestellte Farben bleiben) oder Wie System.
@@ -85,9 +85,9 @@ Installation: siehe `START_HIER.txt` und den Schnellstart der Anleitung. Aktuali
 - Versteckte Tabellen: das Startblatt erscheint nicht mehr als Reiter (4.07).
 - Optionen: alle Reiter sichtbar (3.99).
 
-**Noch nicht an Hardware oder im Browser geprüft:** Alles ab 4.11 (Einstellungen sichern/übernehmen, Ausgabe und Abbrechen beim ESP32-Build, Verbinden beim Start, inkrementelles Speichern und seine Tastenkombination, Kopfbereich (Abstand in Issue 22 nicht bestätigt), Erweiterungen mit `symlink://`, Name und Beschreibung aus `libraries.json`) wurde nur gebaut und kompiliert, nicht auf Hardware oder im Browser getestet. IRremote 4.x für InfraredMLX ist nicht mit einem Pico geprüft. Die Übersetzungen der neuen Texte (CSV) sind ungeprüft. Die Menüs ab 4.51 sind vom Entwickler im Browser getestet (4.54: Rückmeldung „Funktioniert“); Dunkler Modus und Dateinamen mit Datum (4.44 bis 4.50) ebenfalls.
+**Noch nicht an Hardware oder im Browser geprüft:** (die Funktionen 4.55 bis 4.67 hat der Entwickler im Browser geprüft; Rückmeldungen der Tester stehen aus) Alles ab 4.11 (Einstellungen sichern/übernehmen, Ausgabe und Abbrechen beim ESP32-Build, Verbinden beim Start, inkrementelles Speichern und seine Tastenkombination, Kopfbereich (Abstand in Issue 22 nicht bestätigt), Erweiterungen mit `symlink://`, Name und Beschreibung aus `libraries.json`) wurde nur gebaut und kompiliert, nicht auf Hardware oder im Browser getestet. IRremote 4.x für InfraredMLX ist nicht mit einem Pico geprüft. Die Übersetzungen der neuen Texte (CSV) sind ungeprüft. Die Menüs ab 4.51 sind vom Entwickler im Browser getestet (4.67: Rückmeldung „Funktioniert“); Dunkler Modus und Dateinamen mit Datum (4.44 bis 4.50) ebenfalls.
 
-**Wiki:** Paket `webmobaledlib_Wiki_Gesamt_Stand_4.54.zip` (39 Seiten, an die neuen Menüs angepasst, Hinweise in `LIESMICH_Wiki_Gesamt.md`). Die Bilder (Menüband, Programm Einstellungen, ARDUINO-IDE Einstellungen, Optionen, Datei-Menü, Verbinden) zeigen noch den alten Stand und müssen neu aufgenommen werden.
+**Wiki:** Paket `webmobaledlib_Wiki_Gesamt_Stand_4.67.zip` (39 Seiten, an die neuen Menüs angepasst, Hinweise in `LIESMICH_Wiki_Gesamt.md`). Die Bilder (Menüband, Programm Einstellungen, ARDUINO-IDE Einstellungen, Optionen, Datei-Menü, Verbinden) zeigen noch den alten Stand und müssen neu aufgenommen werden.
 
 **Geplant:** Quell-URL direkt in der `platformio.ini` (Issue 6) ist nicht vorgesehen (Cache und `symlink://` bleiben); Rückfragen dazu stehen im Issue.
 

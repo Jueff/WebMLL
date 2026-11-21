@@ -1,15 +1,18 @@
-# Datei-Version: 1.07 (2026-11-16) - web_colorcheck.py
+# Datei-Version: 1.10 (2026-11-21) - web_colorcheck.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_colorcheck.py
 # Path:           _web/web_colorcheck.py
-# Version:        1.07
-# Last Update:    2026-11-16
+# Version:        1.10
+# Last Update:    2026-11-21
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
 #   1.05  2026-11-05  Beschreibungstext der Seite wird uebersetzt (description_text) (fruehere Versionen ohne Eintrag)
 #   1.06  2026-11-14  Dialog Farbpalette: Reihenfolge Ja, Nein, Abbrechen
 #   1.07  2026-11-16  Protokoll: wird die LED-Nummer oder Anzahl auf die Zahl der LEDs der Lichtmaschine (Startmeldung) begrenzt, steht das im Protokoll
+#   1.08  2026-11-21  Version 4.57: open_mini(): Mini-Farbtest als Fenster (Farbe live an die LED, OK gibt R,G,B zurueck) fuer die Tabelle (F3, Kontextmenue)
+#   1.09  2026-11-21  Version 4.59: open_mini(slots=...): mehrere Farben (Ein/Aus) mit Umschalter, Rueckgabe je Farbe (fuer ConstRGB)
+#   1.10  2026-11-21  Version 4.60: open_mini(led=(Start LedNr, Anzahl, Kanal)): LED der Tabellenzeile statt der zuletzt benutzten
 # ----------------------------------------------------------------------------------------------
 """Web-Version der Seite "Farb Test" (ColorCheckPage + ColorWheel + LightGradientBar ohne Tk).
 
@@ -39,6 +42,12 @@ try:  # v1.05
 except ImportError:  # v1.05                                   # aeltere Installation ohne web_i18n.py: Text bleibt deutsch
     def description_text(text, fallback=""):  # v1.05
         return str(text or fallback or "").replace("\r", "").strip()  # v1.05
+
+try:  # v1.09
+    from _web.web_i18n import tr  # v1.09
+except ImportError:  # v1.09                                   # aeltere Installation ohne web_i18n.py
+    def tr(text, **values):  # v1.09
+        return str(text)  # v1.09
 
 logger = logging.getLogger(__name__)
 
@@ -759,6 +768,143 @@ def build(ctrl, goto_generator=None, is_active=None, run_command=None):
     api.tab_unselected = model.tab_unselected
     api.save_config = model.save_config
     return api
+
+
+# async def open_mini(ctrl, rgb=None, title="Mini-Farbtest"):  # v1.08  # v1.09 (entfallen)
+# async def open_mini(ctrl, rgb=None, title="Mini-Farbtest", slots=None):  # v1.08  # v1.09: slots  # v1.10 (entfallen)
+async def open_mini(ctrl, rgb=None, title="Mini-Farbtest", slots=None, led=None):  # v1.08  # v1.09: slots  # v1.10: led
+    """Mini-Farbtest als Fenster: Farbrad, Helligkeit, R/G/B, HEXA, LED-Adresse/Kanal/Anzahl; die Farbe geht live an die LED.
+    rgb: Startfarbe (r, g, b) oder None (zuletzt benutzte Farbe). Rueckgabe: (r, g, b) bei OK, sonst None.
+    slots (v1.09): [(Beschriftung, (r, g, b)), ...]: mehrere Farben mit Umschalter; Rueckgabe dann die Liste der Farben (r, g, b) bei OK."""  # v1.09
+    from nicegui import ui  # v1.08
+    model = ColorCheckModel(ctrl)  # v1.08
+    if slots:  # v1.09
+        rgb = slots[0][1]  # v1.09
+    if led:  # v1.10: LED der Tabellenzeile (Start LedNr, Anzahl, Kanal)
+        model.lednum, model.ledcount, model.ledchannel = (int(x) for x in led)  # v1.10
+    slot = {"cur": 0, "vals": [tuple(v) for _, v in (slots or [])]}  # v1.09
+    if rgb is not None:  # v1.08
+        model.set_rgb(*rgb, led=False)  # v1.08
+    refs: dict = {}  # v1.08
+    guard = {"on": False}  # v1.08
+    timer = {"t": None}  # v1.08
+
+    def intval(value, default=0):  # v1.08
+        try:  # v1.08
+            return int(round(float(value)))  # v1.08
+        except (TypeError, ValueError):  # v1.08
+            return default  # v1.08
+
+    def push():  # v1.08: letzte Farbe sicher an die LED (update_preview sendet hoechstens alle 200 ms)
+        try:  # v1.08
+            model._update_led(model.lednum, model.ledcount, model.red, model.green, model.blue, model.ledchannel)  # v1.08
+        except Exception:                                  # noqa: BLE001  # v1.08
+            logger.debug("Mini-Farbtest: LED nicht erreichbar", exc_info=True)  # v1.08
+
+    def sync():  # v1.08
+        guard["on"] = True  # v1.08
+        try:  # v1.08
+            for k, v in (("r", model.red), ("g", model.green), ("b", model.blue), ("hexa", model.hexa), ("bar", model.wheel_v),
+                         ("led", model.lednum), ("chan", model.ledchannel), ("cnt", model.ledcount)):  # v1.08
+                refs[k].set_value(v)  # v1.08
+            x, y = model.cross  # v1.08
+            refs["wheel"].content = (f'<line x1="0" y1="{y:.1f}" x2="{model.WHEEL}" y2="{y:.1f}" stroke="#C2C2C2" stroke-width="1"/>'  # v1.08
+                                     f'<line x1="{x:.1f}" y1="0" x2="{x:.1f}" y2="{model.WHEEL}" stroke="#C2C2C2" stroke-width="1"/>')  # v1.08
+            disp, brightness = model.preview()  # v1.08
+            refs["preview"].style(f"background: {disp}")  # v1.08
+            refs["preview_text"].set_text(f"{model.red},{model.green},{model.blue}\n" + brightness)  # v1.08
+        finally:  # v1.08
+            guard["on"] = False  # v1.08
+
+    def changed(fn, *args):  # v1.08: Modell aendern, Anzeige nachfuehren, LED nach kurzer Ruhe sicher setzen
+        if guard["on"]:  # v1.08
+            return  # v1.08
+        try:  # v1.08
+            fn(*args)  # v1.08
+        except Exception:                                  # noqa: BLE001  # v1.08
+            logger.debug("Mini-Farbtest", exc_info=True)  # v1.08
+        sync()  # v1.08
+        if timer["t"] is not None:  # v1.08
+            timer["t"].cancel()  # v1.08
+        timer["t"] = ui.timer(0.3, push, once=True)  # v1.08
+
+    clamp = lambda x: min(max(intval(x), 0), 255)  # noqa: E731  # v1.08
+
+    def number(width="w-24", **kw):  # v1.08
+        return ui.number(**kw).props("dense outlined debounce=350").classes(width)  # v1.08
+
+    def on_mouse(e):  # v1.08
+        if e.type == "mousedown" or (e.type == "mousemove" and (getattr(e, "buttons", 0) or 0) & 1):  # v1.08
+            changed(model.on_wheel, e.image_x, e.image_y)  # v1.08
+
+    with ui.dialog().props("persistent") as dlg, ui.card().classes("max-w-full gap-2").style("width: 760px; max-height: 96vh; overflow-y: auto"):  # v1.08
+        ui.label(title).classes("text-h6")  # v1.08
+        if slots:  # v1.09: welche Farbe des Makros bearbeitet wird
+            def switch(e):  # v1.09
+                slot["vals"][slot["cur"]] = (model.red, model.green, model.blue)  # v1.09
+                slot["cur"] = int(e.value)  # v1.09
+                changed(lambda: model.set_rgb(*slot["vals"][slot["cur"]]))  # v1.09
+            ui.radio({i: tr(label) for i, (label, _) in enumerate(slots)}, value=0, on_change=switch).props("inline dense")  # v1.09
+        with ui.row().classes("w-full items-start gap-5 no-wrap"):  # v1.08
+            with ui.column().classes("items-center gap-2").style("width: 300px; flex: 0 0 auto"):  # v1.08
+                with ui.element("div").style("position: relative; width: 100%; height: 18px; border: 1px solid #666; background: linear-gradient(to right, #000, #fff)"):  # v1.08
+                    refs["bar"] = ui.slider(min=0, max=100, step=1, value=model.wheel_v, on_change=lambda e: changed(lambda: model.on_bar(intval(e.value)))).props(  # v1.08
+                        "thumb-color=red track-color=transparent selection-color=transparent dense").style("position: absolute; left: 0; right: 0; top: 0; height: 18px")  # v1.08
+                refs["wheel"] = ui.interactive_image(wheel_png_uri(model.WHEEL, model.cor_red, model.cor_green, model.cor_blue), on_mouse=on_mouse,  # v1.08
+                                                     events=["mousedown", "mousemove"], cross=False).style("width: 100%; height: auto; border: 1px solid #aaa; cursor: crosshair")  # v1.08
+            with ui.column().classes("gap-2 grow"):  # v1.08
+                for label, k in (("Rot", "r"), ("Grün", "g"), ("Blau", "b")):  # v1.08
+                    with ui.row().classes("items-center gap-2 no-wrap"):  # v1.08
+                        ui.label(label).classes("w-16")  # v1.08
+                        refs[k] = number(min=0, max=255, step=1, value=0, format="%d",  # v1.08
+                                         on_change=lambda e: changed(lambda: model.on_rgb(clamp(refs["r"].value), clamp(refs["g"].value), clamp(refs["b"].value))))  # v1.08
+                with ui.row().classes("items-center gap-2 no-wrap"):  # v1.08
+                    ui.label("HEXA").classes("w-16")  # v1.08
+                    refs["hexa"] = ui.input(value=model.hexa).props("dense outlined").classes("w-32")  # v1.08
+                    refs["hexa"].on("blur", lambda _: changed(model.on_hexa, refs["hexa"].value))  # v1.08
+                    refs["hexa"].on("keydown.enter", lambda _: changed(model.on_hexa, refs["hexa"].value))  # v1.08
+                refs["preview"] = ui.element("div").style("width: 150px; height: 50px; border: 1px solid #777; display: flex; align-items: center; justify-content: center; text-align: center")  # v1.08
+                with refs["preview"]:  # v1.08
+                    refs["preview_text"] = ui.label("").style("white-space: pre-line; font-size: 12px; line-height: 1.15")  # v1.08
+        with ui.row().classes("w-full items-center gap-3").style("border: 1px solid #aaa; padding: 6px"):  # v1.08
+            ui.label("LED Adresse")  # v1.08
+            refs["led"] = number(width="w-24", min=0, max=32767, step=1, value=model.lednum, format="%d", on_change=lambda e: changed(lambda: model.set_lednum(intval(e.value))))  # v1.08
+            ui.label("Led Kanal")  # v1.08
+            refs["chan"] = number(width="w-20", min=0, max=10, step=1, value=model.ledchannel, format="%d", on_change=lambda e: changed(lambda: model.set_ledchannel(intval(e.value))))  # v1.08
+            ui.label("Anzahl")  # v1.08
+            refs["cnt"] = number(width="w-24", min=1, max=4095, step=1, value=model.ledcount, format="%d", on_change=lambda e: changed(lambda: model.set_ledcount(intval(e.value, 1))))  # v1.08
+            ui.button("Blinken Ein/Aus", on_click=lambda: changed(model.blinking_on_off)).props("outline no-caps dense")  # v1.08
+        with ui.row().classes("justify-end w-full"):  # v1.08
+            ui.button("Abbrechen (A)", on_click=lambda: dlg.submit(None)).props("flat data-key=A").classes("mll-cancel")  # v1.08
+            # ui.button("OK", on_click=lambda: dlg.submit((model.red, model.green, model.blue))).props("color=primary data-key=O").classes("mll-default")  # v1.08  # v1.09 (entfallen)
+            ui.button("OK", on_click=lambda: ok()).props("color=primary data-key=O").classes("mll-default")  # v1.08  # v1.09
+    def ok():  # v1.09
+        now = (model.red, model.green, model.blue)  # v1.09
+        if slots:  # v1.09
+            slot["vals"][slot["cur"]] = now  # v1.09
+            dlg.submit(list(slot["vals"]))  # v1.09
+        else:  # v1.09
+            dlg.submit(now)  # v1.09
+
+    blink = ui.timer(1.0 / max(BLINKFRQ, 1), model.blink_tick)  # v1.08: Blinktakt
+    sync()  # v1.08
+    try:  # v1.08
+        model.tab_selected()  # v1.08: Direktmodus zum Arduino
+    except Exception:                                      # noqa: BLE001  # v1.08
+        logger.debug("Mini-Farbtest: Direktmodus", exc_info=True)  # v1.08
+    push()  # v1.08: Startfarbe sofort an die LED
+    result = await dlg  # v1.08
+    try:  # v1.08
+        blink.cancel()  # v1.08
+        model.ledhighlight = False  # v1.08
+        model.led_off()  # v1.08: LED wieder aus
+        model.tab_unselected()  # v1.08
+        for key, value in (("lastLed", model.lednum), ("lastLedCount", model.ledcount), ("lastLedChannel", model.ledchannel)):  # v1.08
+            ctrl.setConfigData(key, value)  # v1.08
+    except Exception:                                      # noqa: BLE001  # v1.08
+        logger.debug("Mini-Farbtest: Abschluss", exc_info=True)  # v1.08
+    wd.safe_delete(dlg)  # v1.08
+    return result  # v1.08
 
 
 def _on_key(e, undo, led_off, is_active):

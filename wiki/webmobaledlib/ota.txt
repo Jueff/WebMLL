@@ -14,7 +14,7 @@ Mit einer **Lichtmaschine ESP32** musst du das USB-Kabel nicht mehr dauernd benu
 
 ===== Die Einstellungen: Reiter WLAN (OTA) =====
 
-Klicke in der Werkzeugleiste des Programmgenerators auf **Optionen Werkzeuge**. Im Fenster **Optionen und spezielle Funktionen** gibt es bei der Zentrale **ESP32** den Reiter **WLAN (OTA)**.
+Klicke in der Werkzeugleiste des Programmgenerators auf **Hardware Optionen**. Im Fenster **Optionen und spezielle Funktionen** gibt es bei der Zentrale **ESP32** den Reiter **WLAN (OTA)**.
 
 ^ Feld ^ Bedeutung ^
 | **WLAN am ESP32 aktivieren** | Die Firmware bekommt die WLAN-Funktion. Ohne Haken bleibt der ESP32 ohne WLAN. |
@@ -48,7 +48,7 @@ Der ESP32 merkt sich das WLAN. Du musst diese Schritte nur wiederholen, wenn du 
 
   * **Verbinden:** Der Knopf **Mit Lichtmaschine verbinden** fragt, ob du per **WLAN** oder **USB** verbinden willst. Die Seiten **Farb Test**, **Servo Einstellungen**, **Sound Test** und die **Testschalter** in der Tabelle verbinden **von selbst**: Ist für das Blatt ein ESP32 mit WLAN und OTA eingetragen (mit **Adresse** und **Passwort**), versuchen sie **zuerst das WLAN**. Antwortet der ESP32 nicht, geht es nach einigen Sekunden mit **USB** weiter.
   * **Setup übertragen:** Der Knopf **Setup übertragen** im Programmgenerator fragt bei einem ESP32 mit OTA, ob die Übertragung per **WLAN (OTA)** oder **USB** geschieht. Beide Wege erzeugen die Firmware aus deiner Tabelle neu.
-  * **Fertige Firmware hochladen:** Im Fenster **Optionen** (Knopf **Optionen Werkzeuge**) gibt es auf dem Reiter **WLAN (OTA)** den Knopf **ESP32-Firmware über WLAN hochladen …**. Du gibst die **Adresse**, das **OTA-Passwort** und die fertig übersetzte Anwendungsdatei (''.bin'') an und klickst auf **Über WLAN hochladen**.
+  * **Fertige Firmware hochladen:** Im Fenster **Optionen** (Knopf **Hardware Optionen**) gibt es auf dem Reiter **WLAN (OTA)** den Knopf **ESP32-Firmware über WLAN hochladen …**. Du gibst die **Adresse**, das **OTA-Passwort** und die fertig übersetzte Anwendungsdatei (''.bin'') an und klickst auf **Über WLAN hochladen**.
 
 ===== Die Firewall =====
 

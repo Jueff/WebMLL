@@ -1,5 +1,5 @@
 # webMobaLedLib – Installation und Betrieb
-*Datei-Version: 4.54 (2026-11-21), gilt für webMobaLedLib 4.54*
+*Datei-Version: 4.67 (2026-11-21), gilt für webMobaLedLib 4.67*
 
 Windows · macOS · Linux-Desktop · Raspberry Pi
 
@@ -335,13 +335,13 @@ Die Knöpfe der Symbolleiste **Zeilen duplizieren** (früher „Kopiere Zeilen�
 
 ### 2.9c Die Knöpfe der Werkzeugleiste (2.68)
 
-Die Knöpfe der Werkzeugleiste des Programm Generators (Dialog Wizard, Setup übertragen, Zeile einfügen, Zeilen löschen, Zeilen verschieben, Zeilen duplizieren, Aus- oder Einblenden, Alle Einblenden, Tabelle löschen, Neue Tabelle, Optionen Werkzeuge, Online Wiki, Zeilen Färben) bestehen aus einem **Symbol ohne Text** und einer **Beschriftung unter dem Symbol in der eingestellten Sprache** (jeder Knopf ist nur so breit wie sein Symbol): Die Texte kommen aus demselben Blatt „Languages“ wie im Excel-Programm (Deutsch, Englisch, Niederländisch, Französisch, Italienisch, Spanisch, Dänisch); vorher stand der deutsche Text im Bild und blieb in jeder Sprache deutsch. Der Tooltip (Hinweis beim Darüberfahren) ist ebenfalls übersetzt.
+Die Knöpfe der Werkzeugleiste des Programm Generators (Dialog Wizard, Setup übertragen, Zeile einfügen, Zeilen löschen, Zeilen verschieben, Zeilen duplizieren, Aus- oder Einblenden, Alle Einblenden, Tabelle löschen, Neue Tabelle, Hardware Optionen, Online Wiki, Zeilen Färben) bestehen aus einem **Symbol ohne Text** und einer **Beschriftung unter dem Symbol in der eingestellten Sprache** (jeder Knopf ist nur so breit wie sein Symbol): Die Texte kommen aus demselben Blatt „Languages“ wie im Excel-Programm (Deutsch, Englisch, Niederländisch, Französisch, Italienisch, Spanisch, Dänisch); vorher stand der deutsche Text im Bild und blieb in jeder Sprache deutsch. Der Tooltip (Hinweis beim Darüberfahren) ist ebenfalls übersetzt.
 
 **Eingedrückt:** Beim Klicken erscheint der Knopf **eingedrückt** (innerer Schatten, Symbol und Text einen Pixel tiefer). Er **bleibt eingedrückt, solange der Befehl läuft**, auch wenn der Befehl auf eine Antwort in einem Fenster wartet (zum Beispiel eine Rückfrage oder die Auswahl eines Anschlusses), und kommt danach wieder hoch. Läuft schon ein Vorgang, meldet das Programm das wie bisher. Die Knöpfe haben ein modernes, flaches Aussehen mit Rahmen, Hover (etwas dunkler beim Darüberfahren) und ein dunkles Aussehen im dunklen Modus des Browsers. Die **Größe** folgt der Einstellung „PGIconSize“ in den Programm Einstellungen (Symbol und Schrift). Im **kompakten Layout** (Programm Einstellungen, Darstellung) werden wie bisher nur die Texte in einer Zeile gezeigt.
 
 **Symbole in der Spalte Icon (2.77):** Die Symbole der Tabelle sind etwas kleiner als die Zeile (18 statt 22 Pixel bei normaler Größe) und senkrecht mittig, damit nichts abgeschnitten wird (vorher fehlte zum Beispiel unten ein Stück der „2“ im Symbol der Servos); die Zeilenhöhe ändert sich nicht und folgt wie bisher der Schriftgröße der Tabelle.
 
-**Alle Titel haben zwei Zeilen**, damit alle Knöpfe gleich hoch sind (auch in den anderen Sprachen; die Beschriftung ist mindestens zwei Zeilen hoch). Die Titel (ab 2.76): **Dialog Wizard**, **Setup übertragen** (früher „Z. Arduino schicken“), **Zeilen löschen**, **Zeilen verschieben**, **Zeilen duplizieren**, **Tabelle löschen**, **Optionen Werkzeuge**.
+**Alle Titel haben zwei Zeilen**, damit alle Knöpfe gleich hoch sind (auch in den anderen Sprachen; die Beschriftung ist mindestens zwei Zeilen hoch). Die Titel (ab 2.76): **Dialog Wizard**, **Setup übertragen** (früher „Z. Arduino schicken“), **Zeilen löschen**, **Zeilen verschieben**, **Zeilen duplizieren**, **Tabelle löschen**, **Hardware Optionen**.
 
 Die Symbole liegen im Ordner `images_btn` (Dateinamen wie die alten Bilder `Btn_*.png`, aber ohne Text, etwa 214 × 164 Pixel, durchsichtiger Hintergrund). Fehlt ein Symbol dort, zeigt das Programm das alte Bild aus dem Ordner `images` (mit dem deutschen Text im Bild). Die Knöpfe des Timeline Editors haben noch die alten Bilder.
 
@@ -413,7 +413,7 @@ Das Makro **LEDColorAnim** (Gruppe PatternConfig, Dialog **LED Farb-Animation**)
 
 ### 2.9i ESP Einstellungen je Blatt (3.94, Beitrag von moosbewohner)
 
-Ist unter **Optionen Werkzeuge** ein **ESP32** als LED-Zentrale gewählt, erscheint der Reiter **ESP Einstellungen**. Die Auswahl gilt **für das aktive Blatt**, wird mit der Arbeitsmappe gespeichert und beim Duplizieren eines Blattes mit kopiert. Bei anderen Boards ist der Reiter nicht sichtbar.
+Ist unter **Hardware Optionen** ein **ESP32** als LED-Zentrale gewählt, erscheint der Reiter **ESP Einstellungen**. Die Auswahl gilt **für das aktive Blatt**, wird mit der Arbeitsmappe gespeichert und beim Duplizieren eines Blattes mit kopiert. Bei anderen Boards ist der Reiter nicht sichtbar.
 
 - **OLED-Anzeige:** Modus 0 (aus) bis 5. Eine animierte Vorschau zeigt Beispieldaten. Modus 1 MLL-Zeit, 2 LDR-Wert, 3 MLL-Zeit und LDR-Wert, 4 WLAN, IP, LDR und Zeit, **5 WLAN, IP und Hostname** (Zeile 1 Status, Zeile 2 IP, Zeile 3 Hostname; lange Namen laufen in Zeile 4 weiter).
 - **Fotowiderstand aktivieren** setzt `READ_LDR`, **Zustände werden gespeichert** setzt `ENABLE_STORE_STATUS()`.
@@ -433,9 +433,72 @@ Ist unter **Optionen Werkzeuge** ein **ESP32** als LED-Zentrale gewählt, ersche
 - **Rückfrage beim Öffnen (seit 3.98):** Benutzt eine Datei eine **ausgeschaltete** Erweiterung, fragt das Programm, ob es sie einschalten soll (einmal je Erweiterung und Sitzung); ohne sie fehlen die Zeilen in der erzeugten Datei.
 - **Wiki:** eigene Seite `erweiterungen` (siehe Wiki-Paket 3.98).
 
-### 2.9k Neu seit 3.93 (3.94 bis 4.54)
+### 2.9k Neu seit 3.93 (3.94 bis 4.67)
 
 Kurzfassung der Änderungen seit dem letzten Release, neueste Version zuerst (ausführlich in `HOC_Anwender.md`):
+
+**Version 4.67**
+
+*Neue Funktionen:*
+- Die Werkzeugleiste: Der Knopf „Optionen Werkzeuge“ heißt jetzt „Hardware Optionen“. Der Reiter „Bootloader“ heißt „Firmware Installation“ und enthält auch den Knopf „Firmware installieren“ (vorher im Reiter Lichtmaschine).
+
+**Version 4.66**
+
+*Korrekturen:*
+- F3 öffnet den Mini-Farbtest wieder (Fehler aus 4.65).
+
+**Version 4.65**
+
+*Korrekturen:*
+- F3 (Mini-Farbtest) öffnet nicht mehr die Suche des Browsers.
+
+**Version 4.64**
+
+*Neue Funktionen:*
+- Tabelle drucken: Du kannst alle Zeilen, die markierten Zeilen oder einen Zeilenbereich (von Zeile bis Zeile, Nummern wie in der Tabelle) drucken.
+
+**Version 4.63**
+
+*Korrekturen:*
+- Tabelle drucken: Die zuletzt gewählten Spalten (je Tabelle), die Zeilennummer und die Farben werden gemerkt.
+
+**Version 4.62**
+
+*Neue Funktionen:*
+- Tabelle drucken: Menü Datei, „Tabelle drucken …“. Du wählst die Spalten, das Programm öffnet eine Druckansicht mit allen Zeilen der aktuellen Tabelle (Querformat A4, Kopfzeile auf jeder Seite, mit Zeilenfarben). Gedruckt wird über den Druckdialog des Browsers, dort geht auch „Als PDF speichern“.
+
+**Version 4.61**
+
+*Korrekturen:*
+- Mini-Farbtest: Die Start LedNr darf auch den LED-Kanal enthalten (17, 0-17 oder 2-17); bei 2-17 ist der Kanal 2 und die LED 17.
+
+**Version 4.60**
+
+*Korrekturen:*
+- Mini-Farbtest: Er benutzt die LED der Tabellenzeile (Start LedNr, LEDs, LED Channel) und nicht mehr die zuletzt im Farbtest eingestellte LED.
+
+**Version 4.59**
+
+*Neue Funktionen:*
+- Mini-Farbtest für das Makro ConstRGB: Zelle Beleuchtung anklicken, F3 drücken oder im Rechtsklick-Menü „Farbe mit Mini-Farbtest ändern …“ wählen. Das Fenster startet mit der Farbe bei Ein (R1, G1, B1), mit dem Umschalter wählst du die Farbe bei Aus (R0, G0, B0). Die Farbe leuchtet live an der LED, mit OK ersetzt das Programm die Zahlen im Makrotext (Strg+Z nimmt es zurück).
+
+**Version 4.57**
+
+*Korrekturen:*
+- Farbe einer Zelle oder Zeile entfernen: die Zelle wird nach den Färberegeln wieder gefärbt.
+
+**Version 4.56**
+
+*Neue Funktionen:*
+- Menü Einstellungen (Allgemein, Programm Generator, Farb Test, Simulator, Netzzugriff, Spezial): jeder Eintrag öffnet nur seine Gruppe in einem eigenen Fenster mit Speichern (S) und Abbrechen (A), die immer sichtbar bleiben. Die lange Seite entfällt.
+- „Tabelle färben …“ öffnet ebenfalls ein Fenster. Nach „Speichern und aktuelle Seite färben“ oder „Speichern und ALLE Seiten färben“ springt das Programm in den Programm Generator.
+
+**Version 4.55**
+
+*Neue Funktionen:*
+- Tabelle: Kopieren und Einfügen (Strg+C, Strg+X, Strg+V) überträgt auch die Feldfarbe, bei Zellen und ganzen Zeilen. Ist das Ziel größer (mehrere Zeilen markiert), wird das Muster wiederholt, wie in Excel.
+- „Nur Text einfügen“ (Strg+Umschalt+V oder Rechtsklick) fügt ohne Farbe ein.
+- Von Hand gesetzte Farben („Farbe setzen“, Einfügen) sind vor den Färberegeln geschützt, bleiben mit der Tabelle gespeichert und lassen sich mit Rückgängig zurücknehmen.
 
 **Version 4.54**
 
@@ -1518,13 +1581,13 @@ sudo systemctl restart caddy
 | „Die Arduino Entwicklungsumgebung ist nicht … installiert“ | IDE **1.8.19** installieren (2.2), ggf. den Pfad in „ARDUINO Einstellungen“ eintragen |
 | Kompilieren: „MobaLedLib.h: No such file“ oder Bibliothek/Board fehlt | Bibliotheken installieren (2.3), in der Tabelle „Libraries“ prüfen |
 | **„Headerfileerstellung abgebrochen – Die Headerdatei wurde nicht geschrieben“** (Statuszeile, kein Fehlerfenster) direkt nach **Setup übertragen**; im Protokoll: `tkinter.messagebox.askyesno ohne Display: ARDUINOTest - Erzeugen der Headerdatei wird gestartet` (Version vor 3.22) | Im Reiter **ARDUINO Einstellungen** (neben „Programm Einstellungen“) ist der **oberste Haken „Test ARDUINO Programm Creation“** angehakt (Testmodus für Entwickler: nach jedem Schritt der Erzeugung kommt eine Frage). Bis 3.21 kam die Frage als Tk-Fenster, das es im Browser nicht gibt: Die Antwort war immer „Nein“ und die Erzeugung brach ab. **Seit 3.22** erscheint die Frage als normales Fenster (Ja/Nein, beim Kompilieren Ja/Nein/Abbrechen); **seit 3.23 wirkt der Haken sofort nach dem Speichern** (in 3.22 wurde er erst nach einem Neustart des Programms beachtet). **Sofort-Hilfe bei einer älteren Version:** den Haken **wegnehmen**, **Speichern** drücken und die Seite neu laden. |
-| Hochladen mit der ARDUINO IDE endet mit `avrdude: stk500_paged_load(): (a) protocol error, expect=0x10, resp=0x4c`, `programmer is out of sync`, `avr_read(): error reading address 0x0000` und `failed to read all of flash memory` (seit 3.09 zeigt das Programm die Meldung **„Hochladen: Prüfung fehlgeschlagen“**) | Das Programm wurde **geschrieben**; gescheitert ist nur die **Prüfung** (avrdude liest den Speicher zurück und vergleicht). Es gibt **keinen** Fehler beim Schreiben (`stk500_paged_write`) oder beim Verbinden (`stk500_getsync`). Zuerst prüfen, ob die **Heartbeat LED** blinkt (die Lichtmaschine läuft dann mit dem neuen Programm). Häufigste Ursachen: der **Bootloader** passt nicht zur Einstellung (**beide** Einstellungen **„Nano Normal (old Bootloader)“** und **„Nano (neue Version)“** in **Optionen Werkzeuge → Lichtmaschine** ausprobieren); ein schlechtes USB-Kabel oder ein wackelnder Anschluss; zu schwache Stromversorgung (die LEDs nicht über den USB-Anschluss des Computers speisen, auf dem Raspberry Pi besonders wichtig); ein Nachbau-USB-Chip. Das Protokoll enthält die Zeile „Hochladen: Das Programm wurde geschrieben, nur die Pruefung … ist gescheitert“ |
-| **Windows:** Beim Auswählen des Anschlusses (Optionen Werkzeuge → Lichtmaschine → **USB Port erkennen**) erscheint „**Der COM Port COMx wird bereits von einem anderen Programm benutzt**“, obwohl kein anderes Programm läuft; **Nein** und danach Setup übertragen geht (Protokoll: `could not open port 'COM9': PermissionError(13, 'Zugriff verweigert')`) | Das Programm hatte den Anschluss kurz zuvor **selbst** benutzt (Blink-Zeitgeber des Auswahlfensters, Versand an die LED) und **nicht geschlossen**; Windows (CH340-Treiber) gibt ihn erst nach einem Moment frei. **Seit 3.10** schließt das Programm den Anschluss nach jeder Prüfung, sichert die Zugriffe gegeneinander und **wiederholt** das Öffnen bis zu dreimal. Kommt die Meldung weiter, ist der Anschluss wirklich belegt (zum Beispiel serieller Monitor, Farb Test, ARDUINO IDE). |
+| Hochladen mit der ARDUINO IDE endet mit `avrdude: stk500_paged_load(): (a) protocol error, expect=0x10, resp=0x4c`, `programmer is out of sync`, `avr_read(): error reading address 0x0000` und `failed to read all of flash memory` (seit 3.09 zeigt das Programm die Meldung **„Hochladen: Prüfung fehlgeschlagen“**) | Das Programm wurde **geschrieben**; gescheitert ist nur die **Prüfung** (avrdude liest den Speicher zurück und vergleicht). Es gibt **keinen** Fehler beim Schreiben (`stk500_paged_write`) oder beim Verbinden (`stk500_getsync`). Zuerst prüfen, ob die **Heartbeat LED** blinkt (die Lichtmaschine läuft dann mit dem neuen Programm). Häufigste Ursachen: der **Bootloader** passt nicht zur Einstellung (**beide** Einstellungen **„Nano Normal (old Bootloader)“** und **„Nano (neue Version)“** in **Hardware Optionen → Lichtmaschine** ausprobieren); ein schlechtes USB-Kabel oder ein wackelnder Anschluss; zu schwache Stromversorgung (die LEDs nicht über den USB-Anschluss des Computers speisen, auf dem Raspberry Pi besonders wichtig); ein Nachbau-USB-Chip. Das Protokoll enthält die Zeile „Hochladen: Das Programm wurde geschrieben, nur die Pruefung … ist gescheitert“ |
+| **Windows:** Beim Auswählen des Anschlusses (Hardware Optionen → Lichtmaschine → **USB Port erkennen**) erscheint „**Der COM Port COMx wird bereits von einem anderen Programm benutzt**“, obwohl kein anderes Programm läuft; **Nein** und danach Setup übertragen geht (Protokoll: `could not open port 'COM9': PermissionError(13, 'Zugriff verweigert')`) | Das Programm hatte den Anschluss kurz zuvor **selbst** benutzt (Blink-Zeitgeber des Auswahlfensters, Versand an die LED) und **nicht geschlossen**; Windows (CH340-Treiber) gibt ihn erst nach einem Moment frei. **Seit 3.10** schließt das Programm den Anschluss nach jeder Prüfung, sichert die Zugriffe gegeneinander und **wiederholt** das Öffnen bis zu dreimal. Kommt die Meldung weiter, ist der Anschluss wirklich belegt (zum Beispiel serieller Monitor, Farb Test, ARDUINO IDE). |
 | **Linux/Raspberry Pi:** Der USB-Anschluss erscheint erst mit **„Unbekannte Ports anzeigen“**, danach „**Es ist kein LED Arduino an COM Port /dev/ttyUSB0 angeschlossen**“ (Protokoll: `EnumComPorts:'USB Serial' '/dev/ttyUSB0'`) | Die Liste erkannte Nanos nur an der **Beschreibung** (zum Beispiel „CH340“, „USB2.0-Ser“), der Nano meldet sich aber als „USB Serial“. **Seit 3.10** erkennt sie CH340/CH341, FTDI und Arduino zusätzlich an der **Hersteller-Kennung** (VID), und die Prüfung akzeptiert einen gewählten Anschluss bei einem Nano auch mit unbekannter Beschreibung. Welche Kennung der Anschluss hat: `python3 -m serial.tools.list_ports -v`. |
 | „**Der … am COM Port … lässt sich nicht ansprechen (Fehlercode -2 oder -3)**“ (seit 3.10) | Der Anschluss ließ sich nicht zuweisen (-2) oder der Arduino nicht zurücksetzen (-3), zum Beispiel weil ein anderer Teil des Programms die gemeinsame Verbindung gleichzeitig änderte (Protokoll: `AttributeError: 'NoneType' object has no attribute 'dtr'`). Das Programm hat es **dreimal** versucht. USB-Kabel abziehen, wieder anstecken, noch einmal versuchen. Vor 3.10 hieß der Text fälschlich „von einem anderen Programm benutzt“. |
 | Hochladen mit der ARDUINO IDE: „**Hochladen: Keine Antwort**“ (Protokoll: `stk500_getsync() attempt … not in sync: resp=0x00`, `programmer is not responding`; seit 3.10) | Der Nano antwortet dem Bootloader-Programm nicht: meist passt die Einstellung **„Nano Normal (old Bootloader)“ / „Nano (neue Version)“** nicht zum Bootloader des Nano (alt: 57600 Baud, neu: 115200 Baud). **Beide Einstellungen ausprobieren.** Sonst USB-Kabel (muss Daten übertragen), Anschluss, und dass kein anderes Programm den Anschluss benutzt. Ohne Antwort wiederholt avrdude zehnmal (je 5 Sekunden), das Hochladen dauert dann fast eine Minute. |
 | Im Protokoll (und im Fenster Kompilieren und Hochladen) stehen **tausende Zeilen** `javax.jmdns … Bad domain name`, `dns[response …` und Hexdumps (Raspberry Pi) | Meldungen der **ARDUINO IDE**: Ihre Java-Bibliothek sucht im Netz nach Boards (JmDNS) und stolpert über den Rechnernamen des Pi (zum Beispiel `RaspiMLL-fritz-box-fritz-box-…`, durch Namenskonflikte mit der FRITZ!Box verlängert). **Seit 3.10** blendet das Programm diese Zeilen aus. Ursache beheben: einen **kurzen, festen Rechnernamen** setzen (`sudo raspi-config` → System Options → Hostname). |
-| **Programm Einstellungen → Spezialeinstellungen → „Bootloader des Nano beim Prüfen erkennen“** (seit 3.10, **seit 3.13 Vorgabe an**) | **An (Vorgabe):** Das Programm spricht nach **USB Port erkennen** den Bootloader an (STK500-Sync bei 57600 und 115200 Baud), und erkennt **alt und neu**. Das Board stellt der Knopf **Board und USB Port erkennen** (Optionen Werkzeuge, Reiter Lichtmaschine, seit 3.82) passend ein; er sucht selbst an allen USB-Anschlüssen, stellt das erste gefundene Board ein und öffnet das Fenster **USB Port erkennen** mit dem gefundenen Board, dem Anschluss und den anderen gefundenen Boards (den Haken „Automatisch erkennen“ und den Eintrag „Typ von Arduino IDE benutzen“ gibt es nicht mehr; das gespeicherte Merkmal „AutoDet“ stellt das Board beim Hochladen nicht mehr um). Das Zurücksetzen und die Anfragen sind seit 3.12 auf den alten Bootloader abgestimmt (150 ms Wartezeit, Puffer leeren, GET_SYNC bis zu zehnmal im Abstand von etwa 0,3 Sekunden; Ergebnis von `bootloader_test.py` auf dem Raspberry Pi). **Aus (nur auf ausdrücklichen Wunsch):** Die Prüfung öffnet nur den Anschluss und lässt die gewählte Einstellung „old Bootloader“ / „neue Version“ **unverändert** (so verhielt sich das Programm vor 3.10, nur stellte die Automatik damals jeden Nano auf „neue Version“ um, weil die Prüfung den Bootloader nicht ansprach). **ESP32** bleibt wie bisher. Der **Nano Every** wird seit 3.14 nicht mehr unterstützt (wie im Excel-Programm 3.5.0L3). In 3.10 bis 3.12 war der Haken ausgeschaltet; wer ihn damals beim Speichern der Seite mitgespeichert hat, ist nicht betroffen (der Haken hat seit 3.13 einen neuen Namen). Das Protokoll nennt die gesendeten und empfangenen Bytes (`M07.transact: gesendet 30 20, Antwort 14 10`). Zur Fehlersuche gibt es das Hilfsprogramm `bootloader_test.py`. |
+| **Programm Einstellungen → Spezialeinstellungen → „Bootloader des Nano beim Prüfen erkennen“** (seit 3.10, **seit 3.13 Vorgabe an**) | **An (Vorgabe):** Das Programm spricht nach **USB Port erkennen** den Bootloader an (STK500-Sync bei 57600 und 115200 Baud), und erkennt **alt und neu**. Das Board stellt der Knopf **Board und USB Port erkennen** (Hardware Optionen, Reiter Lichtmaschine, seit 3.82) passend ein; er sucht selbst an allen USB-Anschlüssen, stellt das erste gefundene Board ein und öffnet das Fenster **USB Port erkennen** mit dem gefundenen Board, dem Anschluss und den anderen gefundenen Boards (den Haken „Automatisch erkennen“ und den Eintrag „Typ von Arduino IDE benutzen“ gibt es nicht mehr; das gespeicherte Merkmal „AutoDet“ stellt das Board beim Hochladen nicht mehr um). Das Zurücksetzen und die Anfragen sind seit 3.12 auf den alten Bootloader abgestimmt (150 ms Wartezeit, Puffer leeren, GET_SYNC bis zu zehnmal im Abstand von etwa 0,3 Sekunden; Ergebnis von `bootloader_test.py` auf dem Raspberry Pi). **Aus (nur auf ausdrücklichen Wunsch):** Die Prüfung öffnet nur den Anschluss und lässt die gewählte Einstellung „old Bootloader“ / „neue Version“ **unverändert** (so verhielt sich das Programm vor 3.10, nur stellte die Automatik damals jeden Nano auf „neue Version“ um, weil die Prüfung den Bootloader nicht ansprach). **ESP32** bleibt wie bisher. Der **Nano Every** wird seit 3.14 nicht mehr unterstützt (wie im Excel-Programm 3.5.0L3). In 3.10 bis 3.12 war der Haken ausgeschaltet; wer ihn damals beim Speichern der Seite mitgespeichert hat, ist nicht betroffen (der Haken hat seit 3.13 einen neuen Namen). Das Protokoll nennt die gesendeten und empfangenen Bytes (`M07.transact: gesendet 30 20, Antwort 14 10`). Zur Fehlersuche gibt es das Hilfsprogramm `bootloader_test.py`. |
 | „Fehler beim Lesen der Datei …/preferences.txt“ (zum Beispiel bei „Check actual versions“) | Die Einstellungsdatei der IDE fehlt auf einem frischen System (Linux, macOS, Pi). Das Programm legt sie beim Start an. Von Hand (Linux/Pi): `mkdir -p ~/.arduino15 ~/Arduino/libraries; printf 'sketchbook.path=%s/Arduino\ntarget_package=arduino\ntarget_platform=avr\nboard=uno\n' "$HOME" > ~/.arduino15/preferences.txt` |
 | Board installieren: `NullPointerException at … BaseNoGui.onBoardOrPortChange` | Die IDE hat ein nicht installiertes Board ausgewählt. Das Programm und die Skripte setzen die Auswahl auf `arduino:avr:uno` zurück. Von Hand (Linux/Pi): `sed -i -E '/^(target_package\|target_platform\|board\|custom_[A-Za-z0-9_.]+)=/d' ~/.arduino15/preferences.txt; printf 'target_package=arduino\ntarget_platform=avr\nboard=uno\n' >> ~/.arduino15/preferences.txt`, dann wiederholen |
 | Board `esp32:esp32` installieren: `Tool esptool_py is not available for your operating system` | Für diese Version des ESP32-Pakets fehlen Werkzeuge für die Prozessorart (64-Bit-ARM), siehe Kapitel 10 |

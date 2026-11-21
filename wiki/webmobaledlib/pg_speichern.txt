@@ -21,12 +21,12 @@ Deine Daten liegen im **Datenordner** des Programms, getrennt von den Programmda
 | **ProgrammGenerator: PGF-Datei lesen** | Lädt eine solche Datei in die Tabelle. Das Programm fragt vorher nach, denn die Tabelle wird ersetzt. Du kannst die Datei auch **auf die Tabelle ziehen**. |
 | **ProgrammGenerator-Workbook speichern als** | Speichert die **ganze Arbeitsmappe** (alle Blätter und Einstellungen). |
 | **ProgrammGenerator-Workbook von Datei lesen** | Lädt eine solche Arbeitsmappe. |
-| **Inkrementell speichern** | Sichert die **ganze Arbeitsmappe** als neue Datei mit fortlaufender Nummer, siehe unten. Die Tastenkombination (Vorgabe **Strg+Umschalt+S**) stellst du in den Programm Einstellungen ein. |
+| **Inkrementell speichern** | Sichert die **ganze Arbeitsmappe** als neue Datei mit Datum und Uhrzeit im Namen, siehe unten. Die Tastenkombination (Vorgabe **Strg+Umschalt+S**) stellst du in den Programm Einstellungen ein. |
 | **Sicherungsdatei öffnen …** | Zeigt die Sicherungen des Sicherungsordners (neueste zuerst) und lädt die gewählte. |
 | **Sicherungsort ändern …** | Ändert Ordner und Namen der Sicherungsdateien. |
-| **Einstellungen sichern …** | Packt die Einstellungen in eine ZIP-Datei, zum Beispiel für einen anderen PC, siehe unten. |
-| **Einstellungen übernehmen …** | Liest eine solche ZIP-Datei ein, siehe unten. |
+| **Importieren v. altem Programm …** (seit 4.54) | Zeigt, wie du die Daten des alten Excel-Programms über eine PGF-Datei übernimmst. |
 | **ProgrammGenerator: Anlagenansicht speichern …** | Speichert die [[anleitungen:webmobaledlib:pg_grafisch|grafische Anlagenansicht]] (Bild und Positionen) als Datei **<Blatt>.MLL_view**. |
+| **Tabelle drucken …** (seit 4.62) | Öffnet ein Fenster zur **Auswahl der Spalten** und danach eine **Druckansicht** mit allen Zeilen der aktuellen Tabelle (Querformat A4, Kopfzeile auf jeder Seite, mit Zeilenfarben). Gedruckt wird über den **Druckdialog des Browsers**, dort geht auch **Als PDF speichern**. Gedruckt werden **alle Zeilen**, die **markierten Zeilen** oder ein **Zeilenbereich** (Zeilennummern wie links in der Tabelle). Das Programm merkt sich die zuletzt gewählten Spalten für jede Tabelle. Der Druck des Browserfensters selbst (Strg + P) zeigt nur die sichtbaren Zeilen und ist dafür nicht geeignet. |
 | **ProgrammGenerator: Anlagenansicht laden …** | Lädt eine solche Datei. |
 | **Beenden …** | Beendet das Programm. Das Programm fragt, ob es vorher speichern soll (siehe oben). |
 
@@ -36,8 +36,8 @@ Bei **großen Projekten** lohnt es sich, öfter einen Stand **festzuhalten**, zu
 
   - Drücke die **Tastenkombination** (Vorgabe **Strg+Umschalt+S**) oder wähle //Datei → Inkrementell speichern//.
   - **Beim ersten Mal** fragt das Programm nach dem **Ordner** und dem **Namen** der Sicherungsdatei. Vorgeschlagen wird der Ordner //Sicherungen// im Datenordner und der Name deiner Arbeitsmappe. Der Ordner liegt auf dem Rechner, auf dem das Programm läuft.
-  - Das Programm sichert die **ganze Arbeitsmappe** (alle Blätter und Einstellungen) als **<Name>_0001.json**. Eine kurze Meldung nennt den Dateinamen.
-  - **Bei jedem weiteren Speichern** wird die Nummer um eins größer (**_0002**, **_0003** …). Eine ältere Sicherung wird nie überschrieben. Die nächste Nummer ist immer die höchste im Ordner vorhandene plus eins, auch nach einem Neustart.
+  - Das Programm sichert die **ganze Arbeitsmappe** (alle Blätter und Einstellungen) als **<Name>_<Jahr.Monat.Tag_Std.Min.Sek>.json**, zum Beispiel **MobaLedLib_2026.11.20_20.05.03.json**. Eine kurze Meldung nennt den Dateinamen.
+  - **Bei jedem weiteren Speichern** entsteht eine neue Datei mit dem aktuellen Datum und der Uhrzeit im Namen. Eine ältere Sicherung wird nie überschrieben, und es gibt keine laufende Nummer mehr (bis 4.49 gab es sie).
 
 Zum **Zurückholen** wählst du //Datei → Sicherungsdatei öffnen …//. Das Programm zeigt die Sicherungen im Ordner mit **Datum und Uhrzeit**, die neueste zuerst. Klicke eine an und dann auf **Öffnen** (oder doppelklicke sie). Dabei wird die aktuelle Arbeitsmappe **ersetzt**, ungesicherte Änderungen gehen verloren. Mit dem Feld **Ordner** schaust du in einen anderen Ordner. Ort und Name änderst du mit //Datei → Sicherungsort ändern …//.
 
@@ -49,9 +49,9 @@ Zum **Zurückholen** wählst du //Datei → Sicherungsdatei öffnen …//. Das P
 
 Du hast webMobaLedLib auf zwei PCs, zum Beispiel im Büro und an der Anlage? Die **Tabellen** nimmst du wie bisher mit //Datei → ProgrammGenerator-Workbook speichern als// und //von Datei lesen// mit. Die **Einstellungen** des Programms stehen nicht in der Arbeitsmappe. Dafür gibt es zwei Menüpunkte:
 
-  - **Auf dem ersten PC:** //Datei → Einstellungen sichern …// und **ZIP-Datei erstellen** wählen. Der Browser speichert die Datei //webMobaLedLib_Einstellungen_…zip//.
+  - **Auf dem ersten PC:** //Einstellungen → Einstellungen sichern …// und **ZIP-Datei erstellen** wählen. Der Browser speichert die Datei //webMobaLedLib_Einstellungen_…zip//.
   - Die Datei auf den anderen PC bringen (USB-Stick, Netzlaufwerk, E-Mail).
-  - **Auf dem anderen PC:** //Datei → Einstellungen übernehmen …//, die ZIP-Datei auswählen und **Übernehmen und neu starten** wählen.
+  - **Auf dem anderen PC:** //Einstellungen → Einstellungen übernehmen …//, die ZIP-Datei auswählen und **Übernehmen und neu starten** wählen.
 
 **Was enthalten ist:** die Programm Einstellungen, Farbtest und Palette, die Erweiterungen und die ESP32 OTA Daten.
 

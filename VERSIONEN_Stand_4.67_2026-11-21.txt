@@ -1,6 +1,6 @@
-Datei-Version: 1.04 (2026-11-21) - VERSIONEN_Stand_4.54_2026-11-21.txt
+Datei-Version: 1.05 (2026-11-21) - VERSIONEN_Stand_4.67_2026-11-21.txt
 
-webMobaLedLib, Release-Stand 2026-11-21 (webmobaledlib.py Version 4.54) - Versionen der von Claude gelieferten Dateien im Ordner python
+webMobaLedLib, Release-Stand 2026-11-21 (webmobaledlib.py Version 4.67) - Versionen der von Claude gelieferten Dateien im Ordner python
 
 arduino_prefs.py                     1.02
 fast_paths.py                        1.01
@@ -11,14 +11,14 @@ release_tools.py                     1.09
 repair.py                            1.04
 test_headless_contract.py            1.01
 userdata.py                          1.03
-webmobaledlib.py                     4.54
+webmobaledlib.py                     4.67
 _web/__init__.py                     1.00
 _web/mll_graph.js                    1.16
 _web/mll_servocurve.js               1.03
 _web/mll_tabs.js                     1.00
 _web/web_access.py                   1.13
 _web/web_auth.py                     1.05
-_web/web_colorcheck.py               1.07
+_web/web_colorcheck.py               1.10
 _web/web_dcckeyboard.py              1.05
 _web/web_dialogs.py                  1.11
 _web/web_esp32_ota.py                1.06
@@ -28,9 +28,9 @@ _web/web_form_exchange.py            1.03
 _web/web_form_firmware.py            1.03
 _web/web_form_firmware_download.py   1.02
 _web/web_form_house.py               1.07
-_web/web_house_tips.py            1.00
+_web/web_house_tips.py               1.00
 _web/web_form_ledcoloranim.py        1.00
-_web/web_form_options.py             1.42
+_web/web_form_options.py             1.43
 _web/web_form_other.py               1.07
 _web/web_form_select.py              1.01
 _web/web_form_servoanim.py           1.04
@@ -43,7 +43,7 @@ _web/web_log.py                      1.11
 _web/web_logging.py                  1.05
 _web/web_macro_tree.py               1.12
 _web/web_network.py                  1.01
-_web/web_params.py                   1.16
+_web/web_params.py                   1.17
 _web/web_password.py                 1.02
 _web/web_pattern_test.py             1.01
 _web/web_pattgen.py                  1.24
@@ -56,13 +56,13 @@ _web/web_settings_transfer.py        1.00
 _web/web_sheet_tabs.py               1.05
 _web/web_simulator.py                1.00
 _web/web_soundtest.py                1.03
-_web/web_tabs.py                     1.33
+_web/web_tabs.py                     1.34
 _web/web_toolbar.py                  1.03
 _web/web_update.py                   1.16
 _web/web_viewswitch.py               1.00
 _web/web_z21.py                      1.05
-ExcelAPI/headless_sheet.py           1.02
-ExcelAPI/XLA_Application.py          1.23
+ExcelAPI/headless_sheet.py           1.03
+ExcelAPI/XLA_Application.py          1.24
 headless/__init__.py                 1.00
 headless/headless_app_controller.py  1.10
 headless/headless_controller.py      1.01
@@ -112,7 +112,7 @@ proggen/M06_Write_Header_LED2Var.py  1.02
 proggen/M06_Write_Header_SW.py       1.11
 proggen/M07_COM_Port.py              1.13
 proggen/M07_COM_Port_New.py          1.04
-proggen/M08_ARDUINO.py               1.27
+proggen/M08_ARDUINO.py               1.28
 proggen/M08_Fast_ARDUINO.py          1.01
 proggen/M08_Install_FastBootLoader.py 1.03
 proggen/M09_Language.py              1.07
@@ -121,7 +121,7 @@ proggen/M12_Copy_Prog.py             1.01
 proggen/M17_Import_old_Data.py       1.03
 proggen/M18_Save_Load.py             1.05
 proggen/M18a_Load_PicoConfig.py      1.01
-proggen/M20_PageEvents_a_Functions.py 1.12
+proggen/M20_PageEvents_a_Functions.py 1.13
 proggen/M28_Diverse.py               1.03
 proggen/M30_Tools.py                 1.02
 proggen/M32_DCC.py                   1.04
@@ -148,8 +148,8 @@ test_macro_edit.py                   1.01
 LEDs_AutoProg/MLLDynConfig.h         1.02
 
 MobaLedTest_macroparamdef.json (Hinweise der Schrifteinstellungen, 4.49)
-wiki/ (39 Seiten, Paket webmobaledlib_Wiki_Gesamt_Stand_4.54.zip, an die Menues ab 4.51 angepasst)
+wiki/ (40 Seiten, Paket webmobaledlib_Wiki_Gesamt_Stand_4.67.zip, an die Menues ab 4.51 angepasst)
 
-PDF (install_manual/): ANLEITUNG_Installation.pdf = Version 4.54, BETATEST_Checkliste.pdf = Version 3.36
-Ausserhalb des Ordners python: zip_erstellen.bat Version 1.11 (liegt neben dem Ordner python, ROOT_IN_ZIP=1), START_HIER.txt und START_HIER.md (die .txt kommt in den obersten Ordner des ZIP, die .md ist fuer GitHub), RELEASE_Ablauf.md, HOC_intern.md, HOC_Anwender.md (Stand 4.54), DATEIEN_IM_PAKET_Issue26.md (Liste der Dateien, die nicht ins Paket muessen)
-Neu seit 3.93 (Versionen 3.94 bis 4.54): Aenderungen in webmobaledlib.py, ExcelAPI, _web (web_tabs, web_params, web_form_options, web_serial, web_form_*, web_layout, web_log u.a.; neu: web_settings_transfer), headless (neu: headless_extensions; headless_esp32_ota mit Ausgabe zeilenweise und Abbrechen), proggen (M06_Write_Header_SW, M07_COM_Port, M08_ARDUINO, M38_Extensions u.a.), mlpyproggen/Prog_Generator.py, install (neue Symbole, Anleitung, Checkliste), csv/Web_Languages.csv, libraries (P_ScheduleMLX, P_ScheduleDuoMLX), images
+PDF (install_manual/): ANLEITUNG_Installation.pdf = Version 4.67, BETATEST_Checkliste.pdf = Version 3.49
+Ausserhalb des Ordners python: zip_erstellen.bat Version 1.11 (liegt neben dem Ordner python, ROOT_IN_ZIP=1), START_HIER.txt und START_HIER.md (die .txt kommt in den obersten Ordner des ZIP, die .md ist fuer GitHub), RELEASE_Ablauf.md, HOC_intern.md, HOC_Anwender.md (Stand 4.67), DATEIEN_IM_PAKET_Issue26.md (Liste der Dateien, die nicht ins Paket muessen)
+Neu seit 3.93 (Versionen 3.94 bis 4.67): Aenderungen in webmobaledlib.py, ExcelAPI, _web (web_tabs, web_params, web_form_options, web_serial, web_form_*, web_layout, web_log u.a.; neu: web_settings_transfer), headless (neu: headless_extensions; headless_esp32_ota mit Ausgabe zeilenweise und Abbrechen), proggen (M06_Write_Header_SW, M07_COM_Port, M08_ARDUINO, M38_Extensions u.a.), mlpyproggen/Prog_Generator.py, install (neue Symbole, Anleitung, Checkliste), csv/Web_Languages.csv, libraries (P_ScheduleMLX, P_ScheduleDuoMLX), images

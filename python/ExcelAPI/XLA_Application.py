@@ -1,9 +1,9 @@
-# Datei-Version: 1.23 (2026-11-18) - XLA_Application.py
+# Datei-Version: 1.24 (2026-11-21) - XLA_Application.py
 # ----------------------------------------------------------------------------------------------
 # Name:           XLA_Application.py
 # Path:           ExcelAPI/XLA_Application.py
-# Version:        1.23
-# Last Update:    2026-11-18
+# Version:        1.24
+# Last Update:    2026-11-21
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
@@ -30,6 +30,7 @@
 #   1.21  2026-11-17  Application.OnKey (Tastenbelegung, ohne Wirkung im Web): Beenden mit Speichern scheiterte mit AttributeError 'OnKey' (Workbook_BeforeClose)
 #   1.22  2026-11-17  Vom Anwender versteckte Blaetter (user_hidden): mit der Arbeitsmappe sichern (HiddenSheets) und laden
 #   1.23  2026-11-18  ESP-Einstellungen je Blatt sichern und laden (Beitrag von moosbewohner, Pull Request 11)
+#   1.24  2026-11-21  Manuell gesetzte Feldfarben werden mit dem Blatt gesichert und geladen (TKSHEET_manual_cells/rows) und von apply_formatting (Tabelle faerben) nicht geloescht
 # ----------------------------------------------------------------------------------------------
 # -*- coding: utf-8 -*-
 #
@@ -3082,6 +3083,10 @@ class CWorksheet(object):
                 new_key = str(row)
                 new_highlighted_rows[new_key] = highlight.bg
             data["TKSHEET_highlighted_rows"] = copy.deepcopy(new_highlighted_rows)
+        if getattr(self.tksheet, "_manual_cells", None):  # v1.24: manuell gefaerbte Zellen und Zeilen
+            data["TKSHEET_manual_cells"] = sorted(f"{r},{c}" for r, c in self.tksheet._manual_cells)  # v1.24
+        if getattr(self.tksheet, "_manual_rows", None):  # v1.24
+            data["TKSHEET_manual_rows"] = sorted(self.tksheet._manual_rows)  # v1.24
         
         data["row_pos"] = copy.deepcopy(self.tksheet.get_row_heights(canvas_positions=True))
         if hasattr(type(self.tksheet), "data_row_heights"):                               # HEADLESS: Zeilenhoehen nach Datenzeile  # v1.08
@@ -3161,6 +3166,9 @@ class CWorksheet(object):
             for row_str,highlight in highlighted_rows.items():
                 new_key = int(row_str)
                 self.tksheet.highlight(new_key, bg=highlight)
+        if hasattr(self.tksheet, "_manual_cells"):  # v1.24: Markierung der manuellen Farben laden
+            self.tksheet._manual_cells = {tuple(int(x) for x in k.split(",")) for k in data.get("TKSHEET_manual_cells", [])}  # v1.24
+            self.tksheet._manual_rows = {int(r) for r in data.get("TKSHEET_manual_rows", [])}  # v1.24
 
 
         shapelist = copy.deepcopy(data.get("shapelist", []))
@@ -3307,10 +3315,14 @@ class CWorksheet(object):
         return self.tksheet.getColorAt(row, col)
     
     def apply_formatting(self):
-        ActiveSheet.tksheet.dehighlight("3:"+str(self.get_LastUsedRow()))
+        # ActiveSheet.tksheet.dehighlight("3:"+str(self.get_LastUsedRow()))  # v1.24 (entfallen)
+        _snap = ActiveSheet.tksheet.manual_snapshot() if hasattr(ActiveSheet.tksheet, "manual_snapshot") else None  # v1.24: manuelle Farben merken
+        ActiveSheet.tksheet.dehighlight("3:"+str(self.get_LastUsedRow()))  # v1.24
         for row in range(3, self.get_LastUsedRow()+1):
             Target = ActiveSheet.Cells(row, 1)
             M20.check_conditionalformating(Target, allcolumns=True)
+        if _snap is not None:  # v1.24
+            ActiveSheet.tksheet.manual_restore(_snap)  # v1.24: manuelle Farben wieder setzen
  
  
 class CFreeForm(object):

@@ -1,9 +1,9 @@
-# Datei-Version: 1.02 (2026-10-19) - headless_sheet.py
+# Datei-Version: 1.03 (2026-11-21) - headless_sheet.py
 # ----------------------------------------------------------------------------------------------
 # Name:           headless_sheet.py
 # Path:           ExcelAPI/headless_sheet.py
-# Version:        1.02
-# Last Update:    2026-10-19
+# Version:        1.03
+# Last Update:    2026-11-21
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
@@ -170,6 +170,8 @@ class HeadlessSheet:
         self._cell_hl: dict[tuple[int, int], Highlight] = {}
         self._row_hl: dict[int, Highlight] = {}
         self._col_hl: dict[int, Highlight] = {}
+        self._manual_cells: set[tuple[int, int]] = set()  # v1.03: manuell gefaerbte Zellen (0-basiert), von den Faerberegeln geschuetzt
+        self._manual_rows: set[int] = set()  # v1.03: manuell gefaerbte ganze Zeilen
         self._readonly: list[HSpan] = []
         self._sel_rows: set[int] = set()
         self._sel_cells: set[tuple[int, int]] = set()
@@ -411,6 +413,7 @@ class HeadlessSheet:
         self.displayed_rows, self.displayed_columns = [], []
         self._row_h.clear(); self._col_w.clear()
         self._cell_hl.clear(); self._row_hl.clear(); self._col_hl.clear()
+        self._manual_cells.clear(); self._manual_rows.clear()  # v1.03
         self._readonly.clear(); self._sel_rows.clear(); self._sel_cells.clear()
 
     # ------------------------------------------------------------------ Zeilen
@@ -477,6 +480,8 @@ class HeadlessSheet:
         self._row_h = {mv(r): h for r, h in self._row_h.items() if not (n < 0 and r == at)}
         self._row_hl = {mv(r): h for r, h in self._row_hl.items() if not (n < 0 and r == at)}
         self._cell_hl = {(mv(r), c): h for (r, c), h in self._cell_hl.items() if not (n < 0 and r == at)}
+        self._manual_rows = {mv(r) for r in self._manual_rows if not (n < 0 and r == at)}  # v1.03
+        self._manual_cells = {(mv(r), c) for (r, c) in self._manual_cells if not (n < 0 and r == at)}  # v1.03
         if self.displayed_rows:
             self.displayed_rows = sorted(mv(r) for r in self.displayed_rows if not (n < 0 and r == at))
 
@@ -555,6 +560,53 @@ class HeadlessSheet:
         self._touch()  # v1.01
         old = self._cell_hl.get((row, col))  # v1.01
         self._cell_hl[(row, col)] = Highlight(color or None, old.fg if old else None, old.font if old else None)  # v1.01
+
+    # ---- v1.03: manuelle Feldfarben (vor den Faerberegeln geschuetzt)
+    def set_manual_color(self, r, c, color):  # v1.03
+        """Zelle (r, c) manuell faerben (color "#rrggbb") oder die Farbe entfernen (color None/leer). r, c 0-basiert."""  # v1.03
+        self._touch()  # v1.03
+        if color:  # v1.03
+            old = self._cell_hl.get((r, c))  # v1.03
+            self._cell_hl[(r, c)] = Highlight(color, old.fg if old else None, old.font if old else None)  # v1.03
+            self._manual_cells.add((r, c))  # v1.03
+        else:  # v1.03
+            self._cell_hl.pop((r, c), None)  # v1.03
+            self._manual_cells.discard((r, c))  # v1.03
+
+    def set_manual_row_color(self, r, color):  # v1.03
+        """Ganze Zeile r (0-basiert) manuell faerben oder (color None) die Zeilenfarbe entfernen."""  # v1.03
+        self._touch()  # v1.03
+        if color:  # v1.03
+            self._row_hl[r] = self._merge(self._row_hl.get(r), Highlight(color, None))  # v1.03
+            self._manual_rows.add(r)  # v1.03
+        else:  # v1.03
+            self._row_hl.pop(r, None)  # v1.03
+            self._manual_rows.discard(r)  # v1.03
+
+    def manual_color_at(self, r, c):  # v1.03
+        """Manuell gesetzte Hintergrundfarbe der Zelle (Zellfarbe, sonst Farbe der manuell gefaerbten Zeile) oder None."""  # v1.03
+        if (r, c) in self._manual_cells:  # v1.03
+            hl = self._cell_hl.get((r, c))  # v1.03
+            if hl is not None and hl.bg:  # v1.03
+                return hl.bg  # v1.03
+        if r in self._manual_rows:  # v1.03
+            hl = self._row_hl.get(r)  # v1.03
+            if hl is not None and hl.bg:  # v1.03
+                return hl.bg  # v1.03
+        return None  # v1.03
+
+    def manual_snapshot(self, row=None):  # v1.03
+        """Merkt die manuellen Farben (nur Zeile row, 0-basiert, oder alle) fuer manual_restore nach dem Loeschen der Regelfarben."""  # v1.03
+        cells = {rc: self._cell_hl[rc] for rc in self._manual_cells if rc in self._cell_hl and (row is None or rc[0] == row)}  # v1.03
+        rows = {r: self._row_hl[r] for r in self._manual_rows if r in self._row_hl and (row is None or r == row)}  # v1.03
+        return cells, rows  # v1.03
+
+    def manual_restore(self, snap):  # v1.03
+        cells, rows = snap  # v1.03
+        for rc, hl in cells.items():  # v1.03
+            self._cell_hl[rc] = hl  # v1.03
+        for r, hl in rows.items():  # v1.03
+            self._row_hl[r] = hl  # v1.03
 
     def get_highlighted_rows(self, **kw):
         return dict(self._row_hl)

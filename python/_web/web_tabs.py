@@ -1,8 +1,8 @@
-# Datei-Version: 1.33 (2026-11-21) - web_tabs.py
+# Datei-Version: 1.34 (2026-11-21) - web_tabs.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_tabs.py
 # Path:           _web/web_tabs.py
-# Version:        1.33
+# Version:        1.34
 # Last Update:    2026-11-21
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
@@ -41,6 +41,7 @@
 #   1.31  2026-11-21  Beschriftung der Optionen Minimale/Maximale Zeit mit dem Hinweis House()-Funktion
 #   1.32  2026-11-21  Neue Einstellung LedOffOnDisconnect: beim Trennen alle LEDs ausschalten (Vorgabe aus)
 #   1.33  2026-11-21  Version 4.51 (Menue Einstellungen): Option HideColorButton entfaellt (der Knopf Zeilen Faerben ist weg); Hinweis der Option AutoColorRows nennt Menue Tabelle -> Tabelle faerben
+#   1.34  2026-11-21  Version 4.67: Hinweistext nennt Hardware Optionen (vorher Optionen Werkzeuge)
 # ----------------------------------------------------------------------------------------------
 """Adressen der Reiter: Ein Reiter laesst sich direkt aufrufen, zum Beispiel http://localhost:8080/Farbtest. Mit dem Zusatz ?vollbild=1 oeffnet er sich gleich im Vollbild
 (Titel, Menue und Reiterleiste ausgeblendet, siehe web_fullscreen). Die Startseite / bleibt wie sie ist (Programm Generator).
@@ -104,11 +105,11 @@ PARAM_ADDITIONS = {"ColoredRowsBold": ({"ParName": "ColoredRowsBold", "Cnt": "1"
                                       "SaveExcelCharset"),  # v1.08
                  # "DetectBootloader": ({"ParName": "DetectBootloader", "Cnt": "1", "Type": "Checkbutton", "ConfigName": "DetectBootloader", "ParamLabelWidth": "25", "Min": "0", "Max": "255", "Default": "",  # v1.13  # v1.14 (entfallen)
                  # "Input Text": "Bootloader des Nano beim Prüfen erkennen",  # v1.13  # v1.14 (entfallen)
-                 # "Hint": "Mit Haken spricht das Programm beim Prüfen des angeschlossenen Nano (Optionen Werkzeuge: Haken „Automatisch erkennen“ und „USB Port erkennen“) den Bootloader an und stellt „Nano Normal (old Bootloader)“ oder „Nano (neue Version)“ passend ein. Ohne Haken (Vorgabe) prüft das Programm nur, ob sich der Anschluss öffnen lässt, und lässt Ihre Einstellung unverändert. Der Haken ist neu und wird erprobt."},  # v1.13  # v1.14 (entfallen)
+                 # "Hint": "Mit Haken spricht das Programm beim Prüfen des angeschlossenen Nano (Hardware Optionen: Haken „Automatisch erkennen“ und „USB Port erkennen“) den Bootloader an und stellt „Nano Normal (old Bootloader)“ oder „Nano (neue Version)“ passend ein. Ohne Haken (Vorgabe) prüft das Programm nur, ob sich der Anschluss öffnen lässt, und lässt Ihre Einstellung unverändert. Der Haken ist neu und wird erprobt."},  # v1.13  # v1.14 (entfallen)  # v4.67
                  # "IPUploadTimeout"),  # v1.13  # v1.14 (entfallen)
                  "NanoBootloaderDetection": ({"ParName": "NanoBootloaderDetection", "Cnt": "1", "Type": "Checkbutton", "ConfigName": "NanoBootloaderDetection", "ParamLabelWidth": "25", "Min": "0", "Max": "255", "Default": "1",  # v1.14: Vorgabe an
                                        "Input Text": "Bootloader des Nano beim Prüfen erkennen",  # v1.13
-                                       "Hint": "Mit Haken (Vorgabe) spricht das Programm beim Prüfen des angeschlossenen Nano (Optionen Werkzeuge: Knopf „Board und USB Port erkennen“) den Bootloader an und stellt „Nano Normal (old Bootloader)“ oder „Nano (neue Version)“ passend ein. Ohne Haken prüft das Programm nur, ob sich der Anschluss öffnen lässt, und lässt Ihre Einstellung unverändert."},  # v1.14
+                                       "Hint": "Mit Haken (Vorgabe) spricht das Programm beim Prüfen des angeschlossenen Nano (Hardware Optionen: Knopf „Board und USB Port erkennen“) den Bootloader an und stellt „Nano Normal (old Bootloader)“ oder „Nano (neue Version)“ passend ein. Ohne Haken prüft das Programm nur, ob sich der Anschluss öffnen lässt, und lässt Ihre Einstellung unverändert."},  # v1.14  # v4.67
                                       "IPUploadTimeout"),  # v1.13
                  "AutoColorRows": ({"ParName": "AutoColorRows", "Cnt": "1", "Type": "Checkbutton", "ConfigName": "AutoColorRows", "ParamLabelWidth": "25", "Min": "0", "Max": "255", "Default": "",  # v1.23
                          "Input Text": "Automatisch einfärben",  # v1.23

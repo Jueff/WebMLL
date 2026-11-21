@@ -1,9 +1,9 @@
-# Datei-Version: 1.27 (2026-11-20) - M08_ARDUINO.py
+# Datei-Version: 1.28 (2026-11-21) - M08_ARDUINO.py
 # ----------------------------------------------------------------------------------------------
 # Name:           M08_ARDUINO.py
 # Path:           proggen/M08_ARDUINO.py
-# Version:        1.27
-# Last Update:    2026-11-20
+# Version:        1.28
+# Last Update:    2026-11-21
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
@@ -35,6 +35,7 @@
 #   1.25  2026-11-19  ESP32/Pico: Konfiguration getrennt von der Firmware (M42_Dyn_Config): nur die Konfiguration uebertragen, wenn die Firmware im Geraet passt; nach einem vollstaendigen Hochladen die Konfiguration nachschicken; LittleFS-Groesse fuer den Pico
 #   1.26  2026-11-19  Schneller Weg (M42): Beim Rueckfall auf das ganze Programm bleibt die Begruendung im Ausgabefenster stehen (Fenster wird nicht geleert)
 #   1.27  2026-11-20  Issue 50: ESP32-Setup per USB (Compile_and_Upload_ESP32_Setup): Anschluss wird vor dem Build mit Check_USB_Port_with_Dialog geprueft (aktive Verbindung uebernehmen oder Dialog), Anschluss danach neu aus der Tabelle gelesen
+#   1.28  2026-11-21  Version 4.67: Hilfetexte nennen Hardware Optionen (vorher Optionen Werkzeuge)
 # ----------------------------------------------------------------------------------------------
 # -*- coding: utf-8 -*-
 #
@@ -2504,10 +2505,10 @@ def Compile_and_Upload_Prog_to_Arduino(InoName, ComPortColumn, BuildOptColumn, S
         _lines = getattr(PG.global_controller.getFramebyName("ARDUINOMonitorPage"), 'lines', [])  # v1.13: Ausgabe dieses Laufs (Web); sonst leer
         if Upload_Failed_Only_in_Verify(_lines):  # v1.13: nur die Pruefung nach dem Schreiben ist gescheitert
             upload_logger.warning('Hochladen: Das Programm wurde geschrieben, nur die Pruefung (Zuruecklesen des Speichers) ist gescheitert. Moegliche Ursachen: falscher Bootloader (Nano Normal (old Bootloader) probieren), USB-Kabel oder Anschluss, Stromversorgung.')  # v1.13
-            P01.MsgBox(M09.Get_Language_Str('Das Programm wurde auf die Lichtmaschine geschrieben, aber die anschließende Prüfung (Rücklesen des Speichers) ist fehlgeschlagen.\n\nDie Lichtmaschine arbeitet meist trotzdem mit dem neuen Programm: Blinkt die Heartbeat LED?\n\nMögliche Ursachen und Hilfen:\n- Probiere beide Einstellungen „Nano Normal (old Bootloader)“ und „Nano (neue Version)“ (Optionen Werkzeuge, Reiter LED ARDUINO).\n- Ein anderes USB-Kabel und einen anderen USB-Anschluss probieren.\n- Die LEDs nicht über den USB-Anschluss des Computers versorgen.\n\nDie Einzelheiten stehen im Protokoll (Hilfe → Logfile anzeigen).'), vbInformation, M09.Get_Language_Str('Hochladen: Prüfung fehlgeschlagen'))  # v1.13
+            P01.MsgBox(M09.Get_Language_Str('Das Programm wurde auf die Lichtmaschine geschrieben, aber die anschließende Prüfung (Rücklesen des Speichers) ist fehlgeschlagen.\n\nDie Lichtmaschine arbeitet meist trotzdem mit dem neuen Programm: Blinkt die Heartbeat LED?\n\nMögliche Ursachen und Hilfen:\n- Probiere beide Einstellungen „Nano Normal (old Bootloader)“ und „Nano (neue Version)“ (Hardware Optionen, Reiter LED ARDUINO).\n- Ein anderes USB-Kabel und einen anderen USB-Anschluss probieren.\n- Die LEDs nicht über den USB-Anschluss des Computers versorgen.\n\nDie Einzelheiten stehen im Protokoll (Hilfe → Logfile anzeigen).'), vbInformation, M09.Get_Language_Str('Hochladen: Prüfung fehlgeschlagen'))  # v1.13  # v4.67
         elif Upload_Failed_Not_In_Sync(_lines):  # v1.14: der Bootloader antwortet nicht
             upload_logger.warning('Hochladen: Der Bootloader antwortet nicht (avrdude: not in sync). Moegliche Ursachen: falsche Bootloader-Einstellung (old oder neue Version), USB-Kabel oder Anschluss.')  # v1.14
-            P01.MsgBox(M09.Get_Language_Str('Die Lichtmaschine antwortet beim Hochladen nicht (avrdude: not in sync).\n\nMögliche Ursachen und Hilfen:\n- Der Bootloader passt nicht zur Einstellung: Probiere in Optionen Werkzeuge, Reiter LED ARDUINO, beide Einstellungen „Nano Normal (old Bootloader)“ und „Nano (neue Version)“.\n- Ein anderes USB-Kabel (es muss Daten übertragen) und einen anderen USB-Anschluss probieren.\n- Der Anschluss darf nicht von einem anderen Programm benutzt werden (zum Beispiel vom Seriellen Monitor).\n\nDie Einzelheiten stehen im Protokoll (Hilfe → Logfile anzeigen).'), vbInformation, M09.Get_Language_Str('Hochladen: Keine Antwort'))  # v1.14
+            P01.MsgBox(M09.Get_Language_Str('Die Lichtmaschine antwortet beim Hochladen nicht (avrdude: not in sync).\n\nMögliche Ursachen und Hilfen:\n- Der Bootloader passt nicht zur Einstellung: Probiere in Hardware Optionen, Reiter LED ARDUINO, beide Einstellungen „Nano Normal (old Bootloader)“ und „Nano (neue Version)“.\n- Ein anderes USB-Kabel (es muss Daten übertragen) und einen anderen USB-Anschluss probieren.\n- Der Anschluss darf nicht von einem anderen Programm benutzt werden (zum Beispiel vom Seriellen Monitor).\n\nDie Einzelheiten stehen im Protokoll (Hilfe → Logfile anzeigen).'), vbInformation, M09.Get_Language_Str('Hochladen: Keine Antwort'))  # v1.14  # v4.67
         else:  # v1.13
             P01.MsgBox(M09.Get_Language_Str('Es ist ein Fehler aufgetreten ;-(' + vbCr + vbCr + 'Zur Fehlersuche kann man die letzten Änderungen wieder rückgängig machen und es noch mal versuchen. ' + vbCr + vbCr + 'Kommunikationsprobleme erkennt man an dieser Meldung: ' + vbCr + '   avrdude: ser_open(): can\'t open device "\\\\.\\') + P01.Cells(M02.SH_VARS_ROW, ComPortColumn) + '":' + vbCr + M09.Get_Language_Str('   Das System kann die angegebene Datei nicht finden.' + vbCr + 'In diesem Fall müssen die Verbindungen überprüft und der Arduino durch einen neuen ersetzt werden.' + vbCr + vbCr + 'Der Fehler kann auch auftreten wenn der DCC/LNet/Selextrix Arduino noch nicht programmiert wurde.' + vbCr + 'Am besten man steckt den rechten Arduino erst dann ein wenn er benötigt wird.' + vbCr + vbCr + 'Wenn der Fehler nicht zu finden ist und immer wieder auftritt, dann kann ein Screenshot des ' + 'vorangegangenen Bildschirms (Nach oben scrollen so dass die erste Meldung nach dem Arduino Bild zu sehen ist) ' + 'zusammen mit dem Excel Programm und einer ausführlichen Beschreibung an ' + vbCr + '  https://forum.mobaledlib.de' + vbCr + 'geschickt werden.'), vbInformation, M09.Get_Language_Str('Fehler beim Hochladen des Programms'))  # v1.13 (eingerueckt, unveraendert)
         M30.EndProg()
