@@ -20,7 +20,7 @@
 | **Neue Tabelle** | Legt ein neues Blatt an. |
 | **Optionen Werkzeuge** | Öffnet das Fenster **Optionen und spezielle Funktionen**: die Reiter und ihre Bedeutung stehen weiter unten im Abschnitt [[#das_fenster_optionen_und_spezielle_funktionen|Das Fenster Optionen und spezielle Funktionen]]. |
 | **Online Wiki** | Öffnet diese Wiki-Seiten im Browser. |
-| **Zeilen Färben** | Färbt die Zeilen nach den Einstellungen des Programmgenerators ein, damit du die Gruppen besser siehst. |
+| **Zeilen färben** (ab Version 4.51 kein Knopf mehr) | Menü **Tabelle, Tabelle färben …** öffnet die Seite mit den Bedingungen für die Zeilenfarben. Dort färben **Speichern und aktuelle Seite färben** und **Speichern und ALLE Seiten färben** die Zeilen ein. Mit dem Haken **Automatisch einfärben** geschieht das nach jeder Änderung von selbst. |
 
 Die Knöpfe zum **Löschen, Verschieben, Duplizieren und Ein- oder Ausblenden** wirken auf **alle markierten Zeilen**. Wie du Zeilen markierst, steht auf der Seite [[anleitungen:webmobaledlib:pg_tabelle|Die Tabelle bedienen]].
 
@@ -51,7 +51,7 @@ Hier sicherst du deine Tabelle als **Datei** und lädst sie wieder. Das Ergebnis
 ^ Knopf ^ Wirkung ^
 | **Speichern in Datei** | Speichert deine Daten als Datei. Der Name beginnt mit //Prog_Gen_Data_// und dem Datum, zum Beispiel //Prog_Gen_Data_09_11_2026.MLL_pgf//. Die Datei wird über den **Browser heruntergeladen** und liegt danach im Download-Ordner des Rechners, an dem du sitzt. |
 | **Laden aus Datei** | Öffnet einen **Upload-Dialog**. Du wählst eine **.MLL_pgf**-Datei, und das Programm lädt sie in die Tabelle. |
-| **Importieren v. altem Prog.** | Ausgegraut: Diese Funktion gibt es in der Webversion **nicht**. |
+| **Importieren v. altem Prog.** | Steht seit 4.54 im Menü **Datei** als **Importieren v. altem Programm …** (der Reiter Dateien entfällt). Es gibt keinen direkten Import, die Anleitung zeigt den Weg über eine PGF-Datei. |
 | **Kopiere von Seite zu Seite** | Ausgegraut: Diese Funktion gibt es in der Webversion **nicht**. Im Excel-Programm sollte sie ausgewählte Daten von einem Blatt in ein anderes kopieren. Ein ganzes Blatt kannst du über das **Duplizieren** kopieren (siehe [[anleitungen:webmobaledlib:pg_tabelle|Die Tabelle bedienen]]). |
 
 **Tipp:** Speichere vor einem größeren Umbau eine Datei. So kommst du jederzeit zum alten Stand zurück.

@@ -1,9 +1,9 @@
-Datei-Version: 1.05 (2026-11-20) - RELEASE_Hinweise_4.40.md
-Gilt für webMobaLedLib 4.40
+Datei-Version: 1.07 (2026-11-21) - RELEASE_Hinweise_4.54.md
+Gilt für webMobaLedLib 4.54
 
-# webMobaLedLib 4.40
+# webMobaLedLib 4.54
 
-Anhänge dieses Releases: `webmobaledlib.zip` (Programm, mit `zip_erstellen.bat` Version 1.11 gebaut, `ROOT_IN_ZIP=1`), `START_HIER.txt` (erste Schritte), `ANLEITUNG_Installation.pdf` (Anleitung, Version 4.40) und `BETATEST_Checkliste.pdf` (Checkliste für Betatester, Version 3.22).
+Anhänge dieses Releases: `webmobaledlib.zip` (Programm, mit `zip_erstellen.bat` Version 1.11 gebaut, `ROOT_IN_ZIP=1`), `START_HIER.txt` (erste Schritte), `ANLEITUNG_Installation.pdf` (Anleitung, Version 4.54) und `BETATEST_Checkliste.pdf` (Checkliste für Betatester, Version 3.36).
 Installation: siehe `START_HIER.txt` und den Schnellstart der Anleitung. Aktualisieren: Menü **Hilfe → Update webMobaLedLib …**, danach das Programm **neu starten** und die Seite mit Strg+F5 neu laden.
 
 ## Wichtig beim Aktualisieren
@@ -12,12 +12,28 @@ Installation: siehe `START_HIER.txt` und den Schnellstart der Anleitung. Aktuali
 - **Nach dem Update das Programm neu starten** und die Seite neu laden. Oben darf keine rote Meldung stehen.
 - **Neues Programmsymbol (4.10):** Für die Verknüpfung auf dem Desktop den Installer noch einmal ausführen.
 
-## Neu seit Version 3.93 (3.94 bis 4.40)
+## Neu seit Version 3.93 (3.94 bis 4.54)
+
+**Menüs neu geordnet (4.51 bis 4.54, Vorschlag von Michael aus dem Forum):**
+- Neues Menü **Einstellungen** zwischen **Tabelle** und **Hilfe**: Allgemein, Programm Generator, Farb Test, Simulator (nur Experten Modus), Netzzugriff, Spezial, Erweiterungen …, Einstellungen sichern …, Einstellungen übernehmen …. Die Seite **Programm Einstellungen** ist kein Reiter mehr, die Einträge springen zur Gruppe.
+- **Tabelle, Tabelle färben …** öffnet die Seite mit den Bedingungen für die Zeilenfarben (früher Reiter **Tabelle Färben**, Titel jetzt „Tabelle färben“). Der Knopf **Zeilen Färben** und die Option „Zeilen Färben Button verstecken“ entfallen.
+- Das Menü **Lichtmaschine** entfällt: Der Pfeil neben **Mit Lichtmaschine verbinden** enthält Verbinden, Verbindung trennen, Neu verbinden, Board wechseln …, Alle LED aus.
+- **ARDUINO Einstellungen** ist ein Fenster mit Speichern und Abbrechen (Optionen, Reiter Entwicklungsumgebung, Knopf **ARDUINO-IDE Einstellungen**). **ESP32-Firmware über WLAN hochladen …** steht als Knopf auf dem Reiter WLAN (OTA) der Optionen. **Erweiterungen** ist ein eigenes Fenster (Haken sofort wirksam, Schließen), der Reiter in den Optionen entfällt. **Importieren v. altem Programm …** steht im Menü **Datei**, der Reiter **Dateien** in den Optionen entfällt.
+- Schritt 2 (Optionen Werkzeuge in **Hardware Optionen** umbenennen, Reste der alten Reiter entfernen) folgt in einem späteren Release.
+
+**Darstellung (4.44 bis 4.49, Issue 51):**
+- **Darstellung der Oberfläche** (Programm Einstellungen, Allgemeine Einstellungen, unter Sprache): Hell (Vorgabe, bisheriger Stil), Hell mit Kontrast (kräftigere Blattreiter, dunklere Hinweistexte), Dunkel (die Tabelle bleibt hell), Dunkel mit Tabelle (auch Tabellen dunkel, fest eingestellte Farben bleiben) oder Wie System.
+- Blattreiter besser lesbar, Beschreibungstexte und Tooltips im Dunklen Modus lesbar (4.44 bis 4.49). Der Hinweis zu „Minimale/Maximale Zeit“ nennt die House()-Funktion, die Schrifteinstellungen erklären, wo welche Schrift wirkt (4.49).
+
+**Speichern und Verbinden (4.42 bis 4.50):**
+- „Kein ESP-Port gewählt“ (Issue 50): Ist die Lichtmaschine verbunden und in der Tabelle kein Anschluss eingetragen, nimmt das Programm den Anschluss der aktiven Verbindung (auch beim ESP32-Setup per USB mit WLAN). Bei mehreren Boards entscheidet die Einstellung „Kein Anschluss in der Tabelle: bei mehreren Boards“ (4.42, 4.43).
+- Workbook-Dateinamen mit Datum und Uhrzeit (MobaLedLib_2026.11.20_20.05.03.json) bei „Workbook speichern als“ und „Inkrementell speichern“; die laufende Nummer entfällt (4.50).
+- Beim Trennen gehen die LEDs der Anlage nicht mehr aus. Wer es möchte, setzt „Beim Trennen alle LEDs ausschalten“ (Allgemeine Einstellungen, Vorgabe aus) (4.50).
 
 **Verbinden:**
 - Beim Start verbindet sich das Programm wieder mit der Lichtmaschine, die zuletzt verbunden war, sonst sucht es eine angeschlossene (Nano, ESP32, Pico) und verbindet, wenn es genau eine findet. Das läuft im Hintergrund. In den Programm Einstellungen abschaltbar (4.14).
 - Nach „Setup übertragen“ wird mit der Lichtmaschine verbunden, auf die übertragen wurde, auch über WLAN (4.14).
-- Neben „Mit Lichtmaschine verbinden“ steht ein Pfeil: Trennen, Neu verbinden, Board wechseln (4.14).
+- Neben „Mit Lichtmaschine verbinden“ steht ein Pfeil: Trennen, Neu verbinden, Board wechseln (4.14), ab 4.51 auch Verbinden und Alle LED aus.
 - Ohne eingestellten USB-Anschluss öffnet „Verbinden“ gleich „Board und USB Port erkennen“, danach wird automatisch verbunden (4.04).
 
 **Speichern und Tabelle:**
@@ -45,6 +61,7 @@ Installation: siehe `START_HIER.txt` und den Schnellstart der Anleitung. Aktuali
 - Fehler „slot stack … is empty“ nach „Board und USB Port erkennen“ behoben (4.26).
 - **Paketliste (Issue 26):** `DATEIEN_IM_PAKET_Issue26.md` nennt Dateien, die das Programm selbst erzeugt und nicht ins Paket gehören; offene Punkte entscheidet der Entwickler.
 
+- **Korrektur (4.41):** In 4.38 bis 4.40 baute sich die Seite wegen eines Fehlers bei den neuen Tastenkürzeln nicht mehr auf; behoben. Alle Funktionen von 4.37 bis 4.41 sind ab diesem Release enthalten.
 - **Makro in Spalte L direkt bearbeiten (4.40, Beitrag von Jürgen, Issue 42):** Der Makrotext wird beim Bearbeiten sofort geprüft (Klammern, leere Parameter, Parameterzahl). Bei einem Fehler: „Originaltext wiederherstellen“ oder „Weiter editieren“. Nach einer gültigen Änderung werden Name und Symbol und die Felder LEDs, InCnt, LocInCh, Adressen, Testtasten und Start-LEDs neu gesetzt. Rückgängig und Wiederholen funktionieren.
 - **Übertragungsfenster schließt automatisch (4.40, Issue 41):** Programm Einstellungen, Allgemeine Einstellungen: nach Erfolg (Vorgabe 5 Sekunden) und nach Fehler (Vorgabe 30 Sekunden), wählbar sofort, 5, 10, 30 Sekunden oder nie.
 - **Fehler „Adresse mit zwei Typen“ (4.39, Issue 48):** Eine Adresse, die mit zwei verschiedenen Typen benutzt wird (zum Beispiel AnAus und Rot), wird beim Erzeugen der Kopfdatei wieder gemeldet; das Kompilieren startet dann nicht. Das gilt auch für andere Fehler in der Tabelle (zum Beispiel Adresse außerhalb des Bereichs), die bisher unbemerkt blieben.
@@ -68,9 +85,9 @@ Installation: siehe `START_HIER.txt` und den Schnellstart der Anleitung. Aktuali
 - Versteckte Tabellen: das Startblatt erscheint nicht mehr als Reiter (4.07).
 - Optionen: alle Reiter sichtbar (3.99).
 
-**Noch nicht an Hardware oder im Browser geprüft:** Alles ab 4.11 (Einstellungen sichern/übernehmen, Ausgabe und Abbrechen beim ESP32-Build, Verbinden beim Start, inkrementelles Speichern und seine Tastenkombination, Kopfbereich (Abstand in Issue 22 nicht bestätigt), Erweiterungen mit `symlink://`, Name und Beschreibung aus `libraries.json`) wurde nur gebaut und kompiliert, nicht auf Hardware oder im Browser getestet. IRremote 4.x für InfraredMLX ist nicht mit einem Pico geprüft. Die Übersetzungen der neuen Texte (CSV) sind ungeprüft.
+**Noch nicht an Hardware oder im Browser geprüft:** Alles ab 4.11 (Einstellungen sichern/übernehmen, Ausgabe und Abbrechen beim ESP32-Build, Verbinden beim Start, inkrementelles Speichern und seine Tastenkombination, Kopfbereich (Abstand in Issue 22 nicht bestätigt), Erweiterungen mit `symlink://`, Name und Beschreibung aus `libraries.json`) wurde nur gebaut und kompiliert, nicht auf Hardware oder im Browser getestet. IRremote 4.x für InfraredMLX ist nicht mit einem Pico geprüft. Die Übersetzungen der neuen Texte (CSV) sind ungeprüft. Die Menüs ab 4.51 sind vom Entwickler im Browser getestet (4.54: Rückmeldung „Funktioniert“); Dunkler Modus und Dateinamen mit Datum (4.44 bis 4.50) ebenfalls.
 
-**Wiki:** Paket `webmobaledlib_Wiki_Gesamt_Stand_4.40.zip` (39 Seiten, Hinweise in `LIESMICH_Wiki_Gesamt.md`). Die Bilder `erst_04_optionen.png` und `pg_09_verbinden.png` zeigen noch den alten Stand.
+**Wiki:** Paket `webmobaledlib_Wiki_Gesamt_Stand_4.54.zip` (39 Seiten, an die neuen Menüs angepasst, Hinweise in `LIESMICH_Wiki_Gesamt.md`). Die Bilder (Menüband, Programm Einstellungen, ARDUINO-IDE Einstellungen, Optionen, Datei-Menü, Verbinden) zeigen noch den alten Stand und müssen neu aufgenommen werden.
 
 **Geplant:** Quell-URL direkt in der `platformio.ini` (Issue 6) ist nicht vorgesehen (Cache und `symlink://` bleiben); Rückfragen dazu stehen im Issue.
 

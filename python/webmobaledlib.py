@@ -1,9 +1,9 @@
-# Datei-Version: 4.46 (2026-11-20) - webmobaledlib.py
+# Datei-Version: 4.54 (2026-11-21) - webmobaledlib.py
 # ----------------------------------------------------------------------------------------------
 # Name:           webmobaledlib.py
 # Path:           webmobaledlib.py
-# Version:        4.46
-# Last Update:    2026-11-20
+# Version:        4.54
+# Last Update:    2026-11-21
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
@@ -292,6 +292,14 @@
 #   4.44  2026-11-20  Issue 51: Einstellung Darstellung der Oberflaeche (Hell, Dunkel, Wie System; Vorgabe Hell), Tabelle bleibt hell; Blattreiter kontrastreicher (aktiver Reiter deutlich abgesetzt)
 #   4.45  2026-11-20  Fehler 4.44: Dunkler Modus ging beim Wechsel des Reiters verloren (das Element ui.dark_mode setzte den Server-Wert wieder durch); jetzt wird der Wert des Elements beim Speichern der Einstellungen gesetzt
 #   4.46  2026-11-20  Dunkler Modus (Rueckmeldung Harold, Screenshots): graue Hinweistexte (text-grey) heller, Hinweisboxen mit hellem Grund mit dunkler Schrift (DCC Keyboard, Servo/Sound/Z21, Austausch); web_dcckeyboard 1.04, web_servotest2 1.03, web_soundtest 1.03, web_z21 1.05, web_form_exchange 1.03
+#   4.47  2026-11-21  Darstellung: vier Stufen Hell (klassisch, Vorgabe), Hell mit Kontrast (kraeftige Blattreiter, dunklere Grautexte), Dunkel, Wie System; Kontrast-Stil ueber Klasse mll-contrast; web_tabs 1.29
+#   4.48  2026-11-21  Darstellung: neue Stufe Dunkel mit Tabelle (Tabellen ebenfalls dunkel, feste Farben bleiben; Klasse mll-grid-dark), Einstellung steht jetzt unter Sprache (web_tabs 1.30)
+#   4.49  2026-11-21  Hinweistexte (Tooltips) gut lesbar: heller Grund, dunkle Schrift, Rand; House()-Hinweis in der Beschriftung von Minimale/Maximale Zeit (web_tabs 1.31); Hinweise der Schrifteinstellungen erklaeren, wo die Schrift wirkt (MobaLedTest_macroparamdef.json)
+#   4.50  2026-11-21  Workbook-Dateinamen mit Datum und Uhrzeit (MobaLedLib_2026.11.20_20.05.03.json) bei Speichern als (web_dialogs 1.11) und Inkrementell speichern (statt Nummer); Option LedOffOnDisconnect: LEDs beim Trennen nur noch auf Wunsch ausschalten (web_serial 1.13, web_tabs 1.32, web_params 1.14)
+#   4.51  2026-11-21  Menues neu geordnet (Vorschlag Michael, Schritt 1): neues Menue Einstellungen (Allgemein, Programm Generator, Farb Test, Simulator, Netzzugriff, Spezial, Erweiterungen, Einstellungen sichern / uebernehmen); Programm Einstellungen und Tabelle Faerben sind keine Reiter mehr; Tabelle -> Tabelle faerben oeffnet die Regelseite; Menue Lichtmaschine entfaellt (alles im Pfeil neben dem Knopf Mit Lichtmaschine verbinden); Knopf Zeilen Faerben und Option Zeilen Faerben Button verstecken entfallen (web_tabs 1.33, web_params 1.15, web_dcckeyboard 1.05)
+#   4.52  2026-11-21  Rueckmeldung Harold zu 4.51: Seite Tabelle faerben (Titel, erste Beschreibungszeile weg); ESP32-Firmware ueber WLAN hochladen als Knopf auf dem Reiter WLAN (OTA) der Optionen statt im Pfeilmenue; ARDUINO Einstellungen als Fenster mit Speichern und Abbrechen, Knopf ARDUINO-IDE Einstellungen auf dem Reiter Entwicklungsumgebung (web_params 1.16, web_form_options 1.40)
+#   4.53  2026-11-21  Rueckmeldung Harold: Menue Einstellungen, Erweiterungen oeffnet ein eigenes Fenster Erweiterungen (Haken sofort wirksam, Schliessen) statt des Optionenfensters; der Reiter Erweiterungen entfaellt in den Optionen (web_form_options 1.41)
+#   4.54  2026-11-21  Rueckmeldung Harold: Menue Datei, Importieren v. altem Programm (zeigt das Fenster des bisherigen Knopfs); der Reiter Dateien entfaellt in den Optionen; Fenster Erweiterungen mit Hinweis auf sofort wirksame Aenderungen (web_form_options 1.42)
 #   4.40  2026-11-20  Pull Request 44 von Juergen (Issues 41, 42): Makrotext bei direkter Eingabe pruefen (Fehler korrigieren oder wiederherstellen), bei Makrowechsel Name und Symbol aktualisieren, danach LEDs, InCnt, LocInCh, Adressen, Testtasten und Start-LEDs neu setzen (headless_macro_edit 1.01); Uebertragungsfenster schliesst sich automatisch (web_log 1.11)
 #   4.39  2026-11-20  Issue 48: Fehlerpruefung beim Erzeugen der Kopfdatei (zum Beispiel Adresse mit zwei verschiedenen Typen) wirkte nicht, das Kompilieren startete trotzdem (M06_Write_Header 1.13)
 #   4.38  2026-11-20  Tastenkuerzel ueberall auf der Seite (Issue 49, Juergen): Strg+Z Rueckgaengig, Strg+Y / Strg+Umschalt+Z Wiederholen, neu Strg+S = dauerhaft speichern in die Hauptdatei (Menue Datei: Speichern); nicht in Eingabefeldern und Dialogen
@@ -430,7 +438,8 @@ REQUIRED_FILES = {  # v1.75
     # "proggen/M06_Write_Header.py": "1.04", "proggen/M20_PageEvents_a_Functions.py": "1.04", "vb2py/vbfunctions.py": "1.01", "proggen/M18_Save_Load.py": "1.04",  # v2.24 (entfallen)
     # "proggen/M06_Write_Header.py": "1.04", "proggen/M20_PageEvents_a_Functions.py": "1.05", "vb2py/vbfunctions.py": "1.01", "proggen/M18_Save_Load.py": "1.04",  # v2.27 (entfallen)
     # "proggen/M06_Write_Header.py": "1.04", "proggen/M20_PageEvents_a_Functions.py": "1.06", "vb2py/vbfunctions.py": "1.01", "proggen/M18_Save_Load.py": "1.04",  # v2.54 (entfallen)
-    "proggen/M06_Write_Header.py": "1.10", "proggen/M20_PageEvents_a_Functions.py": "1.12", "vb2py/vbfunctions.py": "1.01", "proggen/M18_Save_Load.py": "1.04", "proggen/M06_Write_Header_SW.py": "1.07", "proggen/M18_Save_Load.py": "1.05", "_web/web_log.py": "1.07", "proggen/M20_PageEvents_a_Functions.py": "1.12", "proggen/M03_Dialog.py": "1.03", "_web/web_layout.py": "1.20", "_web/web_params.py": "1.10", "_web/web_form_options.py": "1.29", "_web/web_tabs.py": "1.23", "proggen/M08_ARDUINO.py": "1.22", "_web/web_z21.py": "1.04", "_web/web_dcckeyboard.py": "1.03", "_web/web_update.py": "1.16", "headless/headless_gridmodel.py": "1.07", "fast_paths.py": "1.01", "proggen/M20_PageEvents_a_Functions.py": "1.12", "proggen/Userform_Other.py": "1.03", "_web/web_firewall.py": "1.04", "_web/web_esp32_ota.py": "1.06", "proggen/UserForm_Options.py": "1.06",  # v2.54  # v3.56  # v3.91
+    # "proggen/M06_Write_Header.py": "1.10", "proggen/M20_PageEvents_a_Functions.py": "1.12", "vb2py/vbfunctions.py": "1.01", "proggen/M18_Save_Load.py": "1.04", "proggen/M06_Write_Header_SW.py": "1.07", "proggen/M18_Save_Load.py": "1.05", "_web/web_log.py": "1.07", "proggen/M20_PageEvents_a_Functions.py": "1.12", "proggen/M03_Dialog.py": "1.03", "_web/web_layout.py": "1.20", "_web/web_params.py": "1.10", "_web/web_form_options.py": "1.29", "_web/web_tabs.py": "1.23", "proggen/M08_ARDUINO.py": "1.22", "_web/web_z21.py": "1.04", "_web/web_dcckeyboard.py": "1.03", "_web/web_update.py": "1.16", "headless/headless_gridmodel.py": "1.07", "fast_paths.py": "1.01", "proggen/M20_PageEvents_a_Functions.py": "1.12", "proggen/Userform_Other.py": "1.03", "_web/web_firewall.py": "1.04", "_web/web_esp32_ota.py": "1.06", "proggen/UserForm_Options.py": "1.06",  # v2.54  # v3.56  # v3.91  # v4.51 (entfallen)
+    "proggen/M06_Write_Header.py": "1.10", "proggen/M20_PageEvents_a_Functions.py": "1.12", "vb2py/vbfunctions.py": "1.01", "proggen/M18_Save_Load.py": "1.04", "proggen/M06_Write_Header_SW.py": "1.07", "proggen/M18_Save_Load.py": "1.05", "_web/web_log.py": "1.07", "proggen/M20_PageEvents_a_Functions.py": "1.12", "proggen/M03_Dialog.py": "1.03", "_web/web_layout.py": "1.20", "_web/web_params.py": "1.10", "_web/web_form_options.py": "1.29", "_web/web_tabs.py": "1.23", "proggen/M08_ARDUINO.py": "1.22", "_web/web_z21.py": "1.04", "_web/web_dcckeyboard.py": "1.05", "_web/web_update.py": "1.16", "headless/headless_gridmodel.py": "1.07", "fast_paths.py": "1.01", "proggen/M20_PageEvents_a_Functions.py": "1.12", "proggen/Userform_Other.py": "1.03", "_web/web_firewall.py": "1.04", "_web/web_esp32_ota.py": "1.06", "proggen/UserForm_Options.py": "1.06",  # v2.54  # v3.56  # v3.91  # v4.51
     "proggen/M18a_Load_PicoConfig.py": "1.01", "proggen/M17_Import_old_Data.py": "1.01",  # v1.75
     # "proggen/M02_Public.py": "1.01", "proggen/M02a_Public.py": "1.01", "proggen/M03_Dialog.py": "1.01", "proggen/M06_Write_Header_LED2Var.py": "1.01", "proggen/M06_Write_Header_SW.py": "1.01", "proggen/M07_COM_Port.py": "1.02", "proggen/M09_Language.py": "1.01", "proggen/M10_Par_Description.py": "1.01", "proggen/M30_Tools.py": "1.01", "proggen/M32_DCC.py": "1.01", "proggen/M38_Extensions.py": "1.01", "proggen/clsExtension.py": "1.01", "proggen/Userform_Other.py": "1.01", "_web/web_form_other.py": "1.04",  # v1.99 (entfallen)
     # "proggen/M02_Public.py": "1.01", "proggen/M02a_Public.py": "1.01", "proggen/M03_Dialog.py": "1.01", "proggen/M06_Write_Header_LED2Var.py": "1.01", "proggen/M06_Write_Header_SW.py": "1.02", "proggen/M07_COM_Port.py": "1.02", "proggen/M09_Language.py": "1.01", "proggen/M10_Par_Description.py": "1.02", "proggen/M30_Tools.py": "1.01", "proggen/M32_DCC.py": "1.01", "proggen/M38_Extensions.py": "1.01", "proggen/clsExtension.py": "1.01", "proggen/Userform_Other.py": "1.01", "_web/web_form_other.py": "1.04",  # v2.00 (entfallen)
@@ -508,7 +517,11 @@ REQUIRED_FILES = {  # v1.75
     # "headless/headless_search.py": "1.00",  # v3.28 (entfallen)
     "headless/headless_search.py": "1.01",  # v3.29
     "proggen/M39_Simulator.py": "1.11", "_web/web_simulator.py": "1.00",  # v3.56
-    "proggen/M07_COM_Port.py": "1.13", "_web/web_tabs.py": "1.28",  # v4.42  # v4.44
+    # "proggen/M07_COM_Port.py": "1.13", "_web/web_tabs.py": "1.32",  # v4.42  # v4.44  # v4.47  # v4.48  # v4.49  # v4.50  # v4.51 (entfallen)
+    "proggen/M07_COM_Port.py": "1.13", "_web/web_tabs.py": "1.33",  # v4.42  # v4.44  # v4.47  # v4.48  # v4.49  # v4.50  # v4.51
+    # "_web/web_serial.py": "1.13", "_web/web_dialogs.py": "1.11", "_web/web_params.py": "1.14",  # v4.50  # v4.51 (entfallen)
+    # "_web/web_serial.py": "1.13", "_web/web_dialogs.py": "1.11", "_web/web_params.py": "1.15",  # v4.50  # v4.51  # v4.52 (entfallen)
+    "_web/web_serial.py": "1.13", "_web/web_dialogs.py": "1.11", "_web/web_params.py": "1.16", "_web/web_form_options.py": "1.42",  # v4.50  # v4.51  # v4.52  # v4.53  # v4.54
     "proggen/M08_ARDUINO.py": "1.27",  # v4.43
 }  # v1.75
 FILE_PROBLEMS = []                                      # Zeilen der Abweichungen, gefuellt in main()  # v1.75
@@ -1041,8 +1054,8 @@ def toolbar_buttons():
         # ("Btn_Help.png", "Online Wiki", "Online Wiki im Webbrowser öffnen", F00.Help_Button_Click),  # v2.76 (entfallen)
         # ("Btn_Color_Row.png", "Zeilen Färben", "Zeilen entsprechend den ProgrammGenerator-Einstellungen einfärben",  # v2.76 (entfallen)
         ("Btn_Help.png", "Online\nWiki", "Online Wiki im Webbrowser öffnen", F00.Help_Button_Click),  # v2.76
-        ("Btn_Color_Row.png", "Zeilen\nFärben", "Zeilen entsprechend den ProgrammGenerator-Einstellungen einfärben",  # v2.76
-         lambda: page.RowFormat_Button_click()),
+        # ("Btn_Color_Row.png", "Zeilen\nFärben", "Zeilen entsprechend den ProgrammGenerator-Einstellungen einfärben",  # v2.76
+        # lambda: page.RowFormat_Button_click()),  # v4.51 (entfallen: Menue Tabelle -> Tabelle faerben)
     ]
 
 
@@ -1326,18 +1339,18 @@ CSS_GRID = """
 .ag-header-cell { font-family: var(--mll-grid-font, Arial), Helvetica, sans-serif; font-size: calc(12px * var(--mll-grid-scale, 1)); background: #f3f3f3; }
 .ag-pinned-left-cols-container .ag-cell { background: #f3f3f3; }
 .mll-center { text-align: center; }
-/* v4.44 (Issue 51): Dunkler Modus: Tabellen (AG Grid) bleiben hell, damit die Zellfarben lesbar bleiben */
-body.body--dark .ag-theme-balham, body.body--dark .ag-theme-balham-dark, body.body--dark .nicegui-aggrid {
+/* v4.44 (Issue 51): Dunkler Modus: Tabellen (AG Grid) bleiben hell (v4.48: ausser bei Dunkel mit Tabelle, Klasse mll-grid-dark), damit die Zellfarben lesbar bleiben */
+html:not(.mll-grid-dark) body.body--dark .ag-theme-balham, html:not(.mll-grid-dark) body.body--dark .ag-theme-balham-dark, html:not(.mll-grid-dark) body.body--dark .nicegui-aggrid {
     --ag-background-color: #ffffff !important; --ag-foreground-color: #181d1f !important; --ag-header-background-color: #f3f3f3 !important; --ag-header-foreground-color: #181d1f !important;
     --ag-odd-row-background-color: #ffffff !important; --ag-border-color: #d4d4d4 !important; --ag-secondary-border-color: #e3e3e3 !important; --ag-row-border-color: #e3e3e3 !important;
     --ag-row-hover-color: #eef3f8 !important; --ag-selected-row-background-color: #d6e6f7 !important; --ag-control-panel-background-color: #f3f3f3 !important;
     --ag-input-border-color: #999999 !important; --ag-disabled-foreground-color: #666666 !important; --ag-chip-background-color: #e3e3e3 !important;
     --ag-range-selection-border-color: #1976d2 !important; --ag-modal-overlay-background-color: rgba(255,255,255,0.66) !important;
     background-color: #ffffff !important; color: #181d1f !important; color-scheme: light; }
-body.body--dark .ag-root-wrapper, body.body--dark .ag-root, body.body--dark .ag-center-cols-viewport { background-color: #ffffff; color: #181d1f; }
-body.body--dark .ag-header-cell, body.body--dark .ag-header-cell-text { color: #181d1f; }
-body.body--dark .ag-pinned-left-cols-container .ag-cell { color: #181d1f; }
-body.body--dark .mll-grid-wrap { background: #ffffff; }
+html:not(.mll-grid-dark) body.body--dark .ag-root-wrapper, html:not(.mll-grid-dark) body.body--dark .ag-root, html:not(.mll-grid-dark) body.body--dark .ag-center-cols-viewport { background-color: #ffffff; color: #181d1f; }
+html:not(.mll-grid-dark) body.body--dark .ag-header-cell, html:not(.mll-grid-dark) body.body--dark .ag-header-cell-text { color: #181d1f; }
+html:not(.mll-grid-dark) body.body--dark .ag-pinned-left-cols-container .ag-cell { color: #181d1f; }
+html:not(.mll-grid-dark) body.body--dark .mll-grid-wrap { background: #ffffff; }
 /* v4.46 (Issue 51): Dunkler Modus: graue Hinweistexte (Quasar text-grey-*) waren auf dunklem Grund kaum lesbar */
 body.body--dark .text-grey, body.body--dark .text-grey-5, body.body--dark .text-grey-6, body.body--dark .text-grey-7, body.body--dark .text-grey-8, body.body--dark .text-grey-9 { color: #d0d7de !important; }
 body.body--dark .q-field__label, body.body--dark .q-field__hint { color: #c4ccd4; }
@@ -1354,12 +1367,14 @@ html:not(.mll-compact) .main-tabs, html:not(.mll-compact) .main-tabs .q-tab, htm
 /* v4.16: weniger Platz zwischen Titel, Menue und Reitern (Issue 22) */
 html:not(.mll-compact) .mll-header { margin-bottom: -8px; }     /* v4.16: Abstand zur Reiterleiste 16 px -> 8 px; das kompakte Layout hat schon 2 px */
 .main-tabs .q-tab { font-size: calc(15px * var(--mll-label-scale, 1)); }
-/* .sheet-tabs { background: #dbe4ee; border: 1px solid #b8c7d8; border-top: 2px solid #8fa8c2; min-height: 30px; }  (v4.44, entfallen) */
-.sheet-tabs { background: #c3d0de; border: 1px solid #5b7490; border-top: 2px solid #5b7490; min-height: 30px; }  /* v4.44 (Issue 51): kraeftiger Rand und dunklerer Streifen */
-/* .sheet-tabs .q-tab { text-transform: none; min-height: 28px; padding: 0 16px; color: #243b53; }  (v4.44, entfallen) */
-.sheet-tabs .q-tab { text-transform: none; min-height: 28px; padding: 0 16px; color: #0b1f33; border-right: 1px solid #5b7490; }  /* v4.44: dunklere Schrift, Trennlinie zwischen den Reitern */
-/* .sheet-tabs .q-tab--active { background: #ffffff; color: #102a43; font-weight: 600; box-shadow: inset 0 3px 0 #1976d2; }  (v4.44, entfallen) */
-.sheet-tabs .q-tab--active { background: #ffffff; color: #000000; font-weight: 700; box-shadow: inset 0 4px 0 #0d47a1, inset 0 -3px 0 #0d47a1; }  /* v4.44: aktiver Reiter weiss mit dickem Balken oben und unten */
+.sheet-tabs { background: #dbe4ee; border: 1px solid #b8c7d8; border-top: 2px solid #8fa8c2; min-height: 30px; }  /* v4.47: klassischer Stil (Hell) wieder wie vor 4.44 */
+.sheet-tabs .q-tab { text-transform: none; min-height: 28px; padding: 0 16px; color: #243b53; }  /* v4.47 */
+.sheet-tabs .q-tab--active { background: #ffffff; color: #102a43; font-weight: 600; box-shadow: inset 0 3px 0 #1976d2; }  /* v4.47 */
+/* v4.47 (Issue 51): Stil Hell mit Kontrast, Dunkel und Wie System: Klasse mll-contrast am html-Element */
+.mll-contrast .sheet-tabs { background: #c3d0de; border: 1px solid #5b7490; border-top: 2px solid #5b7490; min-height: 30px; }
+.mll-contrast .sheet-tabs .q-tab { color: #0b1f33; border-right: 1px solid #5b7490; }
+.mll-contrast .sheet-tabs .q-tab--active { background: #ffffff; color: #000000; font-weight: 700; box-shadow: inset 0 4px 0 #0d47a1, inset 0 -3px 0 #0d47a1; }
+html.mll-contrast body:not(.body--dark) .text-grey-6, html.mll-contrast body:not(.body--dark) .text-grey-7, html.mll-contrast body:not(.body--dark) .text-grey-8 { color: #212121 !important; }
 .sheet-tabs { position: relative; }
 .sheet-tabs .q-tab[data-tabc] { background: var(--tab-color); color: var(--tab-fg); }
 .sheet-tabs .q-tab--active[data-tabc] { background: linear-gradient(to bottom, var(--tab-mid), var(--tab-light) 55%, #ffffff); color: #102a43; box-shadow: inset 0 3px 0 var(--tab-color); }
@@ -1367,7 +1382,9 @@ html:not(.mll-compact) .mll-header { margin-bottom: -8px; }     /* v4.16: Abstan
 .mll-grid-wrap.mll-dropping { outline: 3px dashed #1976d2; outline-offset: -4px; }
 .mll-grid-wrap.mll-dropping::after { content: "MLL_PGF-Datei hier loslassen"; position: absolute; left: 50%; top: 40%; transform: translateX(-50%);
     background: rgba(25, 118, 210, 0.92); color: #fff; padding: 14px 26px; border-radius: 6px; font-size: 18px; pointer-events: none; z-index: 20; }
-.ag-tooltip { white-space: pre-wrap; max-width: 700px; font-size: calc(13px * var(--mll-grid-scale, 1)); }
+/* v4.49: Hinweistexte (Quasar-Tooltips): bisher weisse Schrift auf mittelgrauem Grund (verschwimmt auf manchen Bildschirmen); jetzt heller Grund, dunkle Schrift, Rand, in allen Darstellungen gleich */
+.q-tooltip { background: #fffde7 !important; color: #111111 !important; border: 1px solid #5f6b7a; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35); font-size: calc(13px * var(--mll-label-scale, 1)); line-height: 1.35; padding: 6px 10px; }
+.ag-tooltip { white-space: pre-wrap; max-width: 700px; font-size: calc(13px * var(--mll-grid-scale, 1)); background-color: #fffde7 !important; color: #111111 !important; border: 1px solid #5f6b7a !important; }  /* v4.49: Hell/dunkle Schrift wie .q-tooltip */
 /* .mll-tb { display: inline-block; min-width: ...; height: ...; line-height: ... (entfallen v3.27: Schalter unten abgeschnitten) */
 .mll-tb { display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; vertical-align: middle;  /* v3.27 */
           min-width: calc(18px * var(--mll-grid-scale, 1)); height: calc(18px * var(--mll-grid-scale, 1)); padding: 0 2px;  /* v3.27 */
@@ -1429,7 +1446,11 @@ def font_scales(ctrl) -> dict:
 # VERSION = "4.43 (2026-11-20)"  # v4.44 (entfallen)
 # VERSION = "4.44 (2026-11-20)"  # v4.45 (entfallen)
 # VERSION = "4.45 (2026-11-20)"  # v4.46 (entfallen)
-VERSION = "4.46 (2026-11-20)"  # v3.64  # v4.26  # v4.27  # v4.28  # v4.29  # v4.30  # v4.31  # v4.32  # v4.33  # v4.34  # v4.35  # v4.36  # v4.37  # v4.38  # v4.39  # v4.40  # v4.41  # v4.42  # v4.43  # v4.44  # v4.45  # v4.46
+# VERSION = "4.46 (2026-11-20)"  # v4.47 (entfallen)
+# VERSION = "4.47 (2026-11-21)"  # v4.48 (entfallen)
+# VERSION = "4.48 (2026-11-21)"  # v4.49 (entfallen)
+# VERSION = "4.49 (2026-11-21)"  # v4.50 (entfallen)
+VERSION = "4.54 (2026-11-21)"  # v3.64  # v4.26  # v4.27  # v4.28  # v4.29  # v4.30  # v4.31  # v4.32  # v4.33  # v4.34  # v4.35  # v4.36  # v4.37  # v4.38  # v4.39  # v4.40  # v4.41  # v4.42  # v4.43  # v4.44  # v4.45  # v4.46  # v4.47  # v4.48  # v4.49  # v4.50  # v4.51  # v4.52  # v4.53  # v4.54
 # VERSION = "4.09 (2026-11-19)"  # v3.64 (entfallen)
 # VERSION = "4.08 (2026-11-19)"  # v3.64 (entfallen)
 # VERSION = "4.07 (2026-11-19)"  # v3.64 (entfallen)
@@ -2033,23 +2054,33 @@ def safe_shutdown():  # v3.24
     nicegui_app.shutdown()  # v3.24
 
 
+def theme_choice(ctrl):  # v4.47: gewaehlte Stufe: "hell", "kontrast", "dunkel" oder "system"
+    try:  # v4.47
+        raw = str(ctrl.getConfigData("ThemeMode") or "").strip().lower()  # v4.47
+        if raw in ("", "none"):  # v4.47
+            raw = str(ctrl.getConfigData("ThemeModeIdx") or "").strip().lower()  # v4.47
+    except Exception:                                      # noqa: BLE001  # v4.47
+        raw = ""  # v4.47
+    if raw in ("hell mit kontrast", "light with contrast", "1"):  # v4.47
+        return "kontrast"  # v4.47
+    if raw in ("dunkel mit tabelle", "dark with table", "3"):  # v4.48
+        return "dunkeltabelle"  # v4.48
+    if raw in ("dunkel", "dark", "2"):  # v4.47
+        return "dunkel"  # v4.47
+    if raw in ("wie system", "system", "auto", "4"):  # v4.47  # v4.48
+        return "system"  # v4.47
+    return "hell"  # v4.47
+
+
 def theme_value(ctrl):  # v4.44 (Issue 51)
-    """Einstellung Darstellung der Oberflaeche: False = hell (Vorgabe), True = dunkel, None = wie System"""
-    try:  # v4.44
-        raw = str(ctrl.getConfigData("ThemeMode") or "").strip().lower()  # v4.44
-        if raw in ("", "none"):  # v4.44
-            raw = str(ctrl.getConfigData("ThemeModeIdx") or "").strip().lower()  # v4.44
-    except Exception:                                      # noqa: BLE001  # v4.44
-        raw = ""  # v4.44
-    if raw in ("dunkel", "dark", "1"):  # v4.44
-        return True  # v4.44
-    if raw in ("wie system", "system", "auto", "2"):  # v4.44
-        return None  # v4.44
-    return False  # v4.44
+    """Einstellung Darstellung der Oberflaeche: False = hell (Vorgabe, auch Hell mit Kontrast), True = dunkel, None = wie System"""
+    c = theme_choice(ctrl)  # v4.47
+    return True if c in ("dunkel", "dunkeltabelle") else (None if c == "system" else False)  # v4.47  # v4.48
 
 
-def theme_js(value):  # v4.44: JavaScript, das die Darstellung im Browser umschaltet (nach dem Speichern der Einstellungen)
-    return "if (window.Quasar && Quasar.Dark) { Quasar.Dark.set(%s); }" % ("true" if value is True else ("'auto'" if value is None else "false"))  # v4.44
+def theme_js(value, contrast=False, grid_dark=False):  # v4.44: JavaScript, das die Darstellung im Browser umschaltet (nach dem Speichern der Einstellungen)  # v4.47: contrast  # v4.48: grid_dark
+    return ("if (window.Quasar && Quasar.Dark) { Quasar.Dark.set(%s); } document.documentElement.classList.toggle('mll-contrast', %s); document.documentElement.classList.toggle('mll-grid-dark', %s);"  # v4.48
+            % ("true" if value is True else ("'auto'" if value is None else "false"), "true" if contrast else "false", "true" if grid_dark else "false"))  # v4.48
 
 
 def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
@@ -2083,6 +2114,7 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
     if fullscreen:                                      # Adresse mit ?vollbild=1: ohne Titel, Menue und Reiter oeffnen, der erste Tipp schaltet auch den Browser um  # v1.82
         ui.add_head_html("<script>document.addEventListener('DOMContentLoaded', function () { window.mllSetFull(true); window.mllArmTapFullscreen(); });</script>")  # v1.82
     # ui.dark_mode(theme_value(ctrl))  # v4.45 (entfallen)
+    ui.add_head_html("<script>document.documentElement.classList.%s('mll-contrast'); document.documentElement.classList.%s('mll-grid-dark');</script>" % ("remove" if theme_choice(ctrl) == "hell" else "add", "add" if theme_choice(ctrl) == "dunkeltabelle" else "remove"))  # v4.47: Stil mit Kontrast (Hell mit Kontrast, Dunkel, Wie System)  # v4.48: Tabelle dunkel
     dark_mode_el = ui.dark_mode(theme_value(ctrl))  # v4.45: Element merken, Wert beim Speichern der Einstellungen setzen (Issue 51)
     ui.add_head_html(SCROLL_JS)
     ui.add_head_html(DROP_JS)
@@ -2186,15 +2218,26 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
         ui.tab("dcc", label="DCC Keyboard")  # v1.95
         z21_tab = ui.tab("z21", label="Z21 Simulator")  # v2.05
         ui.tab("mon", label="Serial Monitor")
-        ui.tab("arduinocfg", label="ARDUINO Einstellungen")
-        ui.tab("config", label="Programm Einstellungen")
+        # ui.tab("arduinocfg", label="ARDUINO Einstellungen")  # v4.51 (entfallen: Reiter ohne Kopf, Aufruf ueber die Optionen / Hardware Optionen)
+        # ui.tab("config", label="Programm Einstellungen")  # v4.51 (entfallen: Aufruf ueber das Menue Einstellungen)
+        arduinocfg_tab = ui.tab("arduinocfg", label="ARDUINO Einstellungen")  # v4.51
+        config_tab = ui.tab("config", label="Programm Einstellungen")  # v4.51
+        for hidden_tab in (progcfg_tab, arduinocfg_tab, config_tab):  # v4.51: keine Reiterkoepfe mehr; die Seiten oeffnen die Menues Einstellungen und Tabelle (tabs.set_value)
+            hidden_tab.set_visibility(False)  # v4.51
     # optional_tabs = {"servo2": servo2_tab}               # Reiter mit Option in den Programm Einstellungen (web_tabs.OPTIONAL_TABS)  # v2.05 (entfallen)
     # optional_tabs = {"servo2": servo2_tab, "z21": z21_tab}               # Reiter mit Option in den Programm Einstellungen (web_tabs.OPTIONAL_TABS)  # v2.05 (entfallen)
-    optional_tabs = {"servo2": servo2_tab, "z21": z21_tab, "patt": patt_tab, "progcfg": progcfg_tab}  # Reiter mit Option in den Programm Einstellungen (web_tabs.OPTIONAL_TABS) oder im Anfaenger Modus (web_tabs.BEGINNER_HIDDEN_TABS)  # v2.96
+    # optional_tabs = {"servo2": servo2_tab, "z21": z21_tab, "patt": patt_tab, "progcfg": progcfg_tab}  # Reiter mit Option in den Programm Einstellungen (web_tabs.OPTIONAL_TABS) oder im Anfaenger Modus (web_tabs.BEGINNER_HIDDEN_TABS)  # v2.96  # v4.51 (entfallen)
+    optional_tabs = {"servo2": servo2_tab, "z21": z21_tab, "patt": patt_tab}  # v4.51: Tabelle Faerben ist kein Reiterkopf mehr (Menueeintrag, siehe menu_elems)
+
+    menu_elems = {}                                    # Menueeintraege mit Schluessel (progcfg, sim): im Anfaenger Modus ausgeblendet  # v4.51
 
     def apply_optional_tabs():  # v1.96
         """Reiter mit Option ein- oder ausblenden; ist der ausgeblendete gerade offen, zurueck zum Programm Generator"""  # v1.96
         from _web import web_tabs  # v1.96
+        for key_, item_ in menu_elems.items():  # v4.51: Menueeintraege Tabelle faerben und Simulator im Anfaenger Modus ausblenden
+            item_.set_visibility(web_tabs.tab_enabled("progcfg", ctrl) if key_ == "progcfg" else not web_tabs.is_beginner_mode(ctrl))  # v4.51
+        if tabs.value == "progcfg" and not web_tabs.tab_enabled("progcfg", ctrl):  # v4.51: Anfaenger Modus eingeschaltet, Regelseite offen: zurueck zum Programm Generator
+            tabs.set_value("pg")  # v4.51
         for tab_key, element in optional_tabs.items():  # v1.96
             on = web_tabs.tab_enabled(tab_key, ctrl)  # v1.96
             element.set_visibility(on)  # v1.96
@@ -2448,13 +2491,20 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
             connect_arrow = ui.button(icon="arrow_drop_down").props("unelevated dense color=negative")  # v4.14
             with connect_arrow:  # v4.14
                 with ui.menu():  # v4.14
+                    ui.menu_item(tr("Verbinden"), on_click=lambda: connect_arduino())  # v4.51 (vorher Menue Lichtmaschine)
                     ui.menu_item(tr("Verbindung trennen"), on_click=lambda: disconnect_arduino())  # v4.14
                     ui.menu_item(tr("Neu verbinden"), on_click=lambda: reconnect_arduino())  # v4.14
                     ui.menu_item(tr("Board wechseln …"), on_click=lambda: change_board())  # v4.14
-            connect_arrow.tooltip(tr("Verbindung trennen, neu verbinden oder das Board wechseln"))  # v4.14
+                    ui.separator()  # v4.51
+                    ui.menu_item(tr("Alle LED aus"), on_click=lambda: run_command(lambda: ctrl.led_off(), "Alle LED aus")())  # v4.51 (vorher Menue Lichtmaschine)
+                    # ui.menu_item(tr("ESP32-Firmware über WLAN hochladen …"), on_click=lambda: web_esp32_ota.open_dialog(pio=ota_arduino.Find_PIO() if ota_options.Is_PlatformIO() else None))  # v4.51 (vorher Menue Lichtmaschine)  # v4.52 (entfallen: Knopf auf dem Reiter WLAN (OTA) der Optionen)
+            # connect_arrow.tooltip(tr("Verbindung trennen, neu verbinden oder das Board wechseln"))  # v4.14  # v4.51 (entfallen)
+            # connect_arrow.tooltip(tr("Verbinden, Verbindung trennen, neu verbinden, Board wechseln, alle LED aus oder ESP32-Firmware über WLAN hochladen"))  # v4.51  # v4.52 (entfallen)
+            connect_arrow.tooltip(tr("Verbinden, Verbindung trennen, neu verbinden, Board wechseln oder alle LED aus"))  # v4.52
         # connect_btn.tooltip("Verbindung zum Arduino herstellen (wie Lichtmaschine → Verbinden). Rot: keine Verbindung, grün: verbunden. Trennen: Menü Lichtmaschine → Trennen")  # v2.01  # v3.83  # v3.84 (entfallen)
         # connect_btn.tooltip("Verbindung zur Lichtmaschine herstellen (wie ARDUINO → Verbinden). Rot: keine Verbindung, grün: verbunden. Trennen: Pfeil neben dem Knopf oder Menü ARDUINO → Trennen")  # v2.01  # v3.83  # v4.14  # v4.18 (entfallen)
-        connect_btn.tooltip("Verbindung zur Lichtmaschine herstellen (wie Lichtmaschine → Verbinden). Rot: keine Verbindung, grün: verbunden. Trennen: Pfeil neben dem Knopf oder Menü Lichtmaschine → Trennen")  # v4.18
+        # connect_btn.tooltip("Verbindung zur Lichtmaschine herstellen (wie Lichtmaschine → Verbinden). Rot: keine Verbindung, grün: verbunden. Trennen: Pfeil neben dem Knopf oder Menü Lichtmaschine → Trennen")  # v4.18  # v4.51 (entfallen)
+        connect_btn.tooltip(tr("Verbindung zur Lichtmaschine herstellen. Rot: keine Verbindung, grün: verbunden. Trennen, neu verbinden und mehr: Pfeil neben dem Knopf"))  # v4.51
         web_fullscreen.button()                                       # Vollbild ein und aus: neben Beenden, in jedem Reiter erreichbar und auch im Vollbild sichtbar  # v1.81
         # ui.button("Beenden", on_click=quit_program, icon="power_settings_new").props("color=negative outline dense").classes("mll-quit")  # v3.78 (entfallen)
         with ui.column().classes("items-end gap-0 mll-quitcol"):  # v3.78: unter dem Knopf Beenden die Version der MobaLedLib (nur mit der ARDUINO IDE)
@@ -5833,13 +5883,15 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
 
     def incr_files(folder: str, base: str | None = None) -> list:  # v4.15
         """Sicherungsdateien <Name>_<Nummer>.json im Ordner: [(Nummer, Pfad, Name)], mit base nur dieses Namens"""  # v4.15
-        rx = re.compile(r"^(?P<b>.+)_(?P<n>\d{4,})\.json$", re.IGNORECASE)  # v4.15
+        # rx = re.compile(r"^(?P<b>.+)_(?P<n>\d{4,})\.json$", re.IGNORECASE)  # v4.15 (entfallen)
+        rx = re.compile(r"^(?P<b>.+)_(?P<n>\d{4,}|\d{4}\.\d{2}\.\d{2}_\d{2}\.\d{2}\.\d{2}(?:_\d+)?)\.json$", re.IGNORECASE)  # v4.50: Nummer (alt) oder Datum und Uhrzeit
         res = []  # v4.15
         try:  # v4.15
             for name in os.listdir(folder):  # v4.15
                 m = rx.match(name)  # v4.15
                 if m and (base is None or m.group("b") == base):  # v4.15
-                    res.append((int(m.group("n")), os.path.join(folder, name), name))  # v4.15
+                    # res.append((int(m.group("n")), os.path.join(folder, name), name))  # v4.15 (entfallen)
+                    res.append((int(m.group("n")) if m.group("n").isdigit() else 0, os.path.join(folder, name), name))  # v4.50: Datum und Uhrzeit: Nummer 0
         except OSError:  # v4.15
             pass  # v4.15
         return res  # v4.15
@@ -5849,9 +5901,9 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
         cur = {**incr_default_target(), **{k: v for k, v in cfg.items() if v}}  # v4.15
         with ui.dialog().props("persistent") as dlg, ui.card().classes("w-[640px] max-w-full"):  # v4.15
             ui.label(tr("Sicherungsort für das inkrementelle Speichern")).classes("text-h6")  # v4.15
-            ui.label(tr("An den Namen wird bei jedem Speichern eine vierstellige Nummer angehängt. Der Ordner liegt auf dem Rechner, auf dem das Programm läuft."))  # v4.15
+            ui.label(tr("An den Namen werden bei jedem Speichern Datum und Uhrzeit angehängt, zum Beispiel MobaLedLib_2026.11.20_20.05.03.json. Der Ordner liegt auf dem Rechner, auf dem das Programm läuft."))  # v4.50  (v4.15: vierstellige Nummer)
             folder_in = ui.input(tr("Ordner"), value=cur["dir"]).classes("w-full")  # v4.15
-            base_in = ui.input(tr("Name der Sicherungsdatei (ohne Nummer)"), value=cur["base"]).classes("w-full")  # v4.15
+            base_in = ui.input(tr("Name der Sicherungsdatei (ohne Datum und Uhrzeit)"), value=cur["base"]).classes("w-full")  # v4.15
             with ui.row().classes("justify-end w-full"):  # v4.15
                 ui.button("Abbrechen (A)", on_click=lambda: dlg.submit(None)).props("flat data-key=A").classes("mll-cancel")  # v4.15
                 ui.button("OK (O)", on_click=lambda: dlg.submit((folder_in.value, base_in.value))).props("color=primary data-key=O").classes("mll-default")  # v4.15
@@ -5873,7 +5925,7 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
             ui.notify(tr("Sicherungsort gespeichert: {ordner}", ordner=new["dir"]), type="positive")  # v4.15
 
     async def incremental_save():  # v4.15
-        """Tastenkombination (Programm Einstellungen) oder Menue Datei: das komplette Workbook als <Name>_<Nummer>.json sichern, die Nummer steigt bei jedem Speichern um eins"""  # v4.15
+        """Tastenkombination (Programm Einstellungen) oder Menue Datei: das komplette Workbook als <Name>_<Jahr.Monat.Tag_Std.Min.Sek>.json sichern (bis 4.49: Nummer)"""  # v4.15  # v4.50
         if state["busy"]:  # v4.15
             ui.notify(tr("Es läuft noch ein Vorgang - bitte warten."), type="warning")  # v4.15
             return  # v4.15
@@ -5889,8 +5941,13 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
         except OSError as ex:  # v4.15
             ui.notify(tr("Der Ordner kann nicht angelegt werden: {fehler}", fehler=ex), type="negative")  # v4.15
             return  # v4.15
-        nxt = max([n for n, _p, _f in incr_files(folder, base)] or [0]) + 1  # v4.15: hoechste Nummer im Ordner + 1: auch nach einem Neustart und ohne Ueberschreiben
-        path = os.path.join(folder, "%s_%04d.json" % (base, nxt))  # v4.15
+        # nxt = max([n for n, _p, _f in incr_files(folder, base)] or [0]) + 1  # v4.15 (entfallen: Datum und Uhrzeit statt Nummer)
+        # path = os.path.join(folder, "%s_%04d.json" % (base, nxt))  # v4.15 (entfallen)
+        path = os.path.join(folder, "%s_%s.json" % (base, time.strftime("%Y.%m.%d_%H.%M.%S")))  # v4.50: MobaLedLib_2026.11.20_20.05.03.json
+        _k = 1  # v4.50
+        while os.path.exists(path):  # v4.50: zweimal in derselben Sekunde: _2, _3 ...
+            _k += 1  # v4.50
+            path = os.path.join(folder, "%s_%s_%d.json" % (base, time.strftime("%Y.%m.%d_%H.%M.%S"), _k))  # v4.50
         await run_command(lambda: (sync_all_sheets(), wb.Save(filename=path)), "Inkrementell speichern", live=False)()  # v4.15
         if os.path.exists(path):  # v4.15
             ui.notify(tr("Gesichert: {datei}", datei=os.path.basename(path)), type="positive")  # v4.15
@@ -6476,6 +6533,35 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
 
     web_esp32_ota.minimal_firmware_handler = minimal_firmware  # v3.39
 
+    async def open_settings(tab, group=None):  # v4.51
+        """Seite Programm Einstellungen (config) oder Regelseite Tabelle faerben (progcfg) oeffnen und zur Gruppe springen (Frage nach ungesicherten Aenderungen stellt on_tab)"""  # v4.51
+        tabs.set_value(tab)  # v4.51
+        if group:  # v4.51
+            ui.run_javascript("(function(g){let n=0;const t=setInterval(function(){const e=document.querySelector('[data-group=\"'+g+'\"]');n++;"  # v4.51
+                              "if(e&&e.offsetParent!==null){clearInterval(t);e.scrollIntoView({behavior:'smooth',block:'start'});}else if(n>50){clearInterval(t);}},100);})(%s)" % json.dumps(group))  # v4.51
+
+    async def open_extensions():  # v4.51
+        """Fenster Erweiterungen (vorher Reiter im Optionenfenster)"""  # v4.51  # v4.53
+        # from _web import web_form_options  # v4.51  # v4.53 (entfallen)
+        # web_form_options._TAB.update(name=tr("Erweiterungen"), keep=True)  # v4.51  # v4.53 (entfallen: der Reiter Erweiterungen gibt es nicht mehr)
+        # await run_command(lambda: M20.Option_Dialog(), "Optionen")()  # v4.51  # v4.53 (entfallen)
+        from _web import web_form_options  # v4.53
+        await web_form_options.open_extensions_window()  # v4.53: eigenes Fenster, Haken sofort wirksam, Schliessen
+
+    async def open_arduino_settings():  # v4.52
+        """Fenster ARDUINO-IDE Einstellungen (vorher Reiter ARDUINO Einstellungen) mit Speichern und Abbrechen; oeffnet ueber dem Optionenfenster"""  # v4.52
+        with ui.dialog().props("persistent") as dlg, ui.card().classes("w-[900px] max-w-full").style("max-height: 96vh; overflow-y: auto"):  # v4.52
+            cfg_page = web_params.build_settings_page(ctrl, "ARDUINOConfigPage", extra=web_params.ArduinoPaths(ctrl), embedded=True)  # v4.52
+            with ui.row().classes("justify-end w-full"):  # v4.52
+                ui.button("Abbrechen (A)", on_click=lambda: dlg.submit(False)).props("flat data-key=A").classes("mll-cancel")  # v4.52
+                ui.button("Speichern (S)", on_click=lambda: (cfg_page.save(), dlg.submit(True))).props("color=primary data-key=S").classes("mll-default")  # v4.52
+        await dlg  # v4.52
+        web_dialogs.safe_delete(dlg)  # v4.52
+
+    from _web import web_form_options as _wfo  # v4.52
+    _wfo.arduino_settings_handler = open_arduino_settings  # v4.52: Knopf auf dem Reiter Entwicklungsumgebung der Optionen
+    _wfo.ota_upload_handler = lambda: web_esp32_ota.open_dialog(pio=ota_arduino.Find_PIO() if ota_options.Is_PlatformIO() else None)  # v4.52: Knopf auf dem Reiter WLAN (OTA)
+
     MENU = {
         "Datei": [
             ("Speichern (Strg+S)", permanent_save),  # v4.38 (Issue 49)
@@ -6486,11 +6572,12 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
             ("Inkrementell speichern", incremental_save),  # v4.15  # v4.17 (ohne Tastenkombination: sie ist einstellbar)
             ("Sicherungsdatei öffnen …", open_backup),  # v4.15
             ("Sicherungsort ändern …", change_incr_target),  # v4.15
-            ("Einstellungen sichern …", export_settings),  # v4.24
-            ("Einstellungen übernehmen …", import_settings),  # v4.24
+            # ("Einstellungen sichern …", export_settings),  # v4.24  # v4.51 (entfallen: jetzt im Menue Einstellungen)
+            # ("Einstellungen übernehmen …", import_settings),  # v4.24  # v4.51 (entfallen: jetzt im Menue Einstellungen)
             None,
             ("ProgrammGenerator: PGF-Datei lesen", run_command(lambda: M18.Load_Data_from_File(), "PGF lesen", live=False)),
             ("ProgrammGenerator: PGF-Datei speichern", run_command(lambda: M18.Save_Data_to_File(), "PGF speichern")),
+            ("Importieren v. altem Programm …", run_command(lambda: __import__("proggen.F00_mainbuttons", fromlist=["x"]).UserForm_Options._web_import_info(), "Importieren v. altem Programm", live=False)),  # v4.54 (vorher Reiter Dateien in den Optionen)
             ("ProgrammGenerator: Anlagenansicht laden ...", layout_import),  # v2.40
             ("ProgrammGenerator: Anlagenansicht speichern ...", layout_export),  # v2.40
             None,
@@ -6501,19 +6588,32 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
             # ("Symbole aktualisieren", run_command(lambda: X02.ActiveSheet.refreshicons(), "Symbole aktualisieren")),  # v2.11 (entfallen)
             # ("Testtasten neu aufbauen", run_command(lambda: M20.ResetTestButtons(False), "Testtasten")),  # v2.11 (entfallen)
             # ("Symbole und Testtasten neu aufbauen (Reparatur)", run_command(rebuild_decorations, "Symbole und Testtasten")),  # v2.11 (entfallen)
+            ("Tabelle färben …", lambda: open_settings("progcfg"), "progcfg"),  # v4.51: die Regelseite (vorher Reiter Tabelle Faerben)
             ("Tabelle neu berechnen", run_command(recalc_table, "Tabelle neu berechnen")),  # v2.11
             ("Tabelle reparieren (Symbole und Testtasten neu aufbauen) ...", run_command(repair_table, "Tabelle reparieren")),  # v2.11
         ],
-        # "ARDUINO": [  # v3.84 (entfallen)
-        "Lichtmaschine": [  # v3.84
-            ("ESP32-Firmware über WLAN hochladen …", lambda: web_esp32_ota.open_dialog(pio=ota_arduino.Find_PIO() if ota_options.Is_PlatformIO() else None)),
-            ("Verbinden", connect_arduino),  # v1.86
-            # ("Trennen", run_command(lambda: ctrl.disconnect(), "Trennen")),  # v4.14 (entfallen: merkt jetzt, dass nicht automatisch verbunden wird)
-            ("Trennen", disconnect_arduino),  # v4.14
-            ("Neu verbinden", reconnect_arduino),  # v4.14
-            ("Board wechseln …", change_board),  # v4.14
-            ("Alle LED aus", run_command(lambda: ctrl.led_off(), "Alle LED aus")),
-            # ("Konfiguration vom Pico laden (experimentell)", run_command(lambda: M06cfg.download_from_Pico(), "Konfiguration laden")),  # v2.02 (entfallen)
+        # # "ARDUINO": [  # v3.84 (entfallen)  # v4.51 (entfallen: der Pfeil neben dem Knopf Mit Lichtmaschine verbinden enthaelt alle Eintraege)
+        # "Lichtmaschine": [  # v3.84  # v4.51 (entfallen: der Pfeil neben dem Knopf Mit Lichtmaschine verbinden enthaelt alle Eintraege)
+        # ("ESP32-Firmware über WLAN hochladen …", lambda: web_esp32_ota.open_dialog(pio=ota_arduino.Find_PIO() if ota_options.Is_PlatformIO() else None)),  # v4.51 (entfallen: der Pfeil neben dem Knopf Mit Lichtmaschine verbinden enthaelt alle Eintraege)
+        # ("Verbinden", connect_arduino),  # v1.86  # v4.51 (entfallen: der Pfeil neben dem Knopf Mit Lichtmaschine verbinden enthaelt alle Eintraege)
+        # # ("Trennen", run_command(lambda: ctrl.disconnect(), "Trennen")),  # v4.14 (entfallen: merkt jetzt, dass nicht automatisch verbunden wird)  # v4.51 (entfallen: der Pfeil neben dem Knopf Mit Lichtmaschine verbinden enthaelt alle Eintraege)
+        # ("Trennen", disconnect_arduino),  # v4.14  # v4.51 (entfallen: der Pfeil neben dem Knopf Mit Lichtmaschine verbinden enthaelt alle Eintraege)
+        # ("Neu verbinden", reconnect_arduino),  # v4.14  # v4.51 (entfallen: der Pfeil neben dem Knopf Mit Lichtmaschine verbinden enthaelt alle Eintraege)
+        # ("Board wechseln …", change_board),  # v4.14  # v4.51 (entfallen: der Pfeil neben dem Knopf Mit Lichtmaschine verbinden enthaelt alle Eintraege)
+        # ("Alle LED aus", run_command(lambda: ctrl.led_off(), "Alle LED aus")),  # v4.51 (entfallen: der Pfeil neben dem Knopf Mit Lichtmaschine verbinden enthaelt alle Eintraege)
+        # # ("Konfiguration vom Pico laden (experimentell)", run_command(lambda: M06cfg.download_from_Pico(), "Konfiguration laden")),  # v2.02 (entfallen)  # v4.51 (entfallen: der Pfeil neben dem Knopf Mit Lichtmaschine verbinden enthaelt alle Eintraege)
+        # ],  # v4.51 (entfallen: der Pfeil neben dem Knopf Mit Lichtmaschine verbinden enthaelt alle Eintraege)
+        "Einstellungen": [  # v4.51 (Vorschlag Michael): die Seiten Programm Einstellungen als Menueeintraege
+            ("Allgemein", lambda: open_settings("config", "Allgemeine Einstellungen")),  # v4.51
+            ("Programm Generator", lambda: open_settings("config", "Programm Generator")),  # v4.51
+            ("Farb Test", lambda: open_settings("config", "Farb Test Einstellungen")),  # v4.51
+            ("Simulator", lambda: open_settings("config", "Simulatoreinstellungen"), "sim"),  # v4.51: nur im Experten Modus
+            ("Netzzugriff", lambda: open_settings("config", "Zugriff aus dem Netz")),  # v4.51
+            ("Spezial", lambda: open_settings("config", "Spezialeinstellungen")),  # v4.51
+            ("Erweiterungen …", open_extensions),  # v4.51: Schritt 2 verschiebt die Erweiterungen hierher, bis dahin das Optionenfenster auf dem Reiter Erweiterungen
+            None,  # v4.51
+            ("Einstellungen sichern …", export_settings),  # v4.24  # v4.51 (aus dem Menue Datei)
+            ("Einstellungen übernehmen …", import_settings),  # v4.24  # v4.51 (aus dem Menue Datei)
         ],
         "Hilfe": [
             ("Hilfe öffnen", run_command(open_help, "Hilfe")),
@@ -6534,9 +6634,13 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
                         if entry is None:
                             ui.separator()
                         else:
-                            ui.menu_item(entry[0], on_click=entry[1])
+                            # ui.menu_item(entry[0], on_click=entry[1])  # v4.51 (entfallen)
+                            mi = ui.menu_item(entry[0], on_click=entry[1])  # v4.51
+                            if len(entry) > 2:  # v4.51: Eintrag mit Schluessel (progcfg, sim): im Anfaenger Modus ausgeblendet
+                                menu_elems[entry[2]] = mi  # v4.51
         ui.space()
         autosave_label.move(menu_slot)
+    apply_optional_tabs()                              # Menueeintraege Tabelle faerben und Simulator im Anfaenger Modus ausblenden  # v4.51
 
     async def on_drop(e):
         """Eine MLL_PGF-Datei wurde auf die Tabelle gezogen: nach Rueckfrage wie "PGF-Datei lesen" laden"""
@@ -6634,8 +6738,9 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
         """Im Anfaenger Modus fehlt der Knopf Zeilen Faerben (der Reiter ProgGenerator Einstellungen, in dem man die Farben festlegt, auch)"""  # v2.96
         from _web import web_tabs  # v2.96
         # show_expert = not web_tabs.is_beginner_mode(ctrl)  # v2.96  # v3.92 (entfallen)
-        hide_button = str(ctrl.getConfigData("HideColorButton") or "").strip().lower() in ("1", "true", "ja", "yes", "an", "ein", "on")  # v3.92
-        show_expert = not web_tabs.is_beginner_mode(ctrl) and not hide_button  # v3.92: auch mit dem Haken Zeilen Faerben Button verstecken
+        # hide_button = str(ctrl.getConfigData("HideColorButton") or "").strip().lower() in ("1", "true", "ja", "yes", "an", "ein", "on")  # v3.92  # v4.51 (entfallen)
+        # show_expert = not web_tabs.is_beginner_mode(ctrl) and not hide_button  # v3.92: auch mit dem Haken Zeilen Faerben Button verstecken  # v4.51 (entfallen)
+        show_expert = not web_tabs.is_beginner_mode(ctrl)  # v4.51: die Option Zeilen Faerben Button verstecken entfaellt (der Knopf auch)
         for element in beginner_buttons:  # v2.96
             element.set_visibility(show_expert)  # v2.96
     apply_beginner_buttons()  # v2.96
@@ -6716,6 +6821,7 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
                           "s.id='mll-fonts'; document.head.appendChild(s);} s.textContent=%s; window.mllGridScale=%.3f;"
                           % (json.dumps(font_css(ctrl)), scales["grid"]))
         # ui.run_javascript(theme_js(theme_value(ctrl)))  # v4.45 (entfallen: der Server-Wert des Elements setzte beim Reiterwechsel wieder hell)
+        ui.run_javascript(theme_js(theme_value(ctrl), theme_choice(ctrl) != "hell", theme_choice(ctrl) == "dunkeltabelle"))  # v4.47: Klasse mll-contrast; Dark/Light-Wert setzt weiter das Element (siehe 4.45)
         dark_mode_el.value = theme_value(ctrl)  # v4.45: Darstellung der Oberflaeche (Hell, Dunkel, Wie System)
         apply_icon_size()                              # Groesse der Symbole der Funktionsknoepfe (PGIconSize)
         ui.run_javascript(web_layout.apply_js(web_layout.get_mode(ctrl)))          # kompaktes Layout (Programm Einstellungen, Darstellung)

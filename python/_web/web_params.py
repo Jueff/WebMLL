@@ -1,9 +1,9 @@
-# Datei-Version: 1.12 (2026-11-19) - web_params.py
+# Datei-Version: 1.16 (2026-11-21) - web_params.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_params.py
 # Path:           _web/web_params.py
-# Version:        1.12
-# Last Update:    2026-11-19
+# Version:        1.16
+# Last Update:    2026-11-21
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
@@ -14,6 +14,10 @@
 #   1.10  2026-11-17  Programm Generator: House-Zeiten und DCC-Offset; neue Gruppe Simulatoreinstellungen (nur im Experten Modus, EXPERT_GROUPS, apply_beginner)
 #   1.11  2026-11-19  Einstellung AutoConnect in den Allgemeinen Einstellungen (Issue 20)
 #   1.12  2026-11-19  IncrSaveKey in den Allgemeinen Einstellungen (Issue 21)
+#   1.13  2026-11-21  ThemeMode (Darstellung der Oberflaeche) in den Allgemeinen Einstellungen direkt unter Sprache (Issue 51)
+#   1.14  2026-11-21  LedOffOnDisconnect in den Allgemeinen Einstellungen
+#   1.15  2026-11-21  Version 4.51: jede Gruppe der Einstellungsseite traegt data-group (das Menue Einstellungen springt zur Gruppe)
+#   1.16  2026-11-21  Version 4.52: Seite Tabelle faerben: Titel Tabelle faerben, erste Zeile der Beschreibung entfaellt (TITLE_OVERRIDES, DESCRIPTION_OVERRIDES); build_settings_page(embedded=True) baut den Inhalt ohne Karte und Knoepfe fuer ein Fenster (ARDUINO-IDE Einstellungen)
 # ----------------------------------------------------------------------------------------------
 """Web-Version von create_macroparam_frame/create_macroparam_content (pyMobaLedLib.py) fuer die Einstellungsseiten.
 
@@ -54,7 +58,9 @@ SETTINGS_GROUPS = {  # v1.06
     "ConfigurationPage": [  # v1.06
         # ("Allgemeine Einstellungen", ["Language", "@layout", "FontConfig", "FontConfig_PattGen", "PGIconSize"]),  # v1.06 (entfallen)
         # ("Allgemeine Einstellungen", ["BeginnerMode", "Language", "@layout", "FontConfig", "FontConfig_PattGen", "PGIconSize"]),  # v1.07  # v1.11 (entfallen)
-        ("Allgemeine Einstellungen", ["BeginnerMode", "AutoConnect", "IncrSaveKey", "Language", "@layout", "FontConfig", "FontConfig_PattGen", "PGIconSize"]),  # v1.11
+        # ("Allgemeine Einstellungen", ["BeginnerMode", "AutoConnect", "IncrSaveKey", "Language", "@layout", "FontConfig", "FontConfig_PattGen", "PGIconSize"]),  # v1.11  # v1.13 (entfallen)
+        # ("Allgemeine Einstellungen", ["BeginnerMode", "AutoConnect", "IncrSaveKey", "Language", "ThemeMode", "@layout", "FontConfig", "FontConfig_PattGen", "PGIconSize"]),  # v1.13  # v1.14 (entfallen)
+        ("Allgemeine Einstellungen", ["BeginnerMode", "AutoConnect", "LedOffOnDisconnect", "IncrSaveKey", "Language", "ThemeMode", "@layout", "FontConfig", "FontConfig_PattGen", "PGIconSize"]),  # v1.14
         # ("Programm Generator", ["GraphDefaultView", "ShowHiddentables", "@table"]),  # v1.06 (entfallen v1.08)
         # ("Programm Generator", ["GraphDefaultView", "ColoredRowsBold", "ShowHiddentables", "@table"]),  # v1.08  # v1.10 (entfallen)
         ("Programm Generator", ["GraphDefaultView", "ColoredRowsBold", "ShowHiddentables", "MinTime_House", "MaxTime_House", "DCC_Offset", "@table"]),  # v1.10
@@ -63,6 +69,9 @@ SETTINGS_GROUPS = {  # v1.06
         ("Zugriff aus dem Netz", ["@network"]),  # v1.06
         ("Spezialeinstellungen", None)],  # v1.06
 }  # v1.06
+
+TITLE_OVERRIDES = {"ProgGenConfigPage": "Tabelle färben"}  # v1.16: Titel der Seite (Menü Tabelle, Tabelle färben …)
+DESCRIPTION_OVERRIDES = {"ProgGenConfigPage": "Bedingungen für Zeilenfarben können hier definiert werden."}  # v1.16: ohne die erste Zeile ProgGenerator konfigurieren
 
 EXPERT_GROUPS = ("Simulatoreinstellungen",)             # Gruppen, die im Anfaenger Modus fehlen  # v1.10
 
@@ -108,7 +117,8 @@ class ParamPanel:
     def build(self, hidecondition: bool = False, slots: dict | None = None):  # v1.06: slots
         from nicegui import ui
         # description = self.macrodata.get("Ausführliche Beschreibung") or self.macrodata.get("Kurzbeschreibung") or ""  # v1.06 (entfallen)
-        description = description_text(self.macrodata.get("Ausführliche Beschreibung") or self.macrodata.get("Kurzbeschreibung"))  # v1.06
+        # description = description_text(self.macrodata.get("Ausführliche Beschreibung") or self.macrodata.get("Kurzbeschreibung"))  # v1.06
+        description = description_text(DESCRIPTION_OVERRIDES.get(self.macro) or self.macrodata.get("Ausführliche Beschreibung") or self.macrodata.get("Kurzbeschreibung"))  # v1.16
         if description:
             ui.label(description).style("white-space: pre-line; font-size: 13px").classes("w-full")
         groups = SETTINGS_GROUPS.get(self.macro)  # v1.06
@@ -130,7 +140,8 @@ class ParamPanel:
             if not parts:  # v1.06
                 continue  # v1.06
             # ui.label(heading).classes("text-h6").style("width: 100%; margin-top: 14px; padding-bottom: 2px; color: #1565c0; border-bottom: 2px solid #1976d2")  # v1.06  # v1.10 (entfallen)
-            block = ui.column().classes("gap-0 w-full")  # v1.10: Umschlag, damit sich eine ganze Gruppe ausblenden laesst
+            # block = ui.column().classes("gap-0 w-full")  # v1.10: Umschlag, damit sich eine ganze Gruppe ausblenden laesst  # v1.15 (entfallen)
+            block = ui.column().classes("gap-0 w-full").props('data-group="%s"' % heading.replace('"', ""))  # v1.15: Marke fuer das Menue Einstellungen (springt zur Gruppe)
             if heading in EXPERT_GROUPS:  # v1.10
                 self.expert_blocks.append(block)  # v1.10
             with block:  # v1.10
@@ -382,7 +393,8 @@ class ParamPanel:
 
 # --------------------------------------------------------------------------- Seiten
 # def build_settings_page(ctrl, macro: str, on_save=None, buttons=None, extra=None, after_save=None):  # v1.09 (entfallen)
-def build_settings_page(ctrl, macro: str, on_save=None, buttons=None, extra=None, after_save=None, save_buttons=None):  # v1.09
+# def build_settings_page(ctrl, macro: str, on_save=None, buttons=None, extra=None, after_save=None, save_buttons=None):  # v1.09  # v1.16 (entfallen)
+def build_settings_page(ctrl, macro: str, on_save=None, buttons=None, extra=None, after_save=None, save_buttons=None, embedded=False):  # v1.16: embedded: Inhalt ohne Karte und Knoepfe (Fenster mit eigenen Knoepfen)
     """Baut eine komplette Einstellungsseite (Titel, Speichern-Knopf, Parameter) und gibt ein Objekt mit
     panel, save(), changed(), mark_saved() zurueck.
 
@@ -391,7 +403,8 @@ def build_settings_page(ctrl, macro: str, on_save=None, buttons=None, extra=None
     from nicegui import ui
 
     macrodata = ctrl.MacroDef.data.get(macro, {}) if getattr(ctrl, "MacroDef", None) else {}
-    title = macrodata.get("Title", macro)
+    # title = macrodata.get("Title", macro)  # v1.16 (entfallen)
+    title = tr(TITLE_OVERRIDES[macro]) if macro in TITLE_OVERRIDES else macrodata.get("Title", macro)  # v1.16
     save_text = macrodata.get("Button_1", "Speichern")
     panel = ParamPanel(ctrl, macro, buttons)
     state = {"old_extra": {}}
@@ -424,6 +437,14 @@ def build_settings_page(ctrl, macro: str, on_save=None, buttons=None, extra=None
     def changed():
         return panel.collect() != panel.old_values or (extra is not None and extra.collect() != state["old_extra"])
 
+    if embedded:  # v1.16: Inhalt fuer ein Fenster: Titel, Parameter, Zusatzfelder; Speichern und Abbrechen stellt das Fenster
+        ui.label(title.replace("\n", " ")).classes("text-h6")  # v1.16
+        panel.build()  # v1.16
+        if extra is not None:  # v1.16
+            extra.build()  # v1.16
+        panel.load_from_config()  # v1.16
+        mark_saved()  # v1.16
+        return types.SimpleNamespace(panel=panel, save=save, changed=changed, mark_saved=mark_saved, title=title)  # v1.16
     with ui.column().classes("items-center w-full gap-2"):
         ui.label(title.replace("\n", " ")).classes("text-h5 q-pa-sm").style("border: 1px solid #999")
         with ui.card().classes("w-[1000px] max-w-full gap-2"):

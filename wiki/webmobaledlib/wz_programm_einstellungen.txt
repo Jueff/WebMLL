@@ -75,7 +75,7 @@ Die Einstellungen für den **Zugriff von anderen Geräten**, das **Passwort** un
 
 ===== ProgGenerator Einstellungen =====
 
-Der Reiter **ProgGenerator Einstellungen** enthält die **Bedingungen für Zeilenfarben**. Mit ihnen legst du fest, welche Zeilen der Knopf **Zeilen Färben** welcher Farbe einfärbt (zum Beispiel nach der Art des Makros). Eine Beschreibung steht auf der Seite [[anleitungen:webmobaledlib:pg_werkzeugleiste|Die Werkzeugleiste]].
+Die Seite **Tabelle färben** (Menü **Tabelle, Tabelle färben …**) enthält die **Bedingungen für Zeilenfarben**. Mit ihnen legst du fest, welche Zeilen beim Färben welche Farbe bekommen (zum Beispiel nach der Art des Makros). Eine Beschreibung steht auf der Seite [[anleitungen:webmobaledlib:pg_werkzeugleiste|Die Werkzeugleiste]].
 
 ===== Wo liegen meine Daten? =====
 

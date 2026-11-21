@@ -1,9 +1,9 @@
-# Datei-Version: 1.39 (2026-11-19) - web_form_options.py
+# Datei-Version: 1.42 (2026-11-21) - web_form_options.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_form_options.py
 # Path:           _web/web_form_options.py
-# Version:        1.39
-# Last Update:    2026-11-19
+# Version:        1.42
+# Last Update:    2026-11-21
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
@@ -30,6 +30,9 @@
 #   1.39  2026-11-19  Automatisch verbinden nach Board und USB Port erkennen: der Browserbezug (client) wird mitgegeben, sonst Fehler 'The current slot cannot be determined' (Rueckmeldung Harold, 4.22)
 #   1.38  2026-11-19  Erweiterungen: Name und Beschreibung aus libraries.json der Extension anzeigen, wenn vorhanden (Wunsch Juergen, Issue 6)
 #   1.39  2026-11-19  Reiter Entwicklungsumgebung: Haken 'Schnelles Update: nur geaenderte Konfiguration uebertragen (ESP32/Pico)' (Einstellung serial_cfg, M42_Dyn_Config; Zeilen mit '# v1.32', die Texte mit '# v1.39')
+#   1.40  2026-11-21  Version 4.52: Reiter Entwicklungsumgebung: Knopf ARDUINO-IDE Einstellungen (oeffnet das Fenster der Hauptseite); Reiter WLAN (OTA): Knopf ESP32-Firmware ueber WLAN hochladen
+#   1.41  2026-11-21  Version 4.53: Erweiterungen sind ein eigenes Fenster (open_extensions_window, Schliessen) statt eines Reiters im Optionenfenster; ext_panel auf Modulebene
+#   1.42  2026-11-21  Version 4.54: Reiter Dateien entfaellt (Importieren v. altem Prog. steht im Menue Datei); Fenster Erweiterungen: Hinweis, dass alle Aenderungen sofort wirksam sind
 # ----------------------------------------------------------------------------------------------
 """Web-Ersatz fuer proggen/UserForm_Options.py (Optionen und spezielle Funktionen).
 
@@ -121,7 +124,130 @@ def tab_buttons(buttons: dict, handlers: list[str], frame_hint: str | None = Non
 
 
 # ------------------------------------------------------------------ Dialog (Event-Loop)
+arduino_settings_handler = None  # v1.40: Funktion der Hauptseite (webmobaledlib.py): Fenster ARDUINO-IDE Einstellungen
+ota_upload_handler = None  # v1.40: Funktion der Hauptseite: Fenster ESP32-Firmware ueber WLAN hochladen
 _TAB = {"name": None, "keep": False}  # v1.35: zuletzt gewaehlter Reiter; keep: beim naechsten Oeffnen wieder dort beginnen (nach Board erkennen)
+
+def ext_panel(vals):  # v1.41 (vorher in _options_async, Reiter Erweiterungen)  # v1.31  # v1.32
+    from nicegui import ui  # v1.41
+    import headless.headless_extensions as HE  # v1.31
+    from nicegui import run  # v1.31
+    ui.label(tr("MobaLedLib Extensions (MLX) erweitern die Makros um zusätzliche Funktionen. Sie sind optional, manche brauchen Zusatzhardware. Eine eingeschaltete Erweiterung erscheint in der Makroauswahl in der Gruppe „Erweiterungen“.")).classes("text-grey-8").style("white-space: pre-line")  # v1.31
+    ui.label(tr("Alle Änderungen werden sofort wirksam, du musst nichts speichern.")).classes("text-body2 text-weight-medium")  # v1.42
+    state = {"busy": False}  # v1.31
+    holder = ui.column().classes("w-full gap-1")  # v1.32
+
+    def status_text(ent):  # v1.31
+        st_ = HE.status(ent)  # v1.31
+        return {"bundled": tr("im Programmpaket"), "loaded": tr("geladen"), "missing": tr("noch nicht geladen")}[st_]  # v1.31
+
+    async def confirm_foreign_code(spec):  # v1.32
+        with ui.dialog().props("persistent") as dlg, ui.card().classes("w-[520px] max-w-full"):  # v1.32
+            ui.label(tr("Fremden Code einbinden?")).classes("text-h6")  # v1.32
+            ui.label(tr("Die Erweiterung {spec} wird aus dem Internet geladen. Ihr Code wird beim Übersetzen in Ihr Programm eingebunden und auf dem Arduino ausgeführt. Fügen Sie nur Erweiterungen aus Quellen hinzu, denen Sie vertrauen.", spec=spec)).style("white-space: pre-line")  # v1.32
+            with ui.row().classes("justify-end w-full"):  # v1.32
+                ui.button(tr("Abbrechen"), on_click=lambda: dlg.submit(False)).props("flat")  # v1.32
+                ui.button(tr("Hinzufügen"), on_click=lambda: dlg.submit(True)).props("color=primary")  # v1.32
+        dlg.open()  # v1.32
+        answer = await dlg  # v1.32
+        dlg.delete()  # v1.32
+        return bool(answer)  # v1.32
+
+    def render():  # v1.32: die Liste neu aufbauen (nach Hinzufügen oder Entfernen)
+        holder.clear()  # v1.32
+        with holder:  # v1.32
+            for group, title in (("standard", tr("Standard (vorab eingeschaltet)")), ("optional", tr("Optional (vorab ausgeschaltet)")), ("custom", tr("Eigene Erweiterungen"))):  # v1.32
+                entries = [e_ for e_ in HE.all_entries() if e_.get("group") == group]  # v1.32
+                if not entries:  # v1.32
+                    continue  # v1.32
+                ui.label(title).classes("text-subtitle2 q-mt-sm")  # v1.31
+                for ent in entries:  # v1.31
+                    with ui.row().classes("items-start no-wrap w-full"):  # v1.31
+                        lib_info = HE.library_info(ent)  # v1.38: Name und Beschreibung aus libraries.json, wenn vorhanden
+                        # box = ui.checkbox(ent["name"], value=HE.is_enabled(ent["id"])).classes("w-72")  # v1.31  # v1.38 (entfallen)
+                        box = ui.checkbox(lib_info.get("name") or ent["name"], value=HE.is_enabled(ent["id"])).classes("w-72")  # v1.38
+                        with ui.column().classes("gap-0 grow"):  # v1.31
+                            info = ui.label(status_text(ent)).classes("text-caption")  # v1.31
+                            # ui.label(ent.get("description", "")).classes("text-caption text-grey-8")  # v1.31  # v1.38 (entfallen)
+                            ui.label(lib_info.get("description") or ent.get("description", "")).classes("text-caption text-grey-8")  # v1.38
+                            if ent.get("hardware"):  # v1.31
+                                ui.label(tr("Braucht Zusatzhardware: {hardware}", hardware=ent["hardware"])).classes("text-caption text-orange-9")  # v1.31
+                        if group == "custom":  # v1.32
+                            def remove(ent=ent):  # v1.32
+                                HE.remove_custom(ent["id"])  # v1.32
+                                vals["ext_changed"] = True  # v1.32
+                                render()  # v1.32
+                            ui.button(tr("Entfernen"), on_click=remove).props("flat dense no-caps color=negative")  # v1.32
+
+                    async def toggled(event, ent=ent, box=box, info=info):  # v1.31
+                        if state["busy"]:  # v1.31
+                            return  # v1.31
+                        if event.value and HE.status(ent) == "missing":  # v1.31: erst laden, dann einschalten
+                            state["busy"] = True  # v1.31
+                            info.set_text(tr("wird geladen …"))  # v1.31
+                            try:  # v1.31
+                                await run.io_bound(HE.download, ent)  # v1.31
+                            except HE.ExtensionError as ex:  # v1.31
+                                ui.notify(tr("Die Erweiterung {name} konnte nicht geladen werden: {fehler}", name=ent["id"], fehler=ex), type="negative")  # v1.31
+                                state["busy"] = False  # v1.32
+                                box.set_value(False)  # v1.31
+                                info.set_text(status_text(ent))  # v1.31
+                                return  # v1.31
+                            state["busy"] = False  # v1.31
+                        HE.set_enabled(ent["id"], bool(event.value))  # v1.31
+                        info.set_text(status_text(ent))  # v1.31
+                        vals["ext_changed"] = True  # v1.31
+                    box.on_value_change(toggled)  # v1.31
+            ui.label(tr("Eigene Erweiterung hinzufügen")).classes("text-subtitle2 q-mt-md")  # v1.32
+            with ui.row().classes("items-center no-wrap w-full"):  # v1.32
+                spec_input = ui.input(placeholder="MeineNeueExtensionMLX=https://github.com/…").props("outlined dense clearable").classes("grow")  # v1.32
+
+                async def add():  # v1.32
+                    if state["busy"]:  # v1.32
+                        return  # v1.32
+                    try:  # v1.32
+                        parsed = HE.parse_spec(spec_input.value)  # v1.32
+                    except HE.ExtensionError as ex:  # v1.32
+                        ui.notify(tr(str(ex)), type="negative")  # v1.32
+                        return  # v1.32
+                    if parsed["kind"] == "url" and not HE.warned():  # v1.32: beim ersten Hinzufügen einer Adresse
+                        if not await confirm_foreign_code(parsed["spec"]):  # v1.32
+                            return  # v1.32
+                        HE.set_warned()  # v1.32
+                    state["busy"] = True  # v1.32
+                    ui.notify(tr("wird geladen …"))  # v1.32
+                    try:  # v1.32
+                        await run.io_bound(HE.add_custom, parsed["spec"])  # v1.32
+                    except HE.ExtensionError as ex:  # v1.32
+                        state["busy"] = False  # v1.32
+                        ui.notify(tr("Die Erweiterung {name} konnte nicht geladen werden: {fehler}", name=parsed["id"], fehler=ex), type="negative")  # v1.32
+                        return  # v1.32
+                    state["busy"] = False  # v1.32
+                    vals["ext_changed"] = True  # v1.32
+                    render()  # v1.32
+                ui.button(tr("Hinzufügen"), on_click=add).props("outline no-caps")  # v1.32
+            ui.label(tr("Eine Zeile: Name (aktuelle Version aus der PlatformIO-Registry), Name@=1.1.0 (genau diese Version), Name=https://github.com/Besitzer/Repo (Code aus dem Repository, nach # ein Tag oder Zweig) oder nur die Adresse.")).classes("text-caption text-grey-8")  # v1.32
+    render()  # v1.32
+
+
+async def open_extensions_window():  # v1.41
+    """Eigenes Fenster Erweiterungen (Menue Einstellungen): wie der fruehere Reiter, die Haken wirken sofort; nur Schliessen. Danach werden die Makros neu eingelesen, wenn sich etwas geaendert hat"""  # v1.41
+    from nicegui import ui, run  # v1.41
+    state = {}  # v1.41
+    with ui.dialog().props("persistent") as dlg, ui.card().classes("w-[900px] max-w-full").style("max-height: 96vh; overflow-y: auto"):  # v1.41
+        ui.label(tr("Erweiterungen")).classes("text-h6")  # v1.41
+        ext_panel(state)  # v1.41
+        with ui.row().classes("justify-end w-full"):  # v1.41
+            ui.button(tr("Schließen"), on_click=lambda: dlg.submit(True)).props("color=primary no-caps").classes("mll-default mll-cancel")  # v1.41
+    await dlg  # v1.41
+    wd.safe_delete(dlg)  # v1.41
+    if state.get("ext_changed"):  # v1.41: Erweiterungen ein- oder ausgeschaltet: die Makros neu einlesen (wie vorher beim Schliessen der Optionen)
+        try:  # v1.41
+            import proggen.M38_Extensions as M38  # v1.41
+            await run.io_bound(M38.Load_Extensions)  # v1.41
+        except Exception:                                      # noqa: BLE001  # v1.41
+            logger.exception("Erweiterungen konnten nicht neu eingelesen werden")  # v1.41
+
 
 async def _options_async(spec: dict, st: dict):
     from nicegui import ui
@@ -207,104 +333,106 @@ async def _options_async(spec: dict, st: dict):
                 preview()  # v1.30
                 ui.timer(1, tick)  # v1.30
 
-            def ext_panel():  # v1.31  # v1.32
-                import headless.headless_extensions as HE  # v1.31
-                from nicegui import run  # v1.31
-                ui.label(tr("MobaLedLib Extensions (MLX) erweitern die Makros um zusätzliche Funktionen. Sie sind optional, manche brauchen Zusatzhardware. Eine eingeschaltete Erweiterung erscheint in der Makroauswahl in der Gruppe „Erweiterungen“.")).classes("text-grey-8").style("white-space: pre-line")  # v1.31
-                state = {"busy": False}  # v1.31
-                holder = ui.column().classes("w-full gap-1")  # v1.32
+            # def ext_panel():  # v1.31  # v1.32  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # import headless.headless_extensions as HE  # v1.31  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # from nicegui import run  # v1.31  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # ui.label(tr("MobaLedLib Extensions (MLX) erweitern die Makros um zusätzliche Funktionen. Sie sind optional, manche brauchen Zusatzhardware. Eine eingeschaltete Erweiterung erscheint in der Makroauswahl in der Gruppe „Erweiterungen“.")).classes("text-grey-8").style("white-space: pre-line")  # v1.31  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # state = {"busy": False}  # v1.31  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # holder = ui.column().classes("w-full gap-1")  # v1.32  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
 
-                def status_text(ent):  # v1.31
-                    st_ = HE.status(ent)  # v1.31
-                    return {"bundled": tr("im Programmpaket"), "loaded": tr("geladen"), "missing": tr("noch nicht geladen")}[st_]  # v1.31
+            # def status_text(ent):  # v1.31  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # st_ = HE.status(ent)  # v1.31  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # return {"bundled": tr("im Programmpaket"), "loaded": tr("geladen"), "missing": tr("noch nicht geladen")}[st_]  # v1.31  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
 
-                async def confirm_foreign_code(spec):  # v1.32
-                    with ui.dialog().props("persistent") as dlg, ui.card().classes("w-[520px] max-w-full"):  # v1.32
-                        ui.label(tr("Fremden Code einbinden?")).classes("text-h6")  # v1.32
-                        ui.label(tr("Die Erweiterung {spec} wird aus dem Internet geladen. Ihr Code wird beim Übersetzen in Ihr Programm eingebunden und auf dem Arduino ausgeführt. Fügen Sie nur Erweiterungen aus Quellen hinzu, denen Sie vertrauen.", spec=spec)).style("white-space: pre-line")  # v1.32
-                        with ui.row().classes("justify-end w-full"):  # v1.32
-                            ui.button(tr("Abbrechen"), on_click=lambda: dlg.submit(False)).props("flat")  # v1.32
-                            ui.button(tr("Hinzufügen"), on_click=lambda: dlg.submit(True)).props("color=primary")  # v1.32
-                    dlg.open()  # v1.32
-                    answer = await dlg  # v1.32
-                    dlg.delete()  # v1.32
-                    return bool(answer)  # v1.32
+            # async def confirm_foreign_code(spec):  # v1.32  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # with ui.dialog().props("persistent") as dlg, ui.card().classes("w-[520px] max-w-full"):  # v1.32  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # ui.label(tr("Fremden Code einbinden?")).classes("text-h6")  # v1.32  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # ui.label(tr("Die Erweiterung {spec} wird aus dem Internet geladen. Ihr Code wird beim Übersetzen in Ihr Programm eingebunden und auf dem Arduino ausgeführt. Fügen Sie nur Erweiterungen aus Quellen hinzu, denen Sie vertrauen.", spec=spec)).style("white-space: pre-line")  # v1.32  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # with ui.row().classes("justify-end w-full"):  # v1.32  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # ui.button(tr("Abbrechen"), on_click=lambda: dlg.submit(False)).props("flat")  # v1.32  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # ui.button(tr("Hinzufügen"), on_click=lambda: dlg.submit(True)).props("color=primary")  # v1.32  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # dlg.open()  # v1.32  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # answer = await dlg  # v1.32  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # dlg.delete()  # v1.32  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # return bool(answer)  # v1.32  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
 
-                def render():  # v1.32: die Liste neu aufbauen (nach Hinzufügen oder Entfernen)
-                    holder.clear()  # v1.32
-                    with holder:  # v1.32
-                        for group, title in (("standard", tr("Standard (vorab eingeschaltet)")), ("optional", tr("Optional (vorab ausgeschaltet)")), ("custom", tr("Eigene Erweiterungen"))):  # v1.32
-                            entries = [e_ for e_ in HE.all_entries() if e_.get("group") == group]  # v1.32
-                            if not entries:  # v1.32
-                                continue  # v1.32
-                            ui.label(title).classes("text-subtitle2 q-mt-sm")  # v1.31
-                            for ent in entries:  # v1.31
-                                with ui.row().classes("items-start no-wrap w-full"):  # v1.31
-                                    lib_info = HE.library_info(ent)  # v1.38: Name und Beschreibung aus libraries.json, wenn vorhanden
-                                    # box = ui.checkbox(ent["name"], value=HE.is_enabled(ent["id"])).classes("w-72")  # v1.31  # v1.38 (entfallen)
-                                    box = ui.checkbox(lib_info.get("name") or ent["name"], value=HE.is_enabled(ent["id"])).classes("w-72")  # v1.38
-                                    with ui.column().classes("gap-0 grow"):  # v1.31
-                                        info = ui.label(status_text(ent)).classes("text-caption")  # v1.31
-                                        # ui.label(ent.get("description", "")).classes("text-caption text-grey-8")  # v1.31  # v1.38 (entfallen)
-                                        ui.label(lib_info.get("description") or ent.get("description", "")).classes("text-caption text-grey-8")  # v1.38
-                                        if ent.get("hardware"):  # v1.31
-                                            ui.label(tr("Braucht Zusatzhardware: {hardware}", hardware=ent["hardware"])).classes("text-caption text-orange-9")  # v1.31
-                                    if group == "custom":  # v1.32
-                                        def remove(ent=ent):  # v1.32
-                                            HE.remove_custom(ent["id"])  # v1.32
-                                            vals["ext_changed"] = True  # v1.32
-                                            render()  # v1.32
-                                        ui.button(tr("Entfernen"), on_click=remove).props("flat dense no-caps color=negative")  # v1.32
+            # def render():  # v1.32: die Liste neu aufbauen (nach Hinzufügen oder Entfernen)  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # holder.clear()  # v1.32  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # with holder:  # v1.32  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # for group, title in (("standard", tr("Standard (vorab eingeschaltet)")), ("optional", tr("Optional (vorab ausgeschaltet)")), ("custom", tr("Eigene Erweiterungen"))):  # v1.32  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # entries = [e_ for e_ in HE.all_entries() if e_.get("group") == group]  # v1.32  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # if not entries:  # v1.32  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # continue  # v1.32  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # ui.label(title).classes("text-subtitle2 q-mt-sm")  # v1.31  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # for ent in entries:  # v1.31  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # with ui.row().classes("items-start no-wrap w-full"):  # v1.31  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # lib_info = HE.library_info(ent)  # v1.38: Name und Beschreibung aus libraries.json, wenn vorhanden  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # # box = ui.checkbox(ent["name"], value=HE.is_enabled(ent["id"])).classes("w-72")  # v1.31  # v1.38 (entfallen)  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # box = ui.checkbox(lib_info.get("name") or ent["name"], value=HE.is_enabled(ent["id"])).classes("w-72")  # v1.38  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # with ui.column().classes("gap-0 grow"):  # v1.31  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # info = ui.label(status_text(ent)).classes("text-caption")  # v1.31  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # # ui.label(ent.get("description", "")).classes("text-caption text-grey-8")  # v1.31  # v1.38 (entfallen)  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # ui.label(lib_info.get("description") or ent.get("description", "")).classes("text-caption text-grey-8")  # v1.38  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # if ent.get("hardware"):  # v1.31  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # ui.label(tr("Braucht Zusatzhardware: {hardware}", hardware=ent["hardware"])).classes("text-caption text-orange-9")  # v1.31  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # if group == "custom":  # v1.32  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # def remove(ent=ent):  # v1.32  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # HE.remove_custom(ent["id"])  # v1.32  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # vals["ext_changed"] = True  # v1.32  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # render()  # v1.32  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # ui.button(tr("Entfernen"), on_click=remove).props("flat dense no-caps color=negative")  # v1.32  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
 
-                                async def toggled(event, ent=ent, box=box, info=info):  # v1.31
-                                    if state["busy"]:  # v1.31
-                                        return  # v1.31
-                                    if event.value and HE.status(ent) == "missing":  # v1.31: erst laden, dann einschalten
-                                        state["busy"] = True  # v1.31
-                                        info.set_text(tr("wird geladen …"))  # v1.31
-                                        try:  # v1.31
-                                            await run.io_bound(HE.download, ent)  # v1.31
-                                        except HE.ExtensionError as ex:  # v1.31
-                                            ui.notify(tr("Die Erweiterung {name} konnte nicht geladen werden: {fehler}", name=ent["id"], fehler=ex), type="negative")  # v1.31
-                                            state["busy"] = False  # v1.32
-                                            box.set_value(False)  # v1.31
-                                            info.set_text(status_text(ent))  # v1.31
-                                            return  # v1.31
-                                        state["busy"] = False  # v1.31
-                                    HE.set_enabled(ent["id"], bool(event.value))  # v1.31
-                                    info.set_text(status_text(ent))  # v1.31
-                                    vals["ext_changed"] = True  # v1.31
-                                box.on_value_change(toggled)  # v1.31
-                        ui.label(tr("Eigene Erweiterung hinzufügen")).classes("text-subtitle2 q-mt-md")  # v1.32
-                        with ui.row().classes("items-center no-wrap w-full"):  # v1.32
-                            spec_input = ui.input(placeholder="MeineNeueExtensionMLX=https://github.com/…").props("outlined dense clearable").classes("grow")  # v1.32
+            # async def toggled(event, ent=ent, box=box, info=info):  # v1.31  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # if state["busy"]:  # v1.31  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # return  # v1.31  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # if event.value and HE.status(ent) == "missing":  # v1.31: erst laden, dann einschalten  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # state["busy"] = True  # v1.31  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # info.set_text(tr("wird geladen …"))  # v1.31  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # try:  # v1.31  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # await run.io_bound(HE.download, ent)  # v1.31  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # except HE.ExtensionError as ex:  # v1.31  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # ui.notify(tr("Die Erweiterung {name} konnte nicht geladen werden: {fehler}", name=ent["id"], fehler=ex), type="negative")  # v1.31  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # state["busy"] = False  # v1.32  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # box.set_value(False)  # v1.31  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # info.set_text(status_text(ent))  # v1.31  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # return  # v1.31  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # state["busy"] = False  # v1.31  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # HE.set_enabled(ent["id"], bool(event.value))  # v1.31  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # info.set_text(status_text(ent))  # v1.31  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # vals["ext_changed"] = True  # v1.31  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # box.on_value_change(toggled)  # v1.31  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # ui.label(tr("Eigene Erweiterung hinzufügen")).classes("text-subtitle2 q-mt-md")  # v1.32  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # with ui.row().classes("items-center no-wrap w-full"):  # v1.32  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # spec_input = ui.input(placeholder="MeineNeueExtensionMLX=https://github.com/…").props("outlined dense clearable").classes("grow")  # v1.32  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
 
-                            async def add():  # v1.32
-                                if state["busy"]:  # v1.32
-                                    return  # v1.32
-                                try:  # v1.32
-                                    parsed = HE.parse_spec(spec_input.value)  # v1.32
-                                except HE.ExtensionError as ex:  # v1.32
-                                    ui.notify(tr(str(ex)), type="negative")  # v1.32
-                                    return  # v1.32
-                                if parsed["kind"] == "url" and not HE.warned():  # v1.32: beim ersten Hinzufügen einer Adresse
-                                    if not await confirm_foreign_code(parsed["spec"]):  # v1.32
-                                        return  # v1.32
-                                    HE.set_warned()  # v1.32
-                                state["busy"] = True  # v1.32
-                                ui.notify(tr("wird geladen …"))  # v1.32
-                                try:  # v1.32
-                                    await run.io_bound(HE.add_custom, parsed["spec"])  # v1.32
-                                except HE.ExtensionError as ex:  # v1.32
-                                    state["busy"] = False  # v1.32
-                                    ui.notify(tr("Die Erweiterung {name} konnte nicht geladen werden: {fehler}", name=parsed["id"], fehler=ex), type="negative")  # v1.32
-                                    return  # v1.32
-                                state["busy"] = False  # v1.32
-                                vals["ext_changed"] = True  # v1.32
-                                render()  # v1.32
-                            ui.button(tr("Hinzufügen"), on_click=add).props("outline no-caps")  # v1.32
-                        ui.label(tr("Eine Zeile: Name (aktuelle Version aus der PlatformIO-Registry), Name@=1.1.0 (genau diese Version), Name=https://github.com/Besitzer/Repo (Code aus dem Repository, nach # ein Tag oder Zweig) oder nur die Adresse.")).classes("text-caption text-grey-8")  # v1.32
-                render()  # v1.32
+            # async def add():  # v1.32  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # if state["busy"]:  # v1.32  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # return  # v1.32  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # try:  # v1.32  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # parsed = HE.parse_spec(spec_input.value)  # v1.32  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # except HE.ExtensionError as ex:  # v1.32  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # ui.notify(tr(str(ex)), type="negative")  # v1.32  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # return  # v1.32  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # if parsed["kind"] == "url" and not HE.warned():  # v1.32: beim ersten Hinzufügen einer Adresse  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # if not await confirm_foreign_code(parsed["spec"]):  # v1.32  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # return  # v1.32  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # HE.set_warned()  # v1.32  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # state["busy"] = True  # v1.32  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # ui.notify(tr("wird geladen …"))  # v1.32  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # try:  # v1.32  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # await run.io_bound(HE.add_custom, parsed["spec"])  # v1.32  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # except HE.ExtensionError as ex:  # v1.32  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # state["busy"] = False  # v1.32  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # ui.notify(tr("Die Erweiterung {name} konnte nicht geladen werden: {fehler}", name=parsed["id"], fehler=ex), type="negative")  # v1.32  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # return  # v1.32  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # state["busy"] = False  # v1.32  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # vals["ext_changed"] = True  # v1.32  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # render()  # v1.32  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # ui.button(tr("Hinzufügen"), on_click=add).props("outline no-caps")  # v1.32  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # ui.label(tr("Eine Zeile: Name (aktuelle Version aus der PlatformIO-Registry), Name@=1.1.0 (genau diese Version), Name=https://github.com/Besitzer/Repo (Code aus dem Repository, nach # ein Tag oder Zweig) oder nur die Adresse.")).classes("text-caption text-grey-8")  # v1.32  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+            # render()  # v1.32  # v1.41 (entfallen: jetzt ext_panel auf Modulebene)
+
+            # (ext_panel steht jetzt auf Modulebene, siehe oben)  # v1.41
 
             pico_rows = []                                             # Knoepfe nur fuer den Pico (Firmware installieren)  # v1.09
             pico_values = list(spec["pages"]["left"].get("pico_values") or [])  # v1.09
@@ -428,7 +556,7 @@ async def _options_async(spec: dict, st: dict):
                 esp_tab = ui.tab(tr("ESP Einstellungen"))  # v1.30
                 esp_tab.set_visibility(vals.get("L") == esp32_value and esp32_value is not None)  # v1.30
                 ota_tab = ui.tab(tr("WLAN (OTA)"))
-                ext_tab = ui.tab(tr("Erweiterungen"))  # v1.31
+                # ext_tab = ui.tab(tr("Erweiterungen"))  # v1.31  # v1.41 (entfallen: eigenes Fenster, Menue Einstellungen)
                 ota_tab.set_visibility(vals.get("L") == esp32_value and esp32_value is not None)
             # with ui.tab_panels(tabs, value=tab_objs[0]).classes("w-full"):  # v1.35 (entfallen)
             start_tab = next((t_ for t_ in tab_objs if _TAB["keep"] and t_.props["name"] == _TAB["name"]), tab_objs[0])  # v1.35
@@ -439,8 +567,10 @@ async def _options_async(spec: dict, st: dict):
                     esp_panel()  # v1.30
                 with ui.tab_panel(ota_tab):
                     settings_panel()
-                with ui.tab_panel(ext_tab):  # v1.31
-                    ext_panel()  # v1.31
+                    if ota_upload_handler is not None:  # v1.40
+                        ui.button(tr("ESP32-Firmware über WLAN hochladen …"), on_click=lambda: ota_upload_handler()).props("outline no-caps")  # v1.40
+                # with ui.tab_panel(ext_tab):  # v1.31  # v1.41 (entfallen)
+                    # ext_panel()  # v1.31  # v1.41 (entfallen)
                 for t, tab in zip(spec["tabs"], tab_objs):
                     with ui.tab_panel(tab):
                         if t["kind"] == "arduino":
@@ -462,6 +592,8 @@ async def _options_async(spec: dict, st: dict):
                             ui.label(t["status"]).classes("text-grey-8").style("white-space: pre-line")  # v1.04
                             for b in t["buttons"]:  # v1.04
                                 button_row(b)  # v1.04
+                            if arduino_settings_handler is not None:  # v1.40
+                                ui.button(tr("ARDUINO-IDE Einstellungen"), on_click=lambda: arduino_settings_handler()).props("outline no-caps")  # v1.40
                             for text in t.get("texts", []):  # v1.07
                                 ui.label(text).classes("text-grey-8").style("white-space: pre-line")  # v1.07
                         else:
@@ -614,8 +746,8 @@ def make_class(Base):
                         b["disabled"] = True
                     if b["handler"] == "__Import_Button_Click":  # v1.29
                         b["disabled"] = False  # v1.29
-                tabs.append({"name": M09.Get_Language_Str("Dateien"), "kind": "list", "buttons": files,
-                             "texts": ["Speichern lädt die Datei über den Browser herunter, Laden öffnet einen Upload-Dialog."]})
+                # tabs.append({"name": M09.Get_Language_Str("Dateien"), "kind": "list", "buttons": files,  # v1.42 (entfallen: Importieren v. altem Prog. steht im Menue Datei)
+                # "texts": ["Speichern lädt die Datei über den Browser herunter, Laden öffnet einen Upload-Dialog."]})  # v1.42 (entfallen: Importieren v. altem Prog. steht im Menue Datei)
                 # Der Knopf des Originals "Update pyMobaLedLib" (__Update_pyMobaLedLib_Button_Click) fehlt hier absichtlich: Er laedt master.zip des
                 # Original-Repositorys und ueberschreibt den ganzen Programmordner (Tk-Version), das gibt es im Web nicht. Das Update der Web-Oberflaeche
                 # ist das Menue Hilfe -> Update webMobaLedLib (_web/web_update.py).

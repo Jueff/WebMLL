@@ -23,7 +23,7 @@ Die Spalte **Verteiler-Nr.** sagt, an welchem **Verteiler** (Kabelverteiler auf 
 
 ===== Wie übernehme ich Daten aus dem alten Excel-Programm? =====
 
-Der Knopf **Importieren v. altem Prog.** im Fenster //Optionen und spezielle Funktionen// (Reiter Dateien) zeigt seit 3.93 diese Anleitung an; einen direkten Import aus der Excel-Datei gibt es **nicht**. So geht es:
+Der Menüpunkt **Datei, Importieren v. altem Programm …** (bis 4.53: Knopf im Fenster //Optionen und spezielle Funktionen//, Reiter Dateien) zeigt diese Anleitung an; einen direkten Import aus der Excel-Datei gibt es **nicht**. So geht es:
 
   - Öffne in der **Excel-Version** des ProgrammGenerators //Optionen und spezielle Funktionen//, Reiter //Dateien//, klicke auf **Speichern in Datei** und speichere die Daten als Datei (Endung ''.MLL_pgf'').
   - Öffne in der webMobaLedLib das Menü **Datei** und lade diese Datei (siehe [[anleitungen:webmobaledlib:pg_speichern|Speichern und Laden]]).

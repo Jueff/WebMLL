@@ -386,7 +386,7 @@
         "Max": "",
         "Default": "",
         "Input Text": "Schriftgröße anpassen",
-        "Hint": "Schrifteinstellungen (nur nach Neustart sichtbar)",
+        "Hint": "Größe der Schrift für Titel, Beschriftungen und Eingabefelder. Die Änderung gilt nach dem Speichern der Einstellungen sofort.",
         "Implementation comment": "",
         "MultipleParams": [
             "FontTitle",
@@ -403,7 +403,7 @@
         "Max": "",
         "Default": "",
         "Input Text": "ProgGen/PattGen DefaultFont",
-        "Hint": "ProgGen/PattGen DefaultFont (nur nach Neustart sichtbar)",
+        "Hint": "Schrift der Tabelle des Programm Generators (Größe und Schriftart). Die Änderung gilt nach dem Speichern der Einstellungen sofort.",
         "Implementation comment": "",
         "MultipleParams": [
             "FontSmall",
@@ -422,7 +422,7 @@
         "Persistent": "True",
         "Default": "12",
         "Input Text": "Titel",
-        "Hint": "Titel-Schriftgröße in Punkten"
+        "Hint": "Schriftgröße der Titel in Punkten (Standard 12): Überschriften der Seiten und Dialoge, zum Beispiel „DCC-Keyboard“ oder „Farben Test“."
     },
     "FontLabel": {
         "ParName": "FontLabel",
@@ -434,7 +434,7 @@
         "Persistent": "True",
         "Default": "8",
         "Input Text": "Beschriftung",
-        "Hint": "Parameter-Beschriftung Schriftgröße in Punkten"
+        "Hint": "Schriftgröße der Beschriftungen in Punkten (Standard 8): Menüs, Reiter, Knöpfe sowie die Namen der Einstellungen und Felder."
     },
     "FontLarge": {
         "ParName": "FontLarge",
@@ -446,7 +446,7 @@
         "Persistent": "True",
         "Default": "14",
         "Input Text": "Große Schrift",
-        "Hint": "Schriftgröße für große Schrift in Punkten"
+        "Hint": "Große Schrift in Punkten: wird in der Web-Oberfläche zurzeit nicht verwendet (nur im Desktop-Programm)."
     },
     "FontName": {
         "ParName": "FontName",
@@ -458,7 +458,7 @@
         "Persistent": "True",
         "Default": "Arial",
         "Input Text": "Schriftart",
-        "Hint": "Schriftart z.B. Arial, Calibri"
+        "Hint": "Schriftart der Tabelle des Programm Generators, zum Beispiel Arial oder Calibri (muss auf dem Rechner installiert sein)."
     },
     "FontNormal": {
         "ParName": "FontNormal",
@@ -470,7 +470,7 @@
         "Persistent": "True",
         "Default": "11",
         "Input Text": "Normale Schrift",
-        "Hint": "Schriftgröße für normale Schrift in Punkten"
+        "Hint": "Schriftgröße der Tabelle des Programm Generators in Punkten (Standard 11): Zellen, Spaltenköpfe und die Höhe der Zeilen."
     },
     "FontSmall": {
         "ParName": "FontSmall",
@@ -482,7 +482,7 @@
         "Persistent": "True",
         "Default": "8",
         "Input Text": "Kleine Schrift",
-        "Hint": "Schriftgröße für kleine Schrift in Punkten"
+        "Hint": "Kleine Schrift in Punkten: wird in der Web-Oberfläche zurzeit nicht verwendet (nur im Desktop-Programm)."
     },
     "FontSpinbox": {
         "ParName": "FontSpinbox",
@@ -494,7 +494,7 @@
         "Persistent": "True",
         "Default": "8",
         "Input Text": "Spinbox",
-        "Hint": "SpinBox-Schriftgröße in Punkten"
+        "Hint": "Schriftgröße der Eingabefelder in Punkten (Standard 8): Text und Zahlen in Eingabe- und Auswahlfeldern."
     },
     "FontScale": {
         "ParName": "FontScale",
@@ -506,7 +506,7 @@
         "Persistent": "True",
         "Default": "8",
         "Input Text": "Scale",
-        "Hint": "Scale-Schriftgröße in Punkten"
+        "Hint": "Scale-Schriftgröße in Punkten: wird in der Web-Oberfläche zurzeit nicht verwendet (nur im Desktop-Programm)."
     },
     "G_Max": {
         "ParName": "G_Max",

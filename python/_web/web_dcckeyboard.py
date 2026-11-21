@@ -1,9 +1,9 @@
-# Datei-Version: 1.04 (2026-11-20) - web_dcckeyboard.py
+# Datei-Version: 1.05 (2026-11-21) - web_dcckeyboard.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_dcckeyboard.py
 # Path:           _web/web_dcckeyboard.py
-# Version:        1.04
-# Last Update:    2026-11-20
+# Version:        1.05
+# Last Update:    2026-11-21
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
@@ -12,6 +12,7 @@
 #   1.02  2026-11-05  Beschreibungstext der Seite wird uebersetzt (description_text)
 #   1.03  2026-11-17  Hinweis: Menue Lichtmaschine statt ARDUINO
 #   1.04  2026-11-20  Issue 51: Hinweisbox mit hellem Hintergrund bekommt dunkle Schrift (im Dunklen Modus war weisser Text auf hellem Grund nicht lesbar)
+#   1.05  2026-11-21  Version 4.51: Meldung nennt den Knopf Mit Lichtmaschine verbinden (das Menue Lichtmaschine entfaellt)
 # ----------------------------------------------------------------------------------------------
 """Web-Version der Seite "DCC Keyboard" (mlpyproggen/DCC_KeyboardPage.py, Klasse DCCKeyboardPage, ohne Tk).
 
@@ -185,7 +186,8 @@ def build(ctrl, is_active=None):
             ok = await asyncio.get_running_loop().run_in_executor(None, model.ensure_connected)
             if not ok:
                 # ui.notify("Nicht mit dem ARDUINO verbunden (ARDUINO → Verbinden).", type="warning")  # v1.03 (entfallen)
-                ui.notify("Nicht mit der Lichtmaschine verbunden (Lichtmaschine → Verbinden).", type="warning")  # v1.03
+                # ui.notify("Nicht mit der Lichtmaschine verbunden (Lichtmaschine → Verbinden).", type="warning")  # v1.03  # v1.05 (entfallen)
+                ui.notify("Nicht mit der Lichtmaschine verbunden (Knopf Mit Lichtmaschine verbinden).", type="warning")  # v1.05
                 return
         model.send(index, channel)
 

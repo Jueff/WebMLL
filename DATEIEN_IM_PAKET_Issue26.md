@@ -1,5 +1,5 @@
-Datei-Version: 1.00 (2026-11-19) - DATEIEN_IM_PAKET_Issue26.md
-Gilt für webMobaLedLib 4.25
+Datei-Version: 1.02 (2026-11-19) - DATEIEN_IM_PAKET_Issue26.md
+Gilt für webMobaLedLib 4.54
 
 # Issue 26: Welche Dateien müssen nicht ins Paket?
 
@@ -10,6 +10,7 @@ Grundlage ist die Liste von Jürgen und die Prüfung gegen den Code (Stand 4.25)
 | Datei | Befund |
 |---|---|
 | `LEDs_AutoProg/Start_AM328_Sub.cmd`, `Start_PICO_Sub.cmd`, `Start_ESP32_Sub.cmd` | werden bei jedem Übertragen neu geschrieben (`M08_ARDUINO.py`: `'Start_' + BoardName + '_Sub.cmd'`, `Create_Start_ESP32_Sub`) |
+| `python/icons/*.bmp` | alte Symbole aus dem Excel-Stand. Die Web-Oberfläche lädt statt `X.bmp` immer `X.png` (`webmobaledlib.py`, seit 2.58). Das Tk-Programm nimmt `.png`, wenn die `.bmp` fehlt (`XLA_Application.py`). **Nur löschen, wenn zu jeder `.bmp` eine `.png` gleichen Namens im Ordner liegt.** Prüfung unter Windows: `for %f in (icons\*.bmp) do if not exist "icons\%~nf.png" echo FEHLT: %f`. Die Namen `X.bmp` in den Tabellen bleiben unverändert. |
 | `LEDs_AutoProg/Start_Arduino.cmd` | wird erzeugt (`M08_ARDUINO.py`, `Prog_Generator.py`) |
 | `LEDs_AutoProg/*.cmd.1` | Sicherungskopien, nichts liest sie |
 | `LEDs_AutoProg/MobaLedTest_config.json` | die Konfiguration liegt im Datenordner (`%APPDATA%\webMobaLedLib`), die Datei hier liest webMobaLedLib nicht |

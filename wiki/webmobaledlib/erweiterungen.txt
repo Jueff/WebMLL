@@ -1,17 +1,16 @@
 ====== webMobaLedLib – Erweiterungen (MLX) ======
 //Seitenstand 1.01 (2026-11-19), gilt für webMobaLedLib 4.22//
 
-**Erweiterungen** (englisch //MobaLedLib Extensions//, kurz **MLX**) bringen **zusätzliche Makros** in die Makroauswahl, zum Beispiel einen **Zeitplan**, ein **Kaminfeuer** oder den Empfang von **Infrarot-Fernbedienungen**. Sie gehören nicht zum Kern der MobaLedLib, sondern sind kleine Programmpakete, die jemand zusätzlich geschrieben hat. Du schaltest sie im Fenster **Optionen und spezielle Funktionen** im Reiter **Erweiterungen** ein und aus.
+**Erweiterungen** (englisch //MobaLedLib Extensions//, kurz **MLX**) bringen **zusätzliche Makros** in die Makroauswahl, zum Beispiel einen **Zeitplan**, ein **Kaminfeuer** oder den Empfang von **Infrarot-Fernbedienungen**. Sie gehören nicht zum Kern der MobaLedLib, sondern sind kleine Programmpakete, die jemand zusätzlich geschrieben hat. Du schaltest sie im Fenster **Erweiterungen** (Menü **Einstellungen, Erweiterungen …**) im Reiter **Erweiterungen** ein und aus.
 
 Du brauchst Erweiterungen nicht für ein erstes Programm. Sie sind **optional**, manche brauchen **Zusatzhardware**. Deshalb zeigt die Makroauswahl nur die Erweiterungen, die du eingeschaltet hast.
 
 **Voraussetzung:** Erweiterungen gibt es nur mit **PlatformIO**. Wenn du die Arduino IDE benutzt, siehe [[anleitungen:webmobaledlib:arduino_ide|Zusätzlich: Arduino IDE]]; stelle für Erweiterungen auf PlatformIO um (Reiter **Entwicklungsumgebung**).
 
-===== Den Reiter öffnen =====
+===== Das Fenster öffnen =====
 
-  - Klicke im [[anleitungen:webmobaledlib:programmgenerator|Programm Generator]] auf **Optionen Werkzeuge**.
-  - Wähle den Reiter **Erweiterungen**.
-  - Setze oder entferne den **Haken** vor einer Erweiterung. Die Änderung gilt für die Makroauswahl, sobald du das Fenster schließt. Du musst nichts speichern und nichts neu starten.
+  - Öffne im [[anleitungen:webmobaledlib:programmgenerator|Programm Generator]] das Menü **Einstellungen** und wähle **Erweiterungen …**.
+  - Setze oder entferne den **Haken** vor einer Erweiterung. Die Änderung gilt für die Makroauswahl, sobald du das Fenster mit **Schließen** schließt. Du musst nichts speichern und nichts neu starten.
 
 Steht in der Erweiterung eine Datei ''libraries.json'' mit ''name'' und ''description'', zeigt das Programm diesen **Namen** und die **Beschreibung** an. Sonst nimmt es die Angaben aus der Liste.
 
@@ -76,7 +75,7 @@ Eine Erweiterung ist **Programmcode**. Er wird beim Übersetzen in **dein Progra
 ===== Wenn es nicht klappt =====
 
 ^ Was passiert ^ Was hilft ^
-| Die Gruppe **Erweiterungen** fehlt in der Makroauswahl | Im Reiter **Erweiterungen** ist keine Erweiterung eingeschaltet, oder du benutzt die Arduino IDE statt PlatformIO. |
+| Die Gruppe **Erweiterungen** fehlt in der Makroauswahl | Im Fenster **Erweiterungen** (Menü **Einstellungen**) ist keine Erweiterung eingeschaltet, oder du benutzt die Arduino IDE statt PlatformIO. |
 | //Die Erweiterung … konnte nicht geladen werden// | Prüfe die **Internetverbindung**. Bei einer eigenen Erweiterung prüfe auch die **Schreibweise** der Adresse und ob das Repository **öffentlich** ist. |
 | //MobaLedLib.properties fehlt// oder //nicht lesbar// | Das ist keine gültige MobaLedLib-Erweiterung, oder die Beschreibungsdatei hat einen schweren Formfehler. Frage den Entwickler der Erweiterung. Kleine Formfehler (fehlende Anführungszeichen oder Kommas) toleriert das Programm. |
 | Der Übersetzungsvorgang meldet einen Fehler bei einer Erweiterung | Schalte die Erweiterung aus und übersetze noch einmal. Wenn es dann geht, melde den Fehler dem Entwickler der Erweiterung, siehe [[anleitungen:webmobaledlib:fehler_melden|Fehler melden]]. |

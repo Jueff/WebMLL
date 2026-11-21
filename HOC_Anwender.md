@@ -1,9 +1,66 @@
-Datei-Version: 1.30 (2026-11-20) - HOC_Anwender.md
-Stand: webMobaLedLib 4.46
+Datei-Version: 1.38 (2026-11-21) - HOC_Anwender.md
+Stand: webMobaLedLib 4.54
 
 # webMobaLedLib: Änderungen (Kurzfassung)
 
 Gilt ab Version 1.39. Neueste Version oben.
+
+## Version 4.54 (2026-11-21)
+
+Neue Funktionen:
+- Menü Datei: „Importieren v. altem Programm …“ (der Reiter „Dateien“ in den Optionen entfällt).
+- Fenster „Erweiterungen“: Hinweis, dass alle Änderungen sofort wirksam sind.
+
+## Version 4.53 (2026-11-21)
+
+Neue Funktionen:
+- „Einstellungen, Erweiterungen …“ öffnet ein eigenes Fenster „Erweiterungen“ (Haken sofort wirksam, Button „Schließen“). Der Reiter in den Optionen entfällt.
+
+## Version 4.52 (2026-11-21)
+
+Neue Funktionen:
+- „ARDUINO Einstellungen“ ist ein Fenster mit Speichern und Abbrechen: Optionen, Reiter Entwicklungsumgebung, Knopf „ARDUINO-IDE Einstellungen“.
+- „ESP32-Firmware über WLAN hochladen …“ steht als Knopf auf dem Reiter „WLAN (OTA)“ der Optionen.
+
+Korrekturen:
+- Seite „Tabelle färben“: neuer Titel, überflüssige erste Zeile der Beschreibung entfernt.
+
+## Version 4.51 (2026-11-21)
+
+Neue Funktionen:
+- Neues Menü „Einstellungen“ (Allgemein, Programm Generator, Farb Test, Simulator, Netzzugriff, Spezial, Erweiterungen, Einstellungen sichern, Einstellungen übernehmen). „Programm Einstellungen“ ist kein Reiter mehr.
+- Menü „Tabelle“, „Tabelle färben …“ öffnet die Seite mit den Bedingungen für die Zeilenfarben (früher der Reiter „Tabelle Färben“).
+- Alle Aktionen der Lichtmaschine stehen im Pfeil neben dem Knopf „Mit Lichtmaschine verbinden“: Verbinden, Verbindung trennen, Neu verbinden, Board wechseln, Alle LED aus, ESP32-Firmware über WLAN hochladen. Das Menü „Lichtmaschine“ entfällt.
+
+Korrekturen:
+- Der Knopf „Zeilen Färben“ und die Option „Zeilen Färben Button verstecken“ entfallen (Färben: Menü Tabelle oder automatisch).
+
+## Version 4.50 (2026-11-21)
+
+Neue Funktionen:
+- Dateinamen mit Datum und Uhrzeit: Workbook speichern als und Inkrementell speichern erzeugen zum Beispiel MobaLedLib_2026.11.20_20.05.03.json; die laufende Nummer entfällt.
+- Neue Option „Beim Trennen alle LEDs ausschalten“ (Programm Einstellungen, Allgemeine Einstellungen, Vorgabe aus).
+
+Korrekturen:
+- Beim Trennen der Verbindung gehen die LEDs der Anlage nicht mehr aus (sie kamen teils verzögert wieder).
+
+## Version 4.49 (2026-11-21)
+
+Korrekturen:
+- Hinweistexte beim Überfahren mit der Maus sind besser lesbar (dunkle Schrift auf hellem Grund).
+- „Minimale/Maximale Zeit bis zur nächsten Änderung“ in den Programm Einstellungen nennt jetzt die House()-Funktion.
+- Die Hinweise der Schrifteinstellungen erklären, wo welche Schrift wirkt.
+
+## Version 4.48 (2026-11-21)
+
+Neue Funktionen:
+- Neue Darstellung „Dunkel mit Tabelle“: auch die Tabellen sind dunkel, fest eingestellte Farben bleiben.
+- „Darstellung der Oberfläche“ steht in den Programm Einstellungen jetzt direkt unter „Sprache“.
+
+## Version 4.47 (2026-11-21)
+
+Neue Funktionen:
+- Darstellung der Oberfläche wählbar (Programm Einstellungen, Allgemeine Einstellungen): Hell (bisheriger Stil), Hell mit Kontrast (kräftigere Blattreiter, dunklere Hinweistexte), Dunkel oder Wie System.
 
 ## Version 4.46 (2026-11-20)
 

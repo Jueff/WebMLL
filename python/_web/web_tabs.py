@@ -1,9 +1,9 @@
-# Datei-Version: 1.28 (2026-11-20) - web_tabs.py
+# Datei-Version: 1.33 (2026-11-21) - web_tabs.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_tabs.py
 # Path:           _web/web_tabs.py
-# Version:        1.28
-# Last Update:    2026-11-20
+# Version:        1.33
+# Last Update:    2026-11-21
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
@@ -36,6 +36,11 @@
 #   1.26  2026-11-20  Neue Einstellungen SetupCloseOnSuccess und SetupCloseOnError (Allgemeine Einstellungen): Uebertragungsfenster nach Erfolg/Fehler automatisch schliessen (Issue 41, Pull Request 44)
 #   1.27  2026-11-20  Neue Einstellung UploadPortMode (Allgemeine Einstellungen): Anschluss der aktiven Verbindung fuers Hochladen verwenden oder Fenster Board und USB Port erkennen oeffnen, wenn mehrere Boards angeschlossen sind (Issue 50)
 #   1.28  2026-11-20  Neue Einstellung ThemeMode (Allgemeine Einstellungen): Darstellung Hell, Dunkel oder Wie System, Vorgabe Hell (Issue 51)
+#   1.29  2026-11-21  ThemeMode: vier Werte Hell, Hell mit Kontrast, Dunkel, Wie System (Issue 51)
+#   1.30  2026-11-21  ThemeMode: neuer Wert Dunkel mit Tabelle
+#   1.31  2026-11-21  Beschriftung der Optionen Minimale/Maximale Zeit mit dem Hinweis House()-Funktion
+#   1.32  2026-11-21  Neue Einstellung LedOffOnDisconnect: beim Trennen alle LEDs ausschalten (Vorgabe aus)
+#   1.33  2026-11-21  Version 4.51 (Menue Einstellungen): Option HideColorButton entfaellt (der Knopf Zeilen Faerben ist weg); Hinweis der Option AutoColorRows nennt Menue Tabelle -> Tabelle faerben
 # ----------------------------------------------------------------------------------------------
 """Adressen der Reiter: Ein Reiter laesst sich direkt aufrufen, zum Beispiel http://localhost:8080/Farbtest. Mit dem Zusatz ?vollbild=1 oeffnet er sich gleich im Vollbild
 (Titel, Menue und Reiterleiste ausgeblendet, siehe web_fullscreen). Die Startseite / bleibt wie sie ist (Programm Generator).
@@ -107,18 +112,19 @@ PARAM_ADDITIONS = {"ColoredRowsBold": ({"ParName": "ColoredRowsBold", "Cnt": "1"
                                       "IPUploadTimeout"),  # v1.13
                  "AutoColorRows": ({"ParName": "AutoColorRows", "Cnt": "1", "Type": "Checkbutton", "ConfigName": "AutoColorRows", "ParamLabelWidth": "25", "Min": "0", "Max": "255", "Default": "",  # v1.23
                          "Input Text": "Automatisch einfärben",  # v1.23
-                         "Hint": "Mit Haken werden die Zeilen nach jeder Änderung einer Zelle automatisch nach den Bedingungen unten eingefärbt. Ohne Haken färbt der Knopf Zeilen Färben (oder Speichern und aktuelle Seite färben)."},  # v1.23
+                         # "Hint": "Mit Haken werden die Zeilen nach jeder Änderung einer Zelle automatisch nach den Bedingungen unten eingefärbt. Ohne Haken färbt der Knopf Zeilen Färben (oder Speichern und aktuelle Seite färben)."},  # v1.23  # v1.33 (entfallen)
+                         "Hint": "Mit Haken werden die Zeilen nach jeder Änderung einer Zelle automatisch nach den Bedingungen unten eingefärbt. Ohne Haken färben Sie mit Speichern und aktuelle Seite färben oder Speichern und ALLE Seiten färben (Menü Tabelle, Tabelle färben …)."},  # v1.33
                         "RowFormatInput"),  # v1.23
-                 "HideColorButton": ({"ParName": "HideColorButton", "Cnt": "1", "Type": "Checkbutton", "ConfigName": "HideColorButton", "ParamLabelWidth": "25", "Min": "0", "Max": "255", "Default": "",  # v1.23
-                         "Input Text": "Zeilen Färben Button verstecken",  # v1.23
-                         "Hint": "Mit Haken fehlt der Knopf Zeilen Färben in der Werkzeugleiste (sinnvoll mit „Automatisch einfärben“)."},  # v1.23
-                        "RowFormatInput"),  # v1.23
+                 # "HideColorButton": ({"ParName": "HideColorButton", "Cnt": "1", "Type": "Checkbutton", "ConfigName": "HideColorButton", "ParamLabelWidth": "25", "Min": "0", "Max": "255", "Default": "",  # v1.23  # v1.33 (entfallen)
+                 # "Input Text": "Zeilen Färben Button verstecken",  # v1.23  # v1.33 (entfallen)
+                 # "Hint": "Mit Haken fehlt der Knopf Zeilen Färben in der Werkzeugleiste (sinnvoll mit „Automatisch einfärben“)."},  # v1.23  # v1.33 (entfallen)
+                 # "RowFormatInput"),  # v1.23  # v1.33 (entfallen)
                  "MinTime_House": ({"ParName": "MinTime_House", "Cnt": "1", "Type": "", "ConfigName": "MinTime_House", "ParamLabelWidth": "25", "Min": "0", "Max": "255", "Default": "",  # v1.22
-                         "Input Text": "Minimale Zeit bis zur nächsten Änderung [s]",  # v1.22
+                         "Input Text": "House()-Funktion: Minimale Zeit bis zur nächsten Änderung [s]",  # v1.22  # v1.31
                          "Hint": "Standardzeit der House()-Funktion: Wie lange es mindestens dauert, bis sich die aktiven Räume eines Hauses ändern (0 bis 255 Sekunden). Leer: 50 Sekunden. Zum Testen kann man diesen und den nächsten Wert verkleinern, um die House()-Beleuchtung im Zeitraffer zu sehen."},  # v1.22
                         "ShowSimulator"),  # v1.22
                  "MaxTime_House": ({"ParName": "MaxTime_House", "Cnt": "1", "Type": "", "ConfigName": "MaxTime_House", "ParamLabelWidth": "25", "Min": "0", "Max": "255", "Default": "",  # v1.22
-                         "Input Text": "Maximale Zeit bis zur nächsten Änderung [s]",  # v1.22
+                         "Input Text": "House()-Funktion: Maximale Zeit bis zur nächsten Änderung [s]",  # v1.22  # v1.31
                          "Hint": "Standardzeit der House()-Funktion: Wie lange es höchstens dauert, bis sich die aktiven Räume eines Hauses ändern (1 bis 255 Sekunden). Leer: 150 Sekunden. Sind Minimum und Maximum gleich, kommt die Änderung genau nach dieser Zeit. Das Maximum darf nicht kleiner als das Minimum sein."},  # v1.22
                         "ShowSimulator"),  # v1.22
                  "DCC_Offset": ({"ParName": "DCC_Offset", "Cnt": "1", "Type": "", "ConfigName": "DCC_Offset", "ParamLabelWidth": "25", "Min": "0", "Max": "255", "Default": "",  # v1.22
@@ -162,6 +168,10 @@ PARAM_ADDITIONS = {"ColoredRowsBold": ({"ParName": "ColoredRowsBold", "Cnt": "1"
                                   "Input Text": "Automatisch mit der Lichtmaschine verbinden",  # v1.24
                                   "Hint": "Mit Haken (Vorgabe) stellt das Programm beim Start die Verbindung wieder her, die beim letzten Beenden aktiv war. War keine aktiv, sucht es eine angeschlossene Lichtmaschine (Nano, ESP32 oder Pico) und verbindet, wenn es genau eine findet. Nach „Setup übertragen“ verbindet es mit der Lichtmaschine, auf die gerade übertragen wurde (bei WLAN über WLAN). Ohne Haken verbindet nur der Knopf Mit Lichtmaschine verbinden."},  # v1.24
                                  "BeginnerMode"),  # v1.24  # v1.25
+                 "LedOffOnDisconnect": ({"ParName": "LedOffOnDisconnect", "Cnt": "1", "Type": "Checkbutton", "ConfigName": "LedOffOnDisconnect", "ParamLabelWidth": "25", "Min": "0", "Max": "255", "Default": "0",  # v1.32
+                                         "Input Text": "Beim Trennen alle LEDs ausschalten",  # v1.32
+                                         "Hint": "Mit Haken sendet das Programm beim Trennen der Verbindung den Befehl Alle LEDs aus. Ohne Haken (Vorgabe) bleibt die Anlage beim Trennen unverändert: Die Lichtmaschine behält ihren Zustand, zum Beispiel die schwach leuchtenden LEDs der Pushbutton-Kanäle."},  # v1.32
+                                        "AutoConnect"),  # v1.32
                  "IncrSaveKey": ({"ParName": "IncrSaveKey", "Cnt": "1", "Type": "String", "ConfigName": "IncrSaveKey", "ParamLabelWidth": "25", "Min": "0", "Max": "255", "Default": "Strg+Umschalt+S",  # v1.25
                                   "Input Text": "Tastenkombination: Inkrementell speichern",  # v1.25
                                   "Hint": "Tastenkombination für Datei → Inkrementell speichern, zum Beispiel Strg+Umschalt+S, Strg+Alt+S oder Strg+F9. Sie muss Strg oder Alt oder eine F-Taste enthalten. Ist die Kombination vom Betriebssystem oder von einem anderen Programm belegt (zum Beispiel für Screenshots), stelle hier eine andere ein. Leer: Vorgabe Strg+Umschalt+S. Die Änderung gilt nach dem Speichern der Einstellungen sofort."},  # v1.25
@@ -178,9 +188,9 @@ PARAM_ADDITIONS = {"ColoredRowsBold": ({"ParName": "ColoredRowsBold", "Cnt": "1"
                                      "Input Text": "Kein Anschluss in der Tabelle: bei mehreren Boards",  # v1.27
                                      "Hint": "Ist beim Hochladen kein USB-Anschluss in der Tabelle eingetragen, aber die Lichtmaschine verbunden, trägt das Programm deren Anschluss ein (bei ESP32 und Pico auch das Board) und lädt dorthin hoch. Sind mehrere Boards angeschlossen, legt diese Einstellung fest: 'Aktive Verbindung verwenden' (Vorgabe) nimmt die aktive Verbindung, 'Erkennen-Fenster öffnen' zeigt das Fenster Board und USB Port erkennen. Ist ein Board eingetragen, das nicht zur Verbindung passt, oder sind Board und Anschluss eingetragen, ändert das Programm nichts."},  # v1.27
                                     "SetupCloseOnError"),  # v1.27  # v1.28
-                 "ThemeMode": ({"ParName": "ThemeMode", "Cnt": "1", "Type": "Combo", "Values": ["Hell", "Dunkel", "Wie System"], "ValuesText": ["Hell", "Dunkel", "Wie System"], "ConfigName": ["ThemeMode", "ThemeModeIdx"], "ParamLabelWidth": "25", "Min": "0", "Max": "255", "Default": "Hell",  # v1.28
+                 "ThemeMode": ({"ParName": "ThemeMode", "Cnt": "1", "Type": "Combo", "Values": ["Hell", "Hell mit Kontrast", "Dunkel", "Dunkel mit Tabelle", "Wie System"], "ValuesText": ["Hell", "Hell mit Kontrast", "Dunkel", "Dunkel mit Tabelle", "Wie System"], "ConfigName": ["ThemeMode", "ThemeModeIdx"], "ParamLabelWidth": "25", "Min": "0", "Max": "255", "Default": "Hell",  # v1.28
                                 "Input Text": "Darstellung der Oberfläche",  # v1.28
-                                "Hint": "Hell (Vorgabe), Dunkel oder Wie System (folgt der Einstellung des Betriebssystems oder Browsers). Der Dunkle Modus gilt für Menüs, Dialoge und Formulare, die Tabelle mit den Blattreitern bleibt zur besseren Lesbarkeit der Zellfarben hell. Die Änderung gilt nach dem Speichern der Einstellungen sofort."},  # v1.28
+                                "Hint": "Hell (Vorgabe, bisheriger Stil), Hell mit Kontrast (kräftigere Blattreiter und dunklere Hinweistexte), Dunkel, Dunkel mit Tabelle oder Wie System (folgt dem Betriebssystem oder Browser, mit dem Kontraststil). Bei Dunkel gilt der Dunkle Modus für Menüs, Dialoge und Formulare, die Tabelle mit den Blattreitern bleibt zur besseren Lesbarkeit der Zellfarben hell, Dunkel mit Tabelle zeigt auch die Tabellen dunkel (fest eingestellte Farben bleiben, wie sie sind). Die Änderung gilt nach dem Speichern der Einstellungen sofort."},  # v1.28
                                "UploadPortMode")}  # v1.28
 
 

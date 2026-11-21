@@ -1,9 +1,9 @@
-# Datei-Version: 1.10 (2026-11-14) - web_dialogs.py
+# Datei-Version: 1.11 (2026-11-21) - web_dialogs.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_dialogs.py
 # Path:           _web/web_dialogs.py
-# Version:        1.10
-# Last Update:    2026-11-14
+# Version:        1.11
+# Last Update:    2026-11-21
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
@@ -13,6 +13,7 @@
 #   1.08  2026-10-28  show_busy und hide_busy: Hinweisfenster mit Drehzeichen fuer lange Aktionen
 #   1.09  2026-11-01  color_input: Farbwahl geht rechts neben dem Pipettenknopf auf, nicht ueber den Knoepfen OK und Abbrechen
 #   1.10  2026-11-14  Beschriftete Knoepfe (web_msgbox_labelled, X02.MsgBoxLabelled): Suchen/Weiter/Abbrechen statt Ja/Nein/Abbrechen; Abbrechen steht immer rechts (CSS in web_layout)
+#   1.11  2026-11-21  Vorschlagsname beim Speichern unter ohne initialfile: fuer .json MobaLedLib_<Jahr.Monat.Tag_Std.Min.Sek> (Datum und Uhrzeit)
 # ----------------------------------------------------------------------------------------------
 """Web-Dialoge fuer MsgBox und InputBox (NiceGUI) mit Bruecke aus dem Worker-Thread.
 
@@ -615,6 +616,7 @@ class WebSelectTypSX(_WebForm):
 #               Browser geschickt (take_downloads() in webmobaledlib.py).
 import os
 import tempfile
+import time  # v1.11
 
 _downloads: list[tuple[str, str]] = []
 
@@ -677,7 +679,10 @@ def web_askopenfilename(*args, **kwargs):
 def web_asksaveasfilename(*args, **kwargs):
     if not bridge_usable():
         return _original["asksaveasfilename"](*args, **kwargs)
-    name = os.path.basename(str(kwargs.get("initialfile") or "")) or "mobaledlib"
+    # name = os.path.basename(str(kwargs.get("initialfile") or "")) or "mobaledlib"  # v1.11 (entfallen)
+    name = os.path.basename(str(kwargs.get("initialfile") or ""))  # v1.11
+    if not name:  # v1.11: .json (Workbook): MobaLedLib_2026.11.20_20.05.03
+        name = ("MobaLedLib_" + time.strftime("%Y.%m.%d_%H.%M.%S")) if str(kwargs.get("defaultextension") or "").lower() == ".json" else "mobaledlib"  # v1.11
     ext = kwargs.get("defaultextension") or ""
     if ext and not name.lower().endswith(ext.lower()):
         name += ext

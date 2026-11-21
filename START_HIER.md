@@ -1,4 +1,4 @@
-<!-- Datei-Version: 1.01 (2026-11-19) - START_HIER.md, gilt für webMobaLedLib 4.22 -->
+<!-- Datei-Version: 1.03 (2026-11-21) - START_HIER.md, gilt für webMobaLedLib 4.54 -->
 # webMobaLedLib – START HIER
 
 Mit der **webMobaLedLib** erstellst du ohne Programmierkenntnisse das Programm für deine **Lichtmaschine** (Modellbahnbeleuchtung). Du bedienst sie in deinem Internet-Browser. Sie läuft aber auf deinem eigenen Computer, deine Daten bleiben dort.

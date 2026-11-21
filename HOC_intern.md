@@ -1,5 +1,5 @@
-Datei-Version: 1.30 (2026-11-20) - HOC_intern.md
-Stand: webMobaLedLib 4.46
+Datei-Version: 1.38 (2026-11-21) - HOC_intern.md
+Stand: webMobaLedLib 4.54
 
 # webMobaLedLib: History of Change (intern, ausführlich)
 
@@ -24,6 +24,114 @@ Release-Stand 2.12 auf Wunsch des Entwicklers („Release bauen“). **Neu im Ab
 | `archiv/` | frühere Release-Hinweise, Versionslisten und ZIP (nichts gelöscht) |
 
 **Geprüft:** Dateipaket: `testzip` in Ordnung, alle 113 Dateien gleich dem Ordner `headless`, keine `__pycache__`, alle `.py` kompilieren, Versionsprüfung „alles passt“ (50 Einträge), 11 Dateien ausführbar (`.sh`, `.command`). **Nachbau des Entwickler-Ablaufs mit seinem echten Paket (1678 Dateien, Stand 2.05):** meine 113 Dateien darübergelegt, Prüfliste, ZIP gepackt, `release_tools check --previous <sein ZIP>`: **in Ordnung** (Version 2.12, 1678 Dateien, 6 neue, 0 fehlende, ZIP 16,6 MB). Alle 15 Prüfreihen laufen (17, 26, 15, 70, 28, 19, 43, 26, 16, 27, 8, 8, 8, 5, 9 Prüfungen). **Nicht geprüft:** `zip_erstellen.bat` und die Reparaturskripte unter Windows, ein abgebrochenes Update unter Windows, das Verhalten mit Acronis, der Download von GitHub.
+
+## 4.54 (2026-11-21), Importieren im Menü Datei
+
+Neuer Menüpunkt Datei, „Importieren v. altem Programm …“ (ruft `_web_import_info` des Optionenformulars, dieselbe Hinweisbox wie der bisherige Knopf). Der Reiter „Dateien“ im Optionenfenster entfällt (Speichern/Laden waren im Web ohnehin gesperrt). Fenster Erweiterungen: Hinweis „Alle Änderungen werden sofort wirksam …“.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.54 | Menüpunkt Importieren v. altem Programm … |
+| `_web/web_form_options.py` | 1.42 | Reiter Dateien entfernt, Hinweis im Fenster Erweiterungen |
+| `csv/Web_Languages.csv` | - | zwei neue Texte (6 Sprachen) |
+| `install/ANLEITUNG_Installation.md` | 4.54 | Kurzfassung |
+| `install/BETATEST_Checkliste.md` | 3.36 | Punkt 306 |
+| `wiki/webmobaledlib/*.txt` | - | faq, pg_werkzeugleiste |
+
+## 4.53 (2026-11-21), Fenster Erweiterungen
+
+Rückmeldung Harold: „Einstellungen, Erweiterungen …“ öffnete die Optionen auf dem Reiter Lichtmaschine (der Startreiter wurde nur unter den Standard-Reitern gesucht). Jetzt eigenes Fenster `open_extensions_window` (Inhalt `ext_panel`, vom Reiter auf Modulebene verschoben; Haken sofort wirksam, nur Schließen; danach `M38.Load_Extensions` bei Änderung). Der Reiter Erweiterungen in den Optionen entfällt. Zusätzlich: Kopfdatum von web_form_options 1.40 korrigiert.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.53 | `open_extensions` ruft das neue Fenster |
+| `_web/web_form_options.py` | 1.41 | `ext_panel` auf Modulebene, `open_extensions_window`, Reiter entfernt |
+| `csv/Web_Languages.csv` | - | Text „Schließen“ in 6 Sprachen ergänzt |
+| `install/ANLEITUNG_Installation.md` | 4.53 | Kurzfassung |
+| `install/BETATEST_Checkliste.md` | 3.35 | Punkt 305 |
+| `wiki/webmobaledlib/erweiterungen.txt` | - | Fenster statt Reiter |
+
+## 4.52 (2026-11-21), Rückmeldung zu 4.51
+
+(1) Seite „Tabelle färben“: Titel `TITLE_OVERRIDES`, erste Beschreibungszeile entfällt (`DESCRIPTION_OVERRIDES`). (2) „ESP32-Firmware über WLAN hochladen …“ nicht mehr im Pfeilmenü, sondern Knopf auf dem Reiter WLAN (OTA) der Optionen (Hook `web_form_options.ota_upload_handler`). (3) „ARDUINO Einstellungen“ ist ein Fenster mit Speichern und Abbrechen (`open_arduino_settings`, `build_settings_page(embedded=True)`), erreichbar über den Knopf „ARDUINO-IDE Einstellungen“ auf dem Reiter Entwicklungsumgebung (Hook `arduino_settings_handler`). Der versteckte Reiter `arduinocfg` bleibt nur für die alte Adresse /ARDUINOEinstellungen bestehen.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.52 | Fenster ARDUINO-IDE Einstellungen, Hooks, Pfeilmenü ohne OTA-Eintrag |
+| `_web/web_params.py` | 1.16 | Titel und Beschreibung Tabelle färben, `embedded` |
+| `_web/web_form_options.py` | 1.40 | Knöpfe ARDUINO-IDE Einstellungen und ESP32-Firmware hochladen |
+| `csv/Web_Languages.csv` | - | neue Texte (6 Sprachen) |
+| `install/ANLEITUNG_Installation.md` | 4.52 | Kurzfassung |
+| `install/BETATEST_Checkliste.md` | 3.34 | Punkte 302 bis 304 |
+| `wiki/webmobaledlib/*.txt` | - | ota, pg_arduino, arduino_ide, wz_arduino_einstellungen, fehlersuche |
+
+## 4.51 (2026-11-21), Menüs neu geordnet (Schritt 1, Vorschlag Michael)
+
+Menü **Einstellungen** (zwischen Tabelle und Hilfe): Allgemein, Programm Generator, Farb Test, Simulator (nur Experten Modus), Netzzugriff, Spezial (springen zur Gruppe der Seite Programm Einstellungen über `data-group` und `open_settings`), Erweiterungen … (öffnet bis Schritt 2 das Optionenfenster auf dem Reiter Erweiterungen), Einstellungen sichern / übernehmen (aus dem Menü Datei). Die Reiter Programm Einstellungen, Tabelle Färben und ARDUINO Einstellungen haben keinen Reiterkopf mehr (`set_visibility(False)`); die Seiten bleiben als Container und werden mit `tabs.set_value` geöffnet, die Rückfrage bei ungesicherten Änderungen (`on_tab`) bleibt. Menü **Tabelle**: neuer Eintrag Tabelle färben … (öffnet die Regelseite, im Anfänger Modus ausgeblendet, `menu_elems`). Menü **Lichtmaschine** entfällt: der Pfeil neben dem grünen Knopf enthält jetzt Verbinden, Verbindung trennen, Neu verbinden, Board wechseln …, Alle LED aus, ESP32-Firmware über WLAN hochladen …. Der Knopf **Zeilen Färben** und die Option HideColorButton entfallen. Schritt 2 (Hardware Optionen, ARDUINO Einstellungen, Menü Datei) folgt nach dem Test.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.51 | Menü Einstellungen, Tabelle färben, Pfeilmenü, Reiterköpfe versteckt, Knopf Zeilen Färben entfernt |
+| `_web/web_tabs.py` | 1.33 | HideColorButton entfällt, Hinweis AutoColorRows |
+| `_web/web_params.py` | 1.15 | `data-group` an jeder Gruppe |
+| `_web/web_dcckeyboard.py` | 1.05 | Meldung ohne Menü Lichtmaschine |
+| `csv/Web_Languages.csv` | - | neue Texte (6 Sprachen) |
+| `install/ANLEITUNG_Installation.md` | 4.51 | Kurzfassung |
+| `install/BETATEST_Checkliste.md` | 3.33 | Punkte 297 bis 301 |
+| `wiki/webmobaledlib/*.txt` | - | modus, pg_werkzeugleiste, pg_arduino, ota, programmgenerator, wz_programm_einstellungen |
+
+## 4.50 (2026-11-21), Dateinamen mit Datum und Uhrzeit, LEDs beim Trennen
+
+(1) Wunsch Harold: Workbook-Dateien mit Datum und Uhrzeit im Namen, `MobaLedLib_2026.11.20_20.05.03.json`. Gilt für „ProgrammGenerator-Workbook speichern als“ (Vorschlagsname in `web_dialogs.web_asksaveasfilename`, wenn kein `initialfile` und Endung .json gegeben ist; andere Aufrufe behalten `mobaledlib`) und für „Inkrementell speichern“ (Zeitstempel statt der laufenden Nummer; in derselben Sekunde Zusatz `_2`). Die Liste „Sicherungsdatei öffnen“ und `incr_files` erkennen beide Formen, alte `_0001.json` bleiben sichtbar. Strg+S unverändert. Der Basisname bleibt der bisherige (`MobaLedLib`; beim inkrementellen Speichern der eingestellte Name). (2) Wunsch Harold nach Beobachtung an der Anlage: `disconnect()` sendete immer `#L 00 00 00 00 7FFF` (alle LEDs aus) und `#X`; dadurch gingen schwach leuchtende Pushbutton-LEDs aus und kamen verzögert wieder. Neue Option `LedOffOnDisconnect` (Allgemeine Einstellungen, Vorgabe aus): nur mit Haken wird beim Trennen `led_off()` gesendet, `#X` bleibt. Menü „Alle LED aus“ und Farbtest sind nicht betroffen. Nicht auf Hardware getestet.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.50 | Zeitstempel beim inkrementellen Speichern, `incr_files`, Texte |
+| `_web/web_dialogs.py` | 1.11 | Vorschlagsname mit Datum und Uhrzeit |
+| `_web/web_serial.py` | 1.13 | `led_off()` beim Trennen nur mit Option |
+| `_web/web_tabs.py` | 1.32 | Einstellung `LedOffOnDisconnect` |
+| `_web/web_params.py` | 1.14 | Einstellung in den Allgemeinen Einstellungen |
+| `csv/Web_Languages.csv` | - | neue Texte (6 Sprachen) |
+| `install/ANLEITUNG_Installation.md` | 4.50 | Kurzfassung |
+| `install/BETATEST_Checkliste.md` | 3.32 | Punkte 295, 296 |
+
+## 4.49 (2026-11-21), Rückmeldung eines Testers: House()-Hinweis, Hinweistexte, Schriften
+
+Drei Punkte aus einer Tester-Meldung: (1) Bei Minimale/Maximale Zeit bis zur nächsten Änderung fehlte ein deutlicher Hinweis auf die House()-Funktion: die Beschriftungen beginnen jetzt mit „House()-Funktion:“ (web_tabs 1.31, neue Übersetzungen). (2) Die Hinweistexte beim Überfahren mit der Maus (Quasar-Tooltip) zeigten weiße Schrift auf mittelgrauem Grund und verschwammen: jetzt hellgelber Grund, dunkle Schrift, Rand und Schatten (`.q-tooltip` und `.ag-tooltip`), in allen Darstellungen gleich. (3) Unklar war, wo die Schriften wirken: Die Hinweise der Schrifteinstellungen in `MobaLedTest_macroparamdef.json` nennen jetzt den Einsatzort (Titel: Überschriften; Beschriftung: Menüs, Reiter, Knöpfe, Namen der Felder; Spinbox: Eingabefelder; Normale Schrift und Schriftart: Tabelle des Programm Generators). Kleine Schrift, Große Schrift und Scale werden in der Web-Oberfläche nicht verwendet (Hinweis sagt das; die Einstellungen bleiben, weil sie das Desktop-Programm nutzt). „nur nach Neustart sichtbar“ ersetzt durch „gilt nach dem Speichern sofort“ (stimmt seit der Umstellung auf die Web-Oberfläche). Die Texte sind 6 Sprachen. Nicht im Browser getestet.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.49 | CSS Tooltips |
+| `_web/web_tabs.py` | 1.31 | Beschriftung Minimale/Maximale Zeit |
+| `MobaLedTest_macroparamdef.json` | - | Hinweise der Schrifteinstellungen |
+| `csv/Web_Languages.csv` | - | neue Texte (6 Sprachen) |
+| `install/ANLEITUNG_Installation.md` | 4.49 | Kurzfassung |
+| `install/BETATEST_Checkliste.md` | 3.31 | Punkt 294 |
+
+## 4.48 (2026-11-21), Dunkel mit Tabelle, Position der Einstellung (Issue 51)
+
+Rückmeldung 4.47: funktioniert. Wünsche: (1) „Darstellung der Oberfläche“ direkt unter „Sprache“: `web_params.py` 1.13 (Liste der Allgemeinen Einstellungen, `ThemeMode` nach `Language`; der Anker im Eintrag in `web_tabs.py` ist nur Metadaten und bleibt). (2) Neue Stufe „Dunkel mit Tabelle“: Tabellen ebenfalls dunkel, fest eingestellte Farben (Zeilen-, Zell- und Reiterfarben) bleiben unverändert. Umsetzung: Klasse `mll-grid-dark` am html-Element; die CSS-Regeln, die die Tabelle im Dunklen Modus hell halten, gelten nur ohne diese Klasse (`html:not(.mll-grid-dark) body.body--dark ...`). Die dunkle Tabelle selbst kommt vom Dunkelmodus von NiceGUI/AG Grid; wie sie genau aussieht, ist nicht im Browser geprüft. Werte-Index jetzt Hell 0, Kontrast 1, Dunkel 2, Dunkel mit Tabelle 3, Wie System 4 (gespeichert wird der Text). Wie System zeigt die Tabelle hell, wie bei Dunkel.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.48 | `theme_choice` mit „dunkeltabelle“, `theme_js` mit `mll-grid-dark`, CSS nur ohne diese Klasse |
+| `_web/web_tabs.py` | 1.30 | Wert „Dunkel mit Tabelle“, Hinweistext |
+| `_web/web_params.py` | 1.13 | `ThemeMode` unter `Language` |
+| `csv/Web_Languages.csv` | - | „Dunkel mit Tabelle“, Hinweistext (6 Sprachen) |
+| `install/ANLEITUNG_Installation.md` | 4.48 | Kurzfassung |
+| `install/BETATEST_Checkliste.md` | 3.30 | Punkt 293 ergänzt |
+
+## 4.47 (2026-11-21), Darstellung in vier Stufen (Issue 51)
+
+Wunsch Harold: zwischen altem Stil „Hell“, neuem Stil „Hell mit Kontrast“ und „Dunkel“ wählen. `ThemeMode` hat jetzt vier Werte: Hell (Vorgabe, Blattreiter und Texte wie vor 4.44), Hell mit Kontrast, Dunkel, Wie System. Der Kontraststil hängt an der Klasse `mll-contrast` am html-Element (Skript im Kopf beim Seitenaufbau, beim Speichern per `theme_js`): kräftige Blattreiter (Streifen, Rand, Trennlinien, aktiver Reiter mit Balken) und dunklere Grautexte (`text-grey-6` bis `-8`). Dunkel und Wie System verwenden ebenfalls den Kontraststil für die Blattreiter. Die Werte der Einstellung rutschen im Index (Hell 0, Kontrast 1, Dunkel 2, System 3), gespeichert wird der Text; wer in 4.44 bis 4.46 „Dunkel“ gewählt hat, behält es. Nicht im Browser getestet.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.47 | `theme_choice`, CSS `mll-contrast`, klassische Blattreiter wiederhergestellt |
+| `_web/web_tabs.py` | 1.29 | vier Werte |
+| `csv/Web_Languages.csv` | - | „Hell mit Kontrast“, neuer Hinweistext (6 Sprachen) |
+| `install/ANLEITUNG_Installation.md` | 4.47 | Kurzfassung |
+| `install/BETATEST_Checkliste.md` | 3.29 | Punkt 293 angepasst |
 
 ## 4.46 (2026-11-20), Dunkler Modus: Lesbarkeit (Screenshots Harold)
 

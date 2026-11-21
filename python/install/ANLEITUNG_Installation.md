@@ -1,5 +1,5 @@
 # webMobaLedLib – Installation und Betrieb
-*Datei-Version: 4.46 (2026-11-20), gilt für webMobaLedLib 4.46*
+*Datei-Version: 4.54 (2026-11-21), gilt für webMobaLedLib 4.54*
 
 Windows · macOS · Linux-Desktop · Raspberry Pi
 
@@ -408,7 +408,7 @@ Das Makro **LEDColorAnim** (Gruppe PatternConfig, Dialog **LED Farb-Animation**)
 - **Tabelle Färben (3.88, 3.92):** Der Reiter heißt **Tabelle Färben** (früher ProgGenerator Einstellungen). Die Haken **Automatisch einfärben** (nach jeder Änderung wird nach den Bedingungen gefärbt) und **Zeilen Färben Button verstecken** stehen vor den Bedingungen. Es gibt zwei Speichern-Knöpfe: **Speichern und aktuelle Seite färben** und **Speichern und ALLE Seiten färben**.
 - **Protokolle herunterladen (3.89):** Hilfe → Logdatei anzeigen hat den Knopf **Die letzten 3 log-Dateien herunterladen** (eine ZIP-Datei mit `webmobaledlib.log`, `.log.1` und `.log.2`), nützlich bei großen Projekten.
 - **Testtasten (3.89):** Die Tasten stehen in der Spalte Typ rechts neben dem vollständigen Typnamen.
-- **Optionen, Reiter Dateien (3.93):** **Importieren v. altem Prog.** erklärt, wie die Daten des alten Excel-Programms über eine MLL_pgf-Datei übernommen werden; **Kopiere von Seite zu Seite** entfällt (dafür gibt es **Seite duplizieren** im Blattreiter).
+- **Datei, Importieren v. altem Programm … (3.93, ab 4.54 im Menü Datei, vorher Optionen, Reiter Dateien):** **Importieren v. altem Prog.** erklärt, wie die Daten des alten Excel-Programms über eine MLL_pgf-Datei übernommen werden; **Kopiere von Seite zu Seite** entfällt (dafür gibt es **Seite duplizieren** im Blattreiter).
 - **Online Wiki (3.93):** Der Knopf öffnet die Einführung der webMobaLedLib-Anleitung.
 
 ### 2.9i ESP Einstellungen je Blatt (3.94, Beitrag von moosbewohner)
@@ -423,7 +423,7 @@ Ist unter **Optionen Werkzeuge** ein **ESP32** als LED-Zentrale gewählt, ersche
 
 ### 2.9j Erweiterungen (MLX) ein- und ausschalten (3.96)
 
-**Optionen → Erweiterungen** zeigt die bekannten MobaLedLib Extensions mit einem Haken je Erweiterung. Eine eingeschaltete Erweiterung erscheint in der Makroauswahl in der Gruppe „Erweiterungen“.
+**Einstellungen → Erweiterungen …** (ab 4.53 ein eigenes Fenster mit Schließen, vorher Reiter in den Optionen) zeigt die bekannten MobaLedLib Extensions mit einem Haken je Erweiterung. Eine eingeschaltete Erweiterung erscheint in der Makroauswahl in der Gruppe „Erweiterungen“.
 
 - **Standard (vorab eingeschaltet):** Zeitplan (P_ScheduleMLX) und Zeitplan Duo (P_ScheduleDuoMLX). Sie liegen im Programmpaket (Ordner `libraries`).
 - **Optional (vorab ausgeschaltet):** AddressLearnMLX (Adressen einlernen), FireplaceMLX (Kaminfeuer) und InfraredMLX (IR-Fernbedienung, braucht einen IR-Empfänger). Beim Einschalten lädt das Programm die Erweiterung einmal von GitHub in den Datenordner (Unterordner `extensions`); danach läuft sie auch ohne Internet.
@@ -433,9 +433,65 @@ Ist unter **Optionen Werkzeuge** ein **ESP32** als LED-Zentrale gewählt, ersche
 - **Rückfrage beim Öffnen (seit 3.98):** Benutzt eine Datei eine **ausgeschaltete** Erweiterung, fragt das Programm, ob es sie einschalten soll (einmal je Erweiterung und Sitzung); ohne sie fehlen die Zeilen in der erzeugten Datei.
 - **Wiki:** eigene Seite `erweiterungen` (siehe Wiki-Paket 3.98).
 
-### 2.9k Neu seit 3.93 (3.94 bis 4.46)
+### 2.9k Neu seit 3.93 (3.94 bis 4.54)
 
 Kurzfassung der Änderungen seit dem letzten Release, neueste Version zuerst (ausführlich in `HOC_Anwender.md`):
+
+**Version 4.54**
+
+*Neue Funktionen:*
+- Menü Datei, „Importieren v. altem Programm …“ (vorher Optionen, Reiter „Dateien“; der Reiter entfällt).
+- Fenster „Erweiterungen“: Hinweis, dass alle Änderungen sofort wirksam sind.
+
+**Version 4.53**
+
+*Neue Funktionen:*
+- „Einstellungen, Erweiterungen …“ öffnet ein eigenes Fenster „Erweiterungen“ (Haken sofort wirksam, Button „Schließen“). Der Reiter „Erweiterungen“ in den Optionen entfällt.
+
+**Version 4.52**
+
+*Neue Funktionen:*
+- „ARDUINO Einstellungen“ ist ein Fenster mit Speichern und Abbrechen (Optionen, Reiter Entwicklungsumgebung, Knopf „ARDUINO-IDE Einstellungen“).
+- „ESP32-Firmware über WLAN hochladen …“ als Knopf auf dem Reiter „WLAN (OTA)“ der Optionen.
+
+*Korrekturen:*
+- Seite „Tabelle färben“: neuer Titel, erste Beschreibungszeile entfernt.
+
+**Version 4.51**
+
+*Neue Funktionen:*
+- Menü „Einstellungen“ (Allgemein, Programm Generator, Farb Test, Simulator, Netzzugriff, Spezial, Erweiterungen, Einstellungen sichern / übernehmen); „Programm Einstellungen“ ist kein Reiter mehr.
+- Menü Tabelle, „Tabelle färben …“ öffnet die Regelseite für die Zeilenfarben (früher Reiter „Tabelle Färben“).
+- Pfeil neben „Mit Lichtmaschine verbinden“: Verbinden, Verbindung trennen, Neu verbinden, Board wechseln, Alle LED aus, ESP32-Firmware über WLAN hochladen. Das Menü „Lichtmaschine“ entfällt.
+
+*Korrekturen:*
+- Knopf „Zeilen Färben“ und Option „Zeilen Färben Button verstecken“ entfallen.
+
+**Version 4.50**
+
+*Neue Funktionen:*
+- Dateinamen mit Datum und Uhrzeit beim Speichern des Workbooks (MobaLedLib_2026.11.20_20.05.03.json), auch beim inkrementellen Speichern.
+- Option „Beim Trennen alle LEDs ausschalten“ (Vorgabe aus).
+
+*Korrekturen:*
+- Beim Trennen gehen die LEDs der Anlage nicht mehr aus.
+
+**Version 4.49**
+
+*Korrekturen:*
+- Hinweistexte beim Überfahren mit der Maus: dunkle Schrift auf hellem Grund.
+- „Minimale/Maximale Zeit bis zur nächsten Änderung“ nennt die House()-Funktion; die Schrifteinstellungen erklären, wo sie wirken.
+
+**Version 4.48**
+
+*Neue Funktionen:*
+- Darstellung „Dunkel mit Tabelle“: auch die Tabellen sind dunkel, fest eingestellte Farben bleiben.
+- „Darstellung der Oberfläche“ steht direkt unter „Sprache“.
+
+**Version 4.47**
+
+*Neue Funktionen:*
+- „Darstellung der Oberfläche“ (Programm Einstellungen, Allgemeine Einstellungen): Hell (bisheriger Stil, Vorgabe), Hell mit Kontrast, Dunkel, Wie System.
 
 **Version 4.46**
 

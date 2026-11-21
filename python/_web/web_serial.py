@@ -1,9 +1,9 @@
-# Datei-Version: 1.12 (2026-11-19) - web_serial.py
+# Datei-Version: 1.13 (2026-11-21) - web_serial.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_serial.py
 # Path:           _web/web_serial.py
-# Version:        1.12
-# Last Update:    2026-11-19
+# Version:        1.13
+# Last Update:    2026-11-21
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
@@ -20,6 +20,7 @@
 #   1.10  2026-11-14  connect_if_not_connected (Testtasten, DCC-Tastatur, Z21 ...) versucht auch mit Anschlussangabe zuerst die eingetragene ESP32-WLAN-Verbindung
 #   1.11  2026-11-16  Protokoll: Zeilen der Lichtmaschine (Empfang) werden mit Level DEBUG protokolliert, die Startmeldung mit der Auswertung (LEDs je Kanal, Summe, Version) mit Level INFO
 #   1.12  2026-11-19  Stilles Verbinden (quiet): keine Dialoge bei Fehlern (Automatisch verbinden beim Start und nach dem Hochladen); dtr_override fuer einen gefundenen Pico (Issue 20)
+#   1.13  2026-11-21  Option LedOffOnDisconnect (Programm Einstellungen): Beim Trennen werden die LEDs nur noch ausgeschaltet, wenn die Option gesetzt ist (Vorgabe aus; vorher immer)
 # ----------------------------------------------------------------------------------------------
 """Serielle Verbindung zum Arduino/Pico ohne Tk (Mixin fuer HeadlessAppController).
 
@@ -733,7 +734,9 @@ class SerialMixin:
         with self._conn_lock:
             if self.arduino:
                 try:
-                    self.led_off()
+                    # self.led_off()  # v1.13 (entfallen: nur noch mit der Option LedOffOnDisconnect)
+                    if str(self.getConfigData("LedOffOnDisconnect")).strip().lower() in ("1", "true"):  # v1.13
+                        self.led_off()  # v1.13
                     self.send_to_ARDUINO("#X\n")
                     self._wait_sent(3.0)
                     time.sleep(10 * _const("ARDUINO_WAITTIME", 0.02))

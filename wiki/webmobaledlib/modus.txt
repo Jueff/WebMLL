@@ -7,15 +7,15 @@ Die webMobaLedLib hat viele Funktionen. Für den Einstieg brauchst du nur einen 
 
 Eine **neue Installation startet im Anfänger Modus**. Er zeigt nur, was du zum Einstieg brauchst, und blendet aus:
 
-  * die Reiter **Timeline Editor**, **Z21 Simulator** und **ProgGenerator Einstellungen**,
-  * den Knopf **Zeilen Färben** in der Werkzeugleiste,
+  * die Reiter **Timeline Editor** und **Z21 Simulator**,
+  * den Menüeintrag **Tabelle, Tabelle färben …** und die Gruppe **Simulator** im Menü **Einstellungen**,
   * einige **Makros** in der **Makroauswahl**, in der Suche und in der grafischen Ansicht (welche, wird noch festgelegt).
 
 Alles andere funktioniert wie sonst, auch das Übertragen auf die Lichtmaschine.
 
 ===== Zum Experten Modus umschalten =====
 
-  - Öffne den Reiter **Programm Einstellungen**.
+  - Öffne das Menü **Einstellungen, Allgemein**.
   - In der Gruppe **Allgemeine Einstellungen** steht als erste Einstellung der Haken **Anfänger Modus**. **Entferne den Haken.**
   - Klicke auf **Geänderte Einstellungen übernehmen**.
 
