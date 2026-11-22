@@ -1,11 +1,11 @@
-Datei-Version: 1.40 (2026-11-21) - LIESMICH_Wiki_Gesamt.md
-Gilt für webMobaLedLib 4.67
+Datei-Version: 1.47 (2026-11-22) - LIESMICH_Wiki_Gesamt.md
+Gilt für webMobaLedLib 4.74
 
-# Wiki-Kapitel „webMobaLedLib“: alle Seiten, Stand 4.67
+# Wiki-Kapitel „webMobaLedLib“: alle Seiten, Stand 4.74
 
 Dieses Paket enthält **alle 29 Seiten** in ihrer neuesten Fassung (Seitenstand jeweils um 0,01 erhöht). Es ersetzt die früheren Pakete der sechs Wellen. **Die Seiten erst veröffentlichen, wenn ein Release mit 3.04 (oder neuer) auf GitHub liegt.**
 
-## Neu seit Stand 4.36 (Stand 4.67): Menüs neu geordnet
+## Neu seit Stand 4.36 (Stand 4.74): Menüs neu geordnet
 
 * **Tabelle drucken (4.62):** `pg_speichern`: neuer Menüpunkt Datei, Tabelle drucken … (Druckansicht mit allen Zeilen).
 * **Mini-Farbtest (4.59):** `pg_tabelle`: F3 oder Kontextmenü bei der Zelle Beleuchtung mit dem Makro ConstRGB.

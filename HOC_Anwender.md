@@ -1,9 +1,51 @@
-Datei-Version: 1.51 (2026-11-21) - HOC_Anwender.md
-Stand: webMobaLedLib 4.67
+Datei-Version: 1.58 (2026-11-22) - HOC_Anwender.md
+Stand: webMobaLedLib 4.74
 
 # webMobaLedLib: Änderungen (Kurzfassung)
 
 Gilt ab Version 1.39. Neueste Version oben.
+
+## Version 4.74 (2026-11-22)
+
+Korrekturen:
+- Der Verbindungsstatus („Verbunden mit …“, „Nicht verbunden“) steht wieder direkt neben dem Knopf „Mit Lichtmaschine verbinden“. Die Meldung des Programms steht in der Menüzeile neben „Zwischengespeichert“. Die Knöpfe oben rechts bleiben an ihrem Platz, eine eigene Zeile entfällt.
+
+## Version 4.73 (2026-11-22)
+
+Neue Funktionen:
+- Tabelle färben: Die Felder „Farbe“ zeigen die Farbe selbst (Hintergrund, Schrift schwarz oder weiß), nicht nur den Farbcode.
+
+Korrekturen:
+- Die Meldung des Programms steht nicht mehr neben den Knöpfen oben rechts (Änderung in 4.74 beachten).
+- Textfehler: „Sound-Datei“ (Sound Test), „Programm Einstellungen“ statt „pyProgramGenerator Einstellungen“, „Programm Generator/Timeline Editor Standardschrift“ statt „ProgGen/PattGen DefaultFont“.
+
+## Version 4.72 (2026-11-22)
+
+Korrekturen:
+- Datei bereit (Speichern, Protokoll, Einstellungen sichern): Wo der Browser keine Auswahl des Speicherorts bietet (zum Beispiel Zugriff über das Netz per http oder Firefox), fehlt der Knopf „Speichern unter …“; stattdessen erklärt ein Hinweis, warum, und die Datei geht in den Downloads-Ordner.
+
+## Version 4.71 (2026-11-22)
+
+Neue Funktionen:
+- ESP32 über WLAN: Mit PlatformIO und „Schnelles Update“ überträgt das Programm auch über WLAN nur noch die Konfiguration (Beitrag von moosbewohner, Pull Request 54). Passt die Firmware im Gerät, entfällt das Kompilieren; ist die Konfiguration unverändert, wird nichts übertragen. Bei Übertragungsfehlern gibt es bis zu drei Versuche. Einmal muss die angepasste Firmware auf den ESP32 übertragen werden (USB oder WLAN). Pico bleibt bei USB.
+
+Korrekturen:
+- Die Warnhinweise zu „Schnelles Update“ und WLAN sind entfernt, weil beides zusammen für den ESP32 jetzt funktioniert.
+
+## Version 4.70 (2026-11-22)
+
+Neue Funktionen:
+- Hardware Optionen, Reiter Entwicklungsumgebung: Unter dem Haken „Schnelles Update“ steht der Hinweis, dass die Einstellung nicht mit WLAN vereinbar ist.
+
+## Version 4.69 (2026-11-22)
+
+Korrekturen:
+- Die Adresse /ARDUINOEinstellungen entfällt.
+
+## Version 4.68 (2026-11-22)
+
+Neue Funktionen:
+- Hardware Optionen: Im Anfänger Modus fehlen die Reiter Entwicklungsumgebung und Firmware Installation. Die Boards heißen „Lichtmaschine Classic, Mini (Nano (neue Version))“, „Lichtmaschine Pro (ESP32)“ und „Lichtmaschine Pico Zero, MoLLi (Raspberry Pico)“. PlatformIO (Standard) steht in der Entwicklungsumgebung oben, „ARDUINO-IDE Einstellungen“ erscheint nur mit der ARDUINO-IDE, und der Reiter WLAN (OTA) warnt vor der Kombination mit „Schnelles Update“.
 
 ## Version 4.67 (2026-11-21)
 

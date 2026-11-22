@@ -1,0 +1,78 @@
+[b]Änderungen seit V3.93 (3.94 bis 4.67)[/b]
+
+[b]Tabelle und Farben (4.55 bis 4.66):[/b]
+[list][*]Farben kopieren und einfügen (4.55): Strg+C, Strg+X, Strg+V übertragen auch die Feldfarbe, bei Zellen und ganzen Zeilen. Ist das Ziel größer, wird das Muster wiederholt, wie in Excel.
+[*]„Nur Text einfügen“ (Strg+Umschalt+V oder Rechtsklick) fügt ohne Farbe ein.
+[*]Von Hand gesetzte Farben sind vor den Färberegeln geschützt, bleiben mit der Tabelle gespeichert und lassen sich zurücknehmen (4.55).
+[*]Farbe einer Zelle oder Zeile entfernen: Die Zelle wird danach wieder nach den Färberegeln gefärbt (4.57).
+[*]Mini-Farbtest für ConstRGB (4.58 bis 4.61, Idee eines Anwenders): Zelle Beleuchtung anklicken, F3 drücken oder Rechtsklick „Farbe mit Mini-Farbtest ändern …“. Das Fenster startet mit der Farbe bei Ein (R1, G1, B1), ein Umschalter wählt die Farbe bei Aus (R0, G0, B0). Die Farbe leuchtet live an der LED der Tabellenzeile (Start LedNr, LEDs, LED Channel, auch mit Kanal, zum Beispiel 2-17). Mit OK ersetzt das Programm die Zahlen im Makrotext, Strg+Z nimmt es zurück.
+[*]Tabelle drucken (4.62 bis 4.64): Menü Datei, „Tabelle drucken …“. Spalten wählen (werden je Tabelle gemerkt), Zeilennummer und Farben ein oder aus, Zeilen: alle, die markierten oder ein Zeilenbereich. Das Programm öffnet eine Druckansicht (Querformat A4, Kopfzeile auf jeder Seite), gedruckt wird über den Druckdialog des Browsers, dort geht auch „Als PDF speichern“.
+[*]F3 öffnet nicht mehr die Suche des Browsers (4.65, 4.66).[/list]
+
+[b]Menüs neu geordnet (4.51 bis 4.67, Vorschlag von Michael):[/b]
+[list][*]Neues Menü Einstellungen zwischen Tabelle und Hilfe: Allgemein, Programm Generator, Farb Test, Simulator (nur Experten Modus), Netzzugriff, Spezial, Erweiterungen …, Einstellungen sichern …, Einstellungen übernehmen …. Jeder Eintrag öffnet nur seine Gruppe in einem eigenen Fenster mit Speichern (S) und Abbrechen (A), die immer sichtbar bleiben (4.56).
+[*]Tabelle, „Tabelle färben …“ öffnet ein Fenster mit den Bedingungen für die Zeilenfarben. Nach „Speichern und aktuelle Seite färben“ oder „Speichern und ALLE Seiten färben“ springt das Programm in den Programm Generator. Der Knopf „Zeilen Färben“ entfällt.
+[*]Das Menü Lichtmaschine entfällt: Der Pfeil neben „Mit Lichtmaschine verbinden“ enthält Verbinden, Verbindung trennen, Neu verbinden, Board wechseln …, Alle LED aus.
+[*]ARDUINO Einstellungen und Erweiterungen sind eigene Fenster. „ESP32-Firmware über WLAN hochladen …“ steht auf dem Reiter WLAN (OTA) der Optionen. „Importieren v. altem Programm …“ steht im Menü Datei.
+[*]Neu in 4.67: Der Knopf „Optionen Werkzeuge“ heißt jetzt „Hardware Optionen“. Der Reiter „Bootloader“ heißt „Firmware Installation“ und enthält auch den Knopf „Firmware installieren“ (vorher im Reiter Lichtmaschine).[/list]
+
+[b]Darstellung (4.44 bis 4.49, Issue 51):[/b]
+[list][*]Darstellung der Oberfläche (Programm Einstellungen, Allgemeine Einstellungen, unter Sprache): Hell (Vorgabe), Hell mit Kontrast, Dunkel (die Tabelle bleibt hell), Dunkel mit Tabelle oder Wie System.
+[*]Blattreiter besser lesbar, Beschreibungstexte und Tooltips im Dunklen Modus lesbar (4.44 bis 4.49).[/list]
+
+[b]Speichern und Verbinden (4.42 bis 4.50):[/b]
+[list][*]„Kein ESP-Port gewählt“ (Issue 50): Ist die Lichtmaschine verbunden und in der Tabelle kein Anschluss eingetragen, nimmt das Programm den Anschluss der aktiven Verbindung. Bei mehreren Boards entscheidet die Einstellung „Kein Anschluss in der Tabelle: bei mehreren Boards“ (4.42, 4.43).
+[*]Workbook-Dateinamen mit Datum und Uhrzeit (MobaLedLib_2026.11.20_20.05.03.json) bei „Workbook speichern als“ und „Inkrementell speichern“ (4.50).
+[*]Beim Trennen gehen die LEDs der Anlage nicht mehr aus. Wer es möchte, setzt „Beim Trennen alle LEDs ausschalten“ (Allgemeine Einstellungen, Vorgabe aus) (4.50).[/list]
+
+[b]Verbinden:[/b]
+[list][*]Beim Start verbindet sich das Programm wieder mit der Lichtmaschine, die zuletzt verbunden war, sonst sucht es eine angeschlossene (Nano, ESP32, Pico) und verbindet, wenn es genau eine findet. Das läuft im Hintergrund. In den Programm Einstellungen abschaltbar (4.14).
+[*]Nach „Setup übertragen“ wird mit der Lichtmaschine verbunden, auf die übertragen wurde, auch über WLAN (4.14).
+[*]Ohne eingestellten USB-Anschluss öffnet „Verbinden“ gleich „Board und USB Port erkennen“, danach wird automatisch verbunden (4.04).[/list]
+
+[b]Speichern und Tabelle:[/b]
+[list][*]Inkrementell speichern (Strg+Umschalt+S, die Tastenkombination ist in den Programm Einstellungen einstellbar) sichert die ganze Arbeitsmappe mit fortlaufender Nummer; Sicherungsdatei öffnen … und Sicherungsort ändern … (4.15, 4.17).
+[*]Rückgängig und Wiederholen in der Tabelle (Strg+Z, Strg+Y), die letzten 50 Änderungen je Blatt (4.02). Beim Beenden ohne Speichern lassen sich die verworfenen Änderungen beim nächsten Start wiederherstellen.
+[*]Spaltenbreiten übertragen auf andere Seiten; Zellinnenabstand in den Programm Einstellungen (4.08).
+[*]Weniger Platz im Kopfbereich (4.16, 4.19, 4.20, Issue 22).[/list]
+
+[b]Einstellungen und Hilfe:[/b]
+[list][*]Update Testversion: eigener Link zu einer ZIP-Datei oder ZIP-Datei vom Rechner wählen (3.95).
+[*]Neuer Reiter ESP Einstellungen (OLED-Modus 0 bis 5, Fotowiderstand, Zustandsspeicherung; Beitrag von moosbewohner) (3.94, 4.06, 4.09).
+[*]Neues Programmsymbol (4.10).[/list]
+
+[b]Erweiterungen (MLX):[/b]
+[list][*]Erweiterungen in den Optionen: Haken ein/aus, bekannte Erweiterungen werden von GitHub geladen und danach ohne Internet benutzt, eigene Erweiterungen hinzufügen (Name, Version oder Adresse), Rückfrage beim Öffnen einer Datei mit ausgeschalteter Erweiterung (3.96 bis 3.98).
+[*]Name und Beschreibung aus der `libraries.json` (4.22). Neu importierte Erweiterungen lassen sich kompilieren, Einbindung mit `symlink://` (4.21). InfraredMLX auf dem Pico: IRremote 4.x statt 5.0 (4.05).[/list]
+
+[b]Einstellungen auf einen anderen PC (4.24, Issue 29):[/b]
+[list][*]Datei → Einstellungen sichern … packt Programm Einstellungen, Farbtest/Palette, Erweiterungen und ESP32-OTA in eine ZIP, auf Wunsch auch die Tabellen.
+[*]Einstellungen übernehmen … liest sie auf dem anderen PC ein (Übernahme beim nächsten Start, die alten Einstellungen werden gesichert).
+[*]Passwort, Netzzugriff, USB-Anschluss und Fensterlage bleiben am PC.[/list]
+
+[b]Bedienung (4.23 bis 4.41):[/b]
+[list][*]Das Kontextmenü (Rechtsklick) bleibt im sichtbaren Fenster (4.23).
+[*]Log-Fenster: Schließen-Knopf nach dem Ende, Abbrechen nur solange etwas läuft (4.25, Issue 28).
+[*]Bilder von Nano und Pico waren vertauscht, jetzt richtig (4.25, Issue 27).
+[*]Tooltips (4.34): Im Dialog der Raumeffekte (Haus) und der Straßenbeleuchtung erscheinen die Tooltips wie im Excel-Programm, in der Sprache des Programms.
+[*]Schnelles Update für ESP32 und Pico (4.36, Beitrag von Jürgen, Issue 31): Neuer Haken „Schnelles Update“ im Reiter Entwicklungsumgebung. Das Programm wird nur noch hochgeladen, wenn es sich geändert hat, sonst nur die Konfiguration (Makros, Farben, Startwerte, ab 4.37 auch LED-Pins und LED-Gruppen).
+[*]Tastenkürzel (4.38, Issue 49): Strg+Z, Strg+Y oder Strg+Umschalt+Z gelten auf der ganzen Seite, Strg+S speichert dauerhaft.
+[*]Makro in Spalte L direkt bearbeiten (4.40, Beitrag von Jürgen, Issue 42): Der Makrotext wird beim Bearbeiten sofort geprüft (Klammern, leere Parameter, Parameterzahl).
+[*]Übertragungsfenster schließt automatisch (4.40, Issue 41): nach Erfolg und nach Fehler, die Zeiten sind in den Allgemeinen Einstellungen wählbar.
+[*]Fehler „Adresse mit zwei Typen“ (4.39, Issue 48) wird beim Erzeugen der Kopfdatei wieder gemeldet.[/list]
+
+[b]Übertragen auf den ESP32 und Hänger (4.27 bis 4.35):[/b]
+[list][*]Minimale Firmware per USB (Reiter OTA) nimmt keine Daten mehr aus der DCC-Tabelle, nur die Heartbeat-LED (4.29).
+[*]„Schließen“ im Protokoll-Fenster funktioniert nach dem Upload (4.27).
+[*]Beim Kompilieren und Hochladen auf den ESP32 erscheint die Ausgabe sofort im Protokoll-Fenster, und „Vorgang abbrechen“ beendet den Build (4.33).
+[*]„Setup übertragen“ blieb bei einer Zeile wie `Counter(…)` ohne Zielvariable ohne Meldung stehen (Endlosschleife, 4.31) und stürzte mit Zielvariable ab (4.32). Beides behoben.
+[*]Fehler „slot stack … is empty“ nach „Board und USB Port erkennen“ behoben (4.26). Nach einem Fehler beim Verbinden blieb „Es läuft noch ein Vorgang“ dauerhaft stehen; behoben (4.35).
+[*]Hilfe zur Fehlersuche: Steht ein Befehl länger als 25 Sekunden, schreibt das Programm den Zustand an `hang_dump.txt` im Datenordner (4.28, 4.30). Beim Kompilieren entsteht dabei ein Eintrag, das ist normal.[/list]
+
+[b]Korrekturen:[/b]
+[list][*]„Board und USB Port erkennen“: richtiger Anschluss bei zwei angeschlossenen Arduinos, erkanntes Board bleibt eingestellt, Nano „neu“ und „Full“ werden unterschieden (3.98 bis 4.13, Issues 13 und 14).
+[*]„Vorgang abbrechen“ beendet alles, der COM-Port ist sofort frei (4.12, Issue 15).
+[*]Nach „Verwerfen“ beim Start reagiert die Spalte Aktiv sofort (4.11, Issue 16).
+[*]ESP32: OTA-Passwort wird bei Bedarf abgefragt (4.03); Übertragen per USB mit WLAN ohne OTA (4.09).
+[*]Versteckte Tabellen: das Startblatt erscheint nicht mehr als Reiter (4.07).
+[*]Optionen: alle Reiter sichtbar (3.99).[/list]

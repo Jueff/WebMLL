@@ -32,17 +32,19 @@ Ganz rechts steht die **Version der MobaLedLib-Bibliothek**, zum Beispiel //Ver.
 
 ===== Das Fenster Optionen und spezielle Funktionen =====
 
+(Seit 4.68 heißt das Fenster **Hardware Optionen**.)
+
 Du öffnest es mit dem Knopf **Hardware Optionen**. Oben stehen die **Reiter**, unten **Hilfe im Forum** und **Schließen**.
 
 ^ Reiter ^ Wofür ^
 | **Lichtmaschine** | **Board** deiner Lichtmaschine wählen und den **USB-Anschluss** erkennen lassen. Der Knopf **Board und USB Port erkennen** (seit 3.82, oben im Reiter) sucht selbst an allen USB-Anschlüssen nach einer Lichtmaschine, stellt das erste gefundene Board ein und öffnet das Fenster **USB Port erkennen** mit dem gefundenen Board, dem Anschluss und den anderen gefundenen Boards. Das ist der wichtigste Reiter, siehe [[anleitungen:webmobaledlib:pg_arduino|Verbinden und Übertragen]]. Der Knopf **Firmware installieren** (Firmware auf einen Pico schreiben und herunterladen) steht seit 4.67 im Reiter **Firmware Installation**. |
-| **WLAN (OTA)** | Nur bei der Zentrale **ESP32**: WLAN und OTA einschalten, Hostname, Adresse und Passwort, WLAN über USB einrichten, siehe [[anleitungen:webmobaledlib:ota|ESP32 per WLAN und OTA]]. Bis 3.82 hieß der Reiter **OTA**. |
+| **WLAN (OTA)** | Nur bei der Zentrale **ESP32** (Reiter **ESP Einstellungen** ebenso): WLAN und OTA einschalten, Hostname, Adresse und Passwort, WLAN über USB einrichten, siehe [[anleitungen:webmobaledlib:ota|ESP32 per WLAN und OTA]]. Bis 3.82 hieß der Reiter **OTA**. |
 | **Erweiterungen** | Die **MobaLedLib Extensions (MLX)** ein- und ausschalten, optionale laden und **eigene** hinzufügen, siehe [[anleitungen:webmobaledlib:erweiterungen|Erweiterungen (MLX)]]. |
 | **DCC ARDUINO** | Dasselbe für den **zweiten ARDUINO**, der die Zentrale anbindet (Blatt **DCC**, **Selectrix** oder **LNet**; beim Blatt **CAN** gibt es den Reiter nicht). Er erscheint nur bei einer **Nano**-Lichtmaschine. Die Überschrift trägt den Namen des Blatts. |
 | **DATEIEN** | Tabelle als Datei **speichern** und wieder **laden** (siehe unten). |
-| **ENTWICKLUNGSUMGEBUNG** | Womit die Programme **übersetzt und hochgeladen** werden: **PlatformIO** oder die **ARDUINO-IDE** (siehe unten). |
+| **ENTWICKLUNGSUMGEBUNG** | Womit die Programme **übersetzt und hochgeladen** werden: **PlatformIO (Standard)** oder die **ARDUINO-IDE** (nur Kompatibilität). Im **Anfänger Modus** fehlt der Reiter (siehe unten). |
 | **UPDATE** | Nur mit der **ARDUINO IDE**: Bibliotheken und Boards der IDE aktualisieren. Mit PlatformIO fehlt der Reiter. |
-| **BOOTLOADER** | Den **schnellen Bootloader** auf dem linken ARDUINO installieren (siehe unten). |
+| **FIRMWARE INSTALLATION** (bis 4.66 **BOOTLOADER**; im **Anfänger Modus** nicht sichtbar) | Den **schnellen Bootloader** auf dem linken ARDUINO installieren (siehe unten). |
 
 ==== Der Reiter DATEIEN ====
 

@@ -1,5 +1,5 @@
-Datei-Version: 1.51 (2026-11-21) - HOC_intern.md
-Stand: webMobaLedLib 4.67
+Datei-Version: 1.56 (2026-11-21) - HOC_intern.md
+Stand: webMobaLedLib 4.74
 
 # webMobaLedLib: History of Change (intern, ausführlich)
 
@@ -24,6 +24,82 @@ Release-Stand 2.12 auf Wunsch des Entwicklers („Release bauen“). **Neu im Ab
 | `archiv/` | frühere Release-Hinweise, Versionslisten und ZIP (nichts gelöscht) |
 
 **Geprüft:** Dateipaket: `testzip` in Ordnung, alle 113 Dateien gleich dem Ordner `headless`, keine `__pycache__`, alle `.py` kompilieren, Versionsprüfung „alles passt“ (50 Einträge), 11 Dateien ausführbar (`.sh`, `.command`). **Nachbau des Entwickler-Ablaufs mit seinem echten Paket (1678 Dateien, Stand 2.05):** meine 113 Dateien darübergelegt, Prüfliste, ZIP gepackt, `release_tools check --previous <sein ZIP>`: **in Ordnung** (Version 2.12, 1678 Dateien, 6 neue, 0 fehlende, ZIP 16,6 MB). Alle 15 Prüfreihen laufen (17, 26, 15, 70, 28, 19, 43, 26, 16, 27, 8, 8, 8, 5, 9 Prüfungen). **Nicht geprüft:** `zip_erstellen.bat` und die Reparaturskripte unter Windows, ein abgebrochenes Update unter Windows, das Verhalten mit Acronis, der Download von GitHub.
+
+## 4.74 (2026-11-22), Statuszeile korrigiert
+
+Rückmeldung zu 4.73: `conn_label` steht wieder in `header_row` direkt vor dem Knopf; `status_label` wird in die Menüzeile (`menu_slot`) vor `autosave_label` verschoben (`move`). `status_row` entfällt (Zeile bleibt als Kommentar). Die Knöpfe verschieben sich nicht mehr, weil die Meldung nicht mehr in der Kopfzeile neben ihnen steht.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.74 | `conn_label` im Kopf, `status_label` in der Menüzeile |
+
+## 4.73 (2026-11-22), Statuszeile, Farbfelder, Textfehler
+
+Anwender-Wunsch: (1) Im Fenster Tabelle färben zeigen die Felder Farbe die Farbe selbst: `web_dialogs.color_input` setzt `input-style` (Hintergrund, Schriftfarbe nach Helligkeit), aktualisiert bei Änderung. (2) `status_label` und `conn_label` stehen nicht mehr in `header_row`, sondern in `status_row` (feste Mindesthöhe 20 px) unter der Kopfzeile; die Knöpfe verschieben sich nicht mehr. (3) Textfehler in `MobaLedTest_macrodef.json` (Sound-Datei, Programm Einstellungen) und `MobaLedTest_macroparamdef.json` (Standardschrift), Schlüssel und Übersetzungen in `csv/Web_Languages.csv` angepasst. Die Texte im Dialog der Einstellungen kommen aus den JSON-Dateien.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.73 | Statuszeile `status_row`, REQUIRED_FILES |
+| `_web/web_dialogs.py` | 1.12 | `color_input` zeigt die Farbe |
+| `MobaLedTest_macrodef.json`, `MobaLedTest_macroparamdef.json` | – | Textfehler |
+| `csv/Web_Languages.csv` | – | Schlüssel und Übersetzungen der drei Texte |
+
+## 4.72 (2026-11-22), Speichern unter … nur wo der Browser es kann
+
+Anfrage eines Anwenders: Beim Zugriff über das Netz (webMLL auf einem anderen PC, Adresse mit http) kam bei „Speichern unter …“ kein Dialog, die Datei landete im Downloads-Ordner. Ursache: `window.showSaveFilePicker` gibt es nur in Chromium (Edge, Chrome) und nur in einem sicheren Kontext (https oder localhost); sonst fällt `offer_download` auf den normalen Download zurück, der Knopf tut dann dasselbe wie „In den Downloads-Ordner“. Jetzt blendet ein kurzes Skript nach dem Öffnen des Dialogs den Knopf und den alten Hinweis aus und zeigt stattdessen einen Hinweis mit der Ursache. Der Fall ist keine Einschränkung des Webprogramms an sich: Mit https (zum Beispiel über einen Reverse Proxy) oder in Chrome mit der Ausnahme für unsichere Adressen (`chrome://flags`, „Insecure origins treated as secure“) erscheint der Dialog. Nicht im Browser getestet.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.72 | `offer_download`: Knopf und Hinweis je nach Browserfähigkeit |
+
+## 4.71 (2026-11-22), Pull Request 54: ESP32-Konfiguration über WLAN (moosbewohner)
+
+Übernommen aus Branch `feature/konfiguration-wlan` (Basis 4.67): Mit „Schnelles Update“ und PlatformIO geht die Konfiguration des ESP32 auch über WLAN. Der Empfänger nutzt den vorhandenen HMAC-gesicherten Gerätekanal (TCP 2323) mit dem OTA-Passwort; Wiederholung bis zu dreimal, Nachprüfung von Signatur und CRC bei verlorener END-Antwort; der ESP32 startet 750 ms später aus der Hauptschleife neu; Hostname, Passwort und OTA-Schalter gehen als Hash in die Firmware-Signatur ein (neue Firmware nötig, einmal vollständig übertragen). Pico bleibt bei USB. Der Code der Dateien M06, M08, M42, `headless_dyn_config`, `MLLDynConfig.h`, `LEDs_AutoProg.ino` und `test_dyn_config_wlan.py` wurde unverändert eingespielt (Patch ohne Konflikte); `web_form_options.py`, CSV, HOC und Doku sind von Hand zusammengeführt (der Branch stand auf 4.67, 4.68 bis 4.70 liefen parallel). Meine roten Warnhinweise aus 4.68 (Reiter WLAN) und 4.70 (Reiter Entwicklungsumgebung) sind entfernt (auskommentiert), der Hinweistext des Hakens stammt aus dem Pull Request. Die Texte in Anleitung und Checkliste habe ich neu formuliert, weil die des Branches doppelt kodierte Umlaute enthielten. Nicht im Browser und nicht an Hardware getestet; der Autor hat nach eigenen Angaben ESP32 mit PlatformIO und mehrere WLAN-Updates geprüft, nicht geprüft sind Pico, Nano, Linux/macOS/Raspberry Pi, Verlust der END-Antwort am Gerät und Passwortwechsel.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `proggen/M06_Write_Header.py` | 1.15 | dynamische Konfiguration bei HeaderOnly |
+| `proggen/M08_ARDUINO.py` | 1.29 | ESP32-Setup mit Konfiguration über WLAN |
+| `proggen/M42_Dyn_Config.py` | 1.05 | WLAN, Wiederholung, Nachprüfung |
+| `headless/headless_dyn_config.py` | 1.02 | TCP-Verbindung mit Anmeldung |
+| `LEDs_AutoProg/MLLDynConfig.h` | 1.04 | Protokoll über USB oder WLAN, verzögerter Neustart |
+| `LEDs_AutoProg/LEDs_AutoProg.ino` | WLAN 1.02 | Empfang über WLAN |
+| `test_dyn_config_wlan.py` | 1.05 | 14 Tests |
+| `_web/web_form_options.py` | 1.46 | Warnhinweise entfernt, Hinweistext |
+| `webmobaledlib.py` | 4.71 | Version |
+| `csv/Web_Languages.csv` | – | 2 Texte aus dem PR, meine Warntexte entfernt |
+
+## 4.70 (2026-11-22), Hinweis Schnelles Update im Reiter Entwicklungsumgebung
+
+Roter Hinweistext unter dem Haken „Schnelles Update“ (`_web/web_form_options.py` 1.45), neuer Text in `Web_Languages.csv` (7 Sprachen). Nicht im Browser getestet.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.70 | Version |
+| `_web/web_form_options.py` | 1.45 | Hinweistext |
+| `csv/Web_Languages.csv` | – | neuer Text |
+| Anleitung 4.70, Checkliste 3.52 | – | angepasst |
+
+## 4.69 (2026-11-22), Adresse /ARDUINOEinstellungen entfällt
+
+Eintrag aus `TAB_URLS` (`_web/web_tabs.py` 1.35) auskommentiert; die Übersichtsseite der Adressen und die Anleitung (Tabelle der Adressen) zeigen sie nicht mehr. Der unsichtbare Reiter `arduinocfg` und die Seite bleiben im Code (Entscheidung offen: die drei unsichtbaren Reiter `progcfg`, `config`, `arduinocfg` tragen noch die Seiten der Menüs; Entfernen wäre ein Umbau ohne Nutzen für Anwender).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.69 | Version |
+| `_web/web_tabs.py` | 1.35 | Adresse entfernt |
+| Anleitung 4.69 | – | Adressen-Tabelle |
+
+## 4.68 (2026-11-22), Menü-Umstellung Teil 2, Rest
+
+Dialog Hardware Optionen (`_web/web_form_options.py` 1.44): Titel `tr("Hardware Optionen")`; im Anfänger Modus (`web_tabs.is_beginner_mode`) werden die Reiter Entwicklungsumgebung und Firmware Installation nicht aufgebaut; Boardnamen links über `_radios` (nur Web, die Tk-Datei `UserForm_Options.py` bleibt): Lichtmaschine Classic, Mini (Nano (neue Version)) / Lichtmaschine Pro (ESP32) / Lichtmaschine Pico Zero, MoLLi (Raspberry Pico); Entwicklungsumgebung: Radio mit PlatformIO (Standard) zuerst, ARDUINO-IDE (nur Kompatibilität - nicht mehr nutzen); Knopf ARDUINO-IDE Einstellungen nur sichtbar bei ARDUINO-IDE (beim Umschalten sofort); die Reiter ESP Einstellungen und WLAN (OTA) hingen schon an der Auswahl ESP32 (unverändert); WLAN (OTA): roter Hinweistext oben. Der Hinweis nennt die Einstellung „Schnelles Update“, wie sie in der Oberfläche heißt (im Wunsch stand „Schnelles Hochladen“). Nicht im Browser getestet. Ob WLAN das Schnelle Update tatsächlich ignoriert, wurde im Code nicht geändert oder geprüft.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.68 | Version |
+| `_web/web_form_options.py` | 1.44 | Dialog Hardware Optionen |
+| `csv/Web_Languages.csv` | – | 6 neue Texte |
+| Anleitung (4.68), Checkliste (3.50, Punkt 313), Wiki pg_arduino, pg_werkzeugleiste | – | angepasst |
 
 ## 4.67 (2026-11-21), Menü-Umstellung Teil 2
 
