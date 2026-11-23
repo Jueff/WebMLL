@@ -1,8 +1,8 @@
-# Datei-Version: 4.79 (2026-11-23) - webmobaledlib.py
+# Datei-Version: 4.93 (2026-11-23) - webmobaledlib.py
 # ----------------------------------------------------------------------------------------------
 # Name:           webmobaledlib.py
 # Path:           webmobaledlib.py
-# Version:        4.79
+# Version:        4.93
 # Last Update:    2026-11-23
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
@@ -323,6 +323,20 @@
 #   4.75  2026-11-22  Pull Request 55 (moosbewohner): dunkles Farbschema mit helleren, abgestuften Flaechen (web_layout 1.21, nur CSS)
 #   4.76  2026-11-22  Issue 37: Port-Auswahl: nach dem Wechsel des Boards ueber Andere Typen aendern sich Bild, Text und roter Hinweis (web_form_comport 1.09)
 #   4.77  2026-11-22  Issue 34: Dialoge und Menues fest am Fenster (CSS); Issue 30: Startmeldung der Lichtmaschine mit Datum TT.MM.JJ (M06_Write_Header 1.16)
+#   4.93  2026-11-23  Datenuebertragung (Pull Request 57, neuer Commit): falscher Verbindungscode wird als verstaendliche Meldung angezeigt statt HTTP 403 (headless_table_sync 1.04)
+#   4.92  2026-11-23  Blattwechsel baut auch die WLAN-Verbindung (ESP32) des neuen Blatts auf und wechselt zwischen WLAN und USB; bei nicht erreichbarem WLAN-Ziel wird der USB-Anschluss des Blatts versucht
+#   4.91  2026-11-23  Issue 59 Nachbesserung: Verbinden (Knopf, Menue, Trennen und neu verbinden) nimmt den Anschluss des aktiven Blatts (web_serial 1.14); Blattwechsel passt die Verbindung auch ohne automatische Verbindung an und protokolliert die Entscheidung; Optionen (Board wechseln) lassen den aktiven Reiter stehen
+#   4.90  2026-11-23  Issues 58-60: (60) Knoepfe Vorgang abbrechen/Schliessen flackerten: busy als Zaehler, Ende des Vorgangs erst nach 1,5 s gemeldet (web_log 1.12); (59) automatische Verbindung nimmt den Anschluss und den Typ des aktiven Blatts, beim Blattwechsel wird die Verbindung bei anderem Anschluss neu aufgebaut; (58) Firmware installieren (Pico) fragt den Pico-Anschluss selbst (web_form_options 1.47)
+#   4.89  2026-11-23  Datenuebertragung zwischen PCs (Pull Request 57 von moosbewohner): Menue Einstellungen -> Datenuebertragung, Tabellen oder ausgewaehlte Zeilen im lokalen Netz uebernehmen, Quellfreigabe nach jedem Start aus (web_table_sync 1.08, headless_table_sync 1.03)
+#   4.88  2026-11-23  Nach Zeilen verschieben sind die verschobenen Zeilen markiert
+#   4.87  2026-11-23  Nach Zeilen duplizieren (Werkzeugleiste) ist die erste duplizierte Zeile markiert
+#   4.86  2026-11-23  Nach Zeilen loeschen (Werkzeugleiste) ist die Zeile an der Stelle der geloeschten Zeile markiert (mehrfaches Loeschen)
+#   4.85  2026-11-23  Nach Zeile einfuegen (Werkzeugleiste) ist die eingefuegte Zeile markiert (aktuelle Zeile)
+#   4.84  2026-11-23  Anzeige springt beim Zeile einfuegen nicht mehr: Ankerzeile (erste sichtbare Zeile) wird auch beim Druck auf Knoepfe ausserhalb der Tabelle und nach jedem Bildlauf gemeldet, nach Einfuegen/Loeschen wird sie nach 0,3 s noch einmal gesetzt
+#   4.83  2026-11-23  Mini-Farbtest (F3 und Kontextmenue) auch in der Grafik-Ansicht (Ketten und Anlage): gleiches Verhalten wie in der Tabelle, ConstRGB liest und ersetzt die Farben, jede andere Zeile mit LED-Nummer testet die LED ohne zu senden beim Oeffnen und ohne zu speichern (mll_graph.js 1.17, web_graph.py 1.17)
+#   4.82  2026-11-23  Sicherheit Mini-Farbtest (F3) ausser ConstRGB: beim Oeffnen wird nichts an die Lichtmaschine gesendet (kein Direktmodus, keine Farbe), erst Blinken oder eine Farbaenderung gibt das Senden frei (web_colorcheck 1.12)
+#   4.81  2026-11-23  Mini-Farbtest (F3) gilt fuer alle Zeilen mit LED-Nummer (LED suchen mit Blinken, ohne Speichern); nur bei ConstRGB mit festen Zahlen werden die Farben gelesen und beim OK ersetzt
+#   4.80  2026-11-23  Mini-Farbtest (F3): Blinken Ein/Aus funktioniert wieder (web_colorcheck 1.11)
 #   4.79  2026-11-23  ESP32: wahlweise DHCP oder statische IP-Adresse (Reiter OTA: IP-Adresse, Gateway, Subnetzmaske, DNS); Firmware muss einmal neu uebertragen werden (web_esp32_ota 1.07, headless_esp32_ota 1.12, M08_ARDUINO 1.30, ESP32Extensions.h, Web_Languages.csv)
 #   4.78  2026-11-22  Issue 45: Simulator: Fensterlage -32000 (minimiertes Fenster) wird nicht mehr gespeichert, ungueltige Lage wird beim Oeffnen zurueckgesetzt (M39_Simulator 1.12)
 #   4.40  2026-11-20  Pull Request 44 von Juergen (Issues 41, 42): Makrotext bei direkter Eingabe pruefen (Fehler korrigieren oder wiederherstellen), bei Makrowechsel Name und Symbol aktualisieren, danach LEDs, InCnt, LocInCh, Adressen, Testtasten und Start-LEDs neu setzen (headless_macro_edit 1.01); Uebertragungsfenster schliesst sich automatisch (web_log 1.11)
@@ -554,6 +568,13 @@ REQUIRED_FILES = {  # v1.75
     "proggen/M06_Write_Header.py": "1.16",  # v4.77
     "proggen/M39_Simulator.py": "1.12",  # v4.78
     "proggen/M08_ARDUINO.py": "1.30", "headless/headless_esp32_ota.py": "1.12", "_web/web_esp32_ota.py": "1.07",  # v4.79
+    "_web/web_colorcheck.py": "1.11",  # v4.80
+    "_web/web_colorcheck.py": "1.12",  # v4.82
+    "_web/mll_graph.js": "1.17", "_web/web_graph.py": "1.17",  # v4.83
+    "_web/web_table_sync.py": "1.08", "headless/headless_table_sync.py": "1.03",  # v4.89
+    "headless/headless_table_sync.py": "1.04",  # v4.93
+    "_web/web_log.py": "1.12", "_web/web_form_options.py": "1.47",  # v4.90
+    "_web/web_serial.py": "1.14",  # v4.91
 }  # v1.75
 FILE_PROBLEMS = []                                      # Zeilen der Abweichungen, gefuellt in main()  # v1.75
 
@@ -1505,7 +1526,21 @@ def font_scales(ctrl) -> dict:
 # VERSION = "4.47 (2026-11-21)"  # v4.48 (entfallen)
 # VERSION = "4.48 (2026-11-21)"  # v4.49 (entfallen)
 # VERSION = "4.49 (2026-11-21)"  # v4.50 (entfallen)
-VERSION = "4.79 (2026-11-23)"  # v3.64  # v4.26  # v4.27  # v4.28  # v4.29  # v4.30  # v4.31  # v4.32  # v4.33  # v4.34  # v4.35  # v4.36  # v4.37  # v4.38  # v4.39  # v4.40  # v4.41  # v4.42  # v4.43  # v4.44  # v4.45  # v4.46  # v4.47  # v4.48  # v4.49  # v4.50  # v4.51  # v4.52  # v4.53  # v4.54  # v4.55  # v4.56  # v4.57  # v4.58  # v4.59  # v4.60  # v4.61  # v4.62  # v4.63  # v4.64  # v4.65  # v4.66  # v4.67  # v4.68  # v4.69  # v4.70  # v4.71  # v4.72  # v4.73  # v4.74  # v4.75  # v4.76  # v4.77  # v4.78  # v4.79
+# VERSION = "4.79 (2026-11-23)"  # v4.80 (entfallen)
+# VERSION = "4.80 (2026-11-23)"  # v4.81 (entfallen)
+# VERSION = "4.81 (2026-11-23)"  # v4.82 (entfallen)
+# VERSION = "4.82 (2026-11-23)"  # v4.83 (entfallen)
+# VERSION = "4.83 (2026-11-23)"  # v4.84 (entfallen)
+# VERSION = "4.84 (2026-11-23)"  # v4.85 (entfallen)
+# VERSION = "4.85 (2026-11-23)"  # v4.86 (entfallen)
+# VERSION = "4.86 (2026-11-23)"  # v4.87 (entfallen)
+# VERSION = "4.87 (2026-11-23)"  # v4.88 (entfallen)
+# VERSION = "4.88 (2026-11-23)"  # v4.89 (entfallen)
+# VERSION = "4.89 (2026-11-23)"  # v4.90 (entfallen)
+# VERSION = "4.90 (2026-11-23)"  # v4.91 (entfallen)
+# VERSION = "4.91 (2026-11-23)"  # v4.92 (entfallen)
+# VERSION = "4.92 (2026-11-23)"  # v4.93 (entfallen)
+VERSION = "4.93 (2026-11-23)"  # v3.64  # v4.26  # v4.27  # v4.28  # v4.29  # v4.30  # v4.31  # v4.32  # v4.33  # v4.34  # v4.35  # v4.36  # v4.37  # v4.38  # v4.39  # v4.40  # v4.41  # v4.42  # v4.43  # v4.44  # v4.45  # v4.46  # v4.47  # v4.48  # v4.49  # v4.50  # v4.51  # v4.52  # v4.53  # v4.54  # v4.55  # v4.56  # v4.57  # v4.58  # v4.59  # v4.60  # v4.61  # v4.62  # v4.63  # v4.64  # v4.65  # v4.66  # v4.67  # v4.68  # v4.69  # v4.70  # v4.71  # v4.72  # v4.73  # v4.74  # v4.75  # v4.76  # v4.77  # v4.78  # v4.79  # v4.80  # v4.81  # v4.82  # v4.83  # v4.84  # v4.85  # v4.86  # v4.87  # v4.88  # v4.89  # v4.90  # v4.91  # v4.92  # v4.93
 # VERSION = "4.09 (2026-11-19)"  # v3.64 (entfallen)
 # VERSION = "4.08 (2026-11-19)"  # v3.64 (entfallen)
 # VERSION = "4.07 (2026-11-19)"  # v3.64 (entfallen)
@@ -1840,6 +1875,21 @@ window.mllVp = function () {
   }, true);
   document.addEventListener('pointerdown', arm, true);
   document.addEventListener('keydown', arm, true);
+  // v4.84: Ankerzeile auch beim Druck auf einen Knopf ausserhalb der Tabelle (Zeile einfuegen) und nach jedem Bildlauf melden, damit sie nie veraltet ist
+  function sendAnchor() {
+    var a = window.mllAnchor();
+    if (a && typeof emitEvent === 'function') emitEvent('mll_anchor', {idx: a.idx, off: a.off, sheet: window.mllCur});
+  }
+  document.addEventListener('pointerdown', function (e) {
+    if (!(e.target && e.target.closest && e.target.closest('.ag-root-wrapper'))) sendAnchor();
+  }, true);
+  var anchorTimer = null;
+  document.addEventListener('scroll', function (e) {
+    var t = e.target;
+    if (!t || !t.closest || !t.closest('.ag-root-wrapper') || window.mllFrozen) return;
+    if (anchorTimer) clearTimeout(anchorTimer);
+    anchorTimer = setTimeout(sendAnchor, 200);
+  }, true);
   // Bewusstes Scrollen (Mausrad, Touch) beendet den Wachposten sofort
   ['wheel', 'touchmove'].forEach(function (t) {
     document.addEventListener(t, function () { window.mllGuard.until = 0; }, {capture: true, passive: true});
@@ -2377,6 +2427,15 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
                 sync_shapes(sheet)
             except Exception:                      # noqa: BLE001
                 logger.exception("Shapes von Blatt %s nicht nachgefuehrt", getattr(sheet, "Name", "?"))
+
+    def refresh_after_transfer():  # v4.89 (Pull Request 57, moosbewohner)
+        """Nach externer Tabellenuebernahme denselben Anzeigeweg wie run_command nutzen."""  # v4.89
+        load_sheet_dict()  # v4.89
+        hook_selection()  # v4.89
+        current = wb.ActiveSheet if wb.ActiveSheet in wb.sheets else wb.sheets[0]  # v4.89
+        state["ws"] = current  # v4.89
+        rebuild_sheet_tabs()  # v4.89
+        show(current)  # v4.89
 
     def recalc_table():  # v1.59
         """Menue Tabelle: Proggenerator Tabelle neuberechnen. Alle Tabellenblaetter neu rechnen (LED-Zahlen je Kanal und Start-LED-Nummern, auch die
@@ -3008,6 +3067,10 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
         if cmd == "dialog":  # v2.38
             await on_graph_hit(row, True)  # v2.38
             return  # v2.38
+        if cmd == "minicolor":  # v4.83: Mini-Farbtest (F3 / Kontextmenue) wie in der Tabelle; kein graph_lock, der Dialog bleibt offen
+            if state["ws"] is not None and not state["busy"] and row is not None and int(row) >= first_data_row0():  # v4.83
+                await mini_color_cells([(int(row), int(M25.Config__Col) - 1)])  # v4.83
+            return  # v4.83
         async with graph_lock:  # v2.38
             ws_ = state["ws"]  # v2.38
             if ws_ is None or not await wait_not_busy():  # v2.38
@@ -4010,6 +4073,14 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
                     logger.info("SCROLL: Ankerzeile Index %s (+%.0f px) wird wieder an den oberen Rand gestellt", anchor["idx"], anchor["off"])
                 grid.run_grid_method("ensureIndexVisible", anchor["idx"], "top")
                 grid.client.run_javascript(f"mllAdjust({anchor['off']:.1f})")
+                if len(rows) != len(old_rows):  # v4.84: Zeilen eingefuegt/geloescht: nach dem Neuberechnen der Zeilen im Browser die Ankerzeile noch einmal an den Rand stellen (die neue Zeile darf die Anzeige nicht verschieben)
+                    def _again(idx_=anchor["idx"], off_=anchor["off"]):  # v4.84
+                        try:  # v4.84
+                            grid.run_grid_method("ensureIndexVisible", idx_, "top")  # v4.84
+                            grid.client.run_javascript(f"mllAdjust({off_:.1f})")  # v4.84
+                        except Exception:                  # noqa: BLE001  # v4.84
+                            logger.debug("Ankerzeile nicht noch einmal gesetzt", exc_info=True)  # v4.84
+                    asyncio.get_running_loop().call_later(0.3, _again)  # v4.84
             else:
                 grid.client.run_javascript("mllRestore()")                       # ... und danach wiederherstellen
         except Exception:                                  # noqa: BLE001
@@ -4191,6 +4262,8 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
 
     ui.timer(0.5, refresh_while_busy)
 
+    sheet_conn_hook = {"fn": None}  # v4.90 (Issue 59): wird beim Seitenaufbau weiter unten gesetzt
+
     def activate(ws):
         state["ws"] = ws
         try:  # v3.24: Blatt merken, beim Neustart wird es wieder gewaehlt
@@ -4213,6 +4286,11 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
         show(ws)
         if find_hooks["marks"] is not None:  # v3.28: Treffer der Suche auf dem neuen Blatt markieren
             find_hooks["marks"]()  # v3.28
+        if sheet_conn_hook["fn"] is not None:  # v4.90 (Issue 59): Verbindung an den Anschluss des neuen Blatts anpassen
+            try:  # v4.90
+                asyncio.get_running_loop().create_task(sheet_conn_hook["fn"](ws))  # v4.90
+            except RuntimeError:                           # noqa: BLE001  # v4.90: ausserhalb der Ereignisschleife
+                pass  # v4.90
 
 
     # ------------------------------------------------------------------ Auswahl
@@ -4230,6 +4308,14 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
         ev = types.SimpleNamespace(selected=ws.tksheet.get_currently_selected())
         was_moving = bool(getattr(ws, "Flag_move", False))
         version_before = ws.tksheet.version
+        move_rows, move_dest = [], None  # v4.88: die zu verschiebenden Zeilen und die angeklickte Zielzeile (Daten-Zeilen), um sie danach zu markieren
+        if was_moving:  # v4.88
+            try:  # v4.88
+                move_rows = sorted(int(x) for x in (getattr(ws, "lastselectedRows", None) or ()))  # v4.88
+                cur_ = ev.selected  # v4.88
+                move_dest = int(ws.tksheet.displayed_row_to_data(cur_.row)) if cur_ is not None and cur_.row is not None else None  # v4.88
+            except Exception:                      # noqa: BLE001  # v4.88
+                move_rows, move_dest = [], None  # v4.88
 
         def fire():
             try:
@@ -4253,6 +4339,16 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
             ui.notify("Zeilen verschoben", type="positive")
         if moved or ws.tksheet.version != version_before:
             show(ws)           # nur bei echten Aenderungen neu zeichnen: sonst verschwindet die Markierung im Grid
+        if moved and move_rows and move_dest is not None:  # v4.88: die verschobenen Zeilen markieren (tksheet.move_rows setzt sie vor die Zielzeile)
+            try:  # v4.88
+                first_ = move_dest - sum(1 for x in move_rows if x < move_dest)  # v4.88
+                new_rows = list(range(first_, first_ + len(move_rows)))  # v4.88
+                ws.tksheet.set_selection(rows=set(new_rows), cells={(new_rows[0], 0)}, current=(new_rows[0], 0), type_="row")  # v4.88
+                for i_, r_ in enumerate(new_rows):  # v4.88
+                    grid.run_row_method(str(r_), "setSelected", True, i_ == 0)  # v4.88
+                graph_follow(new_rows[0])  # v4.88
+            except Exception:                      # noqa: BLE001  # v4.88
+                logger.debug("Verschobene Zeilen nicht markiert", exc_info=True)  # v4.88
 
     async def open_macro_dialog(ws):
         """Wie ein Klick auf das Symbol (Shape) in Tk: Makroauswahl mit dem aktuellen Makro der Zeile."""
@@ -4437,14 +4533,18 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
     async def run_in_worker(fn):
         """fn im Worker-Thread ausfuehren. Dialoge (MsgBox/InputBox) erscheinen waehrenddessen im
         Browser, der Worker wartet auf die Antwort. Waehrenddessen sind weitere Befehle gesperrt."""
+        state["busy_n"] = state.get("busy_n", 0) + 1  # v4.90: Zaehler, damit ein zweiter, kurzer Befehl (zum Beispiel Verbinden) busy nicht abschaltet, solange der erste (Kompilieren) noch laeuft (Issue 60)
         state["busy"] = True
         try:  # v4.35: set_bridge innerhalb try, sonst blieb busy bei einem Fehler (kein Browserbezug) dauerhaft gesetzt: "Es laeuft noch ein Vorgang"
             web_dialogs.set_bridge(asyncio.get_running_loop(), context.client)  # v4.35 (stand vor try)
             return await run.io_bound(fn)
         finally:
-            web_dialogs.clear_bridge()
-            state["busy"] = False
-            flush_downloads()
+            state["busy_n"] = max(0, state.get("busy_n", 1) - 1)  # v4.90
+            if state["busy_n"] == 0:  # v4.90
+                web_dialogs.clear_bridge()
+                # state["busy"] = False  # v4.90 (entfallen)
+                state["busy"] = False  # v4.90: nur wenn kein Befehl mehr laeuft
+                flush_downloads()
 
     def auto_color_rows(ws):  # v3.92: Option Automatisch einfaerben (Seite Tabelle Faerben): nach einer Aenderung das Blatt nach den Bedingungen einfaerben (laeuft im Arbeits-Thread)
         if str(ctrl.getConfigData("AutoColorRows") or "").strip().lower() not in ("1", "true", "ja", "yes", "an", "ein", "on"):  # v3.92
@@ -5109,30 +5209,38 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
         """F3 / Kontextmenue: Mini-Farbtest fuer die Zelle(n) mit dem Makro ConstRGB; OK ersetzt die Farbzahlen im Makrotext (rueckgaengig moeglich)"""  # v4.59
         if not ctx_ok() or state["busy"]:  # v4.59
             return  # v4.59
-        ws = state["ws"]  # v4.59
         r = int(ctx_state["r"])  # v4.59
         c = 0 if ctx_is_rn() else col_index(ctx_state["col"])  # v4.59
         cells = [pos for pos in await (target_cells(r, c) if not ctx_is_rn() else color_cells(r, c, True)) if pos[0] >= first_data_row0()]  # v4.59
+        await mini_color_cells(cells)  # v4.83: gemeinsam fuer Tabelle und Grafik
+
+    async def mini_color_cells(cells):  # v4.83: aus op_mini_color herausgeloest (Tabelle: markierte Zellen, Grafik: Konfigurationszelle der Zeile)
+        ws = state["ws"]  # v4.83 (bisher in op_mini_color, v4.59)
         found = [(pos, constrgb_parts(undo_cell(ws, pos[0], pos[1]))) for pos in cells]  # v4.59
         found = [(pos, p) for pos, p in found if p]  # v4.59
-        if not found:  # v4.59
-            ui.notify(tr("Der Mini-Farbtest gilt für das Makro ConstRGB mit festen Zahlen für die Farben. Bitte die Zelle Beleuchtung mit diesem Makro anklicken."), type="warning")  # v4.59
-            return  # v4.59
+
+        def led_of_row(row0):  # v4.81: LED der Zeile aus den Spalten Start LedNr, LEDs und LED Channel (None: keine LED-Nummer)
+            try:  # v4.60
+                M25.Make_sure_that_Col_Variables_match(ws)  # v4.60
+                num = lambda col, default: (lambda m: int(m.group(1)) if m else default)(re.match(r"^\s*(\d+)", undo_cell(ws, row0, int(col) - 1)))  # noqa: E731  # v4.60
+                first = re.match(r"^\s*(?:(\d+)\s*-\s*)?(\d+)", undo_cell(ws, row0, int(M25.LED_Nr__Col) - 1))  # v4.61: 17, 0-17 oder 2-17 (Kanal-LedNr)
+                if first:  # v4.60
+                    return (int(first.group(2)), max(num(M25.LEDs____Col, 1), 1), int(first.group(1)) if first.group(1) is not None else num(M25.LED_Cha_Col, 0))  # v4.61
+            except Exception:                              # noqa: BLE001  # v4.60
+                logger.debug("Mini-Farbtest: LED der Zeile nicht gelesen", exc_info=True)  # v4.60
+            return None  # v4.81
+
+        if not found:  # v4.81: kein ConstRGB mit festen Zahlen: Mini-Farbtest nur zum Testen der LED der Zeile (z. B. LED suchen mit Blinken), es wird nichts gespeichert
+            led = led_of_row(cells[0][0]) if cells else None  # v4.81
+            if led is None:  # v4.81
+                ui.notify(tr("Der Mini-Farbtest gilt für Zeilen mit einer LED-Nummer. Bitte eine Zelle einer solchen Zeile anklicken."), type="warning")  # v4.81
+                return  # v4.81
+            # await web_colorcheck.open_mini(ctrl, None, title=tr("Mini-Farbtest"), led=led)  # v4.81  # v4.82 (entfallen)
+            await web_colorcheck.open_mini(ctrl, None, title=tr("Mini-Farbtest"), led=led, passive=True)  # v4.82: nichts senden, bis Blinken oder Farbaenderung
+            return  # v4.81
+        # (frueher: Hinweis "nur ConstRGB" und return, wenn kein ConstRGB gefunden wurde)  # v4.81 (entfallen)
         nums = found[0][1][3]  # v4.59: R0 G0 B0 R1 G1 B1 des ersten Makros
-        led = None  # v4.60: LED der Zeile aus den Spalten Start LedNr, LEDs und LED Channel
-        try:  # v4.60
-            M25.Make_sure_that_Col_Variables_match(ws)  # v4.60
-            row0 = found[0][0][0]  # v4.60
-            num = lambda col, default: (lambda m: int(m.group(1)) if m else default)(re.match(r"^\s*(\d+)", undo_cell(ws, row0, int(col) - 1)))  # noqa: E731  # v4.60
-            # first = re.match(r"^\s*(\d+)", undo_cell(ws, row0, int(M25.LED_Nr__Col) - 1))  # v4.60  # v4.61 (entfallen)
-            first = re.match(r"^\s*(?:(\d+)\s*-\s*)?(\d+)", undo_cell(ws, row0, int(M25.LED_Nr__Col) - 1))  # v4.61: 17, 0-17 oder 2-17 (Kanal-LedNr)
-            if first:  # v4.60
-                # led = (int(first.group(1)), max(num(M25.LEDs____Col, 1), 1), num(M25.LED_Cha_Col, 0))  # v4.60  # v4.61 (entfallen)
-                led = (int(first.group(2)), max(num(M25.LEDs____Col, 1), 1), int(first.group(1)) if first.group(1) is not None else num(M25.LED_Cha_Col, 0))  # v4.61
-        except Exception:                              # noqa: BLE001  # v4.60
-            logger.debug("Mini-Farbtest: LED der Zeile nicht gelesen", exc_info=True)  # v4.60
-        # result = await web_colorcheck.open_mini(ctrl, None, title=tr("Mini-Farbtest"),  # v4.59  # v4.60 (entfallen)
-        #                                         slots=[("Farbe bei Ein (R1, G1, B1)", tuple(nums[3:6])), ("Farbe bei Aus (R0, G0, B0)", tuple(nums[0:3]))])  # v4.59  # v4.60 (entfallen)
+        led = led_of_row(found[0][0][0])  # v4.81 (bisher inline, v4.60/v4.61)
         result = await web_colorcheck.open_mini(ctrl, None, title=tr("Mini-Farbtest"), led=led,  # v4.60
                                                 slots=[("Farbe bei Ein (R1, G1, B1)", tuple(nums[3:6])), ("Farbe bei Aus (R0, G0, B0)", tuple(nums[0:3]))])  # v4.60
         if result:  # v4.59
@@ -5300,7 +5408,8 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
                 menu_row("Farbe entfernen")
             ui.separator()  # v4.58
             with ui.menu_item(on_click=op_mini_color):  # v4.58
-                menu_row("Farbe mit Mini-Farbtest ändern …", "F3")  # v4.58
+                # menu_row("Farbe mit Mini-Farbtest ändern …", "F3")  # v4.58  # v4.81 (entfallen)
+                menu_row("Mini-Farbtest: LED testen, bei ConstRGB Farbe ändern …", "F3")  # v4.81
 
     async def on_dblmacro(e):
         # """Doppelklick auf Name oder Beleuchtung (nur mit dem Schalter in den Programm Einstellungen): wie in Excel die Makroauswahl"""  # v3.71 (entfallen)
@@ -5446,6 +5555,12 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
         except Exception:  # noqa: BLE001
             pass
 
+    import proggen.F00_mainbuttons as F00_insert_mod  # v4.85
+    F00_insert = F00_insert_mod.Insert_Button_Click  # v4.85: wird in run_command erkannt
+    F00_delete = F00_insert_mod.Del_Button_Click  # v4.86
+    F00_copy = F00_insert_mod.Copy_Button_Click  # v4.87
+    F00_options = F00_insert_mod.Options_Button_Click  # v4.91
+
     def run_command(func, label, live=True):
         async def handler():
             if state["busy"]:
@@ -5458,6 +5573,16 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
                 weblog.set_title(web_log_titles.DEFAULT_TITLE)    # Installationen setzen ihren eigenen Titel (execute_shell_cmd)
             ws = state["ws"]
             sh = ws.tksheet
+            insert_at = None  # v4.85
+            # if func is F00_insert:  # v4.85: Zeile einfuegen: die eingefuegte Zeile soll danach markiert sein  # v4.86 (entfallen)
+            if func is F00_insert or func is F00_delete or func is F00_copy:  # v4.85: Zeile einfuegen: die eingefuegte Zeile soll danach markiert sein  # v4.86: auch Zeilen loeschen (die Zeile an dieser Stelle, damit mehrfaches Loeschen geht)
+                try:  # v4.85
+                    sel_rows_ = sorted(sh.get_selected_rows(get_cells_as_rows=True))  # v4.85
+                    insert_at = min(int(sh.displayed_row_to_data(x)) for x in sel_rows_) if sel_rows_ else selected_row(ws)  # v4.85
+                    if func is F00_copy and insert_at is not None:  # v4.87: die Kopie steht unter den markierten Zeilen: die erste kopierte Zeile markieren
+                        insert_at += max(len(sel_rows_), 1)  # v4.87
+                except Exception:                  # noqa: BLE001  # v4.85
+                    insert_at = selected_row(ws)  # v4.85
             logger.info("Befehl '%s' auf Blatt %s: Auswahl Zeilen=%s Zellen=%s aktuell=%s", label, ws.Name,
                         sorted(sh.get_selected_rows()), sorted(sh.get_selected_cells()),
                         sh.get_currently_selected())
@@ -5520,11 +5645,26 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
             load_sheet_dict()
             hook_selection()
             current = X02.ActiveSheet if getattr(X02, "ActiveSheet", None) in wb.sheets else state["ws"]
+            if (func is F00_options or label.replace(chr(10), " ").replace(chr(13), " ").strip() == "Optionen") and ws in wb.sheets:  # v4.91 (Issue 59): die Optionen (Board wechseln, Erkennen) lassen das Blatt aktiv, das offen war (die Schleife ueber alle Blaetter darf den Reiter nicht umschalten)
+                current = ws  # v4.91
+                try:  # v4.91
+                    ws.Activate()  # v4.91
+                except Exception:                  # noqa: BLE001  # v4.91
+                    logger.debug("Blatt nach den Optionen nicht aktiviert", exc_info=True)  # v4.91
             if current not in wb.sheets:
                 current = wb.sheets[0]
             state["ws"] = current
             rebuild_sheet_tabs()
             show(current)
+            if insert_at is not None and not failed and current is ws:  # v4.85: die eingefuegte Zeile als aktuelle Zeile markieren
+                try:  # v4.85
+                    if func is F00_delete:  # v4.86: nach dem Loeschen nicht hinter die letzte Zeile und nicht in den Kopf
+                        insert_at = max(min(int(insert_at), len(current.tksheet.data) - 1), first_data_row0())  # v4.86
+                    select_row(current, int(insert_at))  # v4.85
+                    graph_follow(int(insert_at))  # v4.85
+                    await fire_selection_event(current)  # v4.85
+                except Exception:                  # noqa: BLE001  # v4.85
+                    logger.debug("Eingefuegte Zeile nicht markiert", exc_info=True)  # v4.85
             if await offer_extensions():                   # v3.98: eine Datei (zum Beispiel per Laden) benutzt eine ausgeschaltete Erweiterung
                 show(current)  # v3.98
         return handler
@@ -6491,7 +6631,17 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
         finally:  # v4.14
             ctrl.quiet, ctrl.dtr_override = False, None  # v4.14
 
-    def _search_lichtmaschine(own_port, other_port):  # v4.14
+    def _sheet_board_type():  # v4.90 (Issue 59): Typ der Lichtmaschine laut Blatt (Build Optionen): "ESP32", "Pico", "Nano" oder "" (nicht eingetragen)
+        try:  # v4.90
+            opts = str(state["ws"].Cells(M02.SH_VARS_ROW, M25.BUILDOP_COL).Value or "").lower()  # v4.90
+        except Exception:                                  # noqa: BLE001  # v4.90
+            return ""  # v4.90
+        if not opts.strip():  # v4.90
+            return ""  # v4.90
+        return "ESP32" if "esp32" in opts else ("Pico" if "rp2040" in opts else "Nano")  # v4.90
+
+    def _search_lichtmaschine(own_port, other_port, want_type=""):  # v4.14  # v4.90: want_type = Typ laut Blatt
+
         """Genau eine angeschlossene Lichtmaschine (Nano, ESP32 oder Pico) suchen: (Anschluss, Typ) oder None. Der Anschluss der anderen Seite (LNet/DCC) wird ausgelassen."""  # v4.14
         import proggen.M07_COM_Port as _M07  # v4.14
         cands = []  # v4.14
@@ -6508,6 +6658,8 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
             return None  # v4.14
         if other_port:  # v4.14
             cands = [c for c in cands if c[0].upper() != other_port.upper()]  # v4.14
+        if want_type:  # v4.90 (Issue 59): nur eine Lichtmaschine vom Typ des aktiven Blatts (nicht den Nano COM16 verbinden, wenn das Blatt einen ESP32 meint)
+            cands = [c for c in cands if c[1] == want_type]  # v4.90
         own = [c for c in cands if own_port and c[0].upper() == own_port.upper()]  # v4.14
         if own:  # v4.14
             return own[0]  # v4.14
@@ -6528,7 +6680,8 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
             own = "COM" + own  # v4.14
         if own.upper() in ("NO DEVICE", "COM?") or own.upper().startswith("IP:"):  # v4.14
             own = ""  # v4.14
-        return own or one(M25.COMPort_COL), one(M25.COMPrtR_COL)  # v4.14
+        # return own or one(M25.COMPort_COL), one(M25.COMPrtR_COL)  # v4.14  # v4.90 (entfallen: die globale Einstellung stand vor dem Blatt)
+        return one(M25.COMPort_COL) or own, one(M25.COMPrtR_COL)  # v4.90 (Issue 59): der Anschluss des aktiven Blatts hat Vorrang vor der globalen Einstellung
 
     async def startup_autoconnect():  # v4.14
         """Beim Start (parallel zum Laden der Tabellen, im eigenen Thread): 1. die Verbindung wiederherstellen, die beim letzten Beenden aktiv war;
@@ -6552,7 +6705,8 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
             what = target[0] if target else own_port  # v4.14
             ok = await run.io_bound(_silent_connect, None if target else own_port, True if target else False)  # v4.14: mit WLAN-Ziel zuerst WLAN (dann USB), sonst USB am eingestellten Anschluss
         if not ok and not ctrl.is_connection_open():  # v4.14
-            found = await run.io_bound(_search_lichtmaschine, own_port, other_port)  # v4.14
+            # found = await run.io_bound(_search_lichtmaschine, own_port, other_port)  # v4.14  # v4.90 (entfallen)
+            found = await run.io_bound(_search_lichtmaschine, own_port, other_port, _sheet_board_type())  # v4.90: Typ des Blatts beachten
             if found:  # v4.14
                 dev, typ = found  # v4.14
                 logger.info("Automatisch verbinden: gefunden %s (%s)", dev, typ)  # v4.14
@@ -6568,6 +6722,77 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
             after_connect()  # v4.14
         else:  # v4.14
             logger.info("Automatisch verbinden: keine Verbindung hergestellt")  # v4.14
+
+    # (Fassung 4.90/4.91 von sync_connection_to_sheet ersetzt in 4.92)
+    async def sync_connection_to_sheet(ws):  # v4.90 (Issue 59)  # v4.92: auch WLAN (ESP32) und der Wechsel zwischen WLAN und USB
+        """Blattwechsel: Gehoert zum neuen Blatt eine andere Verbindung (USB-Anschluss oder ESP32 per WLAN) als die offene, die Verbindung schliessen und die des Blatts aufbauen.
+        Ohne Verbindung im Blatt (kein Anschluss, kein WLAN-Ziel) oder ohne offene Verbindung geschieht nichts."""  # v4.90
+        try:  # v4.90
+            if not ctrl.is_connection_open() or state["ws"] is not ws:  # v4.91
+                return  # v4.90
+            sheet_port, _ = _stored_ports()  # v4.90: Anschluss des aktiven Blatts (sonst globale Einstellung)
+            raw = str(ws.Cells(M02.SH_VARS_ROW, M25.COMPort_COL)).strip().lstrip("*").strip()  # v4.90
+            has_usb = not (raw == "" or raw.upper() in ("COM?", "NO DEVICE") or not sheet_port)  # v4.92
+            target = None  # v4.92
+            try:  # v4.92
+                target = wifi_target()  # v4.92: ESP32 mit WLAN und OTA im aktiven Blatt
+            except Exception:                              # noqa: BLE001  # v4.92
+                logger.debug("WLAN-Ziel nicht ermittelbar", exc_info=True)  # v4.92
+            if target is None and not has_usb:  # v4.92: das Blatt hat keine eigene Verbindung: Verbindung bleibt
+                return  # v4.92
+            current = str(getattr(ctrl, "ARDUINO_current_portname", "") or "").strip()  # v4.90
+            via_ip = bool(getattr(ctrl, "ARDUINO_IP", False))  # v4.92
+            logger.info("Blattwechsel %s: USB-Anschluss '%s', WLAN-Ziel %s, offene Verbindung '%s' (WLAN: %s)", ws.Name, sheet_port if has_usb else "-", target[0] if target else "-", current, via_ip)  # v4.91  # v4.92
+            if target is not None:  # v4.92
+                if via_ip and current == target[0]:  # v4.92: schon mit diesem ESP32 verbunden
+                    return  # v4.92
+            elif not via_ip and current.upper() == sheet_port.upper():  # v4.92: schon mit diesem Anschluss verbunden
+                return  # v4.92
+            for _ in range(50):                            # laeuft noch ein Befehl: kurz warten  # v4.90
+                if not state["busy"]:  # v4.90
+                    break  # v4.90
+                await asyncio.sleep(0.1)  # v4.90
+            if state["busy"] or state["ws"] is not ws:  # v4.92
+                logger.info("Blattwechsel: Verbindung bleibt (beschaeftigt=%s)", state["busy"])  # v4.92
+                return  # v4.92
+            ok, what = False, ""  # v4.92
+            if target is not None:  # v4.92
+                logger.info("Blattwechsel: Verbindung %s -> WLAN %s", current, target[0])  # v4.92
+                ok = await run.io_bound(_switch_wifi, target[0], target[1])  # v4.92
+                what = target[0]  # v4.92
+            if not ok and has_usb and _port_present(sheet_port):  # v4.92: kein WLAN-Ziel oder nicht erreichbar: USB-Anschluss des Blatts
+                logger.info("Blattwechsel: Verbindung %s -> %s", current, sheet_port)  # v4.90
+                ok = await run.io_bound(_switch_connection, sheet_port, _sheet_board_type() == "Pico")  # v4.90
+                what = sheet_port  # v4.92
+                if ok:  # v4.92
+                    try:  # v4.90
+                        ctrl.setConfigData("serportname", sheet_port)  # v4.90
+                    except Exception:                      # noqa: BLE001  # v4.90
+                        logger.debug("Anschluss nicht gespeichert", exc_info=True)  # v4.90
+            if ok:  # v4.92
+                ui.notify(tr("Mit der Lichtmaschine verbunden ({port}).", port=what), type="positive")  # v4.90
+                after_connect()  # v4.90
+            else:  # v4.92
+                logger.info("Blattwechsel: keine Verbindung hergestellt")  # v4.92
+        except Exception:                                  # noqa: BLE001  # v4.90
+            logger.debug("Verbindung nicht an das Blatt angepasst", exc_info=True)  # v4.90
+
+    def _switch_wifi(host, password):  # v4.92: im Hintergrund-Thread
+        try:  # v4.92
+            ctrl.disconnect()  # v4.92
+        except Exception:                                  # noqa: BLE001  # v4.92
+            logger.debug("Trennen vor dem Wechsel fehlgeschlagen", exc_info=True)  # v4.92
+        return _silent_connect(None, None, None, (host, password))  # v4.92
+
+    def _switch_connection(port, dtr):  # v4.90: im Hintergrund-Thread
+        try:  # v4.90
+            ctrl.disconnect()  # v4.90
+        except Exception:                                  # noqa: BLE001  # v4.90
+            logger.debug("Trennen vor dem Wechsel fehlgeschlagen", exc_info=True)  # v4.90
+        return _silent_connect(port, False, True if dtr else None)  # v4.90
+
+    sheet_conn_hook["fn"] = sync_connection_to_sheet  # v4.90
+    ctrl.sheet_port_provider = lambda: (_stored_ports()[0] or None)  # v4.91 (Issue 59): Verbinden (Knopf, Menue, Trennen und neu Verbinden) nimmt den Anschluss des aktiven Blatts
 
     async def connect_after_upload():  # v4.14
         """Nach dem Hochladen zur Lichtmaschine: mit dieser Lichtmaschine verbinden (nach einer WLAN-Uebertragung ueber WLAN)."""  # v4.14
@@ -7051,6 +7276,7 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
             ("Spezial", lambda: open_settings_group("Spezialeinstellungen")),  # v4.51
             ("Erweiterungen …", open_extensions),  # v4.51: Schritt 2 verschiebt die Erweiterungen hierher, bis dahin das Optionenfenster auf dem Reiter Erweiterungen
             None,  # v4.51
+            ("Datenübertragung", lambda: __import__("_web.web_table_sync", fromlist=["open_dialog"]).open_dialog(on_changed=refresh_after_transfer)),  # v4.89 (Pull Request 57)
             ("Einstellungen sichern …", export_settings),  # v4.24  # v4.51 (aus dem Menue Datei)
             ("Einstellungen übernehmen …", import_settings),  # v4.24  # v4.51 (aus dem Menue Datei)
         ],
@@ -7884,6 +8110,8 @@ def main():
     for line in FILE_PROBLEMS:  # v1.75
         logger.error("Datei passt nicht zur Version %s: %s", VERSION, line)  # v1.75
     start_backend()
+    from _web import web_table_sync  # v4.89 (Pull Request 57)
+    web_table_sync.install(nicegui_app, ctrl, lambda: page.workbook, VERSION)  # v4.89
     shown_host = browser_host(args.host)  # v1.66
     print(f"\nwebmobaledlib.py Version {VERSION}")
     print(f"Datenordner: {userdata.data_dir()}")

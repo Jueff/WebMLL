@@ -1,6 +1,6 @@
-Datei-Version: 1.08 (2026-11-23) - VERSIONEN_Stand_4.79_2026-11-23.txt
+Datei-Version: 1.09 (2026-11-23) - VERSIONEN_Stand_4.93_2026-11-23.txt
 
-webMobaLedLib, Release-Stand 2026-11-23 (webmobaledlib.py Version 4.79) - Versionen der von Claude gelieferten Dateien im Ordner python
+webMobaLedLib, Release-Stand 2026-11-23 (webmobaledlib.py Version 4.93) - Versionen der von Claude gelieferten Dateien im Ordner python
 
 arduino_prefs.py                     1.02
 fast_paths.py                        1.01
@@ -11,14 +11,14 @@ release_tools.py                     1.09
 repair.py                            1.04
 test_headless_contract.py            1.01
 userdata.py                          1.03
-webmobaledlib.py                     4.79
+webmobaledlib.py                     4.93
 _web/__init__.py                     1.00
-_web/mll_graph.js                    1.16
+_web/mll_graph.js                    1.17
 _web/mll_servocurve.js               1.03
 _web/mll_tabs.js                     1.00
 _web/web_access.py                   1.13
 _web/web_auth.py                     1.05
-_web/web_colorcheck.py               1.10
+_web/web_colorcheck.py               1.12
 _web/web_dcckeyboard.py              1.05
 _web/web_dialogs.py                  1.12
 _web/web_esp32_ota.py                1.07
@@ -30,16 +30,16 @@ _web/web_form_firmware_download.py   1.02
 _web/web_form_house.py               1.07
 _web/web_house_tips.py               1.00
 _web/web_form_ledcoloranim.py        1.00
-_web/web_form_options.py             1.46
+_web/web_form_options.py             1.47
 _web/web_form_other.py               1.07
 _web/web_form_select.py              1.01
 _web/web_form_servoanim.py           1.04
 _web/web_fullscreen.py               1.02
-_web/web_graph.py                    1.16
+_web/web_graph.py                    1.17
 _web/web_i18n.py                     1.11
 _web/web_instance.py                 1.00
 _web/web_layout.py                   1.21
-_web/web_log.py                      1.11
+_web/web_log.py                      1.12
 _web/web_logging.py                  1.05
 _web/web_macro_tree.py               1.12
 _web/web_network.py                  1.01
@@ -48,7 +48,7 @@ _web/web_password.py                 1.02
 _web/web_pattern_test.py             1.01
 _web/web_pattgen.py                  1.24
 _web/web_pi_status.py                1.00
-_web/web_serial.py                   1.13
+_web/web_serial.py                   1.14
 _web/web_serial_page.py              1.01
 _web/web_servotest.py                2.08
 _web/web_servotest2.py               1.03
@@ -151,8 +151,15 @@ test_dyn_config_wlan.py              1.05
 
 MobaLedTest_macroparamdef.json (Hinweise der Schrifteinstellungen, 4.49; Standardschrift 4.73)
 MobaLedTest_macrodef.json (Texte der Einstellungsseiten, 4.73)
-wiki/ (40 Seiten, Paket webmobaledlib_Wiki_Gesamt_Stand_4.79.zip, an die Menues ab 4.51 angepasst)
+wiki/ (40 Seiten, Paket webmobaledlib_Wiki_Gesamt_Stand_4.93.zip, an die Menues ab 4.51 angepasst)
 
-PDF (install_manual/): ANLEITUNG_Installation.pdf = Version 4.79, BETATEST_Checkliste.pdf = Version 3.61
+PDF (install_manual/): ANLEITUNG_Installation.pdf = Version 4.93, BETATEST_Checkliste.pdf = Version 3.74
 Ausserhalb des Ordners python: zip_erstellen.bat Version 1.11 (liegt neben dem Ordner python, ROOT_IN_ZIP=1), START_HIER.txt und START_HIER.md (die .txt kommt in den obersten Ordner des ZIP, die .md ist fuer GitHub), RELEASE_Ablauf.md, HOC_intern.md, HOC_Anwender.md (Stand 4.79), DATEIEN_IM_PAKET_Issue26.md (Liste der Dateien, die nicht ins Paket muessen)
 Neu seit 3.93 (Versionen 3.94 bis 4.79): Aenderungen in webmobaledlib.py, ExcelAPI, _web (web_tabs, web_params, web_form_options, web_serial, web_form_*, web_layout, web_log u.a.; neu: web_settings_transfer), headless (neu: headless_extensions; headless_esp32_ota mit Ausgabe zeilenweise und Abbrechen), proggen (M06_Write_Header_SW, M07_COM_Port, M08_ARDUINO, M38_Extensions u.a.), mlpyproggen/Prog_Generator.py, install (neue Symbole, Anleitung, Checkliste), csv/Web_Languages.csv, libraries (P_ScheduleMLX, P_ScheduleDuoMLX), images
+
+Neu seit 4.79 (Versionen 4.80 bis 4.93):
+_web/web_table_sync.py               1.08   (Datenuebertragung, Pull Request 57)
+headless/headless_table_sync.py      1.04
+test_table_sync.py                   1.06
+Ausserhalb des Ordners python: DATENUEBERTRAGUNG.md Version 1.03, README.md (Abschnitt Datenuebertragung)
+csv/Web_Languages.csv: neue Texte fuer feste IP, Mini-Farbtest, Datenuebertragung, Pico-Anschluss (7 Spalten)

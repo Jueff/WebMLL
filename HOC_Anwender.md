@@ -1,14 +1,89 @@
-Datei-Version: 1.63 (2026-11-23) - HOC_Anwender.md
-Stand: webMobaLedLib 4.79
+Datei-Version: 1.77 (2026-11-23) - HOC_Anwender.md
+Stand: webMobaLedLib 4.93
 
 # webMobaLedLib: Änderungen (Kurzfassung)
 
 Gilt ab Version 1.39. Neueste Version oben.
 
+## Version 4.93 (2026-11-23)
+
+Korrekturen:
+- Datenübertragung: Bei falschem Verbindungscode erscheint ein verständlicher Hinweis statt „HTTP 403“.
+
+## Version 4.92 (2026-11-23)
+
+Neue Funktionen:
+- Reiterwechsel: Auch eine WLAN-Verbindung (ESP32) des neuen Reiters wird automatisch aufgebaut. Der Wechsel zwischen WLAN und USB geht ebenfalls. Ist das WLAN-Ziel nicht erreichbar, wird der USB-Anschluss des Reiters versucht.
+
+## Version 4.91 (2026-11-23)
+
+Korrekturen:
+- Verbinden (auch „Trennen und neu Verbinden“) nimmt den Anschluss des aktiven Reiters, nicht mehr eine globale Einstellung (Issue 59).
+- Beim Reiterwechsel wird die Verbindung bei einem anderen Anschluss neu aufgebaut, auch wenn die automatische Verbindung ausgeschaltet ist.
+- Nach „Board wechseln“ in den Hardware Optionen bleibt der Reiter stehen, der vorher aktiv war.
+
+## Version 4.90 (2026-11-23)
+
+Korrekturen:
+- Kompilieren und Hochladen: Die Knöpfe „Vorgang abbrechen“ und „Schließen“ flackern nicht mehr (Issue 60).
+- Automatische Verbindung mit der Lichtmaschine: Es gilt der Anschluss und der Typ (ESP32, Pico, Nano) des aktiven Blatts. Beim Blattwechsel wird die Verbindung bei einem anderen Anschluss geschlossen und neu aufgebaut (Issue 59).
+- Pico Firmware installieren: Der Anschluss des Pico wird gesondert gewählt, nicht der Anschluss der Lichtmaschine des Blatts (Issue 58).
+
+## Version 4.89 (2026-11-23)
+
+Neue Funktionen:
+- Datenübertragung zwischen PCs (Beitrag von moosbewohner): Unter Einstellungen → Datenübertragung lassen sich Tabellen oder ausgewählte Zeilen von einem anderen PC im lokalen Netz übernehmen, mit Sicherung vorher und „Letzten Import rückgängig machen“. Die Freigabe am Quell-PC ist nach jedem Start ausgeschaltet. Bedienung: DATENUEBERTRAGUNG.md.
+
+## Version 4.88 (2026-11-23)
+
+Korrekturen:
+- Nach „Zeilen verschieben“ sind die verschobenen Zeilen markiert.
+
+## Version 4.87 (2026-11-23)
+
+Korrekturen:
+- Nach „Zeilen duplizieren“ ist die duplizierte Zeile markiert.
+
+## Version 4.86 (2026-11-23)
+
+Korrekturen:
+- Nach „Zeilen löschen“ ist die Zeile an der Stelle der gelöschten Zeile markiert. Dadurch kann man mehrmals hintereinander löschen.
+
+## Version 4.85 (2026-11-23)
+
+Korrekturen:
+- Nach „Zeile einfügen“ ist die eingefügte Zeile markiert (aktuelle Zeile), auch in der Grafik.
+
+## Version 4.84 (2026-11-23)
+
+Korrekturen:
+- Beim Einfügen einer Zeile bleibt der sichtbare Ausschnitt der Tabelle stehen, die Anzeige springt nicht mehr (wie beim Löschen).
+
+## Version 4.83 (2026-11-23)
+
+Neue Funktionen:
+- Mini-Farbtest (F3 oder Rechtsklick) gibt es jetzt auch in der Grafik-Ansicht, in den Ketten und in der Anlage. Kästchen anklicken und F3 drücken oder mit der rechten Maustaste „Mini-Farbtest …“ wählen. Es verhält sich wie in der Tabelle: ConstRGB liest und ersetzt die Farben, alle anderen Kästchen mit LED-Nummer testen nur die LED, ohne etwas zu speichern und ohne beim Öffnen etwas zu senden.
+
+## Version 4.82 (2026-11-23)
+
+Korrekturen:
+- Mini-Farbtest (F3) in Zeilen ohne ConstRGB: Beim Öffnen wird nichts an die Lichtmaschine gesendet. Erst „Blinken Ein/Aus“ oder eine Änderung der Farbe gibt das Senden frei. Das Ändern von LED-Adresse, Kanal oder Anzahl sendet nichts. So kann beim bloßen Öffnen kein Befehl an ein Gerät wie einen Servo gehen.
+
+## Version 4.81 (2026-11-23)
+
+Neue Funktionen:
+- Mini-Farbtest (F3 oder Rechtsklick): gilt jetzt für alle Zeilen mit einer LED-Nummer. Damit lässt sich eine LED testen oder mit „Blinken Ein/Aus“ auf der Anlage suchen, ohne etwas zu speichern. Nur beim Makro ConstRGB werden die Farben gelesen und beim OK im Makrotext ersetzt.
+
+## Version 4.80 (2026-11-23)
+
+Korrekturen:
+- Mini-Farbtest (F3): „Blinken Ein/Aus“ blinkt wieder. Vorher leuchtete die LED nach kurzem Flackern dauerhaft.
+
 ## Version 4.79 (2026-11-23)
 
 Neue Funktionen:
 - ESP32 über WLAN: Der ESP32 kann wahlweise per **DHCP** (IP-Adresse vom Router) oder mit einer **festen IP-Adresse** ins Netz. Im Reiter „WLAN (OTA)“ gibt es dafür die Auswahl „DHCP“ oder „Statische IP-Adresse“ mit den Feldern IP-Adresse, Gateway, Subnetzmaske und DNS-Server. Das hilft bei Netzen mit festen Adressen, Pi-hole oder MAC-Filter (Anregung aus dem Forum). Die Eingaben werden geprüft (gültige Adressen, Gateway im selben Netz). Nach einer Umstellung die Firmware einmal neu übertragen („ESP32-Setup übertragen“) und bei „Adresse für WebMLL“ die neue IP-Adresse eintragen. Nicht enthalten: verstecktes WLAN und mehrere WLANs.
+- Wiki: Alle Seiten sind auf Stand 4.79 geprüft und ergänzt (Reiter der Hardware Optionen, Schnelles Update, Rückgängig, ESP Einstellungen, feste IP u. a.).
 
 ## Version 4.78 (2026-11-22)
 

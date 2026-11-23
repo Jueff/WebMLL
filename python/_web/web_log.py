@@ -1,12 +1,13 @@
-# Datei-Version: 1.11 (2026-11-20) - web_log.py
+# Datei-Version: 1.12 (2026-11-23) - web_log.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_log.py
 # Path:           _web/web_log.py
-# Version:        1.11
-# Last Update:    2026-11-20
+# Version:        1.12
+# Last Update:    2026-11-23
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
+#   1.12  2026-11-23  Issue 60: Knoepfe Vorgang abbrechen und Schliessen flackerten waehrend Kompilieren/Hochladen: das Ende des Vorgangs wird erst nach 3 Abfragen (1,5 s) gemeldet
 #   1.11  2026-11-20  Erfolgsfenster schliesst sich nach konfigurierbarer Verzögerung automatisch (MLL_WEBLOG_CLOSE_DELAY, 0 = sofort)
 #   1.10  2026-11-19  Vorgang abbrechen beendet zuerst einen laufenden ESP32-Build oder -Upload (headless_esp32_ota.cancel_running), sonst wie bisher
 #   1.09  2026-11-19  run_id: Nummer des Laufs im Fenster; Schliessen wird auch dann aktiv, wenn ein umgebendes Formular (OTA) noch als beschaeftigt gilt (Minimale Firmware per USB)
@@ -159,6 +160,13 @@ class WebLog:
     def set_running(self, running):  # v1.08
         """Laeuft ein Vorgang? Dann ist nur Vorgang abbrechen aktiv, sonst nur Schliessen (Aufruf aus dem Zeitgeber der Seite, im Ereignis-Thread)."""
         running = bool(running)
+        if running:  # v1.12
+            self._idle_polls = 0  # v1.12
+        elif self._running:  # v1.12: Ende des Vorgangs erst melden, wenn es 3 Abfragen (1,5 s) hintereinander so ist: kein Flackern der Knoepfe, wenn ein kurzer Befehl den Zustand kurz zuruecksetzt (Issue 60)
+            self._idle_polls = getattr(self, "_idle_polls", 0) + 1  # v1.12
+            if self._idle_polls < 3:  # v1.12
+                return  # v1.12
+        # if running == self._running:  # v1.12 (entfallen: gleiche Pruefung folgt)
         if running == self._running:
             return
         self._running = running

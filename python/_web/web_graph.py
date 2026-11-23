@@ -1,9 +1,9 @@
-# Datei-Version: 1.16 (2026-11-15) - web_graph.py
+# Datei-Version: 1.17 (2026-11-23) - web_graph.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_graph.py
 # Path:           _web/web_graph.py
-# Version:        1.16
-# Last Update:    2026-11-15
+# Version:        1.17
+# Last Update:    2026-11-23
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
@@ -24,6 +24,7 @@
 #   1.14  2026-11-12  Schalter 'Alle Zeilen' in der Kopfzeile der Ansicht Ketten (all_rows je Blatt): Knoten ohne LEDs tragen den Text 'Ohne LEDs'; view_model meldet all_rows
 #   1.15  2026-11-15  Verteiler: view_model meldet je Knoten vt und plug (aus dem Modell) und die Texte Verteiler / Stecker (vt_texts, vtinfo)
 #   1.16  2026-11-15  Kopfzeile: Schalter Verteiler und Stecker nebeneinander (je Blatt); view_model meldet vt_on und vt_side
+#   1.17  2026-11-23  Kontextmenue: Eintrag Mini-Farbtest (menu.minicolor), Befehl minicolor zugelassen
 # ----------------------------------------------------------------------------------------------
 
 """Grafische Ansicht des Programm Generators, Stufe 1: Verbindung zwischen Modell, Seite und Browser.
@@ -210,6 +211,7 @@ def view_model(model: dict, plant=None, chain_size=None) -> dict:  # v1.12
     out["trash_text"] = tr("Papierkorb: Kästchen hierher ziehen, um die Zeile zu löschen")  # v1.06
     # out["menu"] = {"dialog": tr("Dialog öffnen"), "up": tr("Nach oben"), "down": tr("Nach unten"), "delete": tr("Löschen")}  # v1.10 (entfallen)
     out["menu"] = {"dialog": tr("Dialog öffnen"), "up": tr("Nach oben"), "down": tr("Nach unten"), "delete": tr("Löschen"), "delete_n": tr("{n} Kästchen löschen"),  # v1.10
+                   "minicolor": tr("Mini-Farbtest: LED testen, bei ConstRGB Farbe ändern …"),  # v1.17
                    "align_left": tr("Links ausrichten"), "align_right": tr("Rechts ausrichten"), "align_top": tr("Oben ausrichten"), "align_bottom": tr("Unten ausrichten"),  # v1.10
                    "align_center_x": tr("Senkrecht mittig ausrichten"), "align_center_y": tr("Waagerecht mittig ausrichten"),  # v1.10
                    "align_dist_x": tr("Waagerecht gleichmäßig verteilen"), "align_dist_y": tr("Senkrecht gleichmäßig verteilen")}  # v1.10
@@ -354,7 +356,8 @@ class GraphPanel:
         cmd = str(args.get("cmd", "")) if isinstance(args, dict) else ""  # v1.06
         # if cmd not in ("move", "delete", "dialog", "up", "down") or not isinstance(args.get("row"), int) or not self.on_cmd:  # v1.07 (entfallen)
         # if cmd not in ("move", "delete", "dialog", "up", "down", "place") or not isinstance(args.get("row"), int) or not self.on_cmd:  # v1.10 (entfallen)
-        if cmd not in ("move", "delete", "dialog", "up", "down", "place", "place_many", "align", "undo") or not isinstance(args.get("row"), int) or not self.on_cmd:  # v1.10
+        # if cmd not in ("move", "delete", "dialog", "up", "down", "place", "place_many", "align", "undo") or not isinstance(args.get("row"), int) or not self.on_cmd:  # v1.10  # v1.17 (entfallen)
+        if cmd not in ("move", "delete", "dialog", "up", "down", "place", "place_many", "align", "undo", "minicolor") or not isinstance(args.get("row"), int) or not self.on_cmd:  # v1.17
             logger.debug("Befehl der Grafik unbrauchbar: %r", e.args)  # v1.06
             return  # v1.06
         logger.info("Grafik: Befehl %s fuer Zeile %s %s", cmd, args["row"] + 1, args.get("target") or "")  # v1.06

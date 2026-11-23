@@ -1,4 +1,5 @@
-// Datei-Version: 1.16 (2026-11-15) - mll_graph.js (gilt fuer webMobaLedLib 3.46)
+// Datei-Version: 1.17 (2026-11-23) - mll_graph.js (gilt fuer webMobaLedLib 3.46)
+// 1.17: Mini-Farbtest: Taste F3 auf dem markierten Kaestchen und Eintrag im Kontextmenue (Befehl minicolor)
 // 1.16: Verteiler abschaltbar (model.vt_on) und Stecker nebeneinander (model.vt_side: Klasse mll-g-plugs side, Pfeil zwischen den Steckern)
 // 1.15: Verteiler in der Ansicht Ketten: je Verteilernummer ein Rechteck (mll-g-vt) mit Stecker-Feldern (mll-g-plug); Pfeil Signal zurueck zum Verteiler zwischen den Steckern (n.vt, n.plug, model.vtinfo, model.vt_texts)
 // 1.14: Zeilen ohne LEDs in einer Kette (Alle Zeilen, n.noled): gestrichelter Rand, hellerer Hintergrund (Klasse mll-g-noled)
@@ -657,6 +658,13 @@
         sendCmd("undo", -1);
         return;
       }
+      if (e.key === "F3") {                                                                            // Mini-Farbtest des markierten Kaestchens  // v1.17
+        var sel3 = el.querySelector ? (el.querySelector(".mll-g-node.mll-sel") || el.querySelector(".mll-p-node.mll-sel")) : null;  // v1.17
+        var row3 = sel3 ? parseInt(sel3.getAttribute("data-row"), 10) : NaN;  // v1.17
+        if (e.preventDefault) e.preventDefault();  // v1.17
+        if (!isNaN(row3)) sendCmd("minicolor", row3);  // v1.17
+        return;  // v1.17
+      }
       if (e.key !== "Delete" && e.key !== "Del") return;
       var sel = el.querySelector ? (el.querySelector(".mll-g-node.mll-sel") || el.querySelector(".mll-p-node.mll-sel")) : null;
       var row = sel ? parseInt(sel.getAttribute("data-row"), 10) : NaN;
@@ -681,6 +689,7 @@
       return multi;
     }
     var out = [{cmd: "dialog", label: labels.dialog || "Dialog"}];
+    out.push({cmd: "minicolor", label: (labels.minicolor || "Mini color test") + "  (F3)"});  // v1.17
     if (inChain) { out.push({cmd: "up", label: labels.up || "Up"}); out.push({cmd: "down", label: labels.down || "Down"}); }
     out.push({cmd: "delete", label: labels["delete"] || "Delete", danger: true});
     return out;

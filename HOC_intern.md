@@ -1,5 +1,5 @@
-Datei-Version: 1.57 (2026-11-23) - HOC_intern.md
-Stand: webMobaLedLib 4.79
+Datei-Version: 1.71 (2026-11-23) - HOC_intern.md
+Stand: webMobaLedLib 4.93
 
 # webMobaLedLib: History of Change (intern, ausführlich)
 
@@ -25,6 +25,179 @@ Release-Stand 2.12 auf Wunsch des Entwicklers („Release bauen“). **Neu im Ab
 
 **Geprüft:** Dateipaket: `testzip` in Ordnung, alle 113 Dateien gleich dem Ordner `headless`, keine `__pycache__`, alle `.py` kompilieren, Versionsprüfung „alles passt“ (50 Einträge), 11 Dateien ausführbar (`.sh`, `.command`). **Nachbau des Entwickler-Ablaufs mit seinem echten Paket (1678 Dateien, Stand 2.05):** meine 113 Dateien darübergelegt, Prüfliste, ZIP gepackt, `release_tools check --previous <sein ZIP>`: **in Ordnung** (Version 2.12, 1678 Dateien, 6 neue, 0 fehlende, ZIP 16,6 MB). Alle 15 Prüfreihen laufen (17, 26, 15, 70, 28, 19, 43, 26, 16, 27, 8, 8, 8, 5, 9 Prüfungen). **Nicht geprüft:** `zip_erstellen.bat` und die Reparaturskripte unter Windows, ein abgebrochenes Update unter Windows, das Verhalten mit Acronis, der Download von GitHub.
 
+## 4.93 (2026-11-23), Datenübertragung: verständliche Meldung bei falschem Verbindungscode
+
+Neuer Commit im Pull Request 57 (3572b84, moosbewohner): HTTP 403 beim Tabellenabruf wird als „Verbindungscode nicht akzeptiert. Bitte den Code des Quell-PCs prüfen und erneut versuchen.“ gemeldet, andere HTTP-Fehler bleiben unterscheidbar. Der Code erscheint nicht in der Meldung. Eine Übersetzungszeile (sieben Sprachen) kam dazu. `web_table_sync.py` unverändert. Tests: 20 von 24 bestanden, 637 Teilprüfungen (die 4 übrigen brauchen `nicegui`, hier nicht installiert).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.93 | Version, Dateiprüfung |
+| `headless/headless_table_sync.py` | 1.04 | HTTP 403 als Code-Hinweis |
+| `test_table_sync.py` | 1.06 | Test mit echtem HTTP-Server |
+| `csv/Web_Languages.csv` | +1 Zeile | Meldung in sieben Sprachen |
+
+---
+
+## 4.92 (2026-11-23), Blattwechsel baut auch WLAN-Verbindungen auf
+
+Wunsch von Harold: Beim Reiterwechsel muss eine WLAN-Verbindung (ESP32) bisher von Hand hergestellt werden. `sync_connection_to_sheet` ermittelt jetzt für das neue Blatt das WLAN-Ziel (`wifi_target()`: ESP32 mit WLAN und OTA, Adresse und Passwort im Blatt) und den USB-Anschluss. Mit WLAN-Ziel: schon mit diesem ESP32 verbunden: nichts; sonst trennen und per WLAN verbinden (`_switch_wifi`, stilles Verbinden ohne Dialoge). Schlägt WLAN fehl oder gibt es kein Ziel, wird der USB-Anschluss des Blatts versucht. Wechsel von WLAN zu USB geht ebenfalls (vorher wurde WLAN-Verbindung nie geändert). Ohne eigene Verbindung im Blatt bleibt die offene Verbindung. Nicht im Browser und nicht mit ESP32 geprüft. Die alte Fassung der Funktion (4.90/4.91) ist ersetzt.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.92 | WLAN beim Blattwechsel, `_switch_wifi` |
+
+---
+
+## 4.91 (2026-11-23), Issue 59 Nachbesserung (Test von Harold: Reiter LNET COM4, Reiter Anlage COM7)
+
+Befund: (1) Beim Reiterwechsel blieb die Verbindung bestehen. (2) „Verbindung trennen, neu verbinden“ ging zum falschen Anschluss, weil `ctrl.connect` ohne Anschlussangabe die globale Einstellung `serportname` las, nicht den Anschluss des Blatts. (3) Nach Board wechseln (Optionen) sprang der Reiter auf Anlage.
+
+Änderungen: `web_serial.sheet_port_provider` (von `webmobaledlib` auf `_stored_ports()[0]` gesetzt): `_connect` nimmt ohne Anschlussangabe den Anschluss des aktiven Blatts, dann erst `serportname`. `sync_connection_to_sheet` arbeitet auch ohne eingeschaltete automatische Verbindung und schreibt die Entscheidung ins Protokoll (`Blattwechsel …: Anschluss des Blatts …, offene Verbindung …`), weil die Ursache von (1) nicht nachgestellt werden konnte. `run_command`: Nach den Optionen (Knopf Hardware Optionen und Board wechseln) bleibt das Blatt aktiv, das vorher offen war; vermutet wird, dass `Clear_COM_Port_Check_and_Set_Cursor_in_all_Sheets` oder die Optionen das aktive Blatt verstellen. Ursache nicht nachgestellt.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.91 | Provider, Protokoll, Blatt nach Optionen |
+| `_web/web_serial.py` | 1.14 | `sheet_port_provider` |
+
+---
+
+## 4.90 (2026-11-23), Issues 58, 59, 60
+
+**Issue 60 (Knöpfe flackern):** `run_in_worker` setzte `state["busy"]` am Ende jedes Befehls auf False. Lief neben dem Kompilieren ein zweiter, kurzer Befehl (zum Beispiel stilles Verbinden), schaltete dessen Ende `busy` ab, solange der erste noch lief; der Zeitgeber (0,5 s) schaltete die Knöpfe um. Jetzt Zähler `busy_n`: `busy` wird erst False, wenn kein Befehl mehr läuft. Zusätzlich meldet `WebLog.set_running` das Ende erst nach 3 Abfragen (1,5 s) hintereinander (web_log 1.12). Ursache nicht im Browser nachgestellt.
+
+**Issue 59 (falsche automatische Verbindung):** `_stored_ports` nahm die globale Einstellung `serportname` vor dem Anschluss des aktiven Blatts. Jetzt hat das Blatt Vorrang. Die Suche nach einer einzelnen Lichtmaschine (`_search_lichtmaschine`) berücksichtigt den Typ laut Build Optionen des Blatts (ESP32, Pico, Nano), damit ein Nano nicht verbunden wird, wenn das Blatt einen ESP32 meint. Neu: `sync_connection_to_sheet` beim Blattwechsel (`activate`): hat das neue Blatt einen eigenen, anderen USB-Anschluss als die offene Verbindung, wird getrennt und mit dem Anschluss des Blatts neu verbunden. Ohne Anschluss im Blatt, bei WLAN-Verbindung oder abgeschalteter automatischer Verbindung geschieht nichts. Nur wenn der Anschluss im Rechner vorhanden ist.
+
+**Issue 58 (Pico Firmware):** `_web_pico_firmware` fragt den Pico-Anschluss selbst (Auswahl unter den Pico-Anschlüssen, `_FW_PORT` beim Start ungültig, zuletzt gewählter vorbelegt, die verbundene Lichtmaschine ist markiert und wird vor dem Schreiben getrennt, falls gewählt). Ein Pico im Bootmodus (Laufwerk RPI-RP2) braucht keine Auswahl. Der Anschluss des Blatts wird nie benutzt. Der Knopf „Firmware installieren“ steht im Reiter Firmware Installation für jedes Board; im Anfänger Modus ist der ganze Reiter ausgeblendet (v1.44, Wunsch von Harold), das ist unverändert.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.90 | `busy_n`, Anschluss und Typ des Blatts, `sync_connection_to_sheet` |
+| `_web/web_log.py` | 1.12 | Ende des Vorgangs erst nach 1,5 s |
+| `_web/web_form_options.py` | 1.47 | Pico-Anschluss wählen |
+| `csv/Web_Languages.csv` | +3 Zeilen | Texte der Anschlussauswahl |
+
+---
+
+## 4.89 (2026-11-23), Datenübertragung zwischen PCs (Pull Request 57)
+
+Übernommen von moosbewohner (Branch `feature/datenuebertragung`, Basis 4.79, dort `4.79-daten1` bis `4.79-daten3`). Menü Einstellungen → Datenübertragung: Tabellen oder ausgewählte Zeilen aus einem anderen PC im lokalen Netz übernehmen. Quelle: HTTP-Server (TCP 45875) mit Challenge und HMAC, Suche per UDP (45874), Freigabe nach jedem Start aus, Code mindestens 12 Zeichen. Ziel: Vorschau, Konflikthinweise, Sicherung der ganzen Arbeitsmappe (`tabellenabgleich_letztes_backup.json`), Rückgängig, LED-Kanal für eingefügte Zeilen. Lokale Einstellungen, WLAN und ESP-Zugangsdaten werden nicht übertragen. HTTP überträgt unverschlüsselt (nur im vertrauenswürdigen Netz).
+
+Beim Einarbeiten in 4.88: die drei Stellen in `webmobaledlib.py` neu gesetzt (Funktion `refresh_after_transfer`, Menüeintrag, `web_table_sync.install` im Start), die 94 Übersetzungszeilen an die CSV angehängt (keine Dubletten, 7 Spalten), die beiden neuen Module in `REQUIRED_FILES` eingetragen. Nicht übernommen: `release_manifest.json` des Branches (entsteht beim Release). Die Versionsnummern des Branches (`4.79-daten…`) sind durch 4.89 ersetzt.
+
+Prüfung: `test_table_sync.py` 20 von 24 Tests bestanden, 630 Teilprüfungen (Sprachen, HTTP und UDP auf Loopback, Backup/Rückgängig, Zeilenauswahl, Konflikte). Die 4 übrigen brauchen `nicegui` (hier nicht installiert). Nicht geprüft: Windows-Firewall-Schaltfläche (Administratorbestätigung), echte Übertragung zwischen zwei PCs.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.89 | Menü, `refresh_after_transfer`, Start, `REQUIRED_FILES` |
+| `_web/web_table_sync.py` | 1.08 | neu (Dialog, Freigabe, Übernahme) |
+| `headless/headless_table_sync.py` | 1.03 | neu (Protokoll, Datenpaket, Zeilen einfügen, Sicherung) |
+| `test_table_sync.py` | 1.05 | neu (24 Tests) |
+| `csv/Web_Languages.csv` | 94 neue Zeilen | Texte in sieben Sprachen |
+| `DATENUEBERTRAGUNG.md` | 1.03 | neu, Bedienung und Grenzen |
+| `HOC_intern.md` / `HOC_Anwender.md` | 1.67 / 1.73 | Eintrag 4.89 |
+| `install/ANLEITUNG_Installation.md` | 4.89 | Abschnitt Datenübertragung |
+| `install/BETATEST_Checkliste.md` | 3.70 | Punkte 334 bis 336 |
+
+---
+
+## 4.88 (2026-11-23), Markierung nach Zeilen verschieben
+
+Wunsch von Harold. Das Verschieben ist zweistufig (Knopf setzt `Flag_move`, der Klick auf die Zielzeile verschiebt in `EventSH_cellselected`). In `on_cell_select` werden vor dem Ereignis die zu verschiebenden Zeilen (`lastselectedRows`) und die Zielzeile gemerkt. Nach `show()` werden die verschobenen Zeilen markiert: erste Zeile = Ziel minus Anzahl der verschobenen Zeilen oberhalb des Ziels (`tksheet.move_rows` setzt sie vor die Zielzeile). Tabelle, Grid und Grafik. Nicht im Browser geprüft: Liegt die Markierung um eine Zeile daneben, ist die Berechnung der ersten Zeile anzupassen.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.88 | Markierung nach Zeilen verschieben |
+
+---
+
+## 4.87 (2026-11-23), Markierung nach Zeilen duplizieren
+
+Wunsch von Harold. `run_command` behandelt `F00.Copy_Button_Click` wie Einfügen und Löschen: `M23.Proc_Copy_Row` fügt die Kopie unter den markierten Zeilen ein, daher wird die Zeile `oberste markierte + Anzahl markierter Zeilen` markiert (erste duplizierte Zeile).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.87 | Markierung nach Zeilen duplizieren |
+
+---
+
+## 4.86 (2026-11-23), Markierung nach Zeilen löschen
+
+Wunsch von Harold: Nach dem Löschen soll die Zeile an der Stelle der gelöschten Zeile markiert sein, damit mehrfaches Löschen geht. `run_command` behandelt `F00.Del_Button_Click` wie das Einfügen (4.85): oberste markierte Zeile merken, nach `show()` markieren; die Zeile wird auf `[erste Datenzeile, letzte Zeile]` begrenzt.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.86 | Markierung nach Zeilen löschen |
+
+---
+
+## 4.85 (2026-11-23), Eingefügte Zeile ist markiert
+
+Rückmeldung von Harold zu 4.84: Nach dem Einfügen ist keine Zeile mehr markiert. `run_command` merkt sich beim Knopf Zeile einfügen (`F00.Insert_Button_Click`) die oberste markierte Zeile vor dem Befehl und markiert sie nach `show()` mit `select_row` (Tabelle und Grid), folgt in der Grafik (`graph_follow`) und löst das Auswahlereignis aus. Die neue Zeile steht an dieser Stelle, weil über der markierten Zeile eingefügt wird.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.85 | Markierung nach Zeile einfügen |
+
+---
+
+## 4.84 (2026-11-23), Anzeige springt beim Zeile einfügen nicht mehr
+
+Meldung von Harold: Beim Einfügen einer Zeile springt der Ausschnitt so, dass die neue Zeile ganz unten steht; beim Löschen bleibt die Seite ruhig. Ursache vermutet (nicht im Browser reproduziert): Die Ankerzeile (erste sichtbare Zeile, `mll_anchor`) wurde nur beim Klick oder Tastendruck in der Tabelle gemeldet und war nach Bildlauf mit dem Mausrad und beim Druck auf die Knöpfe der Werkzeugleiste veraltet; zusätzlich kann AG Grid die Zeilenhöhen nach dem Austausch der Zeilen erst nach `mllAdjust` neu berechnen. Änderung: `mll_anchor` auch beim Druck außerhalb der Tabelle und 200 ms nach jedem Bildlauf; nach Einfügen oder Löschen wird die Ankerzeile nach 0,3 s noch einmal gesetzt. Falls es weiter springt: Start mit `MLL_DEBUG_SCROLL=1` und das Protokoll senden.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.84 | Anker aktuell halten, zweites Setzen nach Zeilenänderung |
+
+---
+
+## 4.83 (2026-11-23), Mini-Farbtest auch in der Grafik-Ansicht
+
+Wunsch von Harold. `op_mini_color` ist aufgeteilt: die Tabelle ermittelt die markierten Zellen, die gemeinsame Funktion `mini_color_cells(cells)` macht den Rest (ConstRGB lesen und ersetzen, sonst passiver Test der LED der Zeile, nichts senden beim Öffnen). Die Grafik meldet den neuen Befehl `minicolor` (F3 auf dem markierten Kästchen oder Eintrag im Kontextmenü); `on_graph_cmd` ruft `mini_color_cells([(Zeile, Config-Spalte)])` ohne `graph_lock` auf, damit der Dialog offen bleiben kann. Gilt in Ketten und Anlage. Kein neuer Übersetzungstext (der Menütext der Tabelle wird wiederverwendet).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.83 | `mini_color_cells`, Befehl `minicolor` |
+| `_web/mll_graph.js` | 1.17 | F3 und Menüeintrag |
+| `_web/web_graph.py` | 1.17 | Befehl zugelassen, Menütext |
+| `wiki/webmobaledlib/pg_grafisch.txt` | 1.06 | Hinweis |
+
+---
+
+## 4.82 (2026-11-23), Mini-Farbtest ohne ConstRGB sendet beim Öffnen nichts
+
+Sicherheit (Hinweis von Harold: ungewollte Befehle könnten Servos ansteuern). `open_mini(passive=True)` setzt `model.quiet`: `_update_led`, `_send_led`, `led_off` und `highlight_led` senden dann nichts, es gibt weder Direktmodus noch Startfarbe. `arm()` gibt frei (Direktmodus starten) bei „Blinken Ein/Aus“ und bei einer Farbänderung (Farbrad, Helligkeit, R/G/B, HEXA nur bei geändertem Wert). LED-Adresse, Kanal und Anzahl geben nicht frei. Beim Schließen werden LED-aus und Direktmodus-Ende nur gesendet, wenn freigegeben wurde. ConstRGB (mit Farbplätzen) verhält sich unverändert.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_colorcheck.py` | 1.12 | `quiet`, `arm()`, `passive` |
+| `webmobaledlib.py` | 4.82 | Aufruf mit `passive=True` |
+| `wiki/webmobaledlib/pg_tabelle.txt` | 1.09 | Hinweis |
+
+---
+
+## 4.81 (2026-11-23), Mini-Farbtest für alle Zeilen mit LED-Nummer
+
+`op_mini_color` liest bei ConstRGB mit festen Zahlen wie bisher die Farben und ersetzt sie bei OK. Sonst öffnet es den Mini-Farbtest ohne Farbplätze nur mit der LED der Zeile (`led_of_row`: Start LedNr, LEDs, LED Channel), das Ergebnis wird verworfen. Ohne LED-Nummer erscheint ein Hinweis. Menüeintrag umbenannt: „Mini-Farbtest: LED testen, bei ConstRGB Farbe ändern …“.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.81 | `op_mini_color`, Menütext |
+| `csv/Web_Languages.csv` | | 2 neue Texte |
+| `wiki/webmobaledlib/pg_tabelle.txt` | 1.08 | Beschreibung F3 |
+
+---
+
+## 4.80 (2026-11-23), Mini-Farbtest: Blinken
+
+Ursache: Der Knopf „Blinken Ein/Aus“ lief über `changed()`, das nach 0,3 s `push()` mit `_update_led()` sendet; `_update_led()` beendet bei `ledhighlight` das Blinken (`led_off`), die LED blieb an. Der Knopf ruft jetzt `toggle_blink()` auf (offenes `push()` wird verworfen, kein Senden der Farbe). Ein Farbwechsel beendet das Blinken weiterhin (wie im Farbtest-Reiter).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_colorcheck.py` | 1.11 | `toggle_blink()` für den Knopf |
+| `webmobaledlib.py` | 4.80 | Version, REQUIRED_FILES |
+
+---
+
 ## 4.79 (2026-11-23), ESP32: DHCP oder statische IP-Adresse
 
 Anregung aus dem Forum (Netz mit festen Adressen, Pi-hole, MAC-Filter). Neue Einstellungen je Blatt (Attribut `esp32_wlan`, mit der Arbeitsmappe gesichert): `ip_mode` (`dhcp` oder `static`), `ip`, `gateway`, `mask`, `dns1`, `dns2`. `validate_network` prüft IPv4-Adressen, Maske (Präfix 8 bis 30), IP nicht Netz-/Broadcast-Adresse und nicht Gateway, Gateway im selben Netz; leeres DNS 1 = Gateway, leeres DNS 2 = DNS 1. `prepare_ota_sketch` setzt bei statischer IP `MLL_WIFI_STATIC_IP`, `MLL_WIFI_IP`, `_GATEWAY`, `_MASK`, `_DNS1`, `_DNS2` vor den Sketch; `ESP32Extensions.h` ruft vor `WiFi.begin()` `WiFi.config(ip, gateway, mask, dns1, dns2)` auf. Die Netzwerkwerte gehören bei statischer IP zum Firmware-Schlüssel (`DynFirmwareKey`), die Firmware wird also einmal vollständig neu übertragen; bei DHCP bleibt der Schlüssel unverändert (keine unnötige Neuübertragung). Die minimale USB-Firmware wird immer mit DHCP gebaut (die Einrichtung des WLAN über USB meldet die DHCP-Adresse). Ist „Adresse für WebMLL“ leer, wird die feste IP als Ziel eingetragen. Nicht geprüft auf Hardware. Nicht enthalten: verstecktes WLAN, mehrere WLANs, Anzeige der MAC-Adresse.
@@ -37,6 +210,7 @@ Anregung aus dem Forum (Netz mit festen Adressen, Pi-hole, MAC-Filter). Neue Ein
 | `LEDs_AutoProg/ESP32Extensions.h` | (4.79) | `WiFi.config` bei `MLL_WIFI_STATIC_IP` |
 | `csv/Web_Languages.csv` | | 15 neue Texte |
 | `webmobaledlib.py` | 4.79 | Version, Aufruf, REQUIRED_FILES |
+| `wiki/webmobaledlib/*.txt` | Stand 4.79 | alle 39 Seiten geprüft, Seitenstand +0,01; inhaltlich geändert: pg_werkzeugleiste, pg_arduino, programmgenerator, pg_tabelle, pg_speichern, wz_programm_einstellungen, ota, fehlersuche, aktualisieren, erweiterungen, modus, simulator, seiten_update |
 
 ---
 

@@ -1,5 +1,5 @@
 ====== webMobaLedLib – Die grafische Ansicht ======
-//Seitenstand 1.05 (2026-11-23), gilt für webMobaLedLib 4.79//
+//Seitenstand 1.06 (2026-11-23), gilt für webMobaLedLib 4.83//
 
 Neben der Tabelle zeigt die webMobaLedLib deine Zeilen auch **als Bild**. Du siehst auf einen Blick, welches Gerät an welcher LED-Kette hängt, und kannst Effekte **mit der Maus** anlegen und verschieben. Das gab es in der Excel-Version nicht.
 
@@ -22,7 +22,7 @@ Jede Zeile mit LEDs ist ein **Kästchen** mit dem Symbol des Makros, dem Namen u
   * **Anklicken** markiert die Zeile in der Tabelle. Umgekehrt markiert die Auswahl in der Tabelle das Kästchen.
   * **Doppelklick** auf ein Kästchen öffnet die **Makroauswahl** dieser Zeile.
   * Ein Kästchen lässt sich mit der Maus **verschieben**, aber nur **innerhalb seiner Kette**: vor oder hinter ein anderes Kästchen. Die LED-Nummern ändern sich dabei von selbst.
-  * Mit der **rechten Maustaste** auf ein Kästchen kommst du zum Menü: **Dialog öffnen**, **Nach oben**, **Nach unten**, **Löschen**.
+  * Mit der **rechten Maustaste** auf ein Kästchen kommst du zum Menü: **Dialog öffnen**, **Nach oben**, **Nach unten**, **Löschen**. Außerdem gibt es **Mini-Farbtest: LED testen, bei ConstRGB Farbe ändern …**, auch mit der Taste **F3** auf dem markierten Kästchen: Er verhält sich wie in der Tabelle (siehe Seite Tabelle).
   * **Löschen:** Ziehe das Kästchen auf den **Papierkorb** (er erscheint rechts, solange du ziehst) oder drücke die Taste **Entf**. Das Programm fragt vorher nach.
 
 ===== Alle Zeilen in den Ketten =====

@@ -1,5 +1,5 @@
 ====== webMobaLedLib – Die Tabelle bedienen ======
-//Seitenstand 1.07 (2026-11-23), gilt für webMobaLedLib 4.79//
+//Seitenstand 1.09 (2026-11-23), gilt für webMobaLedLib 4.82//
 
 In der Tabelle des [[anleitungen:webmobaledlib:programmgenerator|Programmgenerators]] steht jede Zeile für einen Effekt oder ein Gerät. Auf dieser Seite steht, wie du die Tabelle bedienst.
 
@@ -43,7 +43,7 @@ Mit der **rechten Maustaste** (auf dem Tablet: lange drücken) auf eine Zelle er
 | Nach unten ausfüllen (Strg + D) | Kopiert die oberste markierte Zelle in die markierten Zeilen darunter; bei einer Zelle die Zelle darüber |
 | Reihe fortsetzen | Wie Nach unten ausfüllen, aber die Zahl am Ende zählt weiter (1, 2, 3 oder V1, V2, V3) |
 | Farbe setzen, Farbe entfernen | Färbt die Zelle ein oder entfernt die Farbe. Von Hand gesetzte Farben bleiben bei „Tabelle färben“ und „Automatisch einfärben“ erhalten und werden mit der Tabelle gespeichert. Strg + Z nimmt sie zurück |
-| Farbe mit Mini-Farbtest ändern … (**F3**) | Für das Makro **ConstRGB**: Zelle **Beleuchtung** anklicken. Der Mini-Farbtest startet mit der Farbe bei Ein (R1, G1, B1), mit dem Umschalter wählst du die Farbe bei Aus (R0, G0, B0). Die Farbe leuchtet live an der LED, mit **OK** ersetzt das Programm die Zahlen im Makrotext (Strg + Z macht es rückgängig) |
+| Mini-Farbtest: LED testen, bei ConstRGB Farbe ändern … (**F3**) | Für **jede Zeile mit einer LED-Nummer**: Zelle der Zeile anklicken. Der Mini-Farbtest nimmt die LED der Zeile (Start LedNr, LEDs, LED Channel) und zeigt die Farbe live an der LED. Mit **Blinken Ein/Aus** findest du eine LED auf der Anlage. Es wird **nichts gespeichert**, und **beim Öffnen wird nichts an die Lichtmaschine gesendet**: Erst **Blinken Ein/Aus** oder eine Änderung der Farbe schickt Befehle an die LED (LED-Adresse, Kanal und Anzahl ändern sendet nichts). So geht beim bloßen Öffnen kein Befehl an ein Gerät in der Zeile, zum Beispiel einen Servo. Beim Makro **ConstRGB** (feste Zahlen) startet er zusätzlich mit der Farbe bei Ein (R1, G1, B1), mit dem Umschalter wählst du die Farbe bei Aus (R0, G0, B0), und **OK** ersetzt die Zahlen im Makrotext (rückgängig möglich). |
 
 ===== Mehrere Zeilen auf einmal =====
 

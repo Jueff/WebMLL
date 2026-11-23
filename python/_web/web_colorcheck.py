@@ -1,9 +1,9 @@
-# Datei-Version: 1.10 (2026-11-21) - web_colorcheck.py
+# Datei-Version: 1.12 (2026-11-23) - web_colorcheck.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_colorcheck.py
 # Path:           _web/web_colorcheck.py
-# Version:        1.10
-# Last Update:    2026-11-21
+# Version:        1.12
+# Last Update:    2026-11-23
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
@@ -12,6 +12,8 @@
 #   1.07  2026-11-16  Protokoll: wird die LED-Nummer oder Anzahl auf die Zahl der LEDs der Lichtmaschine (Startmeldung) begrenzt, steht das im Protokoll
 #   1.08  2026-11-21  Version 4.57: open_mini(): Mini-Farbtest als Fenster (Farbe live an die LED, OK gibt R,G,B zurueck) fuer die Tabelle (F3, Kontextmenue)
 #   1.09  2026-11-21  Version 4.59: open_mini(slots=...): mehrere Farben (Ein/Aus) mit Umschalter, Rueckgabe je Farbe (fuer ConstRGB)
+#   1.12  2026-11-23  Version 4.82: open_mini(passive=True) (Mini-Farbtest ausser ConstRGB): beim Oeffnen wird NICHTS an die Lichtmaschine gesendet (kein Direktmodus, keine Farbe); erst Blinken oder eine Farbaenderung schaltet frei; model.quiet sperrt alle LED-Befehle
+#   1.11  2026-11-23  Version 4.80: Mini-Farbtest: "Blinken Ein/Aus" blinkt wieder (der verzoegerte Sendebefehl push() beendete das Blinken nach 0,3 s)
 #   1.10  2026-11-21  Version 4.60: open_mini(led=(Start LedNr, Anzahl, Kanal)): LED der Tabellenzeile statt der zuletzt benutzten
 # ----------------------------------------------------------------------------------------------
 """Web-Version der Seite "Farb Test" (ColorCheckPage + ColorWheel + LightGradientBar ohne Tk).
@@ -333,6 +335,8 @@ class ColorCheckModel:
                 self._update_led(self.lednum, self.ledcount, self.red, self.green, self.blue, self.ledchannel)
 
     def _update_led(self, lednum, ledcount, red, green, blue, ledchannel=0):
+        if getattr(self, "quiet", False):  # v1.12: gesperrt (Mini-Farbtest ohne Freigabe): nichts senden
+            return  # v1.12
         lednum += self.ctrl.get_lednum_offset_for_channel(ledchannel)
         if self.ledhighlight:                                      # _update_ledtable/_restore_led_colors
             self.ledhighlight = False
@@ -344,9 +348,13 @@ class ColorCheckModel:
 
     def led_off(self):
         self.ledhighlight = False
+        if getattr(self, "quiet", False):  # v1.12
+            return  # v1.12
         self.ctrl.send_to_ARDUINO("#L00 00 00 00 FF\n" if self.ctrl.mobaledlib_version == 1 else "#L 00 00 00 00 FFFF\n")
 
     def _send_led(self, lednum, ledcount, color, ledchannel=0):
+        if getattr(self, "quiet", False):  # v1.12
+            return  # v1.12
         red, green, blue = color[1:3], color[3:5], color[5:7]
         if not self.use_r:
             red = "00"
@@ -358,6 +366,8 @@ class ColorCheckModel:
 
     def highlight_led(self, lednum, ledcount, ledchannel=0):
         """_highlight_led: LED blinken lassen, bei laufendem Blinken auf die neue LED wechseln"""
+        if getattr(self, "quiet", False):  # v1.12: gesperrt: nur merken, nichts senden
+            return  # v1.12
         if self.ledhighlight:
             self._send_led(self.on_lednum, self.on_ledcount, "#000000", self.on_ledchannel)      # alte LED aus
             self._send_led(lednum, ledcount, "#FFFFFF", ledchannel)                              # neue LED an
@@ -772,12 +782,14 @@ def build(ctrl, goto_generator=None, is_active=None, run_command=None):
 
 # async def open_mini(ctrl, rgb=None, title="Mini-Farbtest"):  # v1.08  # v1.09 (entfallen)
 # async def open_mini(ctrl, rgb=None, title="Mini-Farbtest", slots=None):  # v1.08  # v1.09: slots  # v1.10 (entfallen)
-async def open_mini(ctrl, rgb=None, title="Mini-Farbtest", slots=None, led=None):  # v1.08  # v1.09: slots  # v1.10: led
+# async def open_mini(ctrl, rgb=None, title="Mini-Farbtest", slots=None, led=None):  # v1.08  # v1.09: slots  # v1.10: led  # v1.12 (entfallen)
+async def open_mini(ctrl, rgb=None, title="Mini-Farbtest", slots=None, led=None, passive=False):  # v1.08  # v1.09: slots  # v1.10: led  # v1.12: passive
     """Mini-Farbtest als Fenster: Farbrad, Helligkeit, R/G/B, HEXA, LED-Adresse/Kanal/Anzahl; die Farbe geht live an die LED.
     rgb: Startfarbe (r, g, b) oder None (zuletzt benutzte Farbe). Rueckgabe: (r, g, b) bei OK, sonst None.
     slots (v1.09): [(Beschriftung, (r, g, b)), ...]: mehrere Farben mit Umschalter; Rueckgabe dann die Liste der Farben (r, g, b) bei OK."""  # v1.09
     from nicegui import ui  # v1.08
     model = ColorCheckModel(ctrl)  # v1.08
+    model.quiet = bool(passive)  # v1.12: passive: es wird nichts gesendet, bis Blinken oder eine Farbaenderung freigibt (Schutz vor ungewollten Befehlen, z. B. an Servos)
     if slots:  # v1.09
         rgb = slots[0][1]  # v1.09
     if led:  # v1.10: LED der Tabellenzeile (Start LedNr, Anzahl, Kanal)
@@ -816,9 +828,19 @@ async def open_mini(ctrl, rgb=None, title="Mini-Farbtest", slots=None, led=None)
         finally:  # v1.08
             guard["on"] = False  # v1.08
 
-    def changed(fn, *args):  # v1.08: Modell aendern, Anzeige nachfuehren, LED nach kurzer Ruhe sicher setzen
+    def arm():  # v1.12: Senden freigeben (einmalig): Direktmodus starten
+        if model.quiet:  # v1.12
+            model.quiet = False  # v1.12
+            try:  # v1.12
+                model.tab_selected()  # v1.12
+            except Exception:                              # noqa: BLE001  # v1.12
+                logger.debug("Mini-Farbtest: Direktmodus", exc_info=True)  # v1.12
+
+    def changed(fn, *args, send=True):  # v1.08: Modell aendern, Anzeige nachfuehren, LED nach kurzer Ruhe sicher setzen  # v1.12: send=False: LED-Felder geben nicht frei
         if guard["on"]:  # v1.08
             return  # v1.08
+        if send:  # v1.12: Farbaenderung gibt das Senden frei (vor der Aenderung, damit sie gesendet wird)
+            arm()  # v1.12
         try:  # v1.08
             fn(*args)  # v1.08
         except Exception:                                  # noqa: BLE001  # v1.08
@@ -826,7 +848,8 @@ async def open_mini(ctrl, rgb=None, title="Mini-Farbtest", slots=None, led=None)
         sync()  # v1.08
         if timer["t"] is not None:  # v1.08
             timer["t"].cancel()  # v1.08
-        timer["t"] = ui.timer(0.3, push, once=True)  # v1.08
+        if not model.quiet:  # v1.12: gesperrt: nichts nachsenden
+            timer["t"] = ui.timer(0.3, push, once=True)  # v1.08
 
     clamp = lambda x: min(max(intval(x), 0), 255)  # noqa: E731  # v1.08
 
@@ -861,23 +884,40 @@ async def open_mini(ctrl, rgb=None, title="Mini-Farbtest", slots=None, led=None)
                 with ui.row().classes("items-center gap-2 no-wrap"):  # v1.08
                     ui.label("HEXA").classes("w-16")  # v1.08
                     refs["hexa"] = ui.input(value=model.hexa).props("dense outlined").classes("w-32")  # v1.08
-                    refs["hexa"].on("blur", lambda _: changed(model.on_hexa, refs["hexa"].value))  # v1.08
-                    refs["hexa"].on("keydown.enter", lambda _: changed(model.on_hexa, refs["hexa"].value))  # v1.08
+                    # refs["hexa"].on("blur", lambda _: changed(model.on_hexa, refs["hexa"].value))  # v1.08  # v1.12 (entfallen)
+                    # refs["hexa"].on("keydown.enter", lambda _: changed(model.on_hexa, refs["hexa"].value))  # v1.08  # v1.12 (entfallen)
+                    refs["hexa"].on("blur", lambda _: hexa_commit())  # v1.12: nur bei geaendertem Wert (Verlassen des Feldes sendet nichts)
+                    refs["hexa"].on("keydown.enter", lambda _: hexa_commit())  # v1.12
                 refs["preview"] = ui.element("div").style("width: 150px; height: 50px; border: 1px solid #777; display: flex; align-items: center; justify-content: center; text-align: center")  # v1.08
                 with refs["preview"]:  # v1.08
                     refs["preview_text"] = ui.label("").style("white-space: pre-line; font-size: 12px; line-height: 1.15")  # v1.08
         with ui.row().classes("w-full items-center gap-3").style("border: 1px solid #aaa; padding: 6px"):  # v1.08
             ui.label("LED Adresse")  # v1.08
-            refs["led"] = number(width="w-24", min=0, max=32767, step=1, value=model.lednum, format="%d", on_change=lambda e: changed(lambda: model.set_lednum(intval(e.value))))  # v1.08
+            refs["led"] = number(width="w-24", min=0, max=32767, step=1, value=model.lednum, format="%d", on_change=lambda e: changed(lambda: model.set_lednum(intval(e.value)), send=False))  # v1.08  # v1.12
             ui.label("Led Kanal")  # v1.08
-            refs["chan"] = number(width="w-20", min=0, max=10, step=1, value=model.ledchannel, format="%d", on_change=lambda e: changed(lambda: model.set_ledchannel(intval(e.value))))  # v1.08
+            refs["chan"] = number(width="w-20", min=0, max=10, step=1, value=model.ledchannel, format="%d", on_change=lambda e: changed(lambda: model.set_ledchannel(intval(e.value)), send=False))  # v1.08  # v1.12
             ui.label("Anzahl")  # v1.08
-            refs["cnt"] = number(width="w-24", min=1, max=4095, step=1, value=model.ledcount, format="%d", on_change=lambda e: changed(lambda: model.set_ledcount(intval(e.value, 1))))  # v1.08
-            ui.button("Blinken Ein/Aus", on_click=lambda: changed(model.blinking_on_off)).props("outline no-caps dense")  # v1.08
+            refs["cnt"] = number(width="w-24", min=1, max=4095, step=1, value=model.ledcount, format="%d", on_change=lambda e: changed(lambda: model.set_ledcount(intval(e.value, 1)), send=False))  # v1.08  # v1.12
+            # ui.button("Blinken Ein/Aus", on_click=lambda: changed(model.blinking_on_off)).props("outline no-caps dense")  # v1.08  # v1.11 (entfallen)
+            ui.button("Blinken Ein/Aus", on_click=lambda: toggle_blink()).props("outline no-caps dense")  # v1.11
         with ui.row().classes("justify-end w-full"):  # v1.08
             ui.button("Abbrechen (A)", on_click=lambda: dlg.submit(None)).props("flat data-key=A").classes("mll-cancel")  # v1.08
             # ui.button("OK", on_click=lambda: dlg.submit((model.red, model.green, model.blue))).props("color=primary data-key=O").classes("mll-default")  # v1.08  # v1.09 (entfallen)
             ui.button("OK", on_click=lambda: ok()).props("color=primary data-key=O").classes("mll-default")  # v1.08  # v1.09
+    def hexa_commit():  # v1.12
+        if str(refs["hexa"].value or "").strip().upper() != str(model.hexa or "").strip().upper():  # v1.12
+            changed(model.on_hexa, refs["hexa"].value)  # v1.12
+
+    def toggle_blink():  # v1.11: ohne verzoegertes push(), das _update_led() das Blinken sofort wieder beendet
+        if timer["t"] is not None:  # v1.11
+            timer["t"].cancel()  # v1.11
+            timer["t"] = None  # v1.11
+        arm()  # v1.12: Blinken gibt das Senden frei
+        try:  # v1.11
+            model.blinking_on_off()  # v1.11
+        except Exception:                                  # noqa: BLE001  # v1.11
+            logger.debug("Mini-Farbtest: Blinken", exc_info=True)  # v1.11
+
     def ok():  # v1.09
         now = (model.red, model.green, model.blue)  # v1.09
         if slots:  # v1.09
@@ -888,17 +928,19 @@ async def open_mini(ctrl, rgb=None, title="Mini-Farbtest", slots=None, led=None)
 
     blink = ui.timer(1.0 / max(BLINKFRQ, 1), model.blink_tick)  # v1.08: Blinktakt
     sync()  # v1.08
-    try:  # v1.08
-        model.tab_selected()  # v1.08: Direktmodus zum Arduino
-    except Exception:                                      # noqa: BLE001  # v1.08
-        logger.debug("Mini-Farbtest: Direktmodus", exc_info=True)  # v1.08
-    push()  # v1.08: Startfarbe sofort an die LED
+    if not model.quiet:  # v1.12: passive: beim Oeffnen nichts senden
+        try:  # v1.08
+            model.tab_selected()  # v1.08: Direktmodus zum Arduino
+        except Exception:                                  # noqa: BLE001  # v1.08
+            logger.debug("Mini-Farbtest: Direktmodus", exc_info=True)  # v1.08
+        push()  # v1.08: Startfarbe sofort an die LED
     result = await dlg  # v1.08
     try:  # v1.08
         blink.cancel()  # v1.08
         model.ledhighlight = False  # v1.08
-        model.led_off()  # v1.08: LED wieder aus
-        model.tab_unselected()  # v1.08
+        if not model.quiet:  # v1.12: nur wenn freigegeben wurde (sonst wurde nie etwas gesendet)
+            model.led_off()  # v1.08: LED wieder aus
+            model.tab_unselected()  # v1.08
         for key, value in (("lastLed", model.lednum), ("lastLedCount", model.ledcount), ("lastLedChannel", model.ledchannel)):  # v1.08
             ctrl.setConfigData(key, value)  # v1.08
     except Exception:                                      # noqa: BLE001  # v1.08

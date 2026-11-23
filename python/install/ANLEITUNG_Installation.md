@@ -1,5 +1,5 @@
 # webMobaLedLib – Installation und Betrieb
-*Datei-Version: 4.79 (2026-11-23), gilt für webMobaLedLib 4.79*
+*Datei-Version: 4.93 (2026-11-23), gilt für webMobaLedLib 4.93*
 
 Windows · macOS · Linux-Desktop · Raspberry Pi
 
@@ -1793,3 +1793,14 @@ In Hardware Optionen, Reiter Entwicklungsumgebung, **PlatformIO** wählen und �
 ## ESP32: feste IP-Adresse statt DHCP (ab 4.79)
 
 Im Reiter „WLAN (OTA)“ der Hardware Optionen wählst du, ob der ESP32 seine Adresse per **DHCP** vom Router bekommt oder eine **feste IP-Adresse** verwendet. Bei „Statische IP-Adresse“ trägst du IP-Adresse, Gateway (meist der Router), Subnetzmaske (meist 255.255.255.0) und DNS-Server ein (leer: Gateway). Das Programm prüft die Eingaben. Danach das ESP32-Setup einmal neu übertragen und bei „Adresse für WebMLL“ die neue IP-Adresse eintragen (bleibt das Feld leer, nimmt das Programm die feste IP). Die feste Adresse darf nicht im DHCP-Bereich des Routers liegen. Verstecktes WLAN und mehrere WLANs werden nicht unterstützt.
+
+## Mini-Farbtest für jede LED (ab 4.81)
+
+F3 oder der Rechtsklick-Eintrag „Mini-Farbtest: LED testen, bei ConstRGB Farbe ändern …“ gilt für **alle Zeilen mit einer LED-Nummer**. Der Mini-Farbtest nimmt die LED der Zeile und zeigt die Farbe live an der LED. Mit „Blinken Ein/Aus“ findest du eine LED auf der Anlage. Es wird nichts gespeichert. Nur beim Makro ConstRGB mit festen Zahlen startet er mit den Farben des Makros, und OK ersetzt sie im Makrotext.
+Bei Zeilen ohne ConstRGB sendet der Mini-Farbtest **beim Öffnen nichts** an die Lichtmaschine (ab 4.82). Erst „Blinken Ein/Aus“ oder eine Änderung der Farbe schickt Befehle.
+
+Der Mini-Farbtest funktioniert auch in der **Grafik-Ansicht** (Ketten und Anlage, ab 4.83): Kästchen anklicken, F3 drücken oder Rechtsklick auf das Kästchen und „Mini-Farbtest …“. Er verhält sich wie in der Tabelle.
+
+## Datenübertragung zwischen PCs (ab 4.89)
+
+Unter **Einstellungen → Datenübertragung** kannst du Tabellen aus einem anderen PC im lokalen Netz übernehmen oder ausgewählte Zeilen in bestehende Tabellen einfügen. Die Freigabe am Quell-PC ist nach jedem Start ausgeschaltet und muss im Dialog bewusst aktiviert werden. Vor jeder Übernahme wird die bisherige Arbeitsmappe gesichert, „Letzten Import rückgängig machen“ stellt sie wieder her. Beim Einfügen ausgewählter Zeilen kannst du den LED-Kanal wählen (Standard 0). Die Tabellenansicht wird danach automatisch aktualisiert. Wird der Verbindungscode nicht akzeptiert, prüfe den im Quell-PC angezeigten Code und versuche es erneut. Die Daten werden im Netz unverschlüsselt übertragen, benutze die Funktion nur in einem vertrauenswürdigen Netz. Anleitung, Ports und Firewall: [Datenübertragung](../../DATENUEBERTRAGUNG.md).

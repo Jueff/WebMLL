@@ -1,9 +1,9 @@
-Datei-Version: 1.11 (2026-11-23) - RELEASE_Hinweise_4.79.md
-Gilt für webMobaLedLib 4.79
+Datei-Version: 1.12 (2026-11-23) - RELEASE_Hinweise_4.93.md
+Gilt für webMobaLedLib 4.93
 
-# webMobaLedLib 4.79
+# webMobaLedLib 4.93
 
-Anhänge dieses Releases: `webmobaledlib.zip` (Programm, mit `zip_erstellen.bat` Version 1.11 gebaut, `ROOT_IN_ZIP=1`), `START_HIER.txt` (erste Schritte), `ANLEITUNG_Installation.pdf` (Anleitung, Version 4.79) und `BETATEST_Checkliste.pdf` (Checkliste für Betatester, Version 3.61).
+Anhänge dieses Releases: `webmobaledlib.zip` (Programm, mit `zip_erstellen.bat` Version 1.11 gebaut, `ROOT_IN_ZIP=1`), `START_HIER.txt` (erste Schritte), `ANLEITUNG_Installation.pdf` (Anleitung, Version 4.93) und `BETATEST_Checkliste.pdf` (Checkliste für Betatester, Version 3.74).
 Installation: siehe `START_HIER.txt` und den Schnellstart der Anleitung. Aktualisieren: Menü **Hilfe → Update webMobaLedLib …**, danach das Programm **neu starten** und die Seite mit Strg+F5 neu laden.
 
 ## Wichtig beim Aktualisieren
@@ -12,7 +12,15 @@ Installation: siehe `START_HIER.txt` und den Schnellstart der Anleitung. Aktuali
 - **Nach dem Update das Programm neu starten** und die Seite neu laden. Oben darf keine rote Meldung stehen.
 - **Neues Programmsymbol (4.10):** Für die Verknüpfung auf dem Desktop den Installer noch einmal ausführen.
 
-## Neu seit Version 3.93 (3.94 bis 4.79)
+## Neu seit Version 3.93 (3.94 bis 4.93)
+
+**Neu seit 4.79 (4.80 bis 4.93):**
+- **Mini-Farbtest in der grafischen Ansicht (4.83):** F3 oder Rechtsklick bei einem ConstRGB-Makro, wie in der Tabelle. Bei anderen Makros sendet der Mini-Farbtest beim Öffnen nichts, erst nach „Blinken“ oder einer Farbänderung (4.82).
+- **Tabelle (4.84 bis 4.88):** Beim Einfügen springt die Anzeige nicht mehr. Nach Einfügen, Löschen, Duplizieren und Verschieben ist die betroffene Zeile markiert, mehrfaches Löschen geht hintereinander.
+- **Datenübertragung (4.89, Pull Request 57, moosbewohner):** Neuer Menüpunkt „Datenübertragung“: Tabellen von einem Rechner auf einen anderen übertragen, gesichert mit Verbindungscode; vor dem Überschreiben entsteht eine Sicherung. Beschreibung in `DATENUEBERTRAGUNG.md`. Getestet unter Windows 10, Windows 11 und Raspberry Pi 4B. Bei falschem Verbindungscode erscheint eine verständliche Meldung (4.93).
+- **Kompilieren und Hochladen (4.90, Issue 60):** Die Knöpfe flackern nicht mehr.
+- **Pico-Firmware (4.90, Issue 58):** Sind mehrere Picos angeschlossen, fragt das Programm, welcher bespielt werden soll.
+- **Verbindung folgt dem Tabellenblatt (4.90 bis 4.92, Issue 59):** Beim Blattwechsel verbindet sich das Programm mit der Lichtmaschine des Blattes (USB und WLAN); Trennen, Neu verbinden und Board wechseln gelten für das aktuelle Blatt.
 
 **Tabelle und Farben (4.55 bis 4.66, 4.73):**
 - **Farben kopieren und einfügen (4.55):** Strg+C, Strg+X und Strg+V übertragen auch die Feldfarbe, bei Zellen und ganzen Zeilen; ist das Ziel größer, wird das Muster wiederholt. „Nur Text einfügen“ (Strg+Umschalt+V oder Rechtsklick) fügt ohne Farbe ein. Von Hand gesetzte Farben sind vor den Färberegeln geschützt, bleiben mit der Tabelle gespeichert und lassen sich zurücknehmen. Farbe entfernen (4.57): die Zelle wird wieder nach den Färberegeln gefärbt.
@@ -103,9 +111,9 @@ Installation: siehe `START_HIER.txt` und den Schnellstart der Anleitung. Aktuali
 - Versteckte Tabellen: das Startblatt erscheint nicht mehr als Reiter (4.07).
 - Optionen: alle Reiter sichtbar (3.99).
 
-**Noch nicht an Hardware oder im Browser geprüft:** (die Funktionen 4.55 bis 4.79 hat der Entwickler im Browser geprüft; Rückmeldungen der Tester stehen aus) Alles ab 4.11 (Einstellungen sichern/übernehmen, Ausgabe und Abbrechen beim ESP32-Build, Verbinden beim Start, inkrementelles Speichern und seine Tastenkombination, Kopfbereich (Abstand in Issue 22 nicht bestätigt), Erweiterungen mit `symlink://`, Name und Beschreibung aus `libraries.json`) wurde nur gebaut und kompiliert, nicht auf Hardware oder im Browser getestet. IRremote 4.x für InfraredMLX ist nicht mit einem Pico geprüft. Die Übersetzungen der neuen Texte (CSV) sind ungeprüft. Die Menüs ab 4.51 sind vom Entwickler im Browser getestet (4.74: Rückmeldung „Funktioniert“); Dunkler Modus und Dateinamen mit Datum (4.44 bis 4.50) ebenfalls.
+**Noch nicht an Hardware oder im Browser geprüft:** (die Funktionen 4.55 bis 4.93 hat der Entwickler im Browser geprüft; Rückmeldungen der Tester stehen aus) Alles ab 4.11 (Einstellungen sichern/übernehmen, Ausgabe und Abbrechen beim ESP32-Build, Verbinden beim Start, inkrementelles Speichern und seine Tastenkombination, Kopfbereich (Abstand in Issue 22 nicht bestätigt), Erweiterungen mit `symlink://`, Name und Beschreibung aus `libraries.json`) wurde nur gebaut und kompiliert, nicht auf Hardware oder im Browser getestet. IRremote 4.x für InfraredMLX ist nicht mit einem Pico geprüft. Die Übersetzungen der neuen Texte (CSV) sind ungeprüft. Die Menüs ab 4.51 sind vom Entwickler im Browser getestet (4.74: Rückmeldung „Funktioniert“); Dunkler Modus und Dateinamen mit Datum (4.44 bis 4.50) ebenfalls.
 
-**Wiki:** Paket `webmobaledlib_Wiki_Gesamt_Stand_4.79.zip` (41 Dateien, an die neuen Menüs angepasst, Hinweise in `LIESMICH_Wiki_Gesamt.md`). Die Bilder (Menüband, Programm Einstellungen, ARDUINO-IDE Einstellungen, Optionen, Datei-Menü, Verbinden) zeigen noch den alten Stand und müssen neu aufgenommen werden.
+**Wiki:** Paket `webmobaledlib_Wiki_Gesamt_Stand_4.93.zip` (41 Dateien, an die neuen Menüs angepasst, Hinweise in `LIESMICH_Wiki_Gesamt.md`). Die Bilder (Menüband, Programm Einstellungen, ARDUINO-IDE Einstellungen, Optionen, Datei-Menü, Verbinden) zeigen noch den alten Stand und müssen neu aufgenommen werden.
 
 **Geplant:** Quell-URL direkt in der `platformio.ini` (Issue 6) ist nicht vorgesehen (Cache und `symlink://` bleiben); Rückfragen dazu stehen im Issue.
 

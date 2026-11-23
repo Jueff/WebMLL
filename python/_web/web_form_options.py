@@ -1,9 +1,9 @@
-# Datei-Version: 1.46 (2026-11-22) - web_form_options.py
+# Datei-Version: 1.47 (2026-11-23) - web_form_options.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_form_options.py
 # Path:           _web/web_form_options.py
-# Version:        1.46
-# Last Update:    2026-11-22
+# Version:        1.47
+# Last Update:    2026-11-23
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
@@ -37,6 +37,7 @@
 #   1.44  2026-11-22  Version 4.68: Titel Hardware Optionen; Reiter Entwicklungsumgebung und Firmware Installation nicht im Anfaenger Modus; Boardnamen Lichtmaschine Classic/Pro/Pico; PlatformIO (Standard) zuerst, ARDUINO-IDE (nur Kompatibilitaet), Knopf ARDUINO-IDE Einstellungen nur mit ARDUINO-IDE; Hinweis WLAN (OTA) zu Schnelles Update
 #   1.45  2026-11-22  Version 4.70: Reiter Entwicklungsumgebung: roter Hinweis unter dem Haken Schnelles Update (nicht kompatibel mit WLAN)
 #   1.46  2026-11-22  Version 4.71: Warnhinweise zu Schnelles Update und WLAN entfernt (Pull Request 54: Schnelles Update geht fuer den ESP32 jetzt auch ueber WLAN); neuer Hinweistext zum Schnellen Update (aus dem Pull Request, dort als 1.44)
+#   1.47  2026-11-23  Issue 58: Firmware installieren (Pico): eigener Anschluss, immer erfragt (nicht der Anschluss des Blatts, dort haengt die Lichtmaschine); beim Start ungueltig; bei verbundener Lichtmaschine auf diesem Anschluss wird vorher getrennt
 # ----------------------------------------------------------------------------------------------
 """Web-Ersatz fuer proggen/UserForm_Options.py (Optionen und spezielle Funktionen).
 
@@ -130,6 +131,29 @@ def tab_buttons(buttons: dict, handlers: list[str], frame_hint: str | None = Non
 # ------------------------------------------------------------------ Dialog (Event-Loop)
 arduino_settings_handler = None  # v1.40: Funktion der Hauptseite (webmobaledlib.py): Fenster ARDUINO-IDE Einstellungen
 ota_upload_handler = None  # v1.40: Funktion der Hauptseite: Fenster ESP32-Firmware ueber WLAN hochladen
+_FW_PORT = {"port": ""}  # v1.47 (Issue 58): Anschluss fuer die Firmware-Installation des Pico: eigener Wert, beim Start des Programms ungueltig, unabhaengig vom Blatt und der Lichtmaschine
+
+
+async def _pick_fw_port_async(ports, connected, stored, title, texts):  # v1.47 (Issue 58)
+    """Auswahl des Pico-Anschlusses fuer die Firmware: ports = Liste der Pico-Anschluesse, connected = Anschluss der verbundenen Lichtmaschine (oder ''), stored = zuletzt gewaehlter. Rueckgabe: Anschluss oder None (Abbrechen)."""  # v1.47
+    from nicegui import ui  # v1.47
+    client = wd._bridge["client"]  # v1.47
+    options = {p: (p + (" " + texts["connected"] if connected and p.upper() == connected.upper() else "")) for p in ports}  # v1.47
+    free = [p for p in ports if not (connected and p.upper() == connected.upper())]  # v1.47
+    start = stored if stored in ports else (free[0] if free else ports[0])  # v1.47
+    with client:  # v1.47
+        with ui.dialog().props("persistent") as dlg, ui.card().classes("min-w-[380px] max-w-[640px]"):  # v1.47
+            ui.label(title).classes("text-h6")  # v1.47
+            ui.label(texts["info"]).style("white-space: pre-line")  # v1.47
+            sel = ui.select(options, value=start, label=texts["label"]).classes("w-full")  # v1.47
+            with ui.row().classes("justify-end w-full"):  # v1.47
+                ui.button("OK", on_click=lambda: dlg.submit(sel.value)).classes("mll-default")  # v1.47
+                ui.button(texts["cancel"], on_click=lambda: dlg.submit(None)).props("flat").classes("mll-cancel")  # v1.47
+        result = await dlg  # v1.47
+        wd.safe_delete(dlg)  # v1.47
+    return result  # v1.47
+
+
 _TAB = {"name": None, "keep": False}  # v1.35: zuletzt gewaehlter Reiter; keep: beim naechsten Oeffnen wieder dort beginnen (nach Board erkennen)
 
 def ext_panel(vals):  # v1.41 (vorher in _options_async, Reiter Erweiterungen)  # v1.31  # v1.32
@@ -1104,8 +1128,32 @@ def make_class(Base):
             path = wd.call_in_loop(WFF.firmware_async, groups, folder, download, rescan, fw_texts, default=None)  # v1.19
             if not path:  # v1.09
                 return  # v1.09
+            serial_port = None  # v1.47 (Issue 58): nicht der Anschluss des Blatts (dort haengt die Lichtmaschine), sondern ein eigener, immer erfragter Pico-Anschluss
+            if not HP.find_boot_drives():  # v1.47: ein Pico im Bootmodus (Laufwerk RPI-RP2) braucht keinen Anschluss
+                pico_ports = HP.find_pico_serial_ports()  # v1.47
+                if pico_ports:  # v1.47: ohne Pico-Anschluss meldet flash_uf2 die Hilfe fuer den Anwender
+                    import mlpyproggen.Prog_Generator as PG_  # v1.47
+                    ctrl_ = PG_.global_controller  # v1.47
+                    connected = ""  # v1.47
+                    try:  # v1.47
+                        if ctrl_.is_connection_open():  # v1.47
+                            connected = str(getattr(ctrl_, "ARDUINO_current_portname", "") or "").strip()  # v1.47
+                    except Exception:                                  # noqa: BLE001  # v1.47
+                        connected = ""  # v1.47
+                    texts = {"info": tr("Welcher Pico soll die Firmware bekommen? Bitte den Anschluss des Pico wählen, der neu programmiert wird."),  # v1.47
+                             "label": tr("Anschluss"), "cancel": tr("Abbrechen"), "connected": tr("(mit der Lichtmaschine verbunden)")}  # v1.47
+                    serial_port = wd.call_in_loop(_pick_fw_port_async, pico_ports, connected, _FW_PORT["port"], title, texts, default=None)  # v1.47
+                    if not serial_port:  # v1.47
+                        return  # v1.47
+                    _FW_PORT["port"] = serial_port  # v1.47
+                    if connected and serial_port.upper() == connected.upper():  # v1.47: der gewaehlte Anschluss ist die verbundene Lichtmaschine: Verbindung vorher trennen
+                        try:  # v1.47
+                            ctrl_.disconnect()  # v1.47
+                        except Exception:                              # noqa: BLE001  # v1.47
+                            logger.debug("Trennen vor der Firmware nicht moeglich", exc_info=True)  # v1.47
             try:  # v1.09
-                HP.flash_uf2(path, log=lambda text: logger.info("%s", text))  # v1.09
+                # HP.flash_uf2(path, log=lambda text: logger.info("%s", text))  # v1.09  # v1.47 (entfallen)
+                HP.flash_uf2(path, serial_port=serial_port, log=lambda text: logger.info("%s", text))  # v1.47
             except RuntimeError as ex:  # v1.09
                 P01.MsgBox(tr(str(ex)), vbCritical, title)  # v1.09
                 return  # v1.09

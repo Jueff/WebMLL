@@ -1,9 +1,9 @@
-# Datei-Version: 1.13 (2026-11-21) - web_serial.py
+# Datei-Version: 1.14 (2026-11-23) - web_serial.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_serial.py
 # Path:           _web/web_serial.py
-# Version:        1.13
-# Last Update:    2026-11-21
+# Version:        1.14
+# Last Update:    2026-11-23
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
@@ -20,6 +20,7 @@
 #   1.10  2026-11-14  connect_if_not_connected (Testtasten, DCC-Tastatur, Z21 ...) versucht auch mit Anschlussangabe zuerst die eingetragene ESP32-WLAN-Verbindung
 #   1.11  2026-11-16  Protokoll: Zeilen der Lichtmaschine (Empfang) werden mit Level DEBUG protokolliert, die Startmeldung mit der Auswertung (LEDs je Kanal, Summe, Version) mit Level INFO
 #   1.12  2026-11-19  Stilles Verbinden (quiet): keine Dialoge bei Fehlern (Automatisch verbinden beim Start und nach dem Hochladen); dtr_override fuer einen gefundenen Pico (Issue 20)
+#   1.14  2026-11-23  Issue 59: Verbinden ohne Anschlussangabe nimmt den Anschluss des aktiven Blatts (sheet_port_provider) vor der globalen Einstellung serportname
 #   1.13  2026-11-21  Option LedOffOnDisconnect (Programm Einstellungen): Beim Trennen werden die LEDs nur noch ausgeschaltet, wenn die Option gesetzt ist (Vorgabe aus; vorher immer)
 # ----------------------------------------------------------------------------------------------
 """Serielle Verbindung zum Arduino/Pico ohne Tk (Mixin fuer HeadlessAppController).
@@ -557,6 +558,8 @@ class SerialMixin:
         self._set_connect_status("Nicht Verbunden", "black")
         return False
 
+    sheet_port_provider = None  # v1.14 (Issue 59): Funktion ohne Argument, liefert den USB-Anschluss des aktiven Blatts (oder None): hat Vorrang vor der globalen Einstellung serportname
+
     wifi_target_provider = None  # v1.09: Funktion ohne Argument, liefert (Adresse, Passwort) der eingetragenen ESP32-WLAN-Verbindung des aktiven Blatts oder None (setzt webmobaledlib.py)
 
     def connect(self, port=None, wlan=None):
@@ -579,6 +582,12 @@ class SerialMixin:
 
     def _connect(self, port=None):
         self.ARDUINO_IP = False
+        if port is None and self.sheet_port_provider is not None:  # v1.14 (Issue 59): Anschluss des aktiven Blatts
+            try:  # v1.14
+                port = self.sheet_port_provider() or None  # v1.14
+            except Exception:                                      # noqa: BLE001  # v1.14
+                logger.debug("sheet_port_provider fehlgeschlagen", exc_info=True)  # v1.14
+                port = None  # v1.14
         if port is None:
             port = self.getConfigData("serportname")
         port = str(port or "")                         # kann eine Zelle (CRange) sein
