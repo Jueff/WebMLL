@@ -1,12 +1,13 @@
-# Datei-Version: 1.05 (2026-11-22) - M42_Dyn_Config.py
+# Datei-Version: 1.06 (2026-11-24) - M42_Dyn_Config.py
 # ----------------------------------------------------------------------------------------------
 # Name:           M42_Dyn_Config.py
 # Path:           proggen/M42_Dyn_Config.py
-# Version:        1.05
-# Last Update:    2026-11-22
+# Version:        1.06
+# Last Update:    2026-11-24
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
+#   1.06  2026-11-24  Die Programmversion (VERSION in webmobaledlib.py) gehoert zur Firmware-Signatur: nach jedem Softwareupdate wird einmal die ganze Firmware geflasht
 #   1.05  2026-11-22  WLAN-Konfiguration bei Transportfehlern hoechstens dreimal mit neuer Sitzung versuchen
 #   1.04  2026-11-22  Bei fehlender END-Antwort ueber WLAN gespeicherte Konfiguration nach Neustart verifizieren
 #   1.03  2026-11-22  PlatformIO: AVR-Werkzeuge ohne Arduino-IDE-Suche ermitteln
@@ -106,6 +107,21 @@ def _tools():
     return _state["tools"]
 
 
+def _program_version():  # v1.06
+    """Programmversion aus webmobaledlib.py (VERSION = "..."); aus der Datei gelesen, damit das Ergebnis nicht davon abhaengt, wie das Programm gestartet wurde."""
+    import re  # v1.06
+    path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "webmobaledlib.py")  # v1.06
+    try:
+        with open(path, "r", encoding="utf-8", errors="replace") as fh:
+            for line in fh:
+                m = re.match(r'VERSION\s*=\s*"([^"]*)"', line)
+                if m:
+                    return m.group(1)
+    except OSError:
+        pass
+    return ""
+
+
 def Decide(CreateFilesOnly, HeaderOnly, firmware_key=""):  # v1.02
     """Soll die Kopfdatei im Modus MLL_DYNAMIC_CONFIG geschrieben werden?"""
     _state["firmware_key"] = firmware_key  # v1.02
@@ -154,6 +170,8 @@ def Finalize(header_path):
         with open(header_path, "rb") as fh:
             raw = fh.read()
         sig = DC.compute_signature(raw.decode("utf-8", errors="replace"), sketch_dir, header_path, project_dir, os.path.join(project_dir, "platformio.ini"), env)
+        import hashlib  # v1.06
+        sig = hashlib.sha256((sig + "|prog|" + _program_version()).encode("utf-8")).hexdigest()[:16]  # v1.06: nach einem Softwareupdate einmal ganz flashen
         if _state.get("firmware_key"):  # v1.02: WLAN-Einstellungen gehoeren zur Firmware
             import hashlib  # v1.02
             sig = hashlib.sha256((sig + _state["firmware_key"]).encode("utf-8")).hexdigest()[:16]  # v1.02
