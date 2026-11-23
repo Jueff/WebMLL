@@ -44,20 +44,21 @@ Herkunft: Arbeitsstand „Identity Feature“ (Juergen Winkler, Commit 527d65f a
 | `headless/headless_dyn_config.py` | 1.03 | Format 7, `~MLLERR`, Protokoll im Log, Pico nach Seriennummer/Location |
 | `proggen/M42_Dyn_Config.py` | 1.06 | `After_Full_Flash`: Pico-Erkennung, Bereitschaftsprüfung mit Wiederholung |
 | `proggen/M08_ARDUINO.py` | 1.31 | Seriennummer/Location des Pico vor dem Hochladen |
-| `proggen/M06_Write_Header.py` | 1.17 | Status-LED-Kanal 7 (ESP32), `MLL_IDENTIFY`, Controller-Tabelle mit LED-Kanal, Pico `Mainboard_LED1..3` |
+| `proggen/M06_Write_Header.py` | 1.17 | Status-LED-Kanal 7 (ESP32), `MLL_IDENTIFY`, Controller-Tabelle mit LED-Kanal, Pico `Mainboard_LED1..3 SI_0` nur wenn nicht in der Tabelle |
 | `proggen/M07_COM_Port_New.py` | 1.05 | `~MLLIDENT` im Zeitgeber des Dialogs, Hinweistext |
 | `proggen/Select_COM_Port_Userform.py` | 1.00 (Kopf neu) | `~MLLIDENT 0/1` beim Wechsel und Schließen |
 | `pattgen/Select_COM_Port_UserForm.py` | 1.00 (Kopf neu) | dasselbe für den Patterngenerator |
 | `_web/web_form_comport.py` | 1.10 | dasselbe für die Web-Oberfläche |
 | `test_dyn_config.py` | 1.03 | Format 7 |
+| `test_identify.py` | 1.00 (neu) | `Write_Pico_Mainboard_LED_Defines` (9 Prüfungen) |
 | `csv/Languages.csv` | +1 Zeile | Hinweistext in sieben Sprachen |
 | `install/BETATEST_Checkliste.md` | 3.75 | Punkt 343 |
 
-**Geprüft:** `py_compile` aller Dateien; `test_dyn_config.py` 180 Prüfungen, 0 Fehler; `test_dyn_config_wlan.py` 18 Tests OK; `test_headless_contract.py` unverändert (1 bekannte Abweichung beim Verschieben, auch ohne diese Änderungen); PlatformIO-Build `esp32` mit der Kopfdatei des Branch (klassisch) sowie `pico` und `esp32` mit einer Kopfdatei mit `MLL_DYNAMIC_CONFIG`/`MLL_IDENTIFY`: erfolgreich.
+**Geprüft:** `py_compile` aller Dateien; `test_dyn_config.py` 180 Prüfungen, 0 Fehler; `test_identify.py` 9 Prüfungen, 0 Fehler; `test_dyn_config_wlan.py` 18 Tests OK; `test_headless_contract.py` unverändert (1 bekannte Abweichung beim Verschieben, auch ohne diese Änderungen); PlatformIO-Build `esp32` mit der Kopfdatei des Branch (klassisch) sowie `pico` und `esp32` mit einer Kopfdatei mit `MLL_DYNAMIC_CONFIG`/`MLL_IDENTIFY`: erfolgreich.
 
 **Nicht geprüft:** echte Hardware (Blinken, Wiederherstellen, Pico mit neuem COM Port nach dem Hochladen), die Dialoge im Browser und in Tk, Linux/macOS, der Hinweistext in der Oberfläche.
 
-**Offen (nicht geändert):** `M06` schreibt für den Pico `#define Mainboard_LED1 13` (12, 11). `Mainboard_LEDx` ist in `LEDs_AutoProg.ino` aber die **Nummer des Eingangskanals** (`Set_Mainboard_LEDs`: `MobaLedLib.Get_Input(Mainboard_LED1)`), nicht der Pin: Die LEDs zeigen dann die Kanäle 13, 12, 11. Außerdem werden `Mainboard_LED(1..3, …)`-Zeilen des Anwenders beim Pico nur noch als Kommentar geschrieben. Muss vor dem Zusammenführen entschieden werden.
+**Mainboard-LEDs beim Pico (behoben):** Der Arbeitsstand schrieb `#define Mainboard_LED1 13` (12, 11). `Mainboard_LEDx` ist aber die **Nummer des Eingangskanals** (`Set_Mainboard_LEDs`: `MobaLedLib.Get_Input(Mainboard_LED1)`), nicht der Pin: Die LEDs hätten die Kanäle 13, 12, 11 gezeigt. Außerdem standen die Zeilen im Block `//MLLDYN_BEGIN`…`END`, der nicht zur Firmware-Signatur zählt, und `Mainboard_LED(1..3, …)`-Zeilen des Anwenders wurden beim Pico auskommentiert. Jetzt schreibt `Write_Pico_Mainboard_LED_Defines` (nur Pico, nur mit getrennter Konfiguration) hinter den Präprozessorzeilen der Konfiguration `#define Mainboard_LEDn SI_0` (Eingangskanal immer 0: Pin ist Ausgang, LED aus), und zwar nur für die LEDs 1 bis 3, die die Tabelle nicht selbst definiert (auch nicht als `Mainboard_LED_D3/D4/D5`). Die Zeilen des Anwenders bleiben unverändert. Firmware-Build Pico geprüft: nur erzeugte Defines und gemischt (LED 1 aus der Tabelle, 2 und 3 erzeugt) ohne Warnung, die Gegenprobe mit doppelter Definition warnt „Mainboard_LED1 redefined“.
 
 ---
 

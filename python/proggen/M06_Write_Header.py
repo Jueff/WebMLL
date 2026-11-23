@@ -9,8 +9,8 @@
 # History of Change:
 #   1.17  2026-11-23  Identify (Juergen Winkler): ESP32: die drei Status LEDs (WS2811) sind das erste Pixel von LED Kanal 7; Add_Status_LED_Macro legt den Kanal mit ConstRGB an, wenn der
 #                     Anwender ihn nicht benutzt (Status_LED_Extra, Status_LED_Offset, NUM_LEDS). MLL_P_CONTROLLER_CONFIG mit LED-Kanal (Konfigurationsdatei Format 7). #define MLL_IDENTIFY
-#                     fuer ESP32 und Pico (Konfiguration getrennt). Pico: #define Mainboard_LED1..3 im Kopf, Mainboard_LED(1..3) aus der Tabelle werden als Kommentar geschrieben. Zeilen
-#                     mit '# v1.17'
+#                     fuer ESP32 und Pico (Konfiguration getrennt). Pico: Write_Pico_Mainboard_LED_Defines schreibt #define Mainboard_LED1..3 SI_0 (Pin ist Ausgang, LED aus) nur fuer die LEDs,
+#                     die die Tabelle nicht selbst definiert (keine Warnung 'redefined'). Zeilen mit '# v1.17'
 #   1.16  2026-11-22  Issue 30: Startmeldung der Lichtmaschine mit Datum TT.MM.JJ und Uhrzeit hh:mm unabhaengig von der Spracheinstellung des Rechners (US-Format 11.19.26)
 #   1.15  2026-11-22  Dynamische Optionen bis Write_Header_File_and_Upload_to_Arduino durchreichen (NameError behoben)
 #   1.14  2026-11-22  HeaderOnly kann dynamische Konfiguration fuer zentralen ESP32-Upload erzeugen
@@ -270,6 +270,21 @@ def Add_Status_LED_Macro():  # v1.17
         Cmd = M30.AddSpaceToLen('  ' + Cmd, 109) + ' /* Status LEDs (ESP32): yellow, white, blue = first 3 bytes of LED channel ' + str(Ch)  # v1.17
         ConfigTxt = ConfigTxt + M30.AddSpaceToLen(Cmd, 300) + ' */' + vbCrLf  # v1.17
     Status_LED_Offset = Start_LED_Channel(Ch)  # v1.17
+#-------------------------------------------------------  # v1.17
+def Write_Pico_Mainboard_LED_Defines(fp, Config_Txt):  # v1.17
+#-------------------------------------------------------  # v1.17
+    """Pico (Konfiguration getrennt, MLL_IDENTIFY): MLLIdentify.h laesst die drei LEDs der Hauptplatine (Pins LED1_PIN..LED3_PIN = 13, 12, 11) blinken
+    und setzt voraus, dass die Pins Ausgaenge sind. Das sind sie nur, wenn Mainboard_LED1..3 definiert ist (setup() in LEDs_AutoProg.ino).
+    Mainboard_LEDn ist die Nummer des Eingangskanals, dessen Zustand die LED zeigt (Set_Mainboard_LEDs), nicht der Pin: fehlende Defines werden
+    deshalb mit SI_0 (immer 0, LED aus) geschrieben. Definiert die Tabelle die LED selbst (Mainboard_LED(1, ...), auch als D3/D4/D5),
+    wird nichts geschrieben: sonst warnt der Compiler 'Mainboard_LED1 redefined'."""
+    import re  # v1.17
+    if M02a.Get_BoardTyp() != M02.HT_PICO:  # v1.17
+        return  # v1.17
+    for Nr, Alias in ((1, 'D3'), (2, 'D4'), (3, 'D5')):  # v1.17
+        if re.search(r'^\s*#\s*define\s+Mainboard_LED(' + str(Nr) + '|_' + Alias + r')\b', Config_Txt, re.MULTILINE):  # v1.17
+            continue  # v1.17: in der Tabelle definiert
+        VBFiles.writeText(fp, '#define Mainboard_LED' + str(Nr) + ' SI_0                       // Pico: mainboard LED ' + str(Nr) + ' is an output and off (blinks with ~MLLIDENT, MLLIdentify.h)', '\n')  # v1.17
 #-------------------------------------------------------
 def ExpandName(Variablename):
 #-------------------------------------------------------
@@ -529,14 +544,7 @@ def Proc_Special_Functions(Row, Cmd, LEDNr, ChannelBaseOffset, Channel):  # v1.0
             # 21.12.22 replace vbcr with vbcrlf
         if Replace_Sym_Pin_Name:
             Cmd = Do_Replace_Sym_Pin_Name(Cmd, PinOrNr)
-        # For Pico: Mainboard_LED1/2/3 are already defined at the top of the header file (MLLIdentify.h needs them).  # v1.17
-        # Don't generate duplicate #define inside the configuration array.  # v1.17
-        # PinOrNr '1', '2', '3' correspond to Mainboard_LED1/2/3  # v1.17
-        if M02a.Get_BoardTyp() == M02.HT_PICO and PinOrNr in ('1', '2', '3'):  # v1.17
-            # Convert to comment to avoid redefinition warning  # v1.17
-            Cmd = '// ' + Replace(Replace(Replace(Cmd, 'Mainboard_LED(', '#define Mainboard_LED'), ',', ' '), ')', '')  # v1.17
-        else:  # v1.17
-            Cmd = Replace(Replace(Replace(Cmd, 'Mainboard_LED(', '#define Mainboard_LED'), ',', ' '), ')', '')  # v1.17
+        Cmd = Replace(Replace(Replace(Cmd, 'Mainboard_LED(', '#define Mainboard_LED'), ',', ' '), ')', '')
     if Left(Cmd, Len('DayAndNightTimer(')) == 'DayAndNightTimer(':
         if not Activate_DayAndNightTimer(Cmd):
             return _fn_return_value, Cmd
@@ -1663,10 +1671,6 @@ def Write_Header_File_and_Upload_to_Arduino(CreateFilesOnly=False, LEDsInUse=Non
         VBFiles.writeText(fp, '#define MLL_P_CONTROLLER_COUNT ' + str(len(Controllers)), '\n')  # v1.12
         # VBFiles.writeText(fp, '#define MLL_P_CONTROLLER_CONFIG ' + ', '.join(str(Pin) + ',' + str(Off) + ',' + str(Cnt) for _Ch, Pin, Off, Cnt in Controllers) + '   // Pin,LEDOffset,LEDCount per controller', '\n')  # v1.12  # v1.17 (entfallen)
         VBFiles.writeText(fp, '#define MLL_P_CONTROLLER_CONFIG ' + ', '.join(str(Pin) + ',' + str(Ch) + ',' + str(Off) + ',' + str(Cnt) for Ch, Pin, Off, Cnt in Controllers) + '   // Pin,LEDChannel,LEDOffset,LEDCount per controller', '\n')  # v1.17
-        if M02a.Get_BoardTyp() == M02.HT_PICO:  # v1.17: Pico: Mainboard LEDs sind auf physischen Pins (MLLIdentify.h: die Pins sind dann Ausgaenge)
-            VBFiles.writeText(fp, '#define Mainboard_LED1 13   // Left   Yellow LED on the mainboard (Pico LED1_PIN)', '\n')  # v1.17
-            VBFiles.writeText(fp, '#define Mainboard_LED2 12   // Middle White  LED on the mainboard (Pico LED2_PIN)', '\n')  # v1.17
-            VBFiles.writeText(fp, '#define Mainboard_LED3 11   // Right  Blue   LED on the mainboard (Pico LED3_PIN)', '\n')  # v1.17
         VBFiles.writeText(fp, '#ifdef CONFIG_ONLY', '\n')  # v1.12
         VBFiles.writeText(fp, '#define NUM_LEDS ' + str(NumLeds) + '                      // Number of LEDs: only used to check the LED numbers when the configuration is compiled', '\n')  # v1.12
         VBFiles.writeText(fp, '#endif', '\n')  # v1.12
@@ -1857,6 +1861,7 @@ def Write_Header_File_and_Upload_to_Arduino(CreateFilesOnly=False, LEDsInUse=Non
         for cfgline in ConfigTxt.splitlines():  # v1.07
             if re.match(r'\s*#\s*(if|ifdef|ifndef|elif|else|endif|define|undef|include)\b', cfgline):  # v1.07
                 VBFiles.writeText(fp, cfgline, '\n')  # v1.07
+        Write_Pico_Mainboard_LED_Defines(fp, ConfigTxt)  # v1.17
         write_esp32_options()  # v1.07
         VBFiles.writeText(fp, '', '\n')  # v1.07
         VBFiles.writeText(fp, DC.MARK_BEGIN, '\n')  # v1.07
