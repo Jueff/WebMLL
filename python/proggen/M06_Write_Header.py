@@ -1,12 +1,20 @@
-# Datei-Version: 2.00 (2026-11-23) - M06_Write_Header.py
+# Datei-Version: 1.16 (2026-11-22) - M06_Write_Header.py
 # ----------------------------------------------------------------------------------------------
 # Name:           M06_Write_Header.py
 # Path:           proggen/M06_Write_Header.py
-# Version:        2.00
+# Version:        1.20
 # Last Update:    2026-11-23
 # Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
 # History of Change:
+#   1.20  2026-11-23  Identity Feature: Vereinheitlichtes Admin-Protokoll '~' (MLLAdminCommunication.h), vereint MLLCFG und MLLIDENT; ESP32 Status LEDs als WS2811-Bytes auf Kanal 7; Pico Mainboard_LED1/2/3 Defines; LED-Zustand Save/Restore bei Identifikation; keine pinMode-Änderung; MLL_ESP32_STATUS_LEDS Define
+#   1.19  2026-11-22  Pico: Mainboard_LED1/2/3 Defines automatisch generieren (fuer mllIdentKeepOutput in MLLIdentify.h)
+#   1.18  2026-11-22  MLL_P_CONTROLLER_CONFIG: je Controller Pin, LED Kanal, erste LED, LED-Anzahl (Konfigurationsdatei Format 6; die Firmware findet die Status LEDs ueber LED Kanal 7)
+#   1.17  2026-11-22  Add_Status_LED_Macro (ersetzt Reserve_Status_LED): Benutzt der Anwender LED Kanal 7 nicht, wird das Makro ConstRGB(#LED, #InCh, 0, 0, 0, 0, 0, 0) auf Kanal 7 verarbeitet; der Kanal entsteht dadurch
+
+#   1.16  2026-11-22  Issue 30: Startmeldung der Lichtmaschine mit Datum TT.MM.JJ und Uhrzeit hh:mm unabhaengig von der Spracheinstellung des Rechners (US-Format 11.19.26)
+#   1.15  2026-11-22  Dynamische Optionen bis Write_Header_File_and_Upload_to_Arduino durchreichen (NameError behoben)
+#   1.14  2026-11-22  HeaderOnly kann dynamische Konfiguration fuer zentralen ESP32-Upload erzeugen
 #   1.01  2026-10-18  LED Kanal von Zeilen ohne Eintrag: Previous_LEDChannel als Modulvariable von M06 (global in Create_Header_Entry und ProcessSheet), Bedingung auf den Zellentext statt Trim(Val()) (nie leer); LED_to_Var in eingebundenen Blaettern bekam Kanal 0 und dessen Offset (LED2Var_Tab stimmte nicht mit Excel); davor Original-Port, nicht erfasst
 #   1.02  2026-10-18  Create_HeaderFile: vor dem Erzeugen alle Blaetter neu rechnen (Update_All_Start_LedNr), das aktive Blatt danach wieder auswaehlen
 #   1.03  2026-10-21  Version K des Excel-Programms: Makros Name_LED_Number und Name_LED_Offset (Proc_Special_Functions), Variable #ChannelOffset (Generate_Config_Line mit ChannelBaseOffset), Adresse 0 (Addr >= 1 in Create_Header_Entry, Addr >= 0 in ProcessLine), keine Pruefung des Boards bei nur Simulator, START_MSG ohne Test_Suffix, inch_t in HandleValue_t
@@ -1623,7 +1631,9 @@ def Write_Header_File_and_Upload_to_Arduino(CreateFilesOnly=False, LEDsInUse=Non
     VBFiles.writeText(fp, '', '\n')
     # 30.03.25 Juergen/Harold: add board type to version information
     # VBFiles.writeText(fp, '#define START_MSG "LEDs_AutoProg Ver 3: ' + M02a.Get_BoardTyp() + " " + M37.Get_Lib_Version("MobaLedLib") + M02.Test_Suffix + " " + P01.Format(P01.Date_str(), 'dd.mm.yy') + ' ' + P01.Format(P01.Time_str(), 'hh:mm') + '"', '\n')  # v1.03 (entfallen)
-    Start_Msg = 'LEDs_AutoProg Ver 3: ' + M02a.Get_BoardTyp() + " " + M37.Get_Lib_Version("MobaLedLib") + " " + P01.Format(P01.Date_str(), 'dd.mm.yy') + ' ' + P01.Format(P01.Time_str(), 'hh:mm')  # v1.12
+    # Start_Msg = 'LEDs_AutoProg Ver 3: ' + M02a.Get_BoardTyp() + " " + M37.Get_Lib_Version("MobaLedLib") + " " + P01.Format(P01.Date_str(), 'dd.mm.yy') + ' ' + P01.Format(P01.Time_str(), 'hh:mm')  # v1.12  # v1.16 (entfallen: Date_str liefert je nach Rechner das US-Format)
+    import datetime as _dt  # v1.16
+    Start_Msg = 'LEDs_AutoProg Ver 3: ' + M02a.Get_BoardTyp() + " " + M37.Get_Lib_Version("MobaLedLib") + " " + _dt.datetime.now().strftime("%d.%m.%y %H:%M")  # v1.16: TT.MM.JJ hh:mm, unabhaengig von der Sprache des Rechners
     if not DynMode:  # v1.12: ESP32/Pico mit Konfigurationsdatei: der Text steht in der Konfigurationsdatei (siehe unten)
         VBFiles.writeText(fp, '#define START_MSG "' + Start_Msg + '"', '\n')  # v1.03
     # The version could be read out in a future version of this tool

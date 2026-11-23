@@ -1,9 +1,35 @@
-Datei-Version: 1.58 (2026-11-22) - HOC_Anwender.md
-Stand: webMobaLedLib 4.74
+Datei-Version: 1.63 (2026-11-23) - HOC_Anwender.md
+Stand: webMobaLedLib 4.79
 
 # webMobaLedLib: Änderungen (Kurzfassung)
 
 Gilt ab Version 1.39. Neueste Version oben.
+
+## Version 4.79 (2026-11-23)
+
+Neue Funktionen:
+- ESP32 über WLAN: Der ESP32 kann wahlweise per **DHCP** (IP-Adresse vom Router) oder mit einer **festen IP-Adresse** ins Netz. Im Reiter „WLAN (OTA)“ gibt es dafür die Auswahl „DHCP“ oder „Statische IP-Adresse“ mit den Feldern IP-Adresse, Gateway, Subnetzmaske und DNS-Server. Das hilft bei Netzen mit festen Adressen, Pi-hole oder MAC-Filter (Anregung aus dem Forum). Die Eingaben werden geprüft (gültige Adressen, Gateway im selben Netz). Nach einer Umstellung die Firmware einmal neu übertragen („ESP32-Setup übertragen“) und bei „Adresse für WebMLL“ die neue IP-Adresse eintragen. Nicht enthalten: verstecktes WLAN und mehrere WLANs.
+
+## Version 4.78 (2026-11-22)
+
+Korrekturen:
+- Simulator: Das Fenster erschien nur in der Taskleiste, weil als gespeicherte Lage −32000 eingetragen war (so meldet Windows ein minimiertes Fenster). Diese Lage wird nicht mehr gespeichert, und eine ungültige gespeicherte Lage wird beim Öffnen auf 800/400 zurückgesetzt, auch in den Einstellungen (Issue 45).
+
+## Version 4.77 (2026-11-22)
+
+Korrekturen:
+- Startmeldung der Lichtmaschine: Das Datum steht wieder als TT.MM.JJ (zum Beispiel 19.11.26 16:09), unabhängig von der Spracheinstellung des Rechners (vorher US-Format 11.19.26; Issue 30).
+- Dialoge und Menüs liegen fest über der Seite. Beim Anwender mit Mac erschienen sie unterhalb der Tabelle (Issue 34, Ursache noch nicht sicher geklärt; Rückmeldung des Anwenders steht aus).
+
+## Version 4.76 (2026-11-22)
+
+Korrekturen:
+- Auswahl des COM Ports: Wechselt man über „Andere Typen“ das Board (zum Beispiel von Nano auf ESP32), ändern sich jetzt auch Bild, Beschreibungstext und der rote Hinweis (Issue 37).
+
+## Version 4.75 (2026-11-22)
+
+Neue Funktionen:
+- Dunkles Farbschema mit helleren, deutlicher abgestuften Flächen für Dialoge, Eingabefelder und die Tabelle bei „Dunkel mit Tabelle“ (Beitrag von moosbewohner, Pull Request 55). Feste Zellfarben bleiben erhalten.
 
 ## Version 4.74 (2026-11-22)
 

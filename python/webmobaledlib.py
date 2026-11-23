@@ -1,9 +1,9 @@
-# Datei-Version: 4.74 (2026-11-22) - webmobaledlib.py
+# Datei-Version: 4.79 (2026-11-23) - webmobaledlib.py
 # ----------------------------------------------------------------------------------------------
 # Name:           webmobaledlib.py
 # Path:           webmobaledlib.py
-# Version:        4.74
-# Last Update:    2026-11-22
+# Version:        4.79
+# Last Update:    2026-11-23
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
@@ -320,6 +320,11 @@
 #   4.72  2026-11-22  Dialog Datei bereit: Knopf Speichern unter ... wird ausgeblendet, wenn der Browser keinen Speichern-Dialog bietet (kein https/localhost oder kein Edge/Chrome), mit Hinweis
 #   4.73  2026-11-22  Anwender-Wunsch: Meldung des Programms und Verbindungsstatus in einer eigenen Zeile unter der Kopfzeile (die Knoepfe Mit Lichtmaschine verbinden, Vollbild, Beenden bleiben stehen); Tabelle faerben: Farbfelder zeigen die Farbe (web_dialogs 1.12); Textfehler: Sound-Datei, Programm Einstellungen, Standardschrift
 #   4.74  2026-11-22  Kopfzeile: Verbindungsstatus wieder direkt neben dem Knopf Mit Lichtmaschine verbinden, Meldung des Programms in der Menuezeile neben Zwischengespeichert (keine eigene Zeile mehr)
+#   4.75  2026-11-22  Pull Request 55 (moosbewohner): dunkles Farbschema mit helleren, abgestuften Flaechen (web_layout 1.21, nur CSS)
+#   4.76  2026-11-22  Issue 37: Port-Auswahl: nach dem Wechsel des Boards ueber Andere Typen aendern sich Bild, Text und roter Hinweis (web_form_comport 1.09)
+#   4.77  2026-11-22  Issue 34: Dialoge und Menues fest am Fenster (CSS); Issue 30: Startmeldung der Lichtmaschine mit Datum TT.MM.JJ (M06_Write_Header 1.16)
+#   4.79  2026-11-23  ESP32: wahlweise DHCP oder statische IP-Adresse (Reiter OTA: IP-Adresse, Gateway, Subnetzmaske, DNS); Firmware muss einmal neu uebertragen werden (web_esp32_ota 1.07, headless_esp32_ota 1.12, M08_ARDUINO 1.30, ESP32Extensions.h, Web_Languages.csv)
+#   4.78  2026-11-22  Issue 45: Simulator: Fensterlage -32000 (minimiertes Fenster) wird nicht mehr gespeichert, ungueltige Lage wird beim Oeffnen zurueckgesetzt (M39_Simulator 1.12)
 #   4.40  2026-11-20  Pull Request 44 von Juergen (Issues 41, 42): Makrotext bei direkter Eingabe pruefen (Fehler korrigieren oder wiederherstellen), bei Makrowechsel Name und Symbol aktualisieren, danach LEDs, InCnt, LocInCh, Adressen, Testtasten und Start-LEDs neu setzen (headless_macro_edit 1.01); Uebertragungsfenster schliesst sich automatisch (web_log 1.11)
 #   4.39  2026-11-20  Issue 48: Fehlerpruefung beim Erzeugen der Kopfdatei (zum Beispiel Adresse mit zwei verschiedenen Typen) wirkte nicht, das Kompilieren startete trotzdem (M06_Write_Header 1.13)
 #   4.38  2026-11-20  Tastenkuerzel ueberall auf der Seite (Issue 49, Juergen): Strg+Z Rueckgaengig, Strg+Y / Strg+Umschalt+Z Wiederholen, neu Strg+S = dauerhaft speichern in die Hauptdatei (Menue Datei: Speichern); nicht in Eingabefeldern und Dialogen
@@ -544,6 +549,11 @@ REQUIRED_FILES = {  # v1.75
     "_web/web_serial.py": "1.13", "_web/web_dialogs.py": "1.11", "_web/web_params.py": "1.17", "_web/web_form_options.py": "1.46",  # v4.50  # v4.51  # v4.52  # v4.53  # v4.54
     "proggen/M08_ARDUINO.py": "1.29",  # v4.43  # v4.71
     "_web/web_dialogs.py": "1.12",  # v4.73
+    "_web/web_layout.py": "1.21",  # v4.75
+    "_web/web_form_comport.py": "1.09",  # v4.76
+    "proggen/M06_Write_Header.py": "1.16",  # v4.77
+    "proggen/M39_Simulator.py": "1.12",  # v4.78
+    "proggen/M08_ARDUINO.py": "1.30", "headless/headless_esp32_ota.py": "1.12", "_web/web_esp32_ota.py": "1.07",  # v4.79
 }  # v1.75
 FILE_PROBLEMS = []                                      # Zeilen der Abweichungen, gefuellt in main()  # v1.75
 
@@ -1398,6 +1408,9 @@ body.body--dark .text-grey, body.body--dark .text-grey-5, body.body--dark .text-
 body.body--dark .q-field__label, body.body--dark .q-field__hint { color: #c4ccd4; }
 /* Seite fuellt genau das Fenster: Kopfzeile, Menue, Reiter und Werkzeugleiste behalten ihre Groesse, die Tabelle nimmt den Rest */
 .q-page { display: flex; }
+/* v4.77 (Issue 34): Dialoge und Menues muessen immer ueber der Seite liegen (fest am Fenster). Mit dem vollstaendigen Quasar-Stylesheet aendert das nichts; fehlt es (Mac, Cache), landeten sie unter der Tabelle */
+.q-dialog.fullscreen { position: fixed !important; top: 0; left: 0; right: 0; bottom: 0; z-index: 6000; }
+.q-menu, .q-tooltip { position: fixed !important; }
 .nicegui-content { width: 100%; height: 100vh; flex: 1 1 auto; flex-wrap: nowrap; overflow: auto; }
 .main-tabs { border-bottom: 1px solid #c9c9c9; margin-bottom: 4px; }
 .nicegui-content .mll-header { row-gap: 0 !important; }                 /* v4.19: !important, damit nicht der Standardabstand 16 px von NiceGUI gewinnt */
@@ -1492,7 +1505,7 @@ def font_scales(ctrl) -> dict:
 # VERSION = "4.47 (2026-11-21)"  # v4.48 (entfallen)
 # VERSION = "4.48 (2026-11-21)"  # v4.49 (entfallen)
 # VERSION = "4.49 (2026-11-21)"  # v4.50 (entfallen)
-VERSION = "4.74 (2026-11-22)"  # v3.64  # v4.26  # v4.27  # v4.28  # v4.29  # v4.30  # v4.31  # v4.32  # v4.33  # v4.34  # v4.35  # v4.36  # v4.37  # v4.38  # v4.39  # v4.40  # v4.41  # v4.42  # v4.43  # v4.44  # v4.45  # v4.46  # v4.47  # v4.48  # v4.49  # v4.50  # v4.51  # v4.52  # v4.53  # v4.54  # v4.55  # v4.56  # v4.57  # v4.58  # v4.59  # v4.60  # v4.61  # v4.62  # v4.63  # v4.64  # v4.65  # v4.66  # v4.67  # v4.68  # v4.69  # v4.70  # v4.71  # v4.72  # v4.73  # v4.74
+VERSION = "4.79 (2026-11-23)"  # v3.64  # v4.26  # v4.27  # v4.28  # v4.29  # v4.30  # v4.31  # v4.32  # v4.33  # v4.34  # v4.35  # v4.36  # v4.37  # v4.38  # v4.39  # v4.40  # v4.41  # v4.42  # v4.43  # v4.44  # v4.45  # v4.46  # v4.47  # v4.48  # v4.49  # v4.50  # v4.51  # v4.52  # v4.53  # v4.54  # v4.55  # v4.56  # v4.57  # v4.58  # v4.59  # v4.60  # v4.61  # v4.62  # v4.63  # v4.64  # v4.65  # v4.66  # v4.67  # v4.68  # v4.69  # v4.70  # v4.71  # v4.72  # v4.73  # v4.74  # v4.75  # v4.76  # v4.77  # v4.78  # v4.79
 # VERSION = "4.09 (2026-11-19)"  # v3.64 (entfallen)
 # VERSION = "4.08 (2026-11-19)"  # v3.64 (entfallen)
 # VERSION = "4.07 (2026-11-19)"  # v3.64 (entfallen)
@@ -6693,7 +6706,7 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
             ota_arduino.Compile_and_Upload_ESP32_Setup(  # v3.94
                 ctrl, board, port, host=host, upload_password=upload_password,  # v3.94
                 password=password, hostname=settings["hostname"], ota=settings["ota"],  # v3.94
-                firewall_hint=web_esp32_ota.HINT_FIREWALL,  # v3.94
+                firewall_hint=web_esp32_ota.HINT_FIREWALL, network_settings=settings,  # v3.94  # v4.79
             )  # v3.94
 
         await run_command(transfer, "ESP32-Setup übertragen")()

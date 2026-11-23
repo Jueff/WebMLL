@@ -1,5 +1,5 @@
-Datei-Version: 1.56 (2026-11-21) - HOC_intern.md
-Stand: webMobaLedLib 4.74
+Datei-Version: 1.57 (2026-11-23) - HOC_intern.md
+Stand: webMobaLedLib 4.79
 
 # webMobaLedLib: History of Change (intern, ausführlich)
 
@@ -24,6 +24,59 @@ Release-Stand 2.12 auf Wunsch des Entwicklers („Release bauen“). **Neu im Ab
 | `archiv/` | frühere Release-Hinweise, Versionslisten und ZIP (nichts gelöscht) |
 
 **Geprüft:** Dateipaket: `testzip` in Ordnung, alle 113 Dateien gleich dem Ordner `headless`, keine `__pycache__`, alle `.py` kompilieren, Versionsprüfung „alles passt“ (50 Einträge), 11 Dateien ausführbar (`.sh`, `.command`). **Nachbau des Entwickler-Ablaufs mit seinem echten Paket (1678 Dateien, Stand 2.05):** meine 113 Dateien darübergelegt, Prüfliste, ZIP gepackt, `release_tools check --previous <sein ZIP>`: **in Ordnung** (Version 2.12, 1678 Dateien, 6 neue, 0 fehlende, ZIP 16,6 MB). Alle 15 Prüfreihen laufen (17, 26, 15, 70, 28, 19, 43, 26, 16, 27, 8, 8, 8, 5, 9 Prüfungen). **Nicht geprüft:** `zip_erstellen.bat` und die Reparaturskripte unter Windows, ein abgebrochenes Update unter Windows, das Verhalten mit Acronis, der Download von GitHub.
+
+## 4.79 (2026-11-23), ESP32: DHCP oder statische IP-Adresse
+
+Anregung aus dem Forum (Netz mit festen Adressen, Pi-hole, MAC-Filter). Neue Einstellungen je Blatt (Attribut `esp32_wlan`, mit der Arbeitsmappe gesichert): `ip_mode` (`dhcp` oder `static`), `ip`, `gateway`, `mask`, `dns1`, `dns2`. `validate_network` prüft IPv4-Adressen, Maske (Präfix 8 bis 30), IP nicht Netz-/Broadcast-Adresse und nicht Gateway, Gateway im selben Netz; leeres DNS 1 = Gateway, leeres DNS 2 = DNS 1. `prepare_ota_sketch` setzt bei statischer IP `MLL_WIFI_STATIC_IP`, `MLL_WIFI_IP`, `_GATEWAY`, `_MASK`, `_DNS1`, `_DNS2` vor den Sketch; `ESP32Extensions.h` ruft vor `WiFi.begin()` `WiFi.config(ip, gateway, mask, dns1, dns2)` auf. Die Netzwerkwerte gehören bei statischer IP zum Firmware-Schlüssel (`DynFirmwareKey`), die Firmware wird also einmal vollständig neu übertragen; bei DHCP bleibt der Schlüssel unverändert (keine unnötige Neuübertragung). Die minimale USB-Firmware wird immer mit DHCP gebaut (die Einrichtung des WLAN über USB meldet die DHCP-Adresse). Ist „Adresse für WebMLL“ leer, wird die feste IP als Ziel eingetragen. Nicht geprüft auf Hardware. Nicht enthalten: verstecktes WLAN, mehrere WLANs, Anzeige der MAC-Adresse.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `headless/headless_esp32_ota.py` | 1.12 | Einstellungen, `validate_network`, `network_of`, Defines im Sketch |
+| `proggen/M08_ARDUINO.py` | 1.30 | `network_settings`, Firmware-Schlüssel |
+| `_web/web_esp32_ota.py` | 1.07 | Auswahl DHCP/Statisch, Felder, Speichern |
+| `LEDs_AutoProg/ESP32Extensions.h` | (4.79) | `WiFi.config` bei `MLL_WIFI_STATIC_IP` |
+| `csv/Web_Languages.csv` | | 15 neue Texte |
+| `webmobaledlib.py` | 4.79 | Version, Aufruf, REQUIRED_FILES |
+
+---
+
+## 4.78 (2026-11-22), Issue 45: Simulatorfenster außerhalb des Bildschirms
+
+Log des Anwenders: `ShowLEDWindow 128 4 24 0 -16383 -16383 True`. `__StorePosition` (beim Öffnen und Schließen) speicherte `GetLEDWindowRect`; für ein minimiertes Fenster liefert Windows −32000/−32000, `Get_Num_Config_Var_Range` begrenzte das auf −16383, das Fenster lag außerhalb. Jetzt: `__StorePosition` speichert Lagen ≤ −10000 oder ≥ 16000 nicht; `OpenSimulator` ersetzt eine solche gespeicherte Lage durch 800/400 und schreibt sie zurück. Hinweis zum Issue: Die Spalte „Autostart“ gibt es seit 3.59 nicht mehr (Knopf „Setup simulieren“, Option „Simulator anzeigen“).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `proggen/M39_Simulator.py` | 1.12 | Fensterlage prüfen |
+| `webmobaledlib.py` | 4.78 | Version, REQUIRED_FILES |
+
+## 4.77 (2026-11-22), Issue 34 und Issue 30
+
+Issue 30: `P01.Date_str()` liefert `strftime("%x")` (abhängig vom Gebietsschema, im C-Gebietsschema 11/19/26); `Format(..., "dd.mm.yy")` schneidet nur Zeichen ab, daraus wurde 11.19.26. Die Startmeldung (`Start_Msg` in `Create_HeaderFile`) nimmt jetzt `datetime.now().strftime("%d.%m.%y %H:%M")`. Die Kommentarzeile „File creation“ im Header bleibt unverändert. `Date_str` selbst bleibt unverändert (wird auch von Speichern und Pico-Konfiguration benutzt).
+
+Issue 34: Ursache nicht gefunden (keine CSS-Regel von uns ändert `.q-dialog` oder `.q-menu`). Absicherung im CSS: `.q-dialog.fullscreen` und `.q-menu` mit `position: fixed !important`; ohne Wirkung, wenn das Quasar-Stylesheet vollständig geladen ist. Rückmeldung des Anwenders (Browser, Cache, Version) abwarten.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `proggen/M06_Write_Header.py` | 1.16 | Startmeldung TT.MM.JJ |
+| `webmobaledlib.py` | 4.77 | CSS Dialoge/Menüs, Version |
+
+## 4.76 (2026-11-22), Issue 37: Boardwechsel in der Port-Auswahl
+
+Ursache: Bild, Beschreibungstext und roter Hinweis wurden nur beim Öffnen des Dialogs gesetzt (aus den Argumenten von `ShowDialog`); der Wechsel über „Andere Typen“ änderte nur Port-Liste und Build-Optionen. Jetzt legt `_comport_async` Text, roten Hinweis und Bild immer an, und nach dem Wechsel setzt `_board_view()` sie neu (gleiche Regeln wie `M07_COM_Port_New.Show_USB_Port_Dialog`: ESP32, Pico, Pico-WLAN, sonst LED/Nano; blinkender Hinweis nur beim Nano). Gilt nur für den Dialog der Lichtmaschine (`main_col`), nicht für DCC- und Tiny-Anschlüsse. Der Boardname im Text kommt aus `M08.GetArduName()`.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_form_comport.py` | 1.09 | Anzeige nach dem Boardwechsel |
+| `webmobaledlib.py` | 4.76 | Version, REQUIRED_FILES |
+
+## 4.75 (2026-11-22), Pull Request 55: helleres dunkles Farbschema
+
+Pull Request 55 (moosbewohner): nur CSS in `_web/web_layout.py` (1.21) unter `body.body--dark` und `html.mll-grid-dark`: hellere Grundflächen, Dialoge und Menüs, abgestufte Tabellenfarben bei „Dunkel mit Tabelle“. Übernommen mit `patch` (nur diese Datei). Die Dokumenttexte des PR (Version 4.67/4.68) habe ich nicht übernommen und selbst neu geschrieben.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_layout.py` | 1.21 | CSS dunkles Farbschema (PR 55) |
+| `webmobaledlib.py` | 4.75 | Version, REQUIRED_FILES |
 
 ## 4.74 (2026-11-22), Statuszeile korrigiert
 
