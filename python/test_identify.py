@@ -8,10 +8,10 @@
 # Licence:        LGPL V2.1
 # History of Change:
 #   1.00  2026-11-23  Neu: Test von M06.Write_Pico_Mainboard_LED_Defines (Identify, Pico): fehlende Mainboard_LED1..3 werden als SI_0 geschrieben,
-#                     von der Tabelle definierte (auch D3/D4/D5) nicht; andere Boards schreiben nichts
+#                     von der Tabelle definierte (auch D3/D4/D5) nicht; andere Boards schreiben nichts; Proc_Special_Functions schreibt #undef vor jedes Mainboard_LEDn der Tabelle
 # ----------------------------------------------------------------------------------------------
 """Aufruf: python test_identify.py
-Die Funktion wird mit ast aus proggen/M06_Write_Header.py geholt (M06 selbst braucht die ganze Programmumgebung) und mit Ersatzobjekten ausgefuehrt.
+Die Funktionen werden mit ast aus proggen/M06_Write_Header.py geholt (M06 selbst braucht die ganze Programmumgebung) und mit Ersatzobjekten ausgefuehrt.
 Nicht geprueft: Firmware auf echter Hardware, der Rest von M06."""
 import ast
 import os
@@ -60,13 +60,13 @@ def run(board, config_txt):
 
 
 def defined(lines):
-    return [l.split()[1] for l in lines]
+    return [l.split()[1] for l in lines if l.startswith("#define")]
 
 
 def test():
     out = run("PICO", "  RGB_Heartbeat(#LED)\r\n")
     check("Pico ohne eigene Defines: Mainboard_LED1..3 werden geschrieben", defined(out) == ["Mainboard_LED1", "Mainboard_LED2", "Mainboard_LED3"], out)
-    check("Wert ist SI_0 (Eingangskanal immer 0), nicht der Pin", all(l.split()[2] == "SI_0" for l in out), out)
+    check("Wert ist SI_0 (Eingangskanal immer 0), nicht der Pin", all(l.split()[2] == "SI_0" for l in out if l.startswith("#define")), out)
 
     cfg = "  // Mainboard_LED(1, SI_1)\r\n  #define Mainboard_LED1 SI_1                                     /* ... */\r\n  #define Mainboard_LED3 INCH_DCC_5_RED\r\n"
     out = run("PICO", cfg)
@@ -87,8 +87,38 @@ def test():
     for board in ("ESP32", "NANO"):
         check("%s: nichts schreiben" % board, run(board, "") == [])
 
+    out = run("PICO", "")
+    check("Pico: jede erzeugte Zeile steht in #ifndef ... #endif", out[0::3] == ["#ifndef Mainboard_LED1", "#ifndef Mainboard_LED2", "#ifndef Mainboard_LED3"]
+          and out[2::3] == ["#endif"] * 3, out)
+
+
+def proc_special(cmd):
+    """Echte Proc_Special_Functions und Do_Replace_Sym_Pin_Name aus M06 mit Ersatzobjekten."""
+    import vb2py.vbfunctions as vbf
+    ns = dict(vars(vbf))
+    m02 = types.SimpleNamespace(MB_LED_NR_STR='D2 D3 D4 D5 A3 A2 A1 D7 D8 D9 D10 D11 D12 D13 A4 A5 A0', MB_LED_PIN_NR='0  1  2  3  4  5  6  7  8  9  10  11  12  13  14 15 16',
+                                SF_LED_TO_VAR='LED_to_Var(', SF_SERIAL_SOUND_PIN='SOUND_CHANNEL_DEFINITON(', SF_NAME_LED_NUMBER='Name_LED_Number', SF_NAME_LED_OFFSET='Name_LED_Offset')
+    ns.update({"M02": m02, "M06SW": types.SimpleNamespace(PIN_A3_Is_Used=lambda: False)})
+    exec(load_function("Do_Replace_Sym_Pin_Name"), ns)
+    exec(load_function("Proc_Special_Functions"), ns)
+    return ns["Proc_Special_Functions"](5, cmd, 0, 0, 0)
+
+
+def test_undef():
+    ok, cmd = proc_special("Mainboard_LED(1, SI_1)")
+    lines = [l.strip() for l in cmd.replace("\r\n", "\n").split("\n")]
+    check("Tabelle Mainboard_LED(1, ...): #undef vor dem #define", ok and lines[0].startswith("#undef  Mainboard_LED1 ") and lines[1].split()[:3] == ["#define", "Mainboard_LED1", "SI_1"], cmd)
+    ok, cmd = proc_special("Mainboard_LED(D3, INCH_DCC_1_RED)")
+    lines = [l.strip() for l in cmd.replace("\r\n", "\n").split("\n")]
+    check("Tabelle Mainboard_LED(D3, ...): D3 wird LED 1, #undef Mainboard_LED1", ok and lines[0].startswith("#undef  Mainboard_LED1 ") and lines[1].split()[:3] == ["#define", "Mainboard_LED1", "INCH_DCC_1_RED"], cmd)
+    out = run("PICO", "  " + cmd + "  /* Excel row 5 */\r\n")
+    check("Pico: Zeile mit #undef zaehlt als in der Tabelle definiert", defined(out) ==["Mainboard_LED2", "Mainboard_LED3"], out)
+    ok, cmd = proc_special("Mainboard_LED(13, SI_1)")
+    check("LED 13: Heartbeat-Zeilen bleiben, #undef Mainboard_LED13 davor", ok and cmd.startswith("#undef  Mainboard_LED13 ") and "LED_HEARTBEAT_PIN A3" in cmd, cmd)
+
 
 if __name__ == "__main__":
     test()
+    test_undef()
     print("\n%d Pruefungen, %d Fehler" % (checks, failures))
     sys.exit(1 if failures else 0)

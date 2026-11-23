@@ -10,7 +10,8 @@
 #   1.17  2026-11-23  Identify (Juergen Winkler): ESP32: die drei Status LEDs (WS2811) sind das erste Pixel von LED Kanal 7; Add_Status_LED_Macro legt den Kanal mit ConstRGB an, wenn der
 #                     Anwender ihn nicht benutzt (Status_LED_Extra, Status_LED_Offset, NUM_LEDS). MLL_P_CONTROLLER_CONFIG mit LED-Kanal (Konfigurationsdatei Format 7). #define MLL_IDENTIFY
 #                     fuer ESP32 und Pico (Konfiguration getrennt). Pico: Write_Pico_Mainboard_LED_Defines schreibt #define Mainboard_LED1..3 SI_0 (Pin ist Ausgang, LED aus) nur fuer die LEDs,
-#                     die die Tabelle nicht selbst definiert (keine Warnung 'redefined'). Zeilen mit '# v1.17'
+#                     die die Tabelle nicht selbst definiert (keine Warnung 'redefined', zusaetzlich #ifndef); vor jedem #define Mainboard_LEDn der Tabelle steht #undef (eine mehrfach benutzte
+#                     LED gibt keine Warnung). Zeilen mit '# v1.17'
 #   1.16  2026-11-22  Issue 30: Startmeldung der Lichtmaschine mit Datum TT.MM.JJ und Uhrzeit hh:mm unabhaengig von der Spracheinstellung des Rechners (US-Format 11.19.26)
 #   1.15  2026-11-22  Dynamische Optionen bis Write_Header_File_and_Upload_to_Arduino durchreichen (NameError behoben)
 #   1.14  2026-11-22  HeaderOnly kann dynamische Konfiguration fuer zentralen ESP32-Upload erzeugen
@@ -277,14 +278,16 @@ def Write_Pico_Mainboard_LED_Defines(fp, Config_Txt):  # v1.17
     und setzt voraus, dass die Pins Ausgaenge sind. Das sind sie nur, wenn Mainboard_LED1..3 definiert ist (setup() in LEDs_AutoProg.ino).
     Mainboard_LEDn ist die Nummer des Eingangskanals, dessen Zustand die LED zeigt (Set_Mainboard_LEDs), nicht der Pin: fehlende Defines werden
     deshalb mit SI_0 (immer 0, LED aus) geschrieben. Definiert die Tabelle die LED selbst (Mainboard_LED(1, ...), auch als D3/D4/D5),
-    wird nichts geschrieben: sonst warnt der Compiler 'Mainboard_LED1 redefined'."""
+    wird nichts geschrieben: sonst warnt der Compiler 'Mainboard_LED1 redefined'. Zur Sicherheit stehen die Zeilen zusaetzlich in #ifndef."""
     import re  # v1.17
     if M02a.Get_BoardTyp() != M02.HT_PICO:  # v1.17
         return  # v1.17
     for Nr, Alias in ((1, 'D3'), (2, 'D4'), (3, 'D5')):  # v1.17
         if re.search(r'^\s*#\s*define\s+Mainboard_LED(' + str(Nr) + '|_' + Alias + r')\b', Config_Txt, re.MULTILINE):  # v1.17
             continue  # v1.17: in der Tabelle definiert
+        VBFiles.writeText(fp, '#ifndef Mainboard_LED' + str(Nr), '\n')  # v1.17
         VBFiles.writeText(fp, '#define Mainboard_LED' + str(Nr) + ' SI_0                       // Pico: mainboard LED ' + str(Nr) + ' is an output and off (blinks with ~MLLIDENT, MLLIdentify.h)', '\n')  # v1.17
+        VBFiles.writeText(fp, '#endif', '\n')  # v1.17
 #-------------------------------------------------------
 def ExpandName(Variablename):
 #-------------------------------------------------------
@@ -545,6 +548,8 @@ def Proc_Special_Functions(Row, Cmd, LEDNr, ChannelBaseOffset, Channel):  # v1.0
         if Replace_Sym_Pin_Name:
             Cmd = Do_Replace_Sym_Pin_Name(Cmd, PinOrNr)
         Cmd = Replace(Replace(Replace(Cmd, 'Mainboard_LED(', '#define Mainboard_LED'), ',', ' '), ')', '')
+        MB_LED_Name = Cmd.split()[1]                                                                  # v1.17: z.B. Mainboard_LED1 (D3 ist schon durch 1 ersetzt)
+        Cmd = '#undef  ' + MB_LED_Name + '   /* no warning "redefined" if the LED is used more than once */' + vbCrLf + '  ' + Cmd  # v1.17
     if Left(Cmd, Len('DayAndNightTimer(')) == 'DayAndNightTimer(':
         if not Activate_DayAndNightTimer(Cmd):
             return _fn_return_value, Cmd
