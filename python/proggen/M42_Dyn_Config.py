@@ -4,7 +4,7 @@
 # Path:           proggen/M42_Dyn_Config.py
 # Version:        1.06
 # Last Update:    2026-11-23
-# Author:         Harold Linke, Co-Autor: Jürgen Winkler
+# Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
 # History of Change:
 #   1.06  2026-11-23  Identify (Juergen Winkler): After_Full_Flash: Pico nach dem Neustart an Seriennummer und Location erkennen (expected_serial, expected_location aus M08); bis zu 5

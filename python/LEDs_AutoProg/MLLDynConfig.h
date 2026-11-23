@@ -1,5 +1,5 @@
 // MLLDynConfig.h - Konfiguration getrennt vom Programm (nur ESP32 und Pico)
-// Author: Harold Linke, Co-Autor: Jürgen Winkler
+// Author: Harold Linke, Jürgen Winkler
 // Version 1.05 (2026-11-23): Identify (Juergen Winkler): Dateiformat 7: jeder Eintrag der Controller-Tabelle enthaelt zusaetzlich den LED Kanal (MllControllerConfig_T.LEDChannel),
 //                            die Status LEDs des ESP32 (MLLIdentify.h) werden ueber LED Kanal 7 gefunden. Alle Zeilen mit '~' laufen ueber die gemeinsame Empfangsroutine
 //                            MllAdminReceive() in MLLAdminCommunication.h (ersetzt MllCfgReceive), Fehler werden als '~MLLERR <Grund>' gemeldet (MllCommunicationError ersetzt MllCfgErr).

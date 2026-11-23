@@ -4,7 +4,7 @@
 # Path:           _web/web_form_comport.py
 # Version:        1.06
 # Last Update:    2026-11-23
-# Author:         Harold Linke, Co-Autor: Jürgen Winkler
+# Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
 # History of Change:
 #   1.02  2026-10-15  Web-Ersatz fuer Select_COM_Port_Userform (Original, nicht erfasst)

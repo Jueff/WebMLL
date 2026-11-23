@@ -4,7 +4,7 @@
 # Path:           test_dyn_config.py
 # Version:        1.03
 # Last Update:    2026-11-23
-# Author:         Harold Linke, Co-Autor: Jürgen Winkler
+# Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
 # History of Change:
 #   1.03  2026-11-23  Konfigurationsdatei Format 7: Controller-Tabelle mit LED-Kanal (vier Werte je Controller), LED-Kanal 16 und eine Tabelle mit drei Werten werden abgelehnt. Zeilen

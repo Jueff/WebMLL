@@ -4,7 +4,7 @@
 # Path:           proggen/M07_COM_Port_New.py
 # Version:        1.05
 # Last Update:    2026-11-23
-# Author:         Harold Linke, Co-Autor: Jürgen Winkler
+# Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
 # History of Change:
 #   1.00  2026-10-12  Stand der Umstellung (nicht erfasst)

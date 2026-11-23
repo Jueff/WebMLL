@@ -4,7 +4,7 @@
 # Path:           headless/headless_dyn_config.py
 # Version:        1.03
 # Last Update:    2026-11-23
-# Author:         Harold Linke, Co-Autor: Jürgen Winkler
+# Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
 # History of Change:
 #   1.03  2026-11-23  Identify (Juergen Winkler): Konfigurationsdatei Format 7 (BLOB_VERSION, passend zu MLL_CFG_VERSION in MLLDynConfig.h): je Controller zusaetzlich der LED-Kanal

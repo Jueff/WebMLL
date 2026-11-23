@@ -4,7 +4,7 @@
 # Path:           pattgen/Select_COM_Port_UserForm.py
 # Version:        1.00
 # Last Update:    2026-11-23
-# Author:         Harold Linke, Co-Autor: Jürgen Winkler
+# Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
 # History of Change:
 #   1.00  2026-11-23  Kopf eingefuegt; Identify (Juergen Winkler): '~MLLIDENT 0' an den zuletzt gewaehlten Anschluss beim Schliessen des Dialogs (alle Knoepfe) und beim Wechsel des

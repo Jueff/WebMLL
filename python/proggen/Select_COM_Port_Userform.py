@@ -5,7 +5,7 @@
 # Path:           proggen/Select_COM_Port_Userform.py
 # Version:        1.00
 # Last Update:    2026-11-23
-# Author:         Harold Linke, Co-Autor: Jürgen Winkler
+# Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
 # History of Change:
 #   1.00  2026-11-23  Kopf eingefuegt (darunter der Kopf des Originals, Version 4.02); Identify (Juergen Winkler): '~MLLIDENT 0' an den zuletzt gewaehlten Anschluss beim Schliessen des Dialogs

@@ -4,7 +4,7 @@
 # Path:           proggen/M08_ARDUINO.py
 # Version:        1.31
 # Last Update:    2026-11-23
-# Author:         Harold Linke, Co-Autor: Jürgen Winkler
+# Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
 # History of Change:
 #   1.31  2026-11-23  Identify (Juergen Winkler): Pico: Seriennummer und Location des Anschlusses vor dem Hochladen ermitteln und an M42.After_Full_Flash geben (der Anschluss kann nach dem

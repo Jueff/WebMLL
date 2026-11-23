@@ -1,4 +1,4 @@
-// Datei-Version: Identify 1.03 (2026-11-23), Co-Autor: Jürgen Winkler: Empfang ueber MllAdminReceive() (MLLAdminCommunication.h, alle Zeilen mit '~'), MllIdentUpdate() nach Set_Mainboard_LEDs(),
+// Datei-Version: Identify 1.03 (2026-11-23, Jürgen Winkler): Empfang ueber MllAdminReceive() (MLLAdminCommunication.h, alle Zeilen mit '~'), MllIdentUpdate() nach Set_Mainboard_LEDs(),
 //                ESP32: Kommentare zu LED1_PIN..LED3_PIN (Status LEDs = erstes Pixel von LED Kanal 7). Zeilen mit '// v1.03'.
 // Datei-Version: WLAN-Konfiguration 1.02 (2026-11-22): vorhandenes MLLCFG-Protokoll auf USB und WLAN.
 /*
