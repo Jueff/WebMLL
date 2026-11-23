@@ -34,6 +34,15 @@ Darunter stehen vier Knöpfe in der Reihenfolge der Arbeitsschritte (rechts dane
 
 **Die Einstellungen gelten für das Blatt.** Hat jedes deiner Tabellenblätter einen anderen ESP32, trägst du bei jedem Blatt seinen Namen und seine Adresse ein. Sie werden mit der Arbeitsmappe gespeichert, **Blatt kopieren** übernimmt sie. Das **Passwort** steht **nicht** in der Arbeitsmappe, sondern nur auf deinem Rechner, je Hostname. Gibst du eine Arbeitsmappe weiter, geht dein Passwort also nicht mit.
 
+===== Der Reiter ESP Einstellungen =====
+
+Bei der Zentrale **ESP32** gibt es in den **Hardware Optionen** den Reiter **ESP Einstellungen** (seit 3.94, Beitrag von moosbewohner). Die Auswahl gilt **für das aktive Blatt**, wird mit der Arbeitsmappe gespeichert und beim Duplizieren eines Blattes mit kopiert.
+
+  * **OLED-Anzeige:** Modus **0** (aus) bis **5**. Eine animierte Vorschau zeigt Beispieldaten. Modus 1: MLL-Zeit, 2: LDR-Wert, 3: MLL-Zeit und LDR-Wert, 4: WLAN, IP, LDR und Zeit, **5: WLAN, IP-Adresse und Hostname** (Zeile 1 Status, Zeile 2 IP, Zeile 3 Hostname, lange Namen laufen in Zeile 4 weiter).
+  * **Fotowiderstand aktivieren** richtet den Sensor beim Übertragen ein, auch ohne Makrozeile (seit 4.06).
+  * **Zustände werden gespeichert:** Die Lichtmaschine merkt sich den Zustand der Effekte über einen Neustart.
+  * Beim **Setup übertragen** erzeugt das Programm die passenden Einstellungen selbst. Nach einer Änderung das Setup erneut auf den ESP32 übertragen.
+
 ===== Erste Einrichtung (einmal, mit USB-Kabel) =====
 
   - Stecke den ESP32 mit dem **USB-Kabel** an den Computer und wähle den **Anschluss** (Knopf **Mit Lichtmaschine verbinden** oder Optionen, Reiter **Lichtmaschine**, siehe [[anleitungen:webmobaledlib:pg_arduino|Verbinden und Übertragen]]).
@@ -51,6 +60,10 @@ Der ESP32 merkt sich das WLAN. Du musst diese Schritte nur wiederholen, wenn du 
   * **Verbinden:** Der Knopf **Mit Lichtmaschine verbinden** fragt, ob du per **WLAN** oder **USB** verbinden willst. Die Seiten **Farb Test**, **Servo Einstellungen**, **Sound Test** und die **Testschalter** in der Tabelle verbinden **von selbst**: Ist für das Blatt ein ESP32 mit WLAN und OTA eingetragen (mit **Adresse** und **Passwort**), versuchen sie **zuerst das WLAN**. Antwortet der ESP32 nicht, geht es nach einigen Sekunden mit **USB** weiter.
   * **Setup übertragen:** Der Knopf **Setup übertragen** im Programmgenerator fragt bei einem ESP32 mit OTA, ob die Übertragung per **WLAN (OTA)** oder **USB** geschieht. Beide Wege erzeugen die Firmware aus deiner Tabelle neu.
   * **Fertige Firmware hochladen:** Im Fenster **Optionen** (Knopf **Hardware Optionen**) gibt es auf dem Reiter **WLAN (OTA)** den Knopf **ESP32-Firmware über WLAN hochladen …**. Du gibst die **Adresse**, das **OTA-Passwort** und die fertig übersetzte Anwendungsdatei (''.bin'') an und klickst auf **Über WLAN hochladen**.
+
+===== Schnelles Update über WLAN (seit 4.71) =====
+
+Mit **PlatformIO** und dem Haken **Schnelles Update** (Hardware Optionen, Reiter **Entwicklungsumgebung**) überträgt das Programm über WLAN nur noch die **Konfiguration** (gesicherter Kanal mit dem OTA-Passwort, Beitrag von moosbewohner). Passt die Firmware im ESP32, entfällt das Übersetzen. Ist die Konfiguration unverändert, wird nichts gesendet. Bei Übertragungsfehlern gibt es bis zu drei Versuche, danach wird alles hochgeladen. **Einmal** muss die angepasste Firmware auf den ESP32 (USB oder WLAN). Ändern sich Hostname, OTA-Passwort, OTA-Schalter oder die Netzwerkeinstellungen, wird die Firmware ebenfalls neu übertragen. Mehr dazu: [[anleitungen:webmobaledlib:pg_arduino#schnelles_update_nur_die_konfiguration_uebertragen|Verbinden und Übertragen]].
 
 ===== Die Firewall =====
 
