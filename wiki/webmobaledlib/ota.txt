@@ -1,5 +1,5 @@
 ====== webMobaLedLib – ESP32 per WLAN und OTA ======
-//Seitenstand 1.04 (2026-11-19), gilt für webMobaLedLib 4.18//
+//Seitenstand 1.05 (2026-11-23), gilt für webMobaLedLib 4.79//
 
 Mit einer **Lichtmaschine ESP32** musst du das USB-Kabel nicht mehr dauernd benutzen. Das Programm kann den ESP32 über das **WLAN** verbinden, die **Einstellungen** und die **Firmware** übertragen (**OTA**, //Over the Air//) und die Testseiten (Farb Test, Servo, Sound, Testschalter) ohne Kabel bedienen. Das **erste Mal** brauchst du das USB-Kabel, danach geht alles über das WLAN.
 
@@ -20,6 +20,8 @@ Klicke in der Werkzeugleiste des Programmgenerators auf **Hardware Optionen**. I
 | **WLAN am ESP32 aktivieren** | Die Firmware bekommt die WLAN-Funktion. Ohne Haken bleibt der ESP32 ohne WLAN. |
 | **OTA-Updates erlauben** | Die Firmware kann über das WLAN aktualisiert werden. Nur mit dem Haken **WLAN am ESP32 aktivieren** möglich. |
 | **Hostname des ESP32** | Der Name des ESP32 im Netz. Voreinstellung **mobaledlib**. Er darf nur Buchstaben, Ziffern und Bindestriche enthalten (bis 63 Zeichen). **Jeder ESP32 in deinem Netz braucht einen eigenen Namen.** |
+| **DHCP** oder **Statische IP-Adresse** | Mit **DHCP** bekommt der ESP32 seine Adresse vom Router (Voreinstellung). Mit **Statische IP-Adresse** verwendet er die Adresse, die du einträgst. Sinnvoll in Netzen mit festen Adressen, mit Pi-hole oder MAC-Filter. |
+| **IP-Adresse des ESP32**, **Gateway (Router)**, **Subnetzmaske**, **DNS-Server 1 und 2** | Nur bei **Statische IP-Adresse**. Die IP-Adresse (zum Beispiel 192.168.1.50) muss im Netz des Routers liegen und darf nicht im DHCP-Bereich des Routers liegen. Gateway ist meist der Router (192.168.1.1), die Maske meist 255.255.255.0. Bleiben die DNS-Felder leer, wird das Gateway verwendet. Das Programm prüft die Eingaben beim Speichern. **Nach einer Änderung** musst du das **ESP32-Setup einmal neu übertragen**. |
 | **Adresse für WebMLL** | Die **Adresse**, unter der das Programm den ESP32 erreicht: die **IP-Adresse** (zum Beispiel ''192.168.1.50'') oder der Name (''mobaledlib.local''). Das Programm trägt sie selbst ein, wenn du das WLAN über USB einrichtest. |
 | **OTA-Passwort** | Das Passwort aus der Firmware. Ein leeres Feld behält das **gespeicherte** Passwort. |
 
@@ -42,7 +44,7 @@ Darunter stehen vier Knöpfe in der Reihenfolge der Arbeitsschritte (rechts dane
 
 Der ESP32 merkt sich das WLAN. Du musst diese Schritte nur wiederholen, wenn du das WLAN wechselst oder den ESP32 mit einer **alten** Firmware überschrieben hast.
 
-**Tipp:** Notiere die **IP-Adresse** und gib dem ESP32 in deinem Router eine **feste Adresse**. Dann bleibt die Adresse im Feld **Adresse für WebMLL** richtig.
+**Tipp:** Notiere die **IP-Adresse** und gib dem ESP32 eine **feste Adresse**: entweder im Router oder, ohne Router-Einstellung, mit **Statische IP-Adresse** im Reiter **WLAN (OTA)**. Dann bleibt die Adresse im Feld **Adresse für WebMLL** richtig.
 
 ===== Danach: Alles über WLAN =====
 

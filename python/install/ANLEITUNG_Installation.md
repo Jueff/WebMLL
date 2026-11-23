@@ -1,5 +1,5 @@
 # webMobaLedLib – Installation und Betrieb
-*Datei-Version: 4.74 (2026-11-22), gilt für webMobaLedLib 4.74*
+*Datei-Version: 4.79 (2026-11-23), gilt für webMobaLedLib 4.79*
 
 Windows · macOS · Linux-Desktop · Raspberry Pi
 
@@ -433,9 +433,30 @@ Ist unter **Hardware Optionen** ein **ESP32** als LED-Zentrale gewählt, erschei
 - **Rückfrage beim Öffnen (seit 3.98):** Benutzt eine Datei eine **ausgeschaltete** Erweiterung, fragt das Programm, ob es sie einschalten soll (einmal je Erweiterung und Sitzung); ohne sie fehlen die Zeilen in der erzeugten Datei.
 - **Wiki:** eigene Seite `erweiterungen` (siehe Wiki-Paket 3.98).
 
-### 2.9k Neu seit 3.93 (3.94 bis 4.74)
+### 2.9k Neu seit 3.93 (3.94 bis 4.78)
 
 Kurzfassung der Änderungen seit dem letzten Release, neueste Version zuerst (ausführlich in `HOC_Anwender.md`):
+
+**Version 4.78**
+
+*Korrekturen:*
+- Simulator: Eine gespeicherte Fensterlage außerhalb des Bildschirms (−32000, minimiertes Fenster) wird nicht mehr gespeichert und beim Öffnen auf 800/400 zurückgesetzt.
+
+**Version 4.77**
+
+*Korrekturen:*
+- Startmeldung der Lichtmaschine: Datum wieder als TT.MM.JJ.
+- Dialoge und Menüs liegen fest über der Seite (Absicherung gegen Anzeige unter der Tabelle).
+
+**Version 4.76**
+
+*Korrekturen:*
+- Auswahl des COM Ports: Nach dem Wechsel des Boards über „Andere Typen“ ändern sich Bild, Text und roter Hinweis (Issue 37).
+
+**Version 4.75**
+
+*Neue Funktionen:*
+- Dunkles Farbschema mit helleren, abgestuften Flächen (Beitrag von moosbewohner).
 
 **Version 4.74**
 
@@ -1768,3 +1789,7 @@ Bei einer Fehlermeldung bitte den Text aus dem Installationsfenster und die Date
 ## ESP32: schnelle Konfiguration über WLAN (ab 4.71)
 
 In Hardware Optionen, Reiter Entwicklungsumgebung, **PlatformIO** wählen und „Schnelles Update: nur geänderte Konfiguration übertragen“ einschalten. WLAN und OTA am ESP32 wie bisher einrichten. Beim ersten Mal muss die Firmware mit der neuen Empfangsfunktion übertragen werden. Danach prüft das Programm bei jeder Übertragung über WLAN die Firmware im Gerät: Passt sie, wird nur die Konfiguration gesendet und der ESP32 startet neu. Ist die Konfiguration unverändert, wird nichts gesendet. Bei einem Übertragungsfehler gibt es bis zu drei Versuche, danach wird das ganze Programm hochgeladen. Ändern sich Hostname, OTA-Passwort oder OTA-Schalter, wird die Firmware ebenfalls neu übertragen. Pico und USB bleiben unverändert.
+
+## ESP32: feste IP-Adresse statt DHCP (ab 4.79)
+
+Im Reiter „WLAN (OTA)“ der Hardware Optionen wählst du, ob der ESP32 seine Adresse per **DHCP** vom Router bekommt oder eine **feste IP-Adresse** verwendet. Bei „Statische IP-Adresse“ trägst du IP-Adresse, Gateway (meist der Router), Subnetzmaske (meist 255.255.255.0) und DNS-Server ein (leer: Gateway). Das Programm prüft die Eingaben. Danach das ESP32-Setup einmal neu übertragen und bei „Adresse für WebMLL“ die neue IP-Adresse eintragen (bleibt das Feld leer, nimmt das Programm die feste IP). Die feste Adresse darf nicht im DHCP-Bereich des Routers liegen. Verstecktes WLAN und mehrere WLANs werden nicht unterstützt.
