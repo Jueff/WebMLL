@@ -253,6 +253,7 @@ public:
         return *this;
     }
 		virtual void clearLeds(int nLeds) {};
+    virtual void showColor(const struct CRGB &data, int nLeds, uint8_t brightness) {};
 		virtual void showLeds(uint8_t brightness=255) = 0;
     virtual void show(const struct CRGB *data, int nLeds, uint8_t brightness) = 0;
 };
@@ -286,6 +287,26 @@ public:
 
     void showLeds(uint8_t brightness=255) {
         show(m_Data, m_nLeds, brightness);
+    }
+    // Sends nLeds pixels of one color. Needs no data array, so it can also reach LEDs beyond the configured count.
+    void showColor(const struct CRGB &data, int nLeds, uint8_t brightness)
+    {
+      if (sm<0) return;
+      uint32_t val = 0;
+      uint16_t pixels = nLeds*3;
+      uint16_t max = ((pixels+3)/4)*4;
+      for (uint i = 0; i < max; ++i) {
+          val = val << 8;
+          if (i<pixels) {
+              uint8_t v = 0;
+              switch(i%3) { case 0: v = data.g; break; case 1: v = data.r; break; default: v = data.b; }
+              val = val + (uint8_t)(((uint16_t)v * (brightness + 1)) >> 8);
+          }
+          if ((i&0x03)==3) {
+              pio_sm_put_blocking(pio, sm, val);
+              val = 0;
+          }
+      }
     }
     void show(const struct CRGB *data, int nLeds, uint8_t brightness)
     {

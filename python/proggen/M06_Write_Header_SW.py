@@ -1426,6 +1426,13 @@ def Write_Switches_Header_File_Part_A(fp, Channel):
                 VBFiles.writeText(fp, '#define MLL_ADD_LEDS(Pin, Data, Cnt) FastLED.addLeds<WS2811, Pin, RGB>(Data, Cnt)', '\n')  # v1.11
             else:  # v1.11
                 VBFiles.writeText(fp, '#define MLL_ADD_LEDS(Pin, Data, Cnt) FastLED.addLeds<NEOPIXEL, Pin>(Data, Cnt)', '\n')  # v1.11
+        if DynLed:
+            VBFiles.writeText(fp, '// Number of LEDs which are cleared at startup', '\n')
+            VBFiles.writeText(fp, '#if defined(LONG_LED_ADDR)', '\n')
+            VBFiles.writeText(fp, '  #define MLL_CLEAR_LED_CNT 1000', '\n')
+            VBFiles.writeText(fp, '#else', '\n')
+            VBFiles.writeText(fp, '  #define MLL_CLEAR_LED_CNT 256', '\n')
+            VBFiles.writeText(fp, '#endif', '\n')
         VBFiles.writeText(fp, '/*********************/', '\n')
         VBFiles.writeText(fp, '#define SETUP_FASTLED()                                                      \\', '\n')
         VBFiles.writeText(fp, '/*********************/                                                      \\', '\n')
@@ -1465,7 +1472,10 @@ def Write_Switches_Header_File_Part_A(fp, Channel):
         if DynLed:  # v1.11: ein Controller je Eintrag der Konfigurationsdatei
             VBFiles.writeText(fp, '  for (uint8_t ch = 0; ch < mllControllerCount; ++ch) {                      \\', '\n')  # v1.11
             VBFiles.writeText(fp, '    CLEDController *Ctrl = MllAddLeds(mllControllerConfig[ch]);              \\', '\n')  # v1.11
-            VBFiles.writeText(fp, '    if (Ctrl != NULL) Ctrl->clearLeds(256);                                  \\', '\n')  # v1.11
+            VBFiles.writeText(fp, '    /* clearLeds(256) is clamped by FastLED to the configured LED count. LEDs which are physically */ \\', '\n')
+            VBFiles.writeText(fp, '    /* connected but no longer configured would keep their last state. showColor() sends        */ \\', '\n')
+            VBFiles.writeText(fp, '    /* MLL_CLEAR_LED_CNT black pixels without needing a data array.                              */ \\', '\n')
+            VBFiles.writeText(fp, '    if (Ctrl != NULL) Ctrl->showColor(CRGB(0, 0, 0), MLL_CLEAR_LED_CNT, 0); \\', '\n')
             VBFiles.writeText(fp, '    }                                                                        \\', '\n')  # v1.11
         else:  # v1.11
             VBFiles.writeText(fp, '                                                                             \\', '\n')
