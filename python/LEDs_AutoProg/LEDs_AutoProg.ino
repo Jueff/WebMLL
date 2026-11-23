@@ -1,3 +1,5 @@
+// Datei-Version: Identify 1.03 (2026-11-23), Co-Autor: Jürgen Winkler: Empfang ueber MllAdminReceive() (MLLAdminCommunication.h, alle Zeilen mit '~'), MllIdentUpdate() nach Set_Mainboard_LEDs(),
+//                ESP32: Kommentare zu LED1_PIN..LED3_PIN (Status LEDs = erstes Pixel von LED Kanal 7). Zeilen mit '// v1.03'.
 // Datei-Version: WLAN-Konfiguration 1.02 (2026-11-22): vorhandenes MLLCFG-Protokoll auf USB und WLAN.
 /*
  MobaLedLib: LED library for model railways
@@ -367,9 +369,12 @@
 
 #if defined(ESP32)                                                                                                  // 30.10.20: Juergen
   #define LED0_PIN    2          // Onboard Led
-  #define LED1_PIN    16         // Left   Yellow LED on the mainboard
-  #define LED2_PIN    14         // Middle White  LED on the mainboard
-  #define LED3_PIN    0          // Right  Blue   LED on the mainboard
+  // #define LED1_PIN    16         // Left   Yellow LED on the mainboard  // v1.03 (entfallen)
+  // #define LED2_PIN    14         // Middle White  LED on the mainboard  // v1.03 (entfallen)
+  // #define LED3_PIN    0          // Right  Blue   LED on the mainboard  // v1.03 (entfallen)
+  #define LED1_PIN    16         // Not used as LED: yellow status LED = .r of the first pixel of LED channel 7 (MLLIdentify.h). Pin 16 = LED channel 2  // v1.03
+  #define LED2_PIN    14         // Not used as LED: white  status LED = .g of the first pixel of LED channel 7. Pin 14 = LED channel 3  // v1.03
+  #define LED3_PIN    0          // Not used as LED: blue   status LED = .b of the first pixel of LED channel 7. Pin 0  = LED channel 7  // v1.03
   #define LED4_PIN    33         // Green  HB LED between the Nanos
   #define LED5_PIN    34         // Buttons input KEYBRDx, Pin 7
   #define LED6_PIN    4          // KEY_80, Pin 8
@@ -1352,7 +1357,8 @@ uint8_t Handle_Command(uint8_t Type, const uint8_t* arguments, bool process)
       Buff_Nr = 2;
       c = mllDeviceClient.read();
 #ifdef MLL_DYNAMIC_CONFIG
-      if (MllCfgReceive(c, mllDeviceClient)) return 0;  // v1.01 WLAN-Konfiguration
+      // if (MllCfgReceive(c, mllDeviceClient)) return 0;  // v1.01 WLAN-Konfiguration  // v1.03 (entfallen)
+      if (MllAdminReceive(c, mllDeviceClient)) return 0;  // v1.01 WLAN-Konfiguration  // v1.03
 #endif
       return 1;
     }
@@ -1363,7 +1369,8 @@ uint8_t Handle_Command(uint8_t Type, const uint8_t* arguments, bool process)
 		c = Serial.read();
 #ifdef MLL_DYNAMIC_CONFIG
 // 		if (MllCfgReceive(c)) return 0;                                                                       // Konfiguration ueber die serielle Schnittstelle (Zeilen mit '~') // v1.01 WLAN-Konfiguration (entfallen)
-		if (MllCfgReceive(c, Serial)) return 0;                                                                       // Konfiguration ueber die serielle Schnittstelle (Zeilen mit '~') // v1.01 WLAN-Konfiguration
+		// if (MllCfgReceive(c, Serial)) return 0;                                                                       // Konfiguration ueber die serielle Schnittstelle (Zeilen mit '~') // v1.01 WLAN-Konfiguration  // v1.03 (entfallen)
+		if (MllAdminReceive(c, Serial)) return 0;                                                                       // Konfiguration ueber die serielle Schnittstelle (Zeilen mit '~') // v1.01 WLAN-Konfiguration  // v1.03
 #endif
 #ifdef MLL_OTA_SAVED_WIFI
 		if (WifiUsbReceive(c)) return 0;
@@ -2541,6 +2548,9 @@ void MLLMainLoop(){
   #endif
 
   Set_Mainboard_LEDs();                 // Turn on/off the LEDs on the mainboard if configured
+#ifdef MLL_DYNAMIC_CONFIG  // v1.03
+  MllIdentUpdate();                     // ~MLLIDENT: blink the mainboard/status LEDs (overrides Set_Mainboard_LEDs() while active, before FastLED.show())  // v1.03
+#endif  // v1.03
 #ifdef ESP32
   lastFastledSend = millis();
 #if defined(DISPLAY_FASTLED_FAULTS)                                                                           // 18.01.24 Juergen add fault display feature

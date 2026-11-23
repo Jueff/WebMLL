@@ -1,12 +1,14 @@
-# Datei-Version: 1.05 (2026-11-22) - M42_Dyn_Config.py
+# Datei-Version: 1.06 (2026-11-23) - M42_Dyn_Config.py
 # ----------------------------------------------------------------------------------------------
 # Name:           M42_Dyn_Config.py
 # Path:           proggen/M42_Dyn_Config.py
-# Version:        1.05
-# Last Update:    2026-11-22
-# Author:         Harold Linke
+# Version:        1.06
+# Last Update:    2026-11-23
+# Author:         Harold Linke, Co-Autor: Jürgen Winkler
 # Licence:        LGPL V2.1
 # History of Change:
+#   1.06  2026-11-23  Identify (Juergen Winkler): After_Full_Flash: Pico nach dem Neustart an Seriennummer und Location erkennen (expected_serial, expected_location aus M08); bis zu 5
+#                     Versuche, bis die Firmware auf '~MLLCFG INFO' antwortet (der Anschluss wird zwischen den Versuchen geschlossen). Zeilen mit '# v1.06'
 #   1.05  2026-11-22  WLAN-Konfiguration bei Transportfehlern hoechstens dreimal mit neuer Sitzung versuchen
 #   1.04  2026-11-22  Bei fehlender END-Antwort ueber WLAN gespeicherte Konfiguration nach Neustart verifizieren
 #   1.03  2026-11-22  PlatformIO: AVR-Werkzeuge ohne Arduino-IDE-Suche ermitteln
@@ -368,8 +370,10 @@ def _try_config_once(ComPort, *, host="", password=""):  # v1.05
 
 
 # def After_Full_Flash(ComPort):  # v1.02 (entfallen)
-def After_Full_Flash(ComPort, *, host="", password=""):  # v1.02
-    """Nach dem Flashen die Konfiguration schicken. True wenn sie im Geraet angekommen ist."""
+# def After_Full_Flash(ComPort, *, host="", password=""):  # v1.02  # v1.06 (entfallen)
+def After_Full_Flash(ComPort, *, host="", password="", expected_serial=None, expected_location=None):  # v1.02  # v1.06
+    """Nach dem Flashen die Konfiguration schicken. True wenn sie im Geraet angekommen ist.
+    expected_serial/expected_location: Serial Number und Location des Pico VOR dem Upload (für erneute Erkennung nach Reboot)."""
     blob = _state["blob"]
     t0 = time.time()  # v1.01
     _out("")  # v1.01
@@ -398,18 +402,60 @@ def After_Full_Flash(ComPort, *, host="", password=""):  # v1.02
                     _out(_t("Die Konfiguration konnte nicht übertragen werden ({reason}).", reason="WLAN-Verbindung nach Neustart nicht verfuegbar"), "Error")  # v1.02
                     return False  # v1.02
                 time.sleep(0.5)  # v1.02
-    else:  # v1.02
-        port = DC.wait_for_port(ComPort, _state["pico"], 25.0)  # v1.02
+    # else:  # v1.02  # v1.06 (entfallen)
+        # port = DC.wait_for_port(ComPort, _state["pico"], 25.0)  # v1.02  # v1.06 (entfallen)
+    else:  # v1.02: USB (Pico/ESP32/Arduino)  # v1.06
+        # Nach Upload (insbesondere Pico) wartet das Geraet auf Neustart.  # v1.06
+        # Port suchen, Verbindung oeffnen, dann warten bis Firmware bereit ist (Retry bis 5x mit 500ms).  # v1.06
+        # expected_serial/expected_location wurden VOR dem Upload ermittelt und uebergeben  # v1.06
+        port = DC.wait_for_port(ComPort, _state["pico"], 25.0, expected_serial, expected_location)  # v1.02  # v1.06
         if port is None:  # v1.02
             log.warning("Konfiguration getrennt: der Anschluss %s erscheint nach dem Hochladen nicht wieder", ComPort)  # v1.02
             _out(_t("Der Anschluss {port} erscheint nach dem Hochladen nicht wieder. Die Konfiguration wurde nicht übertragen.", port=ComPort), "Error")  # v1.01  # v1.02
             return False  # v1.02
-        try:  # v1.02
-            link = DC.Link(port, dtr=_state["pico"])  # v1.02
-        except Exception as e:                                 # noqa: BLE001  # v1.02
-            log.warning("Konfiguration getrennt: Anschluss %s nicht zu oeffnen: %s", port, e)  # v1.02
-            _out(_t("Der Anschluss {port} lässt sich nicht öffnen ({reason}). Die Konfiguration wurde nicht übertragen.", port=port, reason=e), "Error")  # v1.01  # v1.02
-            return False  # v1.02
+        # try:  # v1.02  # v1.06 (entfallen)
+            # link = DC.Link(port, dtr=_state["pico"])  # v1.02  # v1.06 (entfallen)
+        # except Exception as e:                                 # noqa: BLE001  # v1.02  # v1.06 (entfallen)
+            # log.warning("Konfiguration getrennt: Anschluss %s nicht zu oeffnen: %s", port, e)  # v1.02  # v1.06 (entfallen)
+            # _out(_t("Der Anschluss {port} lässt sich nicht öffnen ({reason}). Die Konfiguration wurde nicht übertragen.", port=port, reason=e), "Error")  # v1.01  # v1.02  # v1.06 (entfallen)
+            # return False  # v1.02  # v1.06 (entfallen)
+
+        link = None  # v1.06
+        for attempt in range(5):  # max 5 Versuche  # v1.06
+            try:  # v1.06
+                link = DC.Link(port, dtr=_state["pico"])  # v1.06
+                # Firmware ready testen: INFO abfragen (bis 500ms warten, 5x retry = ~2.5s)  # v1.06
+                for retry in range(5):  # v1.06
+                    try:  # v1.06
+                        log.info("TX: ~MLLCFG INFO (ready-check %d/%d)", retry + 1, 5)  # v1.06
+                        link.send("~MLLCFG INFO")  # v1.06
+                        msg = link.read("INFO", 0.5)  # v1.06
+                        if msg:  # v1.06
+                            log.info("RX: %s", msg)  # v1.06
+                            info = DC.parse_info(msg)  # v1.06
+                            if info:  # v1.06
+                                break  # v1.06
+                    except Exception:  # v1.06
+                        pass  # v1.06
+                    if retry < 4:  # v1.06
+                        time.sleep(0.5)  # v1.06
+                else:  # v1.06
+                    # Keine Antwort nach 5 Versuchen  # v1.06
+                    raise DC.DynConfigError("Keine Antwort auf INFO nach Neustart")  # v1.06
+                break  # Verbindung ok, Firmware bereit  # v1.06
+            except Exception as e:                                 # noqa: BLE001  # v1.06
+                if link:  # v1.06: Anschluss vor dem naechsten Versuch freigeben
+                    link.close()  # v1.06
+                    link = None  # v1.06
+                if attempt < 4:  # v1.06
+                    log.info("Konfiguration: Versuch %d fehlgeschlagen, warte 500ms: %s", attempt + 1, e)  # v1.06
+                    time.sleep(0.5)  # v1.06
+                else:  # v1.06
+                    log.warning("Konfiguration getrennt: Anschluss %s nicht bereit nach 5 Versuchen: %s", port, e)  # v1.06
+                    _out(_t("Der Anschluss {port} lässt sich nicht öffnen ({reason}). Die Konfiguration wurde nicht übertragen.", port=port, reason=e), "Error")  # v1.06: vorhandener Text (Uebersetzungen)
+                    return False  # v1.06
+
+        # Link ist nun offen und Firmware bereit  # v1.06
     try:
         _status("Die Konfiguration wird uebertragen ...")
         info = DC.query_info(link, 20.0)
@@ -432,4 +478,5 @@ def After_Full_Flash(ComPort, *, host="", password=""):  # v1.02
         _out(_t("Die Konfiguration konnte nicht übertragen werden ({reason}).", reason=e), "Error")  # v1.01
         return False
     finally:
-        link.close()
+        if link:  # v1.06
+            link.close()  # v1.06

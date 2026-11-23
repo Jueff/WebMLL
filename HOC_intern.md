@@ -1,4 +1,4 @@
-Datei-Version: 1.71 (2026-11-23) - HOC_intern.md
+Datei-Version: 1.72 (2026-11-23) - HOC_intern.md
 Stand: webMobaLedLib 4.93
 
 # webMobaLedLib: History of Change (intern, ausführlich)
@@ -24,6 +24,42 @@ Release-Stand 2.12 auf Wunsch des Entwicklers („Release bauen“). **Neu im Ab
 | `archiv/` | frühere Release-Hinweise, Versionslisten und ZIP (nichts gelöscht) |
 
 **Geprüft:** Dateipaket: `testzip` in Ordnung, alle 113 Dateien gleich dem Ordner `headless`, keine `__pycache__`, alle `.py` kompilieren, Versionsprüfung „alles passt“ (50 Einträge), 11 Dateien ausführbar (`.sh`, `.command`). **Nachbau des Entwickler-Ablaufs mit seinem echten Paket (1678 Dateien, Stand 2.05):** meine 113 Dateien darübergelegt, Prüfliste, ZIP gepackt, `release_tools check --previous <sein ZIP>`: **in Ordnung** (Version 2.12, 1678 Dateien, 6 neue, 0 fehlende, ZIP 16,6 MB). Alle 15 Prüfreihen laufen (17, 26, 15, 70, 28, 19, 43, 26, 16, 27, 8, 8, 8, 5, 9 Prüfungen). **Nicht geprüft:** `zip_erstellen.bat` und die Reparaturskripte unter Windows, ein abgebrochenes Update unter Windows, das Verhalten mit Acronis, der Download von GitHub.
+
+## Identify (Branch feature/identitfyLeds, auf Basis 4.93, 2026-11-23): Zentrale im COM-Port-Dialog erkennen
+
+Herkunft: Arbeitsstand „Identity Feature“ (Juergen Winkler, Commit 527d65f auf `feature/identity` und weitere, nicht eingecheckte Änderungen auf Basis 4.79a). Für den Branch zusammengefasst: **eine Version je Datei**, jede geänderte Zeile mit der Version markiert, gelöschte Zeilen als `(entfallen)` stehen gelassen; ältere `(entfallen)`-Zeilen, die der Arbeitsstand entfernt hatte, sind wieder da. `VERSION` in `webmobaledlib.py` ist **nicht** erhöht (Branch, die Versionsnummer vergibt der Entwickler beim Zusammenführen).
+
+**Funktion:** Solange der Dialog „Auswahl des COM Ports“ für die LED-Zentrale (ESP32 oder Pico, ohne WLAN) offen ist, schickt der Zeitgeber jede Sekunde `~MLLIDENT 1` an den gewählten Anschluss (kurz öffnen, senden, schließen). Die Firmware (`MLLIdentify.h`) lässt die drei LEDs der Hauptplatine mit 1 Hz blinken (ESP32: erstes Pixel von LED-Kanal 7 als WS2811, Pico: Pins 13, 12, 11) und stellt beim Stopp (`~MLLIDENT 0`, 3 s ohne Zeile, Neustart) den vorherigen Zustand wieder her. Alle Zeilen mit `~` laufen in der Firmware über `MllAdminReceive()` (`MLLAdminCommunication.h`), Fehler kommen als `~MLLERR <Grund>`. Die Konfigurationsdatei hat **Format 7** (je Controller zusätzlich der LED-Kanal).
+
+**Ursache des Fehlers „LEDs blinken nicht“:** `MllIdentUpdate()` wurde nirgends aufgerufen; jetzt in `MLLMainLoop()` nach `Set_Mainboard_LEDs()` und vor `FastLED.show()`.
+
+**Beim Zusammenfassen behoben:** `test_dyn_config.py` passte nicht zu Format 7 (4 Fehler); `headless_dyn_config.pack_params` lehnt LED-Kanäle ≥ 16 ab; `wait_for_port` findet den Pico ohne Seriennummer wieder wie früher (der erste Pico); `M42.After_Full_Flash` schließt den Anschluss zwischen den Versuchen; zwei Texte in `M42` auf die vorhandenen, übersetzten Schlüssel zurückgesetzt (der neue Text hatte den Tippfehler „and {port}“ und keine Übersetzung); Kommentare in `MLLIdentify.h`/`MLLAdminCommunication.h` (keine Antwort `~MLLIDENT ON/OFF`, 1 Hz statt 4 Hz).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `LEDs_AutoProg/MLLIdentify.h` | 1.00 (neu) | Blinken der Status-LEDs, Zustand merken und wiederherstellen |
+| `LEDs_AutoProg/MLLAdminCommunication.h` | 1.00 (neu) | gemeinsame Empfangsroutine für `~MLLCFG` und `~MLLIDENT`, `~MLLERR` |
+| `LEDs_AutoProg/MLLDynConfig.h` | 1.05 | Format 7 mit LED-Kanal, `MllCommunicationError`, Controller-Tabelle vor dem Include |
+| `LEDs_AutoProg/LEDs_AutoProg.ino` | 1.03 | `MllAdminReceive()`, `MllIdentUpdate()`, Kommentare LED1..3_PIN (ESP32) |
+| `headless/headless_dyn_config.py` | 1.03 | Format 7, `~MLLERR`, Protokoll im Log, Pico nach Seriennummer/Location |
+| `proggen/M42_Dyn_Config.py` | 1.06 | `After_Full_Flash`: Pico-Erkennung, Bereitschaftsprüfung mit Wiederholung |
+| `proggen/M08_ARDUINO.py` | 1.31 | Seriennummer/Location des Pico vor dem Hochladen |
+| `proggen/M06_Write_Header.py` | 1.17 | Status-LED-Kanal 7 (ESP32), `MLL_IDENTIFY`, Controller-Tabelle mit LED-Kanal, Pico `Mainboard_LED1..3` |
+| `proggen/M07_COM_Port_New.py` | 1.05 | `~MLLIDENT` im Zeitgeber des Dialogs, Hinweistext |
+| `proggen/Select_COM_Port_Userform.py` | 1.00 (Kopf neu) | `~MLLIDENT 0/1` beim Wechsel und Schließen |
+| `pattgen/Select_COM_Port_UserForm.py` | 1.00 (Kopf neu) | dasselbe für den Patterngenerator |
+| `_web/web_form_comport.py` | 1.10 | dasselbe für die Web-Oberfläche |
+| `test_dyn_config.py` | 1.03 | Format 7 |
+| `csv/Languages.csv` | +1 Zeile | Hinweistext in sieben Sprachen |
+| `install/BETATEST_Checkliste.md` | 3.75 | Punkt 343 |
+
+**Geprüft:** `py_compile` aller Dateien; `test_dyn_config.py` 180 Prüfungen, 0 Fehler; `test_dyn_config_wlan.py` 18 Tests OK; `test_headless_contract.py` unverändert (1 bekannte Abweichung beim Verschieben, auch ohne diese Änderungen); PlatformIO-Build `esp32` mit der Kopfdatei des Branch (klassisch) sowie `pico` und `esp32` mit einer Kopfdatei mit `MLL_DYNAMIC_CONFIG`/`MLL_IDENTIFY`: erfolgreich.
+
+**Nicht geprüft:** echte Hardware (Blinken, Wiederherstellen, Pico mit neuem COM Port nach dem Hochladen), die Dialoge im Browser und in Tk, Linux/macOS, der Hinweistext in der Oberfläche.
+
+**Offen (nicht geändert):** `M06` schreibt für den Pico `#define Mainboard_LED1 13` (12, 11). `Mainboard_LEDx` ist in `LEDs_AutoProg.ino` aber die **Nummer des Eingangskanals** (`Set_Mainboard_LEDs`: `MobaLedLib.Get_Input(Mainboard_LED1)`), nicht der Pin: Die LEDs zeigen dann die Kanäle 13, 12, 11. Außerdem werden `Mainboard_LED(1..3, …)`-Zeilen des Anwenders beim Pico nur noch als Kommentar geschrieben. Muss vor dem Zusammenführen entschieden werden.
+
+---
 
 ## 4.93 (2026-11-23), Datenübertragung: verständliche Meldung bei falschem Verbindungscode
 

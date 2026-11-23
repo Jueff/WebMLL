@@ -1,12 +1,14 @@
-# Datei-Version: 1.30 (2026-11-23) - M08_ARDUINO.py
+# Datei-Version: 1.31 (2026-11-23) - M08_ARDUINO.py
 # ----------------------------------------------------------------------------------------------
 # Name:           M08_ARDUINO.py
 # Path:           proggen/M08_ARDUINO.py
-# Version:        1.30
+# Version:        1.31
 # Last Update:    2026-11-23
-# Author:         Harold Linke
+# Author:         Harold Linke, Co-Autor: Jürgen Winkler
 # Licence:        LGPL V2.1
 # History of Change:
+#   1.31  2026-11-23  Identify (Juergen Winkler): Pico: Seriennummer und Location des Anschlusses vor dem Hochladen ermitteln und an M42.After_Full_Flash geben (der Anschluss kann nach dem
+#                     Neustart einen anderen Namen haben). Zeilen mit '# v1.31'
 #   1.30  2026-11-23  ESP32-Setup: statische IP-Adresse statt DHCP (network_settings), die Netzwerkwerte gehoeren zum Firmware-Schluessel
 #   1.29  2026-11-22  ESP32-Setup nutzt dynamische Konfiguration auch ueber WLAN; nach OTA Konfiguration nachsenden
 #   1.00  2026-10-12  Stand der Umstellung (nicht erfasst)
@@ -126,6 +128,7 @@ import proggen.M38_Extensions as M38
 import proggen.M39_Simulator as M39
 import proggen.M40_ShellandWait as M40
 import proggen.M42_Dyn_Config as M42  # v1.25
+import headless.headless_dyn_config as DC  # für Pico serial/location Ermittlung  # v1.31
 #import proggen.M60_CheckColors as M60
 #import proggen.M70_Exp_Libraries as M70
 #import proggen.M80_Create_Multiplexer as M80
@@ -2465,6 +2468,15 @@ def Compile_and_Upload_Prog_to_Arduino(InoName, ComPortColumn, BuildOptColumn, S
             F00.notimplemented("Excel Console")
             #Res = UserForm_RunProgram.ShellExecute(CommandStr, 0, Replace(Get_Language_Str('Programmiere #1# Arduino'), "#1#", ArduName) + ' - ' + FileNameExt(InoName), PromptUser, 0x800000, TextColor, Get_Language_Str('Senden zum Arduino abbrechen?'))
         else:
+            # Pico: serial/location VOR dem Upload ermitteln (für After_Full_Flash nach Reboot)  # v1.31
+            pico_serial = None  # v1.31
+            pico_location = None  # v1.31
+            if M02a.Get_BoardTyp() == M02.HT_PICO:  # v1.31
+                for d, vid, pid, serial, location in DC.list_port_names():  # v1.31
+                    if d == ComPort:  # v1.31
+                        pico_serial = serial  # v1.31
+                        pico_location = location  # v1.31
+                        break  # v1.31
             PG.global_controller.disconnect()
             #Res = M40.ShellAndWait(CommandStr, 0, vbNormalFocus, PromptUser)
             if type(CommandStr) == str:
@@ -2521,7 +2533,8 @@ def Compile_and_Upload_Prog_to_Arduino(InoName, ComPortColumn, BuildOptColumn, S
         if DynDone:  # v1.25
             M30.Show_Status_for_a_while(M09.Get_Language_Str('Nur die Konfiguration wurde übertragen. Das Programm in der Lichtmaschine ist unverändert. Dauer ') + P01.Format(P01.Time() - Start, 'hh:mm:ss'), '00:02:00')  # v1.25
         else:  # v1.25
-            if HexFile == '' and M42.Upload_Possible(Mode, ComPort) and not M42.After_Full_Flash(ComPort):  # v1.25: die Konfiguration kommt nach dem Programm
+            # if HexFile == '' and M42.Upload_Possible(Mode, ComPort) and not M42.After_Full_Flash(ComPort):  # v1.25: die Konfiguration kommt nach dem Programm  # v1.31 (entfallen)
+            if HexFile == '' and M42.Upload_Possible(Mode, ComPort) and not M42.After_Full_Flash(ComPort, expected_serial=pico_serial, expected_location=pico_location):  # v1.25: die Konfiguration kommt nach dem Programm  # v1.31
                 P01.MsgBox(M09.Get_Language_Str('Das Programm wurde hochgeladen, die Konfiguration konnte aber nicht übertragen werden.\n\nDie Lichtmaschine hat noch keine Konfiguration. Bitte noch einmal hochladen (Einzelheiten im Protokoll).'), vbInformation, M09.Get_Language_Str('Konfiguration nicht übertragen'))  # v1.25
             M30.Show_Status_for_a_while(M09.Get_Language_Str('Programm erfolgreich hochgeladen. Kompilieren und Hochladen dauerte ') + P01.Format(P01.Time() - Start, 'hh:mm:ss'), '00:02:00')
         PG.global_controller.showFramebyName("ProgGeneratorPage")

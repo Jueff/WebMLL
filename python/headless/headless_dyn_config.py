@@ -1,12 +1,16 @@
-# Datei-Version: 1.02 (2026-11-22) - headless_dyn_config.py
+# Datei-Version: 1.03 (2026-11-23) - headless_dyn_config.py
 # ----------------------------------------------------------------------------------------------
 # Name:           headless_dyn_config.py
 # Path:           headless/headless_dyn_config.py
-# Version:        1.02
-# Last Update:    2026-11-22
-# Author:         Harold Linke
+# Version:        1.03
+# Last Update:    2026-11-23
+# Author:         Harold Linke, Co-Autor: Jürgen Winkler
 # Licence:        LGPL V2.1
 # History of Change:
+#   1.03  2026-11-23  Identify (Juergen Winkler): Konfigurationsdatei Format 7 (BLOB_VERSION, passend zu MLL_CFG_VERSION in MLLDynConfig.h): je Controller zusaetzlich der LED-Kanal
+#                     (MLL_P_CONTROLLER_CONFIG mit vier Werten, LED-Kanal kleiner MAX_LED_CHANNELS); Fehlermeldung '~MLLERR <Grund>' des Geraets; TX/RX im Protokoll (Logger dyn_cfg);
+#                     list_port_names liefert zusaetzlich pid, Seriennummer und Location; wait_for_port findet den Pico nach dem Neustart an Seriennummer und Location (ohne diese Angaben wie
+#                     bisher den ersten Pico). Zeilen mit '# v1.03'
 #   1.02  2026-11-22  Authentifizierter TCP-Transport fuer ESP32-Konfiguration; USB-Protokoll bleibt erhalten
 #   1.01  2026-11-19  Konfigurationsdatei Format 5: neuer Abschnitt 'Parameter' mit LED-Anzahl (NUM_LEDS), LEDs je LED-Kanal, ControllerCount und Controller-Tabelle (je FastLED-Controller: Pin, erste LED, LED-Anzahl),
 #                     LEDS_PER_CHANNEL und START_MSG. Diese Werte stehen nicht mehr in der Firmware:
@@ -49,7 +53,8 @@ MARK_END = "//MLLDYN_END"
 SIG_SALT = "mlldyn-5"                       # bei Aenderungen am Format der Konfigurationsdatei oder am Protokoll erhoehen  # v1.01
 BLOB_MAGIC = b"MLLC"
 # BLOB_VERSION = 2  # v1.01 (entfallen)
-BLOB_VERSION = 5  # v1.01
+# BLOB_VERSION = 5  # v1.01  # v1.03 (entfallen)
+BLOB_VERSION = 7  # v1.03: entspricht MLL_CFG_VERSION in MLLDynConfig.h
 SIG_LEN = 16
 # BLOB_HEADER = struct.Struct("<4sBBH5II16s")  # v1.01 (entfallen)
 BLOB_HEADER = struct.Struct("<4sBBH6II16s")  # Kennung, Version, reserviert, RAM, Laenge Config/Ext/Store/L2V/Startwerte/Parameter, CRC32 der Nutzdaten, Signatur der Firmware  # v1.01
@@ -158,9 +163,12 @@ def parse_params(header_text):  # v1.01
         return [int(x) for x in re.sub(r"\s", "", m.group(1)).split(",") if x] if m else []  # v1.01
     channels = numbers("MLL_P_CHANNEL_LEDS")  # v1.01
     flat = numbers("MLL_P_CONTROLLER_CONFIG")  # v1.01
-    if len(flat) % 3:  # v1.01
-        raise DynConfigError("MLL_P_CONTROLLER_CONFIG: je Controller werden drei Werte erwartet (Pin, erste LED, LED-Anzahl)")  # v1.01
-    controllers = [flat[i:i + 3] for i in range(0, len(flat), 3)]  # v1.01
+    # if len(flat) % 3:  # v1.01  # v1.03 (entfallen)
+        # raise DynConfigError("MLL_P_CONTROLLER_CONFIG: je Controller werden drei Werte erwartet (Pin, erste LED, LED-Anzahl)")  # v1.01  # v1.03 (entfallen)
+    # controllers = [flat[i:i + 3] for i in range(0, len(flat), 3)]  # v1.01  # v1.03 (entfallen)
+    if len(flat) % 4:  # v1.03: 4 Werte pro Controller (Pin, LEDChannel, LEDOffset, LEDCount)
+        raise DynConfigError("MLL_P_CONTROLLER_CONFIG: je Controller werden vier Werte erwartet (Pin, LED-Kanal, erste LED, LED-Anzahl)")  # v1.03
+    controllers = [flat[i:i + 4] for i in range(0, len(flat), 4)]  # v1.03: Pin, LEDChannel, LEDOffset, LEDCount
     return {"num_leds": number("NUM_LEDS"), "channels": channels, "controller_count": number("MLL_P_CONTROLLER_COUNT"), "controllers": controllers,  # v1.01
             "leds_per_channel": text("MLL_P_LEDS_PER_CHANNEL"), "start_msg": text("MLL_P_START_MSG"),  # v1.01
             "start_send": number("MLL_P_START_SEND_INPUTS"), "total_send": number("MLL_P_TOTAL_SEND_INPUTS")}  # v1.01
@@ -179,11 +187,15 @@ def pack_params(params):  # v1.01
     if controller_count != len(controllers) or controller_count > MAX_LED_CHANNELS:  # v1.01
         raise DynConfigError("Parameter der Konfiguration sind ungueltig (ControllerCount %d, %d Eintraege in MLL_P_CONTROLLER_CONFIG)" % (controller_count, len(controllers)))  # v1.01
     led_total = max(num_leds, sum(channels))  # v1.01
-    for pin, offset, count in controllers:  # v1.01
-        if not 0 <= pin <= 0xFF or not 0 <= offset <= 0xFFFF or not 0 <= count <= 0xFFFF or offset + count > led_total:  # v1.01
-            raise DynConfigError("Parameter der Konfiguration sind ungueltig (Controller Pin %s, erste LED %s, LED-Anzahl %s, LEDs gesamt %d)" % (pin, offset, count, led_total))  # v1.01
+    # for pin, offset, count in controllers:  # v1.01  # v1.03 (entfallen)
+        # if not 0 <= pin <= 0xFF or not 0 <= offset <= 0xFFFF or not 0 <= count <= 0xFFFF or offset + count > led_total:  # v1.01  # v1.03 (entfallen)
+            # raise DynConfigError("Parameter der Konfiguration sind ungueltig (Controller Pin %s, erste LED %s, LED-Anzahl %s, LEDs gesamt %d)" % (pin, offset, count, led_total))  # v1.01  # v1.03 (entfallen)
+    for pin, led_channel, offset, count in controllers:  # v1.03: 4 Werte
+        if not 0 <= pin <= 0xFF or not 0 <= led_channel < MAX_LED_CHANNELS or not 0 <= offset <= 0xFFFF or not 0 <= count <= 0xFFFF or offset + count > led_total:  # v1.03
+            raise DynConfigError("Parameter der Konfiguration sind ungueltig (Controller Pin %s, LED-Kanal %s, erste LED %s, LED-Anzahl %s, LEDs gesamt %d)" % (pin, led_channel, offset, count, led_total))  # v1.03
     out = struct.pack("<HHHB", num_leds, start_send, total_send, len(channels)) + b"".join(struct.pack("<H", c) for c in channels)  # v1.01
-    out += struct.pack("<B", controller_count) + b"".join(struct.pack("<BHH", pin, offset, count) for pin, offset, count in controllers)  # v1.01
+    # out += struct.pack("<B", controller_count) + b"".join(struct.pack("<BHH", pin, offset, count) for pin, offset, count in controllers)  # v1.01  # v1.03 (entfallen)
+    out += struct.pack("<B", controller_count) + b"".join(struct.pack("<BBHH", pin, led_channel, offset, count) for pin, led_channel, offset, count in controllers)  # v1.03: 4 Werte pro Controller
     for key in ("leds_per_channel", "start_msg"):  # v1.01
         out += str(params.get(key) or "").encode("utf-8") + b"\0"  # v1.01
     return out  # v1.01
@@ -389,6 +401,8 @@ class Link:
 
     def __init__(self, port, baud=115200, dtr=False):
         import serial                                     # erst hier: pyserial wird nur zum Senden gebraucht
+        import logging  # v1.03
+        self.log = logging.getLogger("dyn_cfg.link")  # v1.03
         self.ser = serial.Serial()
         self.ser.port = port
         self.ser.baudrate = baud
@@ -406,6 +420,7 @@ class Link:
             pass
 
     def send(self, text):
+        self.log.debug("TX: %s", text)  # v1.03
         self.ser.write((text + "\n").encode("ascii"))
         self.ser.flush()
 
@@ -417,16 +432,24 @@ class Link:
             pass
 
     def read(self, prefix, timeout):
-        """Naechste Zeile '~MLLCFG <prefix>...' (ohne ~MLLCFG) oder None. Eine Fehlermeldung (ERR) loest DynConfigError aus."""
+        """Naechste Zeile '~MLLCFG <prefix>...' (ohne ~MLLCFG) oder None. Eine Fehlermeldung (ERR/~MLLERR) loest DynConfigError aus."""
         end = time.time() + timeout
         while True:
             while b"\n" in self.buf:
                 raw, self.buf = self.buf.split(b"\n", 1)
                 line = raw.decode("ascii", errors="replace").strip()
+                # Prüfe auf ~MLLERR (Fehler vom Gerät, neues einheitliches Protokoll)  # v1.03
+                p_err = line.find("~MLLERR ")  # v1.03
+                if p_err >= 0:  # v1.03
+                    err_msg = line[p_err + 8:]  # v1.03
+                    self.log.error("ERR: %s", err_msg)  # v1.03
+                    raise DynConfigError("Fehler vom Geraet: " + err_msg)  # v1.03
                 p = line.find("~MLLCFG ")
                 if p < 0:
+                    self.log.info("IGN: %s", line)  # Ungueltige/ignorierte Zeilen mitloggen  # v1.03
                     continue
                 msg = line[p + 8:]
+                self.log.debug("RX: %s", msg)  # v1.03
                 if msg.startswith("ERR"):
                     raise DynConfigError("Fehler vom Geraet: " + msg)
                 if msg.startswith(prefix):
@@ -443,7 +466,9 @@ class TcpLink(Link):  # v1.02
     """ESP32-Geraetekanal: derselbe HMAC-Handshake wie beim Verbinden."""  # v1.02
     def __init__(self, host, password, timeout=5.0):  # v1.02
         import hmac  # v1.02
+        import logging  # v1.03
         from _web.web_serial import TcpPort  # v1.02
+        self.log = logging.getLogger("dyn_cfg.link")  # v1.03
         self.ser = TcpPort(host, 2323, timeout=timeout)  # v1.02
         self.buf = b""  # v1.02
         try:  # v1.02
@@ -484,16 +509,29 @@ def query_info(link, timeout=8.0):
 
 
 def send_blob(link, blob, progress=None):
+    import logging  # v1.03
+    log = logging.getLogger("dyn_cfg")  # v1.03
+
     link.clear()
-    link.send("~MLLCFG BEGIN %d %08x" % (len(blob), blob_crc(blob)))
-    if link.read("READY", 5.0) is None:
+    # link.send("~MLLCFG BEGIN %d %08x" % (len(blob), blob_crc(blob)))  # v1.03 (entfallen)
+    # if link.read("READY", 5.0) is None:  # v1.03 (entfallen)
+    cmd = "~MLLCFG BEGIN %d %08x" % (len(blob), blob_crc(blob))  # v1.03
+    log.info("TX: %s", cmd)  # v1.03
+    link.send(cmd)  # v1.03
+    msg = link.read("READY", 5.0)  # v1.03
+    log.info("RX: %s", msg)  # v1.03
+    if msg is None:  # v1.03
         raise DynConfigError("Keine Antwort auf BEGIN")
     pos = 0
     try:
         while pos < len(blob):
             chunk = blob[pos:pos + CHUNK_BYTES]
-            link.send("~MLLCFG DATA %d %s" % (pos, chunk.hex()))
+            # link.send("~MLLCFG DATA %d %s" % (pos, chunk.hex()))  # v1.03 (entfallen)
+            cmd = "~MLLCFG DATA %d %s" % (pos, chunk.hex())  # v1.03
+            log.debug("TX: %s", cmd)  # v1.03
+            link.send(cmd)  # v1.03
             msg = link.read("ACK", 5.0)
+            log.debug("RX: %s", msg)  # v1.03
             if msg is None:
                 raise DynConfigError("Keine Antwort auf DATA %d" % pos)
             if int(msg.split()[1]) != pos + len(chunk):
@@ -501,11 +539,18 @@ def send_blob(link, blob, progress=None):
             pos += len(chunk)
             if progress:
                 progress(pos, len(blob))
-        link.send("~MLLCFG END")
-        if link.read("OK", 10.0) is None:
+        # link.send("~MLLCFG END")  # v1.03 (entfallen)
+        # if link.read("OK", 10.0) is None:  # v1.03 (entfallen)
+        cmd = "~MLLCFG END"  # v1.03
+        log.info("TX: %s", cmd)  # v1.03
+        link.send(cmd)  # v1.03
+        msg = link.read("OK", 10.0)  # v1.03
+        log.info("RX: %s", msg)  # v1.03
+        if msg is None:  # v1.03
             raise DynConfigError("Keine Antwort auf END")
     except DynConfigError:
         try:
+            log.info("TX: ~MLLCFG ABORT")  # v1.03
             link.send("~MLLCFG ABORT")
         except Exception:                                  # noqa: BLE001
             pass
@@ -513,23 +558,43 @@ def send_blob(link, blob, progress=None):
 
 
 def list_port_names():
+    """Liefert Liste von (device, vid, pid, serial_number, location) für alle seriellen Anschlüsse."""
     try:
         import serial.tools.list_ports as lp
-        return [(p.device, p.vid) for p in lp.comports()]
+        # return [(p.device, p.vid) for p in lp.comports()]  # v1.03 (entfallen)
+        return [(p.device, p.vid, p.pid, p.serial_number, p.location) for p in lp.comports()]  # v1.03
     except Exception:                                      # noqa: BLE001
         return []
 
 
-def wait_for_port(port, pico, timeout=25.0):
-    """Nach dem Flashen (Pico: der USB-Anschluss verschwindet und kommt wieder, oft mit anderem Namen) den Anschluss suchen. None wenn er nicht erscheint."""
+# def wait_for_port(port, pico, timeout=25.0):  # v1.03 (entfallen)
+def wait_for_port(port, pico, timeout=25.0, expected_serial=None, expected_location=None):  # v1.03
+    """Nach dem Flashen (Pico: der USB-Anschluss verschwindet und kommt wieder, oft mit anderem Namen) den Anschluss suchen. None wenn er nicht erscheint.
+    Wenn expected_serial und expected_location angegeben sind, wird nach Neustart der Pico anhand dieser Werte identifiziert (auch bei geaenderter COM-Port-Nummer)."""
+    import logging  # v1.03
+    log = logging.getLogger("dyn_cfg")  # v1.03
+
     end = time.time() + timeout
     while time.time() < end:
         ports = list_port_names()
-        if any(d == port for d, _ in ports):
+        # if any(d == port for d, _ in ports):  # v1.03 (entfallen)
+        # 1. Exakter Device-Pfad match  # v1.03
+        if any(d == port for d, _, _, _, _ in ports):  # v1.03
+            log.info("Pico nach Neustart am selben Port gefunden: %s", port)  # v1.03
             return port
-        if pico:
-            for d, vid in ports:
-                if vid == PICO_VID:
+        # if pico:  # v1.03 (entfallen)
+            # for d, vid in ports:  # v1.03 (entfallen)
+                # if vid == PICO_VID:  # v1.03 (entfallen)
+        # 2. Match anhand serial_number und location (falls Pico und Werte uebergeben)  # v1.03
+        if pico and expected_serial is not None and expected_location is not None:  # v1.03
+            for d, vid, pid, serial, location in ports:  # v1.03
+                if vid == PICO_VID and serial == expected_serial and location == expected_location:  # v1.03
+                    log.info("Pico nach Neustart an neuem Port gefunden: %s (war %s)", d, port)  # v1.03
                     return d
+            # Serial/location angegeben aber nicht gefunden -> weiter warten (kein Fallback)  # v1.03
+        elif pico:  # v1.03: ohne Serial/Location wie bisher: der erste Pico
+            for d, vid, pid, serial, location in ports:  # v1.03
+                if vid == PICO_VID:  # v1.03
+                    return d  # v1.03
         time.sleep(0.5)
     return None

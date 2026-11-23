@@ -1,12 +1,16 @@
-# Datei-Version: 1.16 (2026-11-22) - M06_Write_Header.py
+# Datei-Version: 1.17 (2026-11-23) - M06_Write_Header.py
 # ----------------------------------------------------------------------------------------------
 # Name:           M06_Write_Header.py
 # Path:           proggen/M06_Write_Header.py
-# Version:        1.16
-# Last Update:    2026-11-22
-# Author:         Harold Linke
+# Version:        1.17
+# Last Update:    2026-11-23
+# Author:         Harold Linke, Co-Autor: Jürgen Winkler
 # Licence:        LGPL V2.1
 # History of Change:
+#   1.17  2026-11-23  Identify (Juergen Winkler): ESP32: die drei Status LEDs (WS2811) sind das erste Pixel von LED Kanal 7; Add_Status_LED_Macro legt den Kanal mit ConstRGB an, wenn der
+#                     Anwender ihn nicht benutzt (Status_LED_Extra, Status_LED_Offset, NUM_LEDS). MLL_P_CONTROLLER_CONFIG mit LED-Kanal (Konfigurationsdatei Format 7). #define MLL_IDENTIFY
+#                     fuer ESP32 und Pico (Konfiguration getrennt). Pico: #define Mainboard_LED1..3 im Kopf, Mainboard_LED(1..3) aus der Tabelle werden als Kommentar geschrieben. Zeilen
+#                     mit '# v1.17'
 #   1.16  2026-11-22  Issue 30: Startmeldung der Lichtmaschine mit Datum TT.MM.JJ und Uhrzeit hh:mm unabhaengig von der Spracheinstellung des Rechners (US-Format 11.19.26)
 #   1.15  2026-11-22  Dynamische Optionen bis Write_Header_File_and_Upload_to_Arduino durchreichen (NameError behoben)
 #   1.14  2026-11-22  HeaderOnly kann dynamische Konfiguration fuer zentralen ESP32-Upload erzeugen
@@ -160,6 +164,10 @@ DayAndNightTimer = String()
 
 MINLEDs = 20
 
+STATUS_LED_CHANNEL = 7                # ESP32: LED Kanal, an dem die drei Status LEDs der Hauptplatine (WS2811) als erste Bytes haengen  # v1.17
+STATUS_LED_MACRO = 'ConstRGB(#LED, #InCh, 0, 0, 0, 0, 0, 0)'   # v1.17: Makro, das LED Kanal 7 anlegt, wenn der Anwender ihn nicht benutzt (eine LED, immer aus)
+Status_LED_Extra = 0                  # 1: der Generator hat fuer die Status LEDs eine LED auf LED Kanal 7 ergaenzt (der Anwender hat dort keine LEDs)  # v1.17
+Status_LED_Offset = -1                # Index der ersten LED von LED Kanal 7 in leds[] (dort sind die Status LEDs); -1: keine Status LEDs  # v1.17
 #-------------------------------------------------------
 def Init_HeaderFile_Generation():
 #-------------------------------------------------------
@@ -221,6 +229,47 @@ def Init_HeaderFile_Generation():
             LEDs_per_ChannelList = LEDs_per_ChannelList + ','
     _fn_return_value = True
     return _fn_return_value
+#-------------------------------------------------------  # v1.17
+def Add_Status_LED_Macro():  # v1.17
+#-------------------------------------------------------  # v1.17
+    """ESP32: Die drei Status LEDs der Hauptplatine (gelb, weiss, blau) haengen als WS2811 am Anfang von LED Kanal 7: die ersten drei Bytes des Kanals
+    sind die LEDs (Firmware: MLLIdentify.h). Die Firmware braucht dazu immer einen Controller fuer LED Kanal 7 mit mindestens einer LED.
+    Benutzt der Anwender LED Kanal 7 nicht, wird das Makro STATUS_LED_MACRO (ConstRGB, eine LED, immer aus) wie eine Zeile ohne Adresse auf Kanal 7
+    verarbeitet: Die LED Zahl des Kanals, Start_LED_Channel der folgenden Kanaele, NUM_LEDS und die Controller Tabelle ergeben sich daraus, der
+    Kanal 7 entsteht automatisch. Ist Kanal 7 schon konfiguriert, bleibt alles wie es ist: das erste Pixel des Kanals sind dann die Status LEDs.
+    Status_LED_Offset ist der Index dieses Pixels in leds[] (-1: kein Status Pixel). Muss nach dem Einlesen der Zeilen (DMX Kanal, LED Pins) und
+    vor ProcessLine() aufgerufen werden."""
+    global ConfigTxt, Status_LED_Extra, Status_LED_Offset, Max_Channels, LEDs_per_ChannelList  # v1.17
+    Status_LED_Extra = 0  # v1.17
+    Status_LED_Offset = -1  # v1.17
+    if M02a.Get_BoardTyp() != M02.HT_ESP32:  # v1.17
+        return  # v1.17
+    Ch = STATUS_LED_CHANNEL  # v1.17
+    if Ch > M02.LED_CHANNELS - 1:  # v1.17
+        return  # v1.17
+    LED_PINNr_Arr = Split(M06SW.LED_PINNr_List, ' ')  # v1.17
+    if Ch > UBound(LED_PINNr_Arr) or LED_PINNr_Arr(Ch) == M09.Virtual_Channel_T or Ch == M06SW.DMX_LedChan:  # v1.17
+        return                                                                                          # Kanal 7 hat keinen eigenen WS2811 Ausgang (virtuell oder DMX)  # v1.17
+    if LEDs_per_Channel(Ch) <= 0:  # v1.17
+        # Das Makro wie die Makros der Tabelle verarbeiten (siehe Generate_Config_Line): #LED = LED Nummer, #InCh = SI_1 (Zeile ohne Adresse)  # v1.17
+        Status_LED_Extra = 1                                                                            # ConstRGB hat eine LED  # v1.17
+        LEDs_per_Channel[Ch] = Status_LED_Extra  # v1.17
+        for Nr in vbForRange(Ch + 1, M02.LED_CHANNELS - 1):  # v1.17
+            Start_LED_Channel[Nr] = Start_LED_Channel(Nr - 1) + LEDs_per_Channel(Nr - 1)  # v1.17
+        for Nr in vbForRange(M02.LED_CHANNELS - 1, 0, - 1):  # v1.17
+            if LEDs_per_Channel(Nr) > 0:  # v1.17
+                Max_Channels = Nr  # v1.17
+                break  # v1.17
+        LEDs_per_ChannelList = ''  # v1.17
+        for Nr in vbForRange(0, Max_Channels):  # v1.17
+            LEDs_per_ChannelList = LEDs_per_ChannelList + str(LEDs_per_Channel(Nr))  # v1.17
+            if Nr != Max_Channels:  # v1.17
+                LEDs_per_ChannelList = LEDs_per_ChannelList + ','  # v1.17
+        Cmd = Replace(STATUS_LED_MACRO, '#LED', str(Start_LED_Channel(Ch)))  # v1.17
+        Cmd = Replace(Cmd, '#InCh', 'SI_1')  # v1.17
+        Cmd = M30.AddSpaceToLen('  ' + Cmd, 109) + ' /* Status LEDs (ESP32): yellow, white, blue = first 3 bytes of LED channel ' + str(Ch)  # v1.17
+        ConfigTxt = ConfigTxt + M30.AddSpaceToLen(Cmd, 300) + ' */' + vbCrLf  # v1.17
+    Status_LED_Offset = Start_LED_Channel(Ch)  # v1.17
 #-------------------------------------------------------
 def ExpandName(Variablename):
 #-------------------------------------------------------
@@ -480,7 +529,14 @@ def Proc_Special_Functions(Row, Cmd, LEDNr, ChannelBaseOffset, Channel):  # v1.0
             # 21.12.22 replace vbcr with vbcrlf
         if Replace_Sym_Pin_Name:
             Cmd = Do_Replace_Sym_Pin_Name(Cmd, PinOrNr)
-        Cmd = Replace(Replace(Replace(Cmd, 'Mainboard_LED(', '#define Mainboard_LED'), ',', ' '), ')', '')
+        # For Pico: Mainboard_LED1/2/3 are already defined at the top of the header file (MLLIdentify.h needs them).  # v1.17
+        # Don't generate duplicate #define inside the configuration array.  # v1.17
+        # PinOrNr '1', '2', '3' correspond to Mainboard_LED1/2/3  # v1.17
+        if M02a.Get_BoardTyp() == M02.HT_PICO and PinOrNr in ('1', '2', '3'):  # v1.17
+            # Convert to comment to avoid redefinition warning  # v1.17
+            Cmd = '// ' + Replace(Replace(Replace(Cmd, 'Mainboard_LED(', '#define Mainboard_LED'), ',', ' '), ')', '')  # v1.17
+        else:  # v1.17
+            Cmd = Replace(Replace(Replace(Cmd, 'Mainboard_LED(', '#define Mainboard_LED'), ',', ' '), ')', '')  # v1.17
     if Left(Cmd, Len('DayAndNightTimer(')) == 'DayAndNightTimer(':
         if not Activate_DayAndNightTimer(Cmd):
             return _fn_return_value, Cmd
@@ -1310,6 +1366,8 @@ def ProcessSheet(SheetName, firstSheet, addressOffset, LEDsOffset, LEDsInUse):
         return _fn_return_value
     # 08.10.21: Juergen
        
+    if firstSheet:                                                                                    # v1.17: ESP32: Status LEDs (WS2811) = erste Bytes auf LED Kanal 7
+        Add_Status_LED_Macro()  # v1.17
     sx = M25.Page_ID == 'Selectrix'
     M06cfg.init_config_structure_orig()
     for r in vbForRange(M02.FirstDat_Row, M30.LastUsedRow()): #*HL
@@ -1507,6 +1565,7 @@ def Write_Header_File_and_Upload_to_Arduino(CreateFilesOnly=False, LEDsInUse=Non
         # To be able to test at least 20 LEDs with the color test program
         # 26.10.20:        
         NumLeds = MINLEDs
+    NumLeds = NumLeds + Status_LED_Extra                                                              # v1.17: LED fuer die Status LEDs auf LED Kanal 7 (ESP32)
     if NumLeds > MaxLed:
         ErrorText = ErrorText + M09.Get_Language_Str('Maximale LED Anzahl überschritten: ') + str(NumLeds) + vbCr + M09.Get_Language_Str('Es sind maximal #1# RGB LEDs möglich') + vbCr
         # Don't check before to be able to temprory add more than 256 LES
@@ -1550,6 +1609,10 @@ def Write_Header_File_and_Upload_to_Arduino(CreateFilesOnly=False, LEDsInUse=Non
     if DynMode:  # v1.07
         VBFiles.writeText(fp, '#define MLL_DYNAMIC_CONFIG            // The data tables are not part of the firmware. They are loaded from the file system (see MLLDynConfig.h)', '\n')  # v1.07
         VBFiles.writeText(fp, '#define MLL_FIRMWARE_SIG "' + DC.SIG_PLACEHOLDER + '"', '\n')  # v1.07
+        # MLL_IDENTIFY: Enable MLLIdentify feature for ESP32/Pico with dynamic config (blink mainboard LEDs during COM port search)  # v1.17
+        BoardTyp = M02a.Get_BoardTyp()  # v1.17
+        if BoardTyp == M02.HT_ESP32 or BoardTyp == M02.HT_PICO:  # v1.17
+            VBFiles.writeText(fp, '#define MLL_IDENTIFY              // Enable MLLIdentify: blink mainboard LEDs during COM port search (~MLLIDENT)', '\n')  # v1.17
         VBFiles.writeText(fp, '', '\n')  # v1.07
     VBFiles.writeText(fp, '#ifndef CONFIG_ONLY', '\n')
     # 04.03.22 Juergen: add Simulator feature
@@ -1598,7 +1661,12 @@ def Write_Header_File_and_Upload_to_Arduino(CreateFilesOnly=False, LEDsInUse=Non
         VBFiles.writeText(fp, '#define MLL_P_CHANNEL_LEDS ' + ','.join(str(int(LEDs_per_Channel(Nr))) for Nr in range(M02.LED_CHANNELS)), '\n')  # v1.12
         Controllers = M06SW.Get_LED_Controller_List()  # v1.12: je FastLED-Controller Pin, erste LED, LED-Anzahl (SETUP_FASTLED, mllControllerConfig)
         VBFiles.writeText(fp, '#define MLL_P_CONTROLLER_COUNT ' + str(len(Controllers)), '\n')  # v1.12
-        VBFiles.writeText(fp, '#define MLL_P_CONTROLLER_CONFIG ' + ', '.join(str(Pin) + ',' + str(Off) + ',' + str(Cnt) for _Ch, Pin, Off, Cnt in Controllers) + '   // Pin,LEDOffset,LEDCount per controller', '\n')  # v1.12
+        # VBFiles.writeText(fp, '#define MLL_P_CONTROLLER_CONFIG ' + ', '.join(str(Pin) + ',' + str(Off) + ',' + str(Cnt) for _Ch, Pin, Off, Cnt in Controllers) + '   // Pin,LEDOffset,LEDCount per controller', '\n')  # v1.12  # v1.17 (entfallen)
+        VBFiles.writeText(fp, '#define MLL_P_CONTROLLER_CONFIG ' + ', '.join(str(Pin) + ',' + str(Ch) + ',' + str(Off) + ',' + str(Cnt) for Ch, Pin, Off, Cnt in Controllers) + '   // Pin,LEDChannel,LEDOffset,LEDCount per controller', '\n')  # v1.17
+        if M02a.Get_BoardTyp() == M02.HT_PICO:  # v1.17: Pico: Mainboard LEDs sind auf physischen Pins (MLLIdentify.h: die Pins sind dann Ausgaenge)
+            VBFiles.writeText(fp, '#define Mainboard_LED1 13   // Left   Yellow LED on the mainboard (Pico LED1_PIN)', '\n')  # v1.17
+            VBFiles.writeText(fp, '#define Mainboard_LED2 12   // Middle White  LED on the mainboard (Pico LED2_PIN)', '\n')  # v1.17
+            VBFiles.writeText(fp, '#define Mainboard_LED3 11   // Right  Blue   LED on the mainboard (Pico LED3_PIN)', '\n')  # v1.17
         VBFiles.writeText(fp, '#ifdef CONFIG_ONLY', '\n')  # v1.12
         VBFiles.writeText(fp, '#define NUM_LEDS ' + str(NumLeds) + '                      // Number of LEDs: only used to check the LED numbers when the configuration is compiled', '\n')  # v1.12
         VBFiles.writeText(fp, '#endif', '\n')  # v1.12
@@ -1936,7 +2004,6 @@ def Write_Header_File_and_Upload_to_Arduino(CreateFilesOnly=False, LEDsInUse=Non
         M42.Disable_Once("die Konfigurationsdatei konnte nicht erzeugt werden")  # v1.07
         # return Create_HeaderFile(CreateFilesOnly, HeaderOnly=HeaderOnly)  # v1.07  # v1.14 (entfallen)
         return Create_HeaderFile(CreateFilesOnly, HeaderOnly=HeaderOnly, DynamicConfig=DynamicConfig, DynFirmwareKey=DynFirmwareKey)  # v1.07  # v1.14
-
     if HeaderOnly:  # v1.14
         return True  # v1.14
 

@@ -1,9 +1,17 @@
-Datei-Version: 1.77 (2026-11-23) - HOC_Anwender.md
+Datei-Version: 1.78 (2026-11-23) - HOC_Anwender.md
 Stand: webMobaLedLib 4.93
 
 # webMobaLedLib: Änderungen (Kurzfassung)
 
 Gilt ab Version 1.39. Neueste Version oben.
+
+## Identify (Branch feature/identitfyLeds, auf Basis 4.93, 2026-11-23)
+
+Neue Funktionen:
+- ESP32 und Pico: Im Dialog „Auswahl des COM Ports“ blinken die LEDs auf der Hauptplatine der gewählten Zentrale. So erkennst du, welche Zentrale an welchem Anschluss hängt.
+
+Korrekturen:
+- Pico: Die Konfiguration wird nach dem Hochladen auch übertragen, wenn der Pico danach einen anderen COM Port bekommt.
 
 ## Version 4.93 (2026-11-23)
 
