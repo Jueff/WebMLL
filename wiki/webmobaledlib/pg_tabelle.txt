@@ -1,5 +1,5 @@
 ====== webMobaLedLib – Die Tabelle bedienen ======
-//Seitenstand 1.09 (2026-11-23), gilt für webMobaLedLib 4.82//
+//Seitenstand 1.10 (2026-11-23), gilt für webMobaLedLib 4.93//
 
 In der Tabelle des [[anleitungen:webmobaledlib:programmgenerator|Programmgenerators]] steht jede Zeile für einen Effekt oder ein Gerät. Auf dieser Seite steht, wie du die Tabelle bedienst.
 
@@ -49,7 +49,7 @@ Mit der **rechten Maustaste** (auf dem Tablet: lange drücken) auf eine Zelle er
 
 Klicke auf die **Zeilennummer**, um eine Zeile zu markieren. Mit der **Umschalttaste** markierst du einen Bereich, mit der **Strg-Taste** (am Mac **Cmd**) einzelne Zeilen. Du kannst auch mit der Maus einen Bereich von Zellen über mehrere Zeilen aufziehen.
 
-Die Knöpfe **Zeilen duplizieren**, **Zeilen löschen**, **Zeilen verschieben** und **Aus- oder Einblenden** wirken auf **alle markierten Zeilen**. Die Kopien beim Duplizieren stehen hinter der letzten markierten Zeile. Was jeder Knopf macht, steht auf der Seite [[anleitungen:webmobaledlib:pg_werkzeugleiste|Die Werkzeugleiste]].
+Die Knöpfe **Zeilen duplizieren**, **Zeilen löschen**, **Zeilen verschieben** und **Aus- oder Einblenden** wirken auf **alle markierten Zeilen**. Die Kopien beim Duplizieren stehen hinter der letzten markierten Zeile. Nach **Einfügen**, **Löschen**, **Duplizieren** und **Verschieben** springt die Ansicht nicht, und die betroffene Zeile ist markiert, so dass du gleich weiterarbeiten kannst (seit 4.84 bis 4.88). Was jeder Knopf macht, steht auf der Seite [[anleitungen:webmobaledlib:pg_werkzeugleiste|Die Werkzeugleiste]].
 
 ===== Zeilen aktivieren und deaktivieren =====
 

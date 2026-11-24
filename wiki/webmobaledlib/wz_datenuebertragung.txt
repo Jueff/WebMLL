@@ -1,0 +1,58 @@
+====== webMobaLedLib – Datenübertragung zwischen Rechnern ======
+//Seitenstand 1.00 (2026-11-23), gilt für webMobaLedLib 4.93 (Beitrag von moosbewohner, Pull Request 57)//
+
+Mit der **Datenübertragung** holst du Tabellen oder einzelne Zeilen von **einem anderen Rechner** im Heimnetz auf deinen Rechner. Das ist nützlich, wenn du zum Beispiel am Schreibtisch planst und die Tabellen an der Anlage (etwa auf dem Raspberry Pi) brauchst. Du brauchst dafür **kein Konto** und **kein Internet**. Beide Rechner arbeiten weiter mit ihren **eigenen** Daten, nichts wird automatisch abgeglichen.
+
+Du findest die Funktion im Menü //Einstellungen → Datenübertragung//. Sie hat zwei Reiter: **Dieser PC als Quelle** (hier gibst du Tabellen frei) und **Tabellen übernehmen** (hier holst du sie ab).
+
+===== Auf dem Quell-Rechner freigeben =====
+
+  - Öffne den Reiter **Dieser PC als Quelle**.
+  - Gib einen **Namen** für den Rechner ein und wähle die **Tabellen**, die du freigeben willst.
+  - Übernimm den vorgeschlagenen **Verbindungscode** oder gib einen eigenen ein (mindestens **zwölf Zeichen**).
+  - Klicke auf **Tabellenfreigabe aktivieren**. Der Quell-Rechner muss danach **laufen** und im Netz erreichbar bleiben.
+
+**Die Freigabe ist nach jedem Programmstart ausgeschaltet.** Name, Code und Auswahl bleiben gespeichert. **Freigabe ausschalten** beendet sie sofort. Die Freigabe stellt nur den **aktuellen Stand zum Lesen** bereit, sie schreibt nichts auf andere Rechner.
+
+===== Auf dem Ziel-Rechner übernehmen =====
+
+  - Öffne den Reiter **Tabellen übernehmen** und klicke auf **Quell-PC suchen**. Wähle die Quelle aus. Wird sie nicht gefunden, gib die **Adresse** von Hand ein, zum Beispiel ''http://192.168.1.20:45875''.
+  - Trage den **Verbindungscode** des Quell-Rechners ein und klicke auf **Verbindung prüfen und übernehmen**. Stimmt der Code nicht, erscheint eine Meldung mit dem Hinweis, den Code zu prüfen.
+  - Wähle die **Übernahmeart** (siehe unten).
+  - Klicke auf **Übernehmen und sichern**. Danach zeigt die Tabellenansicht gleich den neuen Stand.
+
+==== Übernahmeart ====
+
+^ Art ^ Wirkung ^
+| **Tabellen ersetzen** | Die gewählten Tabellen ersetzen die **gleichnamigen** Tabellen auf dem Ziel-Rechner. Fehlende Tabellen werden angelegt. Mit der Tabelle kommen auch die Kopfwerte und die Boardkonfiguration. |
+| **Zeilen in bestehende Tabelle einfügen** | Du wählst **eine** Quelltabelle und die **Zeilen** (zum Beispiel ''3-8, 12''), dazu die **Zieltabelle** und die **Stelle**: **Am Ende**, **Vor Zeile** oder **Nach Zeile**. Zeile 1 und 2 sind ausgeschlossen. Protokoll und Spaltenaufbau von Quelle und Ziel müssen zusammenpassen. Vorhandene Zeilen bleiben erhalten, die Kopfwerte der Zieltabelle auch. |
+
+==== Zeilen einfügen: LED-Kanal und Prüfung ====
+
+  * **LED-Kanal für eingefügte Zeilen:** Standard ist 0, für Taster-LEDs 1. Die Auswahl gilt für **alle** eingefügten Zeilen. Mit **LED-Kanäle der Quelle beibehalten** bleiben die Kanalwerte der Quelle erhalten. Bestehende Zeilen des Ziels werden nicht verändert.
+  * **Einfügen prüfen** zeigt die Zielposition und **Hinweise**: Adressen, die sich überschneiden, Namen, die es schon gibt, und fehlende include-Tabellen. Bei Konflikten musst du das Einfügen **ausdrücklich bestätigen**. Eigene Makros und symbolische Adressen prüft das Programm nicht vollständig. **Adressen ändert es nie von selbst.**
+  * Zeilenfarben, Zeilenhöhen und ausgeblendete Zeilen werden mit übertragen. Handgezeichnete Formen und externe Bilddateien der Quellzeilen werden **nicht** mitkopiert.
+
+===== Was bleibt auf dem Ziel-Rechner? =====
+
+**Nicht übernommen** werden die Programm Einstellungen, WLAN-Zugangsdaten und ESP-Einstellungen. Der **USB-Anschluss** und die **WLAN-Adresse** der Lichtmaschine bleiben auf dem Ziel-Rechner, wie sie sind. Andere Tabellen bleiben unverändert; das Programm rechnet danach neu, dadurch können sich abhängige Werte ändern.
+
+===== Sicherung und Rückgängig =====
+
+Vor **jeder** Übernahme sichert das Programm die **ganze bisherige Arbeitsmappe** in der Datei ''tabellenabgleich_letztes_backup.json'' im Datenordner. Es gibt nur **eine** Sicherung, jede weitere Übernahme ersetzt sie. Mit **Letzten Import rückgängig machen** stellst du den Stand davor wieder her. Das ersetzt **keine** richtige Datensicherung: Sichere wichtige Arbeitsmappen vorher zusätzlich, zum Beispiel mit //Datei → Inkrementell speichern// (siehe [[anleitungen:webmobaledlib:pg_speichern|Speichern und Laden]]). Schließe während der Übernahme andere Fenster des Programms.
+
+===== Netz und Sicherheit =====
+
+  * Die Freigabe benutzt den Anschluss **TCP 45875**, die Suche **UDP 45874**. Unter **Windows** richtet der Knopf im Fenster nach einer Bestätigung als Administrator die Firewallregeln ein, und zwar **nur für private Netze**. Unter **Linux** musst du die Anschlüsse selbst freigeben. In einer **virtuellen Maschine** hilft eine Netzwerkbrücke, bei NAT gibst du die Adresse von Hand ein.
+  * Der Verbindungscode wird **nicht im Klartext** gesendet, sondern über ein Frage-Antwort-Verfahren geprüft. Die **Tabellendaten selbst sind nicht verschlüsselt** (http). Benutze die Funktion nur im **vertrauenswürdigen Heimnetz** und leite die Anschlüsse **nie ins Internet** weiter.
+  * Die Verbindungscodes liegen im Datenordner des Programms. Gib diesen Ordner nicht weiter.
+
+===== Wenn etwas nicht klappt =====
+
+^ Problem ^ Lösung ^
+| Der Quell-Rechner wird nicht gefunden | Läuft das Programm dort, und ist die **Freigabe aktiviert** (sie ist nach jedem Start aus)? Prüfe die **Firewall** (siehe oben) und gib die Adresse von Hand ein. |
+| Meldung zum Verbindungscode | Der Code stimmt nicht. Tippe ihn noch einmal ein, am besten per Kopieren und Einfügen. |
+| „Einfügen“ ist gesperrt | Protokoll oder Spaltenaufbau passen nicht, oder die Prüfung meldet einen Konflikt, den du noch bestätigen musst. |
+| Das Ergebnis gefällt dir nicht | **Letzten Import rückgängig machen**. |
+
+Die Funktion wurde unter Windows 10, Windows 11 und auf dem Raspberry Pi 4B geprüft. Weitere Hinweise für Entwickler stehen in der Datei ''DATENUEBERTRAGUNG.md'' im Programmpaket.

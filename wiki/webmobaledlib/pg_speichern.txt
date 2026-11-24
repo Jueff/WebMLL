@@ -1,5 +1,5 @@
 ====== webMobaLedLib – Speichern und Laden ======
-//Seitenstand 1.05 (2026-11-23), gilt für webMobaLedLib 4.79//
+//Seitenstand 1.06 (2026-11-24), gilt für webMobaLedLib 4.96//
 
 Das Programm speichert deine Arbeit **automatisch**. Zusätzlich kannst du sie als **Datei** sichern, weitergeben und wieder laden.
 
@@ -20,7 +20,7 @@ Deine Daten liegen im **Datenordner** des Programms, getrennt von den Programmda
 
 ^ Eintrag ^ Wirkung ^
 | **ProgrammGenerator: PGF-Datei speichern** | Speichert die **Tabelle** als Datei mit der Endung **.MLL_pgf**. Die Datei landet im Download-Ordner des Rechners, an dem du sitzt. Mit ihr gibst du dein Programm weiter oder machst eine Sicherung. |
-| **ProgrammGenerator: PGF-Datei lesen** | Lädt eine solche Datei in die Tabelle. Das Programm fragt vorher nach, denn die Tabelle wird ersetzt. Du kannst die Datei auch **auf die Tabelle ziehen**. |
+| **ProgrammGenerator: PGF-Datei lesen** | Lädt eine solche Datei in die Tabelle. Das Programm fragt vorher nach, denn die Tabelle wird ersetzt. Du kannst die Datei auch **auf die Tabelle ziehen**. Enthält die Datei **mehrere Tabellenblätter**, fragt das Programm bei jedem Blatt, ob es geladen werden soll. Mit **Ja, alle** (seit 4.96) werden dieses und alle weiteren Blätter ohne weitere Fragen geladen. |
 | **ProgrammGenerator-Workbook speichern als** | Speichert die **ganze Arbeitsmappe** (alle Blätter und Einstellungen). |
 | **ProgrammGenerator-Workbook von Datei lesen** | Lädt eine solche Arbeitsmappe. |
 | **Inkrementell speichern** | Sichert die **ganze Arbeitsmappe** als neue Datei mit Datum und Uhrzeit im Namen, siehe unten. Die Tastenkombination (Vorgabe **Strg+Umschalt+S**) stellst du in den Programm Einstellungen ein. |

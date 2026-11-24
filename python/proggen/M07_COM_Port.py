@@ -1,12 +1,13 @@
-# Datei-Version: 1.13 (2026-11-20) - M07_COM_Port.py
+# Datei-Version: 1.14 (2026-11-23) - M07_COM_Port.py
 # ----------------------------------------------------------------------------------------------
 # Name:           M07_COM_Port.py
 # Path:           proggen/M07_COM_Port.py
-# Version:        1.13
-# Last Update:    2026-11-20
+# Version:        1.14
+# Last Update:    2026-11-23
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
+#   1.14  2026-11-23  Ensure_Existing_USB_Port: Existiert der in der Tabelle eingetragene USB-Anschluss am Rechner nicht, wird (bei genau einem passenden Board) der vorhandene eingetragen, sonst gemeldet - vor dem langen Build des ESP32-Setups
 #   1.00  2026-10-12  Stand der Umstellung (nicht erfasst)
 #   1.13  2026-11-20  Issue 50: Ist kein Anschluss eingetragen, aber eine Verbindung zur Lichtmaschine aktiv, wird deren Anschluss (und Board) vor dem Hochladen in die Tabelle uebernommen (Fill_Port_From_Active_Connection, Einstellung UploadPortMode)
 #   1.01  2026-10-20  EnumComPorts: FTDI-Adapter (VID 0403, Beschreibung FT232 ...) werden erkannt, sonst meldete die Pruefung beim Hochladen 'kein Arduino angeschlossen'; DetectArduino: kein Absturz, wenn die Verbindung inzwischen getrennt wurde
@@ -361,6 +362,28 @@ def Check_USB_Port_with_Dialog(ComPortColumn):
     else:
         fn_return_value = True
     return fn_return_value
+
+def Ensure_Existing_USB_Port(ComPortColumn):  # v1.14
+    """Der in der Tabelle eingetragene USB-Anschluss muss am Rechner existieren (sonst scheitert das Hochladen erst nach dem langen Build mit 'port doesn't exist').
+    Existiert er nicht und haengt genau ein Board des eingestellten Typs am Rechner, wird dessen Anschluss in die Tabelle eingetragen.
+    Rueckgabe: Name des Anschlusses oder '' (kein passender Anschluss; der Aufrufer meldet das)."""  # v1.14
+    port = str(ComPortPage().Cells(M02.SH_VARS_ROW, ComPortColumn)).strip().lstrip("*").strip()  # v1.14
+    if port.isdigit() and os.name == "nt":  # v1.14
+        port = "COM" + port  # v1.14
+    if port.upper().startswith("IP:"):  # v1.14
+        return port  # v1.14
+    comports = list(portlist.comports(include_links=False))  # v1.14
+    if port and port.upper() in [str(cp.device).upper() for cp in comports]:  # v1.14
+        return port  # v1.14
+    cur = M02a.Get_BoardTyp()  # v1.14
+    wanted = 'Pico' if cur == M02.HT_PICO else ('ESP32' if cur == M02.HT_ESP32 else 'Nano')  # v1.14
+    candidates = [str(cp.device) for cp in comports if Classify_Port(cp) == wanted]  # v1.14
+    if len(candidates) == 1:  # v1.14
+        ComPortPage().CellDict[M02.SH_VARS_ROW, ComPortColumn] = candidates[0]  # v1.14
+        logger.info("USB-Anschluss %s ist nicht vorhanden, eingetragen: %s (%s)", port, candidates[0], wanted)  # v1.14
+        return candidates[0]  # v1.14
+    return ""  # v1.14
+
 
 def __Test_Check_USB_Port_with_Dialog():
     # 30.12.19:

@@ -1,9 +1,9 @@
-# Datei-Version: 4.93 (2026-11-23) - webmobaledlib.py
+# Datei-Version: 4.98 (2026-11-24) - webmobaledlib.py
 # ----------------------------------------------------------------------------------------------
 # Name:           webmobaledlib.py
 # Path:           webmobaledlib.py
-# Version:        4.93
-# Last Update:    2026-11-23
+# Version:        4.98
+# Last Update:    2026-11-24
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
@@ -324,6 +324,11 @@
 #   4.76  2026-11-22  Issue 37: Port-Auswahl: nach dem Wechsel des Boards ueber Andere Typen aendern sich Bild, Text und roter Hinweis (web_form_comport 1.09)
 #   4.77  2026-11-22  Issue 34: Dialoge und Menues fest am Fenster (CSS); Issue 30: Startmeldung der Lichtmaschine mit Datum TT.MM.JJ (M06_Write_Header 1.16)
 #   4.93  2026-11-23  Datenuebertragung (Pull Request 57, neuer Commit): falscher Verbindungscode wird als verstaendliche Meldung angezeigt statt HTTP 403 (headless_table_sync 1.04)
+#   4.94  2026-11-23  ESP32-Upload (Pull Request 54, neue Commits): firmware.bin und partitions.bin kommen aus dem von PlatformIO berechneten Build-Verzeichnis (auch externes build_dir/workspace_dir), klare Meldung wenn sie fehlen (headless_esp32_ota 1.13, test_esp32_build_directory 1.00, Web_Languages.csv)
+#   4.95  2026-11-23  ESP32 feste IP (Meldung PeterVT11): Minimale Firmware bekommt die feste IP-Adresse (blieb bei DHCP), vorhandener USB-Anschluss wird geprueft (ESP32-Setup und Minimale Firmware), Adresse dieses Rechners als Ziel wird abgelehnt (web_esp32_ota 1.08, M07 1.14, M08 1.31, Web_Languages.csv)
+#   4.96  2026-11-24  PGF-Datei mit mehreren Tabellenblaettern laden: Knopf 'Ja, alle' bei der Frage 'Soll die Seite ... importiert werden?' (web_dialogs 1.13, M18_Save_Load 1.06, Web_Languages.csv)
+#   4.98  2026-11-24  git fehlt auf einem frisch eingerichteten Rechner: install_windows.bat und install_mac.command installieren git mit; das Programm bietet git beim Uebersetzen fuer ESP32 und Pico selbst an (M08.Ensure_Git)
+#   4.97  2026-11-24  ESP32-Absturzschleife 'lfs_fs_grow_ assert failed' (altes Dateisystem im Flash): Nach dem vollstaendigen USB-Upload wird die Dateisystem-Partition geloescht (headless_esp32_ota 1.14, M08_ARDUINO 1.32, Web_Languages.csv)
 #   4.92  2026-11-23  Blattwechsel baut auch die WLAN-Verbindung (ESP32) des neuen Blatts auf und wechselt zwischen WLAN und USB; bei nicht erreichbarem WLAN-Ziel wird der USB-Anschluss des Blatts versucht
 #   4.91  2026-11-23  Issue 59 Nachbesserung: Verbinden (Knopf, Menue, Trennen und neu verbinden) nimmt den Anschluss des aktiven Blatts (web_serial 1.14); Blattwechsel passt die Verbindung auch ohne automatische Verbindung an und protokolliert die Entscheidung; Optionen (Board wechseln) lassen den aktiven Reiter stehen
 #   4.90  2026-11-23  Issues 58-60: (60) Knoepfe Vorgang abbrechen/Schliessen flackerten: busy als Zaehler, Ende des Vorgangs erst nach 1,5 s gemeldet (web_log 1.12); (59) automatische Verbindung nimmt den Anschluss und den Typ des aktiven Blatts, beim Blattwechsel wird die Verbindung bei anderem Anschluss neu aufgebaut; (58) Firmware installieren (Pico) fragt den Pico-Anschluss selbst (web_form_options 1.47)
@@ -573,6 +578,12 @@ REQUIRED_FILES = {  # v1.75
     "_web/mll_graph.js": "1.17", "_web/web_graph.py": "1.17",  # v4.83
     "_web/web_table_sync.py": "1.08", "headless/headless_table_sync.py": "1.03",  # v4.89
     "headless/headless_table_sync.py": "1.04",  # v4.93
+    # "headless/headless_esp32_ota.py": "1.13",  # v4.94 (entfallen)
+    "headless/headless_esp32_ota.py": "1.14",  # v4.97
+    "_web/web_esp32_ota.py": "1.08", "proggen/M07_COM_Port.py": "1.14", # "proggen/M08_ARDUINO.py": "1.31",  # v4.95 (entfallen)
+    "proggen/M08_ARDUINO.py": "1.32",  # v4.97 (entfallen)
+    "proggen/M08_ARDUINO.py": "1.33",  # v4.98
+    "_web/web_dialogs.py": "1.13", "proggen/M18_Save_Load.py": "1.06",  # v4.96
     "_web/web_log.py": "1.12", "_web/web_form_options.py": "1.47",  # v4.90
     "_web/web_serial.py": "1.14",  # v4.91
 }  # v1.75
@@ -1540,7 +1551,12 @@ def font_scales(ctrl) -> dict:
 # VERSION = "4.90 (2026-11-23)"  # v4.91 (entfallen)
 # VERSION = "4.91 (2026-11-23)"  # v4.92 (entfallen)
 # VERSION = "4.92 (2026-11-23)"  # v4.93 (entfallen)
-VERSION = "4.93 (2026-11-23)"  # v3.64  # v4.26  # v4.27  # v4.28  # v4.29  # v4.30  # v4.31  # v4.32  # v4.33  # v4.34  # v4.35  # v4.36  # v4.37  # v4.38  # v4.39  # v4.40  # v4.41  # v4.42  # v4.43  # v4.44  # v4.45  # v4.46  # v4.47  # v4.48  # v4.49  # v4.50  # v4.51  # v4.52  # v4.53  # v4.54  # v4.55  # v4.56  # v4.57  # v4.58  # v4.59  # v4.60  # v4.61  # v4.62  # v4.63  # v4.64  # v4.65  # v4.66  # v4.67  # v4.68  # v4.69  # v4.70  # v4.71  # v4.72  # v4.73  # v4.74  # v4.75  # v4.76  # v4.77  # v4.78  # v4.79  # v4.80  # v4.81  # v4.82  # v4.83  # v4.84  # v4.85  # v4.86  # v4.87  # v4.88  # v4.89  # v4.90  # v4.91  # v4.92  # v4.93
+# VERSION = "4.93 (2026-11-23)"  # v4.94 (entfallen)
+# VERSION = "4.94 (2026-11-23)"  # v4.95 (entfallen)
+# VERSION = "4.95 (2026-11-23)"  # v4.96 (entfallen)
+# VERSION = "4.96 (2026-11-24)"  # v4.97 (entfallen)
+# VERSION = "4.97 (2026-11-24)"  # v4.98 (entfallen)
+VERSION = "4.98 (2026-11-24)"  # v3.64  # v4.26  # v4.27  # v4.28  # v4.29  # v4.30  # v4.31  # v4.32  # v4.33  # v4.34  # v4.35  # v4.36  # v4.37  # v4.38  # v4.39  # v4.40  # v4.41  # v4.42  # v4.43  # v4.44  # v4.45  # v4.46  # v4.47  # v4.48  # v4.49  # v4.50  # v4.51  # v4.52  # v4.53  # v4.54  # v4.55  # v4.56  # v4.57  # v4.58  # v4.59  # v4.60  # v4.61  # v4.62  # v4.63  # v4.64  # v4.65  # v4.66  # v4.67  # v4.68  # v4.69  # v4.70  # v4.71  # v4.72  # v4.73  # v4.74  # v4.75  # v4.76  # v4.77  # v4.78  # v4.79  # v4.80  # v4.81  # v4.82  # v4.83  # v4.84  # v4.85  # v4.86  # v4.87  # v4.88  # v4.89  # v4.90  # v4.91  # v4.92  # v4.93  # v4.94  # v4.95  # v4.96  # v4.97  # v4.98
 # VERSION = "4.09 (2026-11-19)"  # v3.64 (entfallen)
 # VERSION = "4.08 (2026-11-19)"  # v3.64 (entfallen)
 # VERSION = "4.07 (2026-11-19)"  # v3.64 (entfallen)
@@ -6949,6 +6965,7 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
         settings = headless_esp32_ota.load_settings()
         port = str(state["ws"].Cells(M02.SH_VARS_ROW, M25.COMPort_COL).Value)
         password = settings["password"]
+        used_port = [port]  # v4.95: der gepruefte Anschluss
 
         def transfer():
             log = ctrl.weblog
@@ -6958,6 +6975,12 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
             header = None
             saved = None
             try:
+                import proggen.M07_COM_Port as _M07p  # v4.95
+                _found = _M07p.Ensure_Existing_USB_Port(M25.COMPort_COL)  # v4.95: der Anschluss muss am Rechner existieren
+                if not _found:  # v4.95
+                    raise ValueError(tr("Der USB-Anschluss {port} ist nicht vorhanden. Bitte „Board und USB Port erkennen“ ausführen.").replace("{port}", port))  # v4.95
+                used_port[0] = _found  # v4.95
+                network = headless_esp32_ota.validate_network(settings)  # v4.95: feste IP-Adresse auch in der minimalen Firmware (None = DHCP)
                 # if not ota_header.Create_HeaderFile(HeaderOnly=True):  # v4.29 (entfallen: die Minimale Firmware nimmt keine Daten aus der Tabelle)
                     # raise ValueError(tr("Die Projektkonfiguration konnte nicht erzeugt werden."))  # v4.29 (entfallen)
                 sketch = os.path.join(ota_arduino.GetWorkbookPath(), M02.Ino_Dir_LED)
@@ -6971,23 +6994,28 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
                 pio = None
                 if ota_options.Is_PlatformIO():
                     pio = ota_arduino.Find_PIO()
+                    if not ota_arduino.Ensure_Git('esp32'):  # v4.98
+                        raise ValueError(tr("git fehlt. Bitte git installieren und den Vorgang wiederholen."))  # v4.98
                     log.add_text_to_textwindow(tr("Build-Umgebung: PlatformIO"))
                     image, partitions = headless_esp32_ota.build_platformio_project(
                         sketch, pio, password, log.add_text_to_textwindow,
                         lambda path: ota_arduino.Write_PIO_Project("esp32", path),
-                        hostname=settings["hostname"], ota=True,
+                        # hostname=settings["hostname"], ota=True,  # v4.95 (entfallen)
+                        hostname=settings["hostname"], ota=True, network=network,  # v4.95
                     )
                 else:
                     log.add_text_to_textwindow(tr("Build-Umgebung: Arduino Builder"))
                     image, partitions = headless_esp32_ota.build_project(
                         sketch, ota_arduino.Find_ArduinoExe(), ota_boards.Get_Sketchbook_Path(),
                         board, password, log.add_text_to_textwindow,
-                        hostname=settings["hostname"], ota=True,
+                        # hostname=settings["hostname"], ota=True,  # v4.95 (entfallen)
+                        hostname=settings["hostname"], ota=True, network=network,  # v4.95
                     )
                 if ctrl.is_connection_open():
                     ctrl.disconnect()
                 log.add_text_to_textwindow(tr("Firmware wird per USB übertragen …"))
-                headless_esp32_ota.flash_usb(port, image, partitions, log.add_text_to_textwindow, pio=pio)
+                # headless_esp32_ota.flash_usb(port, image, partitions, log.add_text_to_textwindow, pio=pio)  # v4.95 (entfallen)
+                headless_esp32_ota.flash_usb(used_port[0], image, partitions, log.add_text_to_textwindow, pio=pio)  # v4.95
                 log.add_text_to_textwindow(tr("Minimale Firmware übertragen. Als Nächstes im Reiter OTA „WLAN über USB einrichten“."), highlight="OK")
             except ValueError as error:
                 log.add_text_to_textwindow(tr(str(error)), highlight="Error")

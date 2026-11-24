@@ -1,9 +1,9 @@
-Datei-Version: 1.12 (2026-11-23) - RELEASE_Hinweise_4.93.md
-Gilt für webMobaLedLib 4.93
+Datei-Version: 1.13 (2026-11-24) - RELEASE_Hinweise_4.98.md
+Gilt für webMobaLedLib 4.98
 
-# webMobaLedLib 4.93
+# webMobaLedLib 4.98
 
-Anhänge dieses Releases: `webmobaledlib.zip` (Programm, mit `zip_erstellen.bat` Version 1.11 gebaut, `ROOT_IN_ZIP=1`), `START_HIER.txt` (erste Schritte), `ANLEITUNG_Installation.pdf` (Anleitung, Version 4.93) und `BETATEST_Checkliste.pdf` (Checkliste für Betatester, Version 3.74).
+Anhänge dieses Releases: `webmobaledlib.zip` (Programm, mit `zip_erstellen.bat` Version 1.11 gebaut, `ROOT_IN_ZIP=1`), `START_HIER.txt` (erste Schritte), `ANLEITUNG_Installation.pdf` (Anleitung, Version 4.98) und `BETATEST_Checkliste.pdf` (Checkliste für Betatester, Version 3.79).
 Installation: siehe `START_HIER.txt` und den Schnellstart der Anleitung. Aktualisieren: Menü **Hilfe → Update webMobaLedLib …**, danach das Programm **neu starten** und die Seite mit Strg+F5 neu laden.
 
 ## Wichtig beim Aktualisieren
@@ -12,7 +12,15 @@ Installation: siehe `START_HIER.txt` und den Schnellstart der Anleitung. Aktuali
 - **Nach dem Update das Programm neu starten** und die Seite neu laden. Oben darf keine rote Meldung stehen.
 - **Neues Programmsymbol (4.10):** Für die Verknüpfung auf dem Desktop den Installer noch einmal ausführen.
 
-## Neu seit Version 3.93 (3.94 bis 4.93)
+## Neu seit Version 3.93 (3.94 bis 4.98)
+
+**Neu seit 4.93 (4.94 bis 4.98):**
+- **Neuinstallation mit git (4.98):** `install_windows.bat` (mit winget; `/nogit` überspringt es) und `install_mac.command` installieren jetzt git mit, das PlatformIO für ESP32 und Pico braucht. Fehlt git trotzdem, fragt das Programm beim Übersetzen für ESP32 oder Pico „git jetzt installieren?“, auch im Anfänger Modus. Bisher musste man git nachträglich in den Optionen (Entwicklungsumgebung) installieren.
+- **ESP32 startet nach dem Hochladen endlos neu (4.97):** Ein altes Dateisystem (LittleFS) im Flash ließ die Firmware beim Start abstürzen („lfs_fs_grow_ assert failed“). Nach dem vollständigen Hochladen per USB löscht das Programm jetzt die Dateisystem-Partition, danach kommt die Konfiguration.
+- **Laden einer Datei mit mehreren Tabellenblättern (4.96):** Bei der Frage „Soll die Seite … importiert werden?“ gibt es den Knopf „Ja, alle“.
+- **Feste IP-Adresse und USB-Anschluss beim ESP32 (4.95, Meldung aus dem Forum):** Die feste IP-Adresse gilt auch in der minimalen Firmware (ESP32-Setup per OTA). Ein nicht vorhandener USB-Anschluss wird vor dem langen Build gemeldet („Board und USB Port erkennen“). Die Adresse des eigenen Rechners wird als Adresse des ESP32 abgelehnt; bleibt „Adresse für WebMLL“ leer, gilt die feste IP.
+- **PlatformIO-Build-Verzeichnis (4.94, Pull Request 54):** Das Build-Verzeichnis für ESP32 wird in `headless_esp32_ota` einheitlich ermittelt (mit Test `test_esp32_build_directory.py`). Das Zusammenführen der Build-Wege (Programmgenerator, OTA, Patterngenerator) ist für später geplant.
+- **Hardware geprüft (Rückmeldung):** Pico-Auswahl und Verbindung per WLAN beim Blattwechsel (4.90 bis 4.92) funktionieren.
 
 **Neu seit 4.79 (4.80 bis 4.93):**
 - **Mini-Farbtest in der grafischen Ansicht (4.83):** F3 oder Rechtsklick bei einem ConstRGB-Makro, wie in der Tabelle. Bei anderen Makros sendet der Mini-Farbtest beim Öffnen nichts, erst nach „Blinken“ oder einer Farbänderung (4.82).
@@ -111,9 +119,9 @@ Installation: siehe `START_HIER.txt` und den Schnellstart der Anleitung. Aktuali
 - Versteckte Tabellen: das Startblatt erscheint nicht mehr als Reiter (4.07).
 - Optionen: alle Reiter sichtbar (3.99).
 
-**Noch nicht an Hardware oder im Browser geprüft:** (die Funktionen 4.55 bis 4.93 hat der Entwickler im Browser geprüft; Rückmeldungen der Tester stehen aus) Alles ab 4.11 (Einstellungen sichern/übernehmen, Ausgabe und Abbrechen beim ESP32-Build, Verbinden beim Start, inkrementelles Speichern und seine Tastenkombination, Kopfbereich (Abstand in Issue 22 nicht bestätigt), Erweiterungen mit `symlink://`, Name und Beschreibung aus `libraries.json`) wurde nur gebaut und kompiliert, nicht auf Hardware oder im Browser getestet. IRremote 4.x für InfraredMLX ist nicht mit einem Pico geprüft. Die Übersetzungen der neuen Texte (CSV) sind ungeprüft. Die Menüs ab 4.51 sind vom Entwickler im Browser getestet (4.74: Rückmeldung „Funktioniert“); Dunkler Modus und Dateinamen mit Datum (4.44 bis 4.50) ebenfalls.
+**Noch nicht an Hardware oder im Browser geprüft:** (die Funktionen 4.55 bis 4.93 hat der Entwickler im Browser geprüft; Rückmeldungen der Tester stehen aus). **Ab 4.94 nur gebaut und kompiliert, nicht an Hardware geprüft:** Löschen des ESP32-Dateisystems (4.97), feste IP in der minimalen Firmware (4.95), git-Installation durch die Installationsskripte und die Frage beim Übersetzen (4.98, nicht an einem frischen PC oder Mac getestet) Alles ab 4.11 (Einstellungen sichern/übernehmen, Ausgabe und Abbrechen beim ESP32-Build, Verbinden beim Start, inkrementelles Speichern und seine Tastenkombination, Kopfbereich (Abstand in Issue 22 nicht bestätigt), Erweiterungen mit `symlink://`, Name und Beschreibung aus `libraries.json`) wurde nur gebaut und kompiliert, nicht auf Hardware oder im Browser getestet. IRremote 4.x für InfraredMLX ist nicht mit einem Pico geprüft. Die Übersetzungen der neuen Texte (CSV) sind ungeprüft. Die Menüs ab 4.51 sind vom Entwickler im Browser getestet (4.74: Rückmeldung „Funktioniert“); Dunkler Modus und Dateinamen mit Datum (4.44 bis 4.50) ebenfalls.
 
-**Wiki:** Paket `webmobaledlib_Wiki_Gesamt_Stand_4.93.zip` (41 Dateien, an die neuen Menüs angepasst, Hinweise in `LIESMICH_Wiki_Gesamt.md`). Die Bilder (Menüband, Programm Einstellungen, ARDUINO-IDE Einstellungen, Optionen, Datei-Menü, Verbinden) zeigen noch den alten Stand und müssen neu aufgenommen werden.
+**Wiki:** Paket `webmobaledlib_Wiki_Gesamt_Stand_4.98.zip` (42 Dateien, an die neuen Menüs angepasst, Hinweise in `LIESMICH_Wiki_Gesamt.md`). Die Bilder (Menüband, Programm Einstellungen, ARDUINO-IDE Einstellungen, Optionen, Datei-Menü, Verbinden) zeigen noch den alten Stand und müssen neu aufgenommen werden.
 
 **Geplant:** Quell-URL direkt in der `platformio.ini` (Issue 6) ist nicht vorgesehen (Cache und `symlink://` bleiben); Rückfragen dazu stehen im Issue.
 

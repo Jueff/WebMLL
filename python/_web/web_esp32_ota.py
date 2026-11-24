@@ -1,12 +1,13 @@
-# Datei-Version: 1.07 (2026-11-23) - web_esp32_ota.py
+# Datei-Version: 1.08 (2026-11-23) - web_esp32_ota.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_esp32_ota.py
 # Path:           _web/web_esp32_ota.py
-# Version:        1.07
+# Version:        1.08
 # Last Update:    2026-11-23
 # Author:         Harold Linke (Beitrag des Fork-Entwicklers, uebernommen in 3.37)
 # Licence:        LGPL V2.1
 # History of Change:
+#   1.08  2026-11-23  Adresse fuer WebMLL: die Adresse dieses Rechners wird abgelehnt (Verwechslung mit der IP des ESP32), bei fester IP gilt dann die IP des ESP32; Hinweistext
 #   1.07  2026-11-23  Reiter OTA: DHCP oder statische IP-Adresse (IP, Gateway, Subnetzmaske, DNS), Pruefung der Eingaben, Zieladresse = feste IP
 #   1.00  2026-11-14  Neu: Dialoge fuer ESP32-WLAN und OTA (Firmware hochladen, Ziel waehlen, Reiter OTA, WLAN ueber USB einrichten)
 #   1.01  2026-11-14  Firewall-Hinweis bei "No response from device" (Port 32323)
@@ -31,9 +32,28 @@ minimal_firmware_handler = None  # v1.02: Funktion der Hauptseite (webmobaledlib
 HINT_FIREWALL = 'Der ESP32 hat sich nicht zurückgemeldet. Meist blockiert eine Firewall die Rückverbindung: Eingehend TCP-Port {port} zulassen (Windows-Firewall: PowerShell als Administrator, New-NetFirewallRule -DisplayName "webMLL OTA 32323" -Direction Inbound -Protocol TCP -LocalPort {port} -Action Allow; andere Firewalls, z. B. ESET: Regel eingehend, TCP, lokaler Port {port}, Zulassen).'  # v1.01
 
 
+def own_addresses():  # v1.08
+    """IP-Adressen dieses Rechners (der ESP32 hat nie eine davon)."""  # v1.08
+    import socket  # v1.08
+    found = set()  # v1.08
+    try:  # v1.08
+        found.update(socket.gethostbyname_ex(socket.gethostname())[2])  # v1.08
+    except OSError:  # v1.08
+        pass  # v1.08
+    try:  # v1.08
+        probe = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)  # v1.08
+        probe.connect(("192.0.2.1", 9))  # v1.08
+        found.add(probe.getsockname()[0])  # v1.08
+        probe.close()  # v1.08
+    except OSError:  # v1.08
+        pass  # v1.08
+    return found  # v1.08
+
+
 def target_address(settings):
     # return settings["address"] or (settings["hostname"] + ".local" if settings["hostname"] else "")  # v1.07 (entfallen)
-    if not settings["address"] and settings.get("wifi") and settings.get("ip_mode") == "static" and settings.get("ip"):  # v1.07: feste IP als Ziel
+    # if not settings["address"] and settings.get("wifi") and settings.get("ip_mode") == "static" and settings.get("ip"):  # v1.07 (entfallen)
+    if (not settings["address"] or settings["address"].strip() in own_addresses()) and settings.get("wifi") and settings.get("ip_mode") == "static" and settings.get("ip"):  # v1.08: feste IP als Ziel (auch wenn die Adresse dieses Rechners eingetragen ist)
         return settings["ip"]  # v1.07
     return settings["address"] or (settings["hostname"] + ".local" if settings["hostname"] else "")  # v1.07
 
@@ -176,7 +196,7 @@ def settings_panel():
         net_mask = ui.input("Subnetzmaske", value=settings.get("mask", "255.255.255.0"), placeholder="255.255.255.0").classes("w-full")  # v1.07
         net_dns1 = ui.input("DNS-Server 1 (leer: Gateway)", value=settings.get("dns1", "")).classes("w-full")  # v1.07
         net_dns2 = ui.input("DNS-Server 2 (leer: wie DNS-Server 1)", value=settings.get("dns2", "")).classes("w-full")  # v1.07
-        ui.label("Nach einer Änderung der Netzwerkeinstellungen muss die Firmware einmal neu übertragen werden (ESP32-Setup übertragen). Danach unter „Adresse für WebMLL“ die neue IP-Adresse eintragen.").classes("text-caption")  # v1.07
+        ui.label("Nach einer Änderung der Netzwerkeinstellungen muss die Firmware einmal neu übertragen werden (ESP32-Setup übertragen). „Adresse für WebMLL“ leer lassen: dann gilt die feste IP-Adresse des ESP32.").classes("text-caption")  # v1.07
     address = ui.input("Adresse für WebMLL", value=settings["address"], placeholder="IP-Adresse oder Name").classes("w-full")
     password = ui.input("OTA-Passwort", password=True, placeholder="Leer lassen, um das gespeicherte Passwort zu behalten").classes("w-full")
     ui.label("Die Firmware verwendet das im ESP32 gespeicherte WLAN.").classes("text-caption")
@@ -189,6 +209,9 @@ def settings_panel():
                       address=address.value, password=password.value or settings["password"],
                       ip_mode=ip_mode.value, ip=net_ip.value or "", gateway=net_gateway.value or "", mask=net_mask.value or "",
                       dns1=net_dns1.value or "", dns2=net_dns2.value or "")  # v1.07
+        if (address.value or "").strip() in own_addresses():  # v1.08: Verwechslung mit der Adresse dieses Rechners
+            ui.notify(tr("Diese Adresse gehört diesem Rechner. Hier muss die Adresse des ESP32 stehen (bei fester IP: leer lassen oder die IP-Adresse des ESP32)."), type="negative")  # v1.08
+            return  # v1.08
         if wifi.value and ip_mode.value == "static" and not (address.value or "").strip():  # v1.07: leere Adresse: feste IP als Ziel
             values["address"] = (net_ip.value or "").strip()  # v1.07
         try:

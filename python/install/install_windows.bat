@@ -1,5 +1,6 @@
 @echo off
-REM Datei-Version: 1.10 (2026-11-05) - install_windows.bat
+REM Datei-Version: 1.11 (2026-11-24) - install_windows.bat
+REM   1.11: git wird mit installiert (winget), PlatformIO braucht es fuer ESP32 und Pico; /nogit ueberspringt das
 REM Installiert die Web-Oberflaeche von webMobaLedLib unter Windows: Python-Umgebung, Pakete, Programmsymbol und
 REM eine Verknuepfung "webMobaLedLib" auf dem Desktop.
 REM Aufruf: Doppelklick, oder mit Optionen:
@@ -7,18 +8,21 @@ REM   /ide       ARDUINO IDE 1.8.19 von arduino.cc laden und installieren (die I
 REM   /libs      Bibliothek MobaLedLib (und FastLED in der geforderten Version) mit der ARDUINO IDE installieren
 REM   /platformio PlatformIO (Ersatz fuer die ARDUINO IDE) in eine eigene Python-Umgebung %USERPROFILE%\.platformio\penv installieren (seit 1.10 der STANDARD, die Option bleibt gueltig)
 REM   /nopio     PlatformIO NICHT installieren (zum Beispiel wer nur die ARDUINO IDE benutzt)
+REM   /nogit     git NICHT installieren
 REM   /nocheck   ohne den Test der Installation am Ende
 setlocal EnableExtensions
 set "NOCHECK=0"
 set "WITHIDE=0"
 set "WITHLIBS=0"
 set "WITHPIO=1"
+set "WITHGIT=1"
 set "FASTLED=3.9.12"
 for %%A in (%*) do (
   if /i "%%A"=="/nocheck" set "NOCHECK=1"
   if /i "%%A"=="/libs" set "WITHLIBS=1"
   if /i "%%A"=="/platformio" set "WITHPIO=1"
   if /i "%%A"=="/nopio" set "WITHPIO=0"
+  if /i "%%A"=="/nogit" set "WITHGIT=0"
   if /i "%%A"=="/ide" set "WITHIDE=1"
   if /i "%%A"=="/ide" set "WITHLIBS=1"
 )
@@ -160,6 +164,27 @@ echo Keine ARDUINO IDE gefunden. Bitte die IDE 1.8.19 installieren (arduino.cc, 
 echo und install_windows.bat /libs noch einmal starten (oder gleich install_windows.bat /ide), oder MobaLedLib in der IDE installieren.
 
 :nolibs
+REM --- git (Version 1.11): PlatformIO laedt fuer ESP32 und Raspberry Pi Pico Bibliotheken und Plattformen mit git aus GitHub
+if "%WITHGIT%"=="0" goto :nogit
+where git >nul 2>&1
+if not errorlevel 1 goto :git_vorhanden
+if exist "%ProgramFiles%\Git\cmd\git.exe" goto :git_vorhanden
+if exist "%LocalAppData%\Programs\Git\cmd\git.exe" goto :git_vorhanden
+echo.
+echo git (Git for Windows) wird installiert, PlatformIO braucht es fuer ESP32 und Pico ...
+where winget >nul 2>&1
+if errorlevel 1 goto :git_manuell
+winget install -e --id Git.Git --accept-package-agreements --accept-source-agreements
+if errorlevel 1 goto :git_manuell
+echo git ist installiert.
+goto :nogit
+:git_manuell
+echo HINWEIS: git konnte nicht automatisch installiert werden. Bitte von https://git-scm.com/download/win installieren
+echo (alle Vorgaben des Installationsprogramms uebernehmen). Das Programm bietet git beim ersten Uebersetzen fuer ESP32 oder Pico auch selbst an.
+goto :nogit
+:git_vorhanden
+echo git ist schon installiert.
+:nogit
 REM --- PlatformIO (Standard, ausser mit /nopio): eigene Python-Umgebung wie beim Installer von platformio.org
 if "%WITHPIO%"=="0" goto :nopio
 set "PIOHOME=%USERPROFILE%\.platformio"

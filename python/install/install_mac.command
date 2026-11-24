@@ -1,5 +1,6 @@
 #!/bin/bash
-# Datei-Version: 1.12 (2026-11-08) - install_mac.command
+# Datei-Version: 1.13 (2026-11-24) - install_mac.command
+# 1.13: git wird mit installiert (Homebrew oder Entwicklerwerkzeuge von Apple), PlatformIO braucht es fuer ESP32 und Pico
 # Installiert die Web-Oberflaeche von webMobaLedLib unter macOS: Python-Umgebung, Pakete, Programmsymbol und ein Programm
 # "webMobaLedLib" auf dem Schreibtisch (Doppelklick startet die Oberflaeche und oeffnet den Browser).
 #
@@ -204,6 +205,21 @@ if [ "$WITH_LIBS" = "1" ]; then
     echo "Bibliotheken installieren: FastLED $FASTLED_VERSION und danach MobaLedLib (dauert einige Minuten) ..."
     "$IDE" --install-library "FastLED:$FASTLED_VERSION" || echo "(FastLED: siehe Meldungen oben)"
     "$IDE" --install-library "MobaLedLib" || echo "(MobaLedLib: siehe Meldungen oben)"
+  fi
+fi
+
+# --- git (Version 1.13): PlatformIO laedt fuer ESP32 und Raspberry Pi Pico Bibliotheken und Plattformen mit git aus GitHub
+if /usr/bin/xcode-select -p >/dev/null 2>&1 || [ -x /opt/homebrew/bin/git ] || [ -x /usr/local/bin/git ]; then
+  echo "git ist schon installiert."
+else
+  echo "git fehlt, es wird installiert (PlatformIO braucht es fuer ESP32 und Pico) ..."
+  GITBREW="$(command -v brew || ls /opt/homebrew/bin/brew /usr/local/bin/brew 2>/dev/null | head -1 || true)"
+  if [ -n "$GITBREW" ]; then
+    "$GITBREW" install git || echo "(git: siehe Meldungen oben)"
+  else
+    echo "Es oeffnet sich ein Fenster von macOS: dort 'Installieren' waehlen (Entwicklerwerkzeuge von Apple, enthalten git)."
+    xcode-select --install 2>/dev/null || true
+    echo "Das Programm bietet git beim ersten Uebersetzen fuer ESP32 oder Pico auch selbst an, falls es noch fehlt."
   fi
 fi
 

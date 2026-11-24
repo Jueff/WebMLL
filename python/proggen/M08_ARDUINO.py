@@ -1,12 +1,15 @@
-# Datei-Version: 1.30 (2026-11-23) - M08_ARDUINO.py
+# Datei-Version: 1.33 (2026-11-24) - M08_ARDUINO.py
 # ----------------------------------------------------------------------------------------------
 # Name:           M08_ARDUINO.py
 # Path:           proggen/M08_ARDUINO.py
-# Version:        1.30
-# Last Update:    2026-11-23
+# Version:        1.33
+# Last Update:    2026-11-24
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
+#   1.33  2026-11-24  Ensure_Git: fehlt git beim Uebersetzen fuer ESP32 oder Pico, bietet das Programm die Installation an (auch im Anfaenger Modus)
+#   1.32  2026-11-24  ESP32: Nach dem vollstaendigen Hochladen per USB wird die Dateisystem-Partition (LittleFS) geloescht, bevor die Konfiguration kommt (Absturzschleife 'lfs_fs_grow_ assert failed' bei altem Dateisystem anderer Groesse)
+#   1.31  2026-11-23  ESP32-Setup per USB: Der eingetragene Anschluss wird vor dem langen Build geprueft (M07.Ensure_Existing_USB_Port), sonst Meldung statt 'port doesn't exist' nach dem Build
 #   1.30  2026-11-23  ESP32-Setup: statische IP-Adresse statt DHCP (network_settings), die Netzwerkwerte gehoeren zum Firmware-Schluessel
 #   1.29  2026-11-22  ESP32-Setup nutzt dynamische Konfiguration auch ueber WLAN; nach OTA Konfiguration nachsenden
 #   1.00  2026-10-12  Stand der Umstellung (nicht erfasst)
@@ -460,6 +463,8 @@ def Create_PIO_Build_cmd(ResultName, ComPort, BuildOptions, InoName, Mode, SrcDi
     if __Environment == 'pico' and not Pico_Udev_Ok():  # v1.03
         if P01.MsgBox(__Pico_Udev_Message(), vbQuestion + vbYesNo + vbDefaultButton2, 'PlatformIO') != vbYes:  # v1.03
             return ''  # v1.03
+    if __Environment in ('pico', 'esp32') and not Ensure_Git(__Environment):  # v1.33: PlatformIO braucht git fuer diese Platinen
+        return ''  # v1.33
     cmd = __Create_PIO_Build_cmd(__Environment, ResultName, ComPort, SrcDir)
     return cmd
     
@@ -602,6 +607,28 @@ def Git_Installed():  # v1.05
     # return shutil.which('git') is not None  # v1.06 (entfallen)
     import headless.headless_git as HG                                             # Windows, macOS und Linux; trägt einen frisch installierten git in PATH ein  # v1.06
     return HG.git_installed()  # v1.06
+
+
+def Ensure_Git(Environment=''):  # v1.33
+    """ESP32 und Pico: PlatformIO laedt Bibliotheken und Plattform per git aus GitHub. Fehlt git, wird die Installation angeboten (kein Umweg ueber die Optionen noetig).
+    Rueckgabe True: git ist vorhanden; False: es fehlt (abgelehnt oder nicht moeglich)"""  # v1.33
+    if Git_Installed():  # v1.33
+        return True  # v1.33
+    if P01.MsgBox(M09.Get_Language_Str("Für diese Platine braucht PlatformIO den Git-Client (git), er ist auf diesem Rechner nicht installiert.") + vbCr + vbCr +
+                  M09.Get_Language_Str("git jetzt installieren? Das Betriebssystem fragt dabei eventuell nach der Erlaubnis. Die Installation kann einige Minuten dauern."),
+                  vbQuestion + vbYesNo, 'PlatformIO') != vbYes:  # v1.33
+        return False  # v1.33
+    try:  # v1.33
+        ok, text = Setup_Git()  # v1.33
+    except Exception as ex:                                # noqa: BLE001  # v1.33
+        ok, text = False, str(ex)  # v1.33
+    if ok is None:                                         # macOS: die Entwicklerwerkzeuge installieren im Hintergrund weiter  # v1.33
+        P01.MsgBox(text, vbInformation, 'PlatformIO')  # v1.33
+        return False  # v1.33
+    if not ok or not Git_Installed():  # v1.33
+        P01.MsgBox(M09.Get_Language_Str("git konnte nicht installiert werden.") + vbCr + vbCr + str(text), vbCritical, 'PlatformIO')  # v1.33
+        return False  # v1.33
+    return True  # v1.33
 
 
 def Git_Script():  # v1.05
@@ -2521,6 +2548,8 @@ def Compile_and_Upload_Prog_to_Arduino(InoName, ComPortColumn, BuildOptColumn, S
         if DynDone:  # v1.25
             M30.Show_Status_for_a_while(M09.Get_Language_Str('Nur die Konfiguration wurde übertragen. Das Programm in der Lichtmaschine ist unverändert. Dauer ') + P01.Format(P01.Time() - Start, 'hh:mm:ss'), '00:02:00')  # v1.25
         else:  # v1.25
+            if HexFile == '' and M02a.Get_BoardTyp() == M02.HT_ESP32 and M42.Upload_Possible(Mode, ComPort):  # v1.32: altes Dateisystem loeschen
+                __Erase_ESP32_Filesystem(ComPort)  # v1.32
             if HexFile == '' and M42.Upload_Possible(Mode, ComPort) and not M42.After_Full_Flash(ComPort):  # v1.25: die Konfiguration kommt nach dem Programm
                 P01.MsgBox(M09.Get_Language_Str('Das Programm wurde hochgeladen, die Konfiguration konnte aber nicht übertragen werden.\n\nDie Lichtmaschine hat noch keine Konfiguration. Bitte noch einmal hochladen (Einzelheiten im Protokoll).'), vbInformation, M09.Get_Language_Str('Konfiguration nicht übertragen'))  # v1.25
             M30.Show_Status_for_a_while(M09.Get_Language_Str('Programm erfolgreich hochgeladen. Kompilieren und Hochladen dauerte ') + P01.Format(P01.Time() - Start, 'hh:mm:ss'), '00:02:00')
@@ -2529,6 +2558,19 @@ def Compile_and_Upload_Prog_to_Arduino(InoName, ComPortColumn, BuildOptColumn, S
         fn_return_value = True                                                         # VBA: Compile_and_Upload_Prog_to_Arduino = True (fehlte in der Umstellung: 'R OK' wurde nie gesetzt)  # v1.10
         return fn_return_value  # v1.10
         
+def __Erase_ESP32_Filesystem(ComPort):  # v1.32
+    """Nach dem vollstaendigen USB-Upload: Dateisystem-Partition des ESP32 loeschen. Ein altes LittleFS anderer Groesse (zum Beispiel von einem frueheren Projekt)
+    laesst die neue Firmware beim Mounten abstuerzen und endlos neu starten. Die Konfiguration wird danach uebertragen; WLAN-Zugangsdaten bleiben."""  # v1.32
+    try:  # v1.32
+        from headless import headless_esp32_ota  # v1.32
+        pio = Find_PIO() if M28.Is_PlatformIO() else None  # v1.32
+        M42._out(M42._t("Das Dateisystem des ESP32 wird zurückgesetzt ..."))  # v1.32
+        if not headless_esp32_ota.erase_filesystem(ComPort, lambda text: upload_logger.info("%s", str(text).strip()), pio=pio):  # v1.32
+            upload_logger.warning("Dateisystem des ESP32 nicht geloescht")  # v1.32
+    except Exception:                                      # noqa: BLE001  # v1.32
+        upload_logger.warning("Dateisystem des ESP32 nicht geloescht", exc_info=True)  # v1.32
+
+
 def GetCPUTypeFromSignature(DeviceSignature, DefaultType='ATMega328P'):
     _fn_return_value = False
     #------------------------------------------------------------------
@@ -2566,6 +2608,10 @@ def Compile_and_Upload_ESP32_Setup(ctrl, board, port, *, host, upload_password, 
                 raise ValueError(tr("Es ist kein USB-Anschluss gewählt."))  # v1.27
             _raw = str(P01.Cells(M02.SH_VARS_ROW, M25.COMPort_COL)).strip().lstrip("*").strip()  # v1.27
             port = ("COM" + _raw) if (_raw.isdigit() and os.name == "nt") else _raw  # v1.27
+            _found = M07.Ensure_Existing_USB_Port(M25.COMPort_COL)  # v1.31: der Anschluss muss am Rechner existieren
+            if not _found:  # v1.31
+                raise ValueError(tr("Der USB-Anschluss {port} ist nicht vorhanden. Bitte „Board und USB Port erkennen“ ausführen.").replace("{port}", port))  # v1.31
+            port = _found  # v1.31
         # if not M06.Create_HeaderFile(HeaderOnly=True):  # v1.22  # v1.29 (entfallen)
         import hashlib, json  # v1.29
         network = headless_esp32_ota.network_of(network_settings) if network_settings else None  # v1.30: statische IP (None = DHCP)
@@ -2583,6 +2629,8 @@ def Compile_and_Upload_ESP32_Setup(ctrl, board, port, *, host, upload_password, 
         pio = None  # v1.22
         if M28.Is_PlatformIO():  # v1.22
             pio = Find_PIO()  # v1.22
+            if not Ensure_Git('esp32'):  # v1.33
+                raise RuntimeError(tr("git fehlt. Bitte git installieren und den Vorgang wiederholen."))  # v1.33
             log.add_text_to_textwindow(tr("Build-Umgebung: PlatformIO"))  # v1.22
             image, partitions = headless_esp32_ota.build_platformio_project(  # v1.22
                 sketch, pio, password, log.add_text_to_textwindow,  # v1.22

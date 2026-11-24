@@ -1,12 +1,13 @@
-# Datei-Version: 1.12 (2026-11-22) - web_dialogs.py
+# Datei-Version: 1.13 (2026-11-24) - web_dialogs.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_dialogs.py
 # Path:           _web/web_dialogs.py
-# Version:        1.12
-# Last Update:    2026-11-22
+# Version:        1.13
+# Last Update:    2026-11-24
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
+#   1.13  2026-11-24  web_msgbox_labelled(..., extra={Rueckgabewert: Text}): zusaetzlicher Knopf direkt nach dem ersten (Ja, alle beim Laden einer PGF-Datei mit mehreren Seiten)
 #   1.05  2026-10-17  redirect_messagebox(): tkinter.messagebox im Browser anzeigen (Patterngenerator); davor bis 1.04 nicht erfasst
 #   1.06  2026-10-20  Web-Formular fuer UserForm_ConfirmLicense (LNet Lizenzbestimmungen): vorher Fehler 'HeadlessAppController' object has no attribute 'wait_window'
 #   1.07  2026-10-28  open_url: Adresse in einem neuen Tab des Webbrowsers oeffnen
@@ -212,7 +213,8 @@ def call_in_loop(coro_func, *args, default=None):
 
 
 # --------------------------------------------------------------------------- Dialoge (Event-Loop)
-async def _msgbox_async(prompt, msg_type, title, labels=None):  # v1.10 (labels)
+# async def _msgbox_async(prompt, msg_type, title, labels=None):  # v1.10 (labels)  # v1.13 (entfallen)
+async def _msgbox_async(prompt, msg_type, title, labels=None, extra=None):  # v1.13 (extra)
     from nicegui import ui
     client = _bridge["client"]
     with client:
@@ -227,6 +229,8 @@ async def _msgbox_async(prompt, msg_type, title, labels=None):  # v1.10 (labels)
                 btns = buttons_for(msg_type)
                 if labels:  # v1.10: eigene Beschriftung je Rueckgabewert
                     btns = [(labels.get(c, lab), c) for lab, c in btns]  # v1.10
+                if extra:  # v1.13: zusaetzliche Knoepfe direkt nach dem ersten
+                    btns = btns[:1] + [(lab, c) for c, lab in extra.items()] + btns[1:]  # v1.13
                 codes = [c for _, c in btns]
                 cancel_code = (vbCancel if vbCancel in codes else vbOK if codes == [vbOK]
                                else vbNo if vbNo in codes else None)
@@ -282,12 +286,14 @@ def web_msgbox(ErrorMessage, msg_type=vbOKOnly, ErrorTitle=""):
     return _original["MsgBox"](ErrorMessage, msg_type, ErrorTitle)
 
 
-def web_msgbox_labelled(ErrorMessage, msg_type=vbOKOnly, ErrorTitle="", labels=None):  # v1.10
+# def web_msgbox_labelled(ErrorMessage, msg_type=vbOKOnly, ErrorTitle="", labels=None):  # v1.10 (entfallen)
+def web_msgbox_labelled(ErrorMessage, msg_type=vbOKOnly, ErrorTitle="", labels=None, extra=None):  # v1.13 (extra)
     """Wie MsgBox, aber mit eigener Beschriftung der Knoepfe: labels = {Rueckgabewert: Text}, z.B. {vbYes: "Suchen", vbNo: "Weiter"}.
     Rueckgabewerte und Reihenfolge bleiben die der VBA-Knopfart (bestaetigen links, Abbrechen rechts)."""
     _log_msgbox(ErrorMessage, ErrorTitle)
     if bridge_usable():
-        return call_in_loop(_msgbox_async, ErrorMessage, msg_type, ErrorTitle, labels, default=default_result(msg_type))
+        # return call_in_loop(_msgbox_async, ErrorMessage, msg_type, ErrorTitle, labels, default=default_result(msg_type))  # v1.13 (entfallen)
+        return call_in_loop(_msgbox_async, ErrorMessage, msg_type, ErrorTitle, labels, extra, default=default_result(msg_type))  # v1.13
     return _original["MsgBox"](ErrorMessage, msg_type, ErrorTitle)
 
 

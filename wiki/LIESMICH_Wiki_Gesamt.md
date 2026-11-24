@@ -1,9 +1,18 @@
-Datei-Version: 1.53 (2026-11-23) - LIESMICH_Wiki_Gesamt.md
-Gilt für webMobaLedLib 4.79
+Datei-Version: 1.55 (2026-11-23) - LIESMICH_Wiki_Gesamt.md
+Gilt für webMobaLedLib 4.93
 
-# Wiki-Kapitel „webMobaLedLib“: alle Seiten, Stand 4.79
+# Wiki-Kapitel „webMobaLedLib“: alle Seiten, Stand 4.93
 
-Dieses Paket enthält **alle 40 Seiten** in ihrer neuesten Fassung (Seitenstand jeweils um 0,01 erhöht). Es ersetzt die früheren Pakete der sechs Wellen. **Die Seiten erst veröffentlichen, wenn ein Release mit 3.04 (oder neuer) auf GitHub liegt.**
+Dieses Paket enthält **alle 41 Seiten** in ihrer neuesten Fassung (Seitenstand jeweils um 0,01 erhöht). Es ersetzt die früheren Pakete der sechs Wellen. **Die Seiten erst veröffentlichen, wenn ein Release mit 3.04 (oder neuer) auf GitHub liegt.**
+
+## Neu seit Stand 4.79 (Stand 4.93)
+
+* **Neue Seite `wz_datenuebertragung` (1.00):** Datenübertragung zwischen Rechnern (Menü Einstellungen → Datenübertragung). Verlinkt von `wz_programm_einstellungen` (1.17) und `werkzeuge` (1.11). `pg_arduino` (1.16): Verbindung folgt dem Blatt, Pico-Auswahl, keine flackernden Knöpfe. `pg_tabelle` (1.10): Markierung nach Einfügen, Löschen, Duplizieren, Verschieben. `seiten_update` (1.08) nachgeführt.
+* **Mini-Farbtest in der grafischen Ansicht (4.83):** `pg_grafisch` (Seitenstand 1.06): F3 oder Rechtsklick bei einem Makro ConstRGB. `pg_tabelle` (1.09): Mini-Farbtest für andere Makros sendet beim Öffnen nichts (4.82).
+* **Tabelle (4.84 bis 4.88):** Nach Einfügen, Löschen, Duplizieren und Verschieben bleibt die Ansicht ruhig, die betroffene Zeile ist markiert.
+* **Datenübertragung (4.89, Pull Request 57):** Menüeintrag „Datenübertragung“ (Tabellen von einem Rechner zum anderen, mit Verbindungscode). Beschreibung in `DATENUEBERTRAGUNG.md`; Wiki-Seite `wz_datenuebertragung`.
+* **Verbinden (4.90 bis 4.92, Issues 58, 59, 60):** Pico-Firmware: Auswahl des Anschlusses; die Verbindung folgt dem Tabellenblatt (USB und WLAN); Knöpfe beim Kompilieren flackern nicht mehr. `pg_arduino` beschreibt es.
+* **Bilder:** Die Bilder (Menüband, Programm Einstellungen, ARDUINO-IDE Einstellungen, Optionen, Datei-Menü, Verbinden) zeigen weiter den alten Stand und müssen neu aufgenommen werden.
 
 ## Neu seit Stand 4.36 (Stand 4.79): Menüs neu geordnet
 
@@ -115,7 +124,7 @@ Dieses Paket enthält **alle 40 Seiten** in ihrer neuesten Fassung (Seitenstand 
 | `installation.txt` | `anleitungen:webmobaledlib:installation` | 1.02 |
 | `led_farbanimation.txt` | `anleitungen:webmobaledlib:led_farbanimation` | 1.02 |
 | `linux.txt` | `anleitungen:webmobaledlib:linux` | 1.02 |
-| `macos.txt` | `anleitungen:webmobaledlib:macos` | 1.02 |
+| `macos.txt` | `anleitungen:webmobaledlib:macos` | 1.04 |
 | `modus.txt` | `anleitungen:webmobaledlib:modus` | 1.01 |
 | `patterngenerator.txt` | `anleitungen:webmobaledlib:patterngenerator` | 1.00 |
 | `pg_arduino.txt` | `anleitungen:webmobaledlib:pg_arduino` | 1.09 |
@@ -129,7 +138,7 @@ Dieses Paket enthält **alle 40 Seiten** in ihrer neuesten Fassung (Seitenstand 
 | `servo_animation.txt` | `anleitungen:webmobaledlib:servo_animation` | 1.05 |
 | `einfuehrung.txt` | `anleitungen:webmobaledlib:einfuehrung` | 1.08 |
 | `werkzeuge.txt` | `anleitungen:webmobaledlib:werkzeuge` | 1.07 |
-| `windows.txt` | `anleitungen:webmobaledlib:windows` | 1.02 |
+| `windows.txt` | `anleitungen:webmobaledlib:windows` | 1.04 |
 | `wz_arduino_einstellungen.txt` | `anleitungen:webmobaledlib:wz_arduino_einstellungen` | 1.04 |
 | `wz_dcckeyboard.txt` | `anleitungen:webmobaledlib:wz_dcckeyboard` | 1.05 |
 | `wz_dmservo.txt` | `anleitungen:webmobaledlib:wz_dmservo` | 1.04 |

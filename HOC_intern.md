@@ -1,5 +1,5 @@
-Datei-Version: 1.71 (2026-11-23) - HOC_intern.md
-Stand: webMobaLedLib 4.93
+Datei-Version: 1.76 (2026-11-24) - HOC_intern.md
+Stand: webMobaLedLib 4.98
 
 # webMobaLedLib: History of Change (intern, ausführlich)
 
@@ -24,6 +24,85 @@ Release-Stand 2.12 auf Wunsch des Entwicklers („Release bauen“). **Neu im Ab
 | `archiv/` | frühere Release-Hinweise, Versionslisten und ZIP (nichts gelöscht) |
 
 **Geprüft:** Dateipaket: `testzip` in Ordnung, alle 113 Dateien gleich dem Ordner `headless`, keine `__pycache__`, alle `.py` kompilieren, Versionsprüfung „alles passt“ (50 Einträge), 11 Dateien ausführbar (`.sh`, `.command`). **Nachbau des Entwickler-Ablaufs mit seinem echten Paket (1678 Dateien, Stand 2.05):** meine 113 Dateien darübergelegt, Prüfliste, ZIP gepackt, `release_tools check --previous <sein ZIP>`: **in Ordnung** (Version 2.12, 1678 Dateien, 6 neue, 0 fehlende, ZIP 16,6 MB). Alle 15 Prüfreihen laufen (17, 26, 15, 70, 28, 19, 43, 26, 16, 27, 8, 8, 8, 5, 9 Prüfungen). **Nicht geprüft:** `zip_erstellen.bat` und die Reparaturskripte unter Windows, ein abgebrochenes Update unter Windows, das Verhalten mit Acronis, der Download von GitHub.
+
+## 4.98 (2026-11-24), git bei der Installation und beim Übersetzen
+
+Meldung: Auf einem frischen PC musste git nachträglich aus der Entwicklungsumgebung (Optionen) installiert werden; im Anfänger-Modus fehlt dieser Reiter (und damit der Knopf „Git installieren“). PlatformIO braucht git für ESP32 (WiFiManager aus GitHub) und Pico (Plattform aus GitHub).
+
+Lösung: (1) `install_windows.bat` 1.11 installiert git mit winget (`Git.Git`), wenn weder `git` im PATH noch Git for Windows in `%ProgramFiles%\Git` oder `%LocalAppData%\Programs\Git` liegt; Option `/nogit`; bei Fehler Hinweis mit Download-Adresse. (2) `install_mac.command` 1.13: git mit Homebrew, sonst `xcode-select --install`. (3) `M08.Ensure_Git`: vor dem Build für ESP32 oder Pico (Create_PIO_Build_cmd, ESP32-Setup, Minimale Firmware) fragt das Programm „git jetzt installieren?“ und ruft `Setup_Git` (winget, Installationsprogramm, Homebrew, Entwicklerwerkzeuge); bei Nein oder Fehler bricht der Build mit der Meldung „git fehlt“ ab. Linux: `install_linux.sh` installierte git schon.
+
+Nicht geprüft: auf einem frischen PC / Mac (ich kann nicht testen); winget-Rückgabecode „schon installiert“ wird als Fehler gewertet und zeigt dann nur den Hinweis (harmlos).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.98 | Version, Dateiprüfung, Aufruf `Ensure_Git` bei Minimaler Firmware |
+| `proggen/M08_ARDUINO.py` | 1.33 | `Ensure_Git`, Aufrufe in `Create_PIO_Build_cmd` und ESP32-Build |
+| `install/install_windows.bat` | 1.11 | git mit winget, Option `/nogit` |
+| `install/install_mac.command` | 1.13 | git mit Homebrew oder xcode-select |
+| `csv/Web_Languages.csv` | +3 Zeilen | Fragetext, Abbruchmeldung |
+| `install/ANLEITUNG_Installation.md` | 4.98 | Abschnitt 2.16, Optionstabelle |
+| `install/BETATEST_Checkliste.md` | 3.79 | Punkt 347 |
+
+---
+
+## 4.97 (2026-11-24), ESP32: Absturzschleife „lfs_fs_grow_ assert failed“
+
+Meldung (Log webmobaledlib_15.zip, Reset-Meldung des seriellen Monitors): Nach „Kompilieren und Hochladen“ per USB (PlatformIO, Standard-Partitionstabelle) bootet der ESP32 endlos: `assert failed: lfs_fs_grow_ lfs.c:5165 (block_count >= lfs->block_count)`. Ursache: `MllFsBegin()` ruft `LittleFS.begin(true)`; im Flash liegt an der Stelle der Dateisystem-Partition (0x290000) noch ein altes LittleFS mit größerer Blockzahl (früheres Projekt, andere Partitionierung). `pio run -t upload` schreibt nur Bootloader, Partitionstabelle, boot_app0 und App, nicht die Dateisystem-Partition. `begin(true)` formatiert nur bei fehlendem Dateisystem, der Assert kommt davor. Die Konfiguration konnte nicht übertragen werden („Gerät antwortet nach dem Hochladen nicht“).
+
+Lösung: Nach dem vollständigen USB-Upload liest das Programm die Partitionstabelle aus dem Gerät (0x8000), sucht die Datenpartition mit Subtyp 0x82 und löscht sie mit `esptool erase_region`, bevor `After_Full_Flash` die Konfiguration schickt. Nur bei vollständigem Upload (nicht beim reinen Konfigurationsweg). NVS (WLAN-Zugangsdaten) bleibt. Die Suche nach esptool wurde in `_esptool_tools` ausgelagert (von `flash_usb` und `erase_filesystem` genutzt). Test mit simulierter Partitionstabelle; nicht an Hardware geprüft.
+
+Nicht geändert: Die Firmware selbst (kein Selbstheilen beim Booten). Ein bereits abstürzendes Gerät wird durch erneutes Hochladen per USB (mit 4.97) repariert, nicht durch OTA.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.97 | Version, Dateiprüfung |
+| `headless/headless_esp32_ota.py` | 1.14 | `erase_filesystem`, `_esptool_tools` |
+| `proggen/M08_ARDUINO.py` | 1.32 | Aufruf nach vollständigem USB-Upload (`__Erase_ESP32_Filesystem`) |
+| `csv/Web_Languages.csv` | +1 Zeile | Meldung „Das Dateisystem des ESP32 wird zurückgesetzt ...“ |
+
+---
+
+## 4.96 (2026-11-24), Laden einer PGF-Datei: „Ja, alle“
+
+Wunsch (Meldung): Eine MLL_PGF-Datei mit mehreren Tabellenblättern fragt bei jedem Blatt „Soll die Seite … importiert werden?“. In Excel galt Strg+Ja für alle weiteren Blätter; im Browser gibt es diese Taste nicht. Neu: zusätzlicher Knopf „Ja, alle“ (Rückgabewert 100) direkt nach „Ja“. Das Blatt „Examples“ wird weiter übersprungen, „Nein“ und „Abbrechen“ wirken wie bisher.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.96 | Version, Dateiprüfung |
+| `_web/web_dialogs.py` | 1.13 | `web_msgbox_labelled(..., extra=)`: zusätzliche Knöpfe |
+| `proggen/M18_Save_Load.py` | 1.06 | Frage mit „Ja, alle“, Merker `__ImportFollowingSheets` |
+| `csv/Web_Languages.csv` | +1 Zeile | „Ja, alle“ in sieben Sprachen |
+
+---
+
+## 4.95 (2026-11-23), ESP32 feste IP: Meldung von PeterVT11 (Log webmobaledlib_14.zip)
+
+Befunde aus dem Log: (1) Die minimale Firmware (`minimal_firmware`) baute ohne `network`, daher blieb der ESP32 nach „Minimale Firmware per USB“ bei DHCP (192.168.110.91); das spätere OTA zur festen IP .95 bekam keine Antwort. (2) ESP32-Setup per USB nahm den in der Tabelle eingetragenen COM4, der nicht existierte (ESP32 an COM3); `port_is_available` prüft nur das Format, der Fehler kam erst nach 5 Minuten Build („port doesn't exist“, danach „Partitionstabelle konnte nicht gelesen werden“). (3) Im Feld „Adresse für WebMLL“ stand die IP des PCs (.78), daher bot der Setup-Dialog diese als Ziel an.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.95 | minimale Firmware mit `network`, Anschlussprüfung, Version, Dateiprüfung |
+| `proggen/M07_COM_Port.py` | 1.14 | `Ensure_Existing_USB_Port` (vorhandenen Anschluss prüfen/eintragen) |
+| `proggen/M08_ARDUINO.py` | 1.31 | Anschlussprüfung vor dem Build (ESP32-Setup per USB) |
+| `_web/web_esp32_ota.py` | 1.08 | Adresse dieses Rechners abgelehnt (`own_addresses`), Zieladresse bei fester IP, Hinweistext |
+| `csv/Web_Languages.csv` | +3 Zeilen | Meldungen in sieben Sprachen |
+
+Nicht geklärt: Warum beim Start COM4 statt COM3 verbunden wurde (die Tabelle enthielt noch COM4 eines früheren Boards); jetzt wird der Anschluss beim Hochladen geprüft, die Auto-Verbindung beim Start bleibt unverändert.
+
+---
+
+## 4.94 (2026-11-23), ESP32-Upload: externes PlatformIO-Build-Verzeichnis
+
+Neue Commits im Pull Request 54 (moosbewohner, Fehler bei Jürgen: Build erfolgreich, aber kein Upload, weil firmware.bin fest unter `.pio/build/esp32` gesucht wurde). Das Programm fragt jetzt `pio project config --json-output` ab (build_dir, workspace_dir, Umgebungsvariablen, interpolierte Pfade). Fehlen die Dateien, gibt es eine klare Meldung; die Konfiguration wird nicht ins Protokoll geschrieben (WLAN-/OTA-Passwörter). Die Dokumente und das Manifest des PR nicht übernommen (eigene Einträge, Manifest wird beim Release erzeugt).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.94 | Version, Dateiprüfung |
+| `headless/headless_esp32_ota.py` | 1.13 | `platformio_build_directory`, Meldung bei fehlenden Dateien |
+| `test_esp32_build_directory.py` | 1.00 | neu, drei Tests |
+| `csv/Web_Languages.csv` | +2 Zeilen | Meldungen in sieben Sprachen |
+
+---
 
 ## 4.93 (2026-11-23), Datenübertragung: verständliche Meldung bei falschem Verbindungscode
 

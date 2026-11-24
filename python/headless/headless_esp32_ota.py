@@ -1,12 +1,14 @@
-# Datei-Version: 1.12 (2026-11-23) - headless_esp32_ota.py
+# Datei-Version: 1.14 (2026-11-24) - headless_esp32_ota.py
 # ----------------------------------------------------------------------------------------------
 # Name:           headless_esp32_ota.py
 # Path:           headless/headless_esp32_ota.py
-# Version:        1.12
-# Last Update:    2026-11-23
+# Version:        1.14
+# Last Update:    2026-11-24
 # Author:         Harold Linke (Beitrag des Fork-Entwicklers, uebernommen in 3.37)
 # Licence:        LGPL V2.1
 # History of Change:
+#   1.14  2026-11-24  erase_filesystem: Dateisystem-Partition (LittleFS) des ESP32 nach vollstaendigem USB-Upload loeschen (Absturzschleife 'lfs_fs_grow_ assert failed', wenn dort ein altes Dateisystem anderer Groesse liegt); esptool-Suche als _esptool_tools
+#   1.13 2026-11-23 ESP32-Firmware aus dem von PlatformIO berechneten Build-Verzeichnis lesen, auch externe Pfade.
 #   1.12  2026-11-23  Statische IP oder DHCP fuer den ESP32: Einstellungen ip_mode/ip/gateway/mask/dns1/dns2 (validate_network, network_of), Defines MLL_WIFI_STATIC_IP im Sketch
 #   1.11  2026-11-19  Zeitstempel-Vergleich der Kopfdatei: auch MLL_P_START_MSG (dynamische Konfiguration) wird ohne Datum verglichen
 #   1.10  2026-11-19  run_streaming: Build (PlatformIO, Arduino Builder) und Flashen geben die Ausgabe zeilenweise ins Protokoll, sobald sie kommt; cancel_running() beendet den laufenden Vorgang (Vorgang abbrechen im Protokoll-Fenster)
@@ -285,6 +287,26 @@ def sync_build_tree(source, target):
 
 
 # def build_platformio_project(sketch_dir, pio, password, report, write_config, *, hostname="", ota=True):  # v1.12 (entfallen)
+def platformio_build_directory(pio, project, environment="esp32"):  # v1.13
+    """PlatformIO resolves ini interpolation and PLATFORMIO_* directory overrides."""  # v1.13
+    import json  # v1.13
+    project = Path(project).resolve()  # v1.13
+    result = subprocess.run([str(pio), "project", "config", "--project-dir", str(project), "--json-output"], capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=30)  # v1.13
+    try:  # v1.13
+        if result.returncode:  # v1.13
+            raise ValueError()  # v1.13
+        sections = dict(json.loads(result.stdout))  # v1.13
+        options = dict(sections.get("platformio", []))  # v1.13
+        workspace = Path(options.get("workspace_dir") or os.getenv("PLATFORMIO_WORKSPACE_DIR") or project / ".pio").expanduser()  # v1.13
+        build = Path(options.get("build_dir") or os.getenv("PLATFORMIO_BUILD_DIR") or workspace / "build").expanduser()  # v1.13
+        if not build.is_absolute():  # v1.13
+            build = project / build  # v1.13
+        return build / environment  # v1.13
+    except (ValueError, TypeError, KeyError):  # v1.13
+        # Never log config JSON: it may contain WLAN or OTA credentials.  # v1.13
+        raise ValueError("Die PlatformIO-Build-Pfade konnten nicht ermittelt werden.") from None  # v1.13
+
+
 def build_platformio_project(sketch_dir, pio, password, report, write_config, *, hostname="", ota=True, network=None):  # v1.12
     """Compile the WebMLL ESP32 configuration in a reusable build project."""
     if not pio:
@@ -324,8 +346,13 @@ def build_platformio_project(sketch_dir, pio, password, report, write_config, *,
         returncode = run_streaming([str(pio), "run", "--project-dir", str(project), "-e", "esp32"], report, 900, (password, secret) if password else ())  # v1.10
         if returncode:  # v1.10
             raise ValueError("ESP32-Kompilierung mit PlatformIO fehlgeschlagen.")
-        build = project / ".pio/build/esp32"
-        return (build / "firmware.bin").read_bytes(), (build / "partitions.bin").read_bytes()
+        # build = project / ".pio/build/esp32"  # v1.13 (entfallen)
+        build = platformio_build_directory(pio, project)  # v1.13
+        logging.getLogger(__name__).info("ESP32 PlatformIO build directory: %s", build)  # v1.13
+        try:  # v1.13
+            return (build / "firmware.bin").read_bytes(), (build / "partitions.bin").read_bytes()  # v1.13
+        except FileNotFoundError:  # v1.13
+            raise ValueError("Die kompilierten ESP32-Dateien wurden im PlatformIO-Build-Verzeichnis nicht gefunden.") from None  # v1.13
 
 
 def ota_partitions(table):
@@ -341,31 +368,81 @@ def ota_partitions(table):
     return partitions
 
 
+def _esptool_tools(pio=None):  # v1.14
+    """Kern des ESP32-Boardpakets und Aufruf von esptool (PlatformIO-Paket oder Arduino-Boardpaket)."""  # v1.14
+    if pio:  # v1.14
+        packages = platformio_packages()  # v1.14
+        core = packages / "framework-arduinoespressif32"  # v1.14
+        script = packages / "tool-esptoolpy/esptool.py"  # v1.14
+        python = Path(pio).with_name("python.exe" if os.name == "nt" else "python")  # v1.14
+        if not script.is_file():  # v1.14
+            raise ValueError("esptool.py fehlt im PlatformIO-ESP32-Paket.")  # v1.14
+        return core, [str(python if python.is_file() else Path(sys.executable)), str(script)]  # v1.14
+    core = Path(find_uploader()[-1]).parents[1]  # v1.14
+    tool_root = core.parents[2] / "tools/esptool_py"  # v1.14
+    tools = sorted(  # v1.14
+        (p for name in ("esptool.exe", "esptool") for p in tool_root.glob("*/" + name) if all(x.isdecimal() for x in p.parent.name.split("."))),  # v1.14
+        key=lambda p: tuple(map(int, p.parent.name.split("."))),  # v1.14
+        reverse=True,  # v1.14
+    )  # v1.14
+    if not tools:  # v1.14
+        raise ValueError("esptool fehlt im installierten ESP32-Board-Core.")  # v1.14
+    return core, [str(tools[0])]  # v1.14
+
+
+def erase_filesystem(port, report, *, pio=None):  # v1.14
+    """Loescht die Dateisystem-Partition (LittleFS) des ESP32. Ein altes Dateisystem anderer Groesse an derselben Stelle laesst die Firmware beim
+    Mounten abstuerzen ('assert failed: lfs_fs_grow_'): Neustart ohne Ende. Die Konfiguration (/mllcfg.bin) wird danach neu uebertragen,
+    WLAN-Zugangsdaten (NVS) bleiben erhalten. Rueckgabe: True wenn geloescht."""  # v1.14
+    port = (port or "").strip()  # v1.14
+    if not re.fullmatch(r"COM[1-9][0-9]*|/dev/(tty|cu)\.?[A-Za-z0-9_.-]+", port, re.IGNORECASE):  # v1.14
+        return False  # v1.14
+    port = port.upper() if port[:3].upper() == "COM" else port  # v1.14
+    _core, tool = _esptool_tools(pio)  # v1.14
+    base = [*tool, "--chip", "esp32", "--port", port, "--baud", "460800"]  # v1.14
+    with tempfile.TemporaryDirectory(prefix="webmll-fs-") as folder:  # v1.14
+        table_file = Path(folder) / "partitions.bin"  # v1.14
+        result = subprocess.run([*base, "read_flash", "0x8000", "0xC00", str(table_file)], capture_output=True, text=True, errors="replace", timeout=60)  # v1.14
+        if result.returncode or not table_file.is_file():  # v1.14
+            report(result.stdout + result.stderr)  # v1.14
+            return False  # v1.14
+        region = None  # v1.14
+        for magic, kind, subtype, start, size, _name, _flags in struct.iter_unpack("<HBBII16sI", table_file.read_bytes()):  # v1.14
+            if magic != 0x50AA:  # v1.14
+                break  # v1.14
+            if kind == 1 and subtype == 0x82:  # v1.14: Daten, spiffs/LittleFS
+                region = start, size  # v1.14
+        if region is None or region[0] % 0x1000 or region[1] % 0x1000:  # v1.14
+            return False  # v1.14
+        return run_streaming([*base, "erase_region", hex(region[0]), hex(region[1])], report, 120) == 0  # v1.14
+
+
 def flash_usb(port, image, partition_table, report, *, pio=None):
     """Flash the app using an existing matching ESP32 OTA partition table."""
     port = (port or "").strip()
     if not re.fullmatch(r"COM[1-9][0-9]*|/dev/(tty|cu)\.?[A-Za-z0-9_.-]+", port, re.IGNORECASE):  # v1.04: auch Linux/Mac
         raise ValueError("Bitte in den ARDUINO-Einstellungen zuerst einen ESP32-COM-Port wählen.")
     port = port.upper() if port[:3].upper() == "COM" else port
-    if pio:
-        packages = platformio_packages()
-        core = packages / "framework-arduinoespressif32"
-        script = packages / "tool-esptoolpy/esptool.py"
-        python = Path(pio).with_name("python.exe" if os.name == "nt" else "python")
-        if not script.is_file():
-            raise ValueError("esptool.py fehlt im PlatformIO-ESP32-Paket.")
-        tool = [str(python if python.is_file() else Path(sys.executable)), str(script)]
-    else:
-        core = Path(find_uploader()[-1]).parents[1]
-        tool_root = core.parents[2] / "tools/esptool_py"
-        tools = sorted(
-            (p for name in ("esptool.exe", "esptool") for p in tool_root.glob("*/" + name) if all(x.isdecimal() for x in p.parent.name.split("."))),
-            key=lambda p: tuple(map(int, p.parent.name.split("."))),
-            reverse=True,
-        )
-        if not tools:
-            raise ValueError("esptool fehlt im installierten ESP32-Board-Core.")
-        tool = [str(tools[0])]
+    # if pio:  # v1.14 (entfallen)
+    #     packages = platformio_packages()  # v1.14 (entfallen)
+    #     core = packages / "framework-arduinoespressif32"  # v1.14 (entfallen)
+    #     script = packages / "tool-esptoolpy/esptool.py"  # v1.14 (entfallen)
+    #     python = Path(pio).with_name("python.exe" if os.name == "nt" else "python")  # v1.14 (entfallen)
+    #     if not script.is_file():  # v1.14 (entfallen)
+    #         raise ValueError("esptool.py fehlt im PlatformIO-ESP32-Paket.")  # v1.14 (entfallen)
+    #     tool = [str(python if python.is_file() else Path(sys.executable)), str(script)]  # v1.14 (entfallen)
+    # else:  # v1.14 (entfallen)
+    #     core = Path(find_uploader()[-1]).parents[1]  # v1.14 (entfallen)
+    #     tool_root = core.parents[2] / "tools/esptool_py"  # v1.14 (entfallen)
+    #     tools = sorted(  # v1.14 (entfallen)
+    #         (p for name in ("esptool.exe", "esptool") for p in tool_root.glob("*/" + name) if all(x.isdecimal() for x in p.parent.name.split("."))),  # v1.14 (entfallen)
+    #         key=lambda p: tuple(map(int, p.parent.name.split("."))),  # v1.14 (entfallen)
+    #         reverse=True,  # v1.14 (entfallen)
+    #     )  # v1.14 (entfallen)
+    #     if not tools:  # v1.14 (entfallen)
+    #         raise ValueError("esptool fehlt im installierten ESP32-Board-Core.")  # v1.14 (entfallen)
+    #     tool = [str(tools[0])]  # v1.14 (entfallen)
+    core, tool = _esptool_tools(pio)  # v1.14
     base = [*tool, "--chip", "esp32", "--port", port, "--baud", "460800"]
     with tempfile.TemporaryDirectory(prefix="webmll-ota-usb-") as folder:
         work = Path(folder)

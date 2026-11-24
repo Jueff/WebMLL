@@ -1,9 +1,37 @@
-Datei-Version: 1.77 (2026-11-23) - HOC_Anwender.md
-Stand: webMobaLedLib 4.93
+Datei-Version: 1.82 (2026-11-24) - HOC_Anwender.md
+Stand: webMobaLedLib 4.98
 
 # webMobaLedLib: Änderungen (Kurzfassung)
 
 Gilt ab Version 1.39. Neueste Version oben.
+
+## Version 4.98 (2026-11-24)
+
+Verbesserungen:
+- Neuinstallation: Das Installationsprogramm für Windows und macOS installiert jetzt auch git mit, das PlatformIO für ESP32 und Raspberry Pi Pico braucht. Man muss git nicht mehr nachträglich in den Optionen installieren.
+- Fehlt git trotzdem, fragt das Programm beim Übersetzen für ESP32 oder Pico „git jetzt installieren?“ (auch im Anfänger-Modus).
+
+## Version 4.97 (2026-11-24)
+
+Korrekturen:
+- ESP32: Startet die Lichtmaschine nach dem Hochladen endlos neu (Meldung „lfs_fs_grow_ assert failed“, die Platine blinkt dauernd), weil im Flash noch ein altes Dateisystem liegt, löscht das Programm nach dem Hochladen per USB jetzt das Dateisystem des ESP32. WLAN-Zugangsdaten bleiben erhalten, die Konfiguration wird danach neu übertragen.
+
+## Version 4.96 (2026-11-24)
+
+Neue Funktionen:
+- Beim Laden einer MLL_PGF-Datei mit mehreren Tabellenblättern gibt es bei der Frage „Soll die Seite … importiert werden?“ den Knopf „Ja, alle“. Dann werden alle weiteren Blätter ohne Nachfrage geladen.
+
+## Version 4.95 (2026-11-23)
+
+Korrekturen:
+- ESP32 mit fester IP-Adresse: Die minimale Firmware per USB nimmt jetzt auch die feste IP-Adresse (sie blieb bei DHCP).
+- Ist der eingetragene USB-Anschluss am Rechner nicht vorhanden (zum Beispiel COM4 statt COM3), prüft das Programm das vor dem langen Übersetzen. Hängt genau ein passendes Board am Rechner, wird dessen Anschluss eingetragen, sonst erscheint eine Meldung.
+- „Adresse für WebMLL“: Die Adresse des eigenen Rechners wird abgelehnt (Verwechslung mit der IP-Adresse des ESP32). Bei fester IP das Feld leer lassen.
+
+## Version 4.94 (2026-11-23)
+
+Korrekturen:
+- ESP32 über WLAN: Nach dem Kompilieren findet das Programm die erzeugte Firmware auch dann, wenn PlatformIO in ein anderes Verzeichnis baut (Beitrag von moosbewohner, Pull Request 54). Fehlen die Dateien, erscheint eine klare Meldung.
 
 ## Version 4.93 (2026-11-23)
 

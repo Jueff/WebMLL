@@ -1,5 +1,5 @@
 ====== webMobaLedLib – Installation unter Windows ======
-//Seitenstand 1.03 (2026-11-23), gilt für webMobaLedLib 4.79//
+//Seitenstand 1.04 (2026-11-24), gilt für webMobaLedLib 4.98//
 
 Diese Seite gilt für **Windows 10 und Windows 11**. Du brauchst keine Eingabeaufforderung: Die Installation startest du mit einem Doppelklick.
 
@@ -44,6 +44,8 @@ Danach liegt im Ordner **mobaledlib** ein Ordner **python**.
 {{:bilder:anleitungen:webmobaledlib:win_03_installation.png?500|Das Installationsfenster während der Installation}}
 
 **Python:** Die webMobaLedLib braucht //Python//, ein Hilfsprogramm (Version 3.10 oder neuer). Du musst dich nicht darum kümmern: Das Installationsfenster **prüft selbst, ob es da ist**. Fehlt es, fragt es **„Python 3.12 jetzt mit winget installieren [J,N]?“**. Tippe **J** und drücke die Enter-Taste. Windows fragt nach der Erlaubnis (**Ja**), dann macht die Installation von allein weiter. Nur wenn das Fenster danach meldet, Python sei noch nicht bekannt, **schließe es, starte den Computer neu** und mache einen Doppelklick auf **install_windows.bat** noch einmal. Hat dein Windows kein //winget// (ältere Windows-10-Versionen), sagt das Fenster, dass du Python 3.12 von [[https://www.python.org/downloads/windows/|python.org]] installieren sollst (mit dem Haken „Add python.exe to PATH“). Danach startest du **install_windows.bat** noch einmal.
+
+**Git:** Für ESP32 und Raspberry Pi Pico braucht die webMobaLedLib das Hilfsprogramm //Git//. Das Installationsfenster installiert es **automatisch mit** (über winget), du musst nichts tun. Fehlt es trotzdem, fragt das Programm beim ersten Übersetzen für ESP32 oder Pico, ob es Git installieren soll: Antworte mit **Ja**.
 
 Am Ende steht im Fenster **„Fertig. Starten: Desktop-Symbol webMobaLedLib“**. Drücke eine Taste, das Fenster schließt sich. Auf dem **Desktop** liegt jetzt das Symbol **webMobaLedLib**.
 

@@ -1,6 +1,6 @@
-Datei-Version: 1.09 (2026-11-23) - VERSIONEN_Stand_4.93_2026-11-23.txt
+Datei-Version: 1.10 (2026-11-24) - VERSIONEN_Stand_4.98_2026-11-24.txt
 
-webMobaLedLib, Release-Stand 2026-11-23 (webmobaledlib.py Version 4.93) - Versionen der von Claude gelieferten Dateien im Ordner python
+webMobaLedLib, Release-Stand 2026-11-24 (webmobaledlib.py Version 4.98) - Versionen der von Claude gelieferten Dateien im Ordner python
 
 arduino_prefs.py                     1.02
 fast_paths.py                        1.01
@@ -11,7 +11,7 @@ release_tools.py                     1.09
 repair.py                            1.04
 test_headless_contract.py            1.01
 userdata.py                          1.03
-webmobaledlib.py                     4.93
+webmobaledlib.py                     4.98
 _web/__init__.py                     1.00
 _web/mll_graph.js                    1.17
 _web/mll_servocurve.js               1.03
@@ -20,8 +20,8 @@ _web/web_access.py                   1.13
 _web/web_auth.py                     1.05
 _web/web_colorcheck.py               1.12
 _web/web_dcckeyboard.py              1.05
-_web/web_dialogs.py                  1.12
-_web/web_esp32_ota.py                1.07
+_web/web_dialogs.py                  1.13
+_web/web_esp32_ota.py                1.08
 _web/web_firewall.py                 1.04
 _web/web_form_comport.py             1.09
 _web/web_form_exchange.py            1.03
@@ -66,7 +66,7 @@ ExcelAPI/XLA_Application.py          1.24
 headless/__init__.py                 1.00
 headless/headless_app_controller.py  1.10
 headless/headless_controller.py      1.01
-headless/headless_esp32_ota.py       1.12
+headless/headless_esp32_ota.py       1.14
 headless/headless_extensions.py      1.03
 headless/headless_firmware_dl.py     1.00
 headless/headless_git.py             1.01
@@ -110,16 +110,16 @@ proggen/M03_Dialog.py                1.03
 proggen/M06_Write_Header.py          1.16
 proggen/M06_Write_Header_LED2Var.py  1.02
 proggen/M06_Write_Header_SW.py       1.11
-proggen/M07_COM_Port.py              1.13
+proggen/M07_COM_Port.py              1.14
 proggen/M07_COM_Port_New.py          1.04
-proggen/M08_ARDUINO.py               1.30
+proggen/M08_ARDUINO.py               1.33
 proggen/M08_Fast_ARDUINO.py          1.01
 proggen/M08_Install_FastBootLoader.py 1.03
 proggen/M09_Language.py              1.07
 proggen/M10_Par_Description.py       1.02
 proggen/M12_Copy_Prog.py             1.01
 proggen/M17_Import_old_Data.py       1.03
-proggen/M18_Save_Load.py             1.05
+proggen/M18_Save_Load.py             1.06
 proggen/M18a_Load_PicoConfig.py      1.01
 proggen/M20_PageEvents_a_Functions.py 1.13
 proggen/M28_Diverse.py               1.03
@@ -151,10 +151,10 @@ test_dyn_config_wlan.py              1.05
 
 MobaLedTest_macroparamdef.json (Hinweise der Schrifteinstellungen, 4.49; Standardschrift 4.73)
 MobaLedTest_macrodef.json (Texte der Einstellungsseiten, 4.73)
-wiki/ (40 Seiten, Paket webmobaledlib_Wiki_Gesamt_Stand_4.93.zip, an die Menues ab 4.51 angepasst)
+wiki/ (41 Seiten, Paket webmobaledlib_Wiki_Gesamt_Stand_4.98.zip, an die Menues ab 4.51 angepasst)
 
-PDF (install_manual/): ANLEITUNG_Installation.pdf = Version 4.93, BETATEST_Checkliste.pdf = Version 3.74
-Ausserhalb des Ordners python: zip_erstellen.bat Version 1.11 (liegt neben dem Ordner python, ROOT_IN_ZIP=1), START_HIER.txt und START_HIER.md (die .txt kommt in den obersten Ordner des ZIP, die .md ist fuer GitHub), RELEASE_Ablauf.md, HOC_intern.md, HOC_Anwender.md (Stand 4.79), DATEIEN_IM_PAKET_Issue26.md (Liste der Dateien, die nicht ins Paket muessen)
+PDF (install_manual/): ANLEITUNG_Installation.pdf = Version 4.98, BETATEST_Checkliste.pdf = Version 3.79
+Ausserhalb des Ordners python: zip_erstellen.bat Version 1.11 (liegt neben dem Ordner python, ROOT_IN_ZIP=1), START_HIER.txt und START_HIER.md (die .txt kommt in den obersten Ordner des ZIP, die .md ist fuer GitHub), RELEASE_Ablauf.md, HOC_intern.md, HOC_Anwender.md (Stand 4.98), DATEIEN_IM_PAKET_Issue26.md (Liste der Dateien, die nicht ins Paket muessen)
 Neu seit 3.93 (Versionen 3.94 bis 4.79): Aenderungen in webmobaledlib.py, ExcelAPI, _web (web_tabs, web_params, web_form_options, web_serial, web_form_*, web_layout, web_log u.a.; neu: web_settings_transfer), headless (neu: headless_extensions; headless_esp32_ota mit Ausgabe zeilenweise und Abbrechen), proggen (M06_Write_Header_SW, M07_COM_Port, M08_ARDUINO, M38_Extensions u.a.), mlpyproggen/Prog_Generator.py, install (neue Symbole, Anleitung, Checkliste), csv/Web_Languages.csv, libraries (P_ScheduleMLX, P_ScheduleDuoMLX), images
 
 Neu seit 4.79 (Versionen 4.80 bis 4.93):
@@ -163,3 +163,13 @@ headless/headless_table_sync.py      1.04
 test_table_sync.py                   1.06
 Ausserhalb des Ordners python: DATENUEBERTRAGUNG.md Version 1.03, README.md (Abschnitt Datenuebertragung)
 csv/Web_Languages.csv: neue Texte fuer feste IP, Mini-Farbtest, Datenuebertragung, Pico-Anschluss (7 Spalten)
+
+Neu seit 4.93 (Versionen 4.94 bis 4.98):
+headless/headless_esp32_ota.py       1.14   (Build-Verzeichnis PlatformIO Pull Request 54, feste IP, Dateisystem des ESP32 loeschen)
+test_esp32_build_directory.py        1.00
+_web/web_dialogs.py, proggen/M18_Save_Load.py (Ja, alle beim Laden mehrerer Tabellenblaetter, 4.96)
+proggen/M07_COM_Port.py, _web/web_esp32_ota.py (USB-Anschluss und eigene IP-Adresse pruefen, 4.95)
+proggen/M08_ARDUINO.py               1.33   (ESP32-Dateisystem loeschen 4.97, Ensure_Git 4.98)
+install/install_windows.bat          1.11  (git mit winget, 4.98)
+install/install_mac.command          1.13  (git mit Homebrew oder Entwicklerwerkzeugen, 4.98)
+csv/Web_Languages.csv (neue Zeilen), wiki/ (neue Seite wz_datenuebertragung, 42 Dateien)

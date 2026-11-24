@@ -1,5 +1,5 @@
 ====== webMobaLedLib – Installation auf dem Mac ======
-//Seitenstand 1.03 (2026-11-23), gilt für webMobaLedLib 4.79//
+//Seitenstand 1.04 (2026-11-24), gilt für webMobaLedLib 4.98//
 
 Diese Seite gilt für **macOS ab Version 10.13**, auch für Macs mit Apple-Chip (M1 und neuer). Für die Installation öffnest du **einmal das Terminal**. Die Schritte dafür stehen unten Schritt für Schritt.
 
@@ -55,6 +55,8 @@ Jetzt kommt das Terminal. Du tippst fast nichts, denn du ziehst die Datei einfac
 Es erscheint viel Text. Das ist normal: Das Programm richtet alles ein. Lass das Fenster offen. Es dauert **5 bis 15 Minuten**.
 
 {{:bilder:anleitungen:webmobaledlib:mac_02_terminal.png?500|Das Terminal mit dem Befehl bash und der hineingezogenen Datei}}
+
+**Git:** Für ESP32 und Raspberry Pi Pico braucht die webMobaLedLib das Hilfsprogramm //Git//. Das Skript installiert es mit (mit Homebrew, sonst öffnet macOS ein Fenster: klicke dort auf **Installieren**). Fehlt es später, fragt das Programm beim ersten Übersetzen für ESP32 oder Pico danach.
 
 Am Ende steht im Fenster **„Fertig. Starten: Programm webMobaLedLib auf dem Schreibtisch doppelklicken“**. Auf dem **Schreibtisch** liegt jetzt das Programm **webMobaLedLib**.
 

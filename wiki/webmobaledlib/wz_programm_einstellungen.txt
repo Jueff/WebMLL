@@ -1,5 +1,5 @@
 ====== webMobaLedLib – Programm Einstellungen ======
-//Seitenstand 1.16 (2026-11-23), gilt für webMobaLedLib 4.79//
+//Seitenstand 1.17 (2026-11-23), gilt für webMobaLedLib 4.93//
 
 Im Menü **Einstellungen** (seit 4.51, vorher der Reiter **Programm Einstellungen**) passt du das Programm an dich an: die **Sprache**, die **Schriftgröße**, die **Darstellung** und einiges mehr. Die Einstellungen werden **gespeichert**, wenn du auf **Geänderte Einstellungen übernehmen** (bzw. **Speichern**) klickst, und gelten danach für das Programm auf diesem Rechner. Einige wirken **sofort**, andere erst nach einem **Neustart** des Programms. Das steht bei der jeweiligen Einstellung als Hinweis, wenn du mit der Maus darauf zeigst.
 
@@ -66,6 +66,10 @@ Die Einstellungen stehen in **fünf Gruppen**, jede mit einer Überschrift. So f
 ==== Zugriff aus dem Netz ====
 
 Der Schalter **Zugriff aus dem Netz erlauben** und das **Passwort** für die Oberfläche: siehe die Seite [[anleitungen:webmobaledlib:wz_netzwerk|Zugriff aus dem Netz]].
+
+==== Datenübertragung (seit 4.89) ====
+
+Tabellen von einem anderen Rechner im Heimnetz holen oder eigene Tabellen freigeben: siehe die Seite [[anleitungen:webmobaledlib:wz_datenuebertragung|Datenübertragung]].
 
 ==== Spezialeinstellungen ====
 

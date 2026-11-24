@@ -1,5 +1,5 @@
 ====== webMobaLedLib – Verbinden und Übertragen ======
-//Seitenstand 1.15 (2026-11-23), gilt für webMobaLedLib 4.79//
+//Seitenstand 1.16 (2026-11-23), gilt für webMobaLedLib 4.93//
 
 Wenn deine Tabelle fertig ist, überträgst du sie auf die **Lichtmaschine**. Auf dieser Seite steht, wie du die Lichtmaschine **einstellst**, **verbindest**, das Programm **überträgst** und was bei Problemen hilft.
 
@@ -43,6 +43,8 @@ Du musst den Knopf meistens nicht mehr drücken. Das Programm verbindet sich **s
   * **Ohne frühere Verbindung:** Das Programm **sucht** eine angeschlossene Lichtmaschine (Nano, ESP32 oder Pico). Findet es **genau eine**, verbindet es sich. Stecken mehrere Geräte am Rechner, **rät** das Programm nicht. Eine zweite Lichtmaschine für LNet/DCC wird ausgelassen. Dann drückst du den Knopf selbst.
   * **Nach dem Übertragen:** Nach **Setup übertragen** verbindet das Programm mit der Lichtmaschine, auf die du **gerade übertragen** hast. Hast du einen **ESP32 per WLAN** übertragen, verbindet es auch **per WLAN**. Der ESP32 startet nach dem Update neu, darum dauert das einige Sekunden.
 
+  * **Beim Blattwechsel (seit 4.90 bis 4.92):** Hat ein Tabellenblatt eine **eigene Lichtmaschine** (eigener USB-Anschluss oder eigene WLAN-Adresse in der Tabelle), wechselt die Verbindung mit dem Blatt: Das Programm trennt die alte und verbindet die des neuen Blattes, auch per **WLAN**. **Verbindung trennen**, **Neu verbinden** und **Board wechseln …** gelten für das Blatt, das gerade offen ist.
+
 Das geschieht **ohne Dialoge**. Klappt es nicht, zum Beispiel weil der Anschluss von einem anderen Programm (etwa der ARDUINO IDE) benutzt wird, bleibt der Knopf **rot**, und du verbindest von Hand.
 
 Wer das nicht möchte, schaltet es in den **Programm Einstellungen** unter **Allgemeine Einstellungen** aus (**Automatisch mit der Lichtmaschine verbinden**, siehe [[anleitungen:webmobaledlib:wz_programm_einstellungen|Programm Einstellungen]]). Der Knopf funktioniert dann wie vorher.
@@ -70,6 +72,8 @@ Die **Umschaltung** zwischen Effekt- und Direktmodus erfolgt **automatisch**: Du
 
   * Das Fenster zeigt die Ausgabe des Übersetzens **sofort** (seit 4.33). **Vorgang abbrechen** beendet das Übersetzen oder Hochladen, **Schließen** gibt es erst nach dem Ende (seit 4.25). Das Fenster schließt sich nach Erfolg und nach einem Fehler **von selbst** (Vorgabe 5 und 30 Sekunden, einstellbar in den [[anleitungen:webmobaledlib:wz_programm_einstellungen|Programm Einstellungen]], seit 4.40).
   * Ist in der Tabelle noch **kein USB-Anschluss** eingetragen, aber die Lichtmaschine verbunden, nimmt das Programm den Anschluss der aktiven Verbindung (seit 4.42).
+  * Ist **mehr als ein Raspberry Pico** angeschlossen, fragt das Programm beim Installieren der Firmware, **welcher Pico** bespielt werden soll (die mit der Lichtmaschine verbundene ist gekennzeichnet) (seit 4.90, Issue 58).
+  * Während des Übersetzens und Hochladens flackern die Knöpfe nicht mehr (seit 4.90, Issue 60).
   * Das **Datum der Startmeldung** der Lichtmaschine (Serial Monitor) steht als TT.MM.JJ (seit 4.77, dazu das Setup neu übertragen).
 
 Die Lichtmaschine **behält** das Programm, auch wenn du ihn vom Computer trennst oder ausschaltest. Nach dem Übertragen verbindet sich das Programm **von selbst** mit dieser Lichtmaschine (siehe **Automatisch verbinden**). Ist das in den Programm Einstellungen ausgeschaltet, ist **keine Verbindung** offen: Das Programm verbindet sich dann **erst wieder, wenn ein Werkzeug sie braucht** (zum Beispiel eine Testtaste, siehe oben).

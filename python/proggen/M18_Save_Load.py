@@ -1,12 +1,13 @@
-# Datei-Version: 1.05 (2026-11-17) - M18_Save_Load.py
+# Datei-Version: 1.06 (2026-11-24) - M18_Save_Load.py
 # ----------------------------------------------------------------------------------------------
 # Name:           M18_Save_Load.py
 # Path:           proggen/M18_Save_Load.py
-# Version:        1.05
-# Last Update:    2026-11-17
+# Version:        1.06
+# Last Update:    2026-11-24
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
+#   1.06  2026-11-24  PGF-Datei mit mehreren Seiten: Frage 'Soll die Seite importiert werden?' hat im Browser den Knopf 'Ja, alle' (alle weiteren Seiten ohne Nachfrage); Strg+Ja wie bisher
 #   1.01  2026-10-17  __Copy_and_Clear_Sheet: Vorlagenzeilen des neuen Blatts ganz loeschen (EntireRow.ClearContents); die Zeile RGB_Heartbeat(#LED) blieb in jedem beim Laden einer PGF-Datei angelegten Blatt stehen; davor Original-Port, nicht erfasst
 #   1.02  2026-10-23  Speichern im Format MLL_PGF (Optionen - Update - Datei speichern): In der Web-Oberflaeche keine Meldung 'Datei wurde geschrieben' mit dem internen Pfad mehr vor der Abfrage, wohin die Datei gespeichert werden soll
 #   1.03  2026-10-23  Beim Laden einer PGF-Datei: Token in der Spalte Typ in irgendeiner Sprache -> neutrales (deutsches) Token (M09.Token_Canonical_Any)
@@ -532,7 +533,16 @@ def __Read_PGF_from_String_V1and2(lines, Name, ToActiveSheet):
                         if __ImportFollowingSheets:
                             SkipSheet = False
                         else:
-                            select_1 = P01.MsgBox(M09.Get_Language_Str('Soll die Seite') + ' \'' + SheetName + '\' ' + M09.Get_Language_Str('importiert werden?'), vbQuestion + vbYesNoCancel, M09.Get_Language_Str('Seite importieren?'))
+                            # select_1 = P01.MsgBox(M09.Get_Language_Str('Soll die Seite') + ' \'' + SheetName + '\' ' + M09.Get_Language_Str('importiert werden?'), vbQuestion + vbYesNoCancel, M09.Get_Language_Str('Seite importieren?'))  # v1.06 (entfallen)
+                            _Msg = M09.Get_Language_Str('Soll die Seite') + ' \'' + SheetName + '\' ' + M09.Get_Language_Str('importiert werden?')  # v1.06
+                            _Title = M09.Get_Language_Str('Seite importieren?')  # v1.06
+                            if getattr(P01, "MsgBoxLabelled", None) is not None:  # v1.06: Web: zusaetzlicher Knopf 'Ja, alle'
+                                select_1 = P01.MsgBoxLabelled(_Msg, vbQuestion + vbYesNoCancel, _Title, {}, {100: M09.Get_Language_Str('Ja, alle')})  # v1.06
+                                if select_1 == 100:  # v1.06: alle weiteren Seiten ohne Nachfrage
+                                    __ImportFollowingSheets = True  # v1.06
+                                    select_1 = vbYes  # v1.06
+                            else:  # v1.06
+                                select_1 = P01.MsgBox(_Msg, vbQuestion + vbYesNoCancel, _Title)  # v1.06
                             if (select_1 == vbYes):
                                 if P01.GetAsyncKeyState(P01.__VK_CONTROL) != 0:
                                     __ImportFollowingSheets = True

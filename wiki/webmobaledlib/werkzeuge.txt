@@ -1,5 +1,5 @@
 ====== webMobaLedLib – Die Werkzeug-Reiter ======
-//Seitenstand 1.10 (2026-11-23), gilt für webMobaLedLib 4.79//
+//Seitenstand 1.11 (2026-11-23), gilt für webMobaLedLib 4.93//
 
 Neben dem [[anleitungen:webmobaledlib:programmgenerator|Programmgenerator]] hat die webMobaLedLib weitere **Reiter** mit Werkzeugen. Mit ihnen **testest du Farben, Servos und Sound**, stellst Geräte ein und siehst, was die Lichtmaschine sendet. Du brauchst sie nicht für ein erstes Programm. Sie helfen aber, wenn du Farben aussuchen oder ein Gerät in Betrieb nehmen willst.
 
@@ -15,6 +15,8 @@ Neben dem [[anleitungen:webmobaledlib:programmgenerator|Programmgenerator]] hat 
 | [[anleitungen:webmobaledlib:wz_monitor|Serial Monitor]] | Sehen, was die Lichtmaschine meldet, und Befehle senden | ja |
 
 Kein Reiter mehr (seit 4.51): [[anleitungen:webmobaledlib:wz_programm_einstellungen|Programm Einstellungen]] (Menü **Einstellungen**: Sprache, Schrift, Darstellung und weitere Einstellungen) und [[anleitungen:webmobaledlib:wz_arduino_einstellungen|ARDUINO-IDE Einstellungen]] (Fenster in **Hardware Optionen**, Reiter **Entwicklungsumgebung**; nur nötig, wenn du die ARDUINO IDE statt PlatformIO benutzt).
+
+Tabellen von einem anderen Rechner holen (Menü **Einstellungen → Datenübertragung**, seit 4.89): siehe [[anleitungen:webmobaledlib:wz_datenuebertragung|Datenübertragung]].
 
 Die Seiten [[anleitungen:webmobaledlib:patterngenerator|Timeline Editor]] und [[anleitungen:webmobaledlib:programmgenerator|Programm Generator]] haben eigene Beschreibungen.
 
