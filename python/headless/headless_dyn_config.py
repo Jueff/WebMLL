@@ -1,12 +1,15 @@
-# Datei-Version: 1.03 (2026-11-23) - headless_dyn_config.py
+# Datei-Version: 1.06 (2026-11-24) - headless_dyn_config.py
 # ----------------------------------------------------------------------------------------------
 # Name:           headless_dyn_config.py
 # Path:           headless/headless_dyn_config.py
-# Version:        1.03
-# Last Update:    2026-11-23
+# Version:        1.06
+# Last Update:    2026-11-24
 # Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
 # History of Change:
+#   1.06  2026-11-24  wait_for_port: Device-Pfad, Seriennummer und Location werden in einer Schleife ueber die Ports geprueft. Zeilen mit '# v1.06'
+#   1.05  2026-11-24  wait_for_port: Pico gilt schon als gefunden, wenn die Seriennummer ODER die Location (jeweils, wenn uebergeben) passt. Zeilen mit '# v1.05'
+#   1.04  2026-11-24  ~MLLERR wird auch ohne Leerzeichen und ohne Text erkannt (Fehler vom Geraet: unbekannter Fehler). Zeilen mit '# v1.04'
 #   1.03  2026-11-23  Identify (Juergen Winkler): Konfigurationsdatei Format 7 (BLOB_VERSION, passend zu MLL_CFG_VERSION in MLLDynConfig.h): je Controller zusaetzlich der LED-Kanal
 #                     (MLL_P_CONTROLLER_CONFIG mit vier Werten, LED-Kanal kleiner MAX_LED_CHANNELS); Fehlermeldung '~MLLERR <Grund>' des Geraets; TX/RX im Protokoll (Logger dyn_cfg);
 #                     list_port_names liefert zusaetzlich pid, Seriennummer und Location; wait_for_port findet den Pico nach dem Neustart an Seriennummer und Location (ohne diese Angaben wie
@@ -439,9 +442,9 @@ class Link:
                 raw, self.buf = self.buf.split(b"\n", 1)
                 line = raw.decode("ascii", errors="replace").strip()
                 # Prüfe auf ~MLLERR (Fehler vom Gerät, neues einheitliches Protokoll)  # v1.03
-                p_err = line.find("~MLLERR ")  # v1.03
+                p_err = line.find("~MLLERR")  # v1.03
                 if p_err >= 0:  # v1.03
-                    err_msg = line[p_err + 8:]  # v1.03
+                    err_msg = line[p_err + 7:].strip() or "unbekannter Fehler"  # v1.03, v1.04: auch ohne Text nach ~MLLERR
                     self.log.error("ERR: %s", err_msg)  # v1.03
                     raise DynConfigError("Fehler vom Geraet: " + err_msg)  # v1.03
                 p = line.find("~MLLCFG ")
@@ -567,34 +570,36 @@ def list_port_names():
         return []
 
 
-# def wait_for_port(port, pico, timeout=25.0):  # v1.03 (entfallen)
-def wait_for_port(port, pico, timeout=25.0, expected_serial=None, expected_location=None):  # v1.03
+def wait_for_port(port, pico, timeout=5.0, expected_serial=None, expected_location=None):
     """Nach dem Flashen (Pico: der USB-Anschluss verschwindet und kommt wieder, oft mit anderem Namen) den Anschluss suchen. None wenn er nicht erscheint.
     Wenn expected_serial und expected_location angegeben sind, wird nach Neustart der Pico anhand dieser Werte identifiziert (auch bei geaenderter COM-Port-Nummer)."""
-    import logging  # v1.03
-    log = logging.getLogger("dyn_cfg")  # v1.03
+    import logging
+    import time
+    log = logging.getLogger("dyn_cfg")
+    log.info("Warte auf Pico am Port %s, expected_serial=%s, expected_location=%s (Timeout %.1f s)", port, expected_serial, expected_location, timeout)
 
     end = time.time() + timeout
     while time.time() < end:
         ports = list_port_names()
-        # if any(d == port for d, _ in ports):  # v1.03 (entfallen)
-        # 1. Exakter Device-Pfad match  # v1.03
-        if any(d == port for d, _, _, _, _ in ports):  # v1.03
-            log.info("Pico nach Neustart am selben Port gefunden: %s", port)  # v1.03
-            return port
-        # if pico:  # v1.03 (entfallen)
-            # for d, vid in ports:  # v1.03 (entfallen)
-                # if vid == PICO_VID:  # v1.03 (entfallen)
-        # 2. Match anhand serial_number und location (falls Pico und Werte uebergeben)  # v1.03
-        if pico and expected_serial is not None and expected_location is not None:  # v1.03
-            for d, vid, pid, serial, location in ports:  # v1.03
-                if vid == PICO_VID and serial == expected_serial and location == expected_location:  # v1.03
-                    log.info("Pico nach Neustart an neuem Port gefunden: %s (war %s)", d, port)  # v1.03
-                    return d
-            # Serial/location angegeben aber nicht gefunden -> weiter warten (kein Fallback)  # v1.03
-        elif pico:  # v1.03: ohne Serial/Location wie bisher: der erste Pico
-            for d, vid, pid, serial, location in ports:  # v1.03
-                if vid == PICO_VID:  # v1.03
-                    return d  # v1.03
+        # Exakter Device-Pfad, Seriennummer und Location in einer Schleife pruefen  # v1.06
+        for d, vid, pid, serial, location in ports:  # v1.06
+            if d == port:  # v1.06: exakter Device-Pfad
+                log.info("Pico nach Neustart am selben Port gefunden: %s", port)
+                return port
+            if pico and vid == PICO_VID:  # v1.06
+                if expected_serial is not None and serial == expected_serial:  # v1.06
+                    log.info("Pico nach Neustart an neuem Port gefunden (Seriennummer): %s (war %s)", d, port)  # v1.06
+                    return d  # v1.06
+                if expected_location is not None and location == expected_location:  # v1.06
+                    log.info("Pico nach Neustart an neuem Port gefunden (Location): %s (war %s)", d, port)  # v1.06
+                    return d  # v1.06
+        # Werte angegeben aber nicht gefunden -> weiter warten (kein Fallback)  # v1.06
         time.sleep(0.5)
+
+    # show log that no expected port was found (with expected values), but still return None
+    log.warning("Pico nach Neustart nicht gefunden (Timeout %.1f s), expected_serial=%s, expected_location=%s", timeout, expected_serial, expected_location)
+    # now log all the pico ports, serials and locations currently available
+    for d, vid, pid, serial, location in ports:
+        if vid == PICO_VID:
+            log.info("Pico port: %s, serial: %s, location: %s", d, serial, location)
     return None

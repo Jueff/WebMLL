@@ -1,12 +1,15 @@
-# Datei-Version: 1.07 (2026-11-24) - M42_Dyn_Config.py
+# Datei-Version: 1.10 (2026-11-24) - M42_Dyn_Config.py
 # ----------------------------------------------------------------------------------------------
 # Name:           M42_Dyn_Config.py
 # Path:           proggen/M42_Dyn_Config.py
-# Version:        1.07
+# Version:        1.10
 # Last Update:    2026-11-24
 # Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
 # History of Change:
+#   1.10  2026-11-24  Nach dem Upload merkt sich After_Full_Flash den gefundenen Anschluss (Funktion Found_Port), M08 traegt ihn ins Blatt ein. Zeilen mit '# v1.10'
+#   1.09  2026-11-24  Timeout fuer die Suche nach dem Pico nach dem Upload von 25 s auf 10 s verkuerzt. Zeile mit '# v1.09'
+#   1.08  2026-11-24  Bereitschaftspruefung: Antwort ~MLLERR (Firmware nicht geeignet) bricht sofort ab, ohne weitere Versuche. Zeilen mit '# v1.08'
 #   1.07  2026-11-24  Pull Request 66 (Juergen, Issue 64): Die Programmversion (VERSION in webmobaledlib.py) gehoert zur Firmware-Signatur: nach jedem Softwareupdate wird einmal die ganze Firmware geflasht (_program_version). Zeilen mit '# v1.07'
 #   1.06  2026-11-23  Identify (Juergen Winkler): After_Full_Flash: Pico nach dem Neustart an Seriennummer und Location erkennen (expected_serial, expected_location aus M08); bis zu 5
 #                     Versuche, bis die Firmware auf '~MLLCFG INFO' antwortet (der Anschluss wird zwischen den Versuchen geschlossen). Zeilen mit '# v1.06'
@@ -387,12 +390,17 @@ def _try_config_once(ComPort, *, host="", password=""):  # v1.05
         link.close()
 
 
+def Found_Port():  # v1.10
+    """Anschluss, an dem der Pico nach dem letzten Upload gefunden wurde (None, wenn keiner)."""  # v1.10
+    return _state.get("found_port")  # v1.10
+
 # def After_Full_Flash(ComPort):  # v1.02 (entfallen)
 # def After_Full_Flash(ComPort, *, host="", password=""):  # v1.02  # v1.06 (entfallen)
 def After_Full_Flash(ComPort, *, host="", password="", expected_serial=None, expected_location=None):  # v1.02  # v1.06
     """Nach dem Flashen die Konfiguration schicken. True wenn sie im Geraet angekommen ist.
     expected_serial/expected_location: Serial Number und Location des Pico VOR dem Upload (für erneute Erkennung nach Reboot)."""
     blob = _state["blob"]
+    _state["found_port"] = None  # v1.10: je Upload neu
     t0 = time.time()  # v1.01
     _out("")  # v1.01
     _out(_t("Das Programm ist hochgeladen. Jetzt wird die Konfiguration übertragen ..."))  # v1.01
@@ -426,7 +434,9 @@ def After_Full_Flash(ComPort, *, host="", password="", expected_serial=None, exp
         # Nach Upload (insbesondere Pico) wartet das Geraet auf Neustart.  # v1.06
         # Port suchen, Verbindung oeffnen, dann warten bis Firmware bereit ist (Retry bis 5x mit 500ms).  # v1.06
         # expected_serial/expected_location wurden VOR dem Upload ermittelt und uebergeben  # v1.06
-        port = DC.wait_for_port(ComPort, _state["pico"], 25.0, expected_serial, expected_location)  # v1.02  # v1.06
+        port = DC.wait_for_port(ComPort, _state["pico"], 10.0, expected_serial, expected_location)  # v1.02  # v1.06  # v1.09: Timeout 10 s
+        if port is not None:  # v1.10
+            _state["found_port"] = port  # v1.10: Anschluss nach dem Neustart; M08 traegt ihn ins Blatt ein
         if port is None:  # v1.02
             log.warning("Konfiguration getrennt: der Anschluss %s erscheint nach dem Hochladen nicht wieder", ComPort)  # v1.02
             _out(_t("Der Anschluss {port} erscheint nach dem Hochladen nicht wieder. Die Konfiguration wurde nicht übertragen.", port=ComPort), "Error")  # v1.01  # v1.02
@@ -440,6 +450,7 @@ def After_Full_Flash(ComPort, *, host="", password="", expected_serial=None, exp
 
         link = None  # v1.06
         for attempt in range(5):  # max 5 Versuche  # v1.06
+            fatal = None  # v1.08
             try:  # v1.06
                 link = DC.Link(port, dtr=_state["pico"])  # v1.06
                 # Firmware ready testen: INFO abfragen (bis 500ms warten, 5x retry = ~2.5s)  # v1.06
@@ -453,6 +464,10 @@ def After_Full_Flash(ComPort, *, host="", password="", expected_serial=None, exp
                             info = DC.parse_info(msg)  # v1.06
                             if info:  # v1.06
                                 break  # v1.06
+                    except DC.DynConfigError as e:  # v1.08
+                        if str(e).startswith("Fehler vom Geraet"):  # v1.08: ~MLLERR = Firmware nicht geeignet, nicht wiederholen
+                            fatal = e  # v1.08
+                            break  # v1.08
                     except Exception:  # v1.06
                         pass  # v1.06
                     if retry < 4:  # v1.06
@@ -460,6 +475,11 @@ def After_Full_Flash(ComPort, *, host="", password="", expected_serial=None, exp
                 else:  # v1.06
                     # Keine Antwort nach 5 Versuchen  # v1.06
                     raise DC.DynConfigError("Keine Antwort auf INFO nach Neustart")  # v1.06
+                if fatal is not None:  # v1.08: Firmware meldet ~MLLERR -> sofort abbrechen, keine weiteren Versuche
+                    link.close()  # v1.08
+                    log.warning("Konfiguration getrennt: Firmware an %s ist fuer die Konfiguration nicht geeignet: %s", port, fatal)  # v1.08
+                    _out(_t("Die Firmware am Anschluss {port} ist für die Konfiguration nicht geeignet ({reason}). Die Konfiguration wurde nicht übertragen.", port=port, reason=fatal), "Error")  # v1.08
+                    return False  # v1.08
                 break  # Verbindung ok, Firmware bereit  # v1.06
             except Exception as e:                                 # noqa: BLE001  # v1.06
                 if link:  # v1.06: Anschluss vor dem naechsten Versuch freigeben

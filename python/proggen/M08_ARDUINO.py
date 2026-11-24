@@ -1,12 +1,13 @@
-# Datei-Version: 1.34 (2026-11-24) - M08_ARDUINO.py
+# Datei-Version: 1.35 (2026-11-24) - M08_ARDUINO.py
 # ----------------------------------------------------------------------------------------------
 # Name:           M08_ARDUINO.py
 # Path:           proggen/M08_ARDUINO.py
-# Version:        1.34
+# Version:        1.35
 # Last Update:    2026-11-24
 # Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
 # History of Change:
+#   1.35  2026-11-24  Pico: Hat sich der COM Port nach dem Hochladen geaendert (Neustart), wird der neue Port ins Blatt eingetragen (__Write_Back_New_ComPort; Markierung '*' bleibt). Zeilen mit '# v1.35'
 #   1.34  2026-11-24  Identify (Jürgen Winkler, Pull Request 61): Pico: Seriennummer und Location des Anschlusses vor dem Hochladen ermitteln und an M42.After_Full_Flash geben (der Anschluss kann nach dem Neustart einen anderen Namen haben). Zeilen mit '# v1.34'
 #   1.33  2026-11-24  Ensure_Git: fehlt git beim Uebersetzen fuer ESP32 oder Pico, bietet das Programm die Installation an (auch im Anfaenger Modus)
 #   1.32  2026-11-24  ESP32: Nach dem vollstaendigen Hochladen per USB wird die Dateisystem-Partition (LittleFS) geloescht, bevor die Konfiguration kommt (Absturzschleife 'lfs_fs_grow_ assert failed' bei altem Dateisystem anderer Groesse)
@@ -2564,12 +2565,32 @@ def Compile_and_Upload_Prog_to_Arduino(InoName, ComPortColumn, BuildOptColumn, S
                 __Erase_ESP32_Filesystem(ComPort)  # v1.32
             if HexFile == '' and M42.Upload_Possible(Mode, ComPort) and not M42.After_Full_Flash(ComPort, expected_serial=pico_serial, expected_location=pico_location):  # v1.25: die Konfiguration kommt nach dem Programm  # v1.34
                 P01.MsgBox(M09.Get_Language_Str('Das Programm wurde hochgeladen, die Konfiguration konnte aber nicht übertragen werden.\n\nDie Lichtmaschine hat noch keine Konfiguration. Bitte noch einmal hochladen (Einzelheiten im Protokoll).'), vbInformation, M09.Get_Language_Str('Konfiguration nicht übertragen'))  # v1.25
+            __Write_Back_New_ComPort(ComPortColumn, ComPort)  # v1.35: Pico meldet sich nach dem Neustart evtl. an einem anderen COM Port
             M30.Show_Status_for_a_while(M09.Get_Language_Str('Programm erfolgreich hochgeladen. Kompilieren und Hochladen dauerte ') + P01.Format(P01.Time() - Start, 'hh:mm:ss'), '00:02:00')
         PG.global_controller.showFramebyName("ProgGeneratorPage")
         Last_Upload.update(ok=(not CreateFilesOnly), host='')  # v1.24: Hochladen per USB geklappt
         fn_return_value = True                                                         # VBA: Compile_and_Upload_Prog_to_Arduino = True (fehlte in der Umstellung: 'R OK' wurde nie gesetzt)  # v1.10
         return fn_return_value  # v1.10
         
+def __Write_Back_New_ComPort(ComPortColumn, OldPort):  # v1.35
+    """Pico: Nach dem Hochladen den neu gefundenen COM Port ins Blatt eintragen (nur Windows-Namen COMn). Eine Markierung '*' (belegt) bleibt erhalten."""  # v1.35
+    new_port = M42.Found_Port()  # v1.35
+    if not new_port:  # v1.35
+        return  # v1.35
+    s = str(new_port).strip()  # v1.35
+    if not (s.upper().startswith("COM") and s[3:].isdigit()):  # v1.35: Linux/macOS-Pfade werden nicht geschrieben
+        return  # v1.35
+    digits = s[3:]  # v1.35
+    cell = P01.Cells(M02.SH_VARS_ROW, ComPortColumn)  # v1.35
+    old = str(cell.Value)  # v1.35
+    if old.lstrip("*") == digits:  # v1.35: unveraendert
+        return  # v1.35
+    if old.startswith("*"):  # v1.35
+        cell.Value = "*" + digits  # v1.35
+    else:  # v1.35
+        cell.Value = int(digits)  # v1.35
+    Debug.Print('Neuer COM Port nach dem Hochladen: ' + str(OldPort) + ' -> ' + s)  # v1.35
+
 def __Erase_ESP32_Filesystem(ComPort):  # v1.32
     """Nach dem vollstaendigen USB-Upload: Dateisystem-Partition des ESP32 loeschen. Ein altes LittleFS anderer Groesse (zum Beispiel von einem frueheren Projekt)
     laesst die neue Firmware beim Mounten abstuerzen und endlos neu starten. Die Konfiguration wird danach uebertragen; WLAN-Zugangsdaten bleiben."""  # v1.32
