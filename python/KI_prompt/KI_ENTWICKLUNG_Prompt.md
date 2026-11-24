@@ -1,11 +1,11 @@
 Datei-Version: 1.00 (2026-11-10) - KI\_ENTWICKLUNG\_Prompt.md
-Gilt für webMobaLedLib 3.07
+Gilt für Version 3.07
 
-# KI-Prompt für die Weiterentwicklung von webMobaLedLib
+# KI-Prompt für die Weiterentwicklung von MobaLedLib Studio
 
 ## Wie du diese Datei benutzt (für den Menschen)
 
-Diese Datei ist ein **Briefing für eine KI** (zum Beispiel Claude), die dir beim Weiterentwickeln von webMobaLedLib hilft. Eine neue KI-Sitzung hat **kein Gedächtnis** an frühere Arbeit; alles, was sie wissen muss, steht hier oder in den Dateien, die du ihr gibst.
+Diese Datei ist ein **Briefing für eine KI** (zum Beispiel Claude), die dir beim Weiterentwickeln von MobaLedLib Studio hilft. Eine neue KI-Sitzung hat **kein Gedächtnis** an frühere Arbeit; alles, was sie wissen muss, steht hier oder in den Dateien, die du ihr gibst.
 
 1. Füge den Text **ab „# Auftrag“** als **Projektanweisung** ein (zum Beispiel in einem Claude-Projekt) oder als **erste Nachricht** einer Sitzung.
 2. Gib der KI **diese Dateien** (Anhang oder Projektwissen): das **Programm** (der Ordner `python`, am besten als ZIP, Stand der letzten Version), **`HOC\_intern.md`**, **`RELEASE\_Ablauf.md`**, **`install/ANLEITUNG\_Installation.md`** und **`install/BETATEST\_Checkliste.md`**. Ohne `HOC\_intern.md` kennt die KI die Gründe der letzten Änderungen nicht.
@@ -16,11 +16,11 @@ Diese Datei ist ein **Briefing für eine KI** (zum Beispiel Claude), die dir bei
 
 # Auftrag
 
-Du hilfst einem Entwickler, das Programm **webMobaLedLib** weiterzuentwickeln. Antworte **auf Deutsch**, sachlich und knapp, außer der Entwickler schreibt in einer anderen Sprache. Behaupte nie, etwas sei geprüft, wenn du es nicht ausgeführt hast. Nenne Unsicheres als unsicher.
+Du hilfst einem Entwickler, das Programm **MobaLedLib Studio** weiterzuentwickeln. Antworte **auf Deutsch**, sachlich und knapp, außer der Entwickler schreibt in einer anderen Sprache. Behaupte nie, etwas sei geprüft, wenn du es nicht ausgeführt hast. Nenne Unsicheres als unsicher.
 
 ## Das Projekt
 
-* **Was:** webMobaLedLib ist die **Web-Version** des **Programmgenerators** der **MobaLedLib** (Steuerung von LEDs, Servos und Sound für Modellbahnanlagen). Man pflegt in einer **Tabelle** (DCC, Selectrix, CAN, LNet) Zeilen mit Makros, das Programm erzeugt daraus ein Programm für die **Lichtmaschine** und lädt es per USB hoch. Es gibt vier Lichtmaschinen: **Classic** (ARDUINO Nano), **Pro** (ESP32), **Pico Zero** und **Molli** (beide Raspberry Pico).
+* **Was:** MobaLedLib Studio ist die **Web-Version** des **Programmgenerators** der **MobaLedLib** (Steuerung von LEDs, Servos und Sound für Modellbahnanlagen). Man pflegt in einer **Tabelle** (DCC, Selectrix, CAN, LNet) Zeilen mit Makros, das Programm erzeugt daraus ein Programm für die **Lichtmaschine** und lädt es per USB hoch. Es gibt vier Lichtmaschinen: **Classic** (ARDUINO Nano), **Pro** (ESP32), **Pico Zero** und **Molli** (beide Raspberry Pico).
 * **Herkunft:** Das Original war ein **Excel-Programm** (VBA). Es wurde nach **Python (Tkinter)** übersetzt (pyMobaLedLib, Ordner `proggen`, `pattgen`, `mlpyproggen`, `ExcelAPI`) und läuft jetzt **im Browser** (NiceGUI, Ordner `\_web`). Der Tk-Code ist weiter vorhanden; die Web-Oberfläche ersetzt die Tk-Fenster durch eigene Module (`web\_\*.py`).
 * **Autor und Lizenz:** Harold Linke, LGPL V2.1. Quelle und Releases: GitHub `haroldlinke/WebMLL`.
 * **Plattformen:** Windows, macOS, Linux und **Raspberry Pi** (als Dienst `mobaledlib-web`). Bedienung im Browser, auch vom Tablet.
@@ -46,7 +46,7 @@ Der **Datenordner** des Anwenders (Tabellen, Einstellungen) liegt **außerhalb**
 
 ## Arbeitsregeln des Projekts
 
-1. **Versionsnummer in jeder gelieferten Datei**, damit der Entwickler sicher ist, die aktuelle Datei zu haben. Dokumente (`.md`, PDF) tragen im Kopf die **Version des Dokuments** und die **webMobaLedLib-Version**, zu der sie gehören.
+1. **Versionsnummer in jeder gelieferten Datei**, damit der Entwickler sicher ist, die aktuelle Datei zu haben. Dokumente (`.md`, PDF) tragen im Kopf die **Version des Dokuments** und die **Programmversion**, zu der sie gehören.
 2. **Python-Dateien, die du änderst:** Wenn noch kein Kopf da ist, einen einfügen (Name, Path relativ zu `python`, Version wie in der ersten Zeile, Last Update, **Author: Harold Linke**, Licence: LGPL V2.1, History of Change mit Version, Datum, Kurzbeschreibung). Bei jeder Änderung Kopf und History aktualisieren. **Jede geänderte Zeile bekommt die Version als Kommentar** (`# v1.07`); **zu löschende Zeilen bleiben als Kommentar stehen** und werden markiert (`# v1.07 (entfallen)`). Bei **großen Umbauten vorher fragen**, wie markiert werden soll. Weitere Autoren gehören in die History, der Eintrag Author bleibt.
 3. **Nach einer Änderung nur die geänderten Dateien liefern**, dazu eine **kurze Liste (Datei, Version, Änderung)**. Den **vollständigen Stand** (ZIP, PDFs, Versionsliste) nur, wenn der Entwickler **„Release-Stand“** schreibt.
 4. **Mehrere Wünsche sammeln.** Bei gesammelten Punkten zuerst **kurz nach Aufwand sortiert antworten** und erst bauen, wenn der Entwickler **„umsetzen“** schreibt. **Blockierende Fehler von Testern** dürfen sofort einzeln behoben werden. Höchstens **eine Rückfrage** auf einmal; erst eine begründete Annahme nennen, wenn möglich.
@@ -73,7 +73,7 @@ Der **Datenordner** des Anwenders (Tabellen, Einstellungen) liegt **außerhalb**
 4. **Erster Start einer Neuinstallation:** Voreinstellungen (PlatformIO, Anfänger Modus) setzt `new\_install\_defaults` über `first\_start\_hook` **in `Workbook\_Open`**, **vor** der Prüfung der ARDUINO IDE. Wer die Reihenfolge ändert, bekommt wieder die Meldung „ARDUINO IDE nicht gefunden“.
 5. **Entwicklungsumgebung:** Seit 2.92 ist **PlatformIO** der Standard (`Use\_PlatformIO`); die ARDUINO IDE ist optional. Meldungen zur IDE dürfen mit PlatformIO nicht kommen (Skripte, `pi\_check.py`, Protokoll).
 6. **Anmeldung am Raspberry Pi:** HTTP Basic (`web\_auth.py`). **WebKit (iPad, iPhone, alle Browser dort)** sendet die Anmeldung nicht beim Aufbau der WebSocket-Verbindung mit; deshalb gibt es ein **Sitzungs-Cookie** (seit 3.05; auf dem iPad noch nicht bestätigt). Plan B: eigene Anmeldeseite mit Cookie.
-7. **Verbindungsarten zur Lichtmaschine:** (1) Programmieren und Hochladen (nur PlatformIO oder IDE; die webMobaLedLib gibt ihre Verbindung frei), (2) **Effektmodus** (Testtasten, wie auf der Anlage), (3) **Direktmodus** (Farb Test, Servo Einstellungen, Sound Test, Makros ServoAnim und LEDColorAnim). Die Verbindung wird **erst aufgebaut, wenn ein Werkzeug sie braucht**; das Programm schaltet die Modi selbst um. **„Mit ARDUINO verbinden“ geht nur, wenn auf der Lichtmaschine schon ein MobaLedLib-Programm läuft.**
+7. **Verbindungsarten zur Lichtmaschine:** (1) Programmieren und Hochladen (nur PlatformIO oder IDE; MobaLedLib Studio gibt ihre Verbindung frei), (2) **Effektmodus** (Testtasten, wie auf der Anlage), (3) **Direktmodus** (Farb Test, Servo Einstellungen, Sound Test, Makros ServoAnim und LEDColorAnim). Die Verbindung wird **erst aufgebaut, wenn ein Werkzeug sie braucht**; das Programm schaltet die Modi selbst um. **„Mit ARDUINO verbinden“ geht nur, wenn auf der Lichtmaschine schon ein MobaLedLib-Programm läuft.**
 8. **Namenskollisionen:** Beim Einführen neuer Konstanten und Funktionen **prüfen, ob der Name schon vergeben ist** (zum Beispiel wurde eine vorhandene Liste `LANGUAGE\_NAMES` überschrieben und hätte die Sprachen 3 bis 6 zerstört).
 9. **Anfänger Modus:** Einstellung `BeginnerMode` (neue Installation: an; bestehende: aus). Er blendet Reiter und den Knopf Zeilen Färben aus; Makros stehen in `csv/Beginner\_Hidden\_Macros.csv` (noch leer). Die gemeinsame Quelle ist `web\_macro\_tree.collect\_macro\_rows()`.
 10. **Zeilen aktivieren:** Die Spalte **Aktiv** enthält `\*` (angezeigt als Haken). Schreiben mehrerer Zellen ohne Ereignisse (`EnableEvents = False`) und **eine** Neuberechnung (`Update\_Start\_LedNr`).
@@ -93,7 +93,7 @@ Siehe **`RELEASE\_Ablauf.md`**. Kurz: Symbole angleichen und erzeugen, Liste der
 
 ## Wiki (DokuWiki)
 
-* Namensraum `anleitungen:webmobaledlib:<seite>`; **Bilder** in `bilder:anleitungen:webmobaledlib`. Eine Seite je Thema, **jede Seite in sich verständlich**, Anfängerniveau, „du“. Unter der Überschrift: `//Seitenstand 1.03 (2026-11-09), gilt für webMobaLedLib 3.04//`; bei jeder Änderung den Seitenstand um 0,01 erhöhen.
+* Namensraum `anleitungen:mobaledlibstudio:<seite>`; **Bilder** in `bilder:anleitungen:webmobaledlib`. Eine Seite je Thema, **jede Seite in sich verständlich**, Anfängerniveau, „du“. Unter der Überschrift: `//Seitenstand 1.03 (2026-11-09), gilt für Version 3.04//`; bei jeder Änderung den Seitenstand um 0,01 erhöhen.
 * Texte **nur** aus Programm, Anleitung und Quelltext; Unsicheres in der **Liste „nicht geprüft“** (`LIESMICH\_Wiki\_Gesamt.md`) nennen. **Namen aus dem Programm** (Knöpfe, Reiter) **exakt** übernehmen (die Reiter des Fensters „Optionen und spezielle Funktionen“ erscheinen in Großbuchstaben). Bildschirmfotos macht der Entwickler; die Liste der Dateinamen steht im LIESMICH.
 * **Noch offene Seiten:** Patterngenerator (mit „Test Pattern“), Fehlersuche, Aktualisieren.
 

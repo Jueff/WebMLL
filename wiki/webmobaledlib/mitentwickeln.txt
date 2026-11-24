@@ -1,9 +1,9 @@
 ====== Mitentwickeln ======
-//Seitenstand 1.01 (2026-11-23), gilt für webMobaLedLib 4.79//
+//Seitenstand 1.03 (2026-11-24), gilt für Version 5.12//
 
-Die webMobaLedLib lebt von der Mitarbeit vieler. Du kannst Fehler beheben, Funktionen ergänzen, Übersetzungen verbessern, Anleitungen schreiben oder neue Versionen testen. Diese Seite erklärt, **wie du mithilfst**, **was du beachten musst**, wie dir eine **KI** dabei helfen kann und **wie deine Arbeit in das Programm kommt**.
+MobaLedLib Studio lebt von der Mitarbeit vieler. Du kannst Fehler beheben, Funktionen ergänzen, Übersetzungen verbessern, Anleitungen schreiben oder neue Versionen testen. Diese Seite erklärt, **wie du mithilfst**, **was du beachten musst**, wie dir eine **KI** dabei helfen kann und **wie deine Arbeit in das Programm kommt**.
 
-Du möchtest nur einen Fehler melden? Dann lies [[anleitungen:webmobaledlib:fehler_melden|Fehler melden]]. Das ist die einfachste Form der Mitarbeit.
+Du möchtest nur einen Fehler melden? Dann lies [[anleitungen:mobaledlibstudio:fehler_melden|Fehler melden]]. Das ist die einfachste Form der Mitarbeit.
 
 ===== Wie kannst du helfen? =====
 
@@ -13,7 +13,7 @@ Du möchtest nur einen Fehler melden? Dann lies [[anleitungen:webmobaledlib:fehl
 | **Wiki und Anleitungen** | Ergänzungen und Korrekturen an den Wiki-Seiten. Schick Vorschläge als Issue. |
 | **Fehler beheben, Funktionen bauen** | Python-Kenntnisse (oder eine KI, siehe unten) und ein GitHub-Konto. |
 
-Beim **Testen** und **Übersetzen** kommst du ohne Programmierung aus. Schreibe deine Ergebnisse als [[anleitungen:webmobaledlib:fehler_melden|Issue]] oder in das Forum.
+Beim **Testen** und **Übersetzen** kommst du ohne Programmierung aus. Schreibe deine Ergebnisse als [[anleitungen:mobaledlibstudio:fehler_melden|Issue]] oder in das Forum.
 
 ===== Der Weg einer Änderung im Überblick =====
 
@@ -26,7 +26,7 @@ Beim **Testen** und **Übersetzen** kommst du ohne Programmierung aus. Schreibe 
 
 ===== Die Technik in Kürze =====
 
-  * **Repository:** [[https://github.com/haroldlinke/WebMLL|github.com/haroldlinke/WebMLL]]. Das Programm liegt im Ordner ''python''. Der Zweig ''main'' enthält den **letzten Release**; seine Nummer steht im Tag, zum Beispiel ''V3.5.0L3-3.85'' (der Teil nach dem Bindestrich ist die webMobaLedLib-Version).
+  * **Repository:** [[https://github.com/haroldlinke/WebMLL|github.com/haroldlinke/WebMLL]]. Das Programm liegt im Ordner ''python''. Der Zweig ''main'' enthält den **letzten Release**; seine Nummer steht im Tag, zum Beispiel ''V3.5.0L3-3.85'' (der Teil nach dem Bindestrich ist die Programmversion).
   * **Sprache:** Python. Die Oberfläche läuft im Browser mit **NiceGUI** (Ordner ''_web'', Hauptprogramm ''webmobaledlib.py''). Die Fachlogik stammt aus dem Excel-Original (VBA), das nach Python übersetzt wurde (Ordner ''proggen'', ''pattgen'', ''mlpyproggen'', ''ExcelAPI''). Der Ordner ''headless'' ersetzt die Fenster der Tk-Oberfläche durch Code ohne Fenster.
   * **Übersicht für Entwickler:** Die Datei ''KI_prompt/KI_ENTWICKLUNG_Prompt.md'' im Repository beschreibt alle Ordner, bekannte Fallstricke, die Arbeitsregeln und die Tests ausführlich. Lies sie, bevor du größere Änderungen machst. Sie ist auch das Briefing für eine KI.
   * **Zusätzlich lesen:** ''HOC_intern.md'' (warum wurde was geändert) und ''install/ANLEITUNG_Installation.md''. Beide liegen im Release-Paket.
@@ -70,7 +70,7 @@ Beim **Testen** und **Übersetzen** kommst du ohne Programmierung aus. Schreibe 
 **Vorlage für die Beschreibung des Pull Requests:**
 
 <code>
-**Basis:** webMobaLedLib-Version, auf der die Änderung beruht (zum Beispiel 3.85)
+**Basis:** Programmversion, auf der die Änderung beruht (zum Beispiel 3.85)
 **Zugehöriger Issue:** #123 (falls vorhanden)
 
 **Was ändert der PR und warum?**
@@ -120,12 +120,12 @@ Du musst nicht alles selbst schreiben: Eine KI wie Claude kann Code lesen, ände
 <code>
 # Auftrag
 Du hilfst mir, einen Beitrag (Pull Request) für das Open-Source-Programm
-webMobaLedLib zu schreiben. Antworte auf Deutsch, sachlich und knapp.
+MobaLedLib Studio zu schreiben. Antworte auf Deutsch, sachlich und knapp.
 Behaupte nie, etwas sei geprüft, wenn du es nicht ausgeführt hast.
 Nenne Unsicheres als unsicher. Stelle höchstens eine Rückfrage auf einmal.
 
 ## Das Projekt
-webMobaLedLib ist die Web-Version des Programmgenerators der MobaLedLib
+MobaLedLib Studio ist die Web-Version des Programmgenerators der MobaLedLib
 (LEDs, Servos und Sound für Modellbahnen). Man pflegt in einer Tabelle
 Zeilen mit Makros, das Programm erzeugt daraus ein Programm für die
 Lichtmaschine (ARDUINO Nano, ESP32 oder Raspberry Pico) und lädt es per USB
@@ -185,6 +185,6 @@ Benenne eigene Fehler sofort und behebe sie.
 
 ===== Siehe auch =====
 
-  * [[anleitungen:webmobaledlib:fehler_melden|Fehler melden und Wünsche eintragen]]
-  * [[anleitungen:webmobaledlib:aktualisieren|Das Programm aktualisieren]] (auch die Testversion)
-  * [[anleitungen:webmobaledlib:begriffe|Begriffe]]
+  * [[anleitungen:mobaledlibstudio:fehler_melden|Fehler melden und Wünsche eintragen]]
+  * [[anleitungen:mobaledlibstudio:aktualisieren|Das Programm aktualisieren]] (auch die Testversion)
+  * [[anleitungen:mobaledlibstudio:begriffe|Begriffe]]

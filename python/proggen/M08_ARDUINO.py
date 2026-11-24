@@ -1,12 +1,13 @@
-# Datei-Version: 1.33 (2026-11-24) - M08_ARDUINO.py
+# Datei-Version: 1.34 (2026-11-24) - M08_ARDUINO.py
 # ----------------------------------------------------------------------------------------------
 # Name:           M08_ARDUINO.py
 # Path:           proggen/M08_ARDUINO.py
-# Version:        1.33
+# Version:        1.34
 # Last Update:    2026-11-24
-# Author:         Harold Linke
+# Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
 # History of Change:
+#   1.34  2026-11-24  Identify (Jürgen Winkler, Pull Request 61): Pico: Seriennummer und Location des Anschlusses vor dem Hochladen ermitteln und an M42.After_Full_Flash geben (der Anschluss kann nach dem Neustart einen anderen Namen haben). Zeilen mit '# v1.34'
 #   1.33  2026-11-24  Ensure_Git: fehlt git beim Uebersetzen fuer ESP32 oder Pico, bietet das Programm die Installation an (auch im Anfaenger Modus)
 #   1.32  2026-11-24  ESP32: Nach dem vollstaendigen Hochladen per USB wird die Dateisystem-Partition (LittleFS) geloescht, bevor die Konfiguration kommt (Absturzschleife 'lfs_fs_grow_ assert failed' bei altem Dateisystem anderer Groesse)
 #   1.31  2026-11-23  ESP32-Setup per USB: Der eingetragene Anschluss wird vor dem langen Build geprueft (M07.Ensure_Existing_USB_Port), sonst Meldung statt 'port doesn't exist' nach dem Build
@@ -129,6 +130,7 @@ import proggen.M38_Extensions as M38
 import proggen.M39_Simulator as M39
 import proggen.M40_ShellandWait as M40
 import proggen.M42_Dyn_Config as M42  # v1.25
+import headless.headless_dyn_config as DC  # für Pico serial/location Ermittlung  # v1.34
 #import proggen.M60_CheckColors as M60
 #import proggen.M70_Exp_Libraries as M70
 #import proggen.M80_Create_Multiplexer as M80
@@ -2492,6 +2494,15 @@ def Compile_and_Upload_Prog_to_Arduino(InoName, ComPortColumn, BuildOptColumn, S
             F00.notimplemented("Excel Console")
             #Res = UserForm_RunProgram.ShellExecute(CommandStr, 0, Replace(Get_Language_Str('Programmiere #1# Arduino'), "#1#", ArduName) + ' - ' + FileNameExt(InoName), PromptUser, 0x800000, TextColor, Get_Language_Str('Senden zum Arduino abbrechen?'))
         else:
+            # Pico: serial/location VOR dem Upload ermitteln (für After_Full_Flash nach Reboot)  # v1.34
+            pico_serial = None  # v1.34
+            pico_location = None  # v1.34
+            if M02a.Get_BoardTyp() == M02.HT_PICO:  # v1.34
+                for d, vid, pid, serial, location in DC.list_port_names():  # v1.34
+                    if d == ComPort:  # v1.34
+                        pico_serial = serial  # v1.34
+                        pico_location = location  # v1.34
+                        break  # v1.34
             PG.global_controller.disconnect()
             #Res = M40.ShellAndWait(CommandStr, 0, vbNormalFocus, PromptUser)
             if type(CommandStr) == str:
@@ -2548,9 +2559,10 @@ def Compile_and_Upload_Prog_to_Arduino(InoName, ComPortColumn, BuildOptColumn, S
         if DynDone:  # v1.25
             M30.Show_Status_for_a_while(M09.Get_Language_Str('Nur die Konfiguration wurde übertragen. Das Programm in der Lichtmaschine ist unverändert. Dauer ') + P01.Format(P01.Time() - Start, 'hh:mm:ss'), '00:02:00')  # v1.25
         else:  # v1.25
+            # if HexFile == '' and M42.Upload_Possible(Mode, ComPort) and not M42.After_Full_Flash(ComPort):  # v1.25: die Konfiguration kommt nach dem Programm  # v1.34 (entfallen)
             if HexFile == '' and M02a.Get_BoardTyp() == M02.HT_ESP32 and M42.Upload_Possible(Mode, ComPort):  # v1.32: altes Dateisystem loeschen
                 __Erase_ESP32_Filesystem(ComPort)  # v1.32
-            if HexFile == '' and M42.Upload_Possible(Mode, ComPort) and not M42.After_Full_Flash(ComPort):  # v1.25: die Konfiguration kommt nach dem Programm
+            if HexFile == '' and M42.Upload_Possible(Mode, ComPort) and not M42.After_Full_Flash(ComPort, expected_serial=pico_serial, expected_location=pico_location):  # v1.25: die Konfiguration kommt nach dem Programm  # v1.34
                 P01.MsgBox(M09.Get_Language_Str('Das Programm wurde hochgeladen, die Konfiguration konnte aber nicht übertragen werden.\n\nDie Lichtmaschine hat noch keine Konfiguration. Bitte noch einmal hochladen (Einzelheiten im Protokoll).'), vbInformation, M09.Get_Language_Str('Konfiguration nicht übertragen'))  # v1.25
             M30.Show_Status_for_a_while(M09.Get_Language_Str('Programm erfolgreich hochgeladen. Kompilieren und Hochladen dauerte ') + P01.Format(P01.Time() - Start, 'hh:mm:ss'), '00:02:00')
         PG.global_controller.showFramebyName("ProgGeneratorPage")

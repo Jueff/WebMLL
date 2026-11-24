@@ -1,6 +1,7 @@
-# Datei-Version: 1.02 (2026-10-15) - mobaledlib-web.service
+# Datei-Version: 1.03 (2026-11-24) - mobaledlib-web.service
+# 1.03: Anzeigename MobaLedLib Studio in den Meldungen (Name des Symbols unveraendert)
 [Unit]
-Description=webMobaLedLib Programmgenerator (Web-Oberflaeche)
+Description=MobaLedLib Studio Programmgenerator (Web-Oberflaeche)
 After=network-online.target
 Wants=network-online.target
 

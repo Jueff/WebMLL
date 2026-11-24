@@ -1,29 +1,29 @@
-====== webMobaLedLib – Begriffe ======
-//Seitenstand 1.07 (2026-11-23), gilt für webMobaLedLib 4.79//
+====== MobaLedLib Studio – Begriffe ======
+//Seitenstand 1.09 (2026-11-24), gilt für Version 5.12//
 
-Hier stehen die Wörter, die auf den Seiten zur webMobaLedLib vorkommen, in alphabetischer Reihenfolge.
+Hier stehen die Wörter, die auf den Seiten zu MobaLedLib Studio vorkommen, in alphabetischer Reihenfolge.
 
 ^ Begriff ^ Bedeutung ^
 | **Arduino** | Ein kleiner Computer (Mikrocontroller) auf einer Platine. Der **Arduino Nano** steckt in der **Lichtmaschine Classic**. |
-| **Arduino IDE** | Ein Programm, mit dem man Arduino-Programme schreiben und hochladen kann. Die webMobaLedLib braucht sie nicht mehr, kann sie aber zusätzlich benutzen. Wenn doch, dann die **Version 1.8.19**, nicht 2.x. |
-| **Browser** | Das Programm, mit dem du Internetseiten ansiehst: Chrome, Edge, Firefox, Safari. Die webMobaLedLib wird darin bedient. |
+| **Arduino IDE** | Ein Programm, mit dem man Arduino-Programme schreiben und hochladen kann. MobaLedLib Studio braucht sie nicht mehr, kann sie aber zusätzlich benutzen. Wenn doch, dann die **Version 1.8.19**, nicht 2.x. |
+| **Browser** | Das Programm, mit dem du Internetseiten ansiehst: Chrome, Edge, Firefox, Safari. MobaLedLib Studio wird darin bedient. |
 | **COM-Port / USB-Anschluss** | Der „Name“, unter dem der Computer die angesteckte Lichtmaschine kennt (unter Windows zum Beispiel COM5, unter Linux /dev/ttyUSB0). Das Programm sucht ihn meist selbst. |
 | **Desktop** | Die Arbeitsfläche deines Computers mit den Symbolen. |
-| **Direktmodus** | Eine Art der Verbindung zur Lichtmaschine: Das Programm steuert **einzelne LEDs direkt** an und ändert ihre Farbe. Benutzt im **Farb Test**, in den **Servo Einstellungen**, im **Sound Test** und bei den Makros **Servo Animation** und **LED Farb-Animation**. Siehe [[anleitungen:webmobaledlib:pg_arduino#die_drei_arten_der_verbindung|Die drei Arten der Verbindung]]. |
-| **Effektmodus** | Eine Art der Verbindung zur Lichtmaschine: Sie arbeitet **genauso wie auf der Anlage**, alle Effekte und Makros laufen. Nötig für die **Testtasten** der Tabelle; gilt für alles, was nicht im Direktmodus arbeitet. Siehe [[anleitungen:webmobaledlib:pg_arduino#die_drei_arten_der_verbindung|Die drei Arten der Verbindung]]. |
+| **Direktmodus** | Eine Art der Verbindung zur Lichtmaschine: Das Programm steuert **einzelne LEDs direkt** an und ändert ihre Farbe. Benutzt im **Farb Test**, in den **Servo Einstellungen**, im **Sound Test** und bei den Makros **Servo Animation** und **LED Farb-Animation**. Siehe [[anleitungen:mobaledlibstudio:pg_arduino#die_drei_arten_der_verbindung|Die drei Arten der Verbindung]]. |
+| **Effektmodus** | Eine Art der Verbindung zur Lichtmaschine: Sie arbeitet **genauso wie auf der Anlage**, alle Effekte und Makros laufen. Nötig für die **Testtasten** der Tabelle; gilt für alles, was nicht im Direktmodus arbeitet. Siehe [[anleitungen:mobaledlibstudio:pg_arduino#die_drei_arten_der_verbindung|Die drei Arten der Verbindung]]. |
 | **ESP32** | Ein Mikrocontroller. Er steckt in der **Lichtmaschine Pro**. |
 | **Heartbeat LED** | Die **erste LED** einer Kette. Sie sitzt bei **allen vier Lichtmaschinen fest auf der Platine** und blinkt in wechselnden Regenbogenfarben, damit man sieht, dass der **Prozessor arbeitet**. |
-| **Hochladen (Upload)** | Das fertige Programm vom Computer auf die Lichtmaschine schicken. In der webMobaLedLib heißt der Knopf **Setup übertragen**. |
+| **Hochladen (Upload)** | Das fertige Programm vom Computer auf die Lichtmaschine schicken. In MobaLedLib Studio heißt der Knopf **Setup übertragen**. |
 | **LED-Kette** | Mehrere LEDs (WS2812 oder WS2811), die hintereinander an einem einzigen Anschluss hängen. Jede LED hat eine Nummer. |
-| **Lichtmaschine** | Die Steuerplatine der MobaLedLib. Sie steuert LEDs, Servos und Sound. Ihr Programm lädst du mit der webMobaLedLib hoch. Es gibt vier: die **Lichtmaschine Classic** (mit ARDUINO Nano), die **Lichtmaschine Pro** (mit ESP32), die **Lichtmaschine Pico Zero** (mit Raspberry Pico) und die **Lichtmaschine Molli** (mit Raspberry Pico). |
+| **Lichtmaschine** | Die Steuerplatine der MobaLedLib. Sie steuert LEDs, Servos und Sound. Ihr Programm lädst du mit MobaLedLib Studio hoch. Es gibt vier: die **Lichtmaschine Classic** (mit ARDUINO Nano), die **Lichtmaschine Pro** (mit ESP32), die **Lichtmaschine Pico Zero** (mit Raspberry Pico) und die **Lichtmaschine Molli** (mit Raspberry Pico). |
 | **Makro** | Eine fertige Funktion der MobaLedLib, zum Beispiel „Belebtes Haus“, „Straßenbeleuchtung“ oder „Heartbeat LED“. Du wählst ein Makro aus und stellst ein paar Werte ein. |
-| **Muster (Pattern)** | Eine selbst gemachte Folge von Lichteffekten. Sie wird im [[anleitungen:webmobaledlib:patterngenerator|Timeline Editor]] erstellt. |
+| **Muster (Pattern)** | Eine selbst gemachte Folge von Lichteffekten. Sie wird im [[anleitungen:mobaledlibstudio:patterngenerator|Timeline Editor]] erstellt. |
 | **PlatformIO** | Ein Hilfsprogramm, das aus deiner Tabelle das Programm für die Lichtmaschine übersetzt und hochlädt. Es wird automatisch mitinstalliert. |
-| **Python** | Die Programmiersprache, in der die webMobaLedLib geschrieben ist. Du musst Python nicht kennen: Das Installationsskript prüft, ob die richtige Version da ist, und kümmert sich darum. |
+| **Python** | Die Programmiersprache, in der MobaLedLib Studio geschrieben ist. Du musst Python nicht kennen: Das Installationsskript prüft, ob die richtige Version da ist, und kümmert sich darum. |
 | **Programmgenerator** | Die Tabelle, in der du die Makros auswählst. Hier erzeugst du das Programm für die Lichtmaschine. |
-| **Raspberry Pi** | Ein kleiner, günstiger Computer. Die webMobaLedLib läuft darauf als Dauerdienst. Nicht zu verwechseln mit dem **Raspberry Pico**. |
+| **Raspberry Pi** | Ein kleiner, günstiger Computer. MobaLedLib Studio läuft darauf als Dauerdienst. Nicht zu verwechseln mit dem **Raspberry Pico**. |
 | **Raspberry Pico** | Ein kleiner Mikrocontroller (Raspberry Pi Pico, kein Raspberry Pi). Er steckt in der **Lichtmaschine Pico Zero** und in der **Lichtmaschine Molli**. |
-| **Release** | Eine fertige, veröffentlichte Version der webMobaLedLib auf GitHub. |
+| **Release** | Eine fertige, veröffentlichte Version von MobaLedLib Studio auf GitHub. |
 | **Setup** | Das fertige Programm für die Lichtmaschine mit allen Einstellungen aus deiner Tabelle. |
 | **Skript** | Eine kleine Datei mit Befehlen, die der Computer der Reihe nach ausführt. Die Installation ist ein Skript. |
 | **Terminal / Eingabeaufforderung** | Ein Fenster, in dem man Befehle eintippt. Auf Windows brauchst du es für die Installation nicht. Auf Mac, Linux und dem Raspberry Pi öffnest du es einmal für die Installation. |

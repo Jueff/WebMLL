@@ -1,5 +1,7 @@
 #!/bin/bash
-# Datei-Version: 1.13 (2026-11-24) - install_mac.command
+# Datei-Version: 1.15 (2026-11-24) - install_mac.command
+# 1.15: Symbol heisst MobaLedLib Studio; Symbole mit den frueheren Namen werden entfernt
+# 1.14: Anzeigename MobaLedLib Studio in den Meldungen (Name des Symbols unveraendert)
 # 1.13: git wird mit installiert (Homebrew oder Entwicklerwerkzeuge von Apple), PlatformIO braucht es fuer ESP32 und Pico
 # Installiert die Web-Oberflaeche von webMobaLedLib unter macOS: Python-Umgebung, Pakete, Programmsymbol und ein Programm
 # "webMobaLedLib" auf dem Schreibtisch (Doppelklick startet die Oberflaeche und oeffnet den Browser).
@@ -16,7 +18,7 @@ cd "$(dirname "$0")" || exit 1
 HERE="$(pwd)"
 APPDIR="$(cd .. && pwd)"
 VENV="$APPDIR/venv_web"
-APP="${MLL_APP_DIR:-$HOME/Desktop}/webMobaLedLib.app"
+APP="${MLL_APP_DIR:-$HOME/Desktop}/MobaLedLib Studio.app"
 CHECK=1
 WITH_LIBS=0
 WITH_IDE=0
@@ -33,7 +35,7 @@ done
 
 echo
 echo "============================================================"
-echo " webMobaLedLib - Installation der Web-Oberflaeche (macOS)"
+echo " MobaLedLib Studio - Installation der Web-Oberflaeche (macOS)"
 echo "============================================================"
 echo " Projektordner: $APPDIR"
 echo
@@ -119,10 +121,12 @@ fi
 echo "[3/4] Programmsymbol erzeugen"
 [ -f "$HERE/mobaledlib.icns" ] || "$VENV/bin/python" "$HERE/make_icons.py" "$HERE" || echo "Symbol nicht erzeugt (das Programm funktioniert trotzdem)."
 
-# --- 4. Programm auf dem Schreibtisch: webMobaLedLib.app (startet die Oberflaeche ohne Terminalfenster)
+# --- 4. Programm auf dem Schreibtisch: MobaLedLib Studio.app (startet die Oberflaeche ohne Terminalfenster)
 echo "[4/4] Programm anlegen: $APP"
 OLD_APP="${APP%/*}/pyMobaLedLib.app"                  # Programm unter dem frueheren Namen entfernen (nur wenn es von diesem Skript stammt)
 if [ -f "$OLD_APP/Contents/MacOS/pyMobaLedLib" ] && grep -q webmobaledlib.py "$OLD_APP/Contents/MacOS/pyMobaLedLib" 2>/dev/null; then rm -rf "$OLD_APP"; fi
+OLD_APP2="${APP%/*}/webMobaLedLib.app"               # Programm unter dem Namen bis 5.09 entfernen (nur wenn es von diesem Skript stammt)
+if [ -f "$OLD_APP2/Contents/MacOS/webMobaLedLib" ] && grep -q webmobaledlib.py "$OLD_APP2/Contents/MacOS/webMobaLedLib" 2>/dev/null; then rm -rf "$OLD_APP2"; fi
 rm -rf "$APP"
 mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources" || fail
 cat > "$APP/Contents/Info.plist" << 'PLIST'
@@ -130,12 +134,12 @@ cat > "$APP/Contents/Info.plist" << 'PLIST'
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-  <key>CFBundleName</key><string>webMobaLedLib</string>
-  <key>CFBundleDisplayName</key><string>webMobaLedLib</string>
+  <key>CFBundleName</key><string>MobaLedLib Studio</string>
+  <key>CFBundleDisplayName</key><string>MobaLedLib Studio</string>
   <key>CFBundleIdentifier</key><string>de.mobaledlib.web</string>
   <key>CFBundleVersion</key><string>1.0</string>
   <key>CFBundleShortVersionString</key><string>1.0</string>
-  <key>CFBundleExecutable</key><string>webMobaLedLib</string>
+  <key>CFBundleExecutable</key><string>MobaLedLibStudio</string>
   <key>CFBundleIconFile</key><string>mobaledlib</string>
   <key>CFBundlePackageType</key><string>APPL</string>
   <key>LSMinimumSystemVersion</key><string>10.13</string>
@@ -150,8 +154,8 @@ PLIST
   echo 'export MLL_HEADLESS=1'
   echo 'DATA="$("$APPDIR/venv_web/bin/python" "$APPDIR/userdata.py" 2>/dev/null || echo "$HOME")"      # Datenordner ausserhalb des Projektordners'
   echo 'exec "$APPDIR/venv_web/bin/python" "$APPDIR/webmobaledlib.py" --open-if-running >> "$DATA/webmobaledlib-console.log" 2>&1'
-} > "$APP/Contents/MacOS/webMobaLedLib"
-chmod +x "$APP/Contents/MacOS/webMobaLedLib"
+} > "$APP/Contents/MacOS/MobaLedLibStudio"
+chmod +x "$APP/Contents/MacOS/MobaLedLibStudio"
 [ -f "$HERE/mobaledlib.icns" ] && cp "$HERE/mobaledlib.icns" "$APP/Contents/Resources/mobaledlib.icns"
 touch "$APP"
 
@@ -237,7 +241,7 @@ fi
 
 echo
 echo "============================================================"
-echo " Fertig. Starten: Programm \"webMobaLedLib\" auf dem Schreibtisch doppelklicken"
+echo " Fertig. Starten: Programm \"MobaLedLib Studio\" auf dem Schreibtisch doppelklicken"
 echo " (beim ersten Mal ggf. Rechtsklick > Oeffnen)  oder  $HERE/start_mac.command"
 echo
 if find_ide >/dev/null; then

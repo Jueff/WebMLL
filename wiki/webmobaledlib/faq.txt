@@ -1,7 +1,7 @@
-====== webMobaLedLib – Häufige Fragen ======
-//Seitenstand 1.01 (2026-11-23), gilt für webMobaLedLib 4.79//
+====== MobaLedLib Studio – Häufige Fragen ======
+//Seitenstand 1.03 (2026-11-24), gilt für Version 5.12//
 
-Diese Seite beantwortet Fragen, die Einsteiger oft stellen. Fehlt deine Frage, schau in die [[anleitungen:webmobaledlib:fehlersuche|Fehlersuche]] oder frag im [[https://forum.mobaledlib.de/viewforum.php?f=14|Forum der MobaLedLib]].
+Diese Seite beantwortet Fragen, die Einsteiger oft stellen. Fehlt deine Frage, schau in die [[anleitungen:mobaledlibstudio:fehlersuche|Fehlersuche]] oder frag im [[https://forum.mobaledlib.de/viewforum.php?f=14|Forum der MobaLedLib]].
 
 ===== Wie kopiere ich Zellen nach unten? =====
 
@@ -15,24 +15,24 @@ Das Ziehen am Ausfüllkästchen (das kleine Quadrat unten rechts an der Zelle) g
 
 ===== Was bedeutet „V“ in der Spalte Verteiler? =====
 
-Die Spalte **Verteiler-Nr.** sagt, an welchem **Verteiler** (Kabelverteiler auf der Anlage) die Zeile angeschlossen ist. Die Grafik zeichnet um alle Zeilen mit derselben Nummer ein Rechteck. Das **V** steht für „Verteiler“: ''V1'' ist der erste Verteiler, ''V2'' der zweite. Seit 3.93 genügt auch die **reine Zahl** (''1'' gilt wie ''V1''). In der Spalte können auch andere Texte stehen (zum Beispiel der Typ der Verteiler-Zeile); deshalb gilt ein Eintrag nur dann als Verteilernummer, wenn er ''V'' und eine Zahl oder nur eine Zahl enthält. Mehr dazu auf der Seite [[anleitungen:webmobaledlib:pg_grafisch|Die grafische Ansicht]].
+Die Spalte **Verteiler-Nr.** sagt, an welchem **Verteiler** (Kabelverteiler auf der Anlage) die Zeile angeschlossen ist. Die Grafik zeichnet um alle Zeilen mit derselben Nummer ein Rechteck. Das **V** steht für „Verteiler“: ''V1'' ist der erste Verteiler, ''V2'' der zweite. Seit 3.93 genügt auch die **reine Zahl** (''1'' gilt wie ''V1''). In der Spalte können auch andere Texte stehen (zum Beispiel der Typ der Verteiler-Zeile); deshalb gilt ein Eintrag nur dann als Verteilernummer, wenn er ''V'' und eine Zahl oder nur eine Zahl enthält. Mehr dazu auf der Seite [[anleitungen:mobaledlibstudio:pg_grafisch|Die grafische Ansicht]].
 
 ===== Die Lichtmaschine wird nicht als COM-Port erkannt =====
 
-//Antwort steht noch aus.// Der Fall (Lichtmaschine Pro mit ESP32, Port wird nicht angezeigt) ist im Forum gemeldet. Sobald es eine bestätigte Lösung gibt, steht sie hier. Bis dahin hilft die [[anleitungen:webmobaledlib:fehlersuche|Fehlersuche]], Abschnitt //Lichtmaschine verbinden und übertragen// (anderes USB-Kabel, das Daten überträgt; anderer USB-Anschluss; Treiber für den USB-Chip).
+//Antwort steht noch aus.// Der Fall (Lichtmaschine Pro mit ESP32, Port wird nicht angezeigt) ist im Forum gemeldet. Sobald es eine bestätigte Lösung gibt, steht sie hier. Bis dahin hilft die [[anleitungen:mobaledlibstudio:fehlersuche|Fehlersuche]], Abschnitt //Lichtmaschine verbinden und übertragen// (anderes USB-Kabel, das Daten überträgt; anderer USB-Anschluss; Treiber für den USB-Chip).
 
 ===== Wie übernehme ich Daten aus dem alten Excel-Programm? =====
 
 Der Menüpunkt **Datei, Importieren v. altem Programm …** (bis 4.53: Knopf im Fenster //Optionen und spezielle Funktionen//, Reiter Dateien) zeigt diese Anleitung an; einen direkten Import aus der Excel-Datei gibt es **nicht**. So geht es:
 
   - Öffne in der **Excel-Version** des ProgrammGenerators //Optionen und spezielle Funktionen//, Reiter //Dateien//, klicke auf **Speichern in Datei** und speichere die Daten als Datei (Endung ''.MLL_pgf'').
-  - Öffne in der webMobaLedLib das Menü **Datei** und lade diese Datei (siehe [[anleitungen:webmobaledlib:pg_speichern|Speichern und Laden]]).
+  - Öffne in MobaLedLib Studio das Menü **Datei** und lade diese Datei (siehe [[anleitungen:mobaledlibstudio:pg_speichern|Speichern und Laden]]).
 
 Anwender haben so das Hauptblatt mit 186 Zeilen in kurzer Zeit übernommen. Prüfe danach die Spalten Verteiler und Aktiv.
 
 ===== Wo werden meine Daten gespeichert? =====
 
-Im **Datenordner** auf dem Rechner, auf dem die webMobaLedLib läuft (Windows: ''%APPDATA%\webMobaLedLib''). Dort liegen Einstellungen, die Sicherung der Tabellen und die Protokolle. Alle Pfade stehen auf der Seite [[anleitungen:webmobaledlib:aktualisieren|Das Programm aktualisieren]]. Eine Datei zum Aufbewahren oder Weitergeben erzeugst du mit dem Menü **Datei**.
+Im **Datenordner** auf dem Rechner, auf dem MobaLedLib Studio läuft (Windows: ''%APPDATA%\webMobaLedLib''). Dort liegen Einstellungen, die Sicherung der Tabellen und die Protokolle. Alle Pfade stehen auf der Seite [[anleitungen:mobaledlibstudio:aktualisieren|Das Programm aktualisieren]]. Eine Datei zum Aufbewahren oder Weitergeben erzeugst du mit dem Menü **Datei**.
 
 ===== Der Knopf „Online Wiki“ führt zur falschen Seite =====
 

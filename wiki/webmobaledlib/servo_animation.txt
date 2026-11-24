@@ -1,19 +1,19 @@
-====== webMobaLedLib – Servo Animation ======
-//Seitenstand 1.06 (2026-11-23), gilt für webMobaLedLib 4.79//
+====== MobaLedLib Studio – Servo Animation ======
+//Seitenstand 1.08 (2026-11-24), gilt für Version 5.12//
 
 Mit der **Servo Animation** bestimmst du, **wie sich ein Servo bewegt**: wie schnell, mit welcher Beschleunigung, mit Pausen und mit eigenen Zwischenstellungen. So lässt du ein Tor sanft aufgehen, eine Schranke langsam senken oder einen Baum mit ein paar Rucklern umstürzen. Du **zeichnest den Bewegungsablauf als Kurve**, und das Programm macht daraus die Einträge für die Lichtmaschine.
 
-Zum Ausprobieren steuert das Programm den Servo **direkt** an (**Direktmodus**, siehe [[anleitungen:webmobaledlib:pg_arduino#die_drei_arten_der_verbindung|Die drei Arten der Verbindung]]).
+Zum Ausprobieren steuert das Programm den Servo **direkt** an (**Direktmodus**, siehe [[anleitungen:mobaledlibstudio:pg_arduino#die_drei_arten_der_verbindung|Die drei Arten der Verbindung]]).
 
-{{:bilder:anleitungen:webmobaledlib:servo_01_dialog.png?700|Der Dialog Servo Animation mit den Einstellungen links und der Kurve rechts}}
+{{:bilder:anleitungen:mobaledlibstudio:servo_01_dialog.png?700|Der Dialog Servo Animation mit den Einstellungen links und der Kurve rechts}}
 
 ===== Das brauchst du =====
 
   * Einen **Servo**, entweder an der **Servoplatine** der MobaLedLib (Servo 1, 2 oder 3) oder als **Direct-Mode-Servo** (mit ATtiny, „Servo DM“).
-  * Die webMobaLedLib mit einer **Tabellenzeile** für den Servo (siehe [[anleitungen:webmobaledlib:pg_tabelle|Die Tabelle bedienen]]).
-  * Zum **Ausprobieren** eine **verbundene Lichtmaschine** ([[anleitungen:webmobaledlib:pg_arduino|Verbinden und Übertragen]]). Ohne Lichtmaschine kannst du die Animation trotzdem planen.
+  * MobaLedLib Studio mit einer **Tabellenzeile** für den Servo (siehe [[anleitungen:mobaledlibstudio:pg_tabelle|Die Tabelle bedienen]]).
+  * Zum **Ausprobieren** eine **verbundene Lichtmaschine** ([[anleitungen:mobaledlibstudio:pg_arduino|Verbinden und Übertragen]]). Ohne Lichtmaschine kannst du die Animation trotzdem planen.
 
-Welche **Endstellungen** dein Servo verträgt, stellst du vorher im Reiter [[anleitungen:webmobaledlib:wz_servo|Servo Einstellungen]] ein.
+Welche **Endstellungen** dein Servo verträgt, stellst du vorher im Reiter [[anleitungen:mobaledlibstudio:wz_servo|Servo Einstellungen]] ein.
 
 ===== Den Dialog öffnen =====
 
@@ -45,7 +45,7 @@ Wenn du mit der Maus über die Grafik fährst, zeigen **Zeit** und **Wert** übe
 
 ===== Eine eigene Kurve zeichnen (Kurventyp Individuell) =====
 
-{{:bilder:anleitungen:webmobaledlib:servo_02_kurve_individuell.png?600|Eine individuelle Kurve mit ziehbaren Punkten}}
+{{:bilder:anleitungen:mobaledlibstudio:servo_02_kurve_individuell.png?600|Eine individuelle Kurve mit ziehbaren Punkten}}
 
 Beim **Kurventyp Individuell** erscheinen **grüne Punkte** auf der Kurve:
 
@@ -67,7 +67,7 @@ Ist eine **Lichtmaschine verbunden**, bewegt sich der **Servo**, sobald du einen
 
 Mit **OK** trägt das Programm das Ergebnis in die Zeile der Tabelle ein. Es besteht aus dem eigentlichen Makro **PatternT…** und einer **Kommentarzeile** ''#ServoAnim(…)'' mit deinen Einstellungen. Mit **Abbrechen** bleibt alles, wie es war.
 
-Du kannst die Zeile **später wieder öffnen** und ändern: Das Programm liest die Einstellungen aus der Zeile wieder ein, bei einer **individuellen Kurve** auch die Punkte. Danach überträgst du das Programm mit **Setup übertragen** auf die Lichtmaschine ([[anleitungen:webmobaledlib:pg_arduino|Verbinden und Übertragen]]).
+Du kannst die Zeile **später wieder öffnen** und ändern: Das Programm liest die Einstellungen aus der Zeile wieder ein, bei einer **individuellen Kurve** auch die Punkte. Danach überträgst du das Programm mit **Setup übertragen** auf die Lichtmaschine ([[anleitungen:mobaledlibstudio:pg_arduino|Verbinden und Übertragen]]).
 
 ===== Ein Beispiel: ein Tor, das sanft aufgeht =====
 
@@ -81,12 +81,12 @@ Du kannst die Zeile **später wieder öffnen** und ändern: Das Programm liest d
 ===== Wenn etwas nicht klappt =====
 
 ^ Was passiert ^ Was hilft ^
-| Der Servo bewegt sich beim Ausprobieren nicht | Läuft auf der **Lichtmaschine** schon ein MobaLedLib-Programm? (Siehe [[anleitungen:webmobaledlib:pg_arduino|Verbinden und Übertragen]]; das Programm verbindet sich zum Ausprobieren selbst.) Stimmen **Servo Adresse**, **Anschluss-Kanal** und **Servotyp**? |
-| Der Servo schlägt an oder summt am Anschlag | Die **Grenzen** des Servos stimmen nicht. Stelle sie im Reiter [[anleitungen:webmobaledlib:wz_servo|Servo Einstellungen]] ein, und nimm dann **Anfangswert** und **Endwert** etwas **innerhalb** der Grenzen. |
+| Der Servo bewegt sich beim Ausprobieren nicht | Läuft auf der **Lichtmaschine** schon ein MobaLedLib-Programm? (Siehe [[anleitungen:mobaledlibstudio:pg_arduino|Verbinden und Übertragen]]; das Programm verbindet sich zum Ausprobieren selbst.) Stimmen **Servo Adresse**, **Anschluss-Kanal** und **Servotyp**? |
+| Der Servo schlägt an oder summt am Anschlag | Die **Grenzen** des Servos stimmen nicht. Stelle sie im Reiter [[anleitungen:mobaledlibstudio:wz_servo|Servo Einstellungen]] ein, und nimm dann **Anfangswert** und **Endwert** etwas **innerhalb** der Grenzen. |
 | Die Kurve ist beim erneuten Öffnen leer | Nur bei einer **individuellen Kurve** liest das Programm die Punkte aus der Zeile **PatternT…** der Tabelle. Hast du diese Zeile von Hand geändert, kann die Kurve fehlen. Zeichne sie neu. |
 | Ein Punkt lässt sich in der Zeit nicht ziehen | Stelle die **Zeitstufen** auf **Individuell**. |
 | Der Dialog ist zu groß oder zu klein | Ziehe am **Rand unten rechts**, um die Größe zu ändern. Am **Titel** verschiebst du das Fenster. |
 
 ===== Verwandt =====
 
-Für die **Farbe einer LED** gibt es denselben Dialog mit drei Kurven: [[anleitungen:webmobaledlib:led_farbanimation|LED Farb-Animation]].
+Für die **Farbe einer LED** gibt es denselben Dialog mit drei Kurven: [[anleitungen:mobaledlibstudio:led_farbanimation|LED Farb-Animation]].

@@ -1,7 +1,7 @@
-====== webMobaLedLib – Die grafische Ansicht ======
-//Seitenstand 1.06 (2026-11-23), gilt für webMobaLedLib 4.83//
+====== MobaLedLib Studio – Die grafische Ansicht ======
+//Seitenstand 1.08 (2026-11-24), gilt für Version 5.12//
 
-Neben der Tabelle zeigt die webMobaLedLib deine Zeilen auch **als Bild**. Du siehst auf einen Blick, welches Gerät an welcher LED-Kette hängt, und kannst Effekte **mit der Maus** anlegen und verschieben. Das gab es in der Excel-Version nicht.
+Neben der Tabelle zeigt MobaLedLib Studio deine Zeilen auch **als Bild**. Du siehst auf einen Blick, welches Gerät an welcher LED-Kette hängt, und kannst Effekte **mit der Maus** anlegen und verschieben. Das gab es in der Excel-Version nicht.
 
 ===== Die Ansicht wählen =====
 
@@ -15,7 +15,7 @@ Welche Ansicht beim Start gilt, stellst du im Menü **Einstellungen, Programm Ge
 
 ===== Ketten =====
 
-{{:bilder:anleitungen:webmobaledlib:pg_06_grafik_ketten.png?700|Die Grafik: Ketten mit Kästchen und der Makrobaum links}}
+{{:bilder:anleitungen:mobaledlibstudio:pg_06_grafik_ketten.png?700|Die Grafik: Ketten mit Kästchen und der Makrobaum links}}
 
 Jede Zeile mit LEDs ist ein **Kästchen** mit dem Symbol des Makros, dem Namen und den LED-Nummern (zum Beispiel „LED 4 bis 7“). Die Kästchen einer **LED-Kette** hängen in einer Linie hintereinander. Makros ohne LEDs (zum Beispiel Sound) stehen in einer eigenen Spalte **Ohne LEDs**.
 
@@ -69,7 +69,7 @@ Links neben der Grafik steht die Liste **aller Makros**, nach Gruppen sortiert. 
 
 ===== Die Anlage als Bild =====
 
-{{:bilder:anleitungen:webmobaledlib:pg_07_grafik_anlage.png?700|Die Anlagenansicht: Kästchen auf einem Foto der Anlage}}
+{{:bilder:anleitungen:mobaledlibstudio:pg_07_grafik_anlage.png?700|Die Anlagenansicht: Kästchen auf einem Foto der Anlage}}
 
 Über der Grafik schaltest du mit **Ketten | Anlage** die Darstellung um. In der **Anlage** liegen die Kästchen **frei auf einem Bild** deiner Anlage, zum Beispiel einem Foto oder einem Gleisplan. Du ziehst jedes Kästchen dorthin, wo das Gerät auf der Anlage steht.
 
@@ -80,7 +80,7 @@ Links neben der Grafik steht die Liste **aller Makros**, nach Gruppen sortiert. 
   * **Rückgängig:** Der Knopf **↶** oder **Strg + Z** macht die letzten Änderungen der Positionen, des Ausrichtens und der Größe rückgängig (bis zu 30 Schritte).
   * Die **Testtasten** der Tabelle stehen auch unter den Kästchen. Damit schaltest du Effekte direkt am Bild ein und aus.
 
-Das Bild und die Positionen werden mit deiner Arbeit **gespeichert**. Zum Weitergeben gibt es im Menü **Datei** die Einträge **ProgrammGenerator: Anlagenansicht speichern …** und **… laden …** (siehe [[anleitungen:webmobaledlib:pg_speichern|Speichern und Laden]]).
+Das Bild und die Positionen werden mit deiner Arbeit **gespeichert**. Zum Weitergeben gibt es im Menü **Datei** die Einträge **ProgrammGenerator: Anlagenansicht speichern …** und **… laden …** (siehe [[anleitungen:mobaledlibstudio:pg_speichern|Speichern und Laden]]).
 
 ===== Gut zu wissen =====
 

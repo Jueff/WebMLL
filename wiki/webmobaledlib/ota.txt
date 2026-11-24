@@ -1,5 +1,5 @@
-====== webMobaLedLib – ESP32 per WLAN und OTA ======
-//Seitenstand 1.06 (2026-11-23), gilt für webMobaLedLib 4.95//
+====== MobaLedLib Studio – ESP32 per WLAN und OTA ======
+//Seitenstand 1.08 (2026-11-24), gilt für Version 5.12//
 
 Mit einer **Lichtmaschine ESP32** musst du das USB-Kabel nicht mehr dauernd benutzen. Das Programm kann den ESP32 über das **WLAN** verbinden, die **Einstellungen** und die **Firmware** übertragen (**OTA**, //Over the Air//) und die Testseiten (Farb Test, Servo, Sound, Testschalter) ohne Kabel bedienen. Das **erste Mal** brauchst du das USB-Kabel, danach geht alles über das WLAN.
 
@@ -7,7 +7,7 @@ Mit einer **Lichtmaschine ESP32** musst du das USB-Kabel nicht mehr dauernd benu
 
 ===== Was du brauchst =====
 
-  * Eine Lichtmaschine mit **ESP32**. In den **Optionen** (Reiter **Lichtmaschine**) ist als Board **ESP32** gewählt (siehe [[anleitungen:webmobaledlib:pg_arduino|Verbinden und Übertragen]]).
+  * Eine Lichtmaschine mit **ESP32**. In den **Optionen** (Reiter **Lichtmaschine**) ist als Board **ESP32** gewählt (siehe [[anleitungen:mobaledlibstudio:pg_arduino|Verbinden und Übertragen]]).
   * Das **WLAN deines Heimnetzes** (2,4 GHz) und sein Passwort.
   * Die **neue Firmware** für WLAN und OTA. Die Dateien sind im Programm enthalten. **Die alte Firmware** (mit WiFiManager, im Protokoll erkennst du sie an Zeilen mit ''*wm:'') **kennt das Einrichten des WLAN über USB nicht**. Den ersten Schritt unten erledigt der Knopf **Minimale WLAN Firmware per USB hochladen** für dich.
   * Ein **OTA-Passwort**: 1 bis 64 Zeichen (Buchstaben, Ziffern, Satzzeichen, **keine** Umlaute und keine Leerzeichen). Es schützt die Lichtmaschine vor fremden Übertragungen und steckt in der Firmware. **Merke es dir**, das Programm speichert es nur auf deinem Rechner.
@@ -45,7 +45,7 @@ Bei der Zentrale **ESP32** gibt es in den **Hardware Optionen** den Reiter **ESP
 
 ===== Erste Einrichtung (einmal, mit USB-Kabel) =====
 
-  - Stecke den ESP32 mit dem **USB-Kabel** an den Computer und wähle den **Anschluss** (Knopf **Mit Lichtmaschine verbinden** oder Optionen, Reiter **Lichtmaschine**, siehe [[anleitungen:webmobaledlib:pg_arduino|Verbinden und Übertragen]]).
+  - Stecke den ESP32 mit dem **USB-Kabel** an den Computer und wähle den **Anschluss** (Knopf **Mit Lichtmaschine verbinden** oder Optionen, Reiter **Lichtmaschine**, siehe [[anleitungen:mobaledlibstudio:pg_arduino|Verbinden und Übertragen]]).
   - Öffne den Reiter **WLAN (OTA)**. Setze die Haken **WLAN am ESP32 aktivieren** und **OTA-Updates erlauben**. Gib **Hostname** und **OTA-Passwort** ein.
   - Klicke auf **Minimale WLAN Firmware per USB hochladen**. Das Programm speichert die Einstellungen, übersetzt eine **kleine Firmware** (eine DCC-Adresse und die **Heartbeat LED**, WLAN und OTA sind eingeschaltet) und lädt sie über USB. Das Protokoll zeigt den Fortschritt. Es dauert beim ersten Mal einige Minuten. Am Ende blinkt die Heartbeat LED.
   - Klicke auf **WLAN über USB einrichten**. Wähle den **USB-Port** und klicke auf **WLANs suchen**. Wähle **dein WLAN** in der Liste **Gefundene WLANs**, gib das **WLAN-Passwort** ein und klicke auf **Verbinden**. Der ESP32 verbindet sich, das Programm zeigt seine **IP-Adresse** und trägt sie als **Adresse für WebMLL** ein.
@@ -63,7 +63,7 @@ Der ESP32 merkt sich das WLAN. Du musst diese Schritte nur wiederholen, wenn du 
 
 ===== Schnelles Update über WLAN (seit 4.71) =====
 
-Mit **PlatformIO** und dem Haken **Schnelles Update** (Hardware Optionen, Reiter **Entwicklungsumgebung**) überträgt das Programm über WLAN nur noch die **Konfiguration** (gesicherter Kanal mit dem OTA-Passwort, Beitrag von moosbewohner). Passt die Firmware im ESP32, entfällt das Übersetzen. Ist die Konfiguration unverändert, wird nichts gesendet. Bei Übertragungsfehlern gibt es bis zu drei Versuche, danach wird alles hochgeladen. **Einmal** muss die angepasste Firmware auf den ESP32 (USB oder WLAN). Ändern sich Hostname, OTA-Passwort, OTA-Schalter oder die Netzwerkeinstellungen, wird die Firmware ebenfalls neu übertragen. Mehr dazu: [[anleitungen:webmobaledlib:pg_arduino#schnelles_update_nur_die_konfiguration_uebertragen|Verbinden und Übertragen]].
+Mit **PlatformIO** und dem Haken **Schnelles Update** (Hardware Optionen, Reiter **Entwicklungsumgebung**) überträgt das Programm über WLAN nur noch die **Konfiguration** (gesicherter Kanal mit dem OTA-Passwort, Beitrag von moosbewohner). Passt die Firmware im ESP32, entfällt das Übersetzen. Ist die Konfiguration unverändert, wird nichts gesendet. Bei Übertragungsfehlern gibt es bis zu drei Versuche, danach wird alles hochgeladen. **Einmal** muss die angepasste Firmware auf den ESP32 (USB oder WLAN). Ändern sich Hostname, OTA-Passwort, OTA-Schalter oder die Netzwerkeinstellungen, wird die Firmware ebenfalls neu übertragen. Mehr dazu: [[anleitungen:mobaledlibstudio:pg_arduino#schnelles_update_nur_die_konfiguration_uebertragen|Verbinden und Übertragen]].
 
 ===== Die Firewall =====
 
@@ -87,6 +87,6 @@ Schalte die Firewall nicht ganz aus. Die Regel genügt.
 | Es läuft noch ein Vorgang | Warte, bis das Protokollfenster fertig ist. Dann noch einmal klicken. |
 | Das **Passwort** ist vergessen | Es steht nur in der Firmware. Lade mit **Minimale WLAN Firmware per USB hochladen** (oder **Setup übertragen** über **USB**) eine Firmware mit einem **neuen** Passwort. |
 
-Das Programm speichert das **OTA-Passwort im Klartext** in einer Datei im **Datenordner des Programms** (''esp32-ota.json''). Mach diesen Ordner nicht öffentlich zugänglich. Bei einem **Zugriff aus dem Netz** (siehe [[anleitungen:webmobaledlib:wz_netzwerk|Zugriff aus dem Netz]]) schützt du die Oberfläche mit einem Passwort, denn wer sie bedienen kann, kann auch Firmware übertragen.
+Das Programm speichert das **OTA-Passwort im Klartext** in einer Datei im **Datenordner des Programms** (''esp32-ota.json''). Mach diesen Ordner nicht öffentlich zugänglich. Bei einem **Zugriff aus dem Netz** (siehe [[anleitungen:mobaledlibstudio:wz_netzwerk|Zugriff aus dem Netz]]) schützt du die Oberfläche mit einem Passwort, denn wer sie bedienen kann, kann auch Firmware übertragen.
 
 Hilft das alles nicht, sieh im Menü **Hilfe → Logfile anzeigen** nach. Schick das Protokoll im [[https://forum.mobaledlib.de/viewforum.php?f=14|Forum]] mit.

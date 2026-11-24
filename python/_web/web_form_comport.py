@@ -1,10 +1,10 @@
-# Datei-Version: 1.09 (2026-11-22) - web_form_comport.py
+# Datei-Version: 1.10 (2026-11-23) - web_form_comport.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_form_comport.py
 # Path:           _web/web_form_comport.py
-# Version:        1.09
-# Last Update:    2026-11-22
-# Author:         Harold Linke
+# Version:        1.10
+# Last Update:    2026-11-23
+# Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
 # History of Change:
 #   1.02  2026-10-15  Web-Ersatz fuer Select_COM_Port_Userform (Original, nicht erfasst)
@@ -15,6 +15,8 @@
 #   1.03  2026-10-21  Update_SpinButton: ohne offenen Dialog den Zeitgeber der blinkenden LEDs beenden (stand 10 Minuten lang auf COM6 und blockierte esptool)
 #   1.04  2026-10-26  Unbekannte Ports anzeigen ist unter Linux und macOS nur noch an, wenn kein bekannter Anschluss (zum Beispiel ttyUSB0) gefunden wird
 #   1.05  2026-10-28  neu angeschlossenes Geraet wird gewaehlt (0 = keine Vorgabe, Anschluss am Ende der Liste); Protokollzeile bei Aenderung der Anschlussliste
+#   1.10  2026-11-23  Identify (Juergen Winkler): ESP32/Pico: beim Wechsel des Anschlusses '~MLLIDENT 0' an den alten und '~MLLIDENT 1' an den neuen Anschluss, '~MLLIDENT 0' beim Schliessen
+#                     des Dialogs und wenn kein Anschluss mehr da ist (_old_comport). Zeilen mit '# v1.10'
 # ----------------------------------------------------------------------------------------------
 """Web-Ersatz fuer proggen/Select_COM_Port_Userform.py (Auswahl des Arduino/Pico-Ports).
 
@@ -173,6 +175,7 @@ def make_class(Base):
         _sel_index = -1
         _old_spin = -1
         _show_unknown = False
+        _old_comport = None  # Vorherig gewaehlter COM Port fuer Ident_Stop/Ident_Start beim Wechsel  # v1.10
 
         def _initial_show_unknown(self, windows):  # v1.04
             """Vorgabe fuer "Unbekannte Ports anzeigen": Windows aus; Linux und macOS nur dann an, wenn kein bekannter Anschluss gefunden wird (sonst standen unter Linux
@@ -277,6 +280,11 @@ def make_class(Base):
             ns["LocalComPorts"], ns["PortNames"] = LocalComPorts, PortNames
             if not M30.isInitialised(LocalComPorts):
                 M07.CheckCOMPort = "999"
+                # Kein Port verfuegbar: _old_comport zuruecksetzen und Ident_Stop senden  # v1.10
+                if self._old_comport is not None:  # v1.10
+                    import proggen.M07_COM_Port_New as M07New  # v1.10
+                    M07New._Ident_Send_Cmd(self._old_comport, M07New._Ident_Board(), "~MLLIDENT 0")  # v1.10
+                    self._old_comport = None  # v1.10
                 return [], "", ""
             spin = self._sel_index
             spin_max = len(LocalComPorts) - 1
@@ -302,6 +310,22 @@ def make_class(Base):
             M07.CheckCOMPort = "999" if port == " " else port
             self.Com_Port_No = spin
             self._sel_index = spin
+
+            # Pruefen ob sich der COM Port geaendert hat  # v1.10
+            new_comport = port if port not in (" ", "999") else None  # v1.10
+            old_comport = self._old_comport  # v1.10
+
+            if new_comport != old_comport and (new_comport is not None or old_comport is not None):  # v1.10
+                # COM Port hat sich geaendert: Ident_Stop an alten, Ident_Send_Keepalive an neuen  # v1.10
+                logger.debug("COM Port gewechselt: %s -> %s", old_comport, new_comport)  # v1.10
+                if old_comport is not None:  # v1.10
+                    import proggen.M07_COM_Port_New as M07New  # v1.10
+                    M07New._Ident_Send_Cmd(old_comport, M07New._Ident_Board(), "~MLLIDENT 0")  # v1.10
+                if new_comport is not None:  # v1.10
+                    import proggen.M07_COM_Port_New as M07New  # v1.10
+                    M07New.Ident_Send_Keepalive(new_comport)  # v1.10
+                self._old_comport = new_comport  # v1.10
+
             old_ = ns["OldL_ComPorts"]  # v1.05
             if not M30.isInitialised(old_) or list(old_) != list(LocalComPorts):  # v1.05
                 try:                                                        # nur wenn sich die Liste aendert: die Zeile im Protokoll zeigt, was das Programm sieht (Anschluesse, Board, unbekannte Ports)  # v1.05
@@ -398,6 +422,7 @@ def make_class(Base):
             self.title = M09.Get_Language_Str(Caption)
             self._old_spin = -1
             self._sel_index = -1
+            self._old_comport = None  # Zuruecksetzen beim Oeffnen des Dialogs  # v1.10
             ns["__LocalPrintDebug"] = PrintDebug
             ns["Pressed_Button"] = 0
             ports, port, avail = [], "", ""
@@ -409,6 +434,8 @@ def make_class(Base):
                 self._remember_variant(self._orig_buildopt)
             if Show_ComPort:
                 ports, port, avail = self._compute(ComPort_IO)
+                # _old_comport initialisieren nach dem ersten _compute  # v1.10
+                self._old_comport = port if port not in (" ", "999") else None  # v1.10
             spec = {"title": Title, "text": Text, "red_hint": Red_Hint, "image": image, "show_port": Show_ComPort,
                     "ports": ports, "port": port if port in ports else None, "avail": avail,
                     "unknown_text": M09.Get_Language_Str(info["unknown"] or "Unbekante Ports anzeigen"),
@@ -420,6 +447,11 @@ def make_class(Base):
             self.IsActive = True
             pressed = wd.call_in_loop(_comport_async, self, spec, default=2)
             self.IsActive = False
+            # Ident_Stop an den aktiven COM Port senden beim Schliessen des Dialogs  # v1.10
+            if self._old_comport is not None:  # v1.10
+                import proggen.M07_COM_Port_New as M07New  # v1.10
+                M07New._Ident_Send_Cmd(self._old_comport, M07New._Ident_Board(), "~MLLIDENT 0")  # v1.10
+                self._old_comport = None  # v1.10
             M07.CheckCOMPort = " "
             if pressed == 2 and self._orig_buildopt is not None and self._read_buildopt() != self._orig_buildopt:  # v1.07: Abbrechen macht den Typwechsel rueckgaengig
                 self._write_buildopt(self._orig_buildopt)

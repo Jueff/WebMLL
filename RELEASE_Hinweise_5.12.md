@@ -1,10 +1,10 @@
-Datei-Version: 1.13 (2026-11-24) - RELEASE_Hinweise_4.98.md
-Gilt für webMobaLedLib 4.98
+Datei-Version: 1.14 (2026-11-24) - RELEASE_Hinweise_5.12.md
+Gilt für MobaLedLib Studio 5.12
 
-# webMobaLedLib 4.98
+# MobaLedLib Studio 5.12
 
-Anhänge dieses Releases: `webmobaledlib.zip` (Programm, mit `zip_erstellen.bat` Version 1.11 gebaut, `ROOT_IN_ZIP=1`), `START_HIER.txt` (erste Schritte), `ANLEITUNG_Installation.pdf` (Anleitung, Version 4.98) und `BETATEST_Checkliste.pdf` (Checkliste für Betatester, Version 3.79).
-Installation: siehe `START_HIER.txt` und den Schnellstart der Anleitung. Aktualisieren: Menü **Hilfe → Update webMobaLedLib …**, danach das Programm **neu starten** und die Seite mit Strg+F5 neu laden.
+Anhänge dieses Releases: `webmobaledlib.zip` (Programm, mit `zip_erstellen.bat` Version 1.11 gebaut, `ROOT_IN_ZIP=1`), `START_HIER.txt` (erste Schritte), `ANLEITUNG_Installation.pdf` (Anleitung, Version 5.12) und `BETATEST_Checkliste.pdf` (Checkliste für Betatester, Version 3.93).
+Installation: siehe `START_HIER.txt` und den Schnellstart der Anleitung. Aktualisieren: Menü **Hilfe → Update MobaLedLib Studio …**, danach das Programm **neu starten** und die Seite mit Strg+F5 neu laden.
 
 ## Wichtig beim Aktualisieren
 
@@ -12,7 +12,20 @@ Installation: siehe `START_HIER.txt` und den Schnellstart der Anleitung. Aktuali
 - **Nach dem Update das Programm neu starten** und die Seite neu laden. Oben darf keine rote Meldung stehen.
 - **Neues Programmsymbol (4.10):** Für die Verknüpfung auf dem Desktop den Installer noch einmal ausführen.
 
-## Neu seit Version 3.93 (3.94 bis 4.98)
+## Neu seit Version 3.93 (3.94 bis 5.12)
+
+**Neu seit 4.98 (4.99 bis 5.12):**
+- **Neuer Name MobaLedLib Studio (5.08, 5.09, 5.10):** Kopfzeile, Browser-Tab, Meldungen (auch Installation und Reparatur), Anleitung, Checkliste und Wiki heißen jetzt „MobaLedLib Studio“, in allen Sprachen. Das Desktop-Symbol heißt ebenfalls „MobaLedLib Studio“: Die Installationsskripte (Windows, Linux, macOS, Raspberry Pi) legen es neu an und entfernen die Symbole mit den alten Namen. **Dafür das Installationsskript einmal erneut ausführen** (nach einem Update über das Menü bleiben die alten Symbole bis dahin). Technische Namen bleiben: Dateinamen (`webmobaledlib.py`, `webmobaledlib.zip`), Datenordner `webMobaLedLib`, Update-Verfahren.
+- **Parameterformular der Makros (5.04 bis 5.06):** Zahlenwerte haben einen Schieberegler mit Zahlenfeld und den Tasten − und +; das Zahlenfeld (auch LED Channel) lässt sich direkt eintragen und mit dem Mausrad ändern. Zeitwerte werden in den Feldern Min, Sek und ms eingegeben. Der Farbwert im HSV-Farbraum hat einen Regler im Farbverlauf und ein Feld mit der Farbe. Die LED Kanal Auswahl hat farbige Tasten (Gelb, Zyan, Rot, Grün, Blau). Der Hinweistext zum HSV-Farbwert nennt die Regenbogen-Zahlen (0 Rot, 32 Orange, 64 Gelb, 96 Grün, 128 Zyan, 160 Blau, 192 Violett, 224 Pink) (5.10).
+- **Formular für House und GasLights (5.07):** Anzahlen und Zeiten mit Regler, Zahlenfeld, − und + und Mausrad; LED Kanal als Zahlenfeld.
+- **Board und USB Port erkennen (5.02, Beitrag von Jürgen, Pull Request 39, Issue 35):** Findet die Erkennung mehrere verschiedene Lichtmaschinen, kann man vorher das Modell wählen.
+- **Zentrale erkennen (4.99, Beitrag von Jürgen, Pull Request 61):** Im Dialog „Auswahl des COM Ports“ blinken die LEDs der gewählten Zentrale (ESP32, Pico). Die neue Firmware muss dafür einmal ganz übertragen werden. Der Pico bekommt die Konfiguration auch, wenn er nach dem Hochladen einen anderen COM Port hat.
+- **Überzählige LEDs (5.00, Beitrag von Jürgen, Pull Request 63, Issue 62):** Hängen am Strang mehr LEDs, als konfiguriert sind, werden sie beim Start ausgeschaltet (Setup einmal ganz neu übertragen).
+- **Schnelles Update nach Programm-Update (5.03, Beitrag von Jürgen, Pull Request 66, Issue 64):** Nach jedem Update wird beim ersten „Setup übertragen“ einmal die ganze Firmware übertragen.
+- **Testtasten (5.01, Issue 68):** Startwert 1 schaltet alle Ein/Aus-Tasten derselben Adresse ein.
+- **Niederländisch (5.11, Rückmeldung eines Testers):** Menü „Uitbreidingen …“; Hinweise (Tooltips) in den Einstellungsfenstern in der gewählten Sprache, fehlende Übersetzungen ergänzt.
+- **Hilfe und Wiki (5.12):** Hilfe → Hilfe öffnen und die Hilfe-Knöpfe (OTA, Servo-Animation, Timeline Editor) führen zu den Seiten im Wiki-Kapitel `anleitungen:mobaledlibstudio`; die Wiki-Seiten des Pakets verweisen auf diesen Namensraum.
+- **Firewall-Text (5.10):** Der Hinweis zur Windows-Firewall nennt die Regel „webMLL Server <Port>“.
 
 **Neu seit 4.93 (4.94 bis 4.98):**
 - **Neuinstallation mit git (4.98):** `install_windows.bat` (mit winget; `/nogit` überspringt es) und `install_mac.command` installieren jetzt git mit, das PlatformIO für ESP32 und Pico braucht. Fehlt git trotzdem, fragt das Programm beim Übersetzen für ESP32 oder Pico „git jetzt installieren?“, auch im Anfänger Modus. Bisher musste man git nachträglich in den Optionen (Entwicklungsumgebung) installieren.
@@ -119,9 +132,9 @@ Installation: siehe `START_HIER.txt` und den Schnellstart der Anleitung. Aktuali
 - Versteckte Tabellen: das Startblatt erscheint nicht mehr als Reiter (4.07).
 - Optionen: alle Reiter sichtbar (3.99).
 
-**Noch nicht an Hardware oder im Browser geprüft:** (die Funktionen 4.55 bis 4.93 hat der Entwickler im Browser geprüft; Rückmeldungen der Tester stehen aus). **Ab 4.94 nur gebaut und kompiliert, nicht an Hardware geprüft:** Löschen des ESP32-Dateisystems (4.97), feste IP in der minimalen Firmware (4.95), git-Installation durch die Installationsskripte und die Frage beim Übersetzen (4.98, nicht an einem frischen PC oder Mac getestet) Alles ab 4.11 (Einstellungen sichern/übernehmen, Ausgabe und Abbrechen beim ESP32-Build, Verbinden beim Start, inkrementelles Speichern und seine Tastenkombination, Kopfbereich (Abstand in Issue 22 nicht bestätigt), Erweiterungen mit `symlink://`, Name und Beschreibung aus `libraries.json`) wurde nur gebaut und kompiliert, nicht auf Hardware oder im Browser getestet. IRremote 4.x für InfraredMLX ist nicht mit einem Pico geprüft. Die Übersetzungen der neuen Texte (CSV) sind ungeprüft. Die Menüs ab 4.51 sind vom Entwickler im Browser getestet (4.74: Rückmeldung „Funktioniert“); Dunkler Modus und Dateinamen mit Datum (4.44 bis 4.50) ebenfalls.
+**Noch nicht an Hardware oder im Browser geprüft:** (die Funktionen 4.55 bis 4.93 hat der Entwickler im Browser geprüft; Rückmeldungen der Tester stehen aus). **Ab 4.94 nur gebaut und kompiliert, nicht an Hardware geprüft:** Löschen des ESP32-Dateisystems (4.97), feste IP in der minimalen Firmware (4.95), git-Installation durch die Installationsskripte und die Frage beim Übersetzen (4.98, nicht an einem frischen PC oder Mac getestet) Alles ab 4.11 (Einstellungen sichern/übernehmen, Ausgabe und Abbrechen beim ESP32-Build, Verbinden beim Start, inkrementelles Speichern und seine Tastenkombination, Kopfbereich (Abstand in Issue 22 nicht bestätigt), Erweiterungen mit `symlink://`, Name und Beschreibung aus `libraries.json`) wurde nur gebaut und kompiliert, nicht auf Hardware oder im Browser getestet. IRremote 4.x für InfraredMLX ist nicht mit einem Pico geprüft. Die Übersetzungen der neuen Texte (CSV) sind ungeprüft. Die Menüs ab 4.51 sind vom Entwickler im Browser getestet (4.74: Rückmeldung „Funktioniert“); Dunkler Modus und Dateinamen mit Datum (4.44 bis 4.50) ebenfalls. **Ab 4.99 nur gebaut und kompiliert, nicht an Hardware oder im Browser geprüft:** die Änderungen von 5.04 bis 5.12 (Parameterformular, House-Formular, Name, Symbole, Niederländisch, Hilfe-Adressen); die Installationsskripte nur mit `bash -n`. Bitte besonders Aussehen und Bedienung des Parameterformulars und das Entfernen der alten Desktop-Symbole prüfen.
 
-**Wiki:** Paket `webmobaledlib_Wiki_Gesamt_Stand_4.98.zip` (42 Dateien, an die neuen Menüs angepasst, Hinweise in `LIESMICH_Wiki_Gesamt.md`). Die Bilder (Menüband, Programm Einstellungen, ARDUINO-IDE Einstellungen, Optionen, Datei-Menü, Verbinden) zeigen noch den alten Stand und müssen neu aufgenommen werden.
+**Wiki:** Paket `webmobaledlib_Wiki_Gesamt_Stand_5.12.zip` (alle Seiten im Namensraum `mobaledlibstudio`, an die neuen Menüs angepasst, Hinweise in `LIESMICH_Wiki_Gesamt.md`). Die Bilder (Menüband, Programm Einstellungen, ARDUINO-IDE Einstellungen, Optionen, Datei-Menü, Verbinden) zeigen noch den alten Stand und müssen neu aufgenommen werden.
 
 **Geplant:** Quell-URL direkt in der `platformio.ini` (Issue 6) ist nicht vorgesehen (Cache und `symlink://` bleiben); Rückfragen dazu stehen im Issue.
 

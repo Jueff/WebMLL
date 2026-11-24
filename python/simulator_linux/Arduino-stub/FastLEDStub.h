@@ -192,6 +192,7 @@ public:
         return *this;
     }
 		virtual void clearLeds(int nLeds) {};
+    virtual void showColor(const struct CRGB &data, int nLeds, uint8_t brightness) {};  // Pull Request 63
 		virtual void showLeds(uint8_t brightness=255) = 0;
     virtual void show(const struct CRGB *data, int nLeds, uint8_t brightness) = 0;
 };

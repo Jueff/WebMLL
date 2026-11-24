@@ -1,5 +1,5 @@
-====== webMobaLedLib – Installation auf dem Mac ======
-//Seitenstand 1.04 (2026-11-24), gilt für webMobaLedLib 4.98//
+====== MobaLedLib Studio – Installation auf dem Mac ======
+//Seitenstand 1.07 (2026-11-24), gilt für Version 5.12//
 
 Diese Seite gilt für **macOS ab Version 10.13**, auch für Macs mit Apple-Chip (M1 und neuer). Für die Installation öffnest du **einmal das Terminal**. Die Schritte dafür stehen unten Schritt für Schritt.
 
@@ -40,7 +40,7 @@ Die Datei **webmobaledlib.zip** liegt danach im Ordner //Downloads// (rund 20 MB
 
 Danach liegt im Ordner **mobaledlib** ein Ordner **python**.
 
-{{:bilder:anleitungen:webmobaledlib:mac_01_ordner.png?500|Der Ordner mobaledlib mit dem Ordner python}}
+{{:bilder:anleitungen:mobaledlibstudio:mac_01_ordner.png?500|Der Ordner mobaledlib mit dem Ordner python}}
 
 ===== Schritt 4: Die Installation starten =====
 
@@ -54,42 +54,42 @@ Jetzt kommt das Terminal. Du tippst fast nichts, denn du ziehst die Datei einfac
 
 Es erscheint viel Text. Das ist normal: Das Programm richtet alles ein. Lass das Fenster offen. Es dauert **5 bis 15 Minuten**.
 
-{{:bilder:anleitungen:webmobaledlib:mac_02_terminal.png?500|Das Terminal mit dem Befehl bash und der hineingezogenen Datei}}
+{{:bilder:anleitungen:mobaledlibstudio:mac_02_terminal.png?500|Das Terminal mit dem Befehl bash und der hineingezogenen Datei}}
 
-**Git:** Für ESP32 und Raspberry Pi Pico braucht die webMobaLedLib das Hilfsprogramm //Git//. Das Skript installiert es mit (mit Homebrew, sonst öffnet macOS ein Fenster: klicke dort auf **Installieren**). Fehlt es später, fragt das Programm beim ersten Übersetzen für ESP32 oder Pico danach.
+**Git:** Für ESP32 und Raspberry Pi Pico braucht MobaLedLib Studio das Hilfsprogramm //Git//. Das Skript installiert es mit (mit Homebrew, sonst öffnet macOS ein Fenster: klicke dort auf **Installieren**). Fehlt es später, fragt das Programm beim ersten Übersetzen für ESP32 oder Pico danach.
 
-Am Ende steht im Fenster **„Fertig. Starten: Programm webMobaLedLib auf dem Schreibtisch doppelklicken“**. Auf dem **Schreibtisch** liegt jetzt das Programm **webMobaLedLib**.
+Am Ende steht im Fenster **„Fertig. Starten: Programm MobaLedLib Studio auf dem Schreibtisch doppelklicken“**. Auf dem **Schreibtisch** liegt jetzt das Programm **MobaLedLib Studio**.
 
 ===== Schritt 5: Das Programm starten =====
 
-  - Mache einen **Doppelklick** auf **webMobaLedLib** auf dem Schreibtisch.
+  - Mache einen **Doppelklick** auf **MobaLedLib Studio** auf dem Schreibtisch.
   - Beim **ersten Mal** meldet der Mac vielleicht, dass das Programm von einem nicht verifizierten Entwickler stammt. Klicke dann mit der **rechten Maustaste** auf das Symbol, wähle **Öffnen** und dann noch einmal **Öffnen**. Das ist nur beim ersten Mal nötig.
-  - Nach **20 bis 60 Sekunden** öffnet sich dein Browser mit der webMobaLedLib. Öffnet er sich nicht, tippe in die Adresszeile ''localhost:8080'' ein.
+  - Nach **20 bis 60 Sekunden** öffnet sich dein Browser mit MobaLedLib Studio. Öffnet er sich nicht, tippe in die Adresszeile ''localhost:8080'' ein.
 
 **Beenden:** Klicke oben rechts auf den Knopf **Beenden**.
 
 ===== Schritt 6: Die Lichtmaschine anschließen =====
 
-Stecke die Lichtmaschine mit dem USB-Kabel an den Mac. Wie es dann weitergeht, steht auf der Seite [[anleitungen:webmobaledlib:erstes_programm|Dein erstes Programm]]. (Hat dein Mac nur USB-C-Anschlüsse, brauchst du einen Adapter oder ein passendes Kabel.)
+Stecke die Lichtmaschine mit dem USB-Kabel an den Mac. Wie es dann weitergeht, steht auf der Seite [[anleitungen:mobaledlibstudio:erstes_programm|Dein erstes Programm]]. (Hat dein Mac nur USB-C-Anschlüsse, brauchst du einen Adapter oder ein passendes Kabel.)
 
 ===== Das Programm aktualisieren =====
 
-Im Programm: Menü **Hilfe → Update webMobaLedLib …**. Starte das Programm danach neu und lade die Seite im Browser neu.
+Im Programm: Menü **Hilfe → Update MobaLedLib Studio …**. Starte das Programm danach neu und lade die Seite im Browser neu.
 
-Mehr dazu steht auf der Seite [[anleitungen:webmobaledlib:aktualisieren|Das Programm aktualisieren]].
+Mehr dazu steht auf der Seite [[anleitungen:mobaledlibstudio:aktualisieren|Das Programm aktualisieren]].
 
 ===== Wenn etwas nicht klappt =====
 
 ^ Was passiert ^ Was hilft ^
-| Der Mac meldet, das Programm stamme von einem nicht verifizierten Entwickler | Rechtsklick auf **webMobaLedLib** → **Öffnen** → **Öffnen** (nur beim ersten Mal). |
+| Der Mac meldet, das Programm stamme von einem nicht verifizierten Entwickler | Rechtsklick auf **MobaLedLib Studio** → **Öffnen** → **Öffnen** (nur beim ersten Mal). |
 | Im Terminal steht „Python 3.10 oder neuer wurde nicht gefunden“ | Schritt 1 ausführen (Homebrew-Frage mit **j** beantworten oder Python von python.org installieren) und Schritt 4 noch einmal. |
 | Beim Update steht „CERTIFICATE_VERIFY_FAILED“ | Mache im Ordner **Programme → Python 3.x** einen Doppelklick auf **Install Certificates.command**. |
 | Das Programm macht nichts | Ziehe im Terminal die Datei **start_mac.command** (Ordner //install//) hinter ''bash '' und drücke Enter. Dann bleiben die Meldungen stehen. |
 | Der Browser öffnet sich nicht | Tippe ''localhost:8080'' in die Adresszeile ein. |
 | Der Mac erkennt die Lichtmaschine nicht | Probiere ein anderes USB-Kabel (ein reines Ladekabel überträgt keine Daten). |
 
-Mehr zu Problemen allgemein: [[anleitungen:webmobaledlib:fehlersuche|Fehlersuche]].
+Mehr zu Problemen allgemein: [[anleitungen:mobaledlibstudio:fehlersuche|Fehlersuche]].
 
 ===== Das Programm entfernen =====
 
-Lösche das Programm **webMobaLedLib** auf dem Schreibtisch und den Ordner **mobaledlib**. Deine Einstellungen und Tabellen liegen getrennt im Datenordner und bleiben erhalten.
+Lösche das Programm **MobaLedLib Studio** auf dem Schreibtisch und den Ordner **mobaledlib**. Deine Einstellungen und Tabellen liegen getrennt im Datenordner und bleiben erhalten.

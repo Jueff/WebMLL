@@ -1,4 +1,10 @@
 // MLLDynConfig.h - Konfiguration getrennt vom Programm (nur ESP32 und Pico)
+// Author: Harold Linke, Jürgen Winkler
+// Version 1.05 (2026-11-23): Identify (Juergen Winkler): Dateiformat 7: jeder Eintrag der Controller-Tabelle enthaelt zusaetzlich den LED Kanal (MllControllerConfig_T.LEDChannel),
+//                            die Status LEDs des ESP32 (MLLIdentify.h) werden ueber LED Kanal 7 gefunden. Alle Zeilen mit '~' laufen ueber die gemeinsame Empfangsroutine
+//                            MllAdminReceive() in MLLAdminCommunication.h (ersetzt MllCfgReceive), Fehler werden als '~MLLERR <Grund>' gemeldet (MllCommunicationError ersetzt MllCfgErr).
+//                            Controller-Tabelle und MLL_MAX_LED_CH stehen vor dem #include von MLLAdminCommunication.h (MLLIdentify.h benutzt sie). port.flush() vor dem Neustart
+//                            auch beim ESP32 und nach '~MLLCFG OK' auf ABORT. Zeilen mit '// v1.05'.
 // Version 1.04 (2026-11-22): ESP32-Neustart nach Konfiguration aus Hauptschleife statt MLLTask auf Core 0.
 // Version 1.03 (2026-11-22): Konfigurationsprotokoll ueber USB oder authentifizierten WLAN-Stream.
 // Version 1.02 (2026-11-19): Dateiformat 5 mit Abschnitt 'Parameter': LED Anzahl, LEDs je LED Kanal, ControllerCount und Controller-Tabelle (Pin, erste LED, LED-Anzahl je FastLED-Controller),
@@ -13,7 +19,8 @@
 //
 // Dateiformat (little endian):
 //   0  "MLLC"
-//   4  Version (5)                                                                                              // v1.02
+//   4  Version (5)                                                                                              // v1.02  // v1.05 (entfallen)
+//   4  Version (7)                                                                                              // v1.02  // v1.05
 //   5  reserviert
 //   6  Groesse von Config_RAM (u16)
 //   8  Laenge Config (u32)
@@ -27,7 +34,8 @@
 //  52  Nutzdaten: Config, Ext_Addr, Store_Values, LED2Var_Tab, Startwerte, Parameter                           // v1.01
 //
 // Parameter: u16 LED Anzahl, u16 Start der Send-Inputs, u16 Anzahl der Send-Inputs, u8 Zahl der LED Kanaele N, N mal u16 LEDs je Kanal,                   // v1.02
-//            u8 ControllerCount, ControllerCount mal { u8 Pin, u16 LEDOffset, u16 LEDCount },                                                              // v1.02
+//            u8 ControllerCount, ControllerCount mal { u8 Pin, u16 LEDOffset, u16 LEDCount },                                                              // v1.02  // v1.05 (entfallen)
+//            u8 ControllerCount, ControllerCount mal { u8 Pin, u8 LEDChannel, u16 LEDOffset, u16 LEDCount },                                              // v1.05
 //            LEDS_PER_CHANNEL (Text, mit 0 abgeschlossen), START_MSG (Text, mit 0 abgeschlossen)                                                          // v1.02
 //
 // Serielles Protokoll (Zeilen, die mit '~' beginnen; Antworten ebenfalls):
@@ -36,7 +44,8 @@
 //   ~MLLCFG DATA <Position> <Hex>     -> ~MLLCFG ACK <neue Position>
 //   ~MLLCFG END                       -> ~MLLCFG OK  (danach Neustart)
 //   ~MLLCFG ABORT                     -> ~MLLCFG OK
-//   Fehler:                              ~MLLCFG ERR <Grund>
+//   Fehler:                              ~MLLCFG ERR <Grund>  // v1.05 (entfallen)
+//   Fehler:                              ~MLLERR <Grund>      (MLLAdminCommunication.h)  // v1.05
 
 #ifndef __MLL_DYN_CONFIG_H__
 #define __MLL_DYN_CONFIG_H__
@@ -44,6 +53,26 @@
 #if defined(MLL_DYNAMIC_CONFIG)
 
 #include <LittleFS.h>
+
+// MllControllerConfig_T und Variablen MÜSSEN vor MLLAdminCommunication.h stehen,  // v1.05
+// da MLLIdentify.h diese verwendet und über MLLAdminCommunication.h inkludiert wird  // v1.05
+#define MLL_MAX_LED_CH       16                                                                                  // v1.01 (headless_dyn_config.MAX_LED_CHANNELS)  // v1.05
+
+typedef struct                                                                                                   // v1.02  // v1.05
+    {  // v1.05
+    uint8_t  Pin;                                                  // Arduino Pin (muss in MLL_LED_PINS stehen)  // v1.05
+    uint8_t  LEDChannel;                                           // LED Kanal des Controllers (ESP32: Kanal 7 = Status LEDs der Hauptplatine)  // v1.05
+    uint16_t LEDOffset;                                            // erste LED in leds[]  // v1.05
+    uint16_t LEDCount;                                             // Zahl der LEDs an diesem Pin  // v1.05
+    } MllControllerConfig_T;  // v1.05
+
+static MllControllerConfig_T mllControllerConfig[MLL_MAX_LED_CH];   // ein Eintrag je FastLED-Controller (SETUP_FASTLED)                // v1.02  // v1.05
+static uint8_t     mllControllerCount = 0;                          // Zahl der benutzten Eintraege in mllControllerConfig[]           // v1.02  // v1.05
+
+// Forward declaration for MllCfgProcessLine (used in MLLAdminCommunication.h)  // v1.05
+static void MllCfgProcessLine(Stream &port, char *Line);  // v1.05
+
+#include <MLLAdminCommunication.h>  // v1.05
 
 #ifndef MLL_FIRMWARE_SIG
   #define MLL_FIRMWARE_SIG "unknown"
@@ -55,13 +84,14 @@
 // #define MLL_CFG_HEADER_SIZE  48                                                                                  // v1.01 (entfallen)
 // #define MLL_CFG_VERSION      2                                                                                   // v1.01 (entfallen)
 // #define MLL_CFG_PARTS        5                                                                                   // v1.01 (entfallen)
-#define MLL_CFG_VERSION      5                                                                                   // v1.02
+// #define MLL_CFG_VERSION      5                                                                                   // v1.02  // v1.05 (entfallen)
+#define MLL_CFG_VERSION      7                                                                                   // v1.05
 #define MLL_CFG_PARTS        6                                                                                   // v1.01
 #define MLL_CFG_CRC_OFS      (8 + 4 * MLL_CFG_PARTS)                                                             // v1.01
 #define MLL_CFG_SIG_OFS      (MLL_CFG_CRC_OFS + 4)                                                               // v1.01
 #define MLL_CFG_HEADER_SIZE  (MLL_CFG_SIG_OFS + MLL_CFG_SIG_LEN)                                                 // v1.01
 #define MLL_CFG_LINE_MAX     260
-#define MLL_MAX_LED_CH       16                                                                                  // v1.01 (headless_dyn_config.MAX_LED_CHANNELS)
+// #define MLL_MAX_LED_CH       16                                                                                  // v1.01 (headless_dyn_config.MAX_LED_CHANNELS)  // v1.05 (entfallen)
 #define MLL_MAX_SEND_INPUTS  1778                                                                                // v1.01 (Laenge des Sendepuffers: (n+6)/7+1 muss in ein Byte passen)
 
 typedef struct
@@ -83,15 +113,14 @@ static const uint8_t  mllEmptyConfig[] = { EndCfg };
 static uint16_t    mllChCnt[MLL_MAX_LED_CH];                       // LEDs je LED Kanal (DMX_LED_OFFSET/DMX_CHANNEL_COUNT)
 static uint16_t    mllChOff[MLL_MAX_LED_CH];                       // erste LED des Kanals (Summe der LEDs der Kanaele davor)
 
-typedef struct                                                                                                   // v1.02
-    {
-    uint8_t  Pin;                                                  // Arduino Pin (muss in MLL_LED_PINS stehen)
-    uint16_t LEDOffset;                                            // erste LED in leds[]
-    uint16_t LEDCount;                                             // Zahl der LEDs an diesem Pin
-    } MllControllerConfig_T;
-
-static MllControllerConfig_T mllControllerConfig[MLL_MAX_LED_CH];   // ein Eintrag je FastLED-Controller (SETUP_FASTLED)                // v1.02
-static uint8_t     mllControllerCount = 0;                          // Zahl der benutzten Eintraege in mllControllerConfig[]           // v1.02
+// typedef struct                                                                                                   // v1.02  // v1.05 (entfallen)
+    // {  // v1.05 (entfallen)
+    // uint8_t  Pin;                                                  // Arduino Pin (muss in MLL_LED_PINS stehen)  // v1.05 (entfallen)
+    // uint16_t LEDOffset;                                            // erste LED in leds[]  // v1.05 (entfallen)
+    // uint16_t LEDCount;                                             // Zahl der LEDs an diesem Pin  // v1.05 (entfallen)
+    // } MllControllerConfig_T;  // v1.05 (entfallen)
+// static MllControllerConfig_T mllControllerConfig[MLL_MAX_LED_CH];   // ein Eintrag je FastLED-Controller (SETUP_FASTLED)                // v1.02  // v1.05 (entfallen)
+// static uint8_t     mllControllerCount = 0;                          // Zahl der benutzten Eintraege in mllControllerConfig[]           // v1.02  // v1.05 (entfallen)
 static uint16_t    mllStartSend = 0, mllTotalSend = 0;             // Start und Anzahl der Send-Inputs (ENABLE_SEND_INPUT)
 static const char *mllLedsPerChannelTxt = ",0";
 static const char *mllStartMsgTxt = "LEDs_AutoProg: no configuration";
@@ -190,15 +219,20 @@ static bool MllParseParams(const uint8_t *p, uint32_t len)                      
   if (Sum > 0xFFFF) return false;
   uint16_t Leds = Num < Sum ? (uint16_t)Sum : Num;
   uint8_t ControllerCount = p[Pos++];
-  if (ControllerCount > MLL_MAX_LED_CH || len < Pos + 5UL * ControllerCount + 2) return false;
+  // if (ControllerCount > MLL_MAX_LED_CH || len < Pos + 5UL * ControllerCount + 2) return false;  // v1.05 (entfallen)
+  if (ControllerCount > MLL_MAX_LED_CH || len < Pos + 6UL * ControllerCount + 2) return false;  // v1.05
   MllControllerConfig_T Ctrl[MLL_MAX_LED_CH];
   memset(Ctrl, 0, sizeof(Ctrl));
   for (uint8_t i = 0; i < ControllerCount; i++)
      {
      Ctrl[i].Pin = p[Pos];
-     memcpy(&Ctrl[i].LEDOffset, p + Pos + 1, 2);
-     memcpy(&Ctrl[i].LEDCount,  p + Pos + 3, 2);
-     Pos += 5;
+     // memcpy(&Ctrl[i].LEDOffset, p + Pos + 1, 2);  // v1.05 (entfallen)
+     // memcpy(&Ctrl[i].LEDCount,  p + Pos + 3, 2);  // v1.05 (entfallen)
+     // Pos += 5;  // v1.05 (entfallen)
+     Ctrl[i].LEDChannel = p[Pos + 1];                                                                           // v1.05
+     memcpy(&Ctrl[i].LEDOffset, p + Pos + 2, 2);  // v1.05
+     memcpy(&Ctrl[i].LEDCount,  p + Pos + 4, 2);  // v1.05
+     Pos += 6;                                                                                                  // v1.05
      if ((uint32_t)Ctrl[i].LEDOffset + Ctrl[i].LEDCount > Leds) return false;
      }
   const char *Txt[2];
@@ -313,17 +347,16 @@ static void MllRxAbort()
   if (MllFsBegin()) LittleFS.remove(MLL_CFG_TMP);
 }
 
-//----------------------------------------
+//----------------------------------------  // v1.05 (entfallen)
 // static void MllCfgErr(const __FlashStringHelper *Reason) // v1.03 (entfallen)
-static void MllCfgErr(Stream &port, const __FlashStringHelper *Reason) // v1.03
-//----------------------------------------
-{
+// static void MllCfgErr(Stream &port, const __FlashStringHelper *Reason) // v1.03  // v1.05 (entfallen)
+//----------------------------------------  // v1.05 (entfallen)
+// {  // v1.05 (entfallen)
 //   Serial.print(F("~MLLCFG ERR ")); // v1.03 (entfallen)
 //   Serial.println(Reason); // v1.03 (entfallen)
-  port.print(F("~MLLCFG ERR ")); // v1.03
-  port.println(Reason); // v1.03
-}
-
+  // port.print(F("~MLLCFG ERR ")); // v1.03  // v1.05 (entfallen)
+  // port.println(Reason); // v1.03  // v1.05 (entfallen)
+// }  // v1.05 (entfallen)
 //---------------------------------------
 static int MllHexVal(char c)
 //---------------------------------------
@@ -348,12 +381,13 @@ static void MllCfgPollRestart() // v1.04
 
 static void MllRestart(Stream &port) // v1.04
 {
+  port.flush();  // Puffer leeren vor verzögertem Restart  // v1.05
 #ifdef ESP32
   // ESP.restart(); // v1.04 (entfallen: Empfang laeuft auf Core 0, Neustart in loop auf Core 1)
   mllCfgRestartAt = millis() + 750; // v1.04: Zeit fuer TCP-Abschlussantwort
   mllCfgRestartPending = true; // v1.04: nach dem Termin setzen
 #else
-  port.flush();
+  // port.flush();  // v1.05 (entfallen)
   delay(300);
   rp2040.restart();
 #endif
@@ -380,12 +414,16 @@ static void MllCfgProcessLine(Stream &port, char *Line) // v1.03
 //      if (Size < MLL_CFG_HEADER_SIZE)                  { MllCfgErr(F("size"));  return; } // v1.03 (entfallen)
 //      if (!MllFsBegin())                               { MllCfgErr(F("fs"));    return; } // v1.03 (entfallen)
 //      if (Size + 4096 > MllFsFreeBytes())              { MllCfgErr(F("full"));  return; } // v1.03 (entfallen)
-     if (Size < MLL_CFG_HEADER_SIZE)                  { MllCfgErr(port, F("size"));  return; } // v1.03
-     if (!MllFsBegin())                               { MllCfgErr(port, F("fs"));    return; } // v1.03
-     if (Size + 4096 > MllFsFreeBytes())              { MllCfgErr(port, F("full"));  return; } // v1.03
+     // if (Size < MLL_CFG_HEADER_SIZE)                  { MllCfgErr(port, F("size"));  return; } // v1.03  // v1.05 (entfallen)
+     // if (!MllFsBegin())                               { MllCfgErr(port, F("fs"));    return; } // v1.03  // v1.05 (entfallen)
+     // if (Size + 4096 > MllFsFreeBytes())              { MllCfgErr(port, F("full"));  return; } // v1.03  // v1.05 (entfallen)
+     if (Size < MLL_CFG_HEADER_SIZE)                  { MllCommunicationError(port, F("size"));  return; }  // v1.05
+     if (!MllFsBegin())                               { MllCommunicationError(port, F("fs"));    return; }  // v1.05
+     if (Size + 4096 > MllFsFreeBytes())              { MllCommunicationError(port, F("full"));  return; }  // v1.05
      mllRxFile = LittleFS.open(MLL_CFG_TMP, "w");
 //      if (!mllRxFile)                                  { MllCfgErr(F("open"));  return; } // v1.03 (entfallen)
-     if (!mllRxFile)                                  { MllCfgErr(port, F("open"));  return; } // v1.03
+     // if (!mllRxFile)                                  { MllCfgErr(port, F("open"));  return; } // v1.03  // v1.05 (entfallen)
+     if (!mllRxFile)                                  { MllCommunicationError(port, F("open"));  return; }  // v1.05
      mllRxActive = true;
      mllRxSize = Size; mllRxCrcExp = Crc; mllRxPos = 0; mllRxCrc = 0;
 //      Serial.println(F("~MLLCFG READY")); // v1.03 (entfallen)
@@ -394,21 +432,25 @@ static void MllCfgProcessLine(Stream &port, char *Line) // v1.03
   else if (strncmp(Line, "DATA ", 5) == 0)
      {
 //      if (!mllRxActive)                                { MllCfgErr(F("nobegin")); return; } // v1.03 (entfallen)
-     if (!mllRxActive)                                { MllCfgErr(port, F("nobegin")); return; } // v1.03
+     // if (!mllRxActive)                                { MllCfgErr(port, F("nobegin")); return; } // v1.03  // v1.05 (entfallen)
+     if (!mllRxActive)                                { MllCommunicationError(port, F("nobegin")); return; }  // v1.05
      char *End;
      uint32_t Pos = strtoul(Line + 5, &End, 10);
 //      if (Pos != mllRxPos)                             { MllCfgErr(F("pos"));   return; } // v1.03 (entfallen)
-     if (Pos != mllRxPos)                             { MllCfgErr(port, F("pos"));   return; } // v1.03
+     // if (Pos != mllRxPos)                             { MllCfgErr(port, F("pos"));   return; } // v1.03  // v1.05 (entfallen)
+     if (Pos != mllRxPos)                             { MllCommunicationError(port, F("pos"));   return; }  // v1.05
      while (*End == ' ') End++;
      size_t Len = strlen(End);
      uint8_t Buf[MLL_CFG_LINE_MAX / 2];
 //      if ((Len & 1) || Len / 2 > sizeof(Buf) || mllRxPos + Len / 2 > mllRxSize) { MllCfgErr(F("len")); return; } // v1.03 (entfallen)
-     if ((Len & 1) || Len / 2 > sizeof(Buf) || mllRxPos + Len / 2 > mllRxSize) { MllCfgErr(port, F("len")); return; } // v1.03
+     // if ((Len & 1) || Len / 2 > sizeof(Buf) || mllRxPos + Len / 2 > mllRxSize) { MllCfgErr(port, F("len")); return; } // v1.03  // v1.05 (entfallen)
+     if ((Len & 1) || Len / 2 > sizeof(Buf) || mllRxPos + Len / 2 > mllRxSize) { MllCommunicationError(port, F("len")); return; }  // v1.05
      for (size_t i = 0; i < Len; i += 2)
         {
         int h = MllHexVal(End[i]), l = MllHexVal(End[i + 1]);
 //         if (h < 0 || l < 0)                           { MllCfgErr(F("hex"));   return; } // v1.03 (entfallen)
-        if (h < 0 || l < 0)                           { MllCfgErr(port, F("hex"));   return; } // v1.03
+        // if (h < 0 || l < 0)                           { MllCfgErr(port, F("hex"));   return; } // v1.03  // v1.05 (entfallen)
+        if (h < 0 || l < 0)                           { MllCommunicationError(port, F("hex"));   return; }  // v1.05
         Buf[i / 2] = (uint8_t)(h << 4 | l);
         }
      size_t n = Len / 2;
@@ -416,7 +458,8 @@ static void MllCfgProcessLine(Stream &port, char *Line) // v1.03
         {
         MllRxAbort();
 //         MllCfgErr(F("write")); // v1.03 (entfallen)
-        MllCfgErr(port, F("write")); // v1.03
+        // MllCfgErr(port, F("write")); // v1.03  // v1.05 (entfallen)
+        MllCommunicationError(port, F("write"));  // v1.05
         return;
         }
      for (size_t i = 0; i < n && mllRxPos + i < MLL_CFG_HEADER_SIZE; i++) mllRxHead[mllRxPos + i] = Buf[i];
@@ -430,7 +473,8 @@ static void MllCfgProcessLine(Stream &port, char *Line) // v1.03
   else if (strcmp(Line, "END") == 0)
      {
 //      if (!mllRxActive)                                { MllCfgErr(F("nobegin")); return; } // v1.03 (entfallen)
-     if (!mllRxActive)                                { MllCfgErr(port, F("nobegin")); return; } // v1.03
+     // if (!mllRxActive)                                { MllCfgErr(port, F("nobegin")); return; } // v1.03  // v1.05 (entfallen)
+     if (!mllRxActive)                                { MllCommunicationError(port, F("nobegin")); return; }  // v1.05
      mllRxFile.close();
      mllRxActive = false;
      uint32_t Len[MLL_CFG_PARTS], Crc;
@@ -440,14 +484,16 @@ static void MllCfgProcessLine(Stream &port, char *Line) // v1.03
         {
         MllRxAbort();
 //         MllCfgErr(F("check")); // v1.03 (entfallen)
-        MllCfgErr(port, F("check")); // v1.03
+        // MllCfgErr(port, F("check")); // v1.03  // v1.05 (entfallen)
+        MllCommunicationError(port, F("invalid configuration data"));  // v1.05
         return;
         }
      LittleFS.remove(MLL_CFG_PATH);
 //      if (!LittleFS.rename(MLL_CFG_TMP, MLL_CFG_PATH))   { LittleFS.remove(MLL_CFG_TMP); MllCfgErr(F("rename")); return; } // v1.03 (entfallen)
 //      Serial.println(F("~MLLCFG OK")); // v1.03 (entfallen)
 //      MllRestart(); // v1.03 (entfallen)
-     if (!LittleFS.rename(MLL_CFG_TMP, MLL_CFG_PATH))   { LittleFS.remove(MLL_CFG_TMP); MllCfgErr(port, F("rename")); return; } // v1.03
+     // if (!LittleFS.rename(MLL_CFG_TMP, MLL_CFG_PATH))   { LittleFS.remove(MLL_CFG_TMP); MllCfgErr(port, F("rename")); return; } // v1.03  // v1.05 (entfallen)
+     if (!LittleFS.rename(MLL_CFG_TMP, MLL_CFG_PATH))   { LittleFS.remove(MLL_CFG_TMP); MllCommunicationError(port, F("rename")); return; }  // v1.05
      port.println(F("~MLLCFG OK")); // v1.03
      MllRestart(port); // v1.03
      }
@@ -456,44 +502,46 @@ static void MllCfgProcessLine(Stream &port, char *Line) // v1.03
      MllRxAbort();
 //      Serial.println(F("~MLLCFG OK")); // v1.03 (entfallen)
      port.println(F("~MLLCFG OK")); // v1.03
+     port.flush();  // v1.05
      }
 //   else MllCfgErr(F("cmd")); // v1.03 (entfallen)
-  else MllCfgErr(port, F("cmd")); // v1.03
+  // else MllCfgErr(port, F("cmd")); // v1.03  // v1.05 (entfallen)
+  else MllCommunicationError(port, F("MLLCFG"));  // v1.05
 }
 
-//-----------------------------------
+//-----------------------------------  // v1.05 (entfallen)
 // static bool MllCfgReceive(char c) // v1.03 (entfallen)
-static bool MllCfgReceive(char c, Stream &port) // v1.03
-//-----------------------------------
-// Wird fuer jedes empfangene Zeichen aufgerufen. Zeilen, die mit '~' beginnen, werden hier vollstaendig gelesen
-// und ausgefuehrt (dauert bei 115200 Baud etwa 20 ms). Gibt true zurueck, wenn das Zeichen verbraucht wurde.
-{
-  if (c != '~') return false;
-  static char Line[MLL_CFG_LINE_MAX];
-  size_t n = 0;
-  bool Over = false, Complete = false;
-  unsigned long Deadline = millis() + 1000;
-  while (millis() < Deadline)
-     {
+// static bool MllCfgReceive(char c, Stream &port) // v1.03  // v1.05 (entfallen)
+//-----------------------------------  // v1.05 (entfallen)
+// Wird fuer jedes empfangene Zeichen aufgerufen. Zeilen, die mit '~' beginnen, werden hier vollstaendig gelesen  // v1.05 (entfallen)
+// und ausgefuehrt (dauert bei 115200 Baud etwa 20 ms). Gibt true zurueck, wenn das Zeichen verbraucht wurde.  // v1.05 (entfallen)
+// {  // v1.05 (entfallen)
+  // if (c != '~') return false;  // v1.05 (entfallen)
+  // static char Line[MLL_CFG_LINE_MAX];  // v1.05 (entfallen)
+  // size_t n = 0;  // v1.05 (entfallen)
+  // bool Over = false, Complete = false;  // v1.05 (entfallen)
+  // unsigned long Deadline = millis() + 1000;  // v1.05 (entfallen)
+  // while (millis() < Deadline)  // v1.05 (entfallen)
+     // {  // v1.05 (entfallen)
 //      if (!Serial.available()) continue; // v1.03 (entfallen)
 //      char x = Serial.read(); // v1.03 (entfallen)
-     if (!port.available()) { delay(1); continue; }  // v1.03: WLAN und Watchdog bedienen
-     char x = port.read(); // v1.03
-     Deadline = millis() + 1000;
-     if (x == '\n') { Complete = true; break; }
-     if (x == '\r') continue;
-     if (n < sizeof(Line) - 1) Line[n++] = x;
-     else Over = true;
-     }
-  Line[n] = 0;
+     // if (!port.available()) { delay(1); continue; }  // v1.03: WLAN und Watchdog bedienen  // v1.05 (entfallen)
+     // char x = port.read(); // v1.03  // v1.05 (entfallen)
+     // Deadline = millis() + 1000;  // v1.05 (entfallen)
+     // if (x == '\n') { Complete = true; break; }  // v1.05 (entfallen)
+     // if (x == '\r') continue;  // v1.05 (entfallen)
+     // if (n < sizeof(Line) - 1) Line[n++] = x;  // v1.05 (entfallen)
+     // else Over = true;  // v1.05 (entfallen)
+     // }  // v1.05 (entfallen)
+  // Line[n] = 0;  // v1.05 (entfallen)
 //   if (!Complete || Over)                      MllCfgErr(F("line")); // v1.03 (entfallen)
 //   else if (strncmp(Line, "MLLCFG ", 7) == 0)  MllCfgProcessLine(Line + 7); // v1.03 (entfallen)
 //   else                                        MllCfgErr(F("cmd")); // v1.03 (entfallen)
-  if (!Complete || Over)                      MllCfgErr(port, F("line")); // v1.03
-  else if (strncmp(Line, "MLLCFG ", 7) == 0)  MllCfgProcessLine(port, Line + 7); // v1.03
-  else                                        MllCfgErr(port, F("cmd")); // v1.03
-  return true;
-}
+  // if (!Complete || Over)                      MllCfgErr(port, F("line")); // v1.03  // v1.05 (entfallen)
+  // else if (strncmp(Line, "MLLCFG ", 7) == 0)  MllCfgProcessLine(port, Line + 7); // v1.03  // v1.05 (entfallen)
+  // else                                        MllCfgErr(port, F("cmd")); // v1.03  // v1.05 (entfallen)
+  // return true;  // v1.05 (entfallen)
+// }  // v1.05 (entfallen)
 
 #endif // MLL_DYNAMIC_CONFIG
 #endif // __MLL_DYN_CONFIG_H__

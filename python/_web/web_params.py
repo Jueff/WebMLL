@@ -1,9 +1,9 @@
-# Datei-Version: 1.17 (2026-11-21) - web_params.py
+# Datei-Version: 1.18 (2026-11-24) - web_params.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_params.py
 # Path:           _web/web_params.py
-# Version:        1.17
-# Last Update:    2026-11-21
+# Version:        1.18
+# Last Update:    2026-11-24
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
@@ -19,6 +19,7 @@
 #   1.15  2026-11-21  Version 4.51: jede Gruppe der Einstellungsseite traegt data-group (das Menue Einstellungen springt zur Gruppe)
 #   1.16  2026-11-21  Version 4.52: Seite Tabelle faerben: Titel Tabelle faerben, erste Zeile der Beschreibung entfaellt (TITLE_OVERRIDES, DESCRIPTION_OVERRIDES); build_settings_page(embedded=True) baut den Inhalt ohne Karte und Knoepfe fuer ein Fenster (ARDUINO-IDE Einstellungen)
 #   1.17  2026-11-21  Version 4.56: Einstellungsgruppe einzeln als Fenster (ParamPanel.only_group, build_settings_page(group=...)); eingebettete Seite mit Gruppen und Zusatzkarten (slots)
+#   1.18  2026-11-24  Hinweise (Tooltips) der Einstellungsfelder werden ausdruecklich uebersetzt (niederlaendischer Tester: Tooltips der Einstellungsfenster blieben deutsch). Zeilen mit '# v5.11'
 # ----------------------------------------------------------------------------------------------
 """Web-Version von create_macroparam_frame/create_macroparam_content (pyMobaLedLib.py) fuer die Einstellungsseiten.
 
@@ -177,7 +178,8 @@ class ParamPanel:
         d = self.pdef(key)
         ptype = d.get("Type", "")
         title = self._title(d, key)
-        tooltip = d.get("Hint", "")
+        # tooltip = d.get("Hint", "")  # v5.11 (entfallen)
+        tooltip = tr(d.get("Hint", ""))  # v5.11
         hidden = self._hidden(d, ptype, hidecondition)
         if d.get("ParamDescription") and not hidden:
             ui.label(d["ParamDescription"]).style("white-space: pre-line; font-size: 12px").classes("w-full text-grey-8")
@@ -283,7 +285,8 @@ class ParamPanel:
                             ui.label(self._title(pd, pkey))
                         el = self._make_input(pkey, ptype, pd, self._title(pd, pkey), with_label=False)
                         if pd.get("Hint"):
-                            el.tooltip(pd["Hint"])
+                            # el.tooltip(pd["Hint"])  # v5.11 (entfallen)
+                            el.tooltip(tr(pd["Hint"]))  # v5.11
                     self.items.append(self._item(pkey, ptype, pd, el, path))
         ui.separator()
 
@@ -309,7 +312,8 @@ class ParamPanel:
                     if ptype in ("Combo", "ChooseColor", "String", "BigEntry"):
                         el.classes("w-full")
                     if pd.get("Hint"):
-                        el.tooltip(pd["Hint"])
+                        # el.tooltip(pd["Hint"])  # v5.11 (entfallen)
+                        el.tooltip(tr(pd["Hint"]))  # v5.11
                     self.items.append(self._item(pkey, ptype, pd, el, (key, str(i))))
 
     def _press(self, func):

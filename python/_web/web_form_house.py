@@ -1,12 +1,13 @@
-# Datei-Version: 1.07 (2026-11-19) - web_form_house.py
+# Datei-Version: 1.08 (2026-11-19) - web_form_house.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_form_house.py
 # Path:           _web/web_form_house.py
-# Version:        1.07
+# Version:        1.08
 # Last Update:    2026-11-19
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
+#   1.08  2026-11-24  Zahlenfelder wie im Parameterformular der Makros: Regler mit Zahlenfeld, minus/plus und Mausrad bei Min./Max. Anzahl und Zeiten, LED Kanal als Zahlenfeld mit minus/plus und Mausrad (Klasse _NumRow). Zeilen mit '# v1.08'
 #   1.07  2026-11-19  Tooltips wie im Excel-Programm: an den Knoepfen der Raumeffekte (House, GasLights) und an den Feldern des Dialogs (Texte in web_house_tips.py, uebersetzt ueber die Tabelle Languages)
 #   1.06  2026-11-10  Der Schalter Einfuegen/Ersetzen (ui.toggle) wird uebersetzt: 'Einfuegen' mit dem Kontext Raum (nicht 'aus der Zwischenablage einfuegen'), der Wert bleibt der deutsche Text (fruehere Versionen ohne Eintrag)
 # ----------------------------------------------------------------------------------------------
@@ -258,6 +259,73 @@ def _tip(ui, element, text):  # v1.07
     return element
 
 
+def parse_int_safe(v, default=0):  # v1.08
+    try:  # v1.08
+        return int(str(v).strip())  # v1.08
+    except ValueError:  # v1.08
+        return default  # v1.08
+
+
+class _NumRow:  # v1.08
+    """Zahleneingabe wie im Parameterformular der Makros: Regler (wenn slider=True) und Zahlenfeld mit minus/plus und Mausrad.
+    Schnittstelle wie ein Eingabefeld (value als Text, set_value, set_enabled, on_value_change). Ist der Startwert keine Zahl, bleibt es ein Textfeld."""  # v1.08
+    def __init__(self, ui, label, value, lo, hi, slider=True, width_label="w-64"):  # v1.08
+        from _web.web_form_other import _stepper, _wheel, parse_int  # v1.08
+        self.lo, self.hi = lo, max(hi, lo)  # v1.08
+        self._plain = parse_int(value) is None  # v1.08
+        self.slider = None  # v1.08
+        self._busy = False  # v1.08
+        if self._plain:  # v1.08
+            self.row = self.num = ui.input(label=label, value=str(value)).props("outlined dense")  # v1.08
+            return  # v1.08
+        v = self._clamp(parse_int(value))  # v1.08
+        with ui.row().classes("w-full items-center no-wrap gap-3") as self.row:  # v1.08
+            if slider:  # v1.08
+                ui.label(label).classes(width_label + " shrink-0")  # v1.08
+                self.slider = ui.slider(min=self.lo, max=self.hi, step=1, value=v).props("label").classes("grow")  # v1.08
+                self.num = _stepper(ui, v, self.lo, self.hi)  # v1.08
+                _wheel(ui, self.slider, self.num, self.lo, self.hi, 1)  # v1.08
+            else:  # v1.08
+                self.num = _stepper(ui, v, self.lo, self.hi, 1, "w-48")  # v1.08
+                self.num.props('label="%s"' % label.replace('"', "'"))  # v1.08
+        if self.slider is not None:  # v1.08
+            self.slider.on_value_change(self._from_slider)  # v1.08
+            self.num.on_value_change(self._from_num)  # v1.08
+
+    def _clamp(self, v):  # v1.08
+        try:  # v1.08
+            return min(max(int(v), self.lo), self.hi)  # v1.08
+        except (TypeError, ValueError):  # v1.08
+            return self.lo  # v1.08
+
+    def _from_slider(self, e):  # v1.08
+        if not self._busy:  # v1.08
+            self._busy = True  # v1.08
+            self.num.set_value(self._clamp(e.value))  # v1.08
+            self._busy = False  # v1.08
+
+    def _from_num(self, e):  # v1.08
+        if not self._busy and e.value is not None:  # v1.08
+            self._busy = True  # v1.08
+            self.slider.set_value(self._clamp(e.value))  # v1.08
+            self._busy = False  # v1.08
+
+    @property
+    def value(self):  # v1.08
+        return self.num.value if self._plain else str(self._clamp(self.num.value))  # v1.08
+
+    def set_value(self, v):  # v1.08
+        self.num.set_value(str(v) if self._plain else self._clamp(v))  # v1.08
+
+    def set_enabled(self, on):  # v1.08
+        self.num.set_enabled(on)  # v1.08
+        if self.slider is not None:  # v1.08
+            self.slider.set_enabled(on)  # v1.08
+
+    def on_value_change(self, cb):  # v1.08
+        self.num.on_value_change(cb)  # v1.08
+
+
 async def _house_async(spec: dict, st: dict):
     from nicegui import ui
     T = spec["texts"]
@@ -306,18 +374,24 @@ async def _house_async(spec: dict, st: dict):
             with ui.grid(columns=2).classes("w-full gap-x-8"):
                 w = {}
                 if mode == "House":
-                    w["min_cnt"] = ui.input(label=T.get("Label1_MinCnt_txt", ""), value=str(st["min_cnt"])).props("outlined dense")
-                    w["min_time"] = ui.input(label=T.get("MinTime_Label_txt", ""), value=str(st["min_time"])).props("outlined dense")
-                    w["max_cnt"] = ui.input(label=T.get("Label2_MaxCnt_txt", ""), value=str(st["max_cnt"])).props("outlined dense")
-                    w["max_time"] = ui.input(label=T.get("MaxTime_Label_txt", ""), value=str(st["max_time"])).props("outlined dense")
+                    # w["min_cnt"] = ui.input(label=T.get("Label1_MinCnt_txt", ""), value=str(st["min_cnt"])).props("outlined dense")  # v1.08 (entfallen)
+                    # w["min_time"] = ui.input(label=T.get("MinTime_Label_txt", ""), value=str(st["min_time"])).props("outlined dense")  # v1.08 (entfallen)
+                    # w["max_cnt"] = ui.input(label=T.get("Label2_MaxCnt_txt", ""), value=str(st["max_cnt"])).props("outlined dense")  # v1.08 (entfallen)
+                    # w["max_time"] = ui.input(label=T.get("MaxTime_Label_txt", ""), value=str(st["max_time"])).props("outlined dense")  # v1.08 (entfallen)
+                    w["min_cnt"] = _NumRow(ui, T.get("Label1_MinCnt_txt", ""), st["min_cnt"], 0, 127)  # v1.08: Bereiche wie check_numbers
+                    w["min_time"] = _NumRow(ui, T.get("MinTime_Label_txt", ""), st["min_time"], 0, 254)  # v1.08
+                    w["max_cnt"] = _NumRow(ui, T.get("Label2_MaxCnt_txt", ""), st["max_cnt"], 1, 255)  # v1.08
+                    w["max_time"] = _NumRow(ui, T.get("MaxTime_Label_txt", ""), st["max_time"], 0, 254)  # v1.08
                     w["indiv"] = ui.checkbox(T.get("IndividualTimes_CheckBox_txt", ""), value=st["indiv"])
                     ui.label("")
-                w["led_channel"] = ui.input(label=T.get("Label9_LED_Channel_txt", "LED Kanal"), value=str(st["led_channel"])).props("outlined dense")
+                # w["led_channel"] = ui.input(label=T.get("Label9_LED_Channel_txt", "LED Kanal"), value=str(st["led_channel"])).props("outlined dense")  # v1.08 (entfallen)
+                w["led_channel"] = _NumRow(ui, T.get("Label9_LED_Channel_txt", "LED Kanal"), st["led_channel"], 0,  # v1.08
+                                           max(int(spec.get("led_channels", 256)) - 1, parse_int_safe(st["led_channel"])), slider=False)  # v1.08
                 w["inv"] = ui.checkbox(T.get("InpInversBox_txt", ""), value=st["inv"])
             for _k, _tk in (("min_cnt", "min_cnt"), ("max_cnt", "max_cnt"), ("min_time", "min_time"), ("max_time", "max_time"),  # v1.07: Tooltips der Felder
                             ("indiv", "indiv"), ("led_channel", "led_channel"), ("inv", "inv")):  # v1.07
                 if _k in w:  # v1.07
-                    _tip(ui, w[_k], TIP_F.get(_tk))  # v1.07
+                    _tip(ui, getattr(w[_k], "row", w[_k]), TIP_F.get(_tk))  # v1.08 (vorher w[_k])
             if mode == "House":
                 def toggle_times():
                     for k in ("min_time", "max_time"):
@@ -450,6 +524,7 @@ def make_factory(Base):
                     "channels": info["channels"], "tips": info.get("tips", {"buttons": {}, "fields": {}}),  # v1.07
                     "button_rows": split_button_rows(ns["house_button_list_str"] if mode == "House"
                                                      else ns["gaslights_button_list_str"]),
+                    "led_channels": M02.LED_CHANNELS,  # v1.08
                     "patch": CV_Adress is not None and CV_Adress != 0}
             self.CV_Adress, self.CV_Used = CV_Adress, CV_used
             self.IsActive = True

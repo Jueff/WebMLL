@@ -1,10 +1,10 @@
-# Datei-Version: 1.47 (2026-11-23) - web_form_options.py
+# Datei-Version: 1.49 (2026-11-24) - web_form_options.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_form_options.py
 # Path:           _web/web_form_options.py
-# Version:        1.47
-# Last Update:    2026-11-23
-# Author:         Harold Linke
+# Version:        1.49
+# Last Update:    2026-11-24
+# Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
 # History of Change:
 #   1.18  2026-11-12  Excel-Programm 3.5.0L3: Der Knopf Firmware installieren steht fuer ALLE Boards im Reiter LED ARDUINO (vorher nur beim Raspberry Pi Pico und nur mit Firmware-Dateien im Ordner); der Firmware-Ordner wird bei Bedarf angelegt (fruehere Versionen ohne Eintrag)
@@ -37,7 +37,9 @@
 #   1.44  2026-11-22  Version 4.68: Titel Hardware Optionen; Reiter Entwicklungsumgebung und Firmware Installation nicht im Anfaenger Modus; Boardnamen Lichtmaschine Classic/Pro/Pico; PlatformIO (Standard) zuerst, ARDUINO-IDE (nur Kompatibilitaet), Knopf ARDUINO-IDE Einstellungen nur mit ARDUINO-IDE; Hinweis WLAN (OTA) zu Schnelles Update
 #   1.45  2026-11-22  Version 4.70: Reiter Entwicklungsumgebung: roter Hinweis unter dem Haken Schnelles Update (nicht kompatibel mit WLAN)
 #   1.46  2026-11-22  Version 4.71: Warnhinweise zu Schnelles Update und WLAN entfernt (Pull Request 54: Schnelles Update geht fuer den ESP32 jetzt auch ueber WLAN); neuer Hinweistext zum Schnellen Update (aus dem Pull Request, dort als 1.44)
+#   1.48  2026-11-24  Pull Request 39 (Juergen, Issue 35), nur der Auswahldialog: Board und USB Port erkennen fragt bei mehreren gefundenen Board-Typen (Nano, ESP32, Pico) vorher nach dem gewuenschten Typ (_choose_detected_board_type). Der Umbau der Boardliste im Optionen-Dialog aus dem PR wurde nicht uebernommen. Zeilen mit '# v1.48'
 #   1.47  2026-11-23  Issue 58: Firmware installieren (Pico): eigener Anschluss, immer erfragt (nicht der Anschluss des Blatts, dort haengt die Lichtmaschine); beim Start ungueltig; bei verbundener Lichtmaschine auf diesem Anschluss wird vorher getrennt
+#   1.49  2026-11-24  Anzeigename MobaLedLib Studio statt webMobaLedLib in Texten der Oberflaeche. Zeilen mit '# v5.09'
 # ----------------------------------------------------------------------------------------------
 """Web-Ersatz fuer proggen/UserForm_Options.py (Optionen und spezielle Funktionen).
 
@@ -118,6 +120,44 @@ def harvest_buttons(Base) -> dict:
                          "frame": node.args[0].id if isinstance(node.args[0], ast.Name) else ""}
                 out.setdefault(handler, []).append(entry)
     return out
+
+
+def _choose_detected_board_type(cands, *, light_machine):  # v1.48 (Pull Request 39, Juergen)
+    """Bei mehreren gefundenen Board-Typen (Nano, ESP32, Pico) den gewuenschten Typ waehlen lassen. cands: [(Anschluss, Typ)]. Rueckgabe: Typ oder None (Abbrechen)"""  # v1.48
+    types = [typ for typ in ("Nano", "ESP32", "Pico") if any(candidate_type == typ for _, candidate_type in cands)]  # v1.48
+    if len(types) <= 1:  # v1.48
+        return types[0] if types else None  # v1.48
+
+    labels = {  # v1.48
+        "Nano": tr("Arduino Nano (Typ wird automatisch erkannt)"),  # v1.48
+        "ESP32": "ESP32",  # v1.48
+        "Pico": tr("Raspberry Pi Pico"),  # v1.48
+    }  # v1.48
+    options = {  # v1.48
+        typ: f"{labels[typ]} ({', '.join(dev for dev, candidate_type in cands if candidate_type == typ)})"  # v1.48
+        for typ in types  # v1.48
+    }  # v1.48
+
+    async def show_dialog():  # v1.48
+        from nicegui import ui  # v1.48
+        with wd._bridge["client"]:  # v1.48
+            with ui.dialog().props("persistent") as dlg, ui.card().classes("min-w-[380px] max-w-[640px]"):  # v1.48
+                title = tr("Unterschiedliche Lichtmaschinen-Modelle gefunden") if light_machine else tr("Mehrere Board-Typen gefunden")  # v1.48
+                prompt = tr("Bitte wählen Sie das gewünschte Modell aus:") if light_machine else tr("Bitte wählen Sie den gewünschten Board-Typ aus:")  # v1.48
+                ui.label(title).classes("text-h6")  # v1.48
+                ui.label(prompt)  # v1.48
+                choice = ui.radio(options, value=None).props("dense")  # v1.48
+                with ui.row().classes("justify-end w-full"):  # v1.48
+                    ui.button(tr("Abbrechen"), on_click=lambda: dlg.submit(None)).props("outline").classes("mll-cancel")  # v1.48
+                    confirm = ui.button("OK", on_click=lambda: dlg.submit(choice.value)).classes("mll-default")  # v1.48
+                    confirm.disable()  # v1.48
+                    choice.on_value_change(lambda event: confirm.enable() if event.value in types else confirm.disable())  # v1.48
+            result = await dlg  # v1.48
+            wd.safe_delete(dlg)  # v1.48
+        return result  # v1.48
+
+    selected = wd.call_in_loop(show_dialog, default=None)  # v1.48
+    return selected if selected in types else None  # v1.48
 
 
 def tab_buttons(buttons: dict, handlers: list[str], frame_hint: str | None = None) -> list[dict]:
@@ -800,7 +840,8 @@ def make_class(Base):
                 pio = M08.Find_PIO()  # v1.04
                 tabs.append({"name": tr("Entwicklungsumgebung"), "kind": "ide",  # v1.04
                              "intro": tr("Womit sollen die Programme übersetzt und auf den Arduino geladen werden?"),  # v1.04
-                             "texts": [tr("Das Programm webMobaLedLib selbst aktualisieren: Menü Hilfe → Update webMobaLedLib …")],  # v1.07
+                             # "texts": [tr("Das Programm webMobaLedLib selbst aktualisieren: Menü Hilfe → Update webMobaLedLib …")],  # v1.07  # v5.09 (entfallen)
+                             "texts": [tr("Das Programm MobaLedLib Studio selbst aktualisieren: Menü Hilfe → Update MobaLedLib Studio …")],  # v1.07  # v5.09
                              "arduino_text": tr("ARDUINO-IDE (nur Kompatibilität - nicht mehr nutzen)"), "pio_text": tr("PlatformIO (Standard)"),  # v1.04  # v1.44
                              "serial_cfg_text": tr("Schnelles Update: nur geänderte Konfiguration übertragen (ESP32/Pico)"),  # v1.39
                              "serial_cfg_hint": tr("Übertragen werden nur Änderungen an der Konfiguration, also Makros, Farben und Startwerte. Das dauert wenige Sekunden. Das Programm selbst wird nur beim ersten Mal oder nach Änderungen an Programm, Erweiterungen, LED-Anzahl oder Pins neu übertragen. Arduino Nano und Uno sind nicht betroffen. Nur mit PlatformIO und USB."),  # v1.39
@@ -826,7 +867,8 @@ def make_class(Base):
                     buttons, ["__Update_to_Arduino_Button_Click", "__Update_Beta_Button_Click",
                               "__Show_Lib_and_Board_Page_Button_Click"]),
                     # "texts": ["Das Programm webMobaLedLib selbst aktualisieren: Menü Hilfe → Update webMobaLedLib …"]})  # v1.07 (entfallen)
-                    "texts": ["Das Programm webMobaLedLib selbst aktualisieren: Menü Hilfe → Update webMobaLedLib …"],  # v1.07
+                    # "texts": ["Das Programm webMobaLedLib selbst aktualisieren: Menü Hilfe → Update webMobaLedLib …"],  # v1.07  # v5.09 (entfallen)
+                    "texts": ["Das Programm MobaLedLib Studio selbst aktualisieren: Menü Hilfe → Update MobaLedLib Studio …"],  # v1.07  # v5.09
                     "ide_only": True})                               # nur mit der ARDUINO IDE (Bibliotheken und Boards aktualisieren)  # v1.07
                 wlan_inst = "WLAN" in buildopt
                 fw_btn = {"text": tr("Firmware installieren"), "handler": "__Boot_Firmware_Button_Click", "disabled": False,  # v1.43 (vorher im Reiter Lichtmaschine)
@@ -950,6 +992,12 @@ def make_class(Base):
             rest = [c for c in cands if not (other_port and c[0].upper() == other_port.upper())]  # v1.34: den Anschluss der anderen Seite auslassen
             if rest:  # v1.34
                 cands = rest  # v1.34
+            if len(set(t for _, t in cands)) > 1:  # v1.48: mehrere Board-Typen gefunden: den gewuenschten Typ waehlen lassen (Pull Request 39, Issue 35)
+                selected_type = _choose_detected_board_type(cands, light_machine=left)  # v1.48
+                if selected_type is None:  # v1.48
+                    logger.info("Erkennen: Auswahl des Board-Typs abgebrochen")  # v1.48
+                    return  # v1.48
+                cands = [candidate for candidate in cands if candidate[1] == selected_type]  # v1.48
             own = [c for c in cands if own_port and c[0].upper() == own_port.upper()]  # v1.34: der gespeicherte eigene Anschluss hat Vorrang
             dev, typ = (own or cands)[0]  # v1.34
             if typ == "ESP32":  # v1.26

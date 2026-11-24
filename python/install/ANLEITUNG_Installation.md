@@ -1,5 +1,5 @@
-# webMobaLedLib – Installation und Betrieb
-*Datei-Version: 4.98 (2026-11-24), gilt für webMobaLedLib 4.98*
+# MobaLedLib Studio – Installation und Betrieb
+*Datei-Version: 5.12 (2026-11-24), gilt für Version 5.12*
 
 Windows · macOS · Linux-Desktop · Raspberry Pi
 
@@ -16,7 +16,7 @@ Diese Anleitung gilt für alle vier Systeme. **Eilige lesen nur den Schnellstart
 2. Einen **neuen Ordner `mobaledlib`** anlegen (zum Beispiel im eigenen Benutzerordner), die ZIP-Datei dort hineinkopieren und **entpacken**: Windows Rechtsklick →
    *Alle extrahieren* (im vorgeschlagenen Zielpfad ein angehängtes `\webmobaledlib` löschen), Linux und Mac „Hier entpacken“. Danach liegt der Ordner `python` direkt in `mobaledlib`.
 3. Die **Komplettinstallation** mit einem Befehl starten (Tabelle unten). Sie richtet alles ein: die Python-Umgebung, **PlatformIO** (übersetzt und lädt das Programm auf den Arduino; seit 2.92 der Standard) und ein Symbol zum Starten. Die **ARDUINO IDE 1.8.19** (nicht 2.x) ist nur noch optional (Option `/ide` bzw. `--with-arduino-ide`, siehe 2.2). Das Fenster zeigt den Fortschritt; es dauert einige Minuten.
-4. **Starten:** Symbol **„webMobaLedLib“** (Windows: „webMobaLedLib“) doppelklicken. Nach 20 bis 60 Sekunden öffnet sich der Browser mit dem Programm.
+4. **Starten:** Symbol **„MobaLedLib Studio“** (Windows: „MobaLedLib Studio“) doppelklicken. Nach 20 bis 60 Sekunden öffnet sich der Browser mit dem Programm.
 
 | System | Komplettinstallation |
 |---|---|
@@ -56,7 +56,7 @@ Der Pi läuft als **Dienst im Dauerbetrieb**: Das Programm startet beim Hochfahr
    cd ~/mobaledlib/python/pi
    sudo bash install_pi.sh
    ```
-4. Danach: Desktop-Symbol **„webMobaLedLib“** (öffnet das Programm auf dem Pi). Von einem anderen Rechner im Netz: `http://raspberrypi.local:8080` (statt `raspberrypi` der im Imager gewählte Rechnername), Benutzer `mobaledlib`,
+4. Danach: Desktop-Symbol **„MobaLedLib Studio“** (öffnet das Programm auf dem Pi). Von einem anderen Rechner im Netz: `http://raspberrypi.local:8080` (statt `raspberrypi` der im Imager gewählte Rechnername), Benutzer `mobaledlib`,
    Passwort `mobaledlib` (im Programm unter „Programm Einstellungen“ änderbar). Der Pi wird über das Menü **Datei → Raspberry Pi herunterfahren** ausgeschaltet, nicht durch Ziehen des Steckers.
 
 Mehr dazu, Optionen und die Fehlersuche stehen in den folgenden Kapiteln.
@@ -65,8 +65,8 @@ Mehr dazu, Optionen und die Fehlersuche stehen in den folgenden Kapiteln.
 
 | System | Kapitel | Installationsskript (im Projektordner) | Läuft als | Starten |
 |---|---|---|---|---|
-| Windows 10 / 11 | 3 | `install\install_windows.bat` | Programm im Konsolenfenster | Verknüpfung „webMobaLedLib“ auf dem Desktop |
-| macOS 10.13 oder neuer | 4 | `install/install_mac.command` | App `webMobaLedLib.app` | Programm auf dem Schreibtisch |
+| Windows 10 / 11 | 3 | `install\install_windows.bat` | Programm im Konsolenfenster | Verknüpfung „MobaLedLib Studio“ auf dem Desktop |
+| macOS 10.13 oder neuer | 4 | `install/install_mac.command` | App `MobaLedLib Studio.app` | Programm auf dem Schreibtisch |
 | Linux-Desktop (Debian, Linux Mint, Ubuntu, Fedora, Arch …) | 5 | `install/install_linux.sh` | Programm im Benutzerkonto | Symbol im Anwendungsmenü und auf dem Schreibtisch |
 | Raspberry Pi (Dauerbetrieb, auch ohne Bildschirm) | 6 | `pi/install_pi.sh` | Systemdienst, startet beim Hochfahren | Desktop-Symbol, oder Browser von einem anderen Rechner |
 
@@ -192,7 +192,7 @@ prüft die Bibliotheken und Boards beim Start („Überprüfe Bibliotheken und B
 - **Speichern:** Das Programm speichert beim Beenden („Speichern und beenden“) und zwischendurch automatisch in die Datei `.autosave.json` im Datenordner (2.6).
   Dateien aus dem Menü „Datei“ werden im Browser heruntergeladen bzw. hochgeladen. Eine PGF-Datei kannst du auch einfach auf die Tabelle ziehen.
 - **Meldungen** stehen in der Datei `webmobaledlib.log` im Datenordner (2.6, Einstellungen siehe 2.7), außerdem `webmobaledlib-console.log` bei macOS und Linux und `journalctl` auf dem Pi. Welche
-  Programmversion läuft, steht unter dem Titel der Oberfläche (zum Beispiel „webMobaLedLib 1.16“) und in den Köpfen der Dateien („Datei-Version“).
+  Programmversion läuft, steht unter dem Titel der Oberfläche (zum Beispiel „MobaLedLib Studio 1.16“) und in den Köpfen der Dateien („Datei-Version“).
 
 **Welcher Browser?** Das Programm ist **nicht** auf einen Browser festgelegt. Es öffnet die Adresse im **Standardbrowser des Systems** und prüft, ob das geklappt hat:
 
@@ -409,7 +409,7 @@ Das Makro **LEDColorAnim** (Gruppe PatternConfig, Dialog **LED Farb-Animation**)
 - **Protokolle herunterladen (3.89):** Hilfe → Logdatei anzeigen hat den Knopf **Die letzten 3 log-Dateien herunterladen** (eine ZIP-Datei mit `webmobaledlib.log`, `.log.1` und `.log.2`), nützlich bei großen Projekten.
 - **Testtasten (3.89):** Die Tasten stehen in der Spalte Typ rechts neben dem vollständigen Typnamen.
 - **Datei, Importieren v. altem Programm … (3.93, ab 4.54 im Menü Datei, vorher Optionen, Reiter Dateien):** **Importieren v. altem Prog.** erklärt, wie die Daten des alten Excel-Programms über eine MLL_pgf-Datei übernommen werden; **Kopiere von Seite zu Seite** entfällt (dafür gibt es **Seite duplizieren** im Blattreiter).
-- **Online Wiki (3.93):** Der Knopf öffnet die Einführung der webMobaLedLib-Anleitung.
+- **Online Wiki (3.93):** Der Knopf öffnet die Einführung MobaLedLib Studio-Anleitung.
 
 ### 2.9i ESP Einstellungen je Blatt (3.94, Beitrag von moosbewohner)
 
@@ -452,6 +452,11 @@ Kurzfassung der Änderungen seit dem letzten Release, neueste Version zuerst (au
 
 *Korrekturen:*
 - Auswahl des COM Ports: Nach dem Wechsel des Boards über „Andere Typen“ ändern sich Bild, Text und roter Hinweis (Issue 37).
+- **Parameterformular der Makros (seit 5.04):** Zahlenwerte mit Minimum und Maximum haben einen Schieberegler, ein Zahlenfeld und die Tasten − und +; der Wert lässt sich auch mit dem Mausrad ändern (seit 5.05). Die LED Kanal Auswahl hat farbige Tasten in der Farbe der LEDs (seit 5.06). Das Formular für House und GasLights hat seit 5.07 die gleichen Zahlenfelder (Regler, − und +, Mausrad). Zeitwerte werden in den Feldern Min, Sek und ms eingegeben. Der HSV-Farbwert hat einen Regler im Farbverlauf und ein Feld mit der eingestellten Farbe. In die Tabelle kommt derselbe Text wie bisher. Zahlenwerte mit sehr großem Bereich (mehr als 1000 Schritte) und Namen von Variablen bleiben Textfelder.
+- **Ganz flashen nach einem Update (seit 5.03, Beitrag von Jürgen, Pull Request 66):** Bei ESP32 und Pico mit schnellem Konfigurationstransfer gehört die Programmversion zur Firmware-Signatur. Nach jedem Update des Programms wird beim ersten „Setup übertragen“ einmal die ganze Firmware übertragen, damit geänderter Firmware-Code sicher auf die Lichtmaschine kommt. Danach geht es wieder schnell.
+- **Board und USB Port erkennen (seit 5.02, Beitrag von Jürgen, Pull Request 39):** Findet die Erkennung mehrere verschiedene Modelle (Nano, ESP32, Pico), fragt ein Fenster vorher nach dem gewünschten Modell mit seinen Anschlüssen. Mit nur einem Modell läuft alles wie bisher.
+- **Nicht konfigurierte LEDs (seit 5.00, Beitrag von Jürgen, Pull Request 63, Issue 62):** Bei ESP32 und Pico (Konfiguration getrennt von der Firmware) schaltet die Zentrale beim Start auch LEDs aus, die am Strang hängen, aber nicht mehr konfiguriert sind (bis zu 256 LEDs je Strang, mit langen LED-Adressen 1000). Vorher blieben sie im letzten Zustand. Die Firmware ändert sich, das Setup wird einmal ganz neu übertragen. Nicht an Hardware geprüft.
+- **Zentrale erkennen (seit 4.99, Beitrag von Jürgen, Pull Request 61):** Bei ESP32 und Pico (Konfiguration getrennt von der Firmware) blinken im Dialog „Auswahl des COM Ports“ die drei LEDs auf der Hauptplatine der gewählten Zentrale (etwa einmal pro Sekunde). Beim Wechsel des Anschlusses hört die eine Zentrale auf, die andere beginnt; nach dem Schließen des Dialogs (spätestens nach 3 Sekunden) zeigen die LEDs wieder ihren alten Zustand. Voraussetzung: die neue Firmware ist auf der Zentrale („Setup übertragen“ einmal ganz). Beim ESP32 sind die Status-LEDs das erste Pixel von LED-Kanal 7. Neues Konfigurationsformat 7: Das Setup wird danach einmal ganz neu übertragen. Nicht an Hardware geprüft.
 
 **Version 4.75**
 
@@ -1066,7 +1071,7 @@ Programme werden mit der **ARDUINO IDE** (Standard, Abschnitt 2.2) oder mit **Pl
   - Beim Start gibt es **keine Suche nach der IDE** (keine Meldung „ARDUINO IDE nicht gefunden“) und **keine Prüfung oder Aktualisierung der ARDUINO Bibliotheken und Boards**.
   - Der **Sketchbook-Pfad ist der Python-Ordner**: Das Programm liest die Datei `preferences.txt` der IDE nicht mehr. Der Ordner `libraries` im Python-Ordner enthält die MobaLedLib (für PlatformIO) und die Erweiterungen (Extensions). Die Version der MobaLedLib steht in `libraries/MobaLedLib/library.properties`. FastLED, NmraDcc und weitere Bibliotheken lädt PlatformIO beim ersten Übersetzen selbst.
   - **Erweiterungen (Extensions) mit PlatformIO (2.70):** Eine Erweiterung (zum Beispiel `P_ScheduleMLX`, `P_ScheduleDuoMLX`) liegt als Ordner mit der Datei `MobaLedLib.properties` im Ordner `libraries`. Das Programm trägt in die Datei `platformio.ini` und in die Kopfdatei `LEDs_AutoProg.h` nur die Erweiterungen ein, die das Programm **wirklich benutzt** (Zeilen `EX.<Name>(…)` in der Tabelle). Vorher stand der Header **aller** installierten Erweiterungen in der Kopfdatei; PlatformIO kannte aber nur die benutzten und meldete beim Übersetzen „fatal error: P_ScheduleDuoMLX.h: No such file or directory“. Die ARDUINO IDE war nicht betroffen, weil sie alle Ordner in `libraries` sieht. Ab Version 2.71 stehen die benutzten Erweiterungen auch in der Umgebung **`pico`** (Raspberry Pi Pico) der Datei `platformio.ini`; ohne Erweiterung bleibt diese Umgebung unverändert.
-  - Der Reiter **Update** (Bibliotheken und Boards der IDE aktualisieren) wird ausgeblendet; er erscheint wieder, wenn man die ARDUINO IDE einstellt. Der Reiter **Bootloader** bleibt (ab 2.74, siehe Abschnitt 2.9e). Das Update des Programms selbst bleibt im Menü **Hilfe → Update webMobaLedLib**.
+  - Der Reiter **Update** (Bibliotheken und Boards der IDE aktualisieren) wird ausgeblendet; er erscheint wieder, wenn man die ARDUINO IDE einstellt. Der Reiter **Bootloader** bleibt (ab 2.74, siehe Abschnitt 2.9e). Das Update des Programms selbst bleibt im Menü **Hilfe → Update MobaLedLib Studio**.
   - **ESP32** und **Pico** sind als Board wählbar, auch wenn ihre Pakete in der IDE fehlen.
   - Schaltet man auf die ARDUINO IDE zurück, fragt das Programm, ob die Bibliotheken und Boards jetzt geprüft werden sollen (und meldet, wenn die IDE nicht gefunden wird).
   - Weiter an die IDE gebunden ist das Übersetzen des Simulators (nur Windows). **Der schnelle Bootloader** läuft in der Webversion **nur mit PlatformIO** (Abschnitt 2.9e); mit der ARDUINO IDE meldet der Knopf im Reiter **Bootloader** weiter einen Hinweis (dafür bitte das Excel-Programm benutzen).
@@ -1127,7 +1132,7 @@ Das Programm beruht auf dem Excel-Programm **3.5.0-K-long** der MobaLedLib. Es e
    die Installation läuft dann ohne Pause weiter. Findet es Python danach nicht, meldet es das: **Dann den PC neu starten** (oder ab- und wieder anmelden) und
    das Skript noch einmal starten. Erst nach dem Neustart kennt Windows den neuen Suchpfad von Python.
 3. Es legt die Python-Umgebung `venv_web` im Projektordner an, installiert die Pakete aus `requirements-web.txt`, erzeugt das Programmsymbol und legt auf dem
-   Desktop die Verknüpfung **„webMobaLedLib“** an.
+   Desktop die Verknüpfung **„MobaLedLib Studio“** an.
 4. Mit `/ide` lädt es die IDE 1.8.19 (ca. 130 MB) von arduino.cc und führt den Installer still aus. Windows fragt nach der Erlaubnis (Benutzerkontensteuerung);
    den Treiber für den USB-Anschluss bitte zulassen. Danach installiert es FastLED und MobaLedLib. (Nur die Bibliotheken, wenn die IDE schon da ist: `/libs`.)
 5. Am Ende läuft ein Test der Installation (`pi_check.py`, etwa eine Minute). Ohne ihn: `/nocheck`.
@@ -1160,7 +1165,7 @@ nicht:** Für diese Systeme gibt es keine fertigen Pakete (zum Beispiel `orjson`
    `bash install/install_mac.command`. Für alles in einem Zug: `bash install_mac.command --with-arduino-ide`.
 2. Das Skript sucht Python 3.10 oder neuer und bietet bei fehlendem Python die Installation mit Homebrew an. Sonst: Python 3.12 von python.org installieren
    und das Skript noch einmal starten.
-3. Es legt `venv_web` im Projektordner an, installiert die Pakete, erzeugt das Symbol und legt auf dem Schreibtisch das Programm **`webMobaLedLib.app`** an.
+3. Es legt `venv_web` im Projektordner an, installiert die Pakete, erzeugt das Symbol und legt auf dem Schreibtisch das Programm **`MobaLedLib Studio.app`** an.
 4. Mit `--with-arduino-ide` lädt es `arduino-1.8.19-macosx.zip` (ca. 200 MB) und kopiert `Arduino.app` nach *Programme*, danach installiert es FastLED und
    MobaLedLib. Auf Macs mit Apple-Chip fragt macOS beim ersten Start der IDE nach Rosetta: bitte zustimmen. (Nur die Bibliotheken: `--with-arduino-libs`.)
 5. Am Ende läuft ein Test der Installation (ohne ihn: `--nocheck`).
@@ -1173,7 +1178,7 @@ nicht:** Für diese Systeme gibt es keine fertigen Pakete (zum Beispiel `orjson`
 | `--no-platformio` | PlatformIO **nicht** installieren (wer nur die ARDUINO IDE benutzt) |
 | `--nocheck` | ohne den Test der Installation am Ende |
 
-**Starten:** `webMobaLedLib` auf dem Schreibtisch doppelklicken. Beim ersten Mal fragt macOS eventuell: Rechtsklick → *Öffnen* → *Öffnen*. Die Oberfläche
+**Starten:** `MobaLedLib Studio` auf dem Schreibtisch doppelklicken. Beim ersten Mal fragt macOS eventuell: Rechtsklick → *Öffnen* → *Öffnen*. Die Oberfläche
 startet ohne Terminalfenster und öffnet den Browser. Meldungen: `webmobaledlib-console.log` und `webmobaledlib.log` im Datenordner (2.6). Zum Beobachten im Terminal:
 `install/start_mac.command`. **Beenden:** Knopf „Beenden“ in der Oberfläche.
 
@@ -1213,7 +1218,7 @@ Das Skript erledigt der Reihe nach:
 
 Das Skript kann **mehrfach** laufen (zum Beispiel nach einem Update).
 
-**Starten:** Symbol „webMobaLedLib“ doppelklicken (Schreibtisch oder Anwendungsmenü), oder `install/start_linux.sh`. Beim ersten Doppelklick fragt der
+**Starten:** Symbol „MobaLedLib Studio“ doppelklicken (Schreibtisch oder Anwendungsmenü), oder `install/start_linux.sh`. Beim ersten Doppelklick fragt der
 Dateimanager (Nemo, Nautilus, Dolphin) eventuell **„Ausführen“** bzw. **„Starter vertrauen“**; sonst Rechtsklick → *Ausführen erlauben* (Mint: in den
 Eigenschaften *Als Programm ausführen*). **Beenden:** Knopf „Beenden“ in der Oberfläche. Zum Beobachten der Meldungen `install/start_linux.sh` im Terminal
 starten. Auf dem Desktop läuft die IDE mit deinem Bildschirm, es wird kein virtuelles Display gebraucht.
@@ -1315,10 +1320,10 @@ entfernt das Skript selbst. Falls schon der Start mit `$'\r': command not found`
 
 ### 6.3 Das Desktop-Symbol
 
-Nach der Installation liegt auf dem Desktop das Symbol **„webMobaLedLib“** (und ein Eintrag im Startmenü unter Entwicklung / Elektronik). Ein Doppelklick:
+Nach der Installation liegt auf dem Desktop das Symbol **„MobaLedLib Studio“** (und ein Eintrag im Startmenü unter Entwicklung / Elektronik). Ein Doppelklick:
 
 1. startet den Dienst, wenn er nicht läuft (nach einem „Beenden“ im Programm zum Beispiel),
-2. wartet, bis die Oberfläche bereit ist (20 bis 60 Sekunden, dabei erscheint die Meldung „webMobaLedLib wird gestartet“),
+2. wartet, bis die Oberfläche bereit ist (20 bis 60 Sekunden, dabei erscheint die Meldung „MobaLedLib Studio wird gestartet“),
 3. öffnet die Oberfläche in einem **eigenen Chromium-Fenster** ohne Adressleiste. Fehlt Chromium, nimmt er Firefox, sonst den Standardbrowser. Mit
    `MLL_BROWSER=<Programm>` wählst du einen anderen.
 
@@ -1398,7 +1403,7 @@ Von einem anderen Rechner brauchst du die Adresse des Pi. Die einfachsten Wege, 
    Namen auf: `http://raspberrypi.fritz.box:8080`. Empfehlung: dem Pi im Router eine **feste IP-Adresse** geben (FRITZ!Box: Gerät bearbeiten → „Diesem Netzwerkgerät immer die gleiche
    IPv4-Adresse zuweisen“), dann ändert sie sich nicht.
 4. **Suchprogramm auf dem PC:** `install/find_mobaledlib.py` probiert zuerst `raspberrypi.local` und `mobaledlib.local` und fragt dann alle Adressen des eigenen Netzes
-   (/24) auf dem Port 8080 ab. Die Oberfläche erkennt es an der Anmeldung „webMobaLedLib“ bzw. dem Seitentitel und zeigt Adresse und Namen. Aufruf: `python install/find_mobaledlib.py`
+   (/24) auf dem Port 8080 ab. Die Oberfläche erkennt es an der Anmeldung „MobaLedLib Studio“ bzw. dem Seitentitel und zeigt Adresse und Namen. Aufruf: `python install/find_mobaledlib.py`
    (Windows nach der Installation: `venv_web\Scripts\python install\find_mobaledlib.py`). Andere Netze oder Ports: `--subnet 192.168.178.0/24`, `--port 9000`, `--name mein-pi`.
 5. **Am Pi selbst:** `hostname -I` zeigt die IP-Adresse, `hostname` den Namen. Beide stehen auch am Ende der Installation.
 
@@ -1406,9 +1411,9 @@ Von einem anderen Rechner brauchst du die Adresse des Pi. Die einfachsten Wege, 
 
 | System | Aktualisieren | Deinstallieren |
 |---|---|---|
-| alle | Menü **Hilfe → Update webMobaLedLib …** (empfohlen, siehe 7.1), oder neue Programmdateien in den Projektordner kopieren oder den Ordner `python` ersetzen (die Version steht im Dateikopf und unter dem Titel der Oberfläche), Oberfläche neu starten. **Das laufende Programm vorher beenden** (Knopf BEENDEN oben rechts): Läuft die alte Instanz noch, öffnet der Starter nur den Browser auf ihr, und es erscheint die alte Version, obwohl die Dateien neu sind. Deine Daten liegen im Datenordner und bleiben erhalten (2.6) | – |
+| alle | Menü **Hilfe → Update MobaLedLib Studio …** (empfohlen, siehe 7.1), oder neue Programmdateien in den Projektordner kopieren oder den Ordner `python` ersetzen (die Version steht im Dateikopf und unter dem Titel der Oberfläche), Oberfläche neu starten. **Das laufende Programm vorher beenden** (Knopf BEENDEN oben rechts): Läuft die alte Instanz noch, öffnet der Starter nur den Browser auf ihr, und es erscheint die alte Version, obwohl die Dateien neu sind. Deine Daten liegen im Datenordner und bleiben erhalten (2.6) | – |
 | Windows | Neue Pakete: `venv_web\Scripts\pip install -U -r install\requirements-web.txt`, oder das Skript noch einmal ausführen | Verknüpfung und Ordner `venv_web` löschen |
-| macOS | `venv_web/bin/pip install -U -r install/requirements-web.txt`, oder das Skript noch einmal ausführen | `webMobaLedLib.app` und Ordner `venv_web` löschen |
+| macOS | `venv_web/bin/pip install -U -r install/requirements-web.txt`, oder das Skript noch einmal ausführen | `MobaLedLib Studio.app` und Ordner `venv_web` löschen |
 | Linux-Desktop | `venv_web/bin/pip install -U -r install/requirements-web.txt`, oder `install_linux.sh` noch einmal | `bash install/uninstall_linux.sh` (mit `--purge` auch `venv_web`) |
 | Raspberry Pi | `sudo bash ~/mobaledlib/python/pi/install_pi.sh --no-check` (aktualisiert auch die Python-Pakete und die Dienstdatei) | `sudo bash ~/mobaledlib/python/pi/uninstall_pi.sh` |
 
@@ -1420,7 +1425,7 @@ Beim Deinstallieren bleiben Projektordner, ARDUINO IDE und Bibliotheken erhalten
 mit dem Menü „Datei“ als Download im Browser (die Datei landet auf dem Rechner, an dem du sitzt). Auf dem Pi geht auch ein fertiges Abbild der SD-Karte
 (Raspberry Pi Imager oder `dd`).
 
-### 7.1 Update über das Programm (Hilfe → Update webMobaLedLib …)
+### 7.1 Update über das Programm (Hilfe → Update MobaLedLib Studio …)
 
 Das Programm lädt das neueste Release (`webmobaledlib.zip` aus <https://github.com/haroldlinke/WebMLL/releases>), vergleicht **jede Datei** mit der installierten
 und zeigt, was sich ändert: neue, geänderte und zu löschende Dateien, mit Versionsnummer. Erst nach **Aktualisieren** passiert etwas.
@@ -1442,8 +1447,7 @@ und zeigt, was sich ändert: neue, geänderte und zu löschende Dateien, mit Ver
   Dateien in den Projektordner zurückkopieren. Die Tabellen werden vor dem Ersetzen gesichert. Das installierte Release (ZIP) wird im Datenordner unter `release_cache` aufgehoben (die letzten
   zwei), damit eine Reparatur auch ohne Internet geht.
 - **Python-Pakete:** Haben sich die Anforderungen geändert (`install/requirements-web.txt`, auf dem Pi `pi/requirements-pi.txt`), aktualisiert das Programm sie.
-- **Name der Verknüpfungen:** Das Programm heißt seit Version 1.31 **webMobaLedLib** (vorher pyMobaLedLib). Nach einem Update über das Menü heißen Symbol und Starter noch
-  wie bisher. Das Installationsskript (`install_windows.bat`, `install_mac.command`, `install_linux.sh`, auf dem Pi `install_pi.sh --no-check`) benennt sie um und entfernt die alten.
+- **Name der Verknüpfungen:** Das Programm hieß ab Version 1.31 **webMobaLedLib** (vorher pyMobaLedLib) und heißt seit Version 5.09 **MobaLedLib Studio**. Nach einem Update über das Menü heißen Symbol und Starter noch „webMobaLedLib“. Das Installationsskript legt sie neu als **MobaLedLib Studio** an. Das Installationsskript (`install_windows.bat`, `install_mac.command`, `install_linux.sh`, auf dem Pi `install_pi.sh --no-check`) legt das Symbol neu an und entfernt die Symbole mit den alten Namen (webMobaLedLib, pyMobaLedLib).
 - **Neustart:** Nach dem Update läuft noch die alte Version. **Neu starten** sichert die Tabellen und startet das Programm neu, der offene Reiter lädt
   sich selbst neu. Auf dem Raspberry Pi startet der Dienst von selbst neu. Haben sich Dateien im Ordner `pi` geändert, muss dort einmal
   `sudo bash ~/mobaledlib/python/pi/install_pi.sh --no-check` laufen (die installierte Dienstdatei ist eine Kopie).
@@ -1464,7 +1468,7 @@ und zeigt, was sich ändert: neue, geänderte und zu löschende Dateien, mit Ver
 
 ### 7.1a Testversion (Hilfe → Update Testversion …)
 
-Für Tester und für den Entwickler lädt **Hilfe → Update Testversion …** eine Version **von GitHub, die man selbst aus einer Liste aussucht** (**Pre-Release oder fertiges Release**; **vorgewählt ist die neueste**), damit man immer die neueste Fassung hat oder gezielt eine bestimmte ausprobieren kann (seit 3.04). Das normale **Update webMobaLedLib …** lädt weiter nur das letzte **fertige** Release (GitHub liefert Pre-Releases dafür nie aus).
+Für Tester und für den Entwickler lädt **Hilfe → Update Testversion …** eine Version **von GitHub, die man selbst aus einer Liste aussucht** (**Pre-Release oder fertiges Release**; **vorgewählt ist die neueste**), damit man immer die neueste Fassung hat oder gezielt eine bestimmte ausprobieren kann (seit 3.04). Das normale **Update MobaLedLib Studio …** lädt weiter nur das letzte **fertige** Release (GitHub liefert Pre-Releases dafür nie aus).
 
 - **Rückfrage:** Zuerst fragt das Programm, ob man wirklich eine Testversion installieren möchte (nicht fertig geprüft, kann Fehler enthalten). Erst nach **Testversion suchen** wird GitHub gefragt. Die Rückfrage bietet **Abbrechen** als Standard an.
 - **Anzeige:** Nach **Version laden** zeigt das Fenster, welche Version gefunden wurde (**Testversion: Name (Pre-Release oder Release, veröffentlicht am Datum)**), die neue Versionsnummer und die Liste der Dateien. Erst nach **Aktualisieren** passiert etwas; danach läuft alles **wie beim normalen Update** (Sicherung der Tabellen, Prüfliste, alles oder nichts, automatisches Zurückgehen bei einem Abbruch, Neustart).
@@ -1514,7 +1518,7 @@ einschalten (ab Version 1.77):** Reiter **Programm Einstellungen**, Kasten **Zug
 | System | Wo |
 |---|---|
 | Windows | `set MLL_HOST=0.0.0.0` und `set MLL_PASSWORD=...` in `install\start_windows.bat` |
-| macOS | `export ...` in der Datei `webMobaLedLib.app/Contents/MacOS/webMobaLedLib` |
+| macOS | `export ...` in der Datei `MobaLedLib Studio.app/Contents/MacOS/MobaLedLibStudio` |
 | Linux-Desktop | `export ...` in `install/start_linux.sh` |
 | Raspberry Pi | in `/etc/mobaledlib-web.env` (`sudo nano /etc/mobaledlib-web.env`), danach `sudo systemctl restart mobaledlib-web` |
 
@@ -1527,7 +1531,7 @@ einschalten (ab Version 1.77):** Reiter **Programm Einstellungen**, Kasten **Zug
    Netzwerk als **Öffentlich**, antwortet der Server anderen Rechnern nicht, und deren Browser meldet einen Ladefehler. Abhilfe:
    - **Einfachster Weg (ab Version 1.67):** Reiter **Programm Einstellungen**, Bereich **Firewall**, Knopf **Zugriff aus dem Netz freigeben**. Windows fragt nach Administratorrechten (*Ja*), nach
      einigen Sekunden steht dort „Der Port 8080 ist freigegeben, Regel „webMLL Server 8080“ (Privatnetzwerke)“. Der Bereich prüft nach **Wirkung**: Er erkennt jede Regel, die eingehende Verbindungen
-     auf den Port zulässt, auch eine von Hand angelegte oder die von Windows für Python angelegte. Regeln, deren Name mit `webMLL Server` oder dem alten Namen `webMobaLedLib` (bis 3.65) beginnt (auch eine von Hand angelegte, zum Beispiel
+     auf den Port zulässt, auch eine von Hand angelegte oder die von Windows für Python angelegte. Regeln, deren Name mit `webMLL Server` oder dem alten Namen `MobaLedLib Studio` (bis 3.65) beginnt (auch eine von Hand angelegte, zum Beispiel
      „webMLL Server 8080“), ersetzt oder entfernt das Programm; andere Regeln lässt es unverändert und zeigt sie an. Er warnt außerdem vor einer **Blockierregel** (gewinnt gegen jede Zulassung), wenn der
      Server nur auf diesem Rechner lauscht (`MLL_HOST`, Schritt 1) und wenn das Netzwerk als „Öffentlich“ eingestuft ist. **Freigabe entfernen** löscht die Regeln wieder. Die folgenden Schritte sind
      dasselbe von Hand. Das Programm liest die Firewall ohne Administratorrechte auf zwei Wegen (PowerShell-Befehle und die COM-Schnittstelle der Firewall). Steht dort „Der Zustand der Firewall
@@ -1684,7 +1688,7 @@ Der ESP32 meldet sich nach der Anmeldung mit einer eigenen Verbindung zurück zu
 
 | Beobachtung | Ursache und Abhilfe |
 |---|---|
-| „… kann nicht geöffnet werden, da es von einem nicht verifizierten Entwickler stammt“ | Rechtsklick auf `webMobaLedLib` → *Öffnen* → *Öffnen* (nur beim ersten Mal) |
+| „… kann nicht geöffnet werden, da es von einem nicht verifizierten Entwickler stammt“ | Rechtsklick auf `MobaLedLib Studio` → *Öffnen* → *Öffnen* (nur beim ersten Mal) |
 | `install_mac.command` lässt sich nicht öffnen | `chmod +x install/install_mac.command`, oder im Terminal `bash install/install_mac.command` |
 | IDE startet nicht (Apple-Chip) | Rosetta installieren: `softwareupdate --install-rosetta` |
 | Programm startet nichts | `install/start_mac.command` im Terminal ausführen und die Meldung lesen; `webmobaledlib-console.log` im Datenordner (2.6) |
@@ -1695,7 +1699,7 @@ Der ESP32 meldet sich nach der Anmeldung mit einer eigenen Verbindung zurück zu
 |---|---|
 | „Python 3.10 oder neuer wurde nicht gefunden“ | System zu alt (Mint 20, Debian 11): neueres Python über pyenv oder deadsnakes installieren, das Skript noch einmal starten |
 | `venv fehlgeschlagen` / `ensurepip is not available` | `sudo apt install python3-venv python3-pip` |
-| Symbol startet nichts | `install/start_linux.sh` im Terminal ausführen und die Meldung lesen; Symbol ausführbar? (`ls -l ~/Desktop/webMobaLedLib.desktop`) |
+| Symbol startet nichts | `install/start_linux.sh` im Terminal ausführen und die Meldung lesen; Symbol ausführbar? (`ls -l ~/Desktop/MobaLedLibStudio.desktop`) |
 | Kein serieller Anschluss / „permission denied“ auf `/dev/ttyACM0` | Gruppe `dialout`: `groups` muss `dialout` enthalten, sonst ab- und wieder anmelden (oder `sudo usermod -aG dialout $USER`) |
 | Tabelle zeichnet sich langsam (weiße Fläche, Ruckeln) | Meist zeichnet der Browser ohne Grafikbeschleunigung auf der CPU. Chromium/Chrome: `chrome://gpu` muss bei „Canvas“ und „Rasterization“ „Hardware accelerated“ zeigen; Firefox: `about:support`, Abschnitt „Grafik“. In den Einstellungen die Hardwarebeschleunigung einschalten, bei Bedarf den Grafiktreiber installieren (`sudo ubuntu-drivers autoinstall`). Auf sehr alten Rechnern hilft ein kleineres Fenster |
 
@@ -1720,7 +1724,7 @@ Der ESP32 meldet sich nach der Anmeldung mit einer eigenen Verbindung zurück zu
 
 Das Programm beobachtet das ab 2.22 selbst: Im Protokoll steht beim Start eine Zeile „Raspberry Pi: Modell, get_throttled=…, Temperatur, Speicher“, danach etwa einmal pro Minute eine weitere. Meldet der Pi **Unterspannung** oder **Drosselung**, steht eine Warnung im Protokoll und beim nächsten Öffnen der Seite eine gelbe Meldung. Von Hand zeigt `vcgencmd get_throttled` die Bits (0x0 ist in Ordnung; 0x50005 heißt Unterspannung, aktuell und seit dem Start), und `dmesg | grep -i -E "volt|oom|killed"` zeigt Meldungen des Systems. Bei einem Absturz bitte das Protokoll aufheben und mitschicken.
 
-**Dateien mit Umlauten fehlen nach dem Entpacken** (zum Beispiel `Pattern_Config_Examples/vorsignal_grün.png`, beim Start „9 Dateien fehlen“): Ältere ZIP-Dateien (bis 2.18) enthielten die Namen mit Umlauten ohne UTF-8-Kennzeichen; Linux („Hier entpacken“) legte sie dann mit falschem Namen an. Abhilfe: **Hilfe → Update webMobaLedLib …** (stellt die Dateien wieder her). Ab 2.22 baut `zip_erstellen.bat` das ZIP mit Python und setzt das Kennzeichen; die Prüfung des ZIP lehnt ein ZIP ohne es ab.
+**Dateien mit Umlauten fehlen nach dem Entpacken** (zum Beispiel `Pattern_Config_Examples/vorsignal_grün.png`, beim Start „9 Dateien fehlen“): Ältere ZIP-Dateien (bis 2.18) enthielten die Namen mit Umlauten ohne UTF-8-Kennzeichen; Linux („Hier entpacken“) legte sie dann mit falschem Namen an. Abhilfe: **Hilfe → Update MobaLedLib Studio …** (stellt die Dateien wieder her). Ab 2.22 baut `zip_erstellen.bat` das ZIP mit Python und setzt das Kennzeichen; die Prüfung des ZIP lehnt ein ZIP ohne es ab.
 
 ### 9.6 Wenn nichts mehr geht (Installation beschädigt oder Update unterbrochen)
 
@@ -1729,7 +1733,7 @@ Ein Update kann abbrechen, wenn der Strom ausfällt, das Programm beendet wird o
 1. **Hinweis „Das Update … ist abgebrochen oder fehlgeschlagen. Das Programm ist automatisch zur vorherigen Version … zurückgegangen“** (orange, oben auf der Seite): Das Programm hat selbst den alten Stand
    wiederhergestellt, Ihre Tabellen und Einstellungen sind nicht betroffen. Mit **OK** schließen. Das Update später noch einmal versuchen. Scheitert es wieder an derselben Datei, **Programm beenden, Sicherungs-
    oder Virenprogramm kurz anhalten** (oder den Ordner `python` und den Datenordner ausnehmen) und das Update wiederholen.
-2. **Rote Meldung „… Dateien fehlen oder haben eine andere Größe als in der Prüfliste des Releases“:** Menü **Hilfe → Update webMobaLedLib …** ausführen. Auch bei gleicher Version vergleicht das Update jede Datei
+2. **Rote Meldung „… Dateien fehlen oder haben eine andere Größe als in der Prüfliste des Releases“:** Menü **Hilfe → Update MobaLedLib Studio …** ausführen. Auch bei gleicher Version vergleicht das Update jede Datei
    mit dem Release und **stellt fehlende und beschädigte Dateien wieder her**. Danach das Programm neu starten. (Dateien, die das Programm selbst erzeugt, zum Beispiel `LEDs_AutoProg.h`, werden beim Start nur auf Vorhandensein geprüft.)
 3. **Das Programm startet gar nicht, oder rot „Das automatische Zurückgehen war nicht vollständig“: Reparaturskript.** Es braucht das Programm nicht und läuft auch, wenn `webmobaledlib.py` beschädigt ist.
    Das Programm vorher beenden, dann:

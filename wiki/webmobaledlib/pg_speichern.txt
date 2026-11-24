@@ -1,5 +1,5 @@
-====== webMobaLedLib – Speichern und Laden ======
-//Seitenstand 1.06 (2026-11-24), gilt für webMobaLedLib 4.96//
+====== MobaLedLib Studio – Speichern und Laden ======
+//Seitenstand 1.08 (2026-11-24), gilt für Version 5.12//
 
 Das Programm speichert deine Arbeit **automatisch**. Zusätzlich kannst du sie als **Datei** sichern, weitergeben und wieder laden.
 
@@ -16,7 +16,7 @@ Deine Daten liegen im **Datenordner** des Programms, getrennt von den Programmda
 
 ===== Das Menü „Datei“ =====
 
-{{:bilder:anleitungen:webmobaledlib:pg_08_dateimenue.png?400|Das Menü Datei}}
+{{:bilder:anleitungen:mobaledlibstudio:pg_08_dateimenue.png?400|Das Menü Datei}}
 
 ^ Eintrag ^ Wirkung ^
 | **ProgrammGenerator: PGF-Datei speichern** | Speichert die **Tabelle** als Datei mit der Endung **.MLL_pgf**. Die Datei landet im Download-Ordner des Rechners, an dem du sitzt. Mit ihr gibst du dein Programm weiter oder machst eine Sicherung. |
@@ -27,7 +27,7 @@ Deine Daten liegen im **Datenordner** des Programms, getrennt von den Programmda
 | **Sicherungsdatei öffnen …** | Zeigt die Sicherungen des Sicherungsordners (neueste zuerst) und lädt die gewählte. |
 | **Sicherungsort ändern …** | Ändert Ordner und Namen der Sicherungsdateien. |
 | **Importieren v. altem Programm …** (seit 4.54) | Zeigt, wie du die Daten des alten Excel-Programms über eine PGF-Datei übernimmst. |
-| **ProgrammGenerator: Anlagenansicht speichern …** | Speichert die [[anleitungen:webmobaledlib:pg_grafisch|grafische Anlagenansicht]] (Bild und Positionen) als Datei **<Blatt>.MLL_view**. |
+| **ProgrammGenerator: Anlagenansicht speichern …** | Speichert die [[anleitungen:mobaledlibstudio:pg_grafisch|grafische Anlagenansicht]] (Bild und Positionen) als Datei **<Blatt>.MLL_view**. |
 | **Tabelle drucken …** (seit 4.62) | Öffnet ein Fenster zur **Auswahl der Spalten** und danach eine **Druckansicht** mit allen Zeilen der aktuellen Tabelle (Querformat A4, Kopfzeile auf jeder Seite, mit Zeilenfarben). Gedruckt wird über den **Druckdialog des Browsers**, dort geht auch **Als PDF speichern**. Gedruckt werden **alle Zeilen**, die **markierten Zeilen** oder ein **Zeilenbereich** (Zeilennummern wie links in der Tabelle). Das Programm merkt sich die zuletzt gewählten Spalten für jede Tabelle. Der Druck des Browserfensters selbst (Strg + P) zeigt nur die sichtbaren Zeilen und ist dafür nicht geeignet. |
 | **ProgrammGenerator: Anlagenansicht laden …** | Lädt eine solche Datei. |
 | **Beenden …** | Beendet das Programm. Das Programm fragt, ob es vorher speichern soll (siehe oben). |
@@ -49,7 +49,7 @@ Zum **Zurückholen** wählst du //Datei → Sicherungsdatei öffnen …//. Das P
 
 ===== Einstellungen auf einen anderen PC übernehmen (seit 4.24) =====
 
-Du hast webMobaLedLib auf zwei PCs, zum Beispiel im Büro und an der Anlage? Die **Tabellen** nimmst du wie bisher mit //Datei → ProgrammGenerator-Workbook speichern als// und //von Datei lesen// mit. Die **Einstellungen** des Programms stehen nicht in der Arbeitsmappe. Dafür gibt es zwei Menüpunkte:
+Du hast MobaLedLib Studio auf zwei PCs, zum Beispiel im Büro und an der Anlage? Die **Tabellen** nimmst du wie bisher mit //Datei → ProgrammGenerator-Workbook speichern als// und //von Datei lesen// mit. Die **Einstellungen** des Programms stehen nicht in der Arbeitsmappe. Dafür gibt es zwei Menüpunkte:
 
   - **Auf dem ersten PC:** //Einstellungen → Einstellungen sichern …// und **ZIP-Datei erstellen** wählen. Der Browser speichert die Datei //webMobaLedLib_Einstellungen_…zip//.
   - Die Datei auf den anderen PC bringen (USB-Stick, Netzlaufwerk, E-Mail).
@@ -61,7 +61,7 @@ Du hast webMobaLedLib auf zwei PCs, zum Beispiel im Büro und an der Anlage? Die
 
 **Gut zu wissen:**
   * Die vorhandenen Einstellungen des anderen PCs werden vorher gesichert (die letzten drei Sicherungen bleiben im Datenordner, Ordner //settings_backup_…//).
-  * Beide PCs sollten dieselbe webMobaLedLib-Version haben.
+  * Beide PCs sollten dieselbe Programmversion haben.
   * Die Übernahme geschieht beim Neustart. Die Fensterlage des anderen PCs bleibt.
 
 ===== Beispiele =====
@@ -70,4 +70,4 @@ Auf dem Blatt **Examples** (Blattreiter unten) stehen **Beispiele** zum Ausprobi
 
 ===== Eine Datei aus der Excel-Version laden =====
 
-Dateien des Excel-Programmgenerators mit der Endung **.MLL_pgf** lassen sich in der webMobaLedLib laden, auch von älteren Versionen. Nutze dafür **PGF-Datei lesen**.
+Dateien des Excel-Programmgenerators mit der Endung **.MLL_pgf** lassen sich in MobaLedLib Studio laden, auch von älteren Versionen. Nutze dafür **PGF-Datei lesen**.

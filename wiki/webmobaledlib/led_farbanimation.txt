@@ -1,19 +1,19 @@
-====== webMobaLedLib – LED Farb-Animation ======
-//Seitenstand 1.03 (2026-11-23), gilt für webMobaLedLib 4.79//
+====== MobaLedLib Studio – LED Farb-Animation ======
+//Seitenstand 1.05 (2026-11-24), gilt für Version 5.12//
 
 Mit der **LED Farb-Animation** lässt du die **Farbe einer RGB-LED** sich langsam verändern: ein sanfter Wechsel von Rot nach Blau, ein Sonnenaufgang, ein Flackern oder ein Farbwechsel für ein Aquarium oder eine Disco. Du **zeichnest den Verlauf als Kurven**, und das Programm macht daraus die Einträge für die Lichtmaschine.
 
-Zum Ausprobieren steuert das Programm die LED **direkt** an (**Direktmodus**, siehe [[anleitungen:webmobaledlib:pg_arduino#die_drei_arten_der_verbindung|Die drei Arten der Verbindung]]).
+Zum Ausprobieren steuert das Programm die LED **direkt** an (**Direktmodus**, siehe [[anleitungen:mobaledlibstudio:pg_arduino#die_drei_arten_der_verbindung|Die drei Arten der Verbindung]]).
 
-Der Dialog arbeitet **fast genauso wie die [[anleitungen:webmobaledlib:servo_animation|Servo Animation]]**. Es gibt aber **drei Kurven** statt einer: eine für **Rot**, eine für **Grün** und eine für **Blau**.
+Der Dialog arbeitet **fast genauso wie die [[anleitungen:mobaledlibstudio:servo_animation|Servo Animation]]**. Es gibt aber **drei Kurven** statt einer: eine für **Rot**, eine für **Grün** und eine für **Blau**.
 
-{{:bilder:anleitungen:webmobaledlib:led_01_dialog.png?700|Der Dialog LED Farb-Animation mit den Einstellungen links und den drei Kurven rechts}}
+{{:bilder:anleitungen:mobaledlibstudio:led_01_dialog.png?700|Der Dialog LED Farb-Animation mit den Einstellungen links und den drei Kurven rechts}}
 
 ===== Das brauchst du =====
 
   * Eine **RGB-LED** (WS2812 oder WS2811) an der MobaLedLib.
-  * Die webMobaLedLib mit einer **Tabellenzeile** für die LED (siehe [[anleitungen:webmobaledlib:pg_tabelle|Die Tabelle bedienen]]).
-  * Zum **Ausprobieren** eine **verbundene Lichtmaschine** ([[anleitungen:webmobaledlib:pg_arduino|Verbinden und Übertragen]]). Ohne Lichtmaschine kannst du die Animation trotzdem planen.
+  * MobaLedLib Studio mit einer **Tabellenzeile** für die LED (siehe [[anleitungen:mobaledlibstudio:pg_tabelle|Die Tabelle bedienen]]).
+  * Zum **Ausprobieren** eine **verbundene Lichtmaschine** ([[anleitungen:mobaledlibstudio:pg_arduino|Verbinden und Übertragen]]). Ohne Lichtmaschine kannst du die Animation trotzdem planen.
 
 ===== Den Dialog öffnen =====
 
@@ -54,7 +54,7 @@ Die drei Kurven heißen dann **Rot(H)**, **Grün(S)** und **Blau(V)**. Das Progr
 
 ===== Eigene Kurven zeichnen (Farbverlauf Individuell) =====
 
-{{:bilder:anleitungen:webmobaledlib:led_02_kurven.png?600|Die drei Kurven Rot, Grün und Blau, die aktive Kurve ist kräftig gezeichnet}}
+{{:bilder:anleitungen:mobaledlibstudio:led_02_kurven.png?600|Die drei Kurven Rot, Grün und Blau, die aktive Kurve ist kräftig gezeichnet}}
 
 Beim **Farbverlauf Individuell** erscheinen **Punkte** auf den Kurven. Du bearbeitest immer **eine Kurve** zur Zeit:
 
@@ -90,7 +90,7 @@ Du kannst die Zeile **später wieder öffnen** und ändern. Das Programm liest d
 ===== Wenn etwas nicht klappt =====
 
 ^ Was passiert ^ Was hilft ^
-| Die LED leuchtet beim Ausprobieren nicht | Ist die **Lichtmaschine verbunden**? Stimmen **LED Adresse** und **Anschluss-Kanal**? Prüfe die Kabel ([[anleitungen:webmobaledlib:pg_arduino|Verbinden und Übertragen]]). |
-| Die Farben auf der LED sehen anders aus als auf dem Bildschirm | LEDs zeigen Farben anders als Bildschirme. Teste Farben im [[anleitungen:webmobaledlib:wz_farbtest|Farb Test]] an der LED und stelle bei Bedarf die **LED-Farbkorrektur** ein. |
+| Die LED leuchtet beim Ausprobieren nicht | Ist die **Lichtmaschine verbunden**? Stimmen **LED Adresse** und **Anschluss-Kanal**? Prüfe die Kabel ([[anleitungen:mobaledlibstudio:pg_arduino|Verbinden und Übertragen]]). |
+| Die Farben auf der LED sehen anders aus als auf dem Bildschirm | LEDs zeigen Farben anders als Bildschirme. Teste Farben im [[anleitungen:mobaledlibstudio:wz_farbtest|Farb Test]] an der LED und stelle bei Bedarf die **LED-Farbkorrektur** ein. |
 | Ein Punkt lässt sich in der Zeit nicht ziehen | Stelle die **Zeitstufen** auf **Individuell**. |
 | Die Kurven sind beim erneuten Öffnen leer | Nur bei **Individuell** liest das Programm die Punkte aus der Zeile **PatternT…**. Hast du diese Zeile von Hand geändert, kann das fehlen. Zeichne die Kurven neu. |

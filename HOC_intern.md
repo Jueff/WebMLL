@@ -1,5 +1,5 @@
-Datei-Version: 1.76 (2026-11-24) - HOC_intern.md
-Stand: webMobaLedLib 4.98
+Datei-Version: 1.90 (2026-11-24) - HOC_intern.md
+Stand: Version 5.12
 
 # webMobaLedLib: History of Change (intern, ausführlich)
 
@@ -24,6 +24,220 @@ Release-Stand 2.12 auf Wunsch des Entwicklers („Release bauen“). **Neu im Ab
 | `archiv/` | frühere Release-Hinweise, Versionslisten und ZIP (nichts gelöscht) |
 
 **Geprüft:** Dateipaket: `testzip` in Ordnung, alle 113 Dateien gleich dem Ordner `headless`, keine `__pycache__`, alle `.py` kompilieren, Versionsprüfung „alles passt“ (50 Einträge), 11 Dateien ausführbar (`.sh`, `.command`). **Nachbau des Entwickler-Ablaufs mit seinem echten Paket (1678 Dateien, Stand 2.05):** meine 113 Dateien darübergelegt, Prüfliste, ZIP gepackt, `release_tools check --previous <sein ZIP>`: **in Ordnung** (Version 2.12, 1678 Dateien, 6 neue, 0 fehlende, ZIP 16,6 MB). Alle 15 Prüfreihen laufen (17, 26, 15, 70, 28, 19, 43, 26, 16, 27, 8, 8, 8, 5, 9 Prüfungen). **Nicht geprüft:** `zip_erstellen.bat` und die Reparaturskripte unter Windows, ein abgebrochenes Update unter Windows, das Verhalten mit Acronis, der Download von GitHub.
+
+## 5.12 (2026-11-24), Wiki-Namensraum mobaledlibstudio
+
+Auftrag (Harold): Im Wiki sind alle Links von `webmobaledlib` auf `mobaledlibstudio` umgestellt (Beispiel: `anleitungen/mobaledlibstudio/einfuehrung`). „Hilfe → Hilfe öffnen“ ging noch auf die alte Seite.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 5.12 | `help_url()` (Menü Hilfe → Hilfe öffnen) liefert `HELP_WIKI_URL` statt `HelpPageURL` aus `MobaLedTest_macrodef.json` (dort stand `anleitungen/spezial/pyprogramgenerator`; die Datei bleibt für die Tk-Oberfläche unverändert) |
+| `proggen/M20_PageEvents_a_Functions.py` | 1.15 | `HELP_WIKI_URL` = `https://wiki.mobaledlib.de/anleitungen/mobaledlibstudio/einfuehrung` |
+| `_web/web_esp32_ota.py`, `_web/web_form_servoanim.py`, `_web/web_pattgen.py` | 1.09, 1.05, 1.25 | Hilfe-Adressen: `mobaledlibstudio/ota`, `mobaledlibstudio/servo_animation` (vorher `spezial/pyprogramgenerator/servo_animation`), `mobaledlibstudio/patterngenerator` (vorher `spezial/patterngenerator`) |
+| Wiki (`wiki/webmobaledlib/*.txt`, 40 Seiten) | +0.01 | alle Links `anleitungen:webmobaledlib:…` → `anleitungen:mobaledlibstudio:…`, auch die Bild-Links `bilder:anleitungen:webmobaledlib:…` → `bilder:anleitungen:mobaledlibstudio:…` (siehe Hinweis); Kopf „gilt für Version 5.12“ |
+| `README.md`, `START_HIER.*`, `wiki/LIESMICH_Wiki_Gesamt.md`, `KI_prompt/KI_ENTWICKLUNG_Prompt.md` | | Wiki-Adressen angepasst |
+
+Nicht geändert: Der Zip-Ordner `wiki/webmobaledlib/` (Gruppe B, Lieferstruktur) und der Dateiname `webmobaledlib.zip`. Die Tk-Dialoge (zum Beispiel `Userform_Animation.py`) verweisen noch auf `spezial/…`; sie sind obsolet.
+
+**Hinweis:** Die Bild-Links habe ich mit umgestellt, weil im Wiki „alle Links“ umgestellt wurden. Liegen die Bilder noch im Namensraum `bilder:anleitungen:webmobaledlib`, bitte melden, dann nehme ich sie zurück. Nicht im Browser getestet.
+
+## 5.11 (2026-11-24), Niederländisch-Feedback (Tester zu 4.98)
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `csv/Web_Languages.csv` | | Neue Zeile „Erweiterungen …“ (Menü Einstellungen, mit Auslassungspunkten) → NL „Uitbreidingen …“; in 14 niederländischen Zellen „extensie(s)“ → „uitbreiding(en)“; 12 Hinweistexte der Einstellungsfenster ergänzt (7 Sprachen, zum Beispiel „Zeilenfarbe“, „Sound Anschluss R“, „Vergleichsoperator“) |
+| `_web/web_params.py` | 1.18 | Hinweise (Tooltips) der Einstellungsfelder gehen ausdrücklich durch `tr()` (2 Stellen, Zeilen `# v5.11`) |
+
+Ursache der deutschen Tooltips in 4.98 ist nicht geklärt: Der globale Eingriff in `Element.tooltip` (`web_i18n.install`) sollte übersetzen, die Schlüssel stehen in der CSV. Der ausdrückliche `tr()`-Aufruf ist die sichere Lösung. Prüfung ohne Browser: `tr()` liefert mit Sprache 2 den niederländischen Text. Nicht im Browser getestet.
+
+## 5.10 (2026-11-24), Symbole „MobaLedLib Studio“, HSV-Hinweis, Firewall-Text
+
+Entscheidung (Harold): alle drei offenen Punkte mit Ja.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `install/install_windows.bat` | 1.13 | Verknüpfung `MobaLedLib Studio.lnk`; `webMobaLedLib.lnk` und `pyMobaLedLib - Web.lnk` werden entfernt |
+| `install/install_linux.sh`, `install/uninstall_linux.sh` | 1.11, 1.03 | Starter `MobaLedLibStudio.desktop` mit `Name=MobaLedLib Studio` (Menü und Schreibtisch); `webMobaLedLib.desktop` und `pyMobaLedLib.desktop` werden entfernt (installieren und deinstallieren) |
+| `pi/install_pi.sh`, `pi/uninstall_pi.sh`, `pi/mobaledlib.desktop.in` | 1.13, 1.02, 1.03 | wie Linux (Schreibtisch und `~/.local/share/applications`) |
+| `install/install_mac.command` | 1.15 | `MobaLedLib Studio.app` (Programmdatei `MobaLedLibStudio`, Anzeigename in `Info.plist`); `webMobaLedLib.app` wird entfernt, wenn es von diesem Skript stammt (Programmdatei enthält `webmobaledlib.py`), ebenso `pyMobaLedLib.app` |
+| `csv/Par_Description.csv` | | Hinweis zu `HSVColor` in allen 6 Sprachen: Farbwert 0 bis 255 auf dem Regenbogen (0 Rot, 32 Orange, 64 Gelb, 96 Grün, 128 Zyan, 160 Blau, 192 Violett, 224 Pink, 255 wieder Rot), Sättigung und Helligkeit voll; die alte Formel Winkel * 255 / 360 (und die kaputten „%3D“ in FR, IT, ES, DA) entfällt |
+| `_web/web_access.py` | 1.14 | Text „Regel webMLL Server <Port>“ statt „webMobaLedLib <Port>“; `csv/Web_Languages.csv`: dieselbe Zeile in allen Sprachen (7 Stellen) |
+| Dokumente und Wiki | | Anleitung 5.10, Checkliste 3.91 (Punkt 354 neu, Punkt 353 angepasst), START_HIER, Wiki: aktualisieren, erstes_programm, linux, macos, raspberrypi, windows (Seitenstand +0.01). Symbolnamen, `.app`, `.desktop` angepasst. |
+
+**Folge:** Nach einem Update über das Menü bleiben die alten Symbole bis zum nächsten Lauf des Installationsskripts („webMobaLedLib“); dort werden sie ersetzt. Der Datenordner `webMobaLedLib` bleibt (Gruppe B).
+
+Nicht geprüft: Skripte nur mit `bash -n` (Windows-Zeile nicht ausgeführt); die Symbole auf einem echten Windows, Linux, macOS und Pi bitte testen, besonders das Entfernen der alten Symbole und macOS (Name mit Leerzeichen).
+
+## 5.09 (2026-11-24), Anzeigename „MobaLedLib Studio“ (Gruppe A)
+
+Auftrag (Harold, nach der Bestandsaufnahme von Stand 4.95): Gruppe A (Anzeigetext) umstellen, Gruppe B (technische Namen) und C (Update-Verfahren, Verknüpfungen) unverändert lassen. Vor der Versionsangabe steht kein Programmname („gilt für Version 5.09“, „Stand: Version 5.10“).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `csv/Web_Languages.csv` | | 12 Zeilen in allen 7 Sprachen: Update-Menü und -Fenster, Testversion, Meldungen bei Abbruch und Rückgang, Seite „… beendet“, „Adresse unbekannt“, Sicherungszeile, Hinweise. Der deutsche Text ist der Schlüssel; `Web-Oberfläche: webMobaLedLib ` wurde zu `Web-Oberfläche:` (die Versionsangabe folgt ohne Namen). Die Zeile mit dem Namen der Firewallregel blieb (Regelname, Gruppe B). |
+| `webmobaledlib.py` | 5.09 | Meldungen (Update, Abbruch, Beenden-Seite, Seitentitel, Hilfe → Über, Sicherungszeile, Menüpunkt „Update MobaLedLib Studio …“, Mitteilungen beim Start). Alte Zeilen als Kommentar mit `# v5.09 (entfallen)`. |
+| `_web/web_dialogs.py` | 1.14 | Standardtitel der Dialoge |
+| `_web/web_form_options.py` | 1.49 | Text „Das Programm MobaLedLib Studio selbst aktualisieren …“ (Schlüssel wie in der Tabelle) |
+| `_web/web_tabs.py` | 1.36 | Seite „MobaLedLib Studio: Adresse unbekannt“ |
+| `repair.py` | 1.05 | Meldungen der Reparatur |
+| `install/install_windows.bat` 1.12, `start_windows.bat` 1.05, `repair_windows.bat` 1.01, `repair_linux.sh` 1.01, `repair_mac.command` 1.01, `install_linux.sh` 1.10, `install_mac.command` 1.14, `start_linux.sh` 1.05, `pi/start_mobaledlib.sh` 1.02, `pi/mobaledlib-web.service` 1.03 | | Titel und Meldungen in den Fenstern, Beschreibung der Verknüpfung, Dienstbeschreibung. **Dateinamen und Namen der Symbole (`webMobaLedLib.lnk`, `.app`, `.desktop`) unverändert.** |
+| Dokumente und Wiki | | Anleitung 5.09, Checkliste 3.90, HOC_Anwender, README, START_HIER (3 Fassungen), KI_prompt, LIESMICH_Wiki_Gesamt, alle Wiki-Seiten außer `seiten_update` (Protokoll). Seitenstand je Seite +0.01, Kopf „gilt für Version 5.09“. Artikel angepasst („die webMobaLedLib“ → „MobaLedLib Studio“, „Herz der …“ → „Herz von …“, `webMobaLedLib-Version` → „Programmversion“). Die Stellen mit Symbol, Datenordner, Dateinamen und Regelname blieben. |
+
+**Nicht geändert (bewusst):** Gruppe B (Dateien `webmobaledlib.py/.zip/.log`, Datenordner, Wiki-Namespace und Links, Repository, Regelnamen der Firewall, Anmeldename, User-Agent, Format der Einstellungsdatei, Kennzeichen in `release_manifest.json` und `release_tools.py`) und Gruppe C (Name im Update-Verfahren und Release-Dateiname, Namen der Verknüpfungen auf Desktop und im Menü). `headless/headless_app_controller.py` (Titel des Excel-Anwendungsobjekts) und die Textausgabe von `headless_hex_upload.py` (Protokoll des Builds) blieben. HOC_intern, die Seite `seiten_update` und alte Release-Hinweise sind Protokolle. In `web_access.py` und der zugehörigen Tabellenzeile steht der Regelname „webMobaLedLib <Port>“, im Programm heißt die Regel aber „webMLL Server <Port>“ (schon vor 5.09 abweichend; Korrektur offen).
+
+Geprüft: alle geänderten Python-Dateien kompilieren; jeder geänderte `tr()`-Text hat in der Tabelle einen Schlüssel mit denselben Wörtern; die Tabelle hat weiter 7 Spalten in allen 1741 Zeilen; Skripte mit `bash -n`. Nicht geprüft: Oberfläche im Browser, Installation, Wiki-Darstellung.
+
+## 5.08 (2026-11-24), Anzeigename „MobaLedLib Studio“ (erste Stufe)
+
+Entscheidung (Harold): Der Anzeigename wird „MobaLedLib Studio“. Gruppe A wird umgestellt: Titel „webMobaLedLib – Programmgenerator“ → „MobaLedLib Studio“, vor der Versionsangabe kein „webMobaLedLib“. (Die Aufzählung der Gruppe A lag mir nach dem Kontextwechsel nicht mehr vor; umgesetzt ist, was im Wortlaut genannt wurde, plus der gleichlautende Tabtitel.)
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 5.08 | Kopfzeile: Titel `MobaLedLib Studio`; Versionsfeld nur `{VERSION}` (zum Beispiel „5.08 (2026-11-24)“); Tabtitel des Browsers (`ui.run(title=...)`) `MobaLedLib Studio`. |
+| `install/find_mobaledlib.py` | 1.02 | Erkennt zusätzlich den Seitentitel „MobaLedLib Studio“ (die Anmeldung „webMobaLedLib“ bleibt, deshalb wird er auch ohne Titel gefunden). |
+
+**Bewusst unverändert** (interne Namen, Änderung würde Bestehendes brechen oder gehört in eine spätere Stufe): Anmeldename (Realm) `webMobaLedLib`, Datenordner `webMobaLedLib`, Dateiname `webmobaledlib.py` und ZIP, Firewallregel, User-Agent, Einstellungsdatei-Format, Meldungstexte und Menüpunkte „Update webMobaLedLib …“, About-Fenster, Mitteilungen beim Start, Seite „webMobaLedLib beendet“, Standardtitel der Dialoge, Dokumente und Wiki.
+
+## 5.07 (2026-11-24), House-Formular wie das Parameterformular
+
+Wunsch (Harold): Dieselben Änderungen (einheitliche Zahlenfelder mit −/+, Regler, Mausrad) im House-Formular.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_form_house.py` | 1.08 | Neue Klasse `_NumRow` (Regler + Zahlenfeld mit −/+ und Mausrad, nutzt `_stepper`/`_wheel` aus `web_form_other`; Schnittstelle wie ein Eingabefeld, Wert als Text). Min. Anzahl 0–127, Max. Anzahl 1–255, Min./Max. Zeit 0–254 (Bereiche wie `check_numbers`) mit Regler; LED Kanal ohne Regler als Zahlenfeld, Obergrenze `M02.LED_CHANNELS - 1` (neu in `spec["led_channels"]`). Ist ein Startwert keine Zahl, bleibt das Textfeld. Tooltips hängen an der Zeile. Automatische Vorbelegung (`calc_min_cnt`, `calc_max_cnt`), Sperre der Zeitfelder und „geändert“-Merker unverändert. |
+| `webmobaledlib.py` | 5.07 | Version, Historie, Mindestversion web_form_house 1.08 |
+
+Nicht im Browser geprüft (nur Kompilieren, NiceGUI fehlt hier). Zu prüfen: Breite von Beschriftung, Regler und Zahlenfeld in den zwei Spalten, Sperren der Zeit-Felder bei „Individuelle Zeiten“ aus.
+
+## 5.06 (2026-11-24), Parameterformular: LED Kanal Auswahl als farbige Tasten
+
+Wunsch (Harold): Statt der Auswahlkreise farbige Tasten in der Farbe der Auswahl (Gelb, Zyan, Rot, Grün, Blau).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_form_other.py` | 1.10 | Neu `_add_led_buttons` und `LED_OPTION_COLORS`: pro Option eine Taste (Alle grau, 1&2 Gelb, 2&3 Zyan, 1 Rot, 2 Grün, 3 Blau); gewählt = voll farbig mit blauem Rahmen und Fettschrift, die anderen blass. Ausgabe über `_Holder` (Wert wie bisher "1" bis "6"). |
+| `webmobaledlib.py` | 5.06 | Version, Historie, Mindestversion |
+
+Nicht im Browser geprüft; Farben und Kontrast bitte ansehen.
+
+## 5.05 (2026-11-24), Parameterformular: einheitliche Zahlenfelder, Mausrad
+
+Wunsch (Harold, nach Test von 5.04): LED Channel und die Felder hinter dem Regler sollen wie die ms-Felder aussehen (Zahl direkt eintragbar, Tasten − und +); Änderung auch mit dem Mausrad.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_form_other.py` | 1.09 | `_stepper`: feste Breite (`w-36 shrink-0`), damit der Regler die Zahl nicht mehr verdrängt (in 5.04 waren hinter dem Regler nur − und + sichtbar). Neu `_wheel`: Ereignis `wheel.prevent` (Rad nach oben = plus, Seite scrollt nicht) auf Zahlenfeldern und Reglern, Schritt wie die Tasten. LED Channel: bei ganzer Zahl ein Zahlenfeld wie die anderen (Ausgabe weiter als Text), sonst Textfeld. |
+| `webmobaledlib.py` | 5.05 | Version, Historie, Mindestversion web_form_other 1.09 |
+
+Nicht im Browser geprüft (nur Kompilieren). Zu beobachten: ob das Rad auch bei nicht fokussiertem Feld reagiert (Hover genügt, so umgesetzt) und das Verhalten bei Zeitfeldern mit Übertrag.
+
+## 5.04 (2026-11-24), Parameterformular der Makros: Regler, Zeitfelder, HSV-Farbe
+
+Wunsch (Harold): Die Eingabeformulare der Makros sehen einfach aus; Regler bei Zahlenwerten, Farbanzeige beim HSV-Farbwert, Zeitwerte wie im Excel-Programm (Min, Sek, ms), dazu Tasten + und −; Grenze für Regler 1000.
+
+Umsetzung nur im Web-Formular (`web_form_other.py`, `_other_async`); die Prüfungen und die Tk-Dialoge sind unverändert. Die Felder liefern den Wert weiter als Text (`_Holder.value`), die Auswertung in `Create_Result` bleibt gleich.
+- **Zahlen** (Typ leer, Minimum und Maximum ganzzahlig, Spannweite höchstens 1000, aktueller Wert eine Zahl): `ui.slider` und `ui.number` mit Tasten (Slots prepend/append), beide gekoppelt. Sonst bleibt das Textfeld.
+- **Zeit** (Typ Time, Wert lesbar: Zahl = ms, oder Zahl mit Einheit Min/Sek/Sec/ms): Felder Min, Sek, ms mit Übertrag (1500 ms → 1 Sek 500 ms). Ausgabe mit der größten ganzen Einheit: `1 Sek`, `2 Min`, `1500 ms`. Ohne Min-Feld, wenn das Maximum unter einer Minute liegt (ohne Sek-Feld unter einer Sekunde).
+- **HSV-Farbwert** (Parametername `HSVColor`): Regler 0 bis 255 mit Farbverlauf als Hintergrund (CSS auf `.mll-hue`), Zahlenfeld mit Tasten, Farbfeld. Umrechnung wie `hsv2rgb_rainbow` in `libraries/MobaLedLib/src/PicoFastLED.cpp` (Y1=1), Sättigung und Helligkeit 255.
+- Parameter mit den Optionen `Inv`, `pf` oder `...` (verändern den Wert) und Listen bleiben unverändert.
+
+Auffälligkeit: Der Hinweistext von `HSVColor` in `Par_Description.csv` nennt „Farbwert = Winkel × 255 / 360“ und im Wiki sind 25 = Orange, 81 = Grün, 171 = Blau genannt; die MobaLedLib rechnet aber mit rainbow (0 Rot, 32 Orange, 96 Grün, 160 Blau). Das Farbfeld zeigt die tatsächliche LED-Farbe. Der Text wurde nicht geändert.
+
+Geprüft: Kompilieren; Hilfsfunktionen und die Kopplung der Felder mit einem Fake-`ui` (Übertrag der Zeit, Klemmen, Rundungen). Nicht geprüft: Darstellung im Browser (NiceGUI ist hier nicht installiert), insbesondere das CSS des Farbreglers, die Tasten in den Slots und die Höhe des Dialogs bei vielen Parametern.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 5.04 | Version, Dateiprüfung |
+| `_web/web_form_other.py` | 1.08 | Regler, Zeitfelder, HSV-Farbe |
+| `install/ANLEITUNG_Installation.md`, `BETATEST_Checkliste.md` | 5.04 / 3.85 | Beschreibung, Punkt 353 |
+
+---
+
+## 5.03 (2026-11-24), Pull Request 66 von Jürgen: Ganz flashen nach jedem Softwareupdate (Issue 64)
+
+Idee (Jürgen, Hinweis von moosbewohner: Versionsnummer prüfen): Beim schnellen Konfigurationstransfer (ESP32/Pico) wurde nur dann ganz geflasht, wenn sich die Firmware-Signatur änderte. Geänderter Firmware-Code durch ein Softwareupdate blieb unbemerkt. Lösung in `M42_Dyn_Config.Finalize`: Die Signatur wird mit `VERSION` aus `webmobaledlib.py` (gelesen aus der Datei, nicht aus dem laufenden Modul) gehasht. Jede neue Programmversion ergibt eine neue Signatur, also einmal ganz flashen, danach wieder nur die Konfiguration.
+
+Zusammenführung: Der PR (M42 1.06) kollidierte nur in der Versionsnummer mit meiner M42 1.06 (Identify); von Hand als **1.07** angewendet, Zeilen mit `# v1.07`. Folge für die Entwicklung: **Jede** neue Versionsnummer (auch Zwischenstände) löst einmal ganzes Flashen aus.
+
+Geprüft: kompiliert. Nicht geprüft: Hardware.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 5.03 | Version, Dateiprüfung |
+| `proggen/M42_Dyn_Config.py` | 1.07 | `_program_version`, Signatur mit Programmversion |
+| `install/ANLEITUNG_Installation.md`, `BETATEST_Checkliste.md` | 5.03 / 3.84 | Beschreibung, Punkt 352 |
+
+---
+
+## 5.02 (2026-11-24), Pull Request 39 von Jürgen (Issue 35): Board-Typ bei der Erkennung wählen
+
+Der PR (von Version 3.9x, mit 4 Konflikten und ohne Versionsmarkierungen, dazu ein Umbau der Boardliste im Optionen-Dialog) wurde **nicht als Ganzes** übernommen. Auf Wunsch (Punkt 2 des Vorschlags) nur der Auswahldialog: Neue Funktion `_choose_detected_board_type` in `web_form_options.py` und ihr Aufruf in `_web_detect_board`, nach dem Weglassen des Anschlusses der anderen Seite: Sind in den gefundenen Anschlüssen mehrere Typen, fragt ein Fenster (Radiogruppe mit Typ und Anschlüssen, OK erst nach Auswahl, Abbrechen beendet die Erkennung); danach arbeitet die Erkennung wie bisher nur mit den Anschlüssen des gewählten Typs. Nicht übernommen: Umbau der Radiogruppen („Für andere Hauptplatine“), geänderte Hinweistexte, Änderung in `UserForm_Options.py` (Tk). Übersetzungen: 6 Zeilen aus dem PR in `Web_Languages.csv`.
+
+Geprüft: kompiliert. Nicht geprüft: Oberfläche (der Dialog braucht NiceGUI), Hardware.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 5.02 | Version, Dateiprüfung |
+| `_web/web_form_options.py` | 1.48 | `_choose_detected_board_type`, Aufruf in `_web_detect_board` |
+| `csv/Web_Languages.csv` | +6 Zeilen | Texte des Dialogs |
+| `install/ANLEITUNG_Installation.md`, `BETATEST_Checkliste.md` | 5.02 / 3.83 | Beschreibung, Punkt 351 |
+
+---
+
+## 5.01 (2026-11-24), Issue 68: Startwert 1 und Tasten gleicher Adresse
+
+Meldung (Jürgen, Bild nicht lesbar): Ist der Startwert eines Inputs 1, wird der DCC-Knopf grün; das soll bei allen Knöpfen derselben Adresse so sein. Ursache: `ResetTestButtons` übergibt den Startwert nur an `Update_TestButtons` der eigenen Zeile. Tasten anderer Zeilen mit derselben Adresse blieben aus, obwohl `DCCSend` beim Anklicken schon alle Tasten gleichen Namens umschaltet. Lösung: Neue Funktion `Sync_Toggle_Buttons_by_Address` am Ende von `ResetTestButtons`: Ein/Aus-Tasten (Name `Bxxxx-DD-…`, eingeschaltet bei Richtung 00) sammeln, dann alle ausgeschalteten Tasten derselben Adresse wie in `DCCSend` umschalten (Name und AlternativeText tauschen, Text, Farbe).
+
+Annahme: Mit „DCC Button“ sind die Testtasten in der Spalte Eingang der Blätter DCC, LNet und Selectrix gemeint. Geprüft nur mit einem Mock der Funktion (3 Tasten), nicht in der Oberfläche.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 5.01 | Version, Dateiprüfung |
+| `proggen/M20_PageEvents_a_Functions.py` | 1.14 | `Sync_Toggle_Buttons_by_Address` |
+| `install/BETATEST_Checkliste.md`, `ANLEITUNG_Installation.md` | 3.82 / 5.01 | Punkt 350, Kopf |
+
+---
+
+## 5.00 (2026-11-24), Pull Request 63 von Jürgen: nicht konfigurierte LEDs ausschalten (Issue 62)
+
+Problem: `clearLeds(256)` wird von FastLED auf die konfigurierte LED-Zahl begrenzt; überzählige, noch angeschlossene LEDs (Effekt aus der Konfiguration entfernt) behielten ihren letzten Zustand. Lösung (nur Konfiguration getrennt von der Firmware): `SETUP_FASTLED` ruft je Controller `showColor(CRGB(0,0,0), MLL_CLEAR_LED_CNT, 0)` auf, ohne Datenfeld. `MLL_CLEAR_LED_CNT` ist 256, mit `LONG_LED_ADDR` 1000. Der Pico-Controller (`PicoFastLED.h`) bekommt `showColor`, der Simulator-Stub (`FastLEDStub.h`) eine leere virtuelle Methode. Die Firmware-Kopfdatei ändert sich, damit die Firmware-Signatur: nächstes „Setup übertragen“ lädt das ganze Programm.
+
+Zusammenführung: Die drei Dateien des PR passten ohne Konflikt; die Zeilen sind mit `# v1.12` markiert, die alte Zeile `clearLeds(256)` bleibt als entfallen stehen. Geprüft: Kompilieren von `M06_Write_Header_SW.py`. Nicht geprüft: Firmware-Build, Hardware (echte FastLED für ESP32: `showColor` ist dort eine Methode der Bibliothek; Pico mit eigener Implementierung).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 5.00 | Version, Dateiprüfung |
+| `proggen/M06_Write_Header_SW.py` | 1.12 | `MLL_CLEAR_LED_CNT`, `showColor` |
+| `libraries/MobaLedLib/src/PicoFastLED.h` | ohne Version | `showColor` |
+| `simulator_linux/Arduino-stub/FastLEDStub.h` | ohne Version | `showColor` (leer) |
+| `install/ANLEITUNG_Installation.md`, `BETATEST_Checkliste.md` | 5.00 / 3.81 | Beschreibung, Punkt 349 |
+
+---
+
+## 4.99 (2026-11-24), Pull Request 61 von Jürgen: Zentrale erkennen (Identify)
+
+Im Dialog „Auswahl des COM Ports“ blinken bei ESP32 und Pico (Konfiguration getrennt von der Firmware, ohne WLAN) die drei LEDs auf der Hauptplatine der gewählten Zentrale. PC sendet jede Sekunde `~MLLIDENT 1`, beim Wechsel oder Schließen `~MLLIDENT 0`; die Firmware stoppt nach 3 s ohne Befehl. Neu in der Firmware: `MLLAdminCommunication.h` (eine Empfangsroutine für alle `~`-Zeilen), `MLLIdentify.h`; Konfigurationsformat 7 (LED-Kanal je Controller). ESP32: Status-LEDs als erstes Pixel von Kanal 7, Pico: Pins 13/12/11 (`Mainboard_LED1..3` immer definiert, `#undef` davor). `After_Full_Flash` findet den Pico nach dem Neustart an Seriennummer und Location.
+
+Zusammenführung: Der Zweig beruhte auf 4.93. Dateien, die ich nicht geändert hatte, kamen unverändert aus dem Pull Request. Echter Konflikt nur in `M08_ARDUINO.py` (PR 1.31 gegen meine 1.31 bis 1.33): von Hand zu **1.34** vereint, die Zeilen des PR tragen `# v1.34`, die alte Zeile `After_Full_Flash(ComPort)` bleibt als entfallen stehen. Der Kopf von `web_form_comport.py` im PR trug irrtümlich 1.06, korrigiert auf 1.10. Der Punkt 343 der Checkliste im PR wurde zu **348** (343 war schon belegt). Die HOC-Dateien des PR wurden nicht übernommen (nur dieser Eintrag).
+
+Geprüft: alle geänderten Dateien kompilieren; `test_identify.py` 14 Prüfungen, `test_dyn_config.py` 163 Prüfungen (der PR nennt 180, mit der Version 4.93 des Tests; Abweichung nicht geklärt), `test_esp32_build_directory.py` OK, 0 Fehler. `test_dyn_config_wlan.py`: 5 Fehler nur wegen fehlendem `tkinter` in meiner Umgebung. Nicht geprüft: Hardware, Browser, Firmware-Build (kein PlatformIO hier).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 4.99 | Version, Dateiprüfung |
+| `proggen/M08_ARDUINO.py` | 1.34 | Pico-Seriennummer vor dem Hochladen (Zusammenführung) |
+| `_web/web_form_comport.py` | 1.10 | `~MLLIDENT` beim Wechsel und Schließen |
+| `proggen/M06_Write_Header.py` | 1.17 | Status-LED-Kanal, `MLL_IDENTIFY`, `Mainboard_LED` Pico |
+| `proggen/M07_COM_Port_New.py` | 1.05 | Zeitgeber sendet `~MLLIDENT 1` |
+| `proggen/M42_Dyn_Config.py` | 1.06 | Pico-Erkennung nach dem Neustart |
+| `headless/headless_dyn_config.py` | 1.03 | Format 7, `~MLLERR` |
+| `proggen/Select_COM_Port_Userform.py`, `pattgen/Select_COM_Port_UserForm.py` | 1.00 | Tk-Dialoge |
+| `LEDs_AutoProg/MLLAdminCommunication.h`, `MLLIdentify.h`, `MLLDynConfig.h`, `LEDs_AutoProg.ino` | neu / 1.05 / 1.03 | Firmware |
+| `test_identify.py`, `test_dyn_config.py` | 1.00 / 1.03 | Tests |
+| `csv/Languages.csv` | +1 Zeile | Hinweistext |
+| `install/ANLEITUNG_Installation.md`, `BETATEST_Checkliste.md` | 4.99 / 3.80 | Beschreibung, Punkt 348 |
+
+---
 
 ## 4.98 (2026-11-24), git bei der Installation und beim Übersetzen
 

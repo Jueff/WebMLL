@@ -1,8 +1,9 @@
 @echo off
-REM Datei-Version: 1.04 (2026-10-15) - start_windows.bat
+REM Datei-Version: 1.05 (2026-11-24) - start_windows.bat
+REM 1.05: Anzeigename MobaLedLib Studio in den Meldungen (Name des Symbols unveraendert)
 REM Startet die Web-Oberflaeche von webMobaLedLib und oeffnet den Browser. Laeuft sie schon, wird nur der Browser geoeffnet.
 setlocal EnableExtensions
-title webMobaLedLib
+title MobaLedLib Studio
 for %%I in ("%~dp0..") do set "APPDIR=%%~fI"
 cd /d "%APPDIR%"
 if not exist "%APPDIR%\venv_web\Scripts\python.exe" (
@@ -11,7 +12,7 @@ if not exist "%APPDIR%\venv_web\Scripts\python.exe" (
   exit /b 1
 )
 set "MLL_HEADLESS=1"
-echo webMobaLedLib wird gestartet. Der Browser oeffnet sich, sobald die Oberflaeche bereit ist.
+echo MobaLedLib Studio wird gestartet. Der Browser oeffnet sich, sobald die Oberflaeche bereit ist.
 echo Dieses Fenster nicht schliessen. Beenden: Knopf "Beenden" in der Oberflaeche.
 echo.
 "%APPDIR%\venv_web\Scripts\python.exe" "%APPDIR%\webmobaledlib.py" --open-if-running %*

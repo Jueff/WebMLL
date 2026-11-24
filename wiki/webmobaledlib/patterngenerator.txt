@@ -1,11 +1,11 @@
-====== webMobaLedLib – Der Timeline Editor ======
-//Seitenstand 1.02 (2026-11-23), gilt für webMobaLedLib 4.79//
+====== MobaLedLib Studio – Der Timeline Editor ======
+//Seitenstand 1.04 (2026-11-24), gilt für Version 5.12//
 
-Mit dem **Timeline Editor** entwirfst du **eigene Lichtmuster** für LEDs: Wechselblinker, Lauflichter, Ampeln, Signale und vieles mehr. Du schreibst in einer Tabelle auf, **welche LED wie lange leuchtet**, und das Programm macht daraus ein **Makro**. Das Makro trägst du in den [[anleitungen:webmobaledlib:programmgenerator|Programmgenerator]] ein, und es geht mit auf die Lichtmaschine.
+Mit dem **Timeline Editor** entwirfst du **eigene Lichtmuster** für LEDs: Wechselblinker, Lauflichter, Ampeln, Signale und vieles mehr. Du schreibst in einer Tabelle auf, **welche LED wie lange leuchtet**, und das Programm macht daraus ein **Makro**. Das Makro trägst du in den [[anleitungen:mobaledlibstudio:programmgenerator|Programmgenerator]] ein, und es geht mit auf die Lichtmaschine.
 
-Im **Anfänger Modus** fehlt der Reiter **Timeline Editor** (siehe [[anleitungen:webmobaledlib:modus|Anfänger Modus und Experten Modus]]). Schalte ihn in den Programm Einstellungen auf **Experten Modus**, wenn du ihn brauchst.
+Im **Anfänger Modus** fehlt der Reiter **Timeline Editor** (siehe [[anleitungen:mobaledlibstudio:modus|Anfänger Modus und Experten Modus]]). Schalte ihn in den Programm Einstellungen auf **Experten Modus**, wenn du ihn brauchst.
 
-{{:bilder:anleitungen:webmobaledlib:pat_01_ueberblick.png?600|Der Timeline Editor}}
+{{:bilder:anleitungen:mobaledlibstudio:pat_01_ueberblick.png?600|Der Timeline Editor}}
 
 ===== Der Aufbau der Seite =====
 
@@ -51,7 +51,7 @@ Am schnellsten lernst du an einem fertigen Beispiel:
   - Klicke auf **Test Pattern** (siehe nächster Abschnitt) und sieh zu, wie das Muster abläuft.
   - Ändere eine Zelle (**x** setzen oder löschen), klicke auf **Aktualisieren** und starte **Test Pattern** noch einmal.
 
-{{:bilder:anleitungen:webmobaledlib:pat_02_beispiele.png?500|Optionen: Beispiele laden}}
+{{:bilder:anleitungen:mobaledlibstudio:pat_02_beispiele.png?500|Optionen: Beispiele laden}}
 
 ===== Das Muster ansehen: Test Pattern =====
 
@@ -64,7 +64,7 @@ Der Knopf **Test Pattern** öffnet ein Fenster, in dem das Muster **auf dem Bild
   * Bei **Goto-Mustern** beginnt der Ablauf am Anfang, folgt den Sprüngen und **endet an der Marke E**. Mit den Knöpfen **Anfang** und **Start 1, 2 …** (je Startmarke) beginnst du neu.
   * **Stop** hält an, **Start** setzt fort, **Schließen** beendet den Test.
 
-{{:bilder:anleitungen:webmobaledlib:pat_03_test.png?500|Das Fenster Test Pattern}}
+{{:bilder:anleitungen:mobaledlibstudio:pat_03_test.png?500|Das Fenster Test Pattern}}
 
 ===== Goto Mode: mehrere Startpunkte und Sprünge =====
 
@@ -79,7 +79,7 @@ Bei aktivem **Goto Mode** zeigt die Tabelle, wie das Muster **startet** und **sp
 
 Umgekehrt liest **Import von ProgGen** ein Muster aus einer Zeile des Programm Generators: Klicke im gelben Band auf eine Zeile mit einem ''PatternT…''-Makro und **OK**. Das Programm fragt, ob die Daten in das **aktuelle Blatt** kommen oder ein **neues Blatt** angelegt wird.
 
-{{:bilder:anleitungen:webmobaledlib:pat_04_export.png?600|Das gelbe Band beim Export zu ProgGen}}
+{{:bilder:anleitungen:mobaledlibstudio:pat_04_export.png?600|Das gelbe Band beim Export zu ProgGen}}
 
 ===== Blätter, Dateien und Bilder =====
 
@@ -101,4 +101,4 @@ Umgekehrt liest **Import von ProgGen** ein Muster aus einer Zeile des Programm G
 | Meldung **„Cursor outside the table“** | Die markierte Zelle liegt nicht in der Tabelle. Klicke vor **+** oder **−** in eine Zelle der LED-Tabelle, der Dauer oder der Goto-Zeile. |
 | Ein **Bild** fehlt nach einem Neustart | Die Bilddatei wurde verschoben oder gelöscht. Die Seite merkt sich nur den Pfad. Füge das Bild noch einmal ein. |
 | **Export zu ProgGen** meldet einen Fehler | Trage einen **Makro Namen** ein, fülle die LED-Tabelle und prüfe die **Dauer**-Zeile. |
-| Der **Reiter fehlt** | Du bist im **Anfänger Modus**. Siehe [[anleitungen:webmobaledlib:modus|Anfänger Modus und Experten Modus]]. |
+| Der **Reiter fehlt** | Du bist im **Anfänger Modus**. Siehe [[anleitungen:mobaledlibstudio:modus|Anfänger Modus und Experten Modus]]. |

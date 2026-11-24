@@ -1,13 +1,13 @@
-====== webMobaLedLib – Z21 Simulator ======
-//Seitenstand 1.06 (2026-11-23), gilt für webMobaLedLib 4.79//
+====== MobaLedLib Studio – Z21 Simulator ======
+//Seitenstand 1.08 (2026-11-24), gilt für Version 5.12//
 
-Der **Z21 Simulator** gibt sich gegenüber **Modellbahn-Steuerprogrammen** als **Roco Z21** aus. Programme wie **Rocrail**, **iTrain**, **TrainController** oder **WinDigiPet** und die **Z21-Apps** schicken ihre Weichen- und Lokbefehle dann an die webMobaLedLib. Sie gibt sie als Schaltbefehl an die Lichtmaschine weiter. So bedienst du die **Schalter der MobaLedLib direkt aus deinem Steuerprogramm**.
+Der **Z21 Simulator** gibt sich gegenüber **Modellbahn-Steuerprogrammen** als **Roco Z21** aus. Programme wie **Rocrail**, **iTrain**, **TrainController** oder **WinDigiPet** und die **Z21-Apps** schicken ihre Weichen- und Lokbefehle dann an MobaLedLib Studio. Sie gibt sie als Schaltbefehl an die Lichtmaschine weiter. So bedienst du die **Schalter der MobaLedLib direkt aus deinem Steuerprogramm**.
 
-**Der Reiter ist normalerweise ausgeblendet.** Schalte ihn in den [[anleitungen:webmobaledlib:wz_programm_einstellungen|Programm Einstellungen]] mit dem Haken **Z21 Simulator anzeigen** ein. Nach dem Speichern erscheint er sofort.
+**Der Reiter ist normalerweise ausgeblendet.** Schalte ihn in den [[anleitungen:mobaledlibstudio:wz_programm_einstellungen|Programm Einstellungen]] mit dem Haken **Z21 Simulator anzeigen** ein. Nach dem Speichern erscheint er sofort.
 
 ===== So benutzt du ihn =====
 
-  - **Voraussetzung:** Auf der Lichtmaschine läuft **schon ein MobaLedLib-Programm** (bei einer **neuen** Lichtmaschine zuerst [[anleitungen:webmobaledlib:pg_arduino|übertragen]]). Du musst nicht vorher auf **Mit Lichtmaschine verbinden** klicken: Das Werkzeug **verbindet sich bei Bedarf selbst**. Es arbeitet im **Effektmodus** ([[anleitungen:webmobaledlib:pg_arduino#die_drei_arten_der_verbindung|Die drei Arten der Verbindung]]). Der Simulator startet auch ohne Verbindung, aber dann kommt nichts an der Lichtmaschine an.
+  - **Voraussetzung:** Auf der Lichtmaschine läuft **schon ein MobaLedLib-Programm** (bei einer **neuen** Lichtmaschine zuerst [[anleitungen:mobaledlibstudio:pg_arduino|übertragen]]). Du musst nicht vorher auf **Mit Lichtmaschine verbinden** klicken: Das Werkzeug **verbindet sich bei Bedarf selbst**. Es arbeitet im **Effektmodus** ([[anleitungen:mobaledlibstudio:pg_arduino#die_drei_arten_der_verbindung|Die drei Arten der Verbindung]]). Der Simulator startet auch ohne Verbindung, aber dann kommt nichts an der Lichtmaschine an.
   - Klicke auf **Start Simulator**.
   - Die Seite zeigt die **IP-Adresse** und den **Port 21105** (UDP). Trage beides in deinem Steuerprogramm als Z21 ein. Läuft das Steuerprogramm auf **demselben Rechner**, genügt ''127.0.0.1''.
   - Im Fenster darunter steht jedes ankommende Paket mit Uhrzeit, Absender und dem Befehl, der an die Lichtmaschine geht.

@@ -1,9 +1,9 @@
-====== webMobaLedLib – LED Simulator ======
-//Seitenstand 1.02 (2026-11-23), gilt für webMobaLedLib 4.79//
+====== MobaLedLib Studio – LED Simulator ======
+//Seitenstand 1.04 (2026-11-24), gilt für Version 5.12//
 
 Der **LED Simulator** zeigt auf dem Bildschirm, **wie deine LEDs leuchten würden**, ohne dass eine Lichtmaschine angeschlossen ist. Du siehst Effekte, Farben und Blinkmuster **sofort** und kannst die **Testtasten** der Tabelle benutzen, als wäre die Anlage da.
 
-**Nicht verwechseln:** Der [[anleitungen:webmobaledlib:wz_z21|Z21 Simulator]] ist etwas ganz anderes. Er steuert die Lichtmaschine aus einem Modellbahnprogramm. Der **LED Simulator** auf dieser Seite ersetzt die Lichtmaschine.
+**Nicht verwechseln:** Der [[anleitungen:mobaledlibstudio:wz_z21|Z21 Simulator]] ist etwas ganz anderes. Er steuert die Lichtmaschine aus einem Modellbahnprogramm. Der **LED Simulator** auf dieser Seite ersetzt die Lichtmaschine.
 
 ===== Wie funktioniert er? =====
 
@@ -14,7 +14,7 @@ Der Simulator zeigt **nur die LEDs**. Servos und Sound gibt es dort nicht.
 ===== Was du brauchst =====
 
   * Die Tabelle mit mindestens einem Effekt.
-  * Die **Entwicklungsumgebung** zum Übersetzen, wie beim normalen [[anleitungen:webmobaledlib:pg_arduino|Übertragen]]: PlatformIO oder die ARDUINO IDE.
+  * Die **Entwicklungsumgebung** zum Übersetzen, wie beim normalen [[anleitungen:mobaledlibstudio:pg_arduino|Übertragen]]: PlatformIO oder die ARDUINO IDE.
   * **Windows:** Nichts weiter. Der Simulator ist als Datei **MobaLedLibWrapper.dll** dabei und zeichnet ein **eigenes Fenster**.
   * **Linux (auch Raspberry Pi):** Die Bibliothek **libMobaLedLibWrapper.so** liegt für x86_64 bei. Auf anderen Prozessoren (zum Beispiel Raspberry Pi) baut das Programm sie beim ersten Start selbst. Dafür braucht es den **C++-Übersetzer**: ''sudo apt install build-essential''. Die **LEDs** erscheinen **im Browser**. Zum Übersetzen der Konfiguration nutzt das Programm die AVR-Werkzeuge von **PlatformIO** (Pakete //toolchain-atmelavr// und //framework-arduino-avr//) oder der ARDUINO IDE.
   * **macOS:** Der Simulator ist dort noch nicht verfügbar.

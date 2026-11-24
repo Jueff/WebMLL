@@ -1,9 +1,9 @@
-====== webMobaLedLib – Programm Einstellungen ======
-//Seitenstand 1.17 (2026-11-23), gilt für webMobaLedLib 4.93//
+====== MobaLedLib Studio – Programm Einstellungen ======
+//Seitenstand 1.19 (2026-11-24), gilt für Version 5.12//
 
 Im Menü **Einstellungen** (seit 4.51, vorher der Reiter **Programm Einstellungen**) passt du das Programm an dich an: die **Sprache**, die **Schriftgröße**, die **Darstellung** und einiges mehr. Die Einstellungen werden **gespeichert**, wenn du auf **Geänderte Einstellungen übernehmen** (bzw. **Speichern**) klickst, und gelten danach für das Programm auf diesem Rechner. Einige wirken **sofort**, andere erst nach einem **Neustart** des Programms. Das steht bei der jeweiligen Einstellung als Hinweis, wenn du mit der Maus darauf zeigst.
 
-{{:bilder:anleitungen:webmobaledlib:wz_07_programm_einstellungen.png?600|Die Seite Programm Einstellungen}}
+{{:bilder:anleitungen:mobaledlibstudio:wz_07_programm_einstellungen.png?600|Die Seite Programm Einstellungen}}
 
 ===== Das Menü „Einstellungen“ =====
 
@@ -16,8 +16,8 @@ Das Menü **Einstellungen** steht zwischen **Tabelle** und **Hilfe**. Jeder Eint
 | **Simulator** | Simulatoreinstellungen (nur im Experten Modus) |
 | **Netzzugriff** | Zugriff aus dem Netz |
 | **Spezial** | Spezialeinstellungen |
-| **Erweiterungen …** | Öffnet das Fenster [[anleitungen:webmobaledlib:erweiterungen|Erweiterungen]] |
-| **Einstellungen sichern …** / **Einstellungen übernehmen …** | Siehe [[anleitungen:webmobaledlib:pg_speichern|Speichern und Laden]] |
+| **Erweiterungen …** | Öffnet das Fenster [[anleitungen:mobaledlibstudio:erweiterungen|Erweiterungen]] |
+| **Einstellungen sichern …** / **Einstellungen übernehmen …** | Siehe [[anleitungen:mobaledlibstudio:pg_speichern|Speichern und Laden]] |
 
 **Speichern** sichert die Gruppe und schließt das Fenster, **Abbrechen** verwirft die Änderungen.
 
@@ -36,11 +36,11 @@ Die Einstellungen stehen in **fünf Gruppen**, jede mit einer Überschrift. So f
 ==== Allgemeine Einstellungen ====
 
 ^ Einstellung ^ Bedeutung ^
-| **Anfänger Modus** | Der Haken schaltet zwischen **Anfänger Modus** (mit Haken, Voreinstellung bei einer neuen Installation) und **Experten Modus** um. Siehe [[anleitungen:webmobaledlib:modus|Anfänger Modus und Experten Modus]]. |
-| **Automatisch mit der Lichtmaschine verbinden** | Mit Haken (Voreinstellung) verbindet das Programm beim Start mit der Lichtmaschine, die beim letzten Beenden verbunden war, oder sucht eine angeschlossene Lichtmaschine. Nach **Setup übertragen** verbindet es mit der Lichtmaschine, auf die übertragen wurde (bei WLAN über WLAN). Ohne Haken verbindet nur der Knopf **Mit Lichtmaschine verbinden**. Siehe [[anleitungen:webmobaledlib:pg_arduino|Verbinden und Übertragen]]. |
+| **Anfänger Modus** | Der Haken schaltet zwischen **Anfänger Modus** (mit Haken, Voreinstellung bei einer neuen Installation) und **Experten Modus** um. Siehe [[anleitungen:mobaledlibstudio:modus|Anfänger Modus und Experten Modus]]. |
+| **Automatisch mit der Lichtmaschine verbinden** | Mit Haken (Voreinstellung) verbindet das Programm beim Start mit der Lichtmaschine, die beim letzten Beenden verbunden war, oder sucht eine angeschlossene Lichtmaschine. Nach **Setup übertragen** verbindet es mit der Lichtmaschine, auf die übertragen wurde (bei WLAN über WLAN). Ohne Haken verbindet nur der Knopf **Mit Lichtmaschine verbinden**. Siehe [[anleitungen:mobaledlibstudio:pg_arduino|Verbinden und Übertragen]]. |
 | **Beim Trennen alle LEDs ausschalten** (seit 4.50) | Mit Haken sendet das Programm beim Trennen den Befehl **Alle LEDs aus**. Ohne Haken (Vorgabe) bleibt die Anlage unverändert, zum Beispiel leuchten die schwach leuchtenden LEDs der Pushbutton-Kanäle weiter. |
 | **Kein Anschluss in der Tabelle: bei mehreren Boards** (seit 4.42) | Ist beim Hochladen kein USB-Anschluss eingetragen, aber die Lichtmaschine verbunden, nimmt das Programm deren Anschluss. Bei mehreren Boards entscheidet diese Einstellung: **Aktive Verbindung verwenden** (Vorgabe) oder **Erkennen-Fenster öffnen**. |
-| **Tastenkombination: Inkrementell speichern** | Die Tastenkombination für //Datei → Inkrementell speichern//. Vorgabe: **Strg+Umschalt+S**. Sie muss **Strg** oder **Alt** oder eine **F-Taste** enthalten, zum Beispiel **Strg+Alt+S** oder **Strg+F9**. Ist die Vorgabe schon belegt (zum Beispiel von einem Screenshot-Programm), stelle hier eine andere ein. Siehe [[anleitungen:webmobaledlib:pg_speichern|Speichern und Laden]]. |
+| **Tastenkombination: Inkrementell speichern** | Die Tastenkombination für //Datei → Inkrementell speichern//. Vorgabe: **Strg+Umschalt+S**. Sie muss **Strg** oder **Alt** oder eine **F-Taste** enthalten, zum Beispiel **Strg+Alt+S** oder **Strg+F9**. Ist die Vorgabe schon belegt (zum Beispiel von einem Screenshot-Programm), stelle hier eine andere ein. Siehe [[anleitungen:mobaledlibstudio:pg_speichern|Speichern und Laden]]. |
 | **Fenster nach Erfolg automatisch schließen**, **Fenster nach Fehler automatisch schließen** (seit 4.40) | Wann sich das Fenster beim Übertragen schließt: sofort, nach 5, 10 oder 30 Sekunden oder nie. Vorgabe: 5 Sekunden nach Erfolg, 30 Sekunden nach Fehler. |
 | **Sprache** | Die Sprache der Oberfläche (siehe oben). |
 | **Darstellung der Oberfläche** (seit 4.44) | **Hell** (Vorgabe, bisheriger Stil), **Hell mit Kontrast** (kräftigere Blattreiter und dunklere Hinweistexte), **Dunkel**, **Dunkel mit Tabelle** (zeigt auch die Tabellen dunkel, fest eingestellte Farben bleiben, wie sie sind) oder **Wie System**. Bei **Dunkel** bleibt die Tabelle zur besseren Lesbarkeit der Zellfarben hell. Die Änderung gilt nach dem Speichern sofort. Seit 4.75 sind die dunklen Flächen von Dialogen, Eingabefeldern und Tabelle heller abgestuft (Beitrag von moosbewohner). |
@@ -55,32 +55,32 @@ Die Einstellungen stehen in **fünf Gruppen**, jede mit einer Überschrift. So f
 ^ Einstellung ^ Bedeutung ^
 | **Standardansicht des Programm Generators** | Ob ein Blatt mit **Tabelle**, **Grafik** oder **Beides** geöffnet wird. |
 | **Programmgenerator versteckte Tabellen anzeigen** | Zeigt zusätzlich die versteckten Blätter des Programmgenerators. Nur für Tester und Entwickler. |
-| **Bedienung der Tabelle** | Der Haken **Doppelklick auf Name und Beleuchtung öffnet die Makroauswahl** (siehe [[anleitungen:webmobaledlib:pg_tabelle|Die Tabelle bedienen]]). |
+| **Bedienung der Tabelle** | Der Haken **Doppelklick auf Name und Beleuchtung öffnet die Makroauswahl** (siehe [[anleitungen:mobaledlibstudio:pg_tabelle|Die Tabelle bedienen]]). |
 
 ==== Farb Test Einstellungen ====
 
 ^ Einstellung ^ Bedeutung ^
-| **Farbauswahl** | Wie der [[anleitungen:webmobaledlib:wz_farbtest|Farb Test]] die Farbe auswählt: mit dem **Farbrad** oder mit dem **HSV-Farbton**. Wirkt nach einem **Neustart**. |
+| **Farbauswahl** | Wie der [[anleitungen:mobaledlibstudio:wz_farbtest|Farb Test]] die Farbe auswählt: mit dem **Farbrad** oder mit dem **HSV-Farbton**. Wirkt nach einem **Neustart**. |
 | **LED-Farbkorrektur** | Gleicht die Farben der LEDs an den Bildschirm an. Sie wirkt im Farb Test. |
 
 ==== Zugriff aus dem Netz ====
 
-Der Schalter **Zugriff aus dem Netz erlauben** und das **Passwort** für die Oberfläche: siehe die Seite [[anleitungen:webmobaledlib:wz_netzwerk|Zugriff aus dem Netz]].
+Der Schalter **Zugriff aus dem Netz erlauben** und das **Passwort** für die Oberfläche: siehe die Seite [[anleitungen:mobaledlibstudio:wz_netzwerk|Zugriff aus dem Netz]].
 
 ==== Datenübertragung (seit 4.89) ====
 
-Tabellen von einem anderen Rechner im Heimnetz holen oder eigene Tabellen freigeben: siehe die Seite [[anleitungen:webmobaledlib:wz_datenuebertragung|Datenübertragung]].
+Tabellen von einem anderen Rechner im Heimnetz holen oder eigene Tabellen freigeben: siehe die Seite [[anleitungen:mobaledlibstudio:wz_datenuebertragung|Datenübertragung]].
 
 ==== Spezialeinstellungen ====
 
 Hier steht alles andere. Normalerweise brauchst du nichts davon.
 
 ^ Einstellung ^ Bedeutung ^
-| **DM Servo Einstellungen anzeigen** | Zeigt den Reiter [[anleitungen:webmobaledlib:wz_dmservo|DM Servo Einstellungen]]. |
-| **Z21 Simulator anzeigen** | Zeigt den Reiter [[anleitungen:webmobaledlib:wz_z21|Z21 Simulator]]. |
-| **Simulator anzeigen** (seit 3.56, Knopf seit 3.59) | Zeigt neben **Setup übertragen** den Knopf **Setup simulieren** (nur Simulator, ohne Lichtmaschine). Die Simulator-Option des Excel-Programms wird dann nicht mehr beachtet. Siehe [[anleitungen:webmobaledlib:simulator|LED Simulator]]. |
+| **DM Servo Einstellungen anzeigen** | Zeigt den Reiter [[anleitungen:mobaledlibstudio:wz_dmservo|DM Servo Einstellungen]]. |
+| **Z21 Simulator anzeigen** | Zeigt den Reiter [[anleitungen:mobaledlibstudio:wz_z21|Z21 Simulator]]. |
+| **Simulator anzeigen** (seit 3.56, Knopf seit 3.59) | Zeigt neben **Setup übertragen** den Knopf **Setup simulieren** (nur Simulator, ohne Lichtmaschine). Die Simulator-Option des Excel-Programms wird dann nicht mehr beachtet. Siehe [[anleitungen:mobaledlibstudio:simulator|LED Simulator]]. |
 | **IP Upload Timeout** | Wie lange das Programm beim Hochladen über das Netz (WLAN-Pico) wartet, in Sekunden. |
-| **RMBUS-Interval (x 100ms)** | Wie oft der [[anleitungen:webmobaledlib:wz_z21|Z21 Simulator]] die Lichtmaschine nach Tastern fragt (1 = alle 100 ms). Normalerweise nicht ändern. |
+| **RMBUS-Interval (x 100ms)** | Wie oft der [[anleitungen:mobaledlibstudio:wz_z21|Z21 Simulator]] die Lichtmaschine nach Tastern fragt (1 = alle 100 ms). Normalerweise nicht ändern. |
 | **Dateien für das Excel-Programm speichern** | Gespeicherte Dateien (**.MLL_pcf** und **.MLL_pgf**) werden im Windows-Zeichensatz geschrieben, damit das Excel-Programm sie lesen kann. |
 | **Bootloader des Nano beim Prüfen erkennen** (seit 3.10, **seit 3.13 Vorgabe an**) | **An (Vorgabe):** Beim Prüfen des angeschlossenen Nano (Hardware Optionen, Knopf **Board und USB Port erkennen** und **USB Port erkennen**) spricht das Programm den Bootloader des Nano an (57600 und 115200 Baud) und erkennt **alt und neu**. Das Board stellt der Knopf **Board und USB Port erkennen** passend ein (seit 3.82; den Haken „Automatisch erkennen“ gibt es nicht mehr). **Aus (nur auf ausdrücklichen Wunsch):** Die Prüfung öffnet nur den Anschluss, deine Wahl **Nano Normal (old Bootloader)** oder **Nano (neue Version)** bleibt unverändert. **ESP32** bleibt wie bisher. Der **Nano Every** wird seit 3.14 nicht mehr unterstützt (wie im Excel-Programm 3.5.0L3). Antwortet der Nano nicht, kommt nach etwa 6 Sekunden „nicht als LED Arduino erkannt“; mit **Nein** geht es mit deiner Wahl weiter. |
 
@@ -96,11 +96,11 @@ Die Auswahl wirkt **sofort**. Zusätzlich helfen **Vollbild** (F11) und der **Br
 
 ===== Zugriff aus dem Netz =====
 
-Die Einstellungen für den **Zugriff von anderen Geräten**, das **Passwort** und die **Firewall** stehen auf der Seite [[anleitungen:webmobaledlib:wz_netzwerk|Zugriff aus dem Netz]].
+Die Einstellungen für den **Zugriff von anderen Geräten**, das **Passwort** und die **Firewall** stehen auf der Seite [[anleitungen:mobaledlibstudio:wz_netzwerk|Zugriff aus dem Netz]].
 
 ===== Tabelle färben =====
 
-Das Fenster **Tabelle färben** (Menü **Tabelle, Tabelle färben …**) enthält die **Bedingungen für Zeilenfarben**. Mit ihnen legst du fest, welche Zeilen beim Färben welche Farbe bekommen (zum Beispiel nach der Art des Makros). Mit **Speichern und aktuelle Seite färben** oder **Speichern und ALLE Seiten färben** wird gefärbt und das Programm wechselt automatisch in den **Programm Generator**. Eine Beschreibung steht auf der Seite [[anleitungen:webmobaledlib:pg_werkzeugleiste|Die Werkzeugleiste]].
+Das Fenster **Tabelle färben** (Menü **Tabelle, Tabelle färben …**) enthält die **Bedingungen für Zeilenfarben**. Mit ihnen legst du fest, welche Zeilen beim Färben welche Farbe bekommen (zum Beispiel nach der Art des Makros). Mit **Speichern und aktuelle Seite färben** oder **Speichern und ALLE Seiten färben** wird gefärbt und das Programm wechselt automatisch in den **Programm Generator**. Eine Beschreibung steht auf der Seite [[anleitungen:mobaledlibstudio:pg_werkzeugleiste|Die Werkzeugleiste]].
 
 ===== Wo liegen meine Daten? =====
 

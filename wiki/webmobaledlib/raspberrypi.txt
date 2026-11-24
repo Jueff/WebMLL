@@ -1,7 +1,7 @@
-====== webMobaLedLib – Installation auf dem Raspberry Pi ======
-//Seitenstand 1.04 (2026-11-23), gilt für webMobaLedLib 4.79//
+====== MobaLedLib Studio – Installation auf dem Raspberry Pi ======
+//Seitenstand 1.07 (2026-11-24), gilt für Version 5.12//
 
-Auf dem Raspberry Pi läuft die webMobaLedLib als **Dauerdienst**: Sie startet beim Hochfahren des Pi von selbst. Du kannst sie am Pi selbst bedienen oder von jedem anderen Computer, Tablet oder Smartphone im Heimnetz aus, auch ohne Bildschirm am Pi. Das ist ideal, wenn der Pi mit der Lichtmaschine fest an der Modellbahn bleibt.
+Auf dem Raspberry Pi läuft MobaLedLib Studio als **Dauerdienst**: Sie startet beim Hochfahren des Pi von selbst. Du kannst sie am Pi selbst bedienen oder von jedem anderen Computer, Tablet oder Smartphone im Heimnetz aus, auch ohne Bildschirm am Pi. Das ist ideal, wenn der Pi mit der Lichtmaschine fest an der Modellbahn bleibt.
 
 Für die Installation öffnest du **einmal das Terminal**. Die Schritte dafür stehen unten Schritt für Schritt.
 
@@ -54,13 +54,13 @@ Es erscheint viel Text, das ist normal. Es dauert **10 bis 20 Minuten**. Lass da
 
 **Tipp:** Wenn du den Befehl nicht kopieren willst, tippe ''sudo bash install_p'' und drücke die **Tab-Taste**. Das Terminal schreibt den Dateinamen dann selbst zu Ende.
 
-{{:bilder:anleitungen:webmobaledlib:pi_01_terminal.png?500|Das Terminal mit dem Befehl sudo bash install_pi.sh}}
+{{:bilder:anleitungen:mobaledlibstudio:pi_01_terminal.png?500|Das Terminal mit dem Befehl sudo bash install_pi.sh}}
 
-Am Ende steht, dass die Installation fertig ist. Auf dem **Desktop** liegt jetzt das Symbol **webMobaLedLib**.
+Am Ende steht, dass die Installation fertig ist. Auf dem **Desktop** liegt jetzt das Symbol **MobaLedLib Studio**.
 
 ===== Schritt 5: Das Programm öffnen =====
 
-**Am Pi selbst:** Mache einen **Doppelklick** auf das Symbol **webMobaLedLib**. Nach **20 bis 60 Sekunden** öffnet sich die Oberfläche in einem eigenen Fenster. Fragt der Pi beim ersten Mal, ob die Datei ausgeführt werden soll, wähle **Ausführen**. Am Pi selbst brauchst du kein Passwort.
+**Am Pi selbst:** Mache einen **Doppelklick** auf das Symbol **MobaLedLib Studio**. Nach **20 bis 60 Sekunden** öffnet sich die Oberfläche in einem eigenen Fenster. Fragt der Pi beim ersten Mal, ob die Datei ausgeführt werden soll, wähle **Ausführen**. Am Pi selbst brauchst du kein Passwort.
 
 **Von einem anderen Computer im Heimnetz:** Öffne dort einen Browser und tippe in die Adresszeile ein:
 
@@ -70,11 +70,11 @@ http://raspberrypi.local:8080
 
 (Statt ''raspberrypi'' schreibst du den Rechnernamen, den du im Imager gewählt hast.) Es erscheint ein Anmeldefenster: Benutzer **mobaledlib**, Passwort **mobaledlib**. **Ändere das Passwort**, sobald du angemeldet bist: im Programm unter //Programm Einstellungen//.
 
-{{:bilder:anleitungen:webmobaledlib:pi_02_programm.png?600|Die webMobaLedLib auf dem Raspberry Pi}}
+{{:bilder:anleitungen:mobaledlibstudio:pi_02_programm.png?600|MobaLedLib Studio auf dem Raspberry Pi}}
 
 ===== Schritt 6: Die Lichtmaschine anschließen =====
 
-Stecke die Lichtmaschine mit dem USB-Kabel an den Pi. Wie es dann weitergeht, steht auf der Seite [[anleitungen:webmobaledlib:erstes_programm|Dein erstes Programm]].
+Stecke die Lichtmaschine mit dem USB-Kabel an den Pi. Wie es dann weitergeht, steht auf der Seite [[anleitungen:mobaledlibstudio:erstes_programm|Dein erstes Programm]].
 
 ===== https einrichten (optional) =====
 
@@ -107,9 +107,9 @@ Der Knopf **Beenden** beendet nur das Programm. Der Pi läuft weiter, und das Pr
 
 ===== Das Programm aktualisieren =====
 
-Im Programm: Menü **Hilfe → Update webMobaLedLib …**. Starte das Programm danach neu und lade die Seite im Browser mit **Strg + F5** neu.
+Im Programm: Menü **Hilfe → Update MobaLedLib Studio …**. Starte das Programm danach neu und lade die Seite im Browser mit **Strg + F5** neu.
 
-Mehr dazu steht auf der Seite [[anleitungen:webmobaledlib:aktualisieren|Das Programm aktualisieren]].
+Mehr dazu steht auf der Seite [[anleitungen:mobaledlibstudio:aktualisieren|Das Programm aktualisieren]].
 
 ===== Wenn etwas nicht klappt =====
 
@@ -122,7 +122,7 @@ Mehr dazu steht auf der Seite [[anleitungen:webmobaledlib:aktualisieren|Das Prog
 | Der Pi hängt sich auf oder startet neu | Meist ist das **Netzteil zu schwach**. Nimm das offizielle Netzteil. Schließe nicht zu viele Verbraucher am Pi an. |
 | Kein Anschluss zur Auswahl | Prüfe das USB-Kabel (Daten, nicht nur Laden) und stecke die Lichtmaschine neu an. |
 
-Mehr zu Problemen allgemein: [[anleitungen:webmobaledlib:fehlersuche|Fehlersuche]].
+Mehr zu Problemen allgemein: [[anleitungen:mobaledlibstudio:fehlersuche|Fehlersuche]].
 
 ===== Das Programm entfernen =====
 

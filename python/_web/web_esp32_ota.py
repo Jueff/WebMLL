@@ -1,12 +1,13 @@
-# Datei-Version: 1.08 (2026-11-23) - web_esp32_ota.py
+# Datei-Version: 1.09 (2026-11-24) - web_esp32_ota.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_esp32_ota.py
 # Path:           _web/web_esp32_ota.py
-# Version:        1.08
-# Last Update:    2026-11-23
+# Version:        1.09
+# Last Update:    2026-11-24
 # Author:         Harold Linke (Beitrag des Fork-Entwicklers, uebernommen in 3.37)
 # Licence:        LGPL V2.1
 # History of Change:
+#   1.09  2026-11-24  Hilfe-Adresse im neuen Namensraum des Wikis
 #   1.08  2026-11-23  Adresse fuer WebMLL: die Adresse dieses Rechners wird abgelehnt (Verwechslung mit der IP des ESP32), bei fester IP gilt dann die IP des ESP32; Hinweistext
 #   1.07  2026-11-23  Reiter OTA: DHCP oder statische IP-Adresse (IP, Gateway, Subnetzmaske, DNS), Pruefung der Eingaben, Zieladresse = feste IP
 #   1.00  2026-11-14  Neu: Dialoge fuer ESP32-WLAN und OTA (Firmware hochladen, Ziel waehlen, Reiter OTA, WLAN ueber USB einrichten)
@@ -27,7 +28,8 @@ from headless import headless_esp32_ota
 from _web import web_dialogs
 
 _upload_running = False
-HELP_URL = "https://wiki.mobaledlib.de/anleitungen/webmobaledlib/ota"  # v1.04: Wiki-Seite zu OTA
+# HELP_URL = "https://wiki.mobaledlib.de/anleitungen/webmobaledlib/ota"  # v1.04: Wiki-Seite zu OTA  # v5.12 (entfallen)
+HELP_URL = "https://wiki.mobaledlib.de/anleitungen/mobaledlibstudio/ota"  # v1.04: Wiki-Seite zu OTA  # v5.12
 minimal_firmware_handler = None  # v1.02: Funktion der Hauptseite (webmobaledlib.py), baut und laedt die minimale Firmware
 HINT_FIREWALL = 'Der ESP32 hat sich nicht zurückgemeldet. Meist blockiert eine Firewall die Rückverbindung: Eingehend TCP-Port {port} zulassen (Windows-Firewall: PowerShell als Administrator, New-NetFirewallRule -DisplayName "webMLL OTA 32323" -Direction Inbound -Protocol TCP -LocalPort {port} -Action Allow; andere Firewalls, z. B. ESET: Regel eingehend, TCP, lokaler Port {port}, Zulassen).'  # v1.01
 

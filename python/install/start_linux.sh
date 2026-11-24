@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
-# Datei-Version: 1.04 (2026-10-15) - start_linux.sh
+# Datei-Version: 1.05 (2026-11-24) - start_linux.sh
+# 1.05: Anzeigename MobaLedLib Studio in den Meldungen (Name des Symbols unveraendert)
 # Startet die Web-Oberflaeche von webMobaLedLib und oeffnet den Browser. Laeuft sie schon, wird nur der Browser geoeffnet.
 # Beenden: Knopf "Beenden" in der Oberflaeche. Meldungen: webmobaledlib.log und webmobaledlib-console.log im Datenordner (Ort: venv_web/bin/python userdata.py).
 cd "$(dirname "$(realpath "$0")")/.." || exit 1
 if [ ! -x venv_web/bin/python ]; then
   msg="Die Installation fehlt. Bitte zuerst install/install_linux.sh ausfuehren."
-  echo "$msg"; command -v notify-send >/dev/null 2>&1 && notify-send -a webMobaLedLib "webMobaLedLib" "$msg"; exit 1
+  echo "$msg"; command -v notify-send >/dev/null 2>&1 && notify-send -a "MobaLedLib Studio" "MobaLedLib Studio" "$msg"; exit 1
 fi
 export MLL_HEADLESS=1
 if [ -t 1 ]; then                                  # im Terminal gestartet: Meldungen anzeigen

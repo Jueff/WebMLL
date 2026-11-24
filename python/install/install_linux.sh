@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
-# Datei-Version: 1.09 (2026-11-15) - install_linux.sh, gilt fuer webMobaLedLib 3.47
+# Datei-Version: 1.11 (2026-11-24) - install_linux.sh, gilt fuer webMobaLedLib 3.47
+# 1.11: Symbol heisst MobaLedLib Studio; Symbole mit den frueheren Namen werden entfernt
+# 1.10: Anzeigename MobaLedLib Studio in den Meldungen (Name des Symbols unveraendert)
 # Installiert die Web-Oberflaeche von webMobaLedLib auf einem Linux-Desktop (Debian, Ubuntu, Linux Mint, Fedora, Arch ...):
 # im eigenen Benutzerkonto, ohne Systemdienst. Es entsteht eine Python-Umgebung im Projektordner (venv_web), ein Starter im
 # Anwendungsmenue und ein Symbol auf dem Schreibtisch. (Raspberry Pi als Dienst: pi/install_pi.sh)
@@ -55,7 +57,7 @@ fail() { echo; echo "Die Installation wurde nicht abgeschlossen."; exit 1; }
 
 echo
 echo "============================================================"
-echo " webMobaLedLib - Installation der Web-Oberflaeche (Linux)"
+echo " MobaLedLib Studio - Installation der Web-Oberflaeche (Linux)"
 echo "============================================================"
 . /etc/os-release 2>/dev/null || true
 echo " System:        ${PRETTY_NAME:-unbekannt} ($(uname -m))"
@@ -209,7 +211,7 @@ PY
       printf 'MLL_HOST=0.0.0.0\nMLL_PORT=%s\nMLL_USER=mobaledlib\n' "$SERVER_PORT" > "$ENVF"
       {
         echo "# Datei-Version: 1.00 (2026-11-15) - mobaledlib-web.service (erzeugt von install_linux.sh --server)"
-        echo "[Unit]"; echo "Description=webMobaLedLib Programmgenerator (Web-Oberflaeche, Server)"
+        echo "[Unit]"; echo "Description=MobaLedLib Studio Programmgenerator (Web-Oberflaeche, Server)"
         echo "After=network-online.target"; echo "Wants=network-online.target"; echo
         echo "[Service]"; echo "Type=simple"; echo "User=$(id -un)"; echo "Group=$(id -gn)"
         echo "SupplementaryGroups=dialout"; echo "WorkingDirectory=$APPDIR"
@@ -239,22 +241,22 @@ echo "[5/5] Starter und Symbol"
 chmod +x "$HERE/start_linux.sh" 2>/dev/null
 [ -f "$HERE/mobaledlib.png" ] || "$VENV/bin/python" "$HERE/make_icons.py" "$HERE" || echo "(Symbol nicht erzeugt)"
 make_entry() {
-  printf '[Desktop Entry]\nType=Application\nName=webMobaLedLib\nGenericName=Programmgenerator Modellbahnbeleuchtung\n'
-  printf 'Comment=webMobaLedLib Programmgenerator starten (Web-Oberflaeche)\nExec="%s/start_linux.sh"\nIcon=%s/mobaledlib.png\n' "$HERE" "$HERE"
+  printf '[Desktop Entry]\nType=Application\nName=MobaLedLib Studio\nGenericName=Programmgenerator Modellbahnbeleuchtung\n'
+  printf 'Comment=MobaLedLib Studio Programmgenerator starten (Web-Oberflaeche)\nExec="%s/start_linux.sh"\nIcon=%s/mobaledlib.png\n' "$HERE" "$HERE"
   printf 'Terminal=false\nCategories=Development;Electronics;\nStartupNotify=false\n'
 }
 APPS="${XDG_DATA_HOME:-$HOME/.local/share}/applications"
 mkdir -p "$APPS"
-rm -f "$APPS/pyMobaLedLib.desktop"          # Eintrag unter dem frueheren Namen entfernen
-make_entry > "$APPS/webMobaLedLib.desktop"; chmod +x "$APPS/webMobaLedLib.desktop"
-echo "Eintrag im Anwendungsmenue: $APPS/webMobaLedLib.desktop"
+rm -f "$APPS/pyMobaLedLib.desktop" "$APPS/webMobaLedLib.desktop"          # Eintraege unter den frueheren Namen entfernen
+make_entry > "$APPS/MobaLedLibStudio.desktop"; chmod +x "$APPS/MobaLedLibStudio.desktop"
+echo "Eintrag im Anwendungsmenue: $APPS/MobaLedLibStudio.desktop"
 if [ "$DESKTOP_ICON" = "1" ]; then
   DESK="$(xdg-user-dir DESKTOP 2>/dev/null || true)"; [ -z "$DESK" ] || [ "$DESK" = "$HOME" ] && DESK="$HOME/Desktop"
   if [ -d "$DESK" ]; then
-    rm -f "$DESK/pyMobaLedLib.desktop"        # Symbol unter dem frueheren Namen entfernen
-    make_entry > "$DESK/webMobaLedLib.desktop"; chmod +x "$DESK/webMobaLedLib.desktop"
-    gio set "$DESK/webMobaLedLib.desktop" metadata::trusted true >/dev/null 2>&1 || true    # Cinnamon/GNOME: Starter vertrauen
-    echo "Symbol auf dem Schreibtisch: $DESK/webMobaLedLib.desktop"
+    rm -f "$DESK/pyMobaLedLib.desktop" "$DESK/webMobaLedLib.desktop"        # Symbole unter den frueheren Namen entfernen
+    make_entry > "$DESK/MobaLedLibStudio.desktop"; chmod +x "$DESK/MobaLedLibStudio.desktop"
+    gio set "$DESK/MobaLedLibStudio.desktop" metadata::trusted true >/dev/null 2>&1 || true    # Cinnamon/GNOME: Starter vertrauen
+    echo "Symbol auf dem Schreibtisch: $DESK/MobaLedLibStudio.desktop"
   else
     echo "Kein Schreibtisch-Ordner gefunden ($DESK): nur der Eintrag im Anwendungsmenue."
   fi
@@ -282,7 +284,7 @@ if [ "$SERVER" = "1" ]; then   # v1.09
 fi
 echo
 echo "============================================================"
-echo " Fertig. Starten: Symbol \"webMobaLedLib\" (Schreibtisch oder Anwendungsmenue)"
+echo " Fertig. Starten: Symbol \"MobaLedLib Studio\" (Schreibtisch oder Anwendungsmenue)"
 echo "         oder  $HERE/start_linux.sh"
 echo " Beim ersten Doppelklick fragt der Dateimanager ggf. \"Ausfuehren\" / \"Starter vertrauen\"."
 echo "============================================================"

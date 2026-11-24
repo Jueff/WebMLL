@@ -1,7 +1,7 @@
-====== webMobaLedLib – Zusätzlich: Arduino IDE ======
-//Seitenstand 1.03 (2026-11-23), gilt für webMobaLedLib 4.79//
+====== MobaLedLib Studio – Zusätzlich: Arduino IDE ======
+//Seitenstand 1.04 (2026-11-24), gilt für Version 5.09//
 
-Die webMobaLedLib überträgt das Programm normalerweise mit **PlatformIO**. Es wird bei der Installation automatisch mitinstalliert. **Du brauchst die Arduino IDE also nicht.**
+MobaLedLib Studio überträgt das Programm normalerweise mit **PlatformIO**. Es wird bei der Installation automatisch mitinstalliert. **Du brauchst die Arduino IDE also nicht.**
 
 Diese Seite ist nur für dich, wenn du die Arduino IDE trotzdem benutzen willst, zum Beispiel weil du sie schon für andere Projekte hast oder weil du eine Funktion brauchst, die es nur mit der IDE gibt.
 
@@ -59,4 +59,4 @@ Wenn du wieder **PlatformIO** benutzen willst, stellst du es an derselben Stelle
 | „ARDUINO IDE nicht gefunden“ | Öffne **Hardware Optionen**, Reiter **Entwicklungsumgebung**, Knopf **ARDUINO-IDE Einstellungen** und klicke auf **IDE suchen**. Oder trage den Pfad der Startdatei ein. |
 | Beim Kompilieren fehlt „MobaLedLib.h“ | Die Bibliotheken fehlen. Öffne den Reiter **UPDATE** (er erscheint nur mit der ARDUINO IDE) und lasse die Bibliotheken installieren. |
 | Windows: Die Installation der IDE bricht ab | Lade die IDE 1.8.19 von Hand von [[https://www.arduino.cc/en/software/OldSoftwareReleases/|arduino.cc]] und starte die Installation noch einmal mit ''install_windows.bat /libs''. |
-| Der schnelle Bootloader geht nicht | Diese Funktion läuft in der webMobaLedLib nur mit PlatformIO. |
+| Der schnelle Bootloader geht nicht | Diese Funktion läuft in MobaLedLib Studio nur mit PlatformIO. |

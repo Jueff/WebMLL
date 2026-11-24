@@ -1,4 +1,5 @@
-# Datei-Version: 1.01 (2026-10-15) - find_mobaledlib.py
+# Datei-Version: 1.02 (2026-11-24) - find_mobaledlib.py
+# 1.02 (2026-11-24): erkennt auch den Seitentitel 'MobaLedLib Studio' (neuer Anzeigename seit 5.08)
 """Sucht die webMobaLedLib-Oberflaeche (frueher pyMobaLedLib genannt; zum Beispiel auf dem Raspberry Pi) im lokalen Netz.
 
 Aufruf (Windows, macOS, Linux; nur Python noetig, keine weiteren Pakete):
@@ -43,7 +44,7 @@ def probe(host: str, port: int, timeout: float = 2.0):
         return None
     if resp.status == 401 and ("webMobaLedLib" in auth or "pyMobaLedLib" in auth):
         return "Anmeldung erforderlich (Benutzer mobaledlib)"
-    if "webMobaLedLib" in body or "pyMobaLedLib" in body:
+    if "webMobaLedLib" in body or "pyMobaLedLib" in body or "MobaLedLib Studio" in body:  # v1.02
         return "offen (ohne Passwort)"
     return None
 

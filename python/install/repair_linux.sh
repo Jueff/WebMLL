@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Datei-Version: 1.00 (2026-10-21) - repair_linux.sh
+# Datei-Version: 1.01 (2026-11-24) - repair_linux.sh
+# 1.01: Anzeigename MobaLedLib Studio in den Meldungen (Name des Symbols unveraendert)
 # Prueft die Installation von webMobaLedLib und stellt fehlende oder beschaedigte Dateien aus dem Release wieder her (zum Beispiel nach einem abgebrochenen Update).
 # Braucht das Programm nicht: laeuft auch, wenn webMobaLedLib nicht mehr startet. Aufruf: bash install/repair_linux.sh   (Raspberry Pi: ebenso, danach den Dienst neu starten)
 # Optionen: --zip <Pfad zu webmobaledlib.zip> (ohne Internet)   --offline   --allow-older   --check-only   --yes
@@ -15,14 +16,14 @@ elif command -v python3 >/dev/null 2>&1; then PY="python3"
 elif command -v python >/dev/null 2>&1; then PY="python"
 fi
 if [ -z "$PY" ]; then echo "FEHLER: Python wurde nicht gefunden. Bitte install/install_linux.sh ausfuehren oder python3 installieren."; exit 1; fi
-echo "webMobaLedLib: Installation pruefen und reparieren"
+echo "MobaLedLib Studio: Installation pruefen und reparieren"
 echo "Das Programm sollte dabei beendet sein."
 echo
 "$PY" repair.py --project "$PWD" "$@"
 RC=$?
 echo
 if [ "$RC" -eq 0 ]; then
-  echo "Fertig. Bitte webMobaLedLib neu starten."
+  echo "Fertig. Bitte MobaLedLib Studio neu starten."
   if command -v systemctl >/dev/null 2>&1 && systemctl cat mobaledlib-web >/dev/null 2>&1; then
     echo "Raspberry Pi (Dienst):  sudo systemctl restart mobaledlib-web"
   fi

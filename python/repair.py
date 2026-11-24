@@ -1,9 +1,9 @@
-# Datei-Version: 1.04 (2026-10-26) - repair.py
+# Datei-Version: 1.05 (2026-11-24) - repair.py
 # ----------------------------------------------------------------------------------------------
 # Name:           repair.py
 # Path:           repair.py
-# Version:        1.04
-# Last Update:    2026-11-18
+# Version:        1.05
+# Last Update:    2026-11-24
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
@@ -12,6 +12,7 @@
 #   1.02  2026-10-23  Korrektur: LEDs_AutoProg/LEDs_AutoProg.h und LEDs_AutoProg/*.cmd werden nicht verglichen und eine vorhandene nie ersetzt; fehlt sie, wird sie aus dem Release geholt (VOLATILE_PATHS)
 #   1.03  2026-10-26  platformio.ini im Ordner python wird von der Reparatur nicht ersetzt (VOLATILE_PATHS)
 #   1.04  2026-11-18  Ein ZIP darf neben dem Ordner python die Datei START_HIER.txt enthalten (wird ignoriert)
+#   1.05  2026-11-24  Anzeigename MobaLedLib Studio in den Meldungen. Zeilen mit '# v5.09'
 # ----------------------------------------------------------------------------------------------
 """Reparatur der Installation von webMobaLedLib. Nur Standardbibliothek, braucht das Programm nicht: laeuft auch, wenn webmobaledlib.py nicht mehr startet.
 
@@ -264,7 +265,8 @@ def write_one(zf, zipname: str, expected: str, project: str, rel: str) -> None:
 
 
 def main(argv=None) -> int:
-    ap = argparse.ArgumentParser(description="webMobaLedLib: Installation prüfen und reparieren")
+    # ap = argparse.ArgumentParser(description="webMobaLedLib: Installation prüfen und reparieren")  # v5.09 (entfallen)
+    ap = argparse.ArgumentParser(description="MobaLedLib Studio: Installation prüfen und reparieren")  # v5.09
     ap.add_argument("--project", default=os.path.dirname(os.path.abspath(__file__)))
     ap.add_argument("--zip", default="", help="ein vollständiges Release (webmobaledlib.zip) von Hand angeben")
     ap.add_argument("--url", default=os.environ.get("MLL_UPDATE_URL") or DEFAULT_URL)
@@ -276,7 +278,8 @@ def main(argv=None) -> int:
     args = ap.parse_args(argv)
     project = os.path.abspath(args.project)
     data = data_dir()
-    say(f"webMobaLedLib: Prüfung und Reparatur\n  Ordner: {project}\n  Datenordner: {data}")
+    # say(f"webMobaLedLib: Prüfung und Reparatur\n  Ordner: {project}\n  Datenordner: {data}")  # v5.09 (entfallen)
+    say(f"MobaLedLib Studio: Prüfung und Reparatur\n  Ordner: {project}\n  Datenordner: {data}")  # v5.09
     if not os.path.isdir(project):
         say("FEHLER: Der Ordner gibt es nicht.")
         return 2
@@ -414,7 +417,8 @@ def main(argv=None) -> int:
     after = find_problems(project, new_manifest, everything=args.all)
     if failed or after:
         say(f"\nERGEBNIS: nicht vollständig repariert ({failed} Fehler beim Schreiben, {len(after)} Abweichungen). Mögliche Ursache: Ein anderes Programm sperrt Dateien "
-            "(Sicherungs- oder Virenprogramm, laufendes webMobaLedLib). Bitte beenden und noch einmal ausführen.")
+            # "(Sicherungs- oder Virenprogramm, laufendes webMobaLedLib). Bitte beenden und noch einmal ausführen.")  # v5.09 (entfallen)
+            "(Sicherungs- oder Virenprogramm, laufendes MobaLedLib Studio). Bitte beenden und noch einmal ausführen.")  # v5.09
         for rel, why in after[:15]:
             say(f"    {why}: {rel}")
         return 1
@@ -429,7 +433,8 @@ def main(argv=None) -> int:
     except OSError:
         pass
     say(f"\nERGEBNIS: Repariert. Version {new_manifest.get('version')}, {len(order)} Dateien geschrieben, alle Dateien stimmen mit dem Release überein.\n"
-        "Bitte webMobaLedLib neu starten (Raspberry Pi: sudo systemctl restart mobaledlib-web).")
+        # "Bitte webMobaLedLib neu starten (Raspberry Pi: sudo systemctl restart mobaledlib-web).")  # v5.09 (entfallen)
+        "Bitte MobaLedLib Studio neu starten (Raspberry Pi: sudo systemctl restart mobaledlib-web).")  # v5.09
     return 0
 
 

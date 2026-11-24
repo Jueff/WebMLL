@@ -1,9 +1,10 @@
-# Datei-Version: 1.02 (2026-10-15) - mobaledlib.desktop.in
+# Datei-Version: 1.03 (2026-11-24) - mobaledlib.desktop.in
+# 1.03: Symbol heisst MobaLedLib Studio; Symbole mit den frueheren Namen werden entfernt
 [Desktop Entry]
 Type=Application
-Name=webMobaLedLib
+Name=MobaLedLib Studio
 GenericName=Programmgenerator Modellbahnbeleuchtung
-Comment=webMobaLedLib Programmgenerator starten (Web-Oberfläche)
+Comment=MobaLedLib Studio Programmgenerator starten (Web-Oberfläche)
 Exec="__APPDIR__/pi/start_mobaledlib.sh"
 Icon=__APPDIR__/install/mobaledlib.png
 Terminal=false

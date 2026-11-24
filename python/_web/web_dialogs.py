@@ -1,12 +1,13 @@
-# Datei-Version: 1.13 (2026-11-24) - web_dialogs.py
+# Datei-Version: 1.14 (2026-11-24) - web_dialogs.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_dialogs.py
 # Path:           _web/web_dialogs.py
-# Version:        1.13
+# Version:        1.14
 # Last Update:    2026-11-24
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
+#   1.14  2026-11-24  Anzeigename MobaLedLib Studio statt webMobaLedLib in Texten der Oberflaeche. Zeilen mit '# v5.09'
 #   1.13  2026-11-24  web_msgbox_labelled(..., extra={Rueckgabewert: Text}): zusaetzlicher Knopf direkt nach dem ersten (Ja, alle beim Laden einer PGF-Datei mit mehreren Seiten)
 #   1.05  2026-10-17  redirect_messagebox(): tkinter.messagebox im Browser anzeigen (Patterngenerator); davor bis 1.04 nicht erfasst
 #   1.06  2026-10-20  Web-Formular fuer UserForm_ConfirmLicense (LNet Lizenzbestimmungen): vorher Fehler 'HeadlessAppController' object has no attribute 'wait_window'
@@ -166,7 +167,8 @@ def show_busy(text, title=""):  # v1.08
             with ui.dialog().props("persistent") as dlg, ui.card().classes("min-w-[380px] max-w-[640px]"):  # v1.08
                 with ui.row().classes("items-center no-wrap"):  # v1.08
                     ui.spinner(size="lg")  # v1.08
-                    ui.label(clean_text(title) or "webMobaLedLib").classes("text-h6")  # v1.08
+                    # ui.label(clean_text(title) or "webMobaLedLib").classes("text-h6")  # v1.08  # v5.09 (entfallen)
+                    ui.label(clean_text(title) or "MobaLedLib Studio").classes("text-h6")  # v1.08  # v5.09
                 ui.label(clean_text(text)).style("white-space: pre-line")  # v1.08
             dlg.open()  # v1.08
         return dlg  # v1.08
@@ -223,7 +225,8 @@ async def _msgbox_async(prompt, msg_type, title, labels=None, extra=None):  # v1
                 icon = icon_for(msg_type)
                 if icon:
                     ui.icon(icon[0], color=icon[1]).classes("text-3xl")
-                ui.label(clean_text(title) or "webMobaLedLib").classes("text-h6")
+                # ui.label(clean_text(title) or "webMobaLedLib").classes("text-h6")  # v5.09 (entfallen)
+                ui.label(clean_text(title) or "MobaLedLib Studio").classes("text-h6")  # v5.09
             ui.label(clean_text(prompt)).style("white-space: pre-line")
             with ui.row().classes("justify-end w-full"):
                 btns = buttons_for(msg_type)
@@ -254,7 +257,8 @@ async def _inputbox_async(message, title, default):
     client = _bridge["client"]
     with client:
         with ui.dialog().props("persistent") as dlg, ui.card().classes("min-w-[380px] max-w-[640px]"):
-            ui.label(clean_text(title) or "webMobaLedLib").classes("text-h6")
+            # ui.label(clean_text(title) or "webMobaLedLib").classes("text-h6")  # v5.09 (entfallen)
+            ui.label(clean_text(title) or "MobaLedLib Studio").classes("text-h6")  # v5.09
             ui.label(clean_text(message)).style("white-space: pre-line")
             entry = ui.input(value=str(default if default is not None else "")).props("autofocus").classes("w-full")
             entry.on("keydown.enter", lambda: dlg.submit(entry.value))

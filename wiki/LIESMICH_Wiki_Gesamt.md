@@ -1,7 +1,7 @@
 Datei-Version: 1.55 (2026-11-23) - LIESMICH_Wiki_Gesamt.md
-Gilt für webMobaLedLib 4.93
+Gilt für Version 4.93
 
-# Wiki-Kapitel „webMobaLedLib“: alle Seiten, Stand 4.93
+# Wiki-Kapitel „MobaLedLib Studio“: alle Seiten, Stand 4.93
 
 Dieses Paket enthält **alle 41 Seiten** in ihrer neuesten Fassung (Seitenstand jeweils um 0,01 erhöht). Es ersetzt die früheren Pakete der sechs Wellen. **Die Seiten erst veröffentlichen, wenn ein Release mit 3.04 (oder neuer) auf GitHub liegt.**
 
@@ -17,7 +17,7 @@ Dieses Paket enthält **alle 41 Seiten** in ihrer neuesten Fassung (Seitenstand 
 ## Neu seit Stand 4.36 (Stand 4.79): Menüs neu geordnet
 
 * **`ota`** (1.05, 4.79): neu **DHCP oder Statische IP-Adresse** (IP-Adresse, Gateway, Subnetzmaske, DNS) im Reiter WLAN (OTA).
-* **Alle Seiten auf Stand 4.79 geprüft** (Seitenstand jeweils um 0,01 erhöht, Kopfzeile „gilt für webMobaLedLib 4.79“). Inhaltlich geändert: `pg_werkzeugleiste` (Reiter der Hardware Optionen neu: ESP Einstellungen, WLAN (OTA), ohne DATEIEN und Erweiterungen; Schnelles Update), `pg_arduino` (Status neben dem Knopf, Übertragungsfenster, Abschnitt Schnelles Update), `programmgenerator` (Kopfzeile), `pg_tabelle` (Rückgängig und Wiederholen, Makrotext in Spalte L, Spaltenbreiten übertragen), `pg_speichern` (verworfene Änderungen, Datei bereit), `wz_programm_einstellungen` (Fenster automatisch schließen, Zellinnenabstand, Dunkel ab 4.75, neue Schriftbezeichnung), `ota` (ESP Einstellungen, Schnelles Update über WLAN, feste IP), `fehlersuche` (hang_dump.txt, Dialoge unter der Tabelle), `aktualisieren` (eigener Link oder ZIP bei Update Testversion), `erweiterungen`, `modus`, `simulator`, `seiten_update` (neue Tabelle, Hinweis zu Bildern). Die übrigen Seiten wurden geprüft und nur im Seitenstand angehoben.
+* **Alle Seiten auf Stand 4.79 geprüft** (Seitenstand jeweils um 0,01 erhöht, Kopfzeile „gilt für Version 4.79“). Inhaltlich geändert: `pg_werkzeugleiste` (Reiter der Hardware Optionen neu: ESP Einstellungen, WLAN (OTA), ohne DATEIEN und Erweiterungen; Schnelles Update), `pg_arduino` (Status neben dem Knopf, Übertragungsfenster, Abschnitt Schnelles Update), `programmgenerator` (Kopfzeile), `pg_tabelle` (Rückgängig und Wiederholen, Makrotext in Spalte L, Spaltenbreiten übertragen), `pg_speichern` (verworfene Änderungen, Datei bereit), `wz_programm_einstellungen` (Fenster automatisch schließen, Zellinnenabstand, Dunkel ab 4.75, neue Schriftbezeichnung), `ota` (ESP Einstellungen, Schnelles Update über WLAN, feste IP), `fehlersuche` (hang_dump.txt, Dialoge unter der Tabelle), `aktualisieren` (eigener Link oder ZIP bei Update Testversion), `erweiterungen`, `modus`, `simulator`, `seiten_update` (neue Tabelle, Hinweis zu Bildern). Die übrigen Seiten wurden geprüft und nur im Seitenstand angehoben.
 * **Tabelle drucken (4.62):** `pg_speichern`: neuer Menüpunkt Datei, Tabelle drucken … (Druckansicht mit allen Zeilen).
 * **Mini-Farbtest (4.59):** `pg_tabelle`: F3 oder Kontextmenü bei der Zelle Beleuchtung mit dem Makro ConstRGB.
 * **Einstellungen als Fenster (4.56):** `wz_programm_einstellungen`, `pg_tabelle`: Jeder Eintrag im Menü Einstellungen und „Tabelle färben …“ öffnet ein Fenster mit festen Knöpfen; nach dem Färben springt das Programm in den Programm Generator. Bilder `wz_07_programm_einstellungen.png` und die Seite Tabelle färben neu aufnehmen.
@@ -59,7 +59,7 @@ Dieses Paket enthält **alle 41 Seiten** in ihrer neuesten Fassung (Seitenstand 
 
 ## Was sich gegenüber den früheren Fassungen geändert hat
 
-1. **Neuer Namensraum:** Alle Links zwischen den Seiten zeigen jetzt auf `anleitungen:webmobaledlib:<Seite>` (vorher `anleitungen:spezial:webmobaledlib:`). Die Links auf vorhandene Wiki-Seiten (`anleitungen:quickstart`, `anleitungen:programmgenerator`, `anleitungen:spezial:pyprogramgenerator` …) sind unverändert.
+1. **Neuer Namensraum:** Alle Links zwischen den Seiten zeigen jetzt auf `anleitungen:mobaledlibstudio:<Seite>` (vorher `anleitungen:webmobaledlib:`, seit 5.12). Die Links auf vorhandene Wiki-Seiten (`anleitungen:quickstart`, `anleitungen:programmgenerator`, `anleitungen:spezial:pyprogramgenerator` …) sind unverändert.
 2. **Lichtmaschine statt Arduino:** Wo es um das Gerät geht, steht jetzt **Lichtmaschine** (Programm für die Lichtmaschine, die Lichtmaschine verbinden …). Die vier Lichtmaschinen stehen auf der Seite `start` und im Begriffsblatt `begriffe`: **Lichtmaschine Classic** (ARDUINO Nano), **Lichtmaschine Pro** (ESP32), **Lichtmaschine Pico Zero** (Raspberry Pico), **Lichtmaschine Molli** (Raspberry Pico); die Seite `pg_arduino` ordnet jedem Typ das Board zu. **Unverändert** bleiben (1) **Namen, wie sie im Programm stehen** (Knopf „Mit ARDUINO verbinden“, Reiter „ARDUINO Einstellungen“, Menü „ARDUINO“, „ARDUINO Überblendung AUS“, Reiter „LED Arduino“, „ARDUINO-IDE“), solange die Oberfläche selbst so heißt; (2) **Arduino IDE** und **Arduino Nano** als Produktnamen; (3) die **Dateinamen der Seiten** `pg_arduino`, `wz_arduino_einstellungen` und `arduino_ide` (Seitenadressen; bei Bedarf umbenennen und die Links anpassen).
 3. **Python:** Die Installationsseiten beschreiben jetzt, was die Skripte wirklich tun: Das Skript **prüft** Python 3.10 oder neuer. **Windows:** installiert nach Rückfrage „Python 3.12 jetzt mit winget installieren [J,N]“ (ohne winget: Hinweis auf python.org). **Linux und Raspberry Pi:** installieren Python mit venv und pip und die anderen Pakete selbst über die Paketverwaltung (Passwort nötig; zu alte Systeme melden es). **macOS:** nur nach Rückfrage mit Homebrew, sonst muss Python vorher von python.org installiert werden. Im Begriffsblatt gibt es den Eintrag „Python“.
 
@@ -71,7 +71,7 @@ Dieses Paket enthält **alle 41 Seiten** in ihrer neuesten Fassung (Seitenstand 
 
    * **Antworten des Entwicklers eingearbeitet:** Das Blatt (DCC, Selectrix, CAN, LNet) spielt beim ersten Test **keine Rolle**, weil noch keine Verbindung zu einer Modellbahnzentrale gebraucht wird. Die **erste LED einer Kette** ist immer eine **Heartbeat LED** (zeigt, dass der Prozessor arbeitet) und sitzt bei **allen vier Lichtmaschinen fest auf der Platine** (neuer Eintrag **Heartbeat LED** in `begriffe`). **Automatisch erkennen** versucht nur den Typ des **ARDUINO Nano** zu erkennen und das geht **nur unter Windows**; unter Linux (auch Raspberry Pi) und macOS muss der Typ immer selbst angegeben werden (`erstes_programm`, `pg_arduino`). Der Hinweis **„Mit ARDUINO verbinden“ geht nur, wenn auf der Lichtmaschine schon ein MobaLedLib-Programm läuft** steht jetzt auch auf den Seiten `wz_servo`, `wz_dmservo`, `wz_sound`, `wz_dcckeyboard`, `wz_z21`, `wz_farbtest`, `wz_monitor`, `servo_animation`, `werkzeuge` und `programmgenerator`.
 
-   * **Drei Arten der Verbindung (Erklärung des Entwicklers):** Neuer Abschnitt **Die drei Arten der Verbindung** in `pg_arduino`: **(1) Programmieren und Hochladen** (nur PlatformIO oder ARDUINO IDE; die webMobaLedLib gibt ihre eigene Verbindung dafür frei), **(2) Effektmodus** (Lichtmaschine arbeitet wie auf der Anlage; nötig für die Testtasten der Tabelle), **(3) Direktmodus** (einzelne LEDs direkt ansteuern; Farb Test, Servo Einstellungen, Makros Servo Animation und LED Farb-Animation). Dazu: neue Einträge **Direktmodus** und **Effektmodus** in `begriffe`; ein Satz auf `pg_tabelle` (Testtasten), `wz_farbtest`, `wz_servo`, `servo_animation`, `led_farbanimation` und `erstes_programm` (Schritt 6).
+   * **Drei Arten der Verbindung (Erklärung des Entwicklers):** Neuer Abschnitt **Die drei Arten der Verbindung** in `pg_arduino`: **(1) Programmieren und Hochladen** (nur PlatformIO oder ARDUINO IDE; MobaLedLib Studio gibt ihre eigene Verbindung dafür frei), **(2) Effektmodus** (Lichtmaschine arbeitet wie auf der Anlage; nötig für die Testtasten der Tabelle), **(3) Direktmodus** (einzelne LEDs direkt ansteuern; Farb Test, Servo Einstellungen, Makros Servo Animation und LED Farb-Animation). Dazu: neue Einträge **Direktmodus** und **Effektmodus** in `begriffe`; ein Satz auf `pg_tabelle` (Testtasten), `wz_farbtest`, `wz_servo`, `servo_animation`, `led_farbanimation` und `erstes_programm` (Schritt 6).
    * **Optionenfenster nach dem Bildschirmfoto:** Die Reiter heißen im Fenster **LED ARDUINO**, **DCC ARDUINO**, **DATEIEN**, **ENTWICKLUNGSUMGEBUNG**, **BOOTLOADER** (Großbuchstaben; **UPDATE** erscheint nur mit der ARDUINO IDE). Die Boardnamen sind bestätigt (**Nano Normal (old Bootloader)**, **Nano (neue Version)**, **Nano (Full memory)**, **Uno**, **Typ von Arduino IDE benutzen**, **ESP32 Wroom**, **Raspberry Pico**). Der Hinweis auf „Raspberry Pico-WLAN-mDNS“ ist entfallen (steht nicht in der Liste). Alle Seiten nennen die Reiter jetzt in dieser Schreibweise.
 
    * **Antworten des Entwicklers zu den Modi eingearbeitet:** Die **Umschaltung** zwischen Effektmodus und Direktmodus erfolgt **automatisch**. **Direktmodus:** Farb Test, Servo Einstellungen, **Sound Test** und die Makros Servo Animation und LED Farb-Animation; **alle anderen** (Testtasten, **DM Servo Einstellungen**, **DCC Keyboard**, **Z21 Simulator**, **Serial Monitor**) arbeiten im **Effektmodus**. Nach dem Übertragen ist **keine Verbindung** mehr offen; sie wird **erst hergestellt, wenn ein Werkzeug sie braucht** (Beispiel: Testtaste klicken: zuerst verbinden, dann den Befehl senden). Der Reiter **DCC ARDUINO** ist bestätigt (zweiter ARDUINO für die Zentrale, nur bei Nano-Lichtmaschinen, nicht beim Blatt CAN). Geändert: `pg_arduino`, `begriffe`, `werkzeuge`, `wz_sound`, `wz_dmservo`, `wz_dcckeyboard`, `wz_z21`, `wz_monitor`.
@@ -116,49 +116,49 @@ Dieses Paket enthält **alle 41 Seiten** in ihrer neuesten Fassung (Seitenstand 
 
 | Datei | Wiki-Seite | Seitenstand |
 |---|---|---|
-| `aktualisieren.txt` | `anleitungen:webmobaledlib:aktualisieren` | 1.01 |
-| `arduino_ide.txt` | `anleitungen:webmobaledlib:arduino_ide` | 1.02 |
-| `begriffe.txt` | `anleitungen:webmobaledlib:begriffe` | 1.05 |
-| `erstes_programm.txt` | `anleitungen:webmobaledlib:erstes_programm` | 1.09 |
-| `fehlersuche.txt` | `anleitungen:webmobaledlib:fehlersuche` | 1.09 |
-| `installation.txt` | `anleitungen:webmobaledlib:installation` | 1.02 |
-| `led_farbanimation.txt` | `anleitungen:webmobaledlib:led_farbanimation` | 1.02 |
-| `linux.txt` | `anleitungen:webmobaledlib:linux` | 1.02 |
-| `macos.txt` | `anleitungen:webmobaledlib:macos` | 1.04 |
-| `modus.txt` | `anleitungen:webmobaledlib:modus` | 1.01 |
-| `patterngenerator.txt` | `anleitungen:webmobaledlib:patterngenerator` | 1.00 |
-| `pg_arduino.txt` | `anleitungen:webmobaledlib:pg_arduino` | 1.09 |
-| `pg_grafisch.txt` | `anleitungen:webmobaledlib:pg_grafisch` | 1.02 |
-| `pg_speichern.txt` | `anleitungen:webmobaledlib:pg_speichern` | 1.04 |
-| `pg_tabelle.txt` | `anleitungen:webmobaledlib:pg_tabelle` | 1.05 |
-| `pg_werkzeugleiste.txt` | `anleitungen:webmobaledlib:pg_werkzeugleiste` | 1.09 |
-| `programmgenerator.txt` | `anleitungen:webmobaledlib:programmgenerator` | 1.06 |
-| `raspberrypi.txt` | `anleitungen:webmobaledlib:raspberrypi` | 1.02 |
-| `seiten_update.txt` | `anleitungen:webmobaledlib:seiten_update` | 1.00 |
-| `servo_animation.txt` | `anleitungen:webmobaledlib:servo_animation` | 1.05 |
-| `einfuehrung.txt` | `anleitungen:webmobaledlib:einfuehrung` | 1.08 |
-| `werkzeuge.txt` | `anleitungen:webmobaledlib:werkzeuge` | 1.07 |
-| `windows.txt` | `anleitungen:webmobaledlib:windows` | 1.04 |
-| `wz_arduino_einstellungen.txt` | `anleitungen:webmobaledlib:wz_arduino_einstellungen` | 1.04 |
-| `wz_dcckeyboard.txt` | `anleitungen:webmobaledlib:wz_dcckeyboard` | 1.05 |
-| `wz_dmservo.txt` | `anleitungen:webmobaledlib:wz_dmservo` | 1.04 |
-| `wz_farbtest.txt` | `anleitungen:webmobaledlib:wz_farbtest` | 1.04 |
-| `wz_monitor.txt` | `anleitungen:webmobaledlib:wz_monitor` | 1.04 |
-| `wz_netzwerk.txt` | `anleitungen:webmobaledlib:wz_netzwerk` | 1.02 |
-| `wz_programm_einstellungen.txt` | `anleitungen:webmobaledlib:wz_programm_einstellungen` | 1.08 |
-| `wz_servo.txt` | `anleitungen:webmobaledlib:wz_servo` | 1.06 |
-| `wz_sound.txt` | `anleitungen:webmobaledlib:wz_sound` | 1.04 |
-| `wz_z21.txt` | `anleitungen:webmobaledlib:wz_z21` | 1.04 |
+| `aktualisieren.txt` | `anleitungen:mobaledlibstudio:aktualisieren` | 1.01 |
+| `arduino_ide.txt` | `anleitungen:mobaledlibstudio:arduino_ide` | 1.02 |
+| `begriffe.txt` | `anleitungen:mobaledlibstudio:begriffe` | 1.05 |
+| `erstes_programm.txt` | `anleitungen:mobaledlibstudio:erstes_programm` | 1.09 |
+| `fehlersuche.txt` | `anleitungen:mobaledlibstudio:fehlersuche` | 1.09 |
+| `installation.txt` | `anleitungen:mobaledlibstudio:installation` | 1.02 |
+| `led_farbanimation.txt` | `anleitungen:mobaledlibstudio:led_farbanimation` | 1.02 |
+| `linux.txt` | `anleitungen:mobaledlibstudio:linux` | 1.02 |
+| `macos.txt` | `anleitungen:mobaledlibstudio:macos` | 1.04 |
+| `modus.txt` | `anleitungen:mobaledlibstudio:modus` | 1.01 |
+| `patterngenerator.txt` | `anleitungen:mobaledlibstudio:patterngenerator` | 1.00 |
+| `pg_arduino.txt` | `anleitungen:mobaledlibstudio:pg_arduino` | 1.09 |
+| `pg_grafisch.txt` | `anleitungen:mobaledlibstudio:pg_grafisch` | 1.02 |
+| `pg_speichern.txt` | `anleitungen:mobaledlibstudio:pg_speichern` | 1.04 |
+| `pg_tabelle.txt` | `anleitungen:mobaledlibstudio:pg_tabelle` | 1.05 |
+| `pg_werkzeugleiste.txt` | `anleitungen:mobaledlibstudio:pg_werkzeugleiste` | 1.09 |
+| `programmgenerator.txt` | `anleitungen:mobaledlibstudio:programmgenerator` | 1.06 |
+| `raspberrypi.txt` | `anleitungen:mobaledlibstudio:raspberrypi` | 1.02 |
+| `seiten_update.txt` | `anleitungen:mobaledlibstudio:seiten_update` | 1.00 |
+| `servo_animation.txt` | `anleitungen:mobaledlibstudio:servo_animation` | 1.05 |
+| `einfuehrung.txt` | `anleitungen:mobaledlibstudio:einfuehrung` | 1.08 |
+| `werkzeuge.txt` | `anleitungen:mobaledlibstudio:werkzeuge` | 1.07 |
+| `windows.txt` | `anleitungen:mobaledlibstudio:windows` | 1.04 |
+| `wz_arduino_einstellungen.txt` | `anleitungen:mobaledlibstudio:wz_arduino_einstellungen` | 1.04 |
+| `wz_dcckeyboard.txt` | `anleitungen:mobaledlibstudio:wz_dcckeyboard` | 1.05 |
+| `wz_dmservo.txt` | `anleitungen:mobaledlibstudio:wz_dmservo` | 1.04 |
+| `wz_farbtest.txt` | `anleitungen:mobaledlibstudio:wz_farbtest` | 1.04 |
+| `wz_monitor.txt` | `anleitungen:mobaledlibstudio:wz_monitor` | 1.04 |
+| `wz_netzwerk.txt` | `anleitungen:mobaledlibstudio:wz_netzwerk` | 1.02 |
+| `wz_programm_einstellungen.txt` | `anleitungen:mobaledlibstudio:wz_programm_einstellungen` | 1.08 |
+| `wz_servo.txt` | `anleitungen:mobaledlibstudio:wz_servo` | 1.06 |
+| `wz_sound.txt` | `anleitungen:mobaledlibstudio:wz_sound` | 1.04 |
+| `wz_z21.txt` | `anleitungen:mobaledlibstudio:wz_z21` | 1.04 |
 
 ## Bildschirmfotos (41)
 
-Die Bilder liegen weiter im Namensraum `bilder:anleitungen:webmobaledlib`. Dateinamen **genau** wie unten.
+Die Bilder liegen im Namensraum `bilder:anleitungen:mobaledlibstudio` (seit 5.12; vorher `bilder:anleitungen:webmobaledlib`). Dateinamen **genau** wie unten.
 
 Das Bildschirmfoto des Entwicklers (Optionen und spezielle Funktionen, Reiter LED ARDUINO) ist als Vorlage für `erst_04_optionen.png` geeignet; bitte auf das Fenster zuschneiden. **Neu für `erstes_programm`:** `erst_02_programmgenerator.png` (der Reiter Programm Generator), `erst_03_blatt.png` (die Tabellenblätter DCC, Selectrix, CAN, LNet), `erst_04_optionen.png` (Hardware Optionen, Reiter LED Arduino mit Board und USB Port erkennen), `erst_05_makro.png` (die Tabelle mit der Zeile Heartbeat LED), `erst_06_uebertragen.png`. **Entfallen:** `erst_02_verbinden.png`, `erst_03_makro.png`, `erst_04_uebertragen.png`. `wz_06_arduino_einstellungen.png` sollte die **echte** Seite zeigen (Haken Test ARDUINO Programm Creation, Pfad zur ARDUINO IDE).
 
 | Dateiname | Seite | Inhalt |
 |---|---|---|
-| `akt_01_update.png` | aktualisieren | Das Fenster Update webMobaLedLib |
+| `akt_01_update.png` | aktualisieren | Das Fenster Update MobaLedLib Studio |
 | `erst_01_start.png` | erstes_programm | Das Programm nach dem Start |
 | `erst_02_programmgenerator.png` | erstes_programm | Der Reiter Programm Generator |
 | `erst_03_blatt.png` | erstes_programm | Die Tabellenblätter unter der Tabelle: DCC, Selectrix, CAN, LNet |
@@ -184,14 +184,14 @@ Das Bildschirmfoto des Entwicklers (Optionen und spezielle Funktionen, Reiter LE
 | `pg_03_werkzeugleiste.png` | pg_werkzeugleiste | Die Werkzeugleiste des Programmgenerators |
 | `pg_01_fenster.png` | programmgenerator | Das Fenster des Programmgenerators mit den beschrifteten Bereichen |
 | `pi_01_terminal.png` | raspberrypi | Das Terminal mit dem Befehl sudo bash install_pi.sh |
-| `pi_02_programm.png` | raspberrypi | Die webMobaLedLib auf dem Raspberry Pi |
+| `pi_02_programm.png` | raspberrypi | MobaLedLib Studio auf dem Raspberry Pi |
 | `servo_01_dialog.png` | servo_animation | Der Dialog Servo Animation mit den Einstellungen links und der Kurve rechts |
 | `servo_02_kurve_individuell.png` | servo_animation | Eine individuelle Kurve mit ziehbaren Punkten |
-| `start_01_oberflaeche.png` | start | Die webMobaLedLib im Browser |
+| `start_01_oberflaeche.png` | start | MobaLedLib Studio im Browser |
 | `win_01_download.png` | windows | Die heruntergeladene Datei im Ordner Downloads |
 | `win_02_extrahieren.png` | windows | Das Fenster Alle extrahieren mit dem richtigen Zielpfad |
 | `win_03_installation.png` | windows | Das Installationsfenster während der Installation |
-| `win_04_programm.png` | windows | Die webMobaLedLib im Browser |
+| `win_04_programm.png` | windows | MobaLedLib Studio im Browser |
 | `wz_06_arduino_einstellungen.png` | wz_arduino_einstellungen | Der Reiter ARDUINO Einstellungen |
 | `wz_04_dcckeyboard.png` | wz_dcckeyboard | Der Reiter DCC Keyboard |
 | `wz_01_farbtest.png` | wz_farbtest | Der Reiter Farb Test |
@@ -211,14 +211,14 @@ Alle Seiten beruhen auf der Anleitung, den Installationsskripten, den Beschriftu
 5. **Werkzeug-Reiter:** ARDUINO Einstellungen (welche Einstellungen sichtbar sind), Serial Monitor (Annahmen zur Verbindung), Farb Test (Blinken, Name des Knopfes „Palette übergeben“), Sound Test (Einheit der Impulslänge), Programm Einstellungen (Erklärungen einzelner Einstellungen), Zugriff aus dem Netz (Namen aus der Anleitung).
 6. **Servo Animation und LED Farb-Animation:** „Servo Animation mit 2 Button“ (nur nach dem Namen beschrieben), die Beispielwerte, Zeitstufen, HSV-Felder.
 7. **Patterngenerator (neu):** Bitte gegenlesen: die Erklärungen der gelben Eingabefelder (aus den Hinweistexten des Blatts, in Anfängersprache umformuliert), der Ablauf „Beispiel laden“ und **Test Pattern** (aus der Anleitung 2.10, nicht an einem Bildschirmfoto abgeglichen), die Namen der Knöpfe und Felder, die Behauptung, dass im Anfänger Modus der Reiter fehlt. Eine Anleitung „Muster von Grund auf neu entwerfen“ fehlt noch (nur ein Beispiel wird beschrieben). Neue Bilder: `pat_01_ueberblick.png`, `pat_02_beispiele.png`, `pat_03_test.png`, `pat_04_export.png`.
-8. **Aktualisieren und Fehlersuche (neu):** aus der Anleitung übernommen; nicht neu geprüft. Bitte gegenlesen: die Abschnitte zu **macOS** (Zertifikate), **Raspberry Pi** (Dienst, Netzteil), **iPad** (Cookie ab 3.05, Berechtigung Lokales Netzwerk: auf einem iPad nicht geprüft). Neues Bild: `akt_01_update.png` (Fenster „Update webMobaLedLib“).
+8. **Aktualisieren und Fehlersuche (neu):** aus der Anleitung übernommen; nicht neu geprüft. Bitte gegenlesen: die Abschnitte zu **macOS** (Zertifikate), **Raspberry Pi** (Dienst, Netzteil), **iPad** (Cookie ab 3.05, Berechtigung Lokales Netzwerk: auf einem iPad nicht geprüft). Neues Bild: `akt_01_update.png` (Fenster „Update MobaLedLib Studio“).
 9. **Optionenfenster (neu beschrieben):** Bitte gegenlesen: die Reiter **DATEIEN**, **ENTWICKLUNGSUMGEBUNG** und **BOOTLOADER** (aus dem Quelltext und der Anleitung, Abschnitt 2.9e; nicht mit einem Foto der Reiter abgeglichen); ob **Importieren v. altem Prog.** und **Kopiere von Seite zu Seite** in der Webversion wirklich ausgegraut sind (aus dem Quelltext abgeleitet); der Knopf **Firmware installieren** beim Pico (nur genannt).
 10. **Hinweis zum Programm:** Die Auswahl im Reiter ENTWICKLUNGSUMGEBUNG heißt im Programm **ARDUINO-IDE (Standard)** und **PlatformIO (Ersatz für die ARDUINO-IDE)**, obwohl seit 2.92 PlatformIO der Standard ist. Das Wiki nennt PlatformIO als Standard; der Text im Programm sollte angepasst werden (Vorschlag für die nächste Version).
 11. **Anfänger Modus:** der Satz, dass noch offen ist, welche Makros fehlen (anpassen, sobald die Liste feststeht).
 
 ## Folgearbeit in der Software (noch nicht gemacht)
 
-* Die Knöpfe **Hilfe** in den Dialogen Servo Animation und LED Farb-Animation öffnen noch die alte Seite `anleitungen:spezial:pyprogramgenerator:servo_animation`. Neue Adressen: `anleitungen:webmobaledlib:servo_animation` und `anleitungen:webmobaledlib:led_farbanimation`.
+* Die Knöpfe **Hilfe** in den Dialogen Servo Animation und LED Farb-Animation öffnen noch die alte Seite `anleitungen:spezial:pyprogramgenerator:servo_animation`. Neue Adressen: `anleitungen:mobaledlibstudio:servo_animation` und `anleitungen:mobaledlibstudio:led_farbanimation`.
 * (Stand 3.04, seit 3.83/3.84 erledigt: Reiter, Verbinden-Knopf und Menü heißen jetzt „Lichtmaschine“; ARDUINO Einstellungen heißt weiter so.) Früher: Die **Oberfläche** sagte „ARDUINO“ (Mit ARDUINO verbinden, ARDUINO Einstellungen …). Umstellen auf „Lichtmaschine“ wäre eine eigene Änderung (Programm, Sprachtabelle, Übersetzungen, Anleitung).
 
 ## Noch offen

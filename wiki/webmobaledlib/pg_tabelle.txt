@@ -1,7 +1,7 @@
-====== webMobaLedLib – Die Tabelle bedienen ======
-//Seitenstand 1.10 (2026-11-23), gilt für webMobaLedLib 4.93//
+====== MobaLedLib Studio – Die Tabelle bedienen ======
+//Seitenstand 1.12 (2026-11-24), gilt für Version 5.12//
 
-In der Tabelle des [[anleitungen:webmobaledlib:programmgenerator|Programmgenerators]] steht jede Zeile für einen Effekt oder ein Gerät. Auf dieser Seite steht, wie du die Tabelle bedienst.
+In der Tabelle des [[anleitungen:mobaledlibstudio:programmgenerator|Programmgenerators]] steht jede Zeile für einen Effekt oder ein Gerät. Auf dieser Seite steht, wie du die Tabelle bedienst.
 
 ===== Eine neue Zeile anlegen =====
 
@@ -11,9 +11,9 @@ Du kannst auch **direkt auf das Symbol** in der Spalte **Icon** einer Zeile klic
 
 ===== Die Makroauswahl =====
 
-{{:bilder:anleitungen:webmobaledlib:pg_02_makroauswahl.png?600|Die Makroauswahl mit der Liste der Makros}}
+{{:bilder:anleitungen:mobaledlibstudio:pg_02_makroauswahl.png?600|Die Makroauswahl mit der Liste der Makros}}
 
-In der Makroauswahl stehen **alle Makros**, nach Gruppen sortiert (zum Beispiel //Licht//, //Signale//, //Servo//). Zu jedem gibt es eine Beschreibung. Wähle ein Makro aus und bestätige mit **OK**. Danach fragt das Programm die Werte des Makros ab, zum Beispiel Farbe, Helligkeit oder Zeiten. Für manche Makros gibt es einen eigenen Dialog, zum Beispiel für die [[anleitungen:webmobaledlib:servo_animation|Servo Animation]].
+In der Makroauswahl stehen **alle Makros**, nach Gruppen sortiert (zum Beispiel //Licht//, //Signale//, //Servo//). Zu jedem gibt es eine Beschreibung. Wähle ein Makro aus und bestätige mit **OK**. Danach fragt das Programm die Werte des Makros ab, zum Beispiel Farbe, Helligkeit oder Zeiten. Für manche Makros gibt es einen eigenen Dialog, zum Beispiel für die [[anleitungen:mobaledlibstudio:servo_animation|Servo Animation]].
 
 ===== Zellen ändern =====
 
@@ -49,7 +49,7 @@ Mit der **rechten Maustaste** (auf dem Tablet: lange drücken) auf eine Zelle er
 
 Klicke auf die **Zeilennummer**, um eine Zeile zu markieren. Mit der **Umschalttaste** markierst du einen Bereich, mit der **Strg-Taste** (am Mac **Cmd**) einzelne Zeilen. Du kannst auch mit der Maus einen Bereich von Zellen über mehrere Zeilen aufziehen.
 
-Die Knöpfe **Zeilen duplizieren**, **Zeilen löschen**, **Zeilen verschieben** und **Aus- oder Einblenden** wirken auf **alle markierten Zeilen**. Die Kopien beim Duplizieren stehen hinter der letzten markierten Zeile. Nach **Einfügen**, **Löschen**, **Duplizieren** und **Verschieben** springt die Ansicht nicht, und die betroffene Zeile ist markiert, so dass du gleich weiterarbeiten kannst (seit 4.84 bis 4.88). Was jeder Knopf macht, steht auf der Seite [[anleitungen:webmobaledlib:pg_werkzeugleiste|Die Werkzeugleiste]].
+Die Knöpfe **Zeilen duplizieren**, **Zeilen löschen**, **Zeilen verschieben** und **Aus- oder Einblenden** wirken auf **alle markierten Zeilen**. Die Kopien beim Duplizieren stehen hinter der letzten markierten Zeile. Nach **Einfügen**, **Löschen**, **Duplizieren** und **Verschieben** springt die Ansicht nicht, und die betroffene Zeile ist markiert, so dass du gleich weiterarbeiten kannst (seit 4.84 bis 4.88). Was jeder Knopf macht, steht auf der Seite [[anleitungen:mobaledlibstudio:pg_werkzeugleiste|Die Werkzeugleiste]].
 
 ===== Zeilen aktivieren und deaktivieren =====
 
@@ -65,11 +65,11 @@ Die Leertaste wirkt nur, wenn du **keine Zelle bearbeitest** und kein Fenster of
 
 ===== Die Testtasten =====
 
-In der Zeile eines Schalters siehst du **farbige Tasten**. Das sind die **Testtasten**: Mit ihnen schaltest du den Effekt direkt an der verbundenen Lichtmaschine (im **Effektmodus**, siehe [[anleitungen:webmobaledlib:pg_arduino#die_drei_arten_der_verbindung|Die drei Arten der Verbindung]]) ein und aus, ohne dass eine Zentrale oder ein echter Schalter nötig ist. Dafür muss die Lichtmaschine **verbunden** sein (siehe [[anleitungen:webmobaledlib:pg_arduino|Verbinden und Übertragen]]).
+In der Zeile eines Schalters siehst du **farbige Tasten**. Das sind die **Testtasten**: Mit ihnen schaltest du den Effekt direkt an der verbundenen Lichtmaschine (im **Effektmodus**, siehe [[anleitungen:mobaledlibstudio:pg_arduino#die_drei_arten_der_verbindung|Die drei Arten der Verbindung]]) ein und aus, ohne dass eine Zentrale oder ein echter Schalter nötig ist. Dafür muss die Lichtmaschine **verbunden** sein (siehe [[anleitungen:mobaledlibstudio:pg_arduino|Verbinden und Übertragen]]).
 
 ===== Die Blattreiter =====
 
-{{:bilder:anleitungen:webmobaledlib:pg_05_blattreiter.png?500|Die Blattreiter am unteren Rand der Tabelle}}
+{{:bilder:anleitungen:mobaledlibstudio:pg_05_blattreiter.png?500|Die Blattreiter am unteren Rand der Tabelle}}
 
 Die **Blattreiter** ganz unten wählst du mit einem Klick. Mit der **rechten Maustaste** auf einen Reiter (auf dem Tablet: lange drücken) erscheint ein Menü:
 
@@ -77,7 +77,7 @@ Die **Blattreiter** ganz unten wählst du mit einem Klick. Mit der **rechten Mau
   * **Umbenennen …:** Das geht nur bei **eigenen Blättern** (Kopien). Die Blätter **DCC**, **Selectrix**, **CAN** und **LNet** und die Systemblätter heißen immer gleich, weil das Programm sie am Namen erkennt. Der Name darf höchstens 31 Zeichen haben und nicht die Zeichen ''[ ] : * ? / \'' enthalten.
   * **Duplizieren …:** Legt eine **Kopie** eines Datenblatts an (mit Zellen, Symbolen, Testtasten und Farbe). Das Programm schlägt einen freien Namen vor, zum Beispiel //DCC_1//.
   * **Nach links verschieben**, **Nach rechts verschieben:** Ändert die Reihenfolge der Reiter.
-  * **Spaltenbreiten übertragen …** (seit 4.08, Beitrag von moosbewohner): Du wählst die **Spalten** und die **Zielseiten**, und die Breiten werden auf diese Seiten übertragen. Bei kleinen Bildschirmen hilft außerdem der **Zellinnenabstand** (siehe [[anleitungen:webmobaledlib:wz_programm_einstellungen|Programm Einstellungen]]).
+  * **Spaltenbreiten übertragen …** (seit 4.08, Beitrag von moosbewohner): Du wählst die **Spalten** und die **Zielseiten**, und die Breiten werden auf diese Seiten übertragen. Bei kleinen Bildschirmen hilft außerdem der **Zellinnenabstand** (siehe [[anleitungen:mobaledlibstudio:wz_programm_einstellungen|Programm Einstellungen]]).
 
 Du kannst Reiter auch **ziehen**: Halte die **Alt-Taste** gedrückt und ziehe den Reiter mit der linken Maustaste an eine andere Stelle. Die Reihenfolge wird gespeichert.
 
@@ -87,6 +87,6 @@ Die Knöpfe **Neue Tabelle** und **Tabelle löschen** in der Werkzeugleiste lege
 
 Im Menü **Tabelle** gibt es drei Befehle:
 
-  * **Tabelle färben …:** Öffnet das Fenster **Tabelle färben** mit den Bedingungen für die Zeilenfarben; nach dem Färben wechselt das Programm in den Programm Generator (siehe [[anleitungen:webmobaledlib:wz_programm_einstellungen|Programm Einstellungen]]). Der Knopf **Zeilen Färben** der Werkzeugleiste und der Reiter **Tabelle Färben** entfallen seit 4.51.
+  * **Tabelle färben …:** Öffnet das Fenster **Tabelle färben** mit den Bedingungen für die Zeilenfarben; nach dem Färben wechselt das Programm in den Programm Generator (siehe [[anleitungen:mobaledlibstudio:wz_programm_einstellungen|Programm Einstellungen]]). Der Knopf **Zeilen Färben** der Werkzeugleiste und der Reiter **Tabelle Färben** entfallen seit 4.51.
   * **Tabelle neu berechnen:** Rechnet alle Blätter neu, also die LED-Zahlen und Start-LED-Nummern. Das Programm macht das vor dem Übertragen ohnehin. Nötig ist es zum Beispiel, wenn du eine Tabelle aus einer älteren Version geladen hast.
   * **Tabelle reparieren (Symbole und Testtasten neu aufbauen) …:** Hilft, wenn **Symbole oder Testtasten fehlen** oder an der falschen Zeile stehen. Das Programm fragt vorher nach.

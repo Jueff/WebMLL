@@ -1,15 +1,15 @@
-====== webMobaLedLib – Installation ======
-//Seitenstand 1.03 (2026-11-23), gilt für webMobaLedLib 4.79//
+====== MobaLedLib Studio – Installation ======
+//Seitenstand 1.05 (2026-11-24), gilt für Version 5.12//
 
 ===== Welche Seite brauchst du? =====
 
-Such dir das System aus, auf dem du die webMobaLedLib installieren willst. Jede Seite beschreibt alles von Anfang bis Ende.
+Such dir das System aus, auf dem du MobaLedLib Studio installieren willst. Jede Seite beschreibt alles von Anfang bis Ende.
 
 ^ Dein Computer ^ Seite ^
-| Windows 10 oder 11 | [[anleitungen:webmobaledlib:windows|Installation unter Windows]] |
-| Mac (macOS ab 10.13) | [[anleitungen:webmobaledlib:macos|Installation auf dem Mac]] |
-| Linux (Linux Mint, Ubuntu, Debian, Fedora …) | [[anleitungen:webmobaledlib:linux|Installation unter Linux]] |
-| Raspberry Pi 4 oder 5 | [[anleitungen:webmobaledlib:raspberrypi|Installation auf dem Raspberry Pi]] |
+| Windows 10 oder 11 | [[anleitungen:mobaledlibstudio:windows|Installation unter Windows]] |
+| Mac (macOS ab 10.13) | [[anleitungen:mobaledlibstudio:macos|Installation auf dem Mac]] |
+| Linux (Linux Mint, Ubuntu, Debian, Fedora …) | [[anleitungen:mobaledlibstudio:linux|Installation unter Linux]] |
+| Raspberry Pi 4 oder 5 | [[anleitungen:mobaledlibstudio:raspberrypi|Installation auf dem Raspberry Pi]] |
 
 ===== Was passiert bei der Installation? =====
 
@@ -22,7 +22,7 @@ Auf allen Systemen sind es dieselben Schritte:
 
 Das Skript prüft auch, ob **Python** (ein Hilfsprogramm, Version 3.10 oder neuer) vorhanden ist, und kümmert sich darum: Unter **Windows** installiert es Python nach einer Rückfrage („J“ tippen), unter **Linux** und auf dem **Raspberry Pi** installiert es Python mit den anderen nötigen Paketen selbst, auf dem **Mac** nur nach einer Rückfrage mit Homebrew (sonst installierst du Python vorher von python.org, siehe die Seite für den Mac).
 
-Das Installationsskript installiert auch **PlatformIO**. Das ist das Hilfsprogramm, das aus deiner Tabelle das Programm für die Lichtmaschine übersetzt und auf ihn lädt. Du musst dich darum nicht kümmern. Die frühere Methode mit der **Arduino IDE** brauchst du nicht mehr. Wer sie trotzdem möchte, findet sie auf der Seite [[anleitungen:webmobaledlib:arduino_ide|Zusätzlich: Arduino IDE]].
+Das Installationsskript installiert auch **PlatformIO**. Das ist das Hilfsprogramm, das aus deiner Tabelle das Programm für die Lichtmaschine übersetzt und auf ihn lädt. Du musst dich darum nicht kümmern. Die frühere Methode mit der **Arduino IDE** brauchst du nicht mehr. Wer sie trotzdem möchte, findet sie auf der Seite [[anleitungen:mobaledlibstudio:arduino_ide|Zusätzlich: Arduino IDE]].
 
 ===== Wie lange dauert es, und was brauche ich? =====
 
@@ -32,7 +32,7 @@ Das Installationsskript installiert auch **PlatformIO**. Das ist das Hilfsprogra
 
 ===== Wenn etwas nicht klappt =====
 
-Jede Installationsseite hat am Ende eine Liste mit den häufigsten Problemen. Alle Probleme nach Bereichen stehen auf der Seite [[anleitungen:webmobaledlib:fehlersuche|Fehlersuche]]. Ein neues Programm spielst du mit dem Menü **Hilfe → Update** ein, siehe [[anleitungen:webmobaledlib:aktualisieren|Das Programm aktualisieren]]. Weiter helfen:
+Jede Installationsseite hat am Ende eine Liste mit den häufigsten Problemen. Alle Probleme nach Bereichen stehen auf der Seite [[anleitungen:mobaledlibstudio:fehlersuche|Fehlersuche]]. Ein neues Programm spielst du mit dem Menü **Hilfe → Update** ein, siehe [[anleitungen:mobaledlibstudio:aktualisieren|Das Programm aktualisieren]]. Weiter helfen:
 
   * Die Protokolldatei **webmobaledlib.log**. Du siehst sie im Programm unter //Hilfe → Logfile anzeigen//.
   * Das [[https://forum.mobaledlib.de/viewforum.php?f=14|Forum der MobaLedLib]]. Schreib dort dein System, die Programmversion (steht unter dem Titel der Oberfläche) und die Fehlermeldung.

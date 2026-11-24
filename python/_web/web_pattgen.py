@@ -1,9 +1,9 @@
-# Datei-Version: 1.24 (2026-11-16) - web_pattgen.py
+# Datei-Version: 1.25 (2026-11-24) - web_pattgen.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_pattgen.py
 # Path:           _web/web_pattgen.py
-# Version:        1.23
-# Last Update:    2026-11-14
+# Version:        1.25
+# Last Update:    2026-11-24
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
@@ -33,6 +33,7 @@
 #   1.22  2026-11-04  Knopf Test Pattern: das Muster der Seite auf dem Bildschirm abspielen (LED-Kreise, Zeiten, PingPong, Goto), wie im Excel-Programm (web_pattern_test, headless_pattern_test)
 #   1.23  2026-11-14  Patterngenerator: Haken RGB LED in der Tabellenkopfzeile, LED-Farbe waehlen (Rechtsklick), Rampen und Goto-Pfeile in den Zellen, Bilder als eigene Zeile, Analog_Trend (Beitrag des Fork-Entwicklers)
 #   1.24  2026-11-16  Kopieren/Einfuegen ueber window.mllClipSet/mllClipGet (auch ohne sicheren Kontext, http)
+#   1.25  2026-11-24  Hilfe-Link: Wiki-Seite patterngenerator im Namensraum mobaledlibstudio
 # ----------------------------------------------------------------------------------------------
 """Reiter "Patterngenerator" im Browser.
 
@@ -624,7 +625,8 @@ class PatternView:
                 ui.button("Alle Beispiele löschen", on_click=lambda: self.delete_pages(True, dlg)).props("outline no-caps color=negative")  # v1.07
                 ui.button("Bilder dieser Seite entfernen", on_click=lambda: self.remove_pictures(dlg)).props("outline no-caps color=negative")  # v1.12
             with ui.row().classes("justify-between items-center w-full"):  # v1.07
-                ui.link("Hilfe", "https://wiki.mobaledlib.de/anleitungen/spezial/patterngenerator", new_tab=True)  # v1.07
+                # ui.link("Hilfe", "https://wiki.mobaledlib.de/anleitungen/spezial/patterngenerator", new_tab=True)  # v1.07  # v5.12 (entfallen)
+                ui.link("Hilfe", "https://wiki.mobaledlib.de/anleitungen/mobaledlibstudio/patterngenerator", new_tab=True)  # v1.07  # v5.12
                 ui.button("Schließen", on_click=dlg.close).props("flat").classes("mll-cancel")  # v1.07
         self._options_dlg = dlg  # v1.08
         dlg.open()  # v1.07

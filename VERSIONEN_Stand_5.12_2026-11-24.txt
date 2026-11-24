@@ -1,6 +1,6 @@
-Datei-Version: 1.10 (2026-11-24) - VERSIONEN_Stand_4.98_2026-11-24.txt
+Datei-Version: 1.11 (2026-11-24) - VERSIONEN_Stand_5.12_2026-11-24.txt
 
-webMobaLedLib, Release-Stand 2026-11-24 (webmobaledlib.py Version 4.98) - Versionen der von Claude gelieferten Dateien im Ordner python
+MobaLedLib Studio, Release-Stand 2026-11-24 (webmobaledlib.py Version 5.12) - Versionen der von Claude gelieferten Dateien im Ordner python
 
 arduino_prefs.py                     1.02
 fast_paths.py                        1.01
@@ -8,32 +8,32 @@ no_tk.py                             1.01
 pi_check.py                          1.05
 recover.py                           1.00
 release_tools.py                     1.09
-repair.py                            1.04
+repair.py                            1.05
 test_headless_contract.py            1.01
 userdata.py                          1.03
-webmobaledlib.py                     4.98
+webmobaledlib.py                     5.12
 _web/__init__.py                     1.00
 _web/mll_graph.js                    1.17
 _web/mll_servocurve.js               1.03
 _web/mll_tabs.js                     1.00
-_web/web_access.py                   1.13
+_web/web_access.py                   1.14
 _web/web_auth.py                     1.05
 _web/web_colorcheck.py               1.12
 _web/web_dcckeyboard.py              1.05
-_web/web_dialogs.py                  1.13
-_web/web_esp32_ota.py                1.08
+_web/web_dialogs.py                  1.14
+_web/web_esp32_ota.py                1.09
 _web/web_firewall.py                 1.04
-_web/web_form_comport.py             1.09
+_web/web_form_comport.py             1.10
 _web/web_form_exchange.py            1.03
 _web/web_form_firmware.py            1.03
 _web/web_form_firmware_download.py   1.02
-_web/web_form_house.py               1.07
+_web/web_form_house.py               1.08
 _web/web_house_tips.py               1.00
 _web/web_form_ledcoloranim.py        1.00
-_web/web_form_options.py             1.47
-_web/web_form_other.py               1.07
+_web/web_form_options.py             1.49
+_web/web_form_other.py               1.10
 _web/web_form_select.py              1.01
-_web/web_form_servoanim.py           1.04
+_web/web_form_servoanim.py           1.05
 _web/web_fullscreen.py               1.02
 _web/web_graph.py                    1.17
 _web/web_i18n.py                     1.11
@@ -43,10 +43,10 @@ _web/web_log.py                      1.12
 _web/web_logging.py                  1.05
 _web/web_macro_tree.py               1.12
 _web/web_network.py                  1.01
-_web/web_params.py                   1.17
+_web/web_params.py                   1.18
 _web/web_password.py                 1.02
 _web/web_pattern_test.py             1.01
-_web/web_pattgen.py                  1.24
+_web/web_pattgen.py                  1.25
 _web/web_pi_status.py                1.00
 _web/web_serial.py                   1.14
 _web/web_serial_page.py              1.01
@@ -56,7 +56,7 @@ _web/web_settings_transfer.py        1.00
 _web/web_sheet_tabs.py               1.05
 _web/web_simulator.py                1.00
 _web/web_soundtest.py                1.03
-_web/web_tabs.py                     1.35
+_web/web_tabs.py                     1.36
 _web/web_toolbar.py                  1.03
 _web/web_update.py                   1.16
 _web/web_viewswitch.py               1.00
@@ -91,7 +91,7 @@ headless/headless_start.py           1.03
 headless/headless_startup.py         1.01
 install/align_icon_names.py          1.00
 install/check_project_writes.py      1.00
-install/find_mobaledlib.py           1.01
+install/find_mobaledlib.py           1.02
 install/make_icons.py                1.03
 install/make_legacy_names.py         1.00
 install/make_web_icons.py            1.01
@@ -107,12 +107,12 @@ proggen/F00_mainbuttons.py           1.02
 proggen/M02_Public.py                1.05
 proggen/M02a_Public.py               1.02
 proggen/M03_Dialog.py                1.03
-proggen/M06_Write_Header.py          1.16
+proggen/M06_Write_Header.py          1.17
 proggen/M06_Write_Header_LED2Var.py  1.02
-proggen/M06_Write_Header_SW.py       1.11
+proggen/M06_Write_Header_SW.py       1.12
 proggen/M07_COM_Port.py              1.14
-proggen/M07_COM_Port_New.py          1.04
-proggen/M08_ARDUINO.py               1.33
+proggen/M07_COM_Port_New.py          1.05
+proggen/M08_ARDUINO.py               1.34
 proggen/M08_Fast_ARDUINO.py          1.01
 proggen/M08_Install_FastBootLoader.py 1.03
 proggen/M09_Language.py              1.07
@@ -121,7 +121,7 @@ proggen/M12_Copy_Prog.py             1.01
 proggen/M17_Import_old_Data.py       1.03
 proggen/M18_Save_Load.py             1.06
 proggen/M18a_Load_PicoConfig.py      1.01
-proggen/M20_PageEvents_a_Functions.py 1.13
+proggen/M20_PageEvents_a_Functions.py 1.15
 proggen/M28_Diverse.py               1.03
 proggen/M30_Tools.py                 1.02
 proggen/M32_DCC.py                   1.04
@@ -140,9 +140,9 @@ csv/Web_Languages.csv (Katalog der Oberflaeche, 6 Sprachen)
 extensions_known.json (Liste der bekannten Erweiterungen, neu seit 3.96)
 images/LED_image.png, PICO_image.png, ESP32_image.png (Bilder der Boards; seit 4.25 richtig zugeordnet)
 
-headless/headless_dyn_config.py      1.02
-proggen/M42_Dyn_Config.py            1.05
-test_dyn_config.py                   1.02
+headless/headless_dyn_config.py      1.03
+proggen/M42_Dyn_Config.py            1.07
+test_dyn_config.py                   1.03
 headless/headless_macro_edit.py      1.01
 test_macro_edit.py                   1.01
 LEDs_AutoProg/MLLDynConfig.h         1.04
@@ -151,10 +151,10 @@ test_dyn_config_wlan.py              1.05
 
 MobaLedTest_macroparamdef.json (Hinweise der Schrifteinstellungen, 4.49; Standardschrift 4.73)
 MobaLedTest_macrodef.json (Texte der Einstellungsseiten, 4.73)
-wiki/ (41 Seiten, Paket webmobaledlib_Wiki_Gesamt_Stand_4.98.zip, an die Menues ab 4.51 angepasst)
+wiki/ (41 Seiten, Paket webmobaledlib_Wiki_Gesamt_Stand_5.12.zip, an die Menues ab 4.51 angepasst)
 
-PDF (install_manual/): ANLEITUNG_Installation.pdf = Version 4.98, BETATEST_Checkliste.pdf = Version 3.79
-Ausserhalb des Ordners python: zip_erstellen.bat Version 1.11 (liegt neben dem Ordner python, ROOT_IN_ZIP=1), START_HIER.txt und START_HIER.md (die .txt kommt in den obersten Ordner des ZIP, die .md ist fuer GitHub), RELEASE_Ablauf.md, HOC_intern.md, HOC_Anwender.md (Stand 4.98), DATEIEN_IM_PAKET_Issue26.md (Liste der Dateien, die nicht ins Paket muessen)
+PDF (install_manual/): ANLEITUNG_Installation.pdf = Version 5.12, BETATEST_Checkliste.pdf = Version 3.93
+Ausserhalb des Ordners python: zip_erstellen.bat Version 1.11 (liegt neben dem Ordner python, ROOT_IN_ZIP=1), START_HIER.txt und START_HIER.md (die .txt kommt in den obersten Ordner des ZIP, die .md ist fuer GitHub), RELEASE_Ablauf.md, HOC_intern.md, HOC_Anwender.md (Stand 5.12), DATEIEN_IM_PAKET_Issue26.md (Liste der Dateien, die nicht ins Paket muessen)
 Neu seit 3.93 (Versionen 3.94 bis 4.79): Aenderungen in webmobaledlib.py, ExcelAPI, _web (web_tabs, web_params, web_form_options, web_serial, web_form_*, web_layout, web_log u.a.; neu: web_settings_transfer), headless (neu: headless_extensions; headless_esp32_ota mit Ausgabe zeilenweise und Abbrechen), proggen (M06_Write_Header_SW, M07_COM_Port, M08_ARDUINO, M38_Extensions u.a.), mlpyproggen/Prog_Generator.py, install (neue Symbole, Anleitung, Checkliste), csv/Web_Languages.csv, libraries (P_ScheduleMLX, P_ScheduleDuoMLX), images
 
 Neu seit 4.79 (Versionen 4.80 bis 4.93):
@@ -173,3 +173,34 @@ proggen/M08_ARDUINO.py               1.33   (ESP32-Dateisystem loeschen 4.97, En
 install/install_windows.bat          1.11  (git mit winget, 4.98)
 install/install_mac.command          1.13  (git mit Homebrew oder Entwicklerwerkzeugen, 4.98)
 csv/Web_Languages.csv (neue Zeilen), wiki/ (neue Seite wz_datenuebertragung, 42 Dateien)
+
+Neu seit 4.98 (Versionen 4.99 bis 5.12):
+_web/web_params.py                   1.18
+_web/web_form_other.py               1.10
+_web/web_form_house.py               1.08
+_web/web_dialogs.py                  1.14
+_web/web_form_options.py             1.49
+_web/web_tabs.py                     1.36
+_web/web_access.py                   1.14
+_web/web_esp32_ota.py                1.09
+_web/web_form_servoanim.py           1.05
+_web/web_pattgen.py                  1.25
+proggen/M20_PageEvents_a_Functions.py 1.15
+proggen/M42_Dyn_Config.py            1.07
+proggen/M06_Write_Header.py          1.17
+proggen/M06_Write_Header_SW.py       1.12
+proggen/M07_COM_Port_New.py          1.05
+_web/web_form_comport.py             1.10
+headless/headless_dyn_config.py      1.03
+repair.py                            1.05
+install/find_mobaledlib.py           1.02
+install/install_windows.bat          1.13
+install/install_linux.sh             1.11
+install/uninstall_linux.sh           1.03
+install/install_mac.command          1.15
+pi/install_pi.sh                     1.13
+pi/uninstall_pi.sh                   1.02
+pi/mobaledlib.desktop.in             1.03
+proggen/M08_ARDUINO.py               1.34
+csv/Web_Languages.csv (neue Zeilen, Name MobaLedLib Studio, Niederlaendisch, 7 Spalten), csv/Par_Description.csv (HSVColor)
+wiki/ (40 Seiten im Namensraum mobaledlibstudio)

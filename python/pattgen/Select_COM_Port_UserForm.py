@@ -1,3 +1,15 @@
+# Datei-Version: 1.00 (2026-11-23) - Select_COM_Port_UserForm.py
+# ----------------------------------------------------------------------------------------------
+# Name:           Select_COM_Port_UserForm.py
+# Path:           pattgen/Select_COM_Port_UserForm.py
+# Version:        1.00
+# Last Update:    2026-11-23
+# Author:         Harold Linke, Jürgen Winkler
+# Licence:        LGPL V2.1
+# History of Change:
+#   1.00  2026-11-23  Kopf eingefuegt; Identify (Juergen Winkler): '~MLLIDENT 0' an den zuletzt gewaehlten Anschluss beim Schliessen des Dialogs (alle Knoepfe) und beim Wechsel des
+#                     Anschlusses, '~MLLIDENT 1' an den neuen Anschluss (_OldComPort). Zeilen mit '# v1.00'; davor nicht erfasst
+# ----------------------------------------------------------------------------------------------
 from vb2py.vbfunctions import *
 from vb2py.vbdebug import *
 import proggen.M07_COM_Port_New as M07
@@ -16,6 +28,7 @@ __OldSpinButton = Long()
 Pressed_Button = Long()
 LocalPrintDebug = Boolean()
 __LocalShow_ComPort = Boolean()
+_OldComPort = None  # Vorherig gewaehlter COM Port fuer Ident_Stop/Ident_Start beim Wechsel  # v1.00
 
 class CSelect_COM_Port_UserForm:
     def __init__(self,controller):
@@ -28,9 +41,18 @@ class CSelect_COM_Port_UserForm:
         self.__UserForm_Initialize()
         #*HL Center_Form(Me)                
 
+    def _send_ident_stop_on_close(self):  # v1.00
+        """Sendet Ident_Stop an den aktuell aktiven COM Port beim Schließen des Dialogs."""
+        global _OldComPort  # v1.00
+        if _OldComPort is not None:  # v1.00
+            import proggen.M07_COM_Port_New as M07New  # v1.00
+            M07New._Ident_Send_Cmd(_OldComPort, M07New._Ident_Board(), "~MLLIDENT 0")  # v1.00
+            _OldComPort = None  # v1.00
+
     def ok(self, event=None):
         self.IsActive = False
         self.isInitialised = False
+        self._send_ident_stop_on_close()  # v1.00
         self.OK_Button_Click()
 
         #self.Userform_res = value
@@ -42,6 +64,7 @@ class CSelect_COM_Port_UserForm:
         self.UserForm_Res = '<Abort>'
         self.IsActive = False
         self.isInitialised = False
+        self._send_ident_stop_on_close()  # v1.00
         X02.ActiveSheet.Redraw_table()
         self.top.destroy()
         self.res = False
@@ -61,6 +84,7 @@ class CSelect_COM_Port_UserForm:
         #P01.ActiveSheet.Redraw_table()
         self.isInitialised = False
         self.IsActive=False
+        self._send_ident_stop_on_close()  # v1.00
         self.top.destroy()
         M07.CheckCOMPort = " "
         
@@ -72,7 +96,8 @@ class CSelect_COM_Port_UserForm:
         Pressed_Button = 2
         #P01.ActiveSheet.Redraw_table()
         self.isInitialised = False
-        self.IsActive=False        
+        self.IsActive=False
+        self._send_ident_stop_on_close()  # v1.00
         self.top.destroy()
         M07.CheckCOMPort = " "
         
@@ -84,7 +109,8 @@ class CSelect_COM_Port_UserForm:
         Pressed_Button = 3
         #P01.ActiveSheet.Redraw_table()
         self.isInitialised = False
-        self.IsActive=False        
+        self.IsActive=False
+        self._send_ident_stop_on_close()  # v1.00
         self.top.destroy()
         M07.CheckCOMPort = " "
 
@@ -114,7 +140,8 @@ class CSelect_COM_Port_UserForm:
     # VB2PY (UntranslatedCode) Argument Passing Semantics / Decorators not supported: DefaultPort - ByVal 
     def Update_SpinButton(self, DefaultPort):
 
-        global COM_Port_Label,PortNames,LocalPrintDebug,LocalComPorts,__OldSpinButton,OldL_ComPorts
+        # global COM_Port_Label,PortNames,LocalPrintDebug,LocalComPorts,__OldSpinButton,OldL_ComPorts  # v1.00 (entfallen)
+        global COM_Port_Label,PortNames,LocalPrintDebug,LocalComPorts,__OldSpinButton,OldL_ComPorts, _OldComPort  # v1.00
         #------------------------------------------------------
         # Is also called by the OnTime proc which checks the available ports
         Debug.Print("Select_Com_Port_UserForm-Update_SpinButton")
@@ -158,7 +185,23 @@ class CSelect_COM_Port_UserForm:
             #if IsNumeric(tmp_comport):
             #    M07.CheckCOMPort = int(tmp_comport)
             #else:
-            M07.CheckCOMPort = tmp_comport 
+
+            # Prüfen ob sich der COM Port geändert hat  # v1.00
+            new_comport = tmp_comport if tmp_comport not in ("999", " ") else None  # v1.00
+            old_comport = _OldComPort  # v1.00
+
+            if new_comport != old_comport and (new_comport is not None or old_comport is not None):  # v1.00
+                # COM Port hat sich geändert: Ident_Stop an alten, Ident_Send_Keepalive an neuen  # v1.00
+                Debug.Print(f"COM Port gewechselt: {old_comport} -> {new_comport}")  # v1.00
+                if old_comport is not None:  # v1.00
+                    import proggen.M07_COM_Port_New as M07New  # v1.00
+                    M07New._Ident_Send_Cmd(old_comport, M07New._Ident_Board(), "~MLLIDENT 0")  # v1.00
+                if new_comport is not None:  # v1.00
+                    import proggen.M07_COM_Port_New as M07New  # v1.00
+                    M07New.Ident_Send_Keepalive(new_comport)  # v1.00
+                _OldComPort = new_comport  # v1.00
+
+            M07.CheckCOMPort = tmp_comport
             LocalComPorts_list = LocalComPorts
             
             #for i in range(len(LocalComPorts)):
@@ -184,6 +227,11 @@ class CSelect_COM_Port_UserForm:
             M07.CheckCOMPort = "999"#999
             self.AvailPorts_Label.configure(text='')
             COM_Port_Label = ' -'
+            # Kein Port verfügbar: _OldComPort zurücksetzen  # v1.00
+            if _OldComPort is not None:  # v1.00
+                import proggen.M07_COM_Port_New as M07New  # v1.00
+                M07New._Ident_Send_Cmd(_OldComPort, M07New._Ident_Board(), "~MLLIDENT 0")  # v1.00
+                _OldComPort = None  # v1.00
 
     def Show_Status(self,ErrBox, Msg):
         global Error_Label,Status_Label
@@ -213,7 +261,8 @@ class CSelect_COM_Port_UserForm:
     
     # VB2PY (UntranslatedCode) Argument Passing Semantics / Decorators not supported: ComPort_IO - ByRef 
     def ShowDialog(self, Caption, Title, Text, Picture, Buttons, FocusButton, Show_ComPort, Red_Hint, ComPort_IO, PrintDebug=False):
-        global COM_Port_Label,PortNames,LocalPrintDebug,LocalComPorts,__LocalPrintDebug, __OldSpinButton,__LocalShow_ComPort,Pressed_Button
+        # global COM_Port_Label,PortNames,LocalPrintDebug,LocalComPorts,__LocalPrintDebug, __OldSpinButton,__LocalShow_ComPort,Pressed_Button  # v1.00 (entfallen)
+        global COM_Port_Label,PortNames,LocalPrintDebug,LocalComPorts,__LocalPrintDebug, __OldSpinButton,__LocalShow_ComPort,Pressed_Button, _OldComPort  # v1.00
         Debug.Print("Select_Com_Port_UserForm-Showdialog")
         #if  not PG.dialog_parent.getConfigData("UseCOM_Port_UserForm"):
         #    Debug.Print("UseCOM_Port_UserForm=True")
@@ -356,6 +405,8 @@ class CSelect_COM_Port_UserForm:
         __OldSpinButton = - 1
         Pressed_Button = 0
         self.Update_SpinButton(ComPort_IO)
+        # _OldComPort initialisieren nach dem ersten Update_SpinButton  # v1.00
+        _OldComPort = M07.CheckCOMPort if M07.CheckCOMPort not in (" ", "999", -1) else None  # v1.00
         #SpinButton.Visible = Show_ComPort
         #if Show_ComPort:
         #    SpinButton.setFocus()

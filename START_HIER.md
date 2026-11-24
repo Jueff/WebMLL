@@ -1,9 +1,9 @@
-<!-- Datei-Version: 1.08 (2026-11-23) - START_HIER.md, gilt für webMobaLedLib 4.93 -->
-# webMobaLedLib – START HIER
+<!-- Datei-Version: 1.02 (2026-11-24) - START_HIER.md, gilt für Version 5.10 -->
+# MobaLedLib Studio – START HIER
 
-Mit der **webMobaLedLib** erstellst du ohne Programmierkenntnisse das Programm für deine **Lichtmaschine** (Modellbahnbeleuchtung). Du bedienst sie in deinem Internet-Browser. Sie läuft aber auf deinem eigenen Computer, deine Daten bleiben dort.
+Mit **MobaLedLib Studio** erstellst du ohne Programmierkenntnisse das Programm für deine **Lichtmaschine** (Modellbahnbeleuchtung). Du bedienst es in deinem Internet-Browser. Es läuft aber auf deinem eigenen Computer, deine Daten bleiben dort.
 
-> Diese Anleitung gilt für **Windows**. Für macOS, Linux und Raspberry Pi siehe die Wiki-Seiten [macOS](https://wiki.mobaledlib.de/anleitungen/webmobaledlib/macos), [Linux](https://wiki.mobaledlib.de/anleitungen/webmobaledlib/linux) und [Raspberry Pi](https://wiki.mobaledlib.de/anleitungen/webmobaledlib/raspberrypi).
+> Diese Anleitung gilt für **Windows**. Für macOS, Linux und Raspberry Pi siehe die Wiki-Seiten [macOS](https://wiki.mobaledlib.de/anleitungen/mobaledlibstudio/macos), [Linux](https://wiki.mobaledlib.de/anleitungen/mobaledlibstudio/linux) und [Raspberry Pi](https://wiki.mobaledlib.de/anleitungen/mobaledlibstudio/raspberrypi).
 
 ## In fünf Schritten zum ersten Programm
 
@@ -17,11 +17,11 @@ Mit der **webMobaLedLib** erstellst du ohne Programmierkenntnisse das Programm f
    - Das schwarze Fenster bleibt **5 bis 15 Minuten** offen und braucht Internet. Warten, bis **Fertig** erscheint, dann eine Taste drücken.
 
 3. **Programm starten**
-   Auf dem Desktop liegt jetzt das Symbol **webMobaLedLib**. Doppelklick darauf.
-   Der Browser (Chrome, Edge, Firefox oder Safari) öffnet die webMobaLedLib. Das schwarze Fenster muss offen bleiben, solange du arbeitest.
+   Auf dem Desktop liegt jetzt das Symbol **MobaLedLib Studio**. Doppelklick darauf.
+   Der Browser (Chrome, Edge, Firefox oder Safari) öffnet MobaLedLib Studio. Das schwarze Fenster muss offen bleiben, solange du arbeitest.
 
 4. **Erstes Programm**
-   Folge der Anleitung [Dein erstes Programm](https://wiki.mobaledlib.de/anleitungen/webmobaledlib/erstes_programm).
+   Folge der Anleitung [Dein erstes Programm](https://wiki.mobaledlib.de/anleitungen/mobaledlibstudio/erstes_programm).
 
 5. **Bei Problemen**
    Siehe die Links unten.
@@ -30,10 +30,10 @@ Mit der **webMobaLedLib** erstellst du ohne Programmierkenntnisse das Programm f
 
 | Thema | Link |
 |---|---|
-| Einführung | [wiki.mobaledlib.de/anleitungen/webmobaledlib/einfuehrung](https://wiki.mobaledlib.de/anleitungen/webmobaledlib/einfuehrung) |
-| Installation | [Installation](https://wiki.mobaledlib.de/anleitungen/webmobaledlib/installation) |
-| Häufige Fragen | [FAQ](https://wiki.mobaledlib.de/anleitungen/webmobaledlib/faq) |
-| Fehlersuche | [Fehlersuche](https://wiki.mobaledlib.de/anleitungen/webmobaledlib/fehlersuche) |
+| Einführung | [wiki.mobaledlib.de/anleitungen/mobaledlibstudio/einfuehrung](https://wiki.mobaledlib.de/anleitungen/mobaledlibstudio/einfuehrung) |
+| Installation | [Installation](https://wiki.mobaledlib.de/anleitungen/mobaledlibstudio/installation) |
+| Häufige Fragen | [FAQ](https://wiki.mobaledlib.de/anleitungen/mobaledlibstudio/faq) |
+| Fehlersuche | [Fehlersuche](https://wiki.mobaledlib.de/anleitungen/mobaledlibstudio/fehlersuche) |
 | Forum | [forum.mobaledlib.de](https://forum.mobaledlib.de/viewforum.php?f=14) |
 | Fehler oder Wunsch melden | [Issue Tracker auf GitHub](https://github.com/haroldlinke/WebMLL/issues) |
 

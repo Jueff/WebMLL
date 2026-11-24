@@ -1,8 +1,8 @@
-# Datei-Version: 4.98 (2026-11-24) - webmobaledlib.py
+# Datei-Version: 5.12 (2026-11-24) - webmobaledlib.py
 # ----------------------------------------------------------------------------------------------
 # Name:           webmobaledlib.py
 # Path:           webmobaledlib.py
-# Version:        4.98
+# Version:        5.12
 # Last Update:    2026-11-24
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
@@ -327,6 +327,20 @@
 #   4.94  2026-11-23  ESP32-Upload (Pull Request 54, neue Commits): firmware.bin und partitions.bin kommen aus dem von PlatformIO berechneten Build-Verzeichnis (auch externes build_dir/workspace_dir), klare Meldung wenn sie fehlen (headless_esp32_ota 1.13, test_esp32_build_directory 1.00, Web_Languages.csv)
 #   4.95  2026-11-23  ESP32 feste IP (Meldung PeterVT11): Minimale Firmware bekommt die feste IP-Adresse (blieb bei DHCP), vorhandener USB-Anschluss wird geprueft (ESP32-Setup und Minimale Firmware), Adresse dieses Rechners als Ziel wird abgelehnt (web_esp32_ota 1.08, M07 1.14, M08 1.31, Web_Languages.csv)
 #   4.96  2026-11-24  PGF-Datei mit mehreren Tabellenblaettern laden: Knopf 'Ja, alle' bei der Frage 'Soll die Seite ... importiert werden?' (web_dialogs 1.13, M18_Save_Load 1.06, Web_Languages.csv)
+#   5.10  2026-11-24  Desktop-Symbole heissen MobaLedLib Studio (Installationsskripte fuer Windows, Linux, macOS und Raspberry Pi legen sie neu an und entfernen die Symbole mit den frueheren Namen); Hinweistext von HSVColor nennt die Rainbow-Werte (Par_Description.csv); Text zur Firewall-Regel nennt den echten Regelnamen (web_access 1.14)
+#   5.11  2026-11-24  Rueckmeldung niederlaendischer Tester (4.98): Menue Einstellungen zeigt Uitbreidingen statt Erweiterungen; Hinweise (Tooltips) in den Einstellungsfenstern werden uebersetzt, 12 fehlende Hinweistexte uebersetzt (web_params 1.18, Web_Languages.csv)
+#   5.12  2026-11-24  Wiki-Namensraum anleitungen:mobaledlibstudio: Hilfe -> Hilfe oeffnen, Hilfe-Knoepfe (OTA, Servo-Animation, Timeline Editor) und alle Wiki-Seiten verweisen auf den neuen Namensraum (M20 1.15, web_esp32_ota 1.09, web_form_servoanim 1.05, web_pattgen 1.25)
+#   5.09  2026-11-24  Anzeigename MobaLedLib Studio in der ganzen Oberflaeche (Web_Languages.csv in allen Sprachen, Meldungen, Update-Fenster, Installation und Reparatur, Dokumente und Wiki); technische Namen (Dateien, Datenordner, Symbole, Anmeldename, Regelnamen) unveraendert (web_dialogs 1.14, web_form_options 1.49, web_tabs 1.36, repair 1.05)
+#   5.08  2026-11-24  Name MobaLedLib Studio: Titel der Kopfzeile und Tabtitel des Browsers 'MobaLedLib Studio', das Versionsfeld zeigt nur die Version ohne 'webMobaLedLib' (interne Namen wie Anmeldung, Ordner, Firewallregel unveraendert)
+#   5.07  2026-11-24  House-Formular (House, GasLights): Regler, Zahlenfelder mit minus/plus und Mausrad, LED Kanal als Zahlenfeld (web_form_house 1.08)
+#   5.06  2026-11-24  Parameterformular: LED Kanal Auswahl als farbige Tasten (web_form_other 1.10)
+#   5.05  2026-11-24  Parameterformular: Zahlenfelder mit fester Breite wie die ms-Felder, LED Channel als Zahlenfeld mit minus/plus, Mausrad aendert den Wert (web_form_other 1.09)
+#   5.04  2026-11-24  Parameterformular der Makros: Schieberegler mit Zahlenfeld und Tasten minus/plus bei Zahlenwerten, Felder Min/Sek/ms bei Zeitwerten, HSV-Farbwert mit Farbverlauf und Farbfeld (web_form_other 1.08)
+#   5.03  2026-11-24  Pull Request 66 von Juergen (Issue 64): Die Programmversion gehoert zur Firmware-Signatur (ESP32/Pico mit schnellem Konfigurationstransfer): nach jedem Softwareupdate wird einmal die ganze Firmware geflasht (M42_Dyn_Config 1.07)
+#   5.02  2026-11-24  Pull Request 39 von Juergen (Issue 35), nur der Auswahldialog: Board und USB Port erkennen fragt bei mehreren gefundenen Board-Typen nach dem gewuenschten Typ (web_form_options 1.48)
+#   5.01  2026-11-24  Issue 68 (Juergen): Startwert 1 schaltet alle Ein/Aus-Tasten derselben Adresse ein, nicht nur die der Zeile mit dem Startwert (M20_PageEvents_a_Functions 1.14)
+#   5.00  2026-11-24  Pull Request 63 von Juergen (Issue 62): Beim Start werden auch physisch angeschlossene, nicht mehr konfigurierte LEDs ausgeschaltet (showColor mit MLL_CLEAR_LED_CNT schwarzen Pixeln je Controller; M06_Write_Header_SW 1.12, PicoFastLED.h, FastLEDStub.h)
+#   4.99  2026-11-24  Pull Request 61 von Juergen (Identify): Im Dialog Auswahl des COM Ports blinken bei ESP32 und Pico die drei LEDs auf der Hauptplatine der gewaehlten Zentrale (Firmware MLLIdentify.h, Konfigurationsformat 7, Pico-Erkennung nach dem Neustart); Zusammenfuehrung mit 4.94 bis 4.98 (M08_ARDUINO 1.34)
 #   4.98  2026-11-24  git fehlt auf einem frisch eingerichteten Rechner: install_windows.bat und install_mac.command installieren git mit; das Programm bietet git beim Uebersetzen fuer ESP32 und Pico selbst an (M08.Ensure_Git)
 #   4.97  2026-11-24  ESP32-Absturzschleife 'lfs_fs_grow_ assert failed' (altes Dateisystem im Flash): Nach dem vollstaendigen USB-Upload wird die Dateisystem-Partition geloescht (headless_esp32_ota 1.14, M08_ARDUINO 1.32, Web_Languages.csv)
 #   4.92  2026-11-23  Blattwechsel baut auch die WLAN-Verbindung (ESP32) des neuen Blatts auf und wechselt zwischen WLAN und USB; bei nicht erreichbarem WLAN-Ziel wird der USB-Anschluss des Blatts versucht
@@ -582,7 +596,21 @@ REQUIRED_FILES = {  # v1.75
     "headless/headless_esp32_ota.py": "1.14",  # v4.97
     "_web/web_esp32_ota.py": "1.08", "proggen/M07_COM_Port.py": "1.14", # "proggen/M08_ARDUINO.py": "1.31",  # v4.95 (entfallen)
     "proggen/M08_ARDUINO.py": "1.32",  # v4.97 (entfallen)
-    "proggen/M08_ARDUINO.py": "1.33",  # v4.98
+    "proggen/M08_ARDUINO.py": "1.33",  # v4.98 (entfallen)
+    "proggen/M08_ARDUINO.py": "1.34",  # v4.99
+    "_web/web_form_comport.py": "1.10", "proggen/M06_Write_Header.py": "1.17", "proggen/M07_COM_Port_New.py": "1.05", "proggen/M42_Dyn_Config.py": "1.06", "headless/headless_dyn_config.py": "1.03",  # v4.99 (Identify, Pull Request 61)
+    "proggen/M06_Write_Header_SW.py": "1.12",  # v5.00 (Pull Request 63)
+    "proggen/M20_PageEvents_a_Functions.py": "1.14",  # v5.01 (Issue 68)
+    "_web/web_form_options.py": "1.48",  # v5.02 (Pull Request 39)
+    "proggen/M42_Dyn_Config.py": "1.07",  # v5.03 (Pull Request 66)
+    "_web/web_form_other.py": "1.08",  # v5.04
+    "_web/web_form_other.py": "1.09",  # v5.05
+    "_web/web_form_other.py": "1.10",  # v5.06
+    "_web/web_form_house.py": "1.08",  # v5.07
+    "_web/web_dialogs.py": "1.14", "_web/web_form_options.py": "1.49", "_web/web_tabs.py": "1.36", "repair.py": "1.05",  # v5.09
+    "_web/web_access.py": "1.14",  # v5.10
+    "_web/web_params.py": "1.18",  # v5.11
+    "proggen/M20_PageEvents_a_Functions.py": "1.15", "_web/web_esp32_ota.py": "1.09", "_web/web_form_servoanim.py": "1.05", "_web/web_pattgen.py": "1.25",  # v5.12
     "_web/web_dialogs.py": "1.13", "proggen/M18_Save_Load.py": "1.06",  # v4.96
     "_web/web_log.py": "1.12", "_web/web_form_options.py": "1.47",  # v4.90
     "_web/web_serial.py": "1.14",  # v4.91
@@ -631,7 +659,8 @@ def update_notice(base=None):  # v2.08
     if kind == "failed":  # v2.08
         # return kind, (f"Das Update auf Version {new_v} ist abgebrochen, und das automatische Zurückgehen war nicht vollständig ({'; '.join(notice.get('problems', [])[:3])}). "  # v2.20 (entfallen)
                       # "Bitte die Installation reparieren: Hilfe → Update webMobaLedLib … oder repair_windows.bat / repair_linux.sh / repair_mac.command (Anleitung, Abschnitt 9.6).")  # v2.20 (entfallen)
-        return kind, (tr('Das Update auf Version {new_v} ist abgebrochen, und das automatische Zurückgehen war nicht vollständig ({probleme}). Bitte die Installation reparieren: Hilfe → Update webMobaLedLib … oder repair_windows.bat / repair_linux.sh / repair_mac.command (Anleitung, Abschnitt 9.6).', new_v=new_v, probleme='; '.join(notice.get('problems', [])[:3])))  # v2.20
+        # return kind, (tr('Das Update auf Version {new_v} ist abgebrochen, und das automatische Zurückgehen war nicht vollständig ({probleme}). Bitte die Installation reparieren: Hilfe → Update webMobaLedLib … oder repair_windows.bat / repair_linux.sh / repair_mac.command (Anleitung, Abschnitt 9.6).', new_v=new_v, probleme='; '.join(notice.get('problems', [])[:3])))  # v2.20  # v5.09 (entfallen)
+        return kind, (tr('Das Update auf Version {new_v} ist abgebrochen, und das automatische Zurückgehen war nicht vollständig ({probleme}). Bitte die Installation reparieren: Hilfe → Update MobaLedLib Studio … oder repair_windows.bat / repair_linux.sh / repair_mac.command (Anleitung, Abschnitt 9.6).', new_v=new_v, probleme='; '.join(notice.get('problems', [])[:3])))  # v2.20  # v5.09
     if kind == "repaired":  # v2.08
         # return kind, f"Die Installation wurde repariert (Version {new_v}, {notice.get('written', 0)} Dateien geschrieben, {notice.get('time', '')}). Bitte das Programm neu starten, falls noch nicht geschehen."  # v2.20 (entfallen)
         return kind, tr('Die Installation wurde repariert (Version {new_v}, {anzahl} Dateien geschrieben, {zeit}). Bitte das Programm neu starten, falls noch nicht geschehen.', new_v=new_v, anzahl=notice.get('written', 0), zeit=notice.get('time', ''))  # v2.20
@@ -660,7 +689,8 @@ def installation_problems(base=None):  # v2.07
     if len(problems) > 8:  # v2.07
         # lines.append(f"    ... und {len(problems) - 8} weitere")  # v2.20 (entfallen)
         lines.append(tr('    ... und {anzahl} weitere', anzahl=len(problems) - 8))  # v2.20
-    lines.append("Abhilfe: Menü Hilfe → Update webMobaLedLib … (stellt die Dateien wieder her), oder die Anleitung, Kapitel „Wenn nichts mehr geht“.")  # v2.07
+    # lines.append("Abhilfe: Menü Hilfe → Update webMobaLedLib … (stellt die Dateien wieder her), oder die Anleitung, Kapitel „Wenn nichts mehr geht“.")  # v2.07  # v5.09 (entfallen)
+    lines.append("Abhilfe: Menü Hilfe → Update MobaLedLib Studio … (stellt die Dateien wieder her), oder die Anleitung, Kapitel „Wenn nichts mehr geht“.")  # v2.07  # v5.09
     return lines  # v2.07
 
 if here not in sys.path:
@@ -829,7 +859,8 @@ def beendet_seite(saved: int = 1, lang: int = -1):  # v2.46
     from _web import web_i18n  # v2.46
     with web_i18n.use_language(lang) as number:  # v2.46
         hint = web_i18n.tr("Die Daten wurden gespeichert.") if saved else web_i18n.tr("Es wurde nicht gespeichert.")  # v2.46
-        title, head, text = (_html.escape(web_i18n.tr(s)) for s in ("webMobaLedLib beendet", "Programm beendet", "Das Fenster kann geschlossen werden."))  # v2.46
+        # title, head, text = (_html.escape(web_i18n.tr(s)) for s in ("webMobaLedLib beendet", "Programm beendet", "Das Fenster kann geschlossen werden."))  # v2.46  # v5.09 (entfallen)
+        title, head, text = (_html.escape(web_i18n.tr(s)) for s in ("MobaLedLib Studio beendet", "Programm beendet", "Das Fenster kann geschlossen werden."))  # v2.46  # v5.09
         html_lang = ("de", "en", "nl", "fr", "it", "es", "da")[number] if isinstance(number, int) and 0 <= number < 7 else "de"  # v2.46
     style = ("body{font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;background:#f4f4f4;color:#222}"  # v2.46
              ".box{text-align:center;padding:2em 3em;background:#fff;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.2)}h1{margin:0 0 .4em}p{margin:.3em 0;color:#555}")  # v2.46
@@ -902,7 +933,8 @@ def heruntergefahren_seite(reboot: int = 0, lang: int = -1):  # v2.46
              ".box{text-align:center;padding:2em 3em;background:#fff;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.2);max-width:34em}h1{margin:0 0 .4em}p{margin:.3em 0;color:#555}")  # v2.46
     return HTMLResponse("".join([  # v2.46
         f'<!doctype html><html lang="{html_lang}"><head><meta charset="utf-8">',  # v2.46
-        f"<title>webMobaLedLib</title><style>{style}</style></head>",  # v2.46
+        # f"<title>webMobaLedLib</title><style>{style}</style></head>",  # v2.46  # v5.09 (entfallen)
+        f"<title>MobaLedLib Studio</title><style>{style}</style></head>",  # v2.46  # v5.09
         f'<body><div class="box"><h1>{head}</h1><p>{text}</p></div>{script}</body></html>']))  # v2.46
 
 
@@ -1556,7 +1588,15 @@ def font_scales(ctrl) -> dict:
 # VERSION = "4.95 (2026-11-23)"  # v4.96 (entfallen)
 # VERSION = "4.96 (2026-11-24)"  # v4.97 (entfallen)
 # VERSION = "4.97 (2026-11-24)"  # v4.98 (entfallen)
-VERSION = "4.98 (2026-11-24)"  # v3.64  # v4.26  # v4.27  # v4.28  # v4.29  # v4.30  # v4.31  # v4.32  # v4.33  # v4.34  # v4.35  # v4.36  # v4.37  # v4.38  # v4.39  # v4.40  # v4.41  # v4.42  # v4.43  # v4.44  # v4.45  # v4.46  # v4.47  # v4.48  # v4.49  # v4.50  # v4.51  # v4.52  # v4.53  # v4.54  # v4.55  # v4.56  # v4.57  # v4.58  # v4.59  # v4.60  # v4.61  # v4.62  # v4.63  # v4.64  # v4.65  # v4.66  # v4.67  # v4.68  # v4.69  # v4.70  # v4.71  # v4.72  # v4.73  # v4.74  # v4.75  # v4.76  # v4.77  # v4.78  # v4.79  # v4.80  # v4.81  # v4.82  # v4.83  # v4.84  # v4.85  # v4.86  # v4.87  # v4.88  # v4.89  # v4.90  # v4.91  # v4.92  # v4.93  # v4.94  # v4.95  # v4.96  # v4.97  # v4.98
+# VERSION = "4.98 (2026-11-24)"  # v4.99 (entfallen)
+# VERSION = "4.99 (2026-11-24)"  # v5.00 (entfallen)
+# VERSION = "5.00 (2026-11-24)"  # v5.01 (entfallen)
+# VERSION = "5.01 (2026-11-24)"  # v5.02 (entfallen)
+# VERSION = "5.02 (2026-11-24)"  # v5.03 (entfallen)
+# VERSION = "5.03 (2026-11-24)"  # v5.04 (entfallen)
+# VERSION = "5.10 (2026-11-24)"  # v5.11 (entfallen)
+# VERSION = "5.11 (2026-11-24)"  # v5.12 (entfallen)
+VERSION = "5.12 (2026-11-24)"  # v5.11  # v5.12  # v3.64  # v4.26  # v4.27  # v4.28  # v4.29  # v4.30  # v4.31  # v4.32  # v4.33  # v4.34  # v4.35  # v4.36  # v4.37  # v4.38  # v4.39  # v4.40  # v4.41  # v4.42  # v4.43  # v4.44  # v4.45  # v4.46  # v4.47  # v4.48  # v4.49  # v4.50  # v4.51  # v4.52  # v4.53  # v4.54  # v4.55  # v4.56  # v4.57  # v4.58  # v4.59  # v4.60  # v4.61  # v4.62  # v4.63  # v4.64  # v4.65  # v4.66  # v4.67  # v4.68  # v4.69  # v4.70  # v4.71  # v4.72  # v4.73  # v4.74  # v4.75  # v4.76  # v4.77  # v4.78  # v4.79  # v4.80  # v4.81  # v4.82  # v4.83  # v4.84  # v4.85  # v4.86  # v4.87  # v4.88  # v4.89  # v4.90  # v4.91  # v4.92  # v4.93  # v4.94  # v4.95  # v4.96  # v4.97  # v4.98  # v4.99  # v5.00  # v5.01  # v5.02  # v5.03  # v5.04
 # VERSION = "4.09 (2026-11-19)"  # v3.64 (entfallen)
 # VERSION = "4.08 (2026-11-19)"  # v3.64 (entfallen)
 # VERSION = "4.07 (2026-11-19)"  # v3.64 (entfallen)
@@ -2293,9 +2333,11 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
 
     with ui.row().classes("items-center w-full mll-header") as header_row:    # Kopfzeile: gilt fuer alle Registerkarten
         with ui.row().classes("items-baseline gap-2 no-wrap mll-titlebox"):
-            ui.label("webMobaLedLib – Programmgenerator").classes("text-h5 mll-title")
+            # ui.label("webMobaLedLib – Programmgenerator").classes("text-h5 mll-title")  # v5.08 (entfallen)
+            ui.label("MobaLedLib Studio").classes("text-h5 mll-title")  # v5.08
             # ui.label("(Prototyp)").classes("text-h5 mll-proto")  # v1.96 (entfallen)
-        ui.label(f"webMobaLedLib {VERSION}").classes("text-caption text-grey-6 mll-ver")      # zeigt, welche Datei wirklich laeuft
+        # ui.label(f"webMobaLedLib {VERSION}").classes("text-caption text-grey-6 mll-ver")      # zeigt, welche Datei wirklich laeuft  # v5.08 (entfallen)
+        ui.label(f"{VERSION}").classes("text-caption text-grey-6 mll-ver")      # zeigt, welche Datei wirklich laeuft; ohne Programmnamen  # v5.08
 
         # -------------------------------------------------------------- Menue (wie im Tk-Hauptfenster); im kompakten Layout in der Kopfzeile
         menu_slot = ui.row().classes("items-center gap-0 mll-menu")
@@ -5691,7 +5733,8 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
     import proggen.M18_Save_Load as M18
 
     def help_url():
-        return ctrl.MacroDef.data.get("HelpPage", {}).get("HelpPageURL", "")
+        # return ctrl.MacroDef.data.get("HelpPage", {}).get("HelpPageURL", "")  # v5.12 (entfallen)
+        import proggen.M20_PageEvents_a_Functions as _M20h; return _M20h.HELP_WIKI_URL  # v5.12
 
     def open_help():
         url = help_url()
@@ -5702,7 +5745,8 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
 
     def about():
         # X02.MsgBox("webMobaLedLib by Harold\n\nVersion " + str(ctrl.ProgVersion) + "\nWeb-Oberfläche: webMobaLedLib " + VERSION + "\n\nDatenordner (Konfiguration, Sicherungen, Protokolle):\n" + ctrl.data_dir, 64, "About")  # v2.20 (entfallen)
-        X02.MsgBox("webMobaLedLib by Harold\n\nVersion " + str(ctrl.ProgVersion) + tr('\nWeb-Oberfläche: webMobaLedLib ') + VERSION + tr('\n\nDatenordner (Konfiguration, Sicherungen, Protokolle):\n') + ctrl.data_dir, 64, "About")  # v2.20
+        # X02.MsgBox("webMobaLedLib by Harold\n\nVersion " + str(ctrl.ProgVersion) + tr('\nWeb-Oberfläche: webMobaLedLib ') + VERSION + tr('\n\nDatenordner (Konfiguration, Sicherungen, Protokolle):\n') + ctrl.data_dir, 64, "About")  # v2.20  # v5.09 (entfallen)
+        X02.MsgBox("MobaLedLib Studio by Harold\n\nVersion " + str(ctrl.ProgVersion) + tr('\nWeb-Oberfläche:') + " " + VERSION + tr('\n\nDatenordner (Konfiguration, Sicherungen, Protokolle):\n') + ctrl.data_dir, 64, "About")  # v2.20  # v5.09
 
     async def show_logfile():
         """Protokoll anzeigen: die letzten Zeilen der aktuellen Datei (reichen sie nicht, auch der Rest der vorigen, gedrehten Datei),
@@ -5806,7 +5850,8 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
         work = {"tmp": None, "release": None, "plan": None, "source": None}  # v2.59
         with ui.dialog().props("persistent") as dlg, ui.card().classes("w-[860px] max-w-full"):
             # ui.label("Update webMobaLedLib").classes("text-h6")  # v2.59 (entfallen)
-            ui.label(tr("Update Testversion webMobaLedLib") if test else "Update webMobaLedLib").classes("text-h6")  # v2.59
+            # ui.label(tr("Update Testversion webMobaLedLib") if test else "Update webMobaLedLib").classes("text-h6")  # v2.59  # v5.09 (entfallen)
+            ui.label(tr("Update Testversion MobaLedLib Studio") if test else "Update MobaLedLib Studio").classes("text-h6")  # v2.59  # v5.09
             # ui.label(f"Installiert: Version {VERSION}").classes("text-caption text-grey-8")  # v2.16 (entfallen)
             ui.label(tr('Installiert: Version {VERSION}', VERSION=VERSION)).classes("text-caption text-grey-8")  # v2.16
             status = ui.label("").style("white-space: pre-line")
@@ -6069,7 +6114,8 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
             if work["source"] and work["source"].get("custom"):  # v3.95
                 notes.append(tr("Die ZIP-Datei stammt aus einer Quelle, die Sie angegeben haben. Sie wird wie webmobaledlib.zip behandelt. Die Prüfliste und die Prüfsummen werden geprüft."))  # v3.95
             elif work["source"]:  # v2.59
-                notes.append(tr('Das ist eine Testversion und kann Fehler enthalten. Das normale Update (Hilfe → Update webMobaLedLib …) lädt nur das letzte fertige Release.'))  # v2.59
+                # notes.append(tr('Das ist eine Testversion und kann Fehler enthalten. Das normale Update (Hilfe → Update webMobaLedLib …) lädt nur das letzte fertige Release.'))  # v2.59  # v5.09 (entfallen)
+                notes.append(tr('Das ist eine Testversion und kann Fehler enthalten. Das normale Update (Hilfe → Update MobaLedLib Studio …) lädt nur das letzte fertige Release.'))  # v2.59  # v5.09
             if plan.many_deletes:                              # mehr als 20 Dateien werden gelöscht: nachfragen statt abbrechen (zum Beispiel viele nicht mehr benutzte Symbole)  # v2.65
                 notes.insert(0, tr("Achtung: Das Update löscht {anzahl} Dateien (mehr als {grenze}). Das ist richtig, wenn sie in der neuen Version nicht mehr gebraucht werden (zum Beispiel nicht mehr benutzte Symbole). Sie werden vorher im Datenordner gesichert. Zum Beispiel: ", anzahl=len(plan.delete), grenze=wu.MAX_DELETE) + ", ".join(plan.delete[:6]) + (" ..." if len(plan.delete) > 6 else ""))  # v2.65
             note.set_text("\n".join(notes))
@@ -6447,7 +6493,8 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
                     ui.notify(str(ex), type="negative")  # v4.24
                     return  # v4.24
                 box["data"], box["info"] = data, info  # v4.24
-                info_label.set_text(tr("Gesichert am {datum} auf {rechner} mit webMobaLedLib {version}, {anzahl} Dateien.",  # v4.24
+                # info_label.set_text(tr("Gesichert am {datum} auf {rechner} mit webMobaLedLib {version}, {anzahl} Dateien.",  # v4.24  # v5.09 (entfallen)
+                info_label.set_text(tr("Gesichert am {datum} auf {rechner} mit MobaLedLib Studio {version}, {anzahl} Dateien.",  # v4.24  # v5.09
                                        datum=info.get("date", "?"), rechner=info.get("computer", "?"), version=info.get("version", "?"), anzahl=info.get("count", 0)))  # v4.24
                 tables_cb.set_visibility(bool(info.get("tables")))  # v4.24
                 hint.set_visibility(True)  # v4.24
@@ -7311,7 +7358,8 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
         "Hilfe": [
             ("Hilfe öffnen", run_command(open_help, "Hilfe")),
             ("Logfile anzeigen", show_logfile),
-            ("Update webMobaLedLib ...", update_program),
+            # ("Update webMobaLedLib ...", update_program),  # v5.09 (entfallen)
+            ("Update MobaLedLib Studio ...", update_program),  # v5.09
             ("Update Testversion ...", update_test_program),  # v2.59
             ("Über ...", run_command(about, "Über")),
         ],
@@ -7888,9 +7936,11 @@ def notify_user(text: str) -> None:
     """Meldung auch zeigen, wenn kein Terminal da ist (Start per Symbol): Linux notify-send, macOS Mitteilung"""
     try:
         if sys.platform.startswith("linux") and shutil.which("notify-send"):
-            subprocess.Popen(["notify-send", "-a", "webMobaLedLib", "webMobaLedLib", text])
+            # subprocess.Popen(["notify-send", "-a", "webMobaLedLib", "webMobaLedLib", text])  # v5.09 (entfallen)
+            subprocess.Popen(["notify-send", "-a", "MobaLedLib Studio", "MobaLedLib Studio", text])  # v5.09
         elif sys.platform == "darwin":
-            subprocess.Popen(["osascript", "-e", f"display notification {json.dumps(text)} with title \"webMobaLedLib\""])
+            # subprocess.Popen(["osascript", "-e", f"display notification {json.dumps(text)} with title \"webMobaLedLib\""])  # v5.09 (entfallen)
+            subprocess.Popen(["osascript", "-e", f"display notification {json.dumps(text)} with title \"MobaLedLib Studio\""])  # v5.09
     except OSError:
         pass
 
@@ -8099,7 +8149,8 @@ def main():
         sys.exit(1)
     globals()["_INSTANCE_LOCK"] = instance_lock            # offen halten bis zum Ende des Prozesses (sonst gibt der Garbage Collector sie frei)
     if args.open_if_running and not sys.stdout.isatty():
-        notify_user("webMobaLedLib startet. Bitte warten, das kann bis zu einer Minute dauern; der Browser oeffnet sich von selbst.")
+        # notify_user("webMobaLedLib startet. Bitte warten, das kann bis zu einer Minute dauern; der Browser oeffnet sich von selbst.")  # v5.09 (entfallen)
+        notify_user("MobaLedLib Studio startet. Bitte warten, das kann bis zu einer Minute dauern; der Browser oeffnet sich von selbst.")  # v5.09
     web_logging.log_banner(logger, f"webmobaledlib.py Version {VERSION}", here, LOG_INFO)        # Kopf des Protokolls wie im Original
     from _web import web_auth
     from _web import web_password
@@ -8189,7 +8240,7 @@ def main():
     if not args.no_browser:
         open_browser_when_ready(args.host, args.port)               # eigener Aufruf statt show=True: prueft das Ergebnis und probiert weitere Browser
     run_args = {"host": args.host, "port": args.port, "reload": False, "show": False,
-                "title": "webMobaLedLib Programmgenerator", "favicon": favicon if os.path.isfile(favicon) else None}
+                "title": "MobaLedLib Studio", "favicon": favicon if os.path.isfile(favicon) else None}
     if "reconnect_timeout" in inspect.signature(ui.run).parameters:      # aeltere NiceGUI-Versionen kennen den Parameter nicht
         run_args["reconnect_timeout"] = RECONNECT_TIMEOUT
     ui.run(**run_args)

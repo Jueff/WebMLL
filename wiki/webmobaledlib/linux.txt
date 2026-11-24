@@ -1,5 +1,5 @@
-====== webMobaLedLib – Installation unter Linux ======
-//Seitenstand 1.04 (2026-11-23), gilt für webMobaLedLib 4.79//
+====== MobaLedLib Studio – Installation unter Linux ======
+//Seitenstand 1.07 (2026-11-24), gilt für Version 5.12//
 
 Diese Seite gilt für **Linux mit Desktop**, zum Beispiel Linux Mint, Ubuntu, Debian, Fedora, Arch und openSUSE. Für die Installation öffnest du **einmal das Terminal**. Die Schritte dafür stehen unten Schritt für Schritt.
 
@@ -26,7 +26,7 @@ Die Datei **webmobaledlib.zip** liegt danach im Ordner //Downloads// (rund 20 MB
 
 Danach liegt im Ordner **mobaledlib** ein Ordner **python**.
 
-{{:bilder:anleitungen:webmobaledlib:linux_01_ordner.png?500|Der Ordner mobaledlib mit dem Ordner python}}
+{{:bilder:anleitungen:mobaledlibstudio:linux_01_ordner.png?500|Der Ordner mobaledlib mit dem Ordner python}}
 
 ===== Schritt 3: Die Installation starten =====
 
@@ -44,21 +44,21 @@ Es erscheint viel Text, das ist normal. Es dauert **5 bis 15 Minuten**. Lass das
 
 **Tipp:** Wenn du den Befehl nicht kopieren willst, tippe ''bash install_l'' und drücke die **Tab-Taste**. Das Terminal schreibt den Dateinamen dann selbst zu Ende.
 
-{{:bilder:anleitungen:webmobaledlib:linux_02_terminal.png?500|Das Terminal mit dem Befehl bash install_linux.sh}}
+{{:bilder:anleitungen:mobaledlibstudio:linux_02_terminal.png?500|Das Terminal mit dem Befehl bash install_linux.sh}}
 
 Am Ende steht im Fenster, dass die Installation fertig ist. **Melde dich jetzt einmal ab und wieder an** (oder starte den Computer neu). Erst danach darf dein Benutzer auf den USB-Anschluss der Lichtmaschine zugreifen.
 
 ===== Schritt 4: Das Programm starten =====
 
-  - Mache einen **Doppelklick** auf das Symbol **webMobaLedLib** auf dem Schreibtisch oder suche es im Anwendungsmenü (Rubrik //Entwicklung// oder //Elektronik//).
+  - Mache einen **Doppelklick** auf das Symbol **MobaLedLib Studio** auf dem Schreibtisch oder suche es im Anwendungsmenü (Rubrik //Entwicklung// oder //Elektronik//).
   - Beim **ersten Doppelklick** fragt der Dateimanager vielleicht, ob die Datei ausgeführt werden soll. Wähle **Ausführen** oder **Starter vertrauen**. Sonst: Rechtsklick auf das Symbol → **Ausführen erlauben**.
-  - Nach **20 bis 60 Sekunden** öffnet sich dein Browser mit der webMobaLedLib. Öffnet er sich nicht, tippe ''localhost:8080'' in die Adresszeile ein.
+  - Nach **20 bis 60 Sekunden** öffnet sich dein Browser mit MobaLedLib Studio. Öffnet er sich nicht, tippe ''localhost:8080'' in die Adresszeile ein.
 
 **Beenden:** Klicke oben rechts auf den Knopf **Beenden**.
 
 ===== Schritt 5: Die Lichtmaschine anschließen =====
 
-Stecke die Lichtmaschine mit dem USB-Kabel an. Wie es dann weitergeht, steht auf der Seite [[anleitungen:webmobaledlib:erstes_programm|Dein erstes Programm]].
+Stecke die Lichtmaschine mit dem USB-Kabel an. Wie es dann weitergeht, steht auf der Seite [[anleitungen:mobaledlibstudio:erstes_programm|Dein erstes Programm]].
 
 ===== Linux-Server ohne Bildschirm =====
 
@@ -69,15 +69,15 @@ Auf einem Server ohne Bildschirm brauchst du statt der Schritte 3 und 4 **eine O
   - Danach richtet es den Dienst **mobaledlib-web** ein (''sudo'' fragt nach deinem Passwort) und startet ihn. Am Ende nennt es die Adresse.
   - Öffne im Browser eines anderen Geräts im **Heimnetz** ''http://<Adresse des Servers>:8080'' und melde dich an.
 
-Weitere Optionen zusammen mit ''--server'': ''--password PW'' gibt das Passwort gleich an (ohne Nachfrage, für Skripte; es ist dann in der Befehlshistorie sichtbar, das liegt in deiner Verantwortung), ''--port N'' wählt einen anderen Port, ''--no-service'' richtet keinen Dienst ein. Hat der Server eine **Firewall**, gib den Port im Heimnetz frei (Beispiel: ''sudo ufw allow from 192.168.0.0/16 to any port 8080 proto tcp''). Das Passwort kannst du später im Programm ändern (**Programm Einstellungen**, **Zugriff über das Netz**, siehe [[anleitungen:webmobaledlib:wz_netzwerk|Zugriff aus dem Netz]]).
+Weitere Optionen zusammen mit ''--server'': ''--password PW'' gibt das Passwort gleich an (ohne Nachfrage, für Skripte; es ist dann in der Befehlshistorie sichtbar, das liegt in deiner Verantwortung), ''--port N'' wählt einen anderen Port, ''--no-service'' richtet keinen Dienst ein. Hat der Server eine **Firewall**, gib den Port im Heimnetz frei (Beispiel: ''sudo ufw allow from 192.168.0.0/16 to any port 8080 proto tcp''). Das Passwort kannst du später im Programm ändern (**Programm Einstellungen**, **Zugriff über das Netz**, siehe [[anleitungen:mobaledlibstudio:wz_netzwerk|Zugriff aus dem Netz]]).
 
 **Wichtig:** Betreibe den Server nur im **Heimnetz** und nie ungeschützt aus dem **Internet**.
 
 ===== Das Programm aktualisieren =====
 
-Im Programm: Menü **Hilfe → Update webMobaLedLib …**. Starte das Programm danach neu und lade die Seite im Browser mit **Strg + F5** neu.
+Im Programm: Menü **Hilfe → Update MobaLedLib Studio …**. Starte das Programm danach neu und lade die Seite im Browser mit **Strg + F5** neu.
 
-Mehr dazu steht auf der Seite [[anleitungen:webmobaledlib:aktualisieren|Das Programm aktualisieren]].
+Mehr dazu steht auf der Seite [[anleitungen:mobaledlibstudio:aktualisieren|Das Programm aktualisieren]].
 
 ===== Wenn etwas nicht klappt =====
 
@@ -89,7 +89,7 @@ Mehr dazu steht auf der Seite [[anleitungen:webmobaledlib:aktualisieren|Das Prog
 | Der Browser öffnet sich nicht | Tippe ''localhost:8080'' in die Adresszeile ein. |
 | Die Tabelle baut sich langsam auf, der Bildschirm ruckelt | Meist rechnet der Browser ohne Grafikkarten-Beschleunigung. Probiere einen anderen Browser. |
 
-Mehr zu Problemen allgemein: [[anleitungen:webmobaledlib:fehlersuche|Fehlersuche]].
+Mehr zu Problemen allgemein: [[anleitungen:mobaledlibstudio:fehlersuche|Fehlersuche]].
 
 ===== Das Programm entfernen =====
 

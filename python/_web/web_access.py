@@ -1,9 +1,9 @@
-# Datei-Version: 1.13 (2026-11-14) - web_access.py
+# Datei-Version: 1.14 (2026-11-24) - web_access.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_access.py
 # Path:           _web/web_access.py
-# Version:        1.13
-# Last Update:    2026-11-14
+# Version:        1.14
+# Last Update:    2026-11-24
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
@@ -16,6 +16,7 @@
 #   1.11  2026-10-26  Zusammengesetzte Meldungen (Verkettungen und f-Strings) mit tr(...) uebersetzbar gemacht
 #   1.12  2026-11-05  Zusatzkarten einzeln aufbaubar (build_layout, build_table, build_network) und als Plaetze (slots) fuer die Gruppen der Seite Programm Einstellungen
 #   1.13  2026-11-14  Dialoge Passwort/Namen: Einschalten bzw. Namen aendern links, Abbrechen rechts
+#   1.14  2026-11-24  Text zur Firewall-Regel nennt den tatsaechlichen Regelnamen 'webMLL Server <Port>' (vorher 'webMobaLedLib <Port>'). Zeile mit '# v5.10'
 # ----------------------------------------------------------------------------------------------
 """Zusatzfelder der Seite Programm Einstellungen: Passwort fuer den Zugriff auf die Web-Oberflaeche aus dem Netz aendern und (nur auf
 dem Raspberry Pi mit installiertem Hilfsprogramm) den Namen des Rechners im Netz aendern.
@@ -265,7 +266,8 @@ class WebAccess:
                     ui.label(hint).classes("text-caption text-grey-8")  # v1.05
                 return  # v1.05
             ui.label("Damit ein anderer Rechner im Heimnetz die Oberfläche erreicht, muss die Windows-Firewall den Port zulassen. Der Knopf richtet dafür die "  # v1.05
-                     "Regel „webMobaLedLib <Port>“ ein (TCP, nur für Privatnetzwerke); eine ältere Regel mit diesem Namen wird dabei ersetzt. Windows fragt dabei nach Administratorrechten: mit „Ja“ bestätigen."  # v1.06
+                     # "Regel „webMobaLedLib <Port>“ ein (TCP, nur für Privatnetzwerke); eine ältere Regel mit diesem Namen wird dabei ersetzt. Windows fragt dabei nach Administratorrechten: mit „Ja“ bestätigen."  # v1.06  # v5.10 (entfallen)
+                     "Regel „webMLL Server <Port>“ ein (TCP, nur für Privatnetzwerke); eine ältere Regel mit diesem Namen wird dabei ersetzt. Windows fragt dabei nach Administratorrechten: mit „Ja“ bestätigen."  # v1.06  # v5.10
                      ).classes("text-caption text-grey-8")  # v1.05
             ui.label("Beim Einschalten von „Zugriff aus dem Netz erlauben“ (oben) wird diese Regel automatisch angelegt.").classes("text-caption text-grey-8")  # v1.09
             self.fw_status = ui.label("Wird geprüft ...")  # v1.05

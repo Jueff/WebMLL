@@ -1,9 +1,88 @@
-Datei-Version: 1.82 (2026-11-24) - HOC_Anwender.md
-Stand: webMobaLedLib 4.98
+Datei-Version: 1.96 (2026-11-24) - HOC_Anwender.md
+Stand: Version 5.12
 
-# webMobaLedLib: Änderungen (Kurzfassung)
+# MobaLedLib Studio: Änderungen (Kurzfassung)
 
 Gilt ab Version 1.39. Neueste Version oben.
+
+## Version 5.12 (2026-11-24)
+
+Korrekturen:
+- Hilfe → Hilfe öffnen führt zur neuen Wiki-Seite „MobaLedLib Studio“ (Einführung).
+- Die Hilfe-Knöpfe bei OTA, Servo-Animation und Timeline Editor und alle Links im Wiki verweisen auf den neuen Namensraum „mobaledlibstudio“.
+
+## Version 5.11 (2026-11-24)
+
+Korrekturen:
+- Niederländisch: Im Menü Einstellungen heißt der Eintrag „Uitbreidingen …“.
+- Die Hinweise (Maus über ein Feld) in den Einstellungsfenstern erscheinen in der gewählten Sprache; fehlende Übersetzungen ergänzt.
+
+## Version 5.10 (2026-11-24)
+
+Neue Funktionen:
+- Das Symbol auf dem Desktop (und im Anwendungsmenü) heißt „MobaLedLib Studio“. Die Installation legt es neu an und entfernt die Symbole mit den alten Namen (Windows, Linux, macOS, Raspberry Pi).
+
+Korrekturen:
+- Der Hinweis zum Farbwert im HSV-Farbraum nennt die richtigen Zahlen (0 Rot, 32 Orange, 64 Gelb, 96 Grün, 128 Zyan, 160 Blau, 192 Violett, 224 Pink), in allen Sprachen.
+- Der Text zur Windows-Firewall nennt den richtigen Namen der Regel („webMLL Server <Port>“).
+
+## Version 5.09 (2026-11-24)
+
+Neue Funktionen:
+- Neuer Name MobaLedLib Studio in der ganzen Oberfläche (alle Sprachen), in den Meldungen der Installation und Reparatur, in der Anleitung, der Checkliste und im Wiki. Das Symbol auf dem Desktop und die Dateinamen heißen unverändert, auch der Datenordner bleibt.
+
+## Version 5.08 (2026-11-24)
+
+Neue Funktionen:
+- Neuer Anzeigename: Die Kopfzeile und der Tab des Browsers zeigen „MobaLedLib Studio“, das Versionsfeld zeigt nur noch die Version.
+
+## Version 5.07 (2026-11-24)
+
+Neue Funktionen:
+- Formular für House und GasLights: Anzahlen und Zeiten haben Schieberegler mit Zahlenfeld, Tasten − und + und Mausrad; der LED Kanal ist ein Zahlenfeld wie im Parameterformular der Makros.
+
+## Version 5.06 (2026-11-24)
+
+Neue Funktionen:
+- Parameterformular der Makros: Die LED Kanal Auswahl hat farbige Tasten (Gelb, Zyan, Rot, Grün, Blau) statt Auswahlkreisen.
+
+## Version 5.05 (2026-11-24)
+
+Neue Funktionen:
+- Parameterformular der Makros: Die Zahlenfelder (auch LED Channel) sehen überall gleich aus (Zahl direkt eintragbar, Tasten − und +). Der Wert lässt sich auch mit dem Mausrad ändern, über dem Zahlenfeld oder dem Regler.
+
+## Version 5.04 (2026-11-24)
+
+Neue Funktionen:
+- Parameterformular der Makros: Zahlenwerte haben einen Schieberegler mit Zahlenfeld und den Tasten − und +. Zeitwerte werden in den Feldern Min, Sek und ms eingegeben. Der Farbwert im HSV-Farbraum hat einen Regler im Farbverlauf und ein Feld mit der eingestellten Farbe.
+
+## Version 5.03 (2026-11-24)
+
+Korrekturen:
+- ESP32 und Pico mit schnellem Konfigurationstransfer: Nach jedem Update des Programms wird beim ersten „Setup übertragen“ einmal die ganze Firmware übertragen, damit geänderter Firmware-Code sicher auf der Lichtmaschine ist (Beitrag von Jürgen, Pull Request 66, Issue 64). Danach gehen Änderungen der Konfiguration wieder schnell.
+
+## Version 5.02 (2026-11-24)
+
+Neue Funktionen:
+- „Board und USB Port erkennen“: Findet die Erkennung mehrere verschiedene Lichtmaschinen (Nano, ESP32, Pico), kann man vorher das gewünschte Modell auswählen (Beitrag von Jürgen, Pull Request 39, Issue 35).
+
+## Version 5.01 (2026-11-24)
+
+Korrekturen:
+- Testtasten: Ein Startwert 1 schaltet jetzt alle Ein/Aus-Tasten derselben Adresse ein (grün), nicht nur die Taste der Zeile mit dem Startwert (Issue 68).
+
+## Version 5.00 (2026-11-24)
+
+Korrekturen:
+- ESP32 und Pico: Hängen am LED-Strang mehr LEDs, als konfiguriert sind (zum Beispiel nach dem Löschen eines Effekts), werden die überzähligen LEDs beim Start jetzt ausgeschaltet (Beitrag von Jürgen, Pull Request 63, Issue 62). Das Setup wird dafür einmal ganz neu übertragen.
+
+## Version 4.99 (2026-11-24)
+
+Neue Funktionen:
+- ESP32 und Pico: Im Dialog „Auswahl des COM Ports“ blinken die LEDs auf der Hauptplatine der gewählten Zentrale. So erkennst du, welche Zentrale an welchem Anschluss hängt (Beitrag von Jürgen, Pull Request 61). Dafür muss die neue Firmware einmal ganz auf die Zentrale übertragen werden.
+
+Korrekturen:
+- Pico: Die Konfiguration wird nach dem Hochladen auch übertragen, wenn der Pico danach einen anderen COM Port bekommt.
 
 ## Version 4.98 (2026-11-24)
 
@@ -586,7 +665,7 @@ Neue Funktionen:
 Neue Funktionen:
 - Neu in der Tabelle: „Nach unten ausfüllen“ (Strg+D oder rechte Maustaste) und „Reihe fortsetzen“ (zählt 1, 2, 3 oder V1, V2, V3 weiter).
 - In der Spalte Verteiler genügt jetzt die Zahl (1 gilt wie V1).
-- Der Knopf „Online Wiki“ öffnet die Seite „Einführung“ der webMobaLedLib-Anleitung.
+- Der Knopf „Online Wiki“ öffnet die Seite „Einführung“ MobaLedLib Studio-Anleitung.
 - Neue Wiki-Seite „Häufige Fragen“.
 - Das Update akzeptiert ein ZIP mit der Datei START_HIER.txt (erste Schritte) im obersten Ordner; sie liegt ab dem nächsten Release im ZIP.
 - Optionen, Reiter Dateien: „Importieren v. altem Prog.“ erklärt, wie Daten des Excel-Programms übernommen werden. Der Knopf „Kopiere von Seite zu Seite“ entfällt (dafür gibt es „Seite duplizieren“).

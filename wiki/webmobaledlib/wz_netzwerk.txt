@@ -1,14 +1,14 @@
-====== webMobaLedLib – Zugriff aus dem Netz ======
-//Seitenstand 1.05 (2026-11-23), gilt für webMobaLedLib 4.79//
+====== MobaLedLib Studio – Zugriff aus dem Netz ======
+//Seitenstand 1.07 (2026-11-24), gilt für Version 5.12//
 
-Normalerweise bedienst du die webMobaLedLib auf dem Rechner, auf dem sie läuft. Du kannst sie aber auch von einem **anderen Gerät im Heimnetz** aus bedienen: vom **Laptop**, **Tablet** oder **Smartphone**, zum Beispiel direkt an der Modellbahn. Das ist besonders praktisch mit dem **Raspberry Pi**, der ohne Bildschirm an der Anlage bleibt.
+Normalerweise bedienst du MobaLedLib Studio auf dem Rechner, auf dem sie läuft. Du kannst sie aber auch von einem **anderen Gerät im Heimnetz** aus bedienen: vom **Laptop**, **Tablet** oder **Smartphone**, zum Beispiel direkt an der Modellbahn. Das ist besonders praktisch mit dem **Raspberry Pi**, der ohne Bildschirm an der Anlage bleibt.
 
 **Wichtig:** Wer Zugriff hat, kann **Programme auf deine Lichtmaschine laden**. Schütze den Zugriff deshalb mit einem **Passwort**, und mach das Programm nie ohne Schutz aus dem **Internet** erreichbar. Es ist nur für dein **Heimnetz** gedacht.
 
 ===== Wie ist es voreingestellt? =====
 
   * **Windows, Mac, Linux:** Das Programm ist **nur auf dem eigenen Rechner** erreichbar (''localhost:8080''). Du musst nichts schützen.
-  * **Linux-Server ohne Bildschirm:** Mit ''bash install_linux.sh --server'' richtet das Installationsskript Passwort und Systemdienst ein, siehe [[anleitungen:webmobaledlib:linux|Installation unter Linux]].
+  * **Linux-Server ohne Bildschirm:** Mit ''bash install_linux.sh --server'' richtet das Installationsskript Passwort und Systemdienst ein, siehe [[anleitungen:mobaledlibstudio:linux|Installation unter Linux]].
   * **Raspberry Pi:** Das Programm ist im **Heimnetz** erreichbar und mit einem **Passwort** geschützt. Benutzername **mobaledlib**, Passwort **mobaledlib**. **Ändere das Passwort** (siehe unten). Am Pi selbst brauchst du kein Passwort.
 
 ===== Zugriff einschalten (Windows, Mac, Linux) =====
@@ -23,7 +23,7 @@ Du musst dafür **keine Datei von Hand ändern**.
 
 ===== Von einem anderen Gerät öffnen =====
 
-  - Finde die **Adresse** des Rechners, auf dem die webMobaLedLib läuft. Beim Raspberry Pi geht oft der Name: ''raspberrypi.local'' (statt ''raspberrypi'' der Name, den du im Imager gewählt hast). Sonst nimm die **IP-Adresse** (steht in deinem Router, zum Beispiel ''192.168.178.79'').
+  - Finde die **Adresse** des Rechners, auf dem MobaLedLib Studio läuft. Beim Raspberry Pi geht oft der Name: ''raspberrypi.local'' (statt ''raspberrypi'' der Name, den du im Imager gewählt hast). Sonst nimm die **IP-Adresse** (steht in deinem Router, zum Beispiel ''192.168.178.79'').
   - Tippe im Browser des anderen Geräts ein: ''http://<Adresse>:8080''. Beispiel: ''http://raspberrypi.local:8080''.
   - Das Programm fragt nach **Benutzername** (**mobaledlib**) und **Passwort**.
 

@@ -1,12 +1,14 @@
-# Datei-Version: 1.13 (2026-11-21) - M20_PageEvents_a_Functions.py
+# Datei-Version: 1.15 (2026-11-24) - M20_PageEvents_a_Functions.py
 # ----------------------------------------------------------------------------------------------
 # Name:           M20_PageEvents_a_Functions.py
 # Path:           proggen/M20_PageEvents_a_Functions.py
-# Version:        1.13
-# Last Update:    2026-11-21
+# Version:        1.15
+# Last Update:    2026-11-24
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
+#   1.15  2026-11-24  Hilfe-Adresse im neuen Namensraum des Wikis (anleitungen/mobaledlibstudio/einfuehrung)
+#   1.14  2026-11-24  Issue 68: Ein Startwert 1 schaltet beim Zuruecksetzen der Testtasten alle Ein/Aus-Tasten derselben Adresse ein, nicht nur die Tasten der Zeile mit dem Startwert (Sync_Toggle_Buttons_by_Address)
 #   1.01  2026-10-17  Update_All_Start_LedNr: Sh.Visible in (xlSheetVisible, True) (bisher wurde kein Blatt berechnet), Durchgang wiederholen bis Zeile 1 stabil ist (Include-Feature); davor Original-Port, nicht erfasst
 #   1.02  2026-10-17  Update_Start_LedNr: CellLinesSum(LEDs) statt CellLinesSum("") (Zeilen mit negativer LED-Zahl wie Next_LED(-1) merken den Hoechststand vor dem Abziehen: LED-Summe eines Blatts stimmte nicht mit Excel)
 #   1.03  2026-10-21  Version K des Excel-Programms: Adresse muss groesser 0 sein (Select_Typ_by_Dialog, Proc_Typ_Col, Complete_Addr_Column_with_InCnt, Update_StartValue); Update_TestButtons loescht die Testknoepfe, wenn die Adresse entfaellt oder das Makro keinen Eingang mehr braucht (ClearButtons)
@@ -728,7 +730,8 @@ def __set_column_width(sheet):
     M01.set_columnwidth(sheet)
 
 # HELP_WIKI_URL = "https://wiki.mobaledlib.de/anleitungen/spezial/programmgenerator"  # v1.07 (entfallen v1.12)
-HELP_WIKI_URL = "https://wiki.mobaledlib.de/anleitungen/webmobaledlib/einfuehrung"  # v1.12: das Wiki nennt die Seite einfuehrung        # Online Wiki: die Hilfe zum Programm Generator  # v1.07
+# HELP_WIKI_URL = "https://wiki.mobaledlib.de/anleitungen/webmobaledlib/einfuehrung"  # v1.12: das Wiki nennt die Seite einfuehrung        # Online Wiki: die Hilfe zum Programm Generator  # v1.07  # v5.12 (entfallen)
+HELP_WIKI_URL = "https://wiki.mobaledlib.de/anleitungen/mobaledlibstudio/einfuehrung"  # v1.12: das Wiki nennt die Seite einfuehrung        # Online Wiki: die Hilfe zum Programm Generator  # v1.07  # v5.12
 
 
 def Show_Help():
@@ -1430,6 +1433,25 @@ def ResetTestButtons(keepStatus):
             if keepStatus == False:
                 Update_TestButtons(Row, First_Call=First_Call)
                 First_Call = False
+    Sync_Toggle_Buttons_by_Address()  # v1.14
+
+def Sync_Toggle_Buttons_by_Address():  # v1.14
+    # Issue 68: Ein Ein/Aus-Taste (Name 'Bxxxx-DD-...') ist eingeschaltet, wenn die Richtung im Namen 00 ist. Alle Tasten mit derselben Adresse zeigen denselben Zustand
+    # (wie beim Anklicken, siehe M32_DCC.DCCSend: dort werden alle Tasten mit gleichem Namen umgeschaltet). Beim Zuruecksetzen mit Startwert 1 wurde nur die Zeile mit
+    # dem Startwert eingeschaltet; die Tasten gleicher Adresse in anderen Zeilen blieben aus.
+    try:  # v1.14
+        shapes = [sh for sh in P01.ActiveSheet.Shapes if sh.OnAction == 'DCCSend' and sh.Name[:1] == 'B' and len(sh.Name) >= 9]  # v1.14
+        on_addr = set(sh.Name[1:5] for sh in shapes if sh.Name[6:8] == '00')  # v1.14
+        for sh in shapes:  # v1.14
+            if sh.Name[6:8] == '01' and sh.Name[1:5] in on_addr and sh.AlternativeText != '':  # v1.14
+                tmp = sh.Name  # v1.14
+                sh.Name = sh.AlternativeText  # v1.14
+                sh.AlternativeText = tmp  # v1.14
+                sh.TextFrame2.TextRange.Text = Mid(sh.Name, 13, 1)  # v1.14
+                sh.Fill.ForeColor.rgb = GetButtonColor(P01.val(Mid(sh.Name, 10, 2)))  # v1.14
+                sh.updateShape()  # v1.14
+    except BaseException as e:                              # noqa: BLE001  # v1.14
+        Debug.Print('Sync_Toggle_Buttons_by_Address: ' + str(e))  # v1.14
 
 def Test_ResetTestButtons():
     Start = Double()

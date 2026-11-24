@@ -1,11 +1,11 @@
-====== webMobaLedLib – ARDUINO-IDE Einstellungen ======
-//Seitenstand 1.06 (2026-11-23), gilt für webMobaLedLib 4.79//
+====== MobaLedLib Studio – ARDUINO-IDE Einstellungen ======
+//Seitenstand 1.08 (2026-11-24), gilt für Version 5.12//
 
-**Mit PlatformIO (Standard) brauchst du diese Seite nicht.** Das Fenster **ARDUINO-IDE Einstellungen** (Hardware Optionen, Reiter Entwicklungsumgebung, Knopf **ARDUINO-IDE Einstellungen**, mit **Speichern** und **Abbrechen**) ist nur für die **ARDUINO IDE** da, die Programmierumgebung der Arduino-Welt. Du brauchst ihn nur, wenn du die ARDUINO IDE **statt PlatformIO** benutzt (siehe [[anleitungen:webmobaledlib:arduino_ide|Zusätzlich: Arduino IDE]]).
+**Mit PlatformIO (Standard) brauchst du diese Seite nicht.** Das Fenster **ARDUINO-IDE Einstellungen** (Hardware Optionen, Reiter Entwicklungsumgebung, Knopf **ARDUINO-IDE Einstellungen**, mit **Speichern** und **Abbrechen**) ist nur für die **ARDUINO IDE** da, die Programmierumgebung der Arduino-Welt. Du brauchst ihn nur, wenn du die ARDUINO IDE **statt PlatformIO** benutzt (siehe [[anleitungen:mobaledlibstudio:arduino_ide|Zusätzlich: Arduino IDE]]).
 
-**Board und USB-Anschluss** deiner Lichtmaschine stellst du **nicht hier** ein, sondern im Programmgenerator: Werkzeugleiste **Hardware Optionen**, Reiter **Lichtmaschine**. Wie das geht, steht auf der Seite [[anleitungen:webmobaledlib:pg_arduino|Verbinden und Übertragen]] und im [[anleitungen:webmobaledlib:erstes_programm|ersten Programm]].
+**Board und USB-Anschluss** deiner Lichtmaschine stellst du **nicht hier** ein, sondern im Programmgenerator: Werkzeugleiste **Hardware Optionen**, Reiter **Lichtmaschine**. Wie das geht, steht auf der Seite [[anleitungen:mobaledlibstudio:pg_arduino|Verbinden und Übertragen]] und im [[anleitungen:mobaledlibstudio:erstes_programm|ersten Programm]].
 
-{{:bilder:anleitungen:webmobaledlib:wz_06_arduino_einstellungen.png?600|Das Fenster ARDUINO-IDE Einstellungen}}
+{{:bilder:anleitungen:mobaledlibstudio:wz_06_arduino_einstellungen.png?600|Das Fenster ARDUINO-IDE Einstellungen}}
 
 ===== Was die Seite enthält =====
 

@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Datei-Version: 1.12 (2026-11-08) - install_pi.sh
+# Datei-Version: 1.13 (2026-11-24) - install_pi.sh
+# 1.13: Symbol heisst MobaLedLib Studio; Symbole mit den frueheren Namen werden entfernt
 # Installiert die Web-Oberflaeche von webMobaLedLib als Dienst (systemd) auf einem Raspberry Pi (Raspberry Pi OS Bookworm/Trixie)
 # oder einem anderen Debian/Ubuntu und legt ein Desktop-Symbol zum Starten an.
 #
@@ -142,14 +143,14 @@ create_desktop_icon() {
     echo "Kein Desktop-Ordner ($desktop_dir): vermutlich Raspberry Pi OS Lite, Symbol uebersprungen (erzwingen: --desktop-icon)"; return
   fi
   sudo -u "$SERVICE_USER" mkdir -p "$desktop_dir" "$USER_HOME/.local/share/applications"
-  rm -f "$desktop_dir/pyMobaLedLib.desktop" "$USER_HOME/.local/share/applications/pyMobaLedLib.desktop"      # Symbol unter dem frueheren Namen entfernen
-  for target in "$desktop_dir/webMobaLedLib.desktop" "$USER_HOME/.local/share/applications/webMobaLedLib.desktop"; do
+  rm -f "$desktop_dir/pyMobaLedLib.desktop" "$USER_HOME/.local/share/applications/pyMobaLedLib.desktop" "$desktop_dir/webMobaLedLib.desktop" "$USER_HOME/.local/share/applications/webMobaLedLib.desktop"      # Symbole unter den frueheren Namen entfernen
+  for target in "$desktop_dir/MobaLedLibStudio.desktop" "$USER_HOME/.local/share/applications/MobaLedLibStudio.desktop"; do
     sed "s|__APPDIR__|$APPDIR|g" "$APPDIR/pi/mobaledlib.desktop.in" > "$target"
     chown "$SERVICE_USER": "$target"
     chmod 755 "$target"
     sudo -u "$SERVICE_USER" gio set "$target" metadata::trusted true >/dev/null 2>&1 || true
   done
-  echo "Symbol angelegt: $desktop_dir/webMobaLedLib.desktop (und im Startmenue unter Entwicklung/Elektronik)"
+  echo "Symbol angelegt: $desktop_dir/MobaLedLibStudio.desktop (und im Startmenue unter Entwicklung/Elektronik)"
 }
 create_desktop_icon
 
@@ -224,7 +225,7 @@ systemctl restart mobaledlib-web
 IP="$(hostname -I 2>/dev/null | awk '{print $1}')"
 echo
 echo "Fertig. Der Dienst startet beim Hochfahren automatisch (die Oberflaeche ist nach 20 bis 60 Sekunden da)."
-echo "  Desktop:      Symbol \"webMobaLedLib\" doppelklicken (startet bei Bedarf den Dienst und oeffnet das Fenster)"
+echo "  Desktop:      Symbol \"MobaLedLib Studio\" doppelklicken (startet bei Bedarf den Dienst und oeffnet das Fenster)"
 echo "  Status:       systemctl status mobaledlib-web"
 echo "  Protokoll:    journalctl -u mobaledlib-web -f"
 if [ "$LOCAL_ONLY" = "1" ]; then

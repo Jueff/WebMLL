@@ -1,36 +1,36 @@
-====== webMobaLedLib – Der Programmgenerator ======
-//Seitenstand 1.09 (2026-11-23), gilt für webMobaLedLib 4.79//
+====== MobaLedLib Studio – Der Programmgenerator ======
+//Seitenstand 1.11 (2026-11-24), gilt für Version 5.12//
 
-Der **Programmgenerator** ist das Herz der webMobaLedLib. In einer **Tabelle** legst du fest, was auf deiner Anlage passieren soll. Daraus erzeugt das Programm das Programm für die Lichtmaschine und überträgt es.
+Der **Programmgenerator** ist das Herz von MobaLedLib Studio. In einer **Tabelle** legst du fest, was auf deiner Anlage passieren soll. Daraus erzeugt das Programm das Programm für die Lichtmaschine und überträgt es.
 
 Diese Seite zeigt dir, wie das Fenster aufgebaut ist und wie du Schritt für Schritt zu einem fertigen Programm kommst. Die einzelnen Bereiche sind auf eigenen Seiten beschrieben.
 
-{{:bilder:anleitungen:webmobaledlib:pg_01_fenster.png?700|Das Fenster des Programmgenerators mit den beschrifteten Bereichen}}
+{{:bilder:anleitungen:mobaledlibstudio:pg_01_fenster.png?700|Das Fenster des Programmgenerators mit den beschrifteten Bereichen}}
 
 ===== Wie das Fenster aufgebaut ist =====
 
 ^ Bereich ^ Was ist das? ^
 | **Kopfzeile** | Ganz oben: der Titel mit der **Programmversion**, rechts der Knopf **Mit Lichtmaschine verbinden** mit dem **Verbindungsstatus** („Nicht verbunden“ oder „Verbunden mit …“) direkt daneben (der Knopf funktioniert nur, wenn auf der Lichtmaschine schon ein MobaLedLib-Programm läuft), **Vollbild** und **Beenden**. Meldungen des Programms stehen in der Menüzeile neben „Zwischengespeichert“. |
 | **Menü** | **Datei**, **Tabelle**, **Einstellungen** und **Hilfe**. Hier laden und speichern du deine Arbeit, färbst und rechnest die Tabelle neu und stellst das Programm ein. Die Lichtmaschine verbindest du mit dem Knopf oben rechts und seinem Pfeil. |
-| **Reiter** | Darunter die Seiten des Programms: **Programm Generator** (diese Seite), [[anleitungen:webmobaledlib:patterngenerator|**Timeline Editor**]], **Farb Test**, **Servo Einstellungen**, **Sound Test**, **DCC Keyboard**, **Serial Monitor** und weitere. Die Einstellungen des Programms stehen im Menü **Einstellungen**, nicht mehr in Reitern. |
+| **Reiter** | Darunter die Seiten des Programms: **Programm Generator** (diese Seite), [[anleitungen:mobaledlibstudio:patterngenerator|**Timeline Editor**]], **Farb Test**, **Servo Einstellungen**, **Sound Test**, **DCC Keyboard**, **Serial Monitor** und weitere. Die Einstellungen des Programms stehen im Menü **Einstellungen**, nicht mehr in Reitern. |
 | **Werkzeugleiste** | Die Knöpfe mit Symbol und Beschriftung: **Dialog Wizard**, **Setup übertragen**, **Zeilen löschen** und so weiter. Rechts davon wählst du die Ansicht **Tabelle**, **Grafik** oder **Beides** und siehst die Version der MobaLedLib-Bibliothek. |
 | **Tabelle** | Die Arbeitsfläche. Jede Zeile ist ein Effekt oder ein Gerät. |
 | **Blattreiter** | Ganz unten: die **Blätter** der Tabelle (**DCC**, **Selectrix**, **CAN**, **LNet**, **Examples**, **Config**). |
 
-Mehr zu den Teilen: [[anleitungen:webmobaledlib:pg_tabelle|Die Tabelle bedienen]], [[anleitungen:webmobaledlib:pg_werkzeugleiste|Die Werkzeugleiste]], [[anleitungen:webmobaledlib:pg_grafisch|Die grafische Ansicht]].
+Mehr zu den Teilen: [[anleitungen:mobaledlibstudio:pg_tabelle|Die Tabelle bedienen]], [[anleitungen:mobaledlibstudio:pg_werkzeugleiste|Die Werkzeugleiste]], [[anleitungen:mobaledlibstudio:pg_grafisch|Die grafische Ansicht]].
 
 ===== Die Blätter =====
 
 Die Blätter unten sind getrennte Tabellen. Sie unterscheiden sich darin, **wie die Befehle zur Lichtmaschine kommen**: über **DCC** (digitale Zentrale), **Selectrix**, **CAN** oder **LNet**. Wenn du dir nicht sicher bist, benutze das Blatt **DCC**. Auf **Examples** stehen Beispiele. **Config** ist ein Systemblatt mit Einstellungen: Du änderst dort nichts von Hand.
 
-Du kannst eigene Kopien eines Blattes anlegen (zum Beispiel für ein zweites Modul). Wie das geht, steht auf der Seite [[anleitungen:webmobaledlib:pg_tabelle#die_blattreiter|Die Tabelle bedienen]].
+Du kannst eigene Kopien eines Blattes anlegen (zum Beispiel für ein zweites Modul). Wie das geht, steht auf der Seite [[anleitungen:mobaledlibstudio:pg_tabelle#die_blattreiter|Die Tabelle bedienen]].
 
 ===== Die Spalten der Tabelle =====
 
 Du füllst die Spalten nicht alle von Hand aus. Der **Dialog Wizard** führt dich durch die Eingabe und trägt die Werte ein.
 
 ^ Spalte ^ Bedeutung ^
-| **Aktiv** | Ein **Haken** bedeutet: Die Zeile wird im Programm für die Lichtmaschine verwendet. Ohne Haken wird sie ignoriert. So schaltest du zum Beispiel ein ganzes Haus vorübergehend ab: Zeilen markieren und die **Leertaste** drücken (siehe [[anleitungen:webmobaledlib:pg_tabelle#zeilen_aktivieren_und_deaktivieren|Die Tabelle bedienen]]). |
+| **Aktiv** | Ein **Haken** bedeutet: Die Zeile wird im Programm für die Lichtmaschine verwendet. Ohne Haken wird sie ignoriert. So schaltest du zum Beispiel ein ganzes Haus vorübergehend ab: Zeilen markieren und die **Leertaste** drücken (siehe [[anleitungen:mobaledlibstudio:pg_tabelle#zeilen_aktivieren_und_deaktivieren|Die Tabelle bedienen]]). |
 | **Adresse oder Name** | Die **Adresse** (zum Beispiel die DCC-Adresse eines Schalters) oder ein **Name** für den Auslöser. |
 | **Beschreibung** | Ein freier Text von dir, zum Beispiel „Bahnhofsgebäude Licht“. |
 | **Verteiler-Nummer / Stecker-Nummer** | Notizen, an welchem Anschluss das Gerät hängt. Sie dienen nur der Übersicht. |
@@ -41,21 +41,21 @@ Du füllst die Spalten nicht alle von Hand aus. Der **Dialog Wizard** führt dic
 | **InCnt, Loc InCh** | Wie viele **Eingänge** die Zeile braucht und welcher Eingang das ist. Das Programm rechnet beides selbst. |
 | **LED/ Sound Kanal** | Der **Kanal** (die LED-Kette) bzw. der Sound, den die Zeile benutzt. |
 
-Eine ausführliche Beschreibung der Spalten steht auf der Seite [[anleitungen:programmgenerator|Der Programmgenerator]]. Sie gilt für die webMobaLedLib genauso.
+Eine ausführliche Beschreibung der Spalten steht auf der Seite [[anleitungen:programmgenerator|Der Programmgenerator]]. Sie gilt für MobaLedLib Studio genauso.
 
 ===== In vier Schritten zum fertigen Programm =====
 
   - **Zeile anlegen:** Klicke auf **Dialog Wizard**. Das Programm führt dich durch die Eingabe.
   - **Makro wählen und einstellen:** Wähle in der **Makroauswahl** den Effekt (zum Beispiel „Belebtes Haus“) und stelle seine Werte ein.
-  - **Übertragen:** Klicke auf **Setup übertragen**. Das Programm erzeugt das Programm für die Lichtmaschine und lädt es auf die Lichtmaschine. ([[anleitungen:webmobaledlib:pg_arduino|Verbinden und Übertragen]])
+  - **Übertragen:** Klicke auf **Setup übertragen**. Das Programm erzeugt das Programm für die Lichtmaschine und lädt es auf die Lichtmaschine. ([[anleitungen:mobaledlibstudio:pg_arduino|Verbinden und Übertragen]])
   - **Testen:** Probiere den Effekt an deiner Anlage aus. Die **Testtasten** in der Tabelle simulieren Schalter. Dann ändere die Tabelle, bis alles so ist, wie du es willst.
 
 ===== Weitere Seiten =====
 
-  * [[anleitungen:webmobaledlib:pg_tabelle|Die Tabelle bedienen]]: Zeilen, Zellen, Blattreiter
-  * [[anleitungen:webmobaledlib:pg_werkzeugleiste|Die Werkzeugleiste]]: Was jeder Knopf macht
-  * [[anleitungen:webmobaledlib:pg_grafisch|Die grafische Ansicht]]: Die Anlage als Bild
-  * [[anleitungen:webmobaledlib:pg_speichern|Speichern und Laden]]
-  * [[anleitungen:webmobaledlib:pg_arduino|Verbinden und Übertragen]]
-  * Die anderen Reiter (Farb Test, Servo, Sound, Monitor, Einstellungen): [[anleitungen:webmobaledlib:werkzeuge|Die Werkzeug-Reiter]]
+  * [[anleitungen:mobaledlibstudio:pg_tabelle|Die Tabelle bedienen]]: Zeilen, Zellen, Blattreiter
+  * [[anleitungen:mobaledlibstudio:pg_werkzeugleiste|Die Werkzeugleiste]]: Was jeder Knopf macht
+  * [[anleitungen:mobaledlibstudio:pg_grafisch|Die grafische Ansicht]]: Die Anlage als Bild
+  * [[anleitungen:mobaledlibstudio:pg_speichern|Speichern und Laden]]
+  * [[anleitungen:mobaledlibstudio:pg_arduino|Verbinden und Übertragen]]
+  * Die anderen Reiter (Farb Test, Servo, Sound, Monitor, Einstellungen): [[anleitungen:mobaledlibstudio:werkzeuge|Die Werkzeug-Reiter]]
   * Was die einzelnen Makros tun: [[anleitungen:effekte_mll|Alle Funktionen im Detail]]

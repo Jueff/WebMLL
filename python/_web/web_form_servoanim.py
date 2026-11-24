@@ -1,9 +1,9 @@
-# Datei-Version: 1.04 (2026-11-04) - web_form_servoanim.py
+# Datei-Version: 1.05 (2026-11-24) - web_form_servoanim.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_form_servoanim.py
 # Path:           _web/web_form_servoanim.py
-# Version:        1.04
-# Last Update:    2026-11-04
+# Version:        1.05
+# Last Update:    2026-11-24
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
@@ -13,6 +13,7 @@
 #   1.01  2026-11-04  Fenster verschiebbar und in der Groesse aenderbar (mllWindow, resize: both), groesser, die Grafik waechst mit; Layout bricht bei schmalem Fenster um
 #   1.03  2026-11-04  Frage nach dem ARDUINO: nach Abbrechen nicht mehr von selbst fragen (bis zum Neustart), nie gleichzeitig mehrmals; nur der Knopf Starte Test fragt wieder
 #   1.04  2026-11-04  harvest: Name der Fensterbeschreibung als Parameter (die LED Farb-Animation benutzt Main_Menu_Form_RSC)
+#   1.05  2026-11-24  Hilfe-Adresse: Wiki-Seite servo_animation im Namensraum mobaledlibstudio
 # ----------------------------------------------------------------------------------------------
 """Web-Ersatz fuer proggen/Userform_ServoAnim.py (Dialog zu den Makros ServoAnim und ServoAnim2B).
 
@@ -46,7 +47,8 @@ except ImportError:                                   # aeltere Installation ohn
 logger = logging.getLogger(__name__)
 
 JS_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "mll_servocurve.js")
-HELP_URL = "https://wiki.mobaledlib.de/anleitungen/spezial/pyprogramgenerator/servo_animation"
+# HELP_URL = "https://wiki.mobaledlib.de/anleitungen/spezial/pyprogramgenerator/servo_animation"  # v5.12 (entfallen)
+HELP_URL = "https://wiki.mobaledlib.de/anleitungen/mobaledlibstudio/servo_animation"  # v5.12
 TEST_STEP_MS = 40                                     # Schritt des Tests (wie im Original: 40 ms)
 ASK_TIMEOUT = 5
 EVENT_NAME = "mll_servo"                              # globales Ereignis: emitEvent('mll_servo', {cmd, i, t, v}) in mll_servocurve.js  # v1.02

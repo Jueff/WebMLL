@@ -1,13 +1,13 @@
-====== webMobaLedLib – DCC Keyboard ======
-//Seitenstand 1.07 (2026-11-23), gilt für webMobaLedLib 4.79//
+====== MobaLedLib Studio – DCC Keyboard ======
+//Seitenstand 1.09 (2026-11-24), gilt für Version 5.12//
 
 Das **DCC Keyboard** ist eine **virtuelle Tastatur** mit **32 Tasten**. Sie schickt der Lichtmaschine dieselben Schaltbefehle, die sonst eine Digitalzentrale (DCC) schicken würde. So **probierst du deine Schalter** und Effekte aus, **auch ohne Zentrale**.
 
-{{:bilder:anleitungen:webmobaledlib:wz_04_dcckeyboard.png?600|Der Reiter DCC Keyboard}}
+{{:bilder:anleitungen:mobaledlibstudio:wz_04_dcckeyboard.png?600|Der Reiter DCC Keyboard}}
 
 ===== So benutzt du es =====
 
-  - **Voraussetzung:** Auf der Lichtmaschine läuft **schon ein MobaLedLib-Programm** (bei einer **neuen** Lichtmaschine zuerst [[anleitungen:webmobaledlib:pg_arduino|übertragen]]). Du musst nicht vorher auf **Mit Lichtmaschine verbinden** klicken: Die Seite **verbindet sich selbst**, beim ersten Tastendruck (das kann etwas dauern). Es arbeitet im **Effektmodus** ([[anleitungen:webmobaledlib:pg_arduino#die_drei_arten_der_verbindung|Die drei Arten der Verbindung]]).
+  - **Voraussetzung:** Auf der Lichtmaschine läuft **schon ein MobaLedLib-Programm** (bei einer **neuen** Lichtmaschine zuerst [[anleitungen:mobaledlibstudio:pg_arduino|übertragen]]). Du musst nicht vorher auf **Mit Lichtmaschine verbinden** klicken: Die Seite **verbindet sich selbst**, beim ersten Tastendruck (das kann etwas dauern). Es arbeitet im **Effektmodus** ([[anleitungen:mobaledlibstudio:pg_arduino#die_drei_arten_der_verbindung|Die drei Arten der Verbindung]]).
   - Stelle die **DCC-Basisadresse** ein. Die Tasten gehören zu **32 Adressen ab dieser Adresse**.
   - Zu jeder Adresse gibt es **zwei Tasten**: eine **rote** (Kanal 0, mit der Adresse beschriftet) und eine **grüne** (Kanal 1). Sie entsprechen **Rot** und **Grün** an einem DCC-Schalter. Die Tasten stehen in **vier Gruppen zu acht**.
   - Drücke eine Taste: Der Effekt, der mit dieser Adresse verknüpft ist, schaltet.
@@ -16,4 +16,4 @@ Das **DCC Keyboard** ist eine **virtuelle Tastatur** mit **32 Tasten**. Sie schi
 
   * Manchmal reagiert die Lichtmaschine erst auf den **zweiten** Tastendruck.
   * Die Seite ist für das **Smartphone** gebaut (große Tasten) und im **Vollbild** gut zu bedienen.
-  * Die Adressen für deine Effekte trägst du im [[anleitungen:webmobaledlib:programmgenerator|Programmgenerator]] in der Spalte **Adresse oder Name** ein.
+  * Die Adressen für deine Effekte trägst du im [[anleitungen:mobaledlibstudio:programmgenerator|Programmgenerator]] in der Spalte **Adresse oder Name** ein.

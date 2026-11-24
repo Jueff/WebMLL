@@ -1,9 +1,9 @@
-# Datei-Version: 1.35 (2026-11-22) - web_tabs.py
+# Datei-Version: 1.36 (2026-11-24) - web_tabs.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_tabs.py
 # Path:           _web/web_tabs.py
-# Version:        1.35
-# Last Update:    2026-11-22
+# Version:        1.36
+# Last Update:    2026-11-24
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
@@ -43,6 +43,7 @@
 #   1.33  2026-11-21  Version 4.51 (Menue Einstellungen): Option HideColorButton entfaellt (der Knopf Zeilen Faerben ist weg); Hinweis der Option AutoColorRows nennt Menue Tabelle -> Tabelle faerben
 #   1.34  2026-11-21  Version 4.67: Hinweistext nennt Hardware Optionen (vorher Optionen Werkzeuge)
 #   1.35  2026-11-22  Version 4.69: Adresse /ARDUINOEinstellungen entfaellt (die Einstellungen sind ein Fenster im Menue Einstellungen und im Reiter Entwicklungsumgebung)
+#   1.36  2026-11-24  Anzeigename MobaLedLib Studio statt webMobaLedLib in Texten der Oberflaeche. Zeilen mit '# v5.09'
 # ----------------------------------------------------------------------------------------------
 """Adressen der Reiter: Ein Reiter laesst sich direkt aufrufen, zum Beispiel http://localhost:8080/Farbtest. Mit dem Zusatz ?vollbild=1 oeffnet er sich gleich im Vollbild
 (Titel, Menue und Reiterleiste ausgeblendet, siehe web_fullscreen). Die Startseite / bleibt wie sie ist (Programm Generator).
@@ -308,7 +309,8 @@ def not_found_page(path: str) -> str:
     # items = "".join(f'<li><a href="/{name}">/{name}</a>: {html.escape(TAB_TITLES[tab])} (<a href="/{name}?vollbild=1">im Vollbild</a>)</li>' for name, tab in TAB_URLS.items())  # v1.09 (entfallen)
     # return ("<!doctype html><html lang=\"de\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><title>webMobaLedLib: Adresse unbekannt</title>"  # v1.09 (entfallen)
     items = "".join(f'<li><a href="/{name}">/{name}</a>: {html.escape(tr(TAB_TITLES[tab]))} (<a href="/{name}?vollbild=1">{html.escape(tr("im Vollbild"))}</a>)</li>' for name, tab in TAB_URLS.items())  # v1.09
-    return ("<!doctype html><html lang=\"" + html.escape(html_lang()) + "\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><title>" + html.escape(tr("webMobaLedLib: Adresse unbekannt")) + "</title>"  # v1.09
+    # return ("<!doctype html><html lang=\"" + html.escape(html_lang()) + "\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><title>" + html.escape(tr("webMobaLedLib: Adresse unbekannt")) + "</title>"  # v1.09  # v5.09 (entfallen)
+    return ("<!doctype html><html lang=\"" + html.escape(html_lang()) + "\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><title>" + html.escape(tr("MobaLedLib Studio: Adresse unbekannt")) + "</title>"  # v1.09  # v5.09
             "<style>body{font-family:sans-serif;margin:2em;color:#222}li{margin:.4em 0}a{color:#1565c0}</style></head><body>"
             # f"<h1>Die Adresse {shown} gibt es nicht</h1>"  # v1.09 (entfallen)
             # "<p>Die Reiter lassen sich direkt aufrufen. Mit dem Zusatz <code>?vollbild=1</code> öffnet sich der Reiter im Vollbild.</p>"  # v1.09 (entfallen)

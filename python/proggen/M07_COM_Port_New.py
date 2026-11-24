@@ -1,10 +1,10 @@
-# Datei-Version: 1.04 (2026-11-11) - M07_COM_Port_New.py
+# Datei-Version: 1.05 (2026-11-23) - M07_COM_Port_New.py
 # ----------------------------------------------------------------------------------------------
 # Name:           M07_COM_Port_New.py
 # Path:           proggen/M07_COM_Port_New.py
-# Version:        1.04
-# Last Update:    2026-11-11
-# Author:         Harold Linke
+# Version:        1.05
+# Last Update:    2026-11-23
+# Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
 # History of Change:
 #   1.00  2026-10-12  Stand der Umstellung (nicht erfasst)
@@ -12,6 +12,9 @@
 #   1.02  2026-10-28  M12 im Aufruf importieren (nicht am Anfang des Moduls)
 #   1.03  2026-10-28  Zeitgeber der blinkenden LEDs: Pico/ESP32 unter Linux und macOS nicht jede Sekunde oeffnen; Pruefung des Bootmodus darf den Zeitgeber nicht beenden
 #   1.04  2026-11-11  Das Auswahlfenster der Anschluesse nennt den Arduino 'LED Arduino' (vorher 'LED Arduino Arduino': SetArduName haengt 'Arduino' selbst an)
+#   1.05  2026-11-23  Identify (Juergen Winkler): ESP32/Pico (LED-Zentrale, ohne WLAN): die LEDs auf der Hauptplatine der gewaehlten Zentrale blinken (Firmware MLLIdentify.h). Der Zeitgeber
+#                     des Dialogs schickt jede Sekunde '~MLLIDENT 1' (Anschluss kurz oeffnen, senden, schliessen; kein DetectArduino), Ident_Stop() schickt nach dem Dialog '~MLLIDENT 0'. Neuer
+#                     Parameter MainBoard, Hinweistext fuer ESP32/Pico. Zeilen mit '# v1.05'
 # ----------------------------------------------------------------------------------------------
 # -*- coding: utf-8 -*-
 #
@@ -50,6 +53,7 @@
 from vb2py.vbfunctions import *
 from vb2py.vbdebug import *
 from vb2py.vbconstants import *
+import logging  # v1.05
 
 #import proggen.M02_Public as M02
 #import ExcelAPI.X02_Workbook as P01
@@ -186,12 +190,92 @@ __CheckCOMPort_Res = Long()
 on_ledon = False
 PicoWL = False
 _Dialog_for_Arduino = True                                    # der Dialog gehoert zu einem Arduino (blinkende LEDs): nur dann wird der Anschluss jede Sekunde geoeffnet und geprueft  # v1.03
+_Ident_Active = False                                          # v1.05: MLLIDENT aktiv (Dialog offen, MainBoard, Pico/ESP)
 
 
 def _Probe_Port_by_Opening():  # v1.03
     """Soll der Zeitgeber den gewaehlten Anschluss jede Sekunde oeffnen (DetectArduino: DTR umschalten, Antwort abwarten)? Fuer einen Arduino ja; fuer Pico und ESP32 unter
     Linux und macOS nein: Das Oeffnen und Schliessen jede Sekunde stoert deren USB-Anschluss (Pico: verschwindet, bis man ihn neu einsteckt; ESP32: Zugriff verweigert)."""
     return bool(_Dialog_for_Arduino) or P01.checkplatform("Windows") is True  # v1.03
+
+
+def _Ident_Board():  # v1.05
+    """'esp32' oder 'pico', wenn der Dialog der LED-Zentrale gehoert und sie ein ESP32 oder Pico (ohne WLAN) ist, sonst None. Der Typ kann im Dialog umgestellt werden."""
+    if not _Ident_Active:  # v1.05
+        return None  # v1.05
+    try:  # v1.05
+        if InStr(P01.Cells(M02.SH_VARS_ROW, M25.BUILDOP_COL), 'WLAN') > 0:  # v1.05
+            return None  # v1.05
+        Board = M02a.Get_BoardTyp()  # v1.05
+    except Exception:                                                  # noqa: BLE001  # v1.05
+        return None  # v1.05
+    if Board == M02.HT_ESP32:  # v1.05
+        return "esp32"  # v1.05
+    if Board == M02.HT_PICO:  # v1.05
+        return "pico"  # v1.05
+    return None  # v1.05
+
+
+def _Ident_Send_Cmd(Port, Board, Cmd):  # v1.05
+    """Sendet '~MLLIDENT 1' (Start) oder '~MLLIDENT 0' (Stop) an Port.
+    Oeffnet den Anschluss kurz, sendet, schliesst wieder. Kein dauerhaft offener Port, kein Thread."""
+    if Port is None:  # v1.05
+        return  # v1.05
+    try:  # v1.05
+        # Evtl. offene Verbindung des Hauptprogramms kurz trennen  # v1.05
+        old_connection = PG.global_controller.arduino  # v1.05
+        if old_connection is not None and old_connection.is_open and getattr(old_connection, "port", None) == Port:  # v1.05
+            old_connection.close()  # v1.05
+    except Exception:                                          # noqa: BLE001  # v1.05
+        pass  # v1.05
+    try:  # v1.05
+        import serial  # v1.05
+        ser = serial.Serial()  # v1.05
+        ser.port = Port  # v1.05
+        ser.baudrate = 115200  # v1.05
+        ser.timeout = 0  # v1.05
+        ser.write_timeout = 0.5  # v1.05
+        ser.dtr = (Board == "pico")  # v1.05
+        ser.rts = False  # v1.05
+        ser.open()  # v1.05
+        try:  # v1.05
+            ser.reset_input_buffer()  # v1.05
+            ser.write((Cmd + "\n").encode())  # v1.05
+            ser.flush()  # v1.05
+        finally:  # v1.05
+            ser.close()  # v1.05
+    except Exception as e:                                     # noqa: BLE001  # v1.05
+        logging.getLogger(__name__).debug("Ident_Send_Cmd: %s fehlgeschlagen: %s", Port, e)  # v1.05
+
+
+def Ident_Enable(MainBoard):  # v1.05
+    """Aktiviert MLLIDENT fuer den Dialog."""
+    global _Ident_Active  # v1.05
+    _Ident_Active = bool(MainBoard)  # v1.05
+
+
+def Ident_Stop():  # v1.05
+    """Sendet Stop und deaktiviert MLLIDENT (bei OK, Abbruch, Port-Wechsel, vor Upload)."""
+    global _Ident_Active  # v1.05
+    if _Ident_Active:  # v1.05
+        # Port zum Senden des Stop-Commands: aktueller CheckCOMPort (wenn gueltig)  # v1.05
+        Port = M07.CheckCOMPort  # v1.05
+        if Port and Port not in (" ", "999", -1):  # v1.05
+            Board = _Ident_Board()  # v1.05
+            if Board:  # v1.05
+                _Ident_Send_Cmd(Port, Board, "~MLLIDENT 0")  # v1.05
+    _Ident_Active = False  # v1.05
+
+
+def Ident_Send_Keepalive(Port):  # v1.05
+    """Sendet '~MLLIDENT 1' waehrend der Polling-Schleife (__Blink_Arduino_LED)."""
+    if not _Ident_Active:  # v1.05
+        return  # v1.05
+    if not Port or Port in (" ", "999", -1):  # v1.05
+        return  # v1.05
+    Board = _Ident_Board()  # v1.05
+    if Board:  # v1.05
+        _Ident_Send_Cmd(Port, Board, "~MLLIDENT 1")  # v1.05
 
 def __Blink_Arduino_LED():
     global __CheckCOMPort_Res, on_ledon
@@ -223,11 +307,21 @@ def __Blink_Arduino_LED():
         if not M07.CheckCOMPort.startswith("IP:"):
             if M07.CheckCOMPort != "999":
                 # __CheckCOMPort_Res, DeviceSignatur = M07.DetectArduino(M07.CheckCOMPort, BaudRate, HWVersion, SWMajorVersion, SWMinorVersion, DeviceSignatur, 1, PrintDebug= __PRINT_DEBUG)  # v1.03 (entfallen)
-                if _Probe_Port_by_Opening():  # v1.03
-                    __CheckCOMPort_Res, DeviceSignatur = M07.DetectArduino(M07.CheckCOMPort, BaudRate, HWVersion, SWMajorVersion, SWMinorVersion, DeviceSignatur, 1, PrintDebug= __PRINT_DEBUG)  # v1.03
+                # v1.05: ESP32/Pico (LED-Zentrale): MLLIDENT statt DetectArduino.
+                # Fuer Pico/ESP (Zentrale): MLLIDENT KeepAlive ueber Polling senden (Ident_Send_Keepalive),  # v1.05
+                # KEIN DetectArduino (Port-Konflikt vermeiden).  # v1.05
+                # Fuer Arduino (klassisch): DetectArduino mit 50 Baud fuer Blinken.  # v1.05
+                Ident_Send_Keepalive(M07.CheckCOMPort)  # v1.05: MLLIDENT 1 senden falls aktiv
+                IdentBoard = _Ident_Board()  # v1.05
+                if IdentBoard is None:  # Arduino (klassisch): DetectArduino mit 50 Baud fuer Blinken  # v1.05
+                    if _Probe_Port_by_Opening():  # v1.03  # v1.05
+                        __CheckCOMPort_Res, DeviceSignatur = M07.DetectArduino(M07.CheckCOMPort, BaudRate, HWVersion, SWMajorVersion, SWMinorVersion, DeviceSignatur, 1, PrintDebug= __PRINT_DEBUG)  # v1.03  # v1.05
+                    else:  # v1.03  # v1.05
+                        __CheckCOMPort_Res = 1                                   # Pico, ESP32 (Linux, macOS): der Anschluss steht in der Liste, mehr wird nicht geprueft  # v1.03  # v1.05
                 else:  # v1.03
-                    __CheckCOMPort_Res = 1                                   # Pico, ESP32 (Linux, macOS): der Anschluss steht in der Liste, mehr wird nicht geprueft  # v1.03
+                    __CheckCOMPort_Res = 1  # Pico/ESP: MLLIDENT laeuft, Erkennung ok  # v1.05
             else:
+                Ident_Send_Keepalive(None)  # v1.05: 999 = kein Port gewaehlt
                 __CheckCOMPort_Res = - 9
             #*HLApplication.Cursor = xlNorthwestArrow
             #Debug.Print "CheckCOMPort_Res=" & CheckCOMPort_Res & "  CheckCOMPort=" & CheckCOMPort
@@ -243,7 +337,8 @@ def __Blink_Arduino_LED():
             else:
                 F00.Select_COM_Port_UserForm.Show_Status(False, M07.CheckCOMPort_Txt)
         else:
-            F00.Select_COM_Port_UserForm.Show_Status(False, M07.CheckCOMPort_Txt)        
+            Ident_Send_Keepalive(None)  # v1.05
+            F00.Select_COM_Port_UserForm.Show_Status(False, M07.CheckCOMPort_Txt)
         # Test_IsPicoInBootMode()  # v1.03 (entfallen)
         try:                                                               # eine Ausnahme darf den Zeitgeber nicht beenden: er aktualisiert auch die Liste der Anschluesse  # v1.03
             Test_IsPicoInBootMode()  # v1.03
@@ -271,7 +366,8 @@ def __Blink_Arduino_LED():
         Debug.Print("Blink_LED end")
 
 # VB2PY (UntranslatedCode) Argument Passing Semantics / Decorators not supported: ComPort_IO - ByRef 
-def Select_Arduino_w_Blinking_LEDs_Dialog(Caption, Title, Text, Picture, IsArduino, Buttons, ComPort_IO):
+# def Select_Arduino_w_Blinking_LEDs_Dialog(Caption, Title, Text, Picture, IsArduino, Buttons, ComPort_IO):  # v1.05 (entfallen)
+def Select_Arduino_w_Blinking_LEDs_Dialog(Caption, Title, Text, Picture, IsArduino, Buttons, ComPort_IO, MainBoard=False):  # v1.05: MainBoard: der Dialog gehoert zur LED-Zentrale (ESP32/Pico: Erkennen per MLLIdentify)
     # global __CheckCOMPort_Res, PicoWL  # v1.03 (entfallen)
     global __CheckCOMPort_Res, PicoWL, _Dialog_for_Arduino  # v1.03
     fn_return_value = None
@@ -293,6 +389,7 @@ def Select_Arduino_w_Blinking_LEDs_Dialog(Caption, Title, Text, Picture, IsArdui
     #  2: If the middle Button is pressed  (Abort)
     #  3: If the right  Button is pressed  (OK)
     M07.CheckCOMPort = "999" #999
+    Ident_Enable(MainBoard)  # v1.05
     P01.Application.OnTime(1000, __Blink_Arduino_LED)
     #__Blink_Arduino_LED()
     # Return values of Select_COM_Port_UserForm.ShowDialog:
@@ -307,6 +404,7 @@ def Select_Arduino_w_Blinking_LEDs_Dialog(Caption, Title, Text, Picture, IsArdui
         hint = ''
         PicoWL = False # True
     fn_return_value, ComPort_IO = F00.Select_COM_Port_UserForm.ShowDialog(Caption, Title, Text, Picture, Buttons, '', True, hint, ComPort_IO, __PRINT_DEBUG)
+    Ident_Stop()  # v1.05: Blinken beenden und den Anschluss freigeben (z.B. fuer das Hochladen)
     if __CheckCOMPort_Res < 0:
         ComPort_IO = F00.port_set_busy(ComPort_IO)
         # Port is buzy
@@ -375,8 +473,11 @@ def Show_USB_Port_Dialog(ComPortColumn, ComPort):
                
     if IsArduino:
         Text = Text + vbCr + vbCr + M09. Get_Language_Str("OK, wenn die LEDs am richtigen Arduino schnell blinken.")
+    elif Picture in ('ESP32_Image', 'PICO_Image'):  # v1.05
+        Text = Text + vbCr + vbCr + Replace(M09.Get_Language_Str("OK, wenn die LEDs auf der Hauptplatine des richtigen #1# schnell blinken."), "#1#", M08.GetArduName())  # v1.05
       
-    Res, ComPort = Select_Arduino_w_Blinking_LEDs_Dialog(M09.Get_Language_Str("Überprüfung des USB Ports"), M09.Get_Language_Str("Auswahl des COM Ports"), Text, Picture, IsArduino, M09.Get_Language_Str(' ; A Abbruch; O Ok'), ComPort)
+    # Res, ComPort = Select_Arduino_w_Blinking_LEDs_Dialog(M09.Get_Language_Str("Überprüfung des USB Ports"), M09.Get_Language_Str("Auswahl des COM Ports"), Text, Picture, IsArduino, M09.Get_Language_Str(' ; A Abbruch; O Ok'), ComPort)  # v1.05 (entfallen)
+    Res, ComPort = Select_Arduino_w_Blinking_LEDs_Dialog(M09.Get_Language_Str("Überprüfung des USB Ports"), M09.Get_Language_Str("Auswahl des COM Ports"), Text, Picture, IsArduino, M09.Get_Language_Str(' ; A Abbruch; O Ok'), ComPort, MainBoard=(ComPortColumn == M25.COMPort_COL))  # v1.05
     fn_return_value = ( Res == 3 )
     return fn_return_value, ComPort
 

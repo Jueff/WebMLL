@@ -1,5 +1,5 @@
 ====== Seiten Update ======
-//Seitenstand 1.10 (2026-11-23), gilt für webMobaLedLib 4.93//
+//Seitenstand 1.11 (2026-11-24), gilt für Version 5.12//
 
 **Arbeitsseite für den Wiki-Pflegenden, keine Anleitung für Anwender.** Sie listet alle Seiten und Bilder des Kapitels //webMobaLedLib// mit **Links**: Ein Klick auf einen **Seitennamen** öffnet die Seite, ein Klick auf einen **Bildnamen** öffnet das Bild. So lässt sich beim Aktualisieren Zeile für Zeile durchgehen. Diese Seite **nicht** in die Seitenleiste und nicht auf die Startseite aufnehmen.
 
@@ -8,95 +8,95 @@
 ===== Seiten (40, davon 21 inhaltlich neu oder geändert seit Stand 3.93) =====
 
 ^ Seite ^ Titel ^ Seitenstand ^ Seit Paket 3.93 ^ Bearbeiten ^
-| [[anleitungen:webmobaledlib:aktualisieren|aktualisieren]] | webMobaLedLib – Das Programm aktualisieren | 1.02 | **geändert** | [[anleitungen:webmobaledlib:aktualisieren?do=edit|bearbeiten]] |
-| [[anleitungen:webmobaledlib:arduino_ide|arduino_ide]] | webMobaLedLib – Zusätzlich: Arduino IDE | 1.03 | **geändert** | [[anleitungen:webmobaledlib:arduino_ide?do=edit|bearbeiten]] |
-| [[anleitungen:webmobaledlib:begriffe|begriffe]] | webMobaLedLib – Begriffe | 1.07 | nur Seitenstand | [[anleitungen:webmobaledlib:begriffe?do=edit|bearbeiten]] |
-| [[anleitungen:webmobaledlib:erstes_programm|erstes_programm]] | webMobaLedLib – Dein erstes Programm | 1.13 | **geändert** | [[anleitungen:webmobaledlib:erstes_programm?do=edit|bearbeiten]] |
-| [[anleitungen:webmobaledlib:faq|faq]] | webMobaLedLib – Häufige Fragen | 1.01 | **geändert** | [[anleitungen:webmobaledlib:faq?do=edit|bearbeiten]] |
-| [[anleitungen:webmobaledlib:fehlersuche|fehlersuche]] | webMobaLedLib – Fehlersuche | 1.12 | **geändert** | [[anleitungen:webmobaledlib:fehlersuche?do=edit|bearbeiten]] |
-| [[anleitungen:webmobaledlib:fehler_melden|fehler_melden]] | Fehler melden und Wünsche eintragen | 1.01 | nur Seitenstand | [[anleitungen:webmobaledlib:fehler_melden?do=edit|bearbeiten]] |
-| [[anleitungen:webmobaledlib:installation|installation]] | webMobaLedLib – Installation | 1.03 | nur Seitenstand | [[anleitungen:webmobaledlib:installation?do=edit|bearbeiten]] |
-| [[anleitungen:webmobaledlib:led_farbanimation|led_farbanimation]] | webMobaLedLib – LED Farb-Animation | 1.03 | nur Seitenstand | [[anleitungen:webmobaledlib:led_farbanimation?do=edit|bearbeiten]] |
-| [[anleitungen:webmobaledlib:linux|linux]] | webMobaLedLib – Installation unter Linux | 1.04 | nur Seitenstand | [[anleitungen:webmobaledlib:linux?do=edit|bearbeiten]] |
-| [[anleitungen:webmobaledlib:macos|macos]] | webMobaLedLib – Installation auf dem Mac | 1.03 | nur Seitenstand | [[anleitungen:webmobaledlib:macos?do=edit|bearbeiten]] |
-| [[anleitungen:webmobaledlib:mitentwickeln|mitentwickeln]] | Mitentwickeln | 1.01 | nur Seitenstand | [[anleitungen:webmobaledlib:mitentwickeln?do=edit|bearbeiten]] |
-| [[anleitungen:webmobaledlib:modus|modus]] | webMobaLedLib – Anfänger Modus und Experten Modus | 1.03 | **geändert** | [[anleitungen:webmobaledlib:modus?do=edit|bearbeiten]] |
-| [[anleitungen:webmobaledlib:ota|ota]] | webMobaLedLib – ESP32 per WLAN und OTA | 1.06 | **geändert** | [[anleitungen:webmobaledlib:ota?do=edit|bearbeiten]] |
-| [[anleitungen:webmobaledlib:patterngenerator|patterngenerator]] | webMobaLedLib – Der Timeline Editor | 1.02 | nur Seitenstand | [[anleitungen:webmobaledlib:patterngenerator?do=edit|bearbeiten]] |
-| [[anleitungen:webmobaledlib:pg_arduino|pg_arduino]] | webMobaLedLib – Verbinden und Übertragen | 1.16 | **geändert** | [[anleitungen:webmobaledlib:pg_arduino?do=edit|bearbeiten]] |
-| [[anleitungen:webmobaledlib:pg_grafisch|pg_grafisch]] | webMobaLedLib – Die grafische Ansicht | 1.05 | **geändert** | [[anleitungen:webmobaledlib:pg_grafisch?do=edit|bearbeiten]] |
-| [[anleitungen:webmobaledlib:pg_speichern|pg_speichern]] | webMobaLedLib – Speichern und Laden | 1.06 | **geändert** | [[anleitungen:webmobaledlib:pg_speichern?do=edit|bearbeiten]] |
-| [[anleitungen:webmobaledlib:pg_tabelle|pg_tabelle]] | webMobaLedLib – Die Tabelle bedienen | 1.10 | **geändert** | [[anleitungen:webmobaledlib:pg_tabelle?do=edit|bearbeiten]] |
-| [[anleitungen:webmobaledlib:pg_werkzeugleiste|pg_werkzeugleiste]] | webMobaLedLib – Die Werkzeugleiste | 1.12 | **geändert** | [[anleitungen:webmobaledlib:pg_werkzeugleiste?do=edit|bearbeiten]] |
-| [[anleitungen:webmobaledlib:programmgenerator|programmgenerator]] | webMobaLedLib – Der Programmgenerator | 1.09 | **geändert** | [[anleitungen:webmobaledlib:programmgenerator?do=edit|bearbeiten]] |
-| [[anleitungen:webmobaledlib:raspberrypi|raspberrypi]] | webMobaLedLib – Installation auf dem Raspberry Pi | 1.04 | nur Seitenstand | [[anleitungen:webmobaledlib:raspberrypi?do=edit|bearbeiten]] |
-| [[anleitungen:webmobaledlib:seiten_update|seiten_update]] | Seiten Update | 1.07 | **geändert** | [[anleitungen:webmobaledlib:seiten_update?do=edit|bearbeiten]] |
-| [[anleitungen:webmobaledlib:servo_animation|servo_animation]] | webMobaLedLib – Servo Animation | 1.06 | nur Seitenstand | [[anleitungen:webmobaledlib:servo_animation?do=edit|bearbeiten]] |
-| [[anleitungen:webmobaledlib:simulator|simulator]] | webMobaLedLib – LED Simulator | 1.02 | **geändert** | [[anleitungen:webmobaledlib:simulator?do=edit|bearbeiten]] |
-| [[anleitungen:webmobaledlib:einfuehrung|einfuehrung]] | webMobaLedLib – Einführung | 1.09 | nur Seitenstand | [[anleitungen:webmobaledlib:einfuehrung?do=edit|bearbeiten]] |
-| [[anleitungen:webmobaledlib:werkzeuge|werkzeuge]] | webMobaLedLib – Die Werkzeug-Reiter | 1.11 | **geändert** | [[anleitungen:webmobaledlib:werkzeuge?do=edit|bearbeiten]] |
-| [[anleitungen:webmobaledlib:windows|windows]] | webMobaLedLib – Installation unter Windows | 1.03 | nur Seitenstand | [[anleitungen:webmobaledlib:windows?do=edit|bearbeiten]] |
-| [[anleitungen:webmobaledlib:wz_arduino_einstellungen|wz_arduino_einstellungen]] | webMobaLedLib – ARDUINO-IDE Einstellungen | 1.06 | **geändert** | [[anleitungen:webmobaledlib:wz_arduino_einstellungen?do=edit|bearbeiten]] |
-| [[anleitungen:webmobaledlib:wz_datenuebertragung|wz_datenuebertragung]] | webMobaLedLib – Datenübertragung zwischen Rechnern | 1.00 | **neu** | [[anleitungen:webmobaledlib:wz_datenuebertragung?do=edit|bearbeiten]] |
-| [[anleitungen:webmobaledlib:wz_dcckeyboard|wz_dcckeyboard]] | webMobaLedLib – DCC Keyboard | 1.07 | nur Seitenstand | [[anleitungen:webmobaledlib:wz_dcckeyboard?do=edit|bearbeiten]] |
-| [[anleitungen:webmobaledlib:wz_dmservo|wz_dmservo]] | webMobaLedLib – DM Servo Einstellungen | 1.06 | nur Seitenstand | [[anleitungen:webmobaledlib:wz_dmservo?do=edit|bearbeiten]] |
-| [[anleitungen:webmobaledlib:wz_farbtest|wz_farbtest]] | webMobaLedLib – Farb Test | 1.06 | nur Seitenstand | [[anleitungen:webmobaledlib:wz_farbtest?do=edit|bearbeiten]] |
-| [[anleitungen:webmobaledlib:wz_monitor|wz_monitor]] | webMobaLedLib – Serial Monitor | 1.05 | nur Seitenstand | [[anleitungen:webmobaledlib:wz_monitor?do=edit|bearbeiten]] |
-| [[anleitungen:webmobaledlib:wz_netzwerk|wz_netzwerk]] | webMobaLedLib – Zugriff aus dem Netz | 1.05 | **geändert** | [[anleitungen:webmobaledlib:wz_netzwerk?do=edit|bearbeiten]] |
-| [[anleitungen:webmobaledlib:wz_programm_einstellungen|wz_programm_einstellungen]] | webMobaLedLib – Programm Einstellungen | 1.17 | **geändert** | [[anleitungen:webmobaledlib:wz_programm_einstellungen?do=edit|bearbeiten]] |
-| [[anleitungen:webmobaledlib:wz_servo|wz_servo]] | webMobaLedLib – Servo Einstellungen | 1.08 | nur Seitenstand | [[anleitungen:webmobaledlib:wz_servo?do=edit|bearbeiten]] |
-| [[anleitungen:webmobaledlib:wz_sound|wz_sound]] | webMobaLedLib – Sound Test | 1.06 | nur Seitenstand | [[anleitungen:webmobaledlib:wz_sound?do=edit|bearbeiten]] |
-| [[anleitungen:webmobaledlib:wz_z21|wz_z21]] | webMobaLedLib – Z21 Simulator | 1.06 | nur Seitenstand | [[anleitungen:webmobaledlib:wz_z21?do=edit|bearbeiten]] |
-| [[anleitungen:webmobaledlib:erweiterungen|erweiterungen]] | webMobaLedLib – Erweiterungen (MLX) | 1.02 | **neu** | [[anleitungen:webmobaledlib:erweiterungen?do=edit|bearbeiten]] |
+| [[anleitungen:mobaledlibstudio:aktualisieren|aktualisieren]] | webMobaLedLib – Das Programm aktualisieren | 1.02 | **geändert** | [[anleitungen:mobaledlibstudio:aktualisieren?do=edit|bearbeiten]] |
+| [[anleitungen:mobaledlibstudio:arduino_ide|arduino_ide]] | webMobaLedLib – Zusätzlich: Arduino IDE | 1.03 | **geändert** | [[anleitungen:mobaledlibstudio:arduino_ide?do=edit|bearbeiten]] |
+| [[anleitungen:mobaledlibstudio:begriffe|begriffe]] | webMobaLedLib – Begriffe | 1.07 | nur Seitenstand | [[anleitungen:mobaledlibstudio:begriffe?do=edit|bearbeiten]] |
+| [[anleitungen:mobaledlibstudio:erstes_programm|erstes_programm]] | webMobaLedLib – Dein erstes Programm | 1.13 | **geändert** | [[anleitungen:mobaledlibstudio:erstes_programm?do=edit|bearbeiten]] |
+| [[anleitungen:mobaledlibstudio:faq|faq]] | webMobaLedLib – Häufige Fragen | 1.01 | **geändert** | [[anleitungen:mobaledlibstudio:faq?do=edit|bearbeiten]] |
+| [[anleitungen:mobaledlibstudio:fehlersuche|fehlersuche]] | webMobaLedLib – Fehlersuche | 1.12 | **geändert** | [[anleitungen:mobaledlibstudio:fehlersuche?do=edit|bearbeiten]] |
+| [[anleitungen:mobaledlibstudio:fehler_melden|fehler_melden]] | Fehler melden und Wünsche eintragen | 1.01 | nur Seitenstand | [[anleitungen:mobaledlibstudio:fehler_melden?do=edit|bearbeiten]] |
+| [[anleitungen:mobaledlibstudio:installation|installation]] | webMobaLedLib – Installation | 1.03 | nur Seitenstand | [[anleitungen:mobaledlibstudio:installation?do=edit|bearbeiten]] |
+| [[anleitungen:mobaledlibstudio:led_farbanimation|led_farbanimation]] | webMobaLedLib – LED Farb-Animation | 1.03 | nur Seitenstand | [[anleitungen:mobaledlibstudio:led_farbanimation?do=edit|bearbeiten]] |
+| [[anleitungen:mobaledlibstudio:linux|linux]] | webMobaLedLib – Installation unter Linux | 1.04 | nur Seitenstand | [[anleitungen:mobaledlibstudio:linux?do=edit|bearbeiten]] |
+| [[anleitungen:mobaledlibstudio:macos|macos]] | webMobaLedLib – Installation auf dem Mac | 1.03 | nur Seitenstand | [[anleitungen:mobaledlibstudio:macos?do=edit|bearbeiten]] |
+| [[anleitungen:mobaledlibstudio:mitentwickeln|mitentwickeln]] | Mitentwickeln | 1.01 | nur Seitenstand | [[anleitungen:mobaledlibstudio:mitentwickeln?do=edit|bearbeiten]] |
+| [[anleitungen:mobaledlibstudio:modus|modus]] | webMobaLedLib – Anfänger Modus und Experten Modus | 1.03 | **geändert** | [[anleitungen:mobaledlibstudio:modus?do=edit|bearbeiten]] |
+| [[anleitungen:mobaledlibstudio:ota|ota]] | webMobaLedLib – ESP32 per WLAN und OTA | 1.06 | **geändert** | [[anleitungen:mobaledlibstudio:ota?do=edit|bearbeiten]] |
+| [[anleitungen:mobaledlibstudio:patterngenerator|patterngenerator]] | webMobaLedLib – Der Timeline Editor | 1.02 | nur Seitenstand | [[anleitungen:mobaledlibstudio:patterngenerator?do=edit|bearbeiten]] |
+| [[anleitungen:mobaledlibstudio:pg_arduino|pg_arduino]] | webMobaLedLib – Verbinden und Übertragen | 1.16 | **geändert** | [[anleitungen:mobaledlibstudio:pg_arduino?do=edit|bearbeiten]] |
+| [[anleitungen:mobaledlibstudio:pg_grafisch|pg_grafisch]] | webMobaLedLib – Die grafische Ansicht | 1.05 | **geändert** | [[anleitungen:mobaledlibstudio:pg_grafisch?do=edit|bearbeiten]] |
+| [[anleitungen:mobaledlibstudio:pg_speichern|pg_speichern]] | webMobaLedLib – Speichern und Laden | 1.06 | **geändert** | [[anleitungen:mobaledlibstudio:pg_speichern?do=edit|bearbeiten]] |
+| [[anleitungen:mobaledlibstudio:pg_tabelle|pg_tabelle]] | webMobaLedLib – Die Tabelle bedienen | 1.10 | **geändert** | [[anleitungen:mobaledlibstudio:pg_tabelle?do=edit|bearbeiten]] |
+| [[anleitungen:mobaledlibstudio:pg_werkzeugleiste|pg_werkzeugleiste]] | webMobaLedLib – Die Werkzeugleiste | 1.12 | **geändert** | [[anleitungen:mobaledlibstudio:pg_werkzeugleiste?do=edit|bearbeiten]] |
+| [[anleitungen:mobaledlibstudio:programmgenerator|programmgenerator]] | webMobaLedLib – Der Programmgenerator | 1.09 | **geändert** | [[anleitungen:mobaledlibstudio:programmgenerator?do=edit|bearbeiten]] |
+| [[anleitungen:mobaledlibstudio:raspberrypi|raspberrypi]] | webMobaLedLib – Installation auf dem Raspberry Pi | 1.04 | nur Seitenstand | [[anleitungen:mobaledlibstudio:raspberrypi?do=edit|bearbeiten]] |
+| [[anleitungen:mobaledlibstudio:seiten_update|seiten_update]] | Seiten Update | 1.07 | **geändert** | [[anleitungen:mobaledlibstudio:seiten_update?do=edit|bearbeiten]] |
+| [[anleitungen:mobaledlibstudio:servo_animation|servo_animation]] | webMobaLedLib – Servo Animation | 1.06 | nur Seitenstand | [[anleitungen:mobaledlibstudio:servo_animation?do=edit|bearbeiten]] |
+| [[anleitungen:mobaledlibstudio:simulator|simulator]] | webMobaLedLib – LED Simulator | 1.02 | **geändert** | [[anleitungen:mobaledlibstudio:simulator?do=edit|bearbeiten]] |
+| [[anleitungen:mobaledlibstudio:einfuehrung|einfuehrung]] | webMobaLedLib – Einführung | 1.09 | nur Seitenstand | [[anleitungen:mobaledlibstudio:einfuehrung?do=edit|bearbeiten]] |
+| [[anleitungen:mobaledlibstudio:werkzeuge|werkzeuge]] | webMobaLedLib – Die Werkzeug-Reiter | 1.11 | **geändert** | [[anleitungen:mobaledlibstudio:werkzeuge?do=edit|bearbeiten]] |
+| [[anleitungen:mobaledlibstudio:windows|windows]] | webMobaLedLib – Installation unter Windows | 1.03 | nur Seitenstand | [[anleitungen:mobaledlibstudio:windows?do=edit|bearbeiten]] |
+| [[anleitungen:mobaledlibstudio:wz_arduino_einstellungen|wz_arduino_einstellungen]] | webMobaLedLib – ARDUINO-IDE Einstellungen | 1.06 | **geändert** | [[anleitungen:mobaledlibstudio:wz_arduino_einstellungen?do=edit|bearbeiten]] |
+| [[anleitungen:mobaledlibstudio:wz_datenuebertragung|wz_datenuebertragung]] | webMobaLedLib – Datenübertragung zwischen Rechnern | 1.00 | **neu** | [[anleitungen:mobaledlibstudio:wz_datenuebertragung?do=edit|bearbeiten]] |
+| [[anleitungen:mobaledlibstudio:wz_dcckeyboard|wz_dcckeyboard]] | webMobaLedLib – DCC Keyboard | 1.07 | nur Seitenstand | [[anleitungen:mobaledlibstudio:wz_dcckeyboard?do=edit|bearbeiten]] |
+| [[anleitungen:mobaledlibstudio:wz_dmservo|wz_dmservo]] | webMobaLedLib – DM Servo Einstellungen | 1.06 | nur Seitenstand | [[anleitungen:mobaledlibstudio:wz_dmservo?do=edit|bearbeiten]] |
+| [[anleitungen:mobaledlibstudio:wz_farbtest|wz_farbtest]] | webMobaLedLib – Farb Test | 1.06 | nur Seitenstand | [[anleitungen:mobaledlibstudio:wz_farbtest?do=edit|bearbeiten]] |
+| [[anleitungen:mobaledlibstudio:wz_monitor|wz_monitor]] | webMobaLedLib – Serial Monitor | 1.05 | nur Seitenstand | [[anleitungen:mobaledlibstudio:wz_monitor?do=edit|bearbeiten]] |
+| [[anleitungen:mobaledlibstudio:wz_netzwerk|wz_netzwerk]] | webMobaLedLib – Zugriff aus dem Netz | 1.05 | **geändert** | [[anleitungen:mobaledlibstudio:wz_netzwerk?do=edit|bearbeiten]] |
+| [[anleitungen:mobaledlibstudio:wz_programm_einstellungen|wz_programm_einstellungen]] | webMobaLedLib – Programm Einstellungen | 1.17 | **geändert** | [[anleitungen:mobaledlibstudio:wz_programm_einstellungen?do=edit|bearbeiten]] |
+| [[anleitungen:mobaledlibstudio:wz_servo|wz_servo]] | webMobaLedLib – Servo Einstellungen | 1.08 | nur Seitenstand | [[anleitungen:mobaledlibstudio:wz_servo?do=edit|bearbeiten]] |
+| [[anleitungen:mobaledlibstudio:wz_sound|wz_sound]] | webMobaLedLib – Sound Test | 1.06 | nur Seitenstand | [[anleitungen:mobaledlibstudio:wz_sound?do=edit|bearbeiten]] |
+| [[anleitungen:mobaledlibstudio:wz_z21|wz_z21]] | webMobaLedLib – Z21 Simulator | 1.06 | nur Seitenstand | [[anleitungen:mobaledlibstudio:wz_z21?do=edit|bearbeiten]] |
+| [[anleitungen:mobaledlibstudio:erweiterungen|erweiterungen]] | webMobaLedLib – Erweiterungen (MLX) | 1.02 | **neu** | [[anleitungen:mobaledlibstudio:erweiterungen?do=edit|bearbeiten]] |
 
 Die Namen der Dateien im Paket sind die Seitennamen mit der Endung ''.txt'' (zum Beispiel ''pg_arduino.txt'').
 
 ===== Bilder (41, davon 10 neu seit Paket 2.96) =====
 
-Die Bilder liegen im Namensraum ''bilder:anleitungen:webmobaledlib''. Der Link auf den Bildnamen öffnet das Bild. **Neue** Bilder gibt es noch nicht: Der Link führt dann ins Leere, bis du das Bild hochgeladen hast (Medien-Manager).
+Die Bilder liegen im Namensraum ''bilder:anleitungen:mobaledlibstudio''. Der Link auf den Bildnamen öffnet das Bild. **Neue** Bilder gibt es noch nicht: Der Link führt dann ins Leere, bis du das Bild hochgeladen hast (Medien-Manager).
 
 **Bilder neu aufnehmen (Stand 4.79):** Diese Bilder zeigen noch den alten Stand der Oberfläche und sollten neu aufgenommen werden: //erst_04_optionen.png// und //pg_03_werkzeugleiste.png// (Knopf **Hardware Optionen**, neue Reiter), //pg_09_verbinden.png// (Status direkt neben dem Knopf, Pfeil), //pg_08_dateimenue.png// (neue Menüpunkte), //wz_07_programm_einstellungen.png// (jetzt Fenster je Gruppe), //wz_06_arduino_einstellungen.png// (Fenster mit Speichern und Abbrechen) und //pg_01_fenster.png// (Menü **Einstellungen**, kein Menü **Lichtmaschine**). Neue Bilder für den Reiter **ESP Einstellungen** und die Auswahl **DHCP / Statische IP-Adresse** im Reiter **WLAN (OTA)** gibt es noch nicht.
 
 ^ Bild ^ Seite ^ Inhalt ^ Seit Paket 2.96 ^
-| {{:bilder:anleitungen:webmobaledlib:akt_01_update.png?linkonly|akt_01_update.png}} | [[anleitungen:webmobaledlib:aktualisieren|aktualisieren]] | Das Fenster Update webMobaLedLib | **neu** |
-| {{:bilder:anleitungen:webmobaledlib:erst_01_start.png?linkonly|erst_01_start.png}} | [[anleitungen:webmobaledlib:erstes_programm|erstes_programm]] | Das Programm nach dem Start | – |
-| {{:bilder:anleitungen:webmobaledlib:erst_02_programmgenerator.png?linkonly|erst_02_programmgenerator.png}} | [[anleitungen:webmobaledlib:erstes_programm|erstes_programm]] | Der Reiter Programm Generator | **neu** |
-| {{:bilder:anleitungen:webmobaledlib:erst_03_blatt.png?linkonly|erst_03_blatt.png}} | [[anleitungen:webmobaledlib:erstes_programm|erstes_programm]] | Die Tabellenblätter unter der Tabelle: DCC, Selectrix, CAN, LNet | **neu** |
-| {{:bilder:anleitungen:webmobaledlib:erst_04_optionen.png?linkonly|erst_04_optionen.png}} | [[anleitungen:webmobaledlib:erstes_programm|erstes_programm]] | Hardware Optionen, Reiter Lichtmaschine: Board wählen und USB Port erkennen | **neu** |
-| {{:bilder:anleitungen:webmobaledlib:erst_05_makro.png?linkonly|erst_05_makro.png}} | [[anleitungen:webmobaledlib:erstes_programm|erstes_programm]] | Die Tabelle mit der Zeile Heartbeat LED | **neu** |
-| {{:bilder:anleitungen:webmobaledlib:erst_06_uebertragen.png?linkonly|erst_06_uebertragen.png}} | [[anleitungen:webmobaledlib:erstes_programm|erstes_programm]] | Das Fenster beim Übertragen | **neu** |
-| {{:bilder:anleitungen:webmobaledlib:led_01_dialog.png?linkonly|led_01_dialog.png}} | [[anleitungen:webmobaledlib:led_farbanimation|led_farbanimation]] | Der Dialog LED Farb-Animation mit den Einstellungen links und den drei Kurven rechts | – |
-| {{:bilder:anleitungen:webmobaledlib:led_02_kurven.png?linkonly|led_02_kurven.png}} | [[anleitungen:webmobaledlib:led_farbanimation|led_farbanimation]] | Die drei Kurven Rot, Grün und Blau, die aktive Kurve ist kräftig gezeichnet | – |
-| {{:bilder:anleitungen:webmobaledlib:linux_01_ordner.png?linkonly|linux_01_ordner.png}} | [[anleitungen:webmobaledlib:linux|linux]] | Der Ordner mobaledlib mit dem Ordner python | – |
-| {{:bilder:anleitungen:webmobaledlib:linux_02_terminal.png?linkonly|linux_02_terminal.png}} | [[anleitungen:webmobaledlib:linux|linux]] | Das Terminal mit dem Befehl bash install_linux.sh | – |
-| {{:bilder:anleitungen:webmobaledlib:mac_01_ordner.png?linkonly|mac_01_ordner.png}} | [[anleitungen:webmobaledlib:macos|macos]] | Der Ordner mobaledlib mit dem Ordner python | – |
-| {{:bilder:anleitungen:webmobaledlib:mac_02_terminal.png?linkonly|mac_02_terminal.png}} | [[anleitungen:webmobaledlib:macos|macos]] | Das Terminal mit dem Befehl bash und der hineingezogenen Datei | – |
-| {{:bilder:anleitungen:webmobaledlib:pat_01_ueberblick.png?linkonly|pat_01_ueberblick.png}} | [[anleitungen:webmobaledlib:patterngenerator|patterngenerator]] | Der Patterngenerator | **neu** |
-| {{:bilder:anleitungen:webmobaledlib:pat_02_beispiele.png?linkonly|pat_02_beispiele.png}} | [[anleitungen:webmobaledlib:patterngenerator|patterngenerator]] | Optionen: Beispiele laden | **neu** |
-| {{:bilder:anleitungen:webmobaledlib:pat_03_test.png?linkonly|pat_03_test.png}} | [[anleitungen:webmobaledlib:patterngenerator|patterngenerator]] | Das Fenster Test Pattern | **neu** |
-| {{:bilder:anleitungen:webmobaledlib:pat_04_export.png?linkonly|pat_04_export.png}} | [[anleitungen:webmobaledlib:patterngenerator|patterngenerator]] | Das gelbe Band beim Export zu ProgGen | **neu** |
-| {{:bilder:anleitungen:webmobaledlib:pg_09_verbinden.png?linkonly|pg_09_verbinden.png}} | [[anleitungen:webmobaledlib:pg_arduino|pg_arduino]] | Oben rechts: der Status und der Knopf Mit Lichtmaschine verbinden | – |
-| {{:bilder:anleitungen:webmobaledlib:pg_06_grafik_ketten.png?linkonly|pg_06_grafik_ketten.png}} | [[anleitungen:webmobaledlib:pg_grafisch|pg_grafisch]] | Die Grafik: Ketten mit Kästchen und der Makrobaum links | – |
-| {{:bilder:anleitungen:webmobaledlib:pg_07_grafik_anlage.png?linkonly|pg_07_grafik_anlage.png}} | [[anleitungen:webmobaledlib:pg_grafisch|pg_grafisch]] | Die Anlagenansicht: Kästchen auf einem Foto der Anlage | – |
-| {{:bilder:anleitungen:webmobaledlib:pg_08_dateimenue.png?linkonly|pg_08_dateimenue.png}} | [[anleitungen:webmobaledlib:pg_speichern|pg_speichern]] | Das Menü Datei | – |
-| {{:bilder:anleitungen:webmobaledlib:pg_02_makroauswahl.png?linkonly|pg_02_makroauswahl.png}} | [[anleitungen:webmobaledlib:pg_tabelle|pg_tabelle]] | Die Makroauswahl mit der Liste der Makros | – |
-| {{:bilder:anleitungen:webmobaledlib:pg_05_blattreiter.png?linkonly|pg_05_blattreiter.png}} | [[anleitungen:webmobaledlib:pg_tabelle|pg_tabelle]] | Die Blattreiter am unteren Rand der Tabelle | – |
-| {{:bilder:anleitungen:webmobaledlib:pg_03_werkzeugleiste.png?linkonly|pg_03_werkzeugleiste.png}} | [[anleitungen:webmobaledlib:pg_werkzeugleiste|pg_werkzeugleiste]] | Die Werkzeugleiste des Programmgenerators | – |
-| {{:bilder:anleitungen:webmobaledlib:pg_01_fenster.png?linkonly|pg_01_fenster.png}} | [[anleitungen:webmobaledlib:programmgenerator|programmgenerator]] | Das Fenster des Programmgenerators mit den beschrifteten Bereichen | – |
-| {{:bilder:anleitungen:webmobaledlib:pi_01_terminal.png?linkonly|pi_01_terminal.png}} | [[anleitungen:webmobaledlib:raspberrypi|raspberrypi]] | Das Terminal mit dem Befehl sudo bash install_pi.sh | – |
-| {{:bilder:anleitungen:webmobaledlib:pi_02_programm.png?linkonly|pi_02_programm.png}} | [[anleitungen:webmobaledlib:raspberrypi|raspberrypi]] | Die webMobaLedLib auf dem Raspberry Pi | – |
-| {{:bilder:anleitungen:webmobaledlib:servo_01_dialog.png?linkonly|servo_01_dialog.png}} | [[anleitungen:webmobaledlib:servo_animation|servo_animation]] | Der Dialog Servo Animation mit den Einstellungen links und der Kurve rechts | – |
-| {{:bilder:anleitungen:webmobaledlib:servo_02_kurve_individuell.png?linkonly|servo_02_kurve_individuell.png}} | [[anleitungen:webmobaledlib:servo_animation|servo_animation]] | Eine individuelle Kurve mit ziehbaren Punkten | – |
-| {{:bilder:anleitungen:webmobaledlib:start_01_oberflaeche.png?linkonly|start_01_oberflaeche.png}} | [[anleitungen:webmobaledlib:einfuehrung|einfuehrung]] | Die webMobaLedLib im Browser | – |
-| {{:bilder:anleitungen:webmobaledlib:win_01_download.png?linkonly|win_01_download.png}} | [[anleitungen:webmobaledlib:windows|windows]] | Die heruntergeladene Datei im Ordner Downloads | – |
-| {{:bilder:anleitungen:webmobaledlib:win_02_extrahieren.png?linkonly|win_02_extrahieren.png}} | [[anleitungen:webmobaledlib:windows|windows]] | Das Fenster Alle extrahieren mit dem richtigen Zielpfad | – |
-| {{:bilder:anleitungen:webmobaledlib:win_03_installation.png?linkonly|win_03_installation.png}} | [[anleitungen:webmobaledlib:windows|windows]] | Das Installationsfenster während der Installation | – |
-| {{:bilder:anleitungen:webmobaledlib:win_04_programm.png?linkonly|win_04_programm.png}} | [[anleitungen:webmobaledlib:windows|windows]] | Die webMobaLedLib im Browser | – |
-| {{:bilder:anleitungen:webmobaledlib:wz_06_arduino_einstellungen.png?linkonly|wz_06_arduino_einstellungen.png}} | [[anleitungen:webmobaledlib:wz_arduino_einstellungen|wz_arduino_einstellungen]] | Der Reiter ARDUINO Einstellungen | – |
-| {{:bilder:anleitungen:webmobaledlib:wz_04_dcckeyboard.png?linkonly|wz_04_dcckeyboard.png}} | [[anleitungen:webmobaledlib:wz_dcckeyboard|wz_dcckeyboard]] | Der Reiter DCC Keyboard | – |
-| {{:bilder:anleitungen:webmobaledlib:wz_01_farbtest.png?linkonly|wz_01_farbtest.png}} | [[anleitungen:webmobaledlib:wz_farbtest|wz_farbtest]] | Der Reiter Farb Test | – |
-| {{:bilder:anleitungen:webmobaledlib:wz_05_monitor.png?linkonly|wz_05_monitor.png}} | [[anleitungen:webmobaledlib:wz_monitor|wz_monitor]] | Der Reiter Serial Monitor | – |
-| {{:bilder:anleitungen:webmobaledlib:wz_07_programm_einstellungen.png?linkonly|wz_07_programm_einstellungen.png}} | [[anleitungen:webmobaledlib:wz_programm_einstellungen|wz_programm_einstellungen]] | Der Reiter Programm Einstellungen | – |
-| {{:bilder:anleitungen:webmobaledlib:wz_02_servo.png?linkonly|wz_02_servo.png}} | [[anleitungen:webmobaledlib:wz_servo|wz_servo]] | Der Reiter Servo Einstellungen | – |
-| {{:bilder:anleitungen:webmobaledlib:wz_03_sound.png?linkonly|wz_03_sound.png}} | [[anleitungen:webmobaledlib:wz_sound|wz_sound]] | Der Reiter Sound Test | – |
+| {{:bilder:anleitungen:mobaledlibstudio:akt_01_update.png?linkonly|akt_01_update.png}} | [[anleitungen:mobaledlibstudio:aktualisieren|aktualisieren]] | Das Fenster Update webMobaLedLib | **neu** |
+| {{:bilder:anleitungen:mobaledlibstudio:erst_01_start.png?linkonly|erst_01_start.png}} | [[anleitungen:mobaledlibstudio:erstes_programm|erstes_programm]] | Das Programm nach dem Start | – |
+| {{:bilder:anleitungen:mobaledlibstudio:erst_02_programmgenerator.png?linkonly|erst_02_programmgenerator.png}} | [[anleitungen:mobaledlibstudio:erstes_programm|erstes_programm]] | Der Reiter Programm Generator | **neu** |
+| {{:bilder:anleitungen:mobaledlibstudio:erst_03_blatt.png?linkonly|erst_03_blatt.png}} | [[anleitungen:mobaledlibstudio:erstes_programm|erstes_programm]] | Die Tabellenblätter unter der Tabelle: DCC, Selectrix, CAN, LNet | **neu** |
+| {{:bilder:anleitungen:mobaledlibstudio:erst_04_optionen.png?linkonly|erst_04_optionen.png}} | [[anleitungen:mobaledlibstudio:erstes_programm|erstes_programm]] | Hardware Optionen, Reiter Lichtmaschine: Board wählen und USB Port erkennen | **neu** |
+| {{:bilder:anleitungen:mobaledlibstudio:erst_05_makro.png?linkonly|erst_05_makro.png}} | [[anleitungen:mobaledlibstudio:erstes_programm|erstes_programm]] | Die Tabelle mit der Zeile Heartbeat LED | **neu** |
+| {{:bilder:anleitungen:mobaledlibstudio:erst_06_uebertragen.png?linkonly|erst_06_uebertragen.png}} | [[anleitungen:mobaledlibstudio:erstes_programm|erstes_programm]] | Das Fenster beim Übertragen | **neu** |
+| {{:bilder:anleitungen:mobaledlibstudio:led_01_dialog.png?linkonly|led_01_dialog.png}} | [[anleitungen:mobaledlibstudio:led_farbanimation|led_farbanimation]] | Der Dialog LED Farb-Animation mit den Einstellungen links und den drei Kurven rechts | – |
+| {{:bilder:anleitungen:mobaledlibstudio:led_02_kurven.png?linkonly|led_02_kurven.png}} | [[anleitungen:mobaledlibstudio:led_farbanimation|led_farbanimation]] | Die drei Kurven Rot, Grün und Blau, die aktive Kurve ist kräftig gezeichnet | – |
+| {{:bilder:anleitungen:mobaledlibstudio:linux_01_ordner.png?linkonly|linux_01_ordner.png}} | [[anleitungen:mobaledlibstudio:linux|linux]] | Der Ordner mobaledlib mit dem Ordner python | – |
+| {{:bilder:anleitungen:mobaledlibstudio:linux_02_terminal.png?linkonly|linux_02_terminal.png}} | [[anleitungen:mobaledlibstudio:linux|linux]] | Das Terminal mit dem Befehl bash install_linux.sh | – |
+| {{:bilder:anleitungen:mobaledlibstudio:mac_01_ordner.png?linkonly|mac_01_ordner.png}} | [[anleitungen:mobaledlibstudio:macos|macos]] | Der Ordner mobaledlib mit dem Ordner python | – |
+| {{:bilder:anleitungen:mobaledlibstudio:mac_02_terminal.png?linkonly|mac_02_terminal.png}} | [[anleitungen:mobaledlibstudio:macos|macos]] | Das Terminal mit dem Befehl bash und der hineingezogenen Datei | – |
+| {{:bilder:anleitungen:mobaledlibstudio:pat_01_ueberblick.png?linkonly|pat_01_ueberblick.png}} | [[anleitungen:mobaledlibstudio:patterngenerator|patterngenerator]] | Der Patterngenerator | **neu** |
+| {{:bilder:anleitungen:mobaledlibstudio:pat_02_beispiele.png?linkonly|pat_02_beispiele.png}} | [[anleitungen:mobaledlibstudio:patterngenerator|patterngenerator]] | Optionen: Beispiele laden | **neu** |
+| {{:bilder:anleitungen:mobaledlibstudio:pat_03_test.png?linkonly|pat_03_test.png}} | [[anleitungen:mobaledlibstudio:patterngenerator|patterngenerator]] | Das Fenster Test Pattern | **neu** |
+| {{:bilder:anleitungen:mobaledlibstudio:pat_04_export.png?linkonly|pat_04_export.png}} | [[anleitungen:mobaledlibstudio:patterngenerator|patterngenerator]] | Das gelbe Band beim Export zu ProgGen | **neu** |
+| {{:bilder:anleitungen:mobaledlibstudio:pg_09_verbinden.png?linkonly|pg_09_verbinden.png}} | [[anleitungen:mobaledlibstudio:pg_arduino|pg_arduino]] | Oben rechts: der Status und der Knopf Mit Lichtmaschine verbinden | – |
+| {{:bilder:anleitungen:mobaledlibstudio:pg_06_grafik_ketten.png?linkonly|pg_06_grafik_ketten.png}} | [[anleitungen:mobaledlibstudio:pg_grafisch|pg_grafisch]] | Die Grafik: Ketten mit Kästchen und der Makrobaum links | – |
+| {{:bilder:anleitungen:mobaledlibstudio:pg_07_grafik_anlage.png?linkonly|pg_07_grafik_anlage.png}} | [[anleitungen:mobaledlibstudio:pg_grafisch|pg_grafisch]] | Die Anlagenansicht: Kästchen auf einem Foto der Anlage | – |
+| {{:bilder:anleitungen:mobaledlibstudio:pg_08_dateimenue.png?linkonly|pg_08_dateimenue.png}} | [[anleitungen:mobaledlibstudio:pg_speichern|pg_speichern]] | Das Menü Datei | – |
+| {{:bilder:anleitungen:mobaledlibstudio:pg_02_makroauswahl.png?linkonly|pg_02_makroauswahl.png}} | [[anleitungen:mobaledlibstudio:pg_tabelle|pg_tabelle]] | Die Makroauswahl mit der Liste der Makros | – |
+| {{:bilder:anleitungen:mobaledlibstudio:pg_05_blattreiter.png?linkonly|pg_05_blattreiter.png}} | [[anleitungen:mobaledlibstudio:pg_tabelle|pg_tabelle]] | Die Blattreiter am unteren Rand der Tabelle | – |
+| {{:bilder:anleitungen:mobaledlibstudio:pg_03_werkzeugleiste.png?linkonly|pg_03_werkzeugleiste.png}} | [[anleitungen:mobaledlibstudio:pg_werkzeugleiste|pg_werkzeugleiste]] | Die Werkzeugleiste des Programmgenerators | – |
+| {{:bilder:anleitungen:mobaledlibstudio:pg_01_fenster.png?linkonly|pg_01_fenster.png}} | [[anleitungen:mobaledlibstudio:programmgenerator|programmgenerator]] | Das Fenster des Programmgenerators mit den beschrifteten Bereichen | – |
+| {{:bilder:anleitungen:mobaledlibstudio:pi_01_terminal.png?linkonly|pi_01_terminal.png}} | [[anleitungen:mobaledlibstudio:raspberrypi|raspberrypi]] | Das Terminal mit dem Befehl sudo bash install_pi.sh | – |
+| {{:bilder:anleitungen:mobaledlibstudio:pi_02_programm.png?linkonly|pi_02_programm.png}} | [[anleitungen:mobaledlibstudio:raspberrypi|raspberrypi]] | Die webMobaLedLib auf dem Raspberry Pi | – |
+| {{:bilder:anleitungen:mobaledlibstudio:servo_01_dialog.png?linkonly|servo_01_dialog.png}} | [[anleitungen:mobaledlibstudio:servo_animation|servo_animation]] | Der Dialog Servo Animation mit den Einstellungen links und der Kurve rechts | – |
+| {{:bilder:anleitungen:mobaledlibstudio:servo_02_kurve_individuell.png?linkonly|servo_02_kurve_individuell.png}} | [[anleitungen:mobaledlibstudio:servo_animation|servo_animation]] | Eine individuelle Kurve mit ziehbaren Punkten | – |
+| {{:bilder:anleitungen:mobaledlibstudio:start_01_oberflaeche.png?linkonly|start_01_oberflaeche.png}} | [[anleitungen:mobaledlibstudio:einfuehrung|einfuehrung]] | Die webMobaLedLib im Browser | – |
+| {{:bilder:anleitungen:mobaledlibstudio:win_01_download.png?linkonly|win_01_download.png}} | [[anleitungen:mobaledlibstudio:windows|windows]] | Die heruntergeladene Datei im Ordner Downloads | – |
+| {{:bilder:anleitungen:mobaledlibstudio:win_02_extrahieren.png?linkonly|win_02_extrahieren.png}} | [[anleitungen:mobaledlibstudio:windows|windows]] | Das Fenster Alle extrahieren mit dem richtigen Zielpfad | – |
+| {{:bilder:anleitungen:mobaledlibstudio:win_03_installation.png?linkonly|win_03_installation.png}} | [[anleitungen:mobaledlibstudio:windows|windows]] | Das Installationsfenster während der Installation | – |
+| {{:bilder:anleitungen:mobaledlibstudio:win_04_programm.png?linkonly|win_04_programm.png}} | [[anleitungen:mobaledlibstudio:windows|windows]] | Die webMobaLedLib im Browser | – |
+| {{:bilder:anleitungen:mobaledlibstudio:wz_06_arduino_einstellungen.png?linkonly|wz_06_arduino_einstellungen.png}} | [[anleitungen:mobaledlibstudio:wz_arduino_einstellungen|wz_arduino_einstellungen]] | Der Reiter ARDUINO Einstellungen | – |
+| {{:bilder:anleitungen:mobaledlibstudio:wz_04_dcckeyboard.png?linkonly|wz_04_dcckeyboard.png}} | [[anleitungen:mobaledlibstudio:wz_dcckeyboard|wz_dcckeyboard]] | Der Reiter DCC Keyboard | – |
+| {{:bilder:anleitungen:mobaledlibstudio:wz_01_farbtest.png?linkonly|wz_01_farbtest.png}} | [[anleitungen:mobaledlibstudio:wz_farbtest|wz_farbtest]] | Der Reiter Farb Test | – |
+| {{:bilder:anleitungen:mobaledlibstudio:wz_05_monitor.png?linkonly|wz_05_monitor.png}} | [[anleitungen:mobaledlibstudio:wz_monitor|wz_monitor]] | Der Reiter Serial Monitor | – |
+| {{:bilder:anleitungen:mobaledlibstudio:wz_07_programm_einstellungen.png?linkonly|wz_07_programm_einstellungen.png}} | [[anleitungen:mobaledlibstudio:wz_programm_einstellungen|wz_programm_einstellungen]] | Der Reiter Programm Einstellungen | – |
+| {{:bilder:anleitungen:mobaledlibstudio:wz_02_servo.png?linkonly|wz_02_servo.png}} | [[anleitungen:mobaledlibstudio:wz_servo|wz_servo]] | Der Reiter Servo Einstellungen | – |
+| {{:bilder:anleitungen:mobaledlibstudio:wz_03_sound.png?linkonly|wz_03_sound.png}} | [[anleitungen:mobaledlibstudio:wz_sound|wz_sound]] | Der Reiter Sound Test | – |
 

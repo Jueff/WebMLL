@@ -1,13 +1,13 @@
-====== webMobaLedLib – Farb Test ======
-//Seitenstand 1.06 (2026-11-23), gilt für webMobaLedLib 4.79//
+====== MobaLedLib Studio – Farb Test ======
+//Seitenstand 1.08 (2026-11-24), gilt für Version 5.12//
 
 Mit dem **Farb Test** suchst du **Farben** aus und siehst sie sofort an einer LED an deiner Anlage. Das ist wichtig, weil LEDs Farben anders zeigen als der Bildschirm. Gefundene Farben kannst du in einer **Palette** sammeln.
 
-{{:bilder:anleitungen:webmobaledlib:wz_01_farbtest.png?700|Der Reiter Farb Test}}
+{{:bilder:anleitungen:mobaledlibstudio:wz_01_farbtest.png?700|Der Reiter Farb Test}}
 
 ===== So benutzt du ihn =====
 
-  - **Voraussetzung:** Auf der Lichtmaschine läuft **schon ein MobaLedLib-Programm** (bei einer **neuen** Lichtmaschine zuerst [[anleitungen:webmobaledlib:pg_arduino|übertragen]]). Du musst nicht vorher auf **Mit Lichtmaschine verbinden** klicken: Das Werkzeug **verbindet sich bei Bedarf selbst**. Es arbeitet im **Direktmodus** ([[anleitungen:webmobaledlib:pg_arduino#die_drei_arten_der_verbindung|Die drei Arten der Verbindung]]).
+  - **Voraussetzung:** Auf der Lichtmaschine läuft **schon ein MobaLedLib-Programm** (bei einer **neuen** Lichtmaschine zuerst [[anleitungen:mobaledlibstudio:pg_arduino|übertragen]]). Du musst nicht vorher auf **Mit Lichtmaschine verbinden** klicken: Das Werkzeug **verbindet sich bei Bedarf selbst**. Es arbeitet im **Direktmodus** ([[anleitungen:mobaledlibstudio:pg_arduino#die_drei_arten_der_verbindung|Die drei Arten der Verbindung]]).
   - Trage bei **LED Adresse** die **Nummer der LED** ein, die leuchten soll, bei **Led Kanal** den Kanal (die LED-Kette) und bei **Anzahl** die Zahl der LEDs.
   - Wähle eine Farbe: **Klicke auf das Farbrad**. Die **Leiste** daneben stellt die Helligkeit ein. Die LED zeigt die Farbe sofort an.
   - Du kannst die Farbe auch **genau eintippen**: als **RGB**-Werte (Rot, Grün, Blau), als **HSV**-Werte (Farbton, Sättigung, Helligkeit), als **Hexa**-Wert oder als **Farbtemperatur**. Alle Felder gehören zusammen: Ändert sich eines, ändern sich die anderen.
@@ -31,6 +31,6 @@ Wenn du den Farb Test **aus einem Makro** heraus öffnest (zum Beispiel beim Mak
 
 ===== Die LED-Farbkorrektur =====
 
-LEDs mischen Farben nicht so wie ein Bildschirm. Die **LED-Farbkorrektur** in den [[anleitungen:webmobaledlib:wz_programm_einstellungen|Programm Einstellungen]] gleicht das aus. Das Farbrad und die Palette passen sich daran an.
+LEDs mischen Farben nicht so wie ein Bildschirm. Die **LED-Farbkorrektur** in den [[anleitungen:mobaledlibstudio:wz_programm_einstellungen|Programm Einstellungen]] gleicht das aus. Das Farbrad und die Palette passen sich daran an.
 
 Mehr zum Thema Farben: [[anleitungen:prog_gen:farbtabelle|Farben definieren]] und [[anleitungen:theorie:prinzip_rgb_leds|Erklärung RGB-LEDs]].

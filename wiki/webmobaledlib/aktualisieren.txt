@@ -1,11 +1,11 @@
-====== webMobaLedLib – Das Programm aktualisieren ======
-//Seitenstand 1.02 (2026-11-23), gilt für webMobaLedLib 4.79//
+====== MobaLedLib Studio – Das Programm aktualisieren ======
+//Seitenstand 1.05 (2026-11-24), gilt für Version 5.12//
 
 Neue Versionen bringen neue Funktionen und beheben Fehler. Das Programm **aktualisiert sich selbst**: Du musst nichts von Hand kopieren. **Deine Tabellen und Einstellungen bleiben erhalten**, weil sie nicht im Programmordner liegen, sondern im **Datenordner** (siehe unten).
 
 ===== Das Wichtigste in drei Schritten =====
 
-  - Öffne das Menü **Hilfe → Update webMobaLedLib …**.
+  - Öffne das Menü **Hilfe → Update MobaLedLib Studio …**.
   - Prüfe die Liste und klicke auf **Aktualisieren**.
   - Klicke danach auf **Neu starten** und lade die Seite im Browser mit **Strg + F5** neu.
 
@@ -13,12 +13,12 @@ Beende das Programm dafür **nicht** von Hand: Du aktualisierst im laufenden Pro
 
 ===== Schritt für Schritt =====
 
-  - **Hilfe → Update webMobaLedLib …** öffnet ein Fenster. Das Programm lädt die **neueste fertige Version** von GitHub und vergleicht **jede Datei** mit deiner Installation.
+  - **Hilfe → Update MobaLedLib Studio …** öffnet ein Fenster. Das Programm lädt die **neueste fertige Version** von GitHub und vergleicht **jede Datei** mit deiner Installation.
   - Das Fenster zeigt, **welche Version** gefunden wurde und **was sich ändert**: neue, geänderte und zu löschende Dateien, jeweils mit der Versionsnummer. Es passiert **noch nichts**, bis du **Aktualisieren** klickst.
   - Nach dem Aktualisieren läuft noch die **alte Version**. **Neu starten** sichert deine Tabellen und startet das Programm neu. Der offene Reiter lädt sich selbst neu. Auf dem **Raspberry Pi** startet der Dienst von selbst neu.
   - Lade die Seite im Browser mit **Strg + F5** neu. Die **Versionsnummer** steht unter dem Titel der Oberfläche. Oben darf **keine rote Meldung** stehen.
 
-{{:bilder:anleitungen:webmobaledlib:akt_01_update.png?600|Das Fenster Update webMobaLedLib}}
+{{:bilder:anleitungen:mobaledlibstudio:akt_01_update.png?600|Das Fenster Update MobaLedLib Studio}}
 
 ===== Ist das Aktualisieren sicher? =====
 
@@ -53,17 +53,17 @@ Dort liegen deine **Einstellungen**, die **Sicherung der Tabellen**, das **Passw
 
 ===== Update aus einer sehr alten Version (Windows und macOS) =====
 
-Das Update führt der Programmcode der **installierten** Version aus. Versionen **bis 2.97** löschen am Ende alle Dateien, die das neue Paket nicht kennt, auch wenn dieselbe Datei dort nur in **anderer Schreibweise** steht (zum Beispiel ''InfoB.png'' und ''infoB.png'', unter Windows und macOS ist das **dieselbe Datei**). Dann meldet das Update **„nach dem Schreiben nicht lesbar“** und stellt den alten Stand wieder her. **Ab Version 3.00** enthält das Paket die alten Schreibweisen zusätzlich, das Update klappt dann ohne Meldung. Erscheint sie trotzdem: Beende das Programm und entpacke das Paket **von Hand** (siehe [[anleitungen:webmobaledlib:fehlersuche#wenn_nichts_mehr_geht|Fehlersuche: Wenn nichts mehr geht]]). Danach ist das Update-Programm neu genug.
+Das Update führt der Programmcode der **installierten** Version aus. Versionen **bis 2.97** löschen am Ende alle Dateien, die das neue Paket nicht kennt, auch wenn dieselbe Datei dort nur in **anderer Schreibweise** steht (zum Beispiel ''InfoB.png'' und ''infoB.png'', unter Windows und macOS ist das **dieselbe Datei**). Dann meldet das Update **„nach dem Schreiben nicht lesbar“** und stellt den alten Stand wieder her. **Ab Version 3.00** enthält das Paket die alten Schreibweisen zusätzlich, das Update klappt dann ohne Meldung. Erscheint sie trotzdem: Beende das Programm und entpacke das Paket **von Hand** (siehe [[anleitungen:mobaledlibstudio:fehlersuche#wenn_nichts_mehr_geht|Fehlersuche: Wenn nichts mehr geht]]). Danach ist das Update-Programm neu genug.
 
 ===== Besonderheiten der Systeme =====
 
   * **Windows, macOS, Linux:** Haben sich die benötigten Python-Pakete geändert, aktualisiert das Programm sie selbst.
   * **Raspberry Pi:** Der Dienst startet nach dem Update von selbst neu. Haben sich Dateien im Ordner **pi** geändert, führe einmal ''sudo bash ~/mobaledlib/python/pi/install_pi.sh --no-check'' aus (die installierte Dienstdatei ist eine Kopie).
-  * **Verknüpfung und Name:** Das Programm heißt seit Version 1.31 **webMobaLedLib** (vorher pyMobaLedLib). Nach einem Update über das Menü heißen Symbol und Starter noch wie bisher. Das Installationsskript benennt sie um.
+  * **Verknüpfung und Name:** Das Programm hieß ab Version 1.31 **webMobaLedLib** (vorher pyMobaLedLib) und heißt seit Version 5.09 **MobaLedLib Studio**. Nach einem Update über das Menü heißen Symbol und Starter noch „webMobaLedLib“. Das Installationsskript legt sie neu als **MobaLedLib Studio** an. Es entfernt dabei die Symbole mit den alten Namen (webMobaLedLib, pyMobaLedLib).
 
 ===== Für Tester: eine Testversion wählen =====
 
-Mit **Hilfe → Update Testversion …** lädst du eine Version von GitHub, **die du selbst aussuchst**. Das können **Pre-Releases** sein, also Versionen, die noch nicht fertig geprüft sind. Das normale **Update webMobaLedLib …** lädt dagegen immer nur die letzte **fertige** Version.
+Mit **Hilfe → Update Testversion …** lädst du eine Version von GitHub, **die du selbst aussuchst**. Das können **Pre-Releases** sein, also Versionen, die noch nicht fertig geprüft sind. Das normale **Update MobaLedLib Studio …** lädt dagegen immer nur die letzte **fertige** Version.
 
   - Das Programm fragt zuerst, ob du **wirklich** eine Testversion installieren möchtest (Standardknopf **Abbrechen**). Dann klicke **Testversion suchen**.
   - Es zeigt eine **Auswahlliste der letzten 15 Versionen**, die **neueste zuerst und vorgewählt**. Jeder Eintrag nennt Name, **Pre-Release** oder **Release** und Datum. Die laufende Version trägt **installiert**, ältere tragen **ältere Version**.
@@ -76,7 +76,7 @@ Mit **Hilfe → Update Testversion …** lädst du eine Version von GitHub, **di
 
 ===== Das Programm startet nach einem Update nicht mehr? =====
 
-Siehe [[anleitungen:webmobaledlib:fehlersuche#wenn_nichts_mehr_geht|Fehlersuche: Wenn nichts mehr geht]]. Dort steht auch das **Reparaturskript**, das fehlende oder beschädigte Dateien wiederherstellt.
+Siehe [[anleitungen:mobaledlibstudio:fehlersuche#wenn_nichts_mehr_geht|Fehlersuche: Wenn nichts mehr geht]]. Dort steht auch das **Reparaturskript**, das fehlende oder beschädigte Dateien wiederherstellt.
 
 ===== Für Entwickler =====
 

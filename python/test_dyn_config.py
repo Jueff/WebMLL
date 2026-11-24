@@ -1,12 +1,14 @@
-# Datei-Version: 1.02 (2026-11-19) - test_dyn_config.py
+# Datei-Version: 1.03 (2026-11-23) - test_dyn_config.py
 # ----------------------------------------------------------------------------------------------
 # Name:           test_dyn_config.py
 # Path:           test_dyn_config.py
-# Version:        1.02
-# Last Update:    2026-11-19
-# Author:         Harold Linke
+# Version:        1.03
+# Last Update:    2026-11-23
+# Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
 # History of Change:
+#   1.03  2026-11-23  Konfigurationsdatei Format 7: Controller-Tabelle mit LED-Kanal (vier Werte je Controller), LED-Kanal 16 und eine Tabelle mit drei Werten werden abgelehnt. Zeilen
+#                     mit '# v1.03'
 #   1.02  2026-11-19  Format 3 (Kopf 52 Bytes, Abschnitt Parameter): Rundlauf von LED-Anzahl, LEDs je Kanal, Texten und Send-Inputs; LED-Anzahl, Starttext, TOTAL_SWITCHES_*, TOTAL_VARIABLES und die Parameter aendern die Signatur nicht mehr; SETUP_FASTLED/DMX-Zeilen
 #   1.01  2026-11-19  Neu: Ausgabefenster des schnellen Wegs (M42: Pruefung, Fortschritt, Fertigstellung, Rueckfall, nach dem Flashen) mit Ersatzgeraet; neue Texte in allen Sprachen
 #   1.00  2026-11-19  Neu: Test der Konfiguration getrennt von der Firmware (headless_dyn_config): Dateiformat, Signatur, Pfade mit Umlauten und Leerzeichen, Protokoll mit einem Ersatzgeraet, Uebersetzung
@@ -45,16 +47,21 @@ def test_format():
     blob = DC.pack_blob(b"\x01\x02\x03", b"\x04", b"", b"\x05\x06", b"\x2c\x01\x01", 9, SIG)
     magic, ver, _, ram, l0, l1, l2, l3, l4, l5, crc, sig = DC.BLOB_HEADER.unpack(blob[:DC.BLOB_HEADER.size])
     check("Kopf 52 Bytes", DC.BLOB_HEADER.size == 52)
-    check("Kennung, Version, RAM", magic == b"MLLC" and ver == 5 and ram == 9)
+    # check("Kennung, Version, RAM", magic == b"MLLC" and ver == 5 and ram == 9)  # v1.03 (entfallen)
+    check("Kennung, Version, RAM", magic == b"MLLC" and ver == DC.BLOB_VERSION == 7 and ram == 9)  # v1.03
     check("Laengen", (l0, l1, l2, l3, l4, l5) == (3, 1, 0, 2, 3, 0))
     check("CRC ueber die Nutzdaten", crc == zlib.crc32(blob[52:]) & 0xFFFFFFFF)
     check("Signatur im Kopf an Position 36", sig.decode() == SIG and blob[36:52].decode() == SIG)
-    params = DC.pack_params({"num_leds": 123, "channels": [100, 20, 3], "controller_count": 2, "controllers": [[27, 0, 100], [16, 120, 3]], "leds_per_channel": ",100,20,3", "start_msg": "Ver 3 x", "start_send": 7, "total_send": 40})
+    # params = DC.pack_params({"num_leds": 123, "channels": [100, 20, 3], "controller_count": 2, "controllers": [[27, 0, 100], [16, 120, 3]], "leds_per_channel": ",100,20,3", "start_msg": "Ver 3 x", "start_send": 7, "total_send": 40})  # v1.03 (entfallen)
+    params = DC.pack_params({"num_leds": 123, "channels": [100, 20, 3], "controller_count": 2, "controllers": [[27, 0, 0, 100], [16, 2, 120, 3]], "leds_per_channel": ",100,20,3", "start_msg": "Ver 3 x", "start_send": 7, "total_send": 40})  # v1.03
     blob = DC.pack_blob(b"\x01", b"", b"", b"", b"", 1, SIG, params)
     check("Parameter im Kopf und am Ende", DC.BLOB_HEADER.unpack(blob[:52])[9] == len(params) and blob.endswith(params))
-    check("Parameter: Aufbau", params == struct.pack("<HHHB3HB", 123, 7, 40, 3, 100, 20, 3, 2) + struct.pack("<BHHBHH", 27, 0, 100, 16, 120, 3) + b",100,20,3\0Ver 3 x\0", params)
-    for bad in ({"num_leds": 70000}, {"channels": [1] * 17}, {"channels": [70000]}, {"controller_count": 2, "controllers": [[27, 0, 1]]},
-                {"num_leds": 10, "controllers": [[27, 5, 6]]}, {"num_leds": 10, "controllers": [[256, 0, 1]]}, {"num_leds": 17, "controllers": [[1, i, 1] for i in range(17)]}):
+    # check("Parameter: Aufbau", params == struct.pack("<HHHB3HB", 123, 7, 40, 3, 100, 20, 3, 2) + struct.pack("<BHHBHH", 27, 0, 100, 16, 120, 3) + b",100,20,3\0Ver 3 x\0", params)  # v1.03 (entfallen)
+    # for bad in ({"num_leds": 70000}, {"channels": [1] * 17}, {"channels": [70000]}, {"controller_count": 2, "controllers": [[27, 0, 1]]},  # v1.03 (entfallen)
+                # {"num_leds": 10, "controllers": [[27, 5, 6]]}, {"num_leds": 10, "controllers": [[256, 0, 1]]}, {"num_leds": 17, "controllers": [[1, i, 1] for i in range(17)]}):  # v1.03 (entfallen)
+    check("Parameter: Aufbau", params == struct.pack("<HHHB3HB", 123, 7, 40, 3, 100, 20, 3, 2) + struct.pack("<BBHHBBHH", 27, 0, 0, 100, 16, 2, 120, 3) + b",100,20,3\0Ver 3 x\0", params)  # v1.03
+    for bad in ({"num_leds": 70000}, {"channels": [1] * 17}, {"channels": [70000]}, {"controller_count": 2, "controllers": [[27, 0, 0, 1]]},  # v1.03
+                {"num_leds": 10, "controllers": [[27, 0, 5, 6]]}, {"num_leds": 10, "controllers": [[256, 0, 0, 1]]}, {"num_leds": 10, "controllers": [[27, 16, 0, 1]]}, {"num_leds": 17, "controllers": [[1, 0, i, 1] for i in range(17)]}):  # v1.03
         try:
             DC.pack_params(bad)
             check("ungueltige Parameter werden abgelehnt: %s" % bad, False)
@@ -83,7 +90,7 @@ HEADER = """// File creation: 1.1.2026
 #define MLL_P_LEDS_PER_CHANNEL ",20,0,5"
 #define MLL_P_CHANNEL_LEDS 20,0,5,0,0,0,0,0,0,0
 #define MLL_P_CONTROLLER_COUNT 2
-#define MLL_P_CONTROLLER_CONFIG 27,0,20, 16,20,5   // Pin,LEDOffset,LEDCount per controller
+#define MLL_P_CONTROLLER_CONFIG 27,0,0,20, 16,2,20,5   // Pin,LEDChannel,LEDOffset,LEDCount per controller
 #define MLL_P_START_SEND_INPUTS 0
 #define MLL_P_TOTAL_SEND_INPUTS 11
 #ifdef CONFIG_ONLY
@@ -147,12 +154,14 @@ def test_paths():
 # ---------------------------------------------------------------- Parameter
 def test_params():
     p = DC.parse_params(HEADER)
-    p_expected = {"num_leds": 25, "channels": [20, 0, 5, 0, 0, 0, 0, 0, 0, 0], "controller_count": 2, "controllers": [[27, 0, 20], [16, 20, 5]], "leds_per_channel": ",20,0,5",
+    # p_expected = {"num_leds": 25, "channels": [20, 0, 5, 0, 0, 0, 0, 0, 0, 0], "controller_count": 2, "controllers": [[27, 0, 20], [16, 20, 5]], "leds_per_channel": ",20,0,5",  # v1.03 (entfallen)
+    p_expected = {"num_leds": 25, "channels": [20, 0, 5, 0, 0, 0, 0, 0, 0, 0], "controller_count": 2, "controllers": [[27, 0, 0, 20], [16, 2, 20, 5]], "leds_per_channel": ",20,0,5",  # v1.03
                   "start_msg": "LEDs_AutoProg Ver 3: ESP32 1.1.26 12:00", "start_send": 0, "total_send": 11}
     check("parse_params: LED-Anzahl, Kanaele, Controller-Tabelle, Texte, Send-Inputs", p == p_expected, p)
     check("parse_params: klassische Kopfdatei ohne Parameter", DC.parse_params("#define NUM_LEDS mllNumLeds\n") == {"num_leds": 0, "channels": [], "controller_count": 0, "controllers": [], "leds_per_channel": "", "start_msg": "", "start_send": 0, "total_send": 0})
     try:
-        DC.parse_params("#define MLL_P_CONTROLLER_CONFIG 27,0\n")
+        # DC.parse_params("#define MLL_P_CONTROLLER_CONFIG 27,0\n")  # v1.03 (entfallen)
+        DC.parse_params("#define MLL_P_CONTROLLER_CONFIG 27,0,0\n")  # v1.03: drei statt vier Werte
         check("parse_params: unvollstaendige Controller-Tabelle wird abgelehnt", False)
     except DC.DynConfigError:
         check("parse_params: unvollstaendige Controller-Tabelle wird abgelehnt", True)
@@ -162,8 +171,10 @@ def test_params():
     chans = struct.unpack("<%dH" % n_ch, raw[7:7 + 2 * n_ch])
     pos = 7 + 2 * n_ch
     controller_count = raw[pos]
-    ctrl = [struct.unpack("<BHH", raw[pos + 1 + 5 * i:pos + 6 + 5 * i]) for i in range(controller_count)]
-    check("Rundlauf: LED-Anzahl, Kanaele und Controller aus dem Blob", num == 25 and n_ch == 10 and chans[:3] == (20, 0, 5) and controller_count == 2 and ctrl == [(27, 0, 20), (16, 20, 5)], (num, n_ch, chans, controller_count, ctrl))
+    # ctrl = [struct.unpack("<BHH", raw[pos + 1 + 5 * i:pos + 6 + 5 * i]) for i in range(controller_count)]  # v1.03 (entfallen)
+    # check("Rundlauf: LED-Anzahl, Kanaele und Controller aus dem Blob", num == 25 and n_ch == 10 and chans[:3] == (20, 0, 5) and controller_count == 2 and ctrl == [(27, 0, 20), (16, 20, 5)], (num, n_ch, chans, controller_count, ctrl))  # v1.03 (entfallen)
+    ctrl = [struct.unpack("<BBHH", raw[pos + 1 + 6 * i:pos + 7 + 6 * i]) for i in range(controller_count)]  # v1.03
+    check("Rundlauf: LED-Anzahl, Kanaele und Controller aus dem Blob", num == 25 and n_ch == 10 and chans[:3] == (20, 0, 5) and controller_count == 2 and ctrl == [(27, 0, 0, 20), (16, 2, 20, 5)], (num, n_ch, chans, controller_count, ctrl))  # v1.03
 
 
 # ---------------------------------------------------------------- Konfigurationsdatei bauen (AVR-Werkzeuge)
@@ -174,7 +185,7 @@ MINI_H = """#include <Arduino.h>
 #define MLL_P_LEDS_PER_CHANNEL ",5"
 #define MLL_P_CHANNEL_LEDS 5,0,0,0,0,0,0,0,0,0
 #define MLL_P_CONTROLLER_COUNT 1
-#define MLL_P_CONTROLLER_CONFIG 27,0,5   // Pin,LEDOffset,LEDCount per controller
+#define MLL_P_CONTROLLER_CONFIG 27,0,0,5   // Pin,LEDChannel,LEDOffset,LEDCount per controller
 #ifdef CONFIG_ONLY
 #define NUM_LEDS 5
 #endif

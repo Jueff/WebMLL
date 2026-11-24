@@ -1,4 +1,4 @@
-webMobaLedLib - START HIER (Windows)
+MobaLedLib Studio - START HIER (Windows)
 ====================================
 
 In fuenf Schritten zum ersten Programm:
@@ -17,19 +17,19 @@ In fuenf Schritten zum ersten Programm:
      Internet. Warten, bis "Fertig" erscheint, dann eine Taste druecken.
 
 3. PROGRAMM STARTEN
-   Auf dem Desktop liegt jetzt das Symbol "webMobaLedLib". Doppelklick.
+   Auf dem Desktop liegt jetzt das Symbol "MobaLedLib Studio". Doppelklick.
    Der Browser (Chrome, Edge, Firefox oder Safari) oeffnet sich mit der
-   webMobaLedLib. Das schwarze Fenster muss offen bleiben, solange du
+   MobaLedLib Studio. Das schwarze Fenster muss offen bleiben, solange du
    arbeitest.
 
 4. ERSTES PROGRAMM
    Anleitung "Dein erstes Programm" im Wiki:
-   https://wiki.mobaledlib.de/anleitungen/webmobaledlib/erstes_programm
+   https://wiki.mobaledlib.de/anleitungen/mobaledlibstudio/erstes_programm
 
 5. BEI PROBLEMEN
-   Anleitung (Einfuehrung): https://wiki.mobaledlib.de/anleitungen/webmobaledlib/einfuehrung
-   Haeufige Fragen:        https://wiki.mobaledlib.de/anleitungen/webmobaledlib/faq
-   Fehlersuche:            https://wiki.mobaledlib.de/anleitungen/webmobaledlib/fehlersuche
+   Anleitung (Einfuehrung): https://wiki.mobaledlib.de/anleitungen/mobaledlibstudio/einfuehrung
+   Haeufige Fragen:        https://wiki.mobaledlib.de/anleitungen/mobaledlibstudio/faq
+   Fehlersuche:            https://wiki.mobaledlib.de/anleitungen/mobaledlibstudio/fehlersuche
    Forum:                  https://forum.mobaledlib.de/viewforum.php?f=14
    Im Programm oeffnet der Knopf "Online Wiki" die Einfuehrung der Anleitung.
 

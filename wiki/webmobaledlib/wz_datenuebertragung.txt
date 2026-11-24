@@ -1,5 +1,5 @@
-====== webMobaLedLib – Datenübertragung zwischen Rechnern ======
-//Seitenstand 1.00 (2026-11-23), gilt für webMobaLedLib 4.93 (Beitrag von moosbewohner, Pull Request 57)//
+====== MobaLedLib Studio – Datenübertragung zwischen Rechnern ======
+//Seitenstand 1.02 (2026-11-24), gilt für Version 5.12//
 
 Mit der **Datenübertragung** holst du Tabellen oder einzelne Zeilen von **einem anderen Rechner** im Heimnetz auf deinen Rechner. Das ist nützlich, wenn du zum Beispiel am Schreibtisch planst und die Tabellen an der Anlage (etwa auf dem Raspberry Pi) brauchst. Du brauchst dafür **kein Konto** und **kein Internet**. Beide Rechner arbeiten weiter mit ihren **eigenen** Daten, nichts wird automatisch abgeglichen.
 
@@ -39,7 +39,7 @@ Du findest die Funktion im Menü //Einstellungen → Datenübertragung//. Sie ha
 
 ===== Sicherung und Rückgängig =====
 
-Vor **jeder** Übernahme sichert das Programm die **ganze bisherige Arbeitsmappe** in der Datei ''tabellenabgleich_letztes_backup.json'' im Datenordner. Es gibt nur **eine** Sicherung, jede weitere Übernahme ersetzt sie. Mit **Letzten Import rückgängig machen** stellst du den Stand davor wieder her. Das ersetzt **keine** richtige Datensicherung: Sichere wichtige Arbeitsmappen vorher zusätzlich, zum Beispiel mit //Datei → Inkrementell speichern// (siehe [[anleitungen:webmobaledlib:pg_speichern|Speichern und Laden]]). Schließe während der Übernahme andere Fenster des Programms.
+Vor **jeder** Übernahme sichert das Programm die **ganze bisherige Arbeitsmappe** in der Datei ''tabellenabgleich_letztes_backup.json'' im Datenordner. Es gibt nur **eine** Sicherung, jede weitere Übernahme ersetzt sie. Mit **Letzten Import rückgängig machen** stellst du den Stand davor wieder her. Das ersetzt **keine** richtige Datensicherung: Sichere wichtige Arbeitsmappen vorher zusätzlich, zum Beispiel mit //Datei → Inkrementell speichern// (siehe [[anleitungen:mobaledlibstudio:pg_speichern|Speichern und Laden]]). Schließe während der Übernahme andere Fenster des Programms.
 
 ===== Netz und Sicherheit =====
 
