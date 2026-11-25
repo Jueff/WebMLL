@@ -1,12 +1,13 @@
-# Datei-Version: 1.06 (2026-11-24) - M18_Save_Load.py
+# Datei-Version: 1.07 (2026-11-25) - M18_Save_Load.py
 # ----------------------------------------------------------------------------------------------
 # Name:           M18_Save_Load.py
 # Path:           proggen/M18_Save_Load.py
-# Version:        1.06
-# Last Update:    2026-11-24
-# Author:         Harold Linke
+# Version:        1.07
+# Last Update:    2026-11-25
+# Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
 # History of Change:
+#   1.07  2026-11-25  Umrechnung der Adressen zwischen Selectrix und DCC/LNet/CAN beim Import wie der Wechsel des Protokolls in den Optionen (headless_protocol_switch): Bitposition 1 bis 8 statt 0 bis 7. Zeilen mit '# v1.07'
 #   1.06  2026-11-24  PGF-Datei mit mehreren Seiten: Frage 'Soll die Seite importiert werden?' hat im Browser den Knopf 'Ja, alle' (alle weiteren Seiten ohne Nachfrage); Strg+Ja wie bisher
 #   1.01  2026-10-17  __Copy_and_Clear_Sheet: Vorlagenzeilen des neuen Blatts ganz loeschen (EntireRow.ClearContents); die Zeile RGB_Heartbeat(#LED) blieb in jedem beim Laden einer PGF-Datei angelegten Blatt stehen; davor Original-Port, nicht erfasst
 #   1.02  2026-10-23  Speichern im Format MLL_PGF (Optionen - Update - Datei speichern): In der Web-Oberflaeche keine Meldung 'Datei wurde geschrieben' mit dem internen Pfad mehr vor der Abfrage, wohin die Datei gespeichert werden soll
@@ -338,11 +339,17 @@ def __Adapt_Adress_and_Typ_from_Selectrix(prLst):
     Addr = Long()
     #----------------------------------------------------------------------
     # Adapt a DCC or CAN Address from Selectrix to DCC or CAN
-    if IsNumeric(prLst(M25.DCC_or_CAN_Add_Col - 1)):
-        Addr = 1 + int(prLst(M25.DCC_or_CAN_Add_Col - 1)) * 8
-        if IsNumeric(prLst(M25.DCC_or_CAN_Add_Col - 1 + 1)):
-            Addr = Addr + int(prLst(M25.DCC_or_CAN_Add_Col - 1 + 1))
-        prLst[M25.DCC_or_CAN_Add_Col - 1] = Addr
+    # if IsNumeric(prLst(M25.DCC_or_CAN_Add_Col - 1)):  # v1.07 (entfallen)
+    #     Addr = 1 + int(prLst(M25.DCC_or_CAN_Add_Col - 1)) * 8  # v1.07 (entfallen)
+    #     if IsNumeric(prLst(M25.DCC_or_CAN_Add_Col - 1 + 1)):  # v1.07 (entfallen)
+    #         Addr = Addr + int(prLst(M25.DCC_or_CAN_Add_Col - 1 + 1))  # v1.07 (entfallen)
+    #     prLst[M25.DCC_or_CAN_Add_Col - 1] = Addr  # v1.07 (entfallen)
+    from headless import headless_protocol_switch as PS  # v1.07: Adresse = Channel * 8 + Bitposition (wie der Code-Generator und der Wechsel des Protokolls in den Optionen)
+    Channel = PS._first_number(prLst(M25.DCC_or_CAN_Add_Col - 1))  # v1.07
+    if Channel is not None:  # v1.07
+        Bit = PS._first_number(prLst(M25.DCC_or_CAN_Add_Col - 1 + 1))  # v1.07
+        Addr = PS.from_selectrix(Channel, Bit) if Bit is not None else None  # v1.07
+        prLst[M25.DCC_or_CAN_Add_Col - 1] = str(Addr if Addr is not None else Channel)  # v1.07
     if prLst(M25.Inp_Typ_Col - 1 + 1) != '':
         M09.Set_Tast_Txt_Var()
         if prLst(M25.Inp_Typ_Col - 1 + 1) == M09.Tast_T:
@@ -354,16 +361,30 @@ def __Adapt_Adress_and_Typ_to_Selectrix(prLst):
     Addr = Long()
     #--------------------------------------------------------------------
     # Adapt a DCC or CAN Address to Selectrix
-    if IsNumeric(prLst(M25.SX_Channel_Col - 1)):
-        Addr = prLst(M25.SX_Channel_Col - 1)
-        if Addr > 0:
-            Addr = Addr - 1
-        prLst[M25.SX_Channel_Col - 1] = Int(Addr / 8)
-        prLst[M25.SX_Bitposi_Col - 1] = Addr % 8
-    if prLst(M25.Inp_Typ_Col - 1) != '':
-        M09.Set_Tast_Txt_Var()
-        if prLst(M25.Inp_Typ_Col - 1) != M09.OnOff_T:
-            prLst[M25.Inp_Typ_Col - 1] = M09.Tast_T
+    # if IsNumeric(prLst(M25.SX_Channel_Col - 1)):  # v1.07 (entfallen)
+    #     Addr = prLst(M25.SX_Channel_Col - 1)  # v1.07 (entfallen)
+    #     if Addr > 0:  # v1.07 (entfallen)
+    #         Addr = Addr - 1  # v1.07 (entfallen)
+    #     prLst[M25.SX_Channel_Col - 1] = Int(Addr / 8)  # v1.07 (entfallen)
+    #     prLst[M25.SX_Bitposi_Col - 1] = Addr % 8  # v1.07 (entfallen)
+    # if prLst(M25.Inp_Typ_Col - 1) != '':  # v1.07 (entfallen)
+    #     M09.Set_Tast_Txt_Var()  # v1.07 (entfallen)
+    #     if prLst(M25.Inp_Typ_Col - 1) != M09.OnOff_T:  # v1.07 (entfallen)
+    #         prLst[M25.Inp_Typ_Col - 1] = M09.Tast_T  # v1.07 (entfallen)
+    from headless import headless_protocol_switch as PS  # v1.07: Channel = (Adresse - 1) // 8, Bitposition = (Adresse - 1) % 8 + 1 (vorher Bitposition 0 bis 7, ungueltig)
+    Addr = PS._first_number(prLst(M25.SX_Channel_Col - 1))  # v1.07
+    Converted = False  # v1.07
+    if Addr is not None:  # v1.07
+        Pos = PS.to_selectrix(Addr)  # v1.07
+        if Pos is not None:  # v1.07
+            prLst[M25.SX_Channel_Col - 1], prLst[M25.SX_Bitposi_Col - 1] = str(Pos[0]), str(Pos[1])  # v1.07
+            Converted = True  # v1.07
+    M09.Set_Tast_Txt_Var()  # v1.07
+    if prLst(M25.Inp_Typ_Col - 1) != '':  # v1.07
+        if prLst(M25.Inp_Typ_Col - 1) != M09.OnOff_T:  # v1.07
+            prLst[M25.Inp_Typ_Col - 1] = M09.Tast_T  # v1.07: Rot und Gruen gibt es bei Selectrix nicht
+    elif Converted:  # v1.07
+        prLst[M25.Inp_Typ_Col - 1] = M09.Tast_T  # v1.07: Selectrix braucht einen Typ
     return prLst
 
 def __Read_Line(line):

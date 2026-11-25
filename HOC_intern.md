@@ -1,5 +1,5 @@
-Datei-Version: 1.106 (2026-11-25) - HOC_intern.md
-Stand: Version 5.27
+Datei-Version: 1.107 (2026-11-25) - HOC_intern.md
+Stand: Version 5.28
 
 # webMobaLedLib: History of Change (intern, ausführlich)
 
@@ -24,6 +24,36 @@ Release-Stand 2.12 auf Wunsch des Entwicklers („Release bauen“). **Neu im Ab
 | `archiv/` | frühere Release-Hinweise, Versionslisten und ZIP (nichts gelöscht) |
 
 **Geprüft:** Dateipaket: `testzip` in Ordnung, alle 113 Dateien gleich dem Ordner `headless`, keine `__pycache__`, alle `.py` kompilieren, Versionsprüfung „alles passt“ (50 Einträge), 11 Dateien ausführbar (`.sh`, `.command`). **Nachbau des Entwickler-Ablaufs mit seinem echten Paket (1678 Dateien, Stand 2.05):** meine 113 Dateien darübergelegt, Prüfliste, ZIP gepackt, `release_tools check --previous <sein ZIP>`: **in Ordnung** (Version 2.12, 1678 Dateien, 6 neue, 0 fehlende, ZIP 16,6 MB). Alle 15 Prüfreihen laufen (17, 26, 15, 70, 28, 19, 43, 26, 16, 27, 8, 8, 8, 5, 9 Prüfungen). **Nicht geprüft:** `zip_erstellen.bat` und die Reparaturskripte unter Windows, ein abgebrochenes Update unter Windows, das Verhalten mit Acronis, der Download von GitHub.
+
+## 5.28 (2026-11-25), Selectrix wieder da: Protokollwechsel mit Umrechnung (Jürgen Winkler)
+
+**Wunsch:** Im Excel-Programm gab es das Blatt Selectrix mit den Spalten Channel \[0..99\] und Bitposition \[1..8\] statt der einen Spalte Adresse. In der Web-Oberfläche fehlte Selectrix in den Hardware Optionen (der Wechsel zwischen den Protokollen ändert die Spalten).
+
+* **Protokoll wechseln:** `headless_protocol_switch.convert()` fügt die Spalte Bitposition ein (`HeadlessSheet.insert_column`) oder entfernt sie (`delete_column`); Zeile 1 (COM-Port, Build-Optionen …), Kopfzeile, Spaltenbreiten, Farben und Symbole wandern mit. DCC ↔ LNet ↔ CAN ändert nur die Kennung.
+* **Umrechnung:** Adresse = Channel × 8 + Bitposition (Bit 1 bis 8, Channel 0 bis 99, also Adressen 1 bis 800), wie der Code-Generator (`Addr = SX_Ch * 8 + Bit_P - 1`). Variablen und Namen bleiben. Adressen außerhalb 1 bis 800 bleiben als Zahl stehen (der Generator meldet den Channel). **Typen:** Rot/Grün und leer werden zu Taster, An/Aus bleibt; zurück wird Taster zu leerem Typ. Selectrix kennt An/Aus **und** Taster.
+* **Rückfrage:** Hat das Blatt mindestens eine Zeile mit Zahl als Adresse (Variablen zählen nicht), fragt das Programm vor dem Wechsel (Zahl der Adressen, Rot/Grün → Taster, Adressen über 800). Nein: das Protokoll bleibt.
+* **Auswahl:** Selectrix steht in der Liste, soweit `SupportsSelectrix` in `Platform_Parameters` für die Hardware auf true steht (Classic, Pro, Pico; die Pico-Firmware ist für Selectrix nicht fertig, das Hochladen meldet das).
+* **Testtasten:** werden beim Wechsel neu angelegt (Spalte Typ, Taster gelb, Text = Bitposition). **Kleiner:** 16 statt 18 Pixel, Schrift 10 statt 11, 1 Pixel höher in der Zelle (`.mll-tb`).
+* **Eingabeprüfung Selectrix** (`M20.SX_Check_Input`): Channel ganze Zahl 0 bis 99 (auch „1 - 2“; Namen und Variablen erlaubt), Bitposition ganze Zahl 1 bis 8; sonst Meldung und die Zelle wird geleert.
+* **Typ-Dialog:** öffnet sich sofort, wenn Channel und Bitposition eingegeben sind und der Typ leer ist (`M20.SX_Ask_Typ_if_Complete`, wie bei DCC nach der Adresse).
+* **Pgf-Import/Export:** gleiche Umrechnung wie der Wechsel (`M18`): Bitposition 1 bis 8 (vorher 0 bis 7, ungültig). Ein Selectrix-Block aus `Mainboard_Hardware_Test.MLL_pgf` des Excel-Programms lässt sich laden und mit identischen aktiven Zeilen wieder speichern.
+* **Fehler behoben:** `M20.Update_TestButtons` löschte bei Selectrix Channel 0 den Typ und die Testtasten; `Select_Typ_by_Dialog` brach bei Channel 0 ab.
+
+| Datei | Version | Änderung |
+|-|-|-|
+| `headless/headless_protocol_switch.py` | 1.00 | neu: Umrechnung, Analyse, Warntext, Wechsel des Blatts |
+| `ExcelAPI/headless_sheet.py` | 1.04 | `insert_column`, `delete_column` |
+| `_web/web_form_options.py` | 1.68 | Selectrix in der Auswahl, Rückfrage und Wechsel |
+| `proggen/M18_Save_Load.py` | 1.07 | Umrechnung beim Import wie der Wechsel |
+| `proggen/M20_PageEvents_a_Functions.py` | 1.18 | Channel 0, Typ-Dialog sofort, Eingabeprüfung Selectrix |
+| `webmobaledlib.py` | 5.28 | Programmversion, kleinere Testtasten |
+| `csv/Web_Languages.csv` | – | 12 neue Texte in sechs Sprachen |
+| `test_protocol_switch.py` | 1.00 | neu: 18 Tests (Umrechnung, Blatt, Testtasten, Pgf, Eingabeprüfung) |
+| `install/BETATEST_Checkliste.md` | 4.08 | Punkte 386 bis 388 |
+
+**Tests:** `python test_protocol_switch.py` (18 Tests; startet die echte Arbeitsmappe ohne Oberfläche mit leerem `MLL_DATA_DIR`), `python test_hardware_dialog.py` (9), Syntax, neue Texte mit `use_language(0..6)` und `tr`.
+
+**Nicht geprüft:** der Dialog Protokoll in den Hardware Optionen im Browser (Auswahl, Rückfrage), Selectrix-Blatt mit echten Eingaben im Browser (Typ-Dialog sofort, Meldung der Eingabeprüfung), kleinere Testtasten im Browser, Laden einer Selectrix-Datei aus dem echten Excel-Programm und Laden unserer Datei im Excel-Programm (nur das Format verglichen), Selectrix mit der Pico-Firmware, Windows, macOS, Linux, Raspberry Pi, Hardware. Die Umrechnung beim Import weicht vom alten Excel ab (dort Bitposition 0 bis 7). Die Übersetzungen außer Englisch sollten Muttersprachler prüfen.
 
 ## 5.27 (2026-11-25), Tabelle bedienen wie in Excel: Pfeiltasten, Doppelklick auf Makrozellen, Fokus (Jürgen Winkler)
 
