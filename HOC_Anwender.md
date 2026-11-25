@@ -9,7 +9,7 @@ Gilt ab Version 1.39. Neueste Version oben.
 
 Neue Funktionen:
 - Hardware Optionen: Der Reiter Lichtmaschine zeigt die eingestellte Hardware mit Port und Bild. Der Knopf „Erkennen“ öffnet die Geräteauswahl: alle angeschlossenen Lichtmaschinen (Classic, Pro, Pico) in einer Liste, das Gerät des Blattes auch offline. Unbekannte Anschlüsse lassen sich einblenden; beim Übernehmen fragt das Programm nach dem Typ.
-- Unter „Einstellungen“ stehen Protokoll, Hardwarevariante, Schnelles Update, Lichtsensor, Schaltzustände speichern und (Pro) die Anzeige auf dem Display. Alles wird im Blatt gespeichert.
+- Unter „Einstellungen“ stehen Protokoll (nur die Protokolle, die die Hardware laut Plattform Parametern kann), Hardwarevariante, Schnelles Update, Lichtsensor, Schaltzustände speichern und (Pro) die Anzeige auf dem Display. Alles wird im Blatt gespeichert.
 - Lichtsensor und Schaltzustände speichern gibt es jetzt auf allen Lichtmaschinen; sie erscheinen als Zeile im Blatt.
 
 Korrekturen:

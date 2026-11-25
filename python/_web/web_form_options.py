@@ -1,8 +1,8 @@
-# Datei-Version: 1.66 (2026-11-25) - web_form_options.py
+# Datei-Version: 1.67 (2026-11-25) - web_form_options.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_form_options.py
 # Path:           _web/web_form_options.py
-# Version:        1.66
+# Version:        1.67
 # Last Update:    2026-11-25
 # Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
@@ -37,6 +37,8 @@
 #   1.44  2026-11-22  Version 4.68: Titel Hardware Optionen; Reiter Entwicklungsumgebung und Firmware Installation nicht im Anfaenger Modus; Boardnamen Lichtmaschine Classic/Pro/Pico; PlatformIO (Standard) zuerst, ARDUINO-IDE (nur Kompatibilitaet), Knopf ARDUINO-IDE Einstellungen nur mit ARDUINO-IDE; Hinweis WLAN (OTA) zu Schnelles Update
 #   1.45  2026-11-22  Version 4.70: Reiter Entwicklungsumgebung: roter Hinweis unter dem Haken Schnelles Update (nicht kompatibel mit WLAN)
 #   1.46  2026-11-22  Version 4.71: Warnhinweise zu Schnelles Update und WLAN entfernt (Pull Request 54: Schnelles Update geht fuer den ESP32 jetzt auch ueber WLAN); neuer Hinweistext zum Schnellen Update (aus dem Pull Request, dort als 1.44)
+#   1.67  2026-11-25  Die Auswahl der Protokolle richtet sich nach der Tabelle Platform_Parameters (SupportsDCC, SupportsLNet, SupportsCAN je Plattform AM328, ESP32, PICO;
+#                     vorher fest: Pico nur DCC); ein eingestelltes, nicht unterstuetztes Protokoll bleibt sichtbar mit Hinweis. Zeilen mit '# v1.67'
 #   1.66  2026-11-25  Anzeige auf dem Display: 'WLAN, IP, LDR und Zeit' und 'WLAN, IP und Hostname' nur, wenn WLAN am ESP32 eingeschaltet ist (folgt dem Haken im Reiter WLAN (OTA),
 #                     sonst Aus); 'Hardwarevariante' statt 'Board-Variante'; Bild der Hardware 50 % groesser; Texte 'auf die/der Lichtmaschine' statt Arduino; Protokoll 'LNet' ohne den Begriff LocoNet (wie 5.25). Zeilen mit '# v1.66'
 #   1.65  2026-11-25  Tooltip des Knopfes Erkennen: Protokoll wird nicht mehr im Dialog gewaehlt. Zeilen mit '# v1.65'
@@ -909,17 +911,34 @@ def make_class(Base):
             # proto_hint = "" if len(pids) > 1 else tr("Selectrix kann nicht auf ein anderes Protokoll umgestellt werden.")  # v1.56  # v1.57 (entfallen)
             # pids = ["DCC", "LNet", "CAN", "Selectrix"]  # v1.57: Classic und Pro (ESP32) koennen auch Selectrix  # v1.58 (entfallen: Selectrix kommt spaeter)
             # proto_hint = ""  # v1.57  # v1.58 (entfallen)
-            pids = ["Selectrix"] if cur_pid == "Selectrix" else ["DCC", "LNet", "CAN"]  # v1.58 (wie v1.56)
-            proto_hint = "" if len(pids) > 1 else tr("Selectrix kann nicht auf ein anderes Protokoll umgestellt werden.")  # v1.58 (wie v1.56)
-            if bt == M02.HT_PICO:  # v1.56: der Pico kann nur DCC
-                if cur_pid == "Selectrix":  # v1.56
-                    pids = ["Selectrix"]  # v1.57: gesperrt
-                    proto_hint = tr("Beim Pico ist nur DCC möglich. Ein Selectrix-Blatt kann nicht umgestellt werden.")  # v1.56
-                else:  # v1.56
-                    pids = ["DCC"]  # v1.56
-                    if cur_pid and cur_pid != "DCC":  # v1.56: das eingestellte Protokoll bleibt sichtbar, damit es auf DCC umgestellt werden kann
-                        pids.insert(0, cur_pid)  # v1.56
-                        proto_hint = tr("Beim Pico ist nur DCC möglich. Bitte auf DCC umstellen.")  # v1.56
+            # pids = ["Selectrix"] if cur_pid == "Selectrix" else ["DCC", "LNet", "CAN"]  # v1.58 (wie v1.56)  # v1.67 (entfallen)
+            # proto_hint = "" if len(pids) > 1 else tr("Selectrix kann nicht auf ein anderes Protokoll umgestellt werden.")  # v1.58 (wie v1.56)  # v1.67 (entfallen)
+            # if bt == M02.HT_PICO:  # v1.56: der Pico kann nur DCC  # v1.67 (entfallen: die Tabelle Platform_Parameters bestimmt die Protokolle)
+            #     if cur_pid == "Selectrix":  # v1.56  # v1.67 (entfallen)
+            #         pids = ["Selectrix"]  # v1.57: gesperrt  # v1.67 (entfallen)
+            #         proto_hint = tr("Beim Pico ist nur DCC möglich. Ein Selectrix-Blatt kann nicht umgestellt werden.")  # v1.56  # v1.67 (entfallen)
+            #     else:  # v1.56  # v1.67 (entfallen)
+            #         pids = ["DCC"]  # v1.56  # v1.67 (entfallen)
+            #         if cur_pid and cur_pid != "DCC":  # v1.56: das eingestellte Protokoll bleibt sichtbar, damit es auf DCC umgestellt werden kann  # v1.67 (entfallen)
+            #             pids.insert(0, cur_pid)  # v1.56  # v1.67 (entfallen)
+            #             proto_hint = tr("Beim Pico ist nur DCC möglich. Bitte auf DCC umstellen.")  # v1.56  # v1.67 (entfallen)
+            import proggen.M30_Tools as M30_  # v1.67
+
+            def _supports(pid):  # v1.67: Zeile Supports<Protokoll> der Tabelle Platform_Parameters (Spalte AM328, ESP32 oder PICO); nicht lesbar = unterstuetzt
+                try:  # v1.67
+                    return bool(M30_.Get_Platform_Bool(bt, "Supports" + pid, True))  # v1.67
+                except Exception:                                  # noqa: BLE001  # v1.67
+                    logger.debug("Supports%s fuer %s nicht lesbar", pid, bt, exc_info=True)  # v1.67
+                    return True  # v1.67
+            if cur_pid == "Selectrix":  # v1.67: Selectrix hat andere Spalten als DCC/LNet/CAN, kein Wechsel
+                pids = ["Selectrix"]  # v1.67
+                proto_hint = tr("Selectrix kann nicht auf ein anderes Protokoll umgestellt werden.")  # v1.67
+            else:  # v1.67
+                pids = [p for p in ("DCC", "LNet", "CAN") if _supports(p)] or ["DCC"]  # v1.67
+                proto_hint = ""  # v1.67
+                if cur_pid and cur_pid not in pids:  # v1.67: das eingestellte Protokoll bleibt sichtbar, damit es umgestellt werden kann
+                    proto_hint = tr("Dieses Protokoll wird von der gewählten Hardware nicht unterstützt. Bitte auf {liste} umstellen.", liste=", ".join(pids))  # v1.67
+                    pids.insert(0, cur_pid)  # v1.67
             if cur_pid and cur_pid not in pids:
                 pids.append(cur_pid)
             variants = None                                        # Board-Variante nur fuer Classic (Wert = Index der Boardliste)
