@@ -1,8 +1,8 @@
-# Datei-Version: 5.26 (2026-11-25) - webmobaledlib.py
+# Datei-Version: 5.27 (2026-11-25) - webmobaledlib.py
 # ----------------------------------------------------------------------------------------------
 # Name:           webmobaledlib.py
 # Path:           webmobaledlib.py
-# Version:        5.26
+# Version:        5.27
 # Last Update:    2026-11-25
 # Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
@@ -58,6 +58,7 @@
 #   1.82  2026-10-20  Reiter direkt per Adresse aufrufen (/Farbtest ...) und mit ?vollbild=1 im Vollbild (web_tabs 1.00, web_fullscreen 1.02); index() baut ueber build_page
 #   1.81  2026-10-20  Vollbild: ein Knopf in der Kopfzeile neben Beenden statt je einer in jedem Reiter, Beenden bleibt im Vollbild (web_fullscreen 1.01, web_pattgen 1.17)
 #   1.80  2026-10-20  Knopf Vollbild in jedem Reiter (web_fullscreen 1.00, web_pattgen 1.16)
+#   5.27  2026-11-25  Schnelle Eingabe in der Tabelle wie in Excel (Juergen): Wurde die Eingabe in einer Zelle durch Tippen begonnen, beenden die Pfeiltasten (hoch, runter, links, rechts) die Eingabe und wechseln in die Nachbarzelle; nach F2, Doppelklick oder Enter bleibt der Cursor im Text; Doppelklick auf Name und Beleuchtung oeffnet standardmaessig die Makroauswahl, Umschalt + Doppelklick bearbeitet den Text (web_layout 1.22); nach dem Dialog Typ sowie nach Entf, Ausschneiden, Einfuegen, Ausfuellen, Rueckgaengig und Wiederholen bleibt der Fokus in der Zelle (web_dialogs 1.15)
 #   5.26  2026-11-25  Hardware Optionen (Juergen): Reiter Lichtmaschine zeigt Hardware, Knopf Erkennen und Einstellungen des Blattes (Protokoll, Board-Variante, Schnelles Update je Blatt, Lichtsensor und Schaltzustaende als Makrozeilen, Anzeige auf dem Display); Dialog Erkennen mit Liste der Geraete (Classic/Pro/Pico, offline, unbekannte Ports); Texte Geraet/Lichtmaschine statt Arduino/Board (Menuepunkt Geraet wechseln) ; Anzeige auf dem Display: WLAN-Anzeigen nur mit WLAN; Geraeteauswahl ohne Einleitungssatz und Statuszeile (Anschlussname nur in der Liste), Liste doppelt so hoch; Bild der Hardware 50 % groesser; Protokollauswahl nach der Tabelle Platform_Parameters; Geraeteauswahl: Dialog oeffnet sofort, Typ und Version im Hintergrund (ESP32, Pico, Nano per #?, Servo und andere Geraete per ~MLLINFO), blockierte Ports, Bootloader des Nano, Pfeiltasten; ESP32: Displaytyp (OLED_TYP); Autoconnect nach Aenderung des COM Ports (web_form_comport 1.44, web_form_options 1.74, headless_sheet_settings 1.00, M42_Dyn_Config 1.12, M06_Write_Header 1.20, M06_Write_Header_SW 1.14, M07_COM_Port_New 1.24, M07_COM_Port 1.16, web_serial 1.18, web_esp32_ota 1.10, web_z21 1.06, web_form_ledcoloranim 1.01, web_form_servoanim 1.06, web_form_exchange 1.04, M06_Write_MLLConfig 1.01, M55_PWM_Data_Send 1.01, Web_Languages.csv, PA_Languages.csv)
 #   5.25  2026-11-25  Der geschuetzte Begriff LocoNet wird in der Oberflaeche nicht mehr benutzt: Startseite zeigt LNet-Zentrale (web_startpage 1.02, Web_Languages.csv)
 #   5.24  2026-11-25  Startseite: Fehler 'unsupported format character' nach Auswahl von Zentrale und Lichtmaschine behoben (web_startpage 1.01)
@@ -662,6 +663,7 @@ REQUIRED_FILES = {  # v1.75
     "_web/web_dialogs.py": "1.13", "proggen/M18_Save_Load.py": "1.06",  # v4.96
     "_web/web_log.py": "1.12", "_web/web_form_options.py": "1.47",  # v4.90
     "_web/web_serial.py": "1.14",  # v4.91
+    "_web/web_layout.py": "1.22", "_web/web_dialogs.py": "1.15",  # v5.27
 }  # v1.75
 FILE_PROBLEMS = []                                      # Zeilen der Abweichungen, gefuellt in main()  # v1.75
 
@@ -1449,6 +1451,88 @@ window.mllCopyMeta = function (api, node, colId) {
   }
   return {rows: [node.data._r], cols: [parseInt(String(colId).slice(1))]};
 };
+// v5.27: Eingabemodus wie in Excel: Wurde die Eingabe durch Tippen eines Zeichens begonnen, beenden die Pfeiltasten die Eingabe und wechseln in die Nachbarzelle
+// (schnelle Eingabe von Adressen). Nach F2, Doppelklick oder Enter bleibt der Cursor im Text (Bearbeiten-Modus); F2 schaltet im Eingabemodus ebenfalls dorthin um.
+// Zelle, die der Anwender zuletzt selbst angesteuert hat (Tastatur, Maus). Der Server setzt die Auswahl auch selbst (zum Beispiel auf die Zelle Typ, wenn er den Dialog
+// oeffnet), das geht ueber api.setFocusedCell: solche Aufrufe (mllProgUntil) zaehlen nicht. Nach dem Dialog bekommt diese Zelle den Tastaturfokus zurueck.
+window.mllUserCell = null;
+window.mllProgUntil = 0;
+window.mllWrapApi = function (api) {
+  if (api.mllOrigSetFocus) return;
+  const orig = api.setFocusedCell.bind(api);
+  api.mllOrigSetFocus = orig;
+  api.setFocusedCell = function () { window.mllProgUntil = Date.now() + 120; return orig.apply(null, arguments); };
+};
+window.mllCellFocused = function (e) {
+  window.mllApi = e.api;
+  window.mllWrapApi(e.api);
+  if (Date.now() < window.mllProgUntil || e.rowIndex === null || e.rowIndex === undefined || !e.column || e.rowPinned) return;
+  const node = e.api.getDisplayedRowAtIndex(e.rowIndex);
+  if (node) window.mllUserCell = {rowId: node.id, colId: e.column.getColId()};
+};
+// Die Tabelle wird nach Befehlen neu aufgebaut (neue Grid-API): die aktuelle API immer ueber das NiceGUI-Element holen, window.mllApi kann veraltet sein.
+window.mllGetApi = function () {
+  const el = document.querySelector('.nicegui-aggrid');
+  const id = el ? parseInt(String(el.id).replace('ng-', ''), 10) : NaN;
+  try { const c = isNaN(id) ? null : getElement(id); if (c && c.api) return c.api; } catch (err) { /* Element noch nicht da */ }
+  return window.mllApi;
+};
+// Befehle, die der Server ausfuehrt und danach die Tabelle neu zeichnet (Entf, Ausschneiden, Einfuegen, Ausfuellen, Rueckgaengig): der Fokus bleibt in der Zelle.
+window.mllRefocusLater = function () {
+  [300, 700, 1300].forEach(d => setTimeout(() => window.mllRefocus(), d));
+};
+window.mllRefocus = function () {
+  const api = window.mllGetApi();
+  if (!api || document.querySelector('.q-dialog')) return;
+  window.mllWrapApi(api);
+  const a = document.activeElement;
+  if (a && a !== document.body && (a.closest('.ag-cell') || a.tagName === 'INPUT' || a.tagName === 'TEXTAREA' || a.tagName === 'SELECT')) return;
+  let target = null;
+  const uc = window.mllUserCell;
+  if (uc) { const node = api.getRowNode(uc.rowId); if (node && node.rowIndex !== null && node.rowIndex !== undefined) target = {rowIndex: node.rowIndex, colId: uc.colId}; }
+  if (!target) { const fc = api.getFocusedCell(); if (fc) target = {rowIndex: fc.rowIndex, colId: fc.column.getColId()}; }
+  if (target) (api.mllOrigSetFocus || api.setFocusedCell)(target.rowIndex, target.colId, undefined, true);
+};
+window.mllTypedStart = false;
+// Das Flag wird in der Capture-Phase gesetzt (vor AG Grid): AG Grid startet das Bearbeiten schon im keydown, noch vor dem Ereignis cellKeyDown.
+if (!window.mllKeyHook) {
+  window.mllKeyHook = true;
+  document.addEventListener('keydown', ev => {
+    const t = ev.target;
+    if (t && t.tagName !== 'INPUT' && t.tagName !== 'TEXTAREA' && t.closest && t.closest('.ag-cell')) {
+      window.mllTypedStart = !!(ev.key && ev.key.length === 1 && !ev.ctrlKey && !ev.metaKey && !ev.altKey);
+    }
+  }, true);
+}
+window.mllArrowNav = function (api, ev) {
+  const inp = ev.target;
+  if (!inp || inp.dataset.mllNav !== '1') return;
+  if (ev.key === 'F2') { inp.dataset.mllNav = '0'; return; }
+  const dirs = {ArrowUp: [-1, 0], ArrowDown: [1, 0], ArrowLeft: [0, -1], ArrowRight: [0, 1]};
+  const d = dirs[ev.key];
+  if (!d || ev.shiftKey || ev.ctrlKey || ev.altKey || ev.metaKey) return;
+  const fc = api.getFocusedCell();
+  if (!fc) return;
+  ev.preventDefault(); ev.stopPropagation();
+  api.stopEditing(false);
+  let colKey = fc.column.getColId();
+  if (d[1]) {
+    const cols = api.getAllDisplayedColumns().filter(c => c.getColId() !== '_rn');
+    const i = cols.findIndex(c => c.getColId() === colKey) + d[1];
+    if (i >= 0 && i < cols.length) colKey = cols[i].getColId();
+  }
+  const rowIndex = Math.max(0, Math.min(api.getDisplayedRowCount() - 1, fc.rowIndex + d[0]));
+  (api.mllOrigSetFocus || api.setFocusedCell)(rowIndex, colKey, undefined, true);
+};
+window.mllEditStarted = function (e) {
+  if (!window.mllTypedStart) return;
+  setTimeout(() => {
+    const inp = document.querySelector('.ag-cell-inline-editing input');
+    if (!inp || inp.dataset.mllNav) return;
+    inp.dataset.mllNav = '1';
+    inp.addEventListener('keydown', ev => window.mllArrowNav(e.api, ev), true);
+  }, 0);
+};
 """
 
 # Rechtsklick auf eine Zelle: merkt sich die Zelle (fuer die Menueeintraege im Browser) und meldet sie dem Server.
@@ -1472,6 +1556,7 @@ EDIT_CELL_JS = ("() => { const c = window.mllCtx, api = window.mllCtxApi; if (!c
 # Tastenkuerzel in der Tabelle (nicht beim Bearbeiten): Strg+C/X/V und Entf wie im Kontextmenue.
 JS_CELL_KEYDOWN = ("e => { if (e.editing || !e.event || !e.node || !e.node.data) return; const k = e.event; "
                    "const ctrl = k.ctrlKey || k.metaKey; const col = e.column.getColId(); const r = e.node.data._r; "
+                   "if (k.key === 'Delete' || (ctrl && ['x', 'v', 'd', 'z', 'y'].includes(k.key.toLowerCase()))) window.mllRefocusLater(); "  # v5.27: nach dem Neuzeichnen der Tabelle den Fokus zurueck
                    "const txt = window.mllCopyText(e.api, e.node, col, e.value); "
                    # "if (ctrl && k.key.toLowerCase() === 'c') { window.mllClipSet(txt); } "  # v3.57  # v4.55 (entfallen)
                    # "else if (ctrl && k.key.toLowerCase() === 'x') { window.mllClipSet(txt); "  # v3.57  # v4.55 (entfallen)
@@ -1653,7 +1738,7 @@ def font_scales(ctrl) -> dict:
 # VERSION = "5.23 (2026-11-25)"  # v5.23  # v5.22  # v5.21  # v5.20  # v5.19  # v5.11  # v5.12  # v5.13  # v5.14  # v5.15  # v5.16  # v5.17  # v5.18  # v3.64  # v4.26  # v4.27  # v4.28  # v4.29  # v4.30  # v4.31  # v4.32  # v4.33  # v4.34  # v4.35  # v4.36  # v4.37  # v4.38  # v4.39  # v4.40  # v4.41  # v4.42  # v4.43  # v4.44  # v4.45  # v4.46  # v4.47  # v4.48  # v4.49  # v4.50  # v4.51  # v4.52  # v4.53  # v4.54  # v4.55  # v4.56  # v4.57  # v4.58  # v4.59  # v4.60  # v4.61  # v4.62  # v4.63  # v4.64  # v4.65  # v4.66  # v4.67  # v4.68  # v4.69  # v4.70  # v4.71  # v4.72  # v4.73  # v4.74  # v4.75  # v4.76  # v4.77  # v4.78  # v4.79  # v4.80  # v4.81  # v4.82  # v4.83  # v4.84  # v4.85  # v4.86  # v4.87  # v4.88  # v4.89  # v4.90  # v4.91  # v4.92  # v4.93  # v4.94  # v4.95  # v4.96  # v4.97  # v4.98  # v4.99  # v5.00  # v5.01  # v5.02  # v5.03  # v5.04  # v5.24 (entfallen)
 # VERSION = "5.24 (2026-11-25)"  # v5.23  # v5.22  # v5.21  # v5.20  # v5.19  # v5.11  # v5.12  # v5.13  # v5.14  # v5.15  # v5.16  # v5.17  # v5.18  # v3.64  # v4.26  # v4.27  # v4.28  # v4.29  # v4.30  # v4.31  # v4.32  # v4.33  # v4.34  # v4.35  # v4.36  # v4.37  # v4.38  # v4.39  # v4.40  # v4.41  # v4.42  # v4.43  # v4.44  # v4.45  # v4.46  # v4.47  # v4.48  # v4.49  # v4.50  # v4.51  # v4.52  # v4.53  # v4.54  # v4.55  # v4.56  # v4.57  # v4.58  # v4.59  # v4.60  # v4.61  # v4.62  # v4.63  # v4.64  # v4.65  # v4.66  # v4.67  # v4.68  # v4.69  # v4.70  # v4.71  # v4.72  # v4.73  # v4.74  # v4.75  # v4.76  # v4.77  # v4.78  # v4.79  # v4.80  # v4.81  # v4.82  # v4.83  # v4.84  # v4.85  # v4.86  # v4.87  # v4.88  # v4.89  # v4.90  # v4.91  # v4.92  # v4.93  # v4.94  # v4.95  # v4.96  # v4.97  # v4.98  # v4.99  # v5.00  # v5.01  # v5.02  # v5.03  # v5.04  # v5.24  # v5.25 (entfallen)
 # VERSION = "5.25 (2026-11-25)"  # v5.26 (entfallen)
-VERSION = "5.26 (2026-11-25)"  # v5.26  # v5.23  # v5.22  # v5.21  # v5.20  # v5.19  # v5.11  # v5.12  # v5.13  # v5.14  # v5.15  # v5.16  # v5.17  # v5.18  # v3.64  # v4.26  # v4.27  # v4.28  # v4.29  # v4.30  # v4.31  # v4.32  # v4.33  # v4.34  # v4.35  # v4.36  # v4.37  # v4.38  # v4.39  # v4.40  # v4.41  # v4.42  # v4.43  # v4.44  # v4.45  # v4.46  # v4.47  # v4.48  # v4.49  # v4.50  # v4.51  # v4.52  # v4.53  # v4.54  # v4.55  # v4.56  # v4.57  # v4.58  # v4.59  # v4.60  # v4.61  # v4.62  # v4.63  # v4.64  # v4.65  # v4.66  # v4.67  # v4.68  # v4.69  # v4.70  # v4.71  # v4.72  # v4.73  # v4.74  # v4.75  # v4.76  # v4.77  # v4.78  # v4.79  # v4.80  # v4.81  # v4.82  # v4.83  # v4.84  # v4.85  # v4.86  # v4.87  # v4.88  # v4.89  # v4.90  # v4.91  # v4.92  # v4.93  # v4.94  # v4.95  # v4.96  # v4.97  # v4.98  # v4.99  # v5.00  # v5.01  # v5.02  # v5.03  # v5.04  # v5.24  # v5.25
+VERSION = "5.27 (2026-11-25)"  # v5.27  # v5.26  # v5.23  # v5.22  # v5.21  # v5.20  # v5.19  # v5.11  # v5.12  # v5.13  # v5.14  # v5.15  # v5.16  # v5.17  # v5.18  # v3.64  # v4.26  # v4.27  # v4.28  # v4.29  # v4.30  # v4.31  # v4.32  # v4.33  # v4.34  # v4.35  # v4.36  # v4.37  # v4.38  # v4.39  # v4.40  # v4.41  # v4.42  # v4.43  # v4.44  # v4.45  # v4.46  # v4.47  # v4.48  # v4.49  # v4.50  # v4.51  # v4.52  # v4.53  # v4.54  # v4.55  # v4.56  # v4.57  # v4.58  # v4.59  # v4.60  # v4.61  # v4.62  # v4.63  # v4.64  # v4.65  # v4.66  # v4.67  # v4.68  # v4.69  # v4.70  # v4.71  # v4.72  # v4.73  # v4.74  # v4.75  # v4.76  # v4.77  # v4.78  # v4.79  # v4.80  # v4.81  # v4.82  # v4.83  # v4.84  # v4.85  # v4.86  # v4.87  # v4.88  # v4.89  # v4.90  # v4.91  # v4.92  # v4.93  # v4.94  # v4.95  # v4.96  # v4.97  # v4.98  # v4.99  # v5.00  # v5.01  # v5.02  # v5.03  # v5.04  # v5.24  # v5.25
 # VERSION = "4.09 (2026-11-19)"  # v3.64 (entfallen)
 # VERSION = "4.08 (2026-11-19)"  # v3.64 (entfallen)
 # VERSION = "4.07 (2026-11-19)"  # v3.64 (entfallen)
@@ -2175,12 +2260,13 @@ JS_ROW_HEIGHT = ("params => Math.round((params.node.rowPinned ? "  # v3.71: eine
 
 JS_DBLCLICK = """
 <script>
-// Doppelklick auf Name und Beleuchtung (Spalten und erste Datenzeile setzt der Server in window.mllDbl): Makroauswahl statt Bearbeiten.
-// Schalter in den Programm Einstellungen (Standard aus). Die Capture-Phase faengt das Ereignis vor AG Grid ab, sonst startet das Bearbeiten.
+// Doppelklick auf Name und Beleuchtung (Spalten und erste Datenzeile setzt der Server in window.mllDbl): Makroauswahl statt Bearbeiten. Mit Umschalt: Bearbeiten.
+// Schalter in den Programm Einstellungen (Standard an seit 5.27). Die Capture-Phase faengt das Ereignis vor AG Grid ab, sonst startet das Bearbeiten.
 window.mllDbl = {on: false, cols: [], typeCol: null, first: 0};  // v3.71
 document.addEventListener('dblclick', function (e) {
   const d = window.mllDbl;
   if (!d) return;   // v3.71
+  if (e.shiftKey) return;   // v5.27: Umschalt + Doppelklick bearbeitet den Text (Experten)
   const cell = e.target && e.target.closest ? e.target.closest('.ag-cell') : null;
   if (!cell || cell.classList.contains('ag-cell-inline-editing')) return;          // im Editor selbst nichts abfangen
   const col = cell.getAttribute('col-id');
@@ -3334,6 +3420,10 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
         "rowSelection": "multiple",
         ":onCellContextMenu": JS_CELL_CONTEXT,
         ":onCellKeyDown": JS_CELL_KEYDOWN,
+        ":onCellEditingStarted": "e => window.mllEditStarted(e)",  # v5.27
+        ":onCellFocused": "e => window.mllCellFocused(e)",  # v5.27
+        ":onCellEditingStopped": "e => { window.mllTypedStart = false; }",  # v5.27
+        ":onCellDoubleClicked": "e => { window.mllTypedStart = false; }",  # v5.27
         "preventDefaultOnContextMenu": True,
         "stopEditingWhenCellsLoseFocus": True,
         "suppressMovableColumns": True,
