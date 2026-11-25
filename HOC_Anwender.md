@@ -1,9 +1,18 @@
-Datei-Version: 1.111 (2026-11-25) - HOC_Anwender.md
-Stand: Version 5.26
+Datei-Version: 1.112 (2026-11-25) - HOC_Anwender.md
+Stand: Version 5.27
 
 # MobaLedLib Studio: Änderungen (Kurzfassung)
 
 Gilt ab Version 1.39. Neueste Version oben.
+
+## Version 5.27 (2026-11-25)
+
+Neue Funktionen:
+- Schnelle Eingabe wie in Excel: Nach dem Tippen in einer Zelle beenden die Pfeiltasten die Eingabe und wechseln in die Nachbarzelle. Nach F2 oder Doppelklick bewegen sie den Cursor im Text.
+- Ein Doppelklick auf Name und Beleuchtung öffnet die Makroauswahl; mit Umschalt + Doppelklick, F2 oder Enter bearbeitet man den Makrotext von Hand.
+
+Korrekturen:
+- Nach dem Dialog Typ und nach Entf, Ausschneiden, Einfügen, Ausfüllen, Rückgängig und Wiederholen bleibt die Markierung in der Zelle, und man kann mit der Tastatur weiterarbeiten.
 
 ## Version 5.26 (2026-11-25)
 

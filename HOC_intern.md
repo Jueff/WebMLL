@@ -1,5 +1,5 @@
-Datei-Version: 1.105 (2026-11-25) - HOC_intern.md
-Stand: Version 5.26
+Datei-Version: 1.106 (2026-11-25) - HOC_intern.md
+Stand: Version 5.27
 
 # webMobaLedLib: History of Change (intern, ausführlich)
 
@@ -24,6 +24,26 @@ Release-Stand 2.12 auf Wunsch des Entwicklers („Release bauen“). **Neu im Ab
 | `archiv/` | frühere Release-Hinweise, Versionslisten und ZIP (nichts gelöscht) |
 
 **Geprüft:** Dateipaket: `testzip` in Ordnung, alle 113 Dateien gleich dem Ordner `headless`, keine `__pycache__`, alle `.py` kompilieren, Versionsprüfung „alles passt“ (50 Einträge), 11 Dateien ausführbar (`.sh`, `.command`). **Nachbau des Entwickler-Ablaufs mit seinem echten Paket (1678 Dateien, Stand 2.05):** meine 113 Dateien darübergelegt, Prüfliste, ZIP gepackt, `release_tools check --previous <sein ZIP>`: **in Ordnung** (Version 2.12, 1678 Dateien, 6 neue, 0 fehlende, ZIP 16,6 MB). Alle 15 Prüfreihen laufen (17, 26, 15, 70, 28, 19, 43, 26, 16, 27, 8, 8, 8, 5, 9 Prüfungen). **Nicht geprüft:** `zip_erstellen.bat` und die Reparaturskripte unter Windows, ein abgebrochenes Update unter Windows, das Verhalten mit Acronis, der Download von GitHub.
+
+## 5.27 (2026-11-25), Tabelle bedienen wie in Excel: Pfeiltasten, Doppelklick auf Makrozellen, Fokus (Jürgen Winkler)
+
+**Wunsch:** Adressen sollen sich wie im Excel-Programm schnell mit der Tastatur eingeben lassen; der Doppelklick auf Name und Beleuchtung soll die Makroauswahl öffnen (Anwender sollen den Makrotext nicht versehentlich von Hand bearbeiten); nach Dialogen und nach Entf soll man ohne Mausklick weiterarbeiten können.
+
+* **Pfeiltasten wie in Excel:** Wurde die Eingabe in einer Zelle durch **Tippen** begonnen (Eingabemodus), beenden Pfeil hoch, runter, links, rechts die Eingabe und gehen in die Nachbarzelle. Nach F2, Doppelklick oder Enter (Bearbeiten-Modus) bleibt der Cursor im Text; F2 schaltet im Eingabemodus ebenfalls um. Gilt nicht in mehrzeiligen Feldern. JavaScript in `webmobaledlib.py` (`mllArrowNav`, `mllEditStarted`); das Flag „Eingabe durch Tippen begonnen“ setzt ein Tastenhaken in der Capture-Phase, weil AG Grid das Bearbeiten schon im keydown startet (vor `cellKeyDown`).
+* **Doppelklick auf Name und Beleuchtung** öffnet standardmäßig die Makroauswahl (`web_layout.get_dblclick`: nicht eingestellt = an, bisher aus). **Umschalt + Doppelklick**, F2, Enter und das Kontextmenü „Zelle bearbeiten“ bearbeiten den Text. Der Haken in den Programm Einstellungen bleibt; ein früher ausgeschalteter Haken bleibt aus. Texte der Einstellung aktualisiert und übersetzt.
+* **Fokus bleibt in der Tabelle:** Nach dem Dialog Typ (`web_dialogs.refocus_grid`) und nach Entf, Strg+X, V, D, Z, Y (`mllRefocusLater`) bekommt die Zelle den Tastaturfokus zurück, in der der Anwender **vor** dem Befehl war. Dazu merkt sich die Oberfläche die zuletzt vom Anwender angesteuerte Zelle (`mllUserCell`); Fokuswechsel, die der Server über `api.setFocusedCell` auslöst (zum Beispiel die Auswahl der Zelle Typ), werden erkannt und zählen nicht. Die Tabelle wird nach Befehlen neu aufgebaut, daher wird die aktuelle Grid-API jedes Mal über das NiceGUI-Element geholt (`mllGetApi`); drei Versuche (0,3, 0,7, 1,3 s), weil das Neuzeichnen den Fokus erneut nehmen kann.
+
+| Datei | Version | Änderung |
+|-|-|-|
+| `webmobaledlib.py` | 5.27 | Programmversion, Pfeiltasten, Fokus, Umschalt + Doppelklick |
+| `_web/web_layout.py` | 1.22 | Doppelklick Makroauswahl Standard an, Text der Einstellung |
+| `_web/web_dialogs.py` | 1.15 | `refocus_grid` nach dem Dialog Typ (DCC und Selectrix) |
+| `csv/Web_Languages.csv` | – | neuer Text der Einstellung in sechs Sprachen |
+| `install/BETATEST_Checkliste.md` | 4.07 | Punkte 382 bis 385 |
+
+**Tests:** Syntax, Start des Servers mit leerem `MLL_DATA_DIR`; im Browser (Chromium der Entwicklungsumgebung): Pfeil runter und rechts nach Tippen übernimmt die Eingabe und wechselt die Zelle, F2 behält den Cursor im Text, Doppelklick löst die Makroauswahl aus und Umschalt + Doppelklick nicht, nach dem Typ-Dialog (DCC) liegt der Fokus wieder in der Zelle vor dem Dialog, nach Entf bleibt der Fokus in der Zelle; der neue Text mit `use_language(0..6)` und `tr`.
+
+**Nicht geprüft:** Fokus nach Strg+X, V, D, Z, Y und bei mehreren markierten Zellen; Safari, Firefox, Tablet (Pfeiltasten), Windows, macOS, Linux, Raspberry Pi; ganz schnelles Tippen mit Pfeiltaste innerhalb weniger Millisekunden nach dem ersten Zeichen (der Haken am Eingabefeld wird erst danach angelegt). Die Übersetzungen außer Englisch sollten Muttersprachler prüfen.
 
 ## 5.26 (2026-11-25), Hardware Optionen: Reiter Lichtmaschine, Geräteauswahl, Einstellungen des Blattes (Jürgen Winkler)
 

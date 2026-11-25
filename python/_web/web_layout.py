@@ -1,12 +1,13 @@
-# Datei-Version: 1.21 (2026-11-22) - web_layout.py
+# Datei-Version: 1.22 (2026-11-25) - web_layout.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_layout.py
 # Path:           _web/web_layout.py
-# Version:        1.21
-# Last Update:    2026-11-22
-# Author:         Harold Linke
+# Version:        1.22
+# Last Update:    2026-11-25
+# Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
 # History of Change:
+#   1.22  2026-11-25  Doppelklick auf Name und Beleuchtung oeffnet standardmaessig die Makroauswahl (wie in Excel); der Makrotext wird mit Umschalt + Doppelklick, F2, Enter oder dem Kontextmenue bearbeitet. Zeilen mit '# v1.22'
 #   1.21  2026-11-22  Dunkles Farbschema: hellere Grundflaechen, Dialoge und optionale dunkle Tabellen
 #   1.20  2026-11-18  Einstellung steuert Zellinnenabstaende statt Tabellenrahmen
 #   1.19  2026-11-18  Einstellbarer Aussenabstand gilt ausschliesslich fuer die Programmgenerator-Tabelle
@@ -40,7 +41,7 @@ import os
 
 LAYOUT_KEY = "WebLayout"
 MARGIN_KEY = "WebOuterMargin"  # v1.18
-DBLCLICK_KEY = "WebDblClickMacro"                  # Doppelklick auf Name und Beleuchtung oeffnet die Makroauswahl (Standard: aus)
+DBLCLICK_KEY = "WebDblClickMacro"                  # Doppelklick auf Name und Beleuchtung oeffnet die Makroauswahl (Standard: an, v1.22; vorher aus)
 MODES = {"normal": "Aus (normales Layout)", "compact": "Ein (kompakt)",
          "auto": "Automatisch (kompakt, wenn das Browserfenster niedriger als 800 Pixel ist)"}
 DEFAULT_MODE = "normal"
@@ -165,13 +166,15 @@ def get_mode(ctrl) -> str:
 
 
 def get_dblclick(ctrl) -> bool:
-    """Schalter "Doppelklick auf Name und Beleuchtung oeffnet die Makroauswahl" (Standard aus)"""
+    """Schalter "Doppelklick auf Name und Beleuchtung oeffnet die Makroauswahl" (Standard an seit v1.22, wie in Excel)"""
     try:  # v1.13: im Anfaenger Modus immer eingeschaltet
         if str(ctrl.getConfigData("BeginnerMode")).strip().lower() in ("1", "true", "ja", "yes", "an", "ein", "on"):  # v1.13
             return True  # v1.13
     except Exception:  # noqa: BLE001  # v1.13
         pass  # v1.13
     value = ctrl.getConfigData(DBLCLICK_KEY)
+    if value is None or str(value).strip() == "":  # v1.22: noch nie eingestellt: an
+        return True  # v1.22
     return value is True or str(value).strip().lower() in ("1", "true", "ja", "yes", "on")
 
 
@@ -212,9 +215,12 @@ class TableSetting:
         from nicegui import ui
         with ui.card().props("flat bordered").classes("w-full gap-2"):
             ui.label("Bedienung der Tabelle").classes("text-subtitle1").style("font-weight: 600")
-            ui.label("Ein Klick auf das Symbol öffnet die Makroauswahl immer. Wie in Excel kann auch ein Doppelklick auf die Spalten Name und Beleuchtung "
-                     "sie öffnen. Dann bearbeitet man diese Zellen von Hand mit F2, Enter oder dem Kontextmenü „Zelle bearbeiten“. Aus (Standard): Ein "
-                     "Doppelklick bearbeitet die Zelle.").classes("text-caption text-grey-8")
+            # ui.label("Ein Klick auf das Symbol öffnet die Makroauswahl immer. Wie in Excel kann auch ein Doppelklick auf die Spalten Name und Beleuchtung "  # v1.22 (entfallen)
+            #          "sie öffnen. Dann bearbeitet man diese Zellen von Hand mit F2, Enter oder dem Kontextmenü „Zelle bearbeiten“. Aus (Standard): Ein "  # v1.22 (entfallen)
+            #          "Doppelklick bearbeitet die Zelle.").classes("text-caption text-grey-8")  # v1.22 (entfallen)
+            ui.label("Wie in Excel öffnet ein Doppelklick auf die Spalten Name und Beleuchtung die Makroauswahl (Standard), ebenso ein Klick auf das Symbol. "
+                     "Den Makrotext bearbeitet man von Hand mit Umschalt + Doppelklick, F2, Enter oder dem Kontextmenü „Zelle bearbeiten“. "
+                     "Aus: Ein Doppelklick bearbeitet die Zelle.").classes("text-caption text-grey-8")  # v1.22
             self.box = ui.checkbox("Doppelklick auf Name und Beleuchtung öffnet die Makroauswahl", value=get_dblclick(self.ctrl))
 
 

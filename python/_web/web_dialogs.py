@@ -1,12 +1,13 @@
-# Datei-Version: 1.14 (2026-11-24) - web_dialogs.py
+# Datei-Version: 1.15 (2026-11-25) - web_dialogs.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_dialogs.py
 # Path:           _web/web_dialogs.py
-# Version:        1.14
-# Last Update:    2026-11-24
-# Author:         Harold Linke
+# Version:        1.15
+# Last Update:    2026-11-25
+# Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
 # History of Change:
+#   1.15  2026-11-25  Nach dem Dialog Typ (DCC und Selectrix) bekommt die Tabelle den Tastaturfokus zurueck (refocus_grid), damit man ohne Mausklick weitertippen kann. Zeilen mit '# v1.15'
 #   1.14  2026-11-24  Anzeigename MobaLedLib Studio statt webMobaLedLib in Texten der Oberflaeche. Zeilen mit '# v5.09'
 #   1.13  2026-11-24  web_msgbox_labelled(..., extra={Rueckgabewert: Text}): zusaetzlicher Knopf direkt nach dem ersten (Ja, alle beim Laden einer PGF-Datei mit mehreren Seiten)
 #   1.05  2026-10-17  redirect_messagebox(): tkinter.messagebox im Browser anzeigen (Patterngenerator); davor bis 1.04 nicht erfasst
@@ -145,6 +146,17 @@ def color_input(ui, **kwargs):  # v1.09
     except Exception:                                   # noqa: BLE001  # v1.12
         logger.debug("color_input: Farbe nicht angezeigt", exc_info=True)  # v1.12
     return entry  # v1.09
+
+
+def refocus_grid(delays=(300, 700, 1300)) -> None:  # v1.15
+    """Nach einem Dialog der Tabelle den Tastaturfokus zurueckgeben (Zelle, die der Anwender zuletzt selbst angesteuert hat, nicht die vom Server gesetzte Auswahl). Aus dem Event-Loop, im Kontext des Clients.
+    Drei Versuche (nach dem Ausblenden des Dialogs und nach dem Neuzeichnen der Tabelle, das den Fokus erneut verlieren kann); window.mllRefocus tut nichts, wenn ein Dialog offen ist oder der Fokus schon in der Tabelle oder in einem Eingabefeld liegt."""  # v1.15
+    try:  # v1.15
+        from nicegui import ui  # v1.15
+        for delay in delays:  # v1.15
+            ui.run_javascript("setTimeout(() => { if (window.mllRefocus) window.mllRefocus(); }, %d);" % delay)  # v1.15
+    except Exception:                                   # noqa: BLE001  # v1.15
+        logger.debug("Fokus der Tabelle nicht zurueckgegeben", exc_info=True)  # v1.15
 
 
 def safe_delete(element) -> None:
@@ -563,6 +575,7 @@ async def _select_typ_async(o, default):
                 ui.button(o.button2_txt, on_click=lambda: dlg.submit(choice.value)).classes("mll-default")
         res = await dlg
         safe_delete(dlg)
+        refocus_grid()  # v1.15
     return res
 
 
@@ -608,6 +621,7 @@ async def _select_typ_sx_async(o, default):
                 ui.button(o.button2_txt, on_click=lambda: dlg.submit(choice.value)).classes("mll-default")
         res = await dlg
         safe_delete(dlg)
+        refocus_grid()  # v1.15
     return res
 
 
