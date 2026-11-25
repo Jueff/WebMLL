@@ -1,14 +1,15 @@
-# Datei-Version: 1.00 (2026-11-04) - web_form_ledcoloranim.py
+# Datei-Version: 1.01 (2026-11-25) - web_form_ledcoloranim.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_form_ledcoloranim.py
 # Path:           _web/web_form_ledcoloranim.py
-# Version:        1.00
-# Last Update:    2026-11-04
-# Author:         Harold Linke
+# Version:        1.01
+# Last Update:    2026-11-25
+# Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
 # History of Change:
 #   1.00  2026-11-04  Neu: Dialog "LED Farb-Animation" (Makro LEDColorAnim) im Browser. Ersetzt proggen/Userform_LEDColorAnim.py (Tk); Rechnung in headless_ledcoloranim.py (drei Kurven),
 #                     Grafik in mll_servocurve.js (mehrere Kurven), Fenster, Ereignisse, Test und Verbindung wie bei web_form_servoanim.py
+#   1.01  2026-11-25  Text: 'Es ist kein Gerät verbunden ...' (statt Arduino). Zeilen mit '# v1.01'
 # ----------------------------------------------------------------------------------------------
 """Web-Ersatz fuer proggen/Userform_LEDColorAnim.py (Dialog zum Makro LEDColorAnim).
 
@@ -313,7 +314,8 @@ async def _ledcoloranim_async(spec: dict):
                     return
                 pull()
                 if not await _ensure_direct(explicit=True):
-                    ui.notify(tr("Es ist kein Arduino verbunden. Der Test braucht einen verbundenen ARDUINO."), type="warning")
+                    # ui.notify(tr("Es ist kein Arduino verbunden. Der Test braucht einen verbundenen ARDUINO."), type="warning")  # v1.01 (entfallen)
+                    ui.notify(tr("Es ist kein Gerät verbunden. Der Test braucht ein verbundenes Gerät."), type="warning")  # v1.01: Gerät statt Arduino
                     return
                 st["t"] = 0
                 test_btn.set_text(tr("Stop Test"))

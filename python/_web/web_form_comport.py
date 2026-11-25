@@ -1,12 +1,25 @@
-# Datei-Version: 1.10 (2026-11-23) - web_form_comport.py
+# Datei-Version: 1.17 (2026-11-25) - web_form_comport.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_form_comport.py
 # Path:           _web/web_form_comport.py
-# Version:        1.10
-# Last Update:    2026-11-23
+# Version:        1.17
+# Last Update:    2026-11-25
 # Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
 # History of Change:
+#   1.17  2026-11-25  Korrektur zu 1.16: Name des Anschlusses steht wieder in der Liste; entfallen ist nur die Statuszeile ueber der Liste (Name des gewaehlten Anschlusses).
+#                     Fehlermeldungen (z. B. 'Kein COM Port erkannt') erscheinen weiter. Zeilen mit '# v1.17'
+#   1.16  2026-11-25  Geräteauswahl: einleitender Satz ('Es wird der COM Port überprüft ...') und Name des Anschlusses (z. B. 'Silicon Labs CP210x ...') entfallen,
+#                     Liste doppelt so hoch (520 px), Typabfrage mit OK links und Abbrechen rechts (mll-default/mll-cancel). Zeilen mit '# v1.16'
+#   1.15  2026-11-25  Weitere Texte: 'OK, wenn die LEDs am richtigen Gerät schnell blinken.', 'Kein Gerät gefunden. Bitte das Gerät per USB anschließen.' Zeilen mit '# v1.15'
+#   1.14  2026-11-25  Texte des Dialogs der Lichtmaschine: 'an dem die Lichtmaschine angeschlossen ist', 'Gefundene Geräte', Hinweis zur Liste (statt Pfeiltasten);
+#                     roter Hinweis 'Tipp: Der ausgewählte Arduino blinkt schnell' entfernt. Zeilen mit '# v1.14'
+#   1.13  2026-11-25  Protokoll und Board-Variante wieder aus dem Dialog entfernt: sie stehen jetzt auf der Hauptseite (Optionen, Reiter Lichtmaschine); der Dialog ist nur noch die Auswahlliste
+#   1.12  2026-11-25  (v1.13 entfallen) Board-Variante (Nano alt/neu/Full, Uno) im unteren Bereich des Dialogs (kommt aus dem Reiter Lichtmaschine der Optionen); find_image() auf Modulebene
+#   1.11  2026-11-25  Dialog der Lichtmaschine neu (Zeilen mit '# v1.11'): Liste aller gefundenen Boards gruppiert nach Classic / Pro / Pico mit Typ und Anschluss; das im Blatt
+#                     eingestellte Board steht immer drin (offline, wenn es nicht am USB haengt); 'Unbekannte Ports' (Vorgabe aus) fuegt die Gruppe 'unbekannt' hinzu, beim OK
+#                     wird der Typ abgefragt; Bild rechts folgt der Auswahl.
+#                     Die anderen Dialoge (rechter Arduino, ISP, WLAN) bleiben unveraendert.
 #   1.02  2026-10-15  Web-Ersatz fuer Select_COM_Port_Userform (Original, nicht erfasst)
 #   1.09  2026-11-22  Issue 37: nach dem Wechsel des Boards ueber 'Andere Typen' werden Bild, Beschreibungstext und roter Hinweis des Dialogs neu gesetzt
 #   1.08  2026-11-19  Bilddatei unabhaengig von Gross- und Kleinschreibung suchen (LED_Image heisst LED_image.png: unter Linux und auf dem Pi fehlte das Bild; Issue 27, Juergen)
@@ -70,6 +83,16 @@ def split_buttons(buttons: str) -> list[tuple[int, str]]:
         if len(b) >= 3 and b[1] == " ":
             res.append((i, b[2:]))
     return res
+
+
+def find_image(picture: str) -> str:  # v1.12: Web-Pfad der Bilddatei (ohne Beachtung der Gross-/Kleinschreibung), "" wenn es sie nicht gibt
+    try:
+        folder = os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), "images")
+        wanted = (picture + ".png").lower()
+        found = next((f for f in os.listdir(folder) if f.lower() == wanted), None)
+    except OSError:
+        found = None
+    return "/mll_images/" + found if found else ""
 
 
 # ------------------------------------------------------------------ Dialog (Event-Loop)
@@ -162,6 +185,141 @@ async def _comport_async(form, spec):
     return res
 
 
+# ------------------------------------------------------------------ neuer Dialog der Lichtmaschine (v1.11)
+async def _comport_async_new(form, spec):  # v1.11
+    from nicegui import ui
+    with wd._bridge["client"]:
+        with ui.dialog().props("persistent") as dlg, ui.card().classes("w-[900px] max-w-full"):
+            ui.label(spec["title"]).classes("text-h6")
+            # ---- oberer Bereich: Liste der Boards links, Bild rechts
+            with ui.row().classes("no-wrap w-full items-start"):
+                with ui.column().classes("grow gap-2"):
+                    text_lbl = ui.label(spec["text"]).style("white-space: pre-line")
+                    text_lbl.set_visibility(bool(spec["text"]))  # v1.16: ohne Text keine leere Zeile
+                    status = ui.label("").classes("text-grey-8").style("white-space: pre-line")
+                    status.set_visibility(False)  # v1.17: keine Statuszeile (Name des Anschlusses steht in der Liste)
+                    error = ui.label("").classes("text-red-8 text-bold").style("white-space: pre-line")
+                    error.set_visibility(False)
+                    with ui.row().classes("w-full items-center justify-between"):
+                        ui.label(spec["list_title"]).classes("text-subtitle2")
+                        chk = ui.checkbox(spec["unknown_text"], value=False)
+                    # list_box = ui.column().classes("w-full gap-0 border rounded").style("max-height: 260px; overflow-y: auto")  # v1.16 (entfallen)
+                    list_box = ui.column().classes("w-full gap-0 border rounded").style("max-height: 520px; overflow-y: auto")  # v1.16: Liste doppelt so hoch
+                    if spec["hint"]:
+                        ui.label(spec["hint"]).classes("text-caption").style("white-space: pre-line")
+                with ui.column().classes("items-end gap-2").style("min-width: 200px"):
+                    red_lbl = ui.label(spec["red_hint"] or "").classes("text-red-8").style("white-space: pre-line")
+                    red_lbl.set_visibility(bool(spec["red_hint"]))
+                    img = ui.image(spec["image"] or "").classes("w-48")
+                    img.set_visibility(bool(spec["image"]))
+
+            sig = [None]
+
+            def render_list():
+                rows, sel = form._rows, form._sel_dev
+                s = (tuple((r["typ"], r["dev"], r["offline"]) for r in rows), sel)
+                if s == sig[0]:
+                    return
+                sig[0] = s
+                list_box.clear()
+                with list_box:
+                    if not rows:
+                        ui.label(spec["none_text"]).classes("text-grey-7 q-pa-sm")
+                        return
+                    with ui.row().classes("w-full items-center no-wrap px-2 text-caption text-grey-7"):
+                        ui.label("").classes("w-6")
+                        ui.label(spec["col_type"]).classes("w-24")
+                        ui.label(spec["col_port"])
+                    last = None
+                    for r in rows:
+                        if r["typ"] != last:
+                            last = r["typ"]
+                            ui.label(spec["groups"].get(last, last)).classes("w-full px-2 py-1 text-bold bg-grey-2")
+                        selected = r["dev"] == sel
+                        row = ui.row().classes("w-full items-center no-wrap px-2 py-1 cursor-pointer" + (" bg-blue-1" if selected else ""))
+                        row.on("click", lambda dev=r["dev"]: on_select(dev))
+                        with row:
+                            ui.icon("radio_button_checked" if selected else "radio_button_unchecked").classes("w-6 text-primary")
+                            ui.label(spec["types"].get(r["typ"], r["typ"])).classes("w-24")
+                            ui.label(r["dev"]).classes("text-bold").style("min-width: 110px")
+                            if r["offline"]:
+                                ui.badge(spec["offline_text"]).props("color=grey-7")
+                            # else:  # v1.16 (entfallen: Name des Anschlusses, z. B. 'Silicon Labs CP210x USB to UART Bridge (COM3)', wird nicht mehr angezeigt)
+                            #     ui.label(r["desc"]).classes("text-caption text-grey-7")  # v1.16 (entfallen)
+                            else:  # v1.17: der Name des Anschlusses steht wieder in der Liste (nur die Statuszeile darueber entfaellt)
+                                ui.label(r["desc"]).classes("text-caption text-grey-7")  # v1.17
+
+            def refresh_view():  # Bild, Text und roter Hinweis zum aktuellen Board
+                try:
+                    view = form._board_view()
+                    text_lbl.set_text(view["text"])
+                    text_lbl.set_visibility(bool(view["text"]))  # v1.16
+                    red_lbl.set_text(view["red_hint"])
+                    red_lbl.set_visibility(bool(view["red_hint"]))
+                    img.set_source(view["image"])
+                    img.set_visibility(bool(view["image"]))
+                except Exception:                                           # noqa: BLE001
+                    logger.exception("Port-Auswahl: Anzeige nach dem Boardwechsel nicht aktualisiert")
+
+            def on_select(dev):
+                form._sel_dev = dev
+                row = form._row(dev)
+                if row and row["typ"] in form._GROUPS and row["typ"] != form._sheet_group():
+                    if form._apply_group(row["typ"]):
+                        refresh_view()
+                form._compute_new()                                         # Ident und Blinken folgen sofort der Auswahl
+                render_list()
+
+            def on_unknown(e):
+                form._show_unknown = bool(e.value)
+                form._compute_new()
+                render_list()
+
+            async def ask_type(dev):  # Typ eines unbekannten Anschlusses abfragen; None = Abbruch
+                with wd._bridge["client"]:
+                    with ui.dialog().props("persistent") as d, ui.card():
+                        ui.label(spec["ask_text"].replace("%1", dev)).style("white-space: pre-line")
+                        radio = ui.radio(spec["ask_options"], value="Classic")
+                        with ui.row().classes("justify-end w-full"):
+                            # ui.button(spec["no_text"], on_click=lambda: d.submit(None)).props("outline")  # v1.16 (entfallen)
+                            # ui.button("OK", on_click=lambda: d.submit(radio.value))  # v1.16 (entfallen)
+                            ui.button("OK", on_click=lambda: d.submit(radio.value)).classes("mll-default")  # v1.16: OK links (Enter)
+                            ui.button(spec["no_text"], on_click=lambda: d.submit(None)).props("outline").classes("mll-cancel")  # v1.16: Abbrechen rechts (Esc), wie in allen Dialogen
+                    typ = await d
+                    wd.safe_delete(d)
+                return typ
+
+            async def on_ok():
+                row = form._row(form._sel_dev)
+                if row and row["typ"] == "unbekannt":
+                    typ = await ask_type(row["dev"])
+                    if typ is None:
+                        return                                              # Dialog bleibt offen
+                    if form._apply_group(typ):
+                        refresh_view()
+                    row["typ"] = typ
+                elif row and row["typ"] in form._GROUPS and row["typ"] != form._sheet_group():
+                    form._apply_group(row["typ"])                           # Vorauswahl einer anderen Gruppe ohne Klick
+                dlg.submit(3)
+
+            chk.on_value_change(on_unknown)
+            with ui.row().classes("justify-end w-full"):
+                for n, text in spec["buttons"]:
+                    if n == 3:
+                        ui.button(text, on_click=on_ok).classes("mll-default")
+                    else:
+                        ui.button(text, on_click=lambda n=n: dlg.submit(n)).props("outline").classes("mll-cancel" if n == 2 else "")
+
+            render_list()
+            form._ui = {"loop": wd._bridge["loop"], "status": status, "error": error, "select": None, "render_list": render_list}
+            form.isInitialised = True
+        res = await dlg
+        form.isInitialised = False
+        form._ui = None
+        wd.safe_delete(dlg)
+    return res
+
+
 # ------------------------------------------------------------------ Klasse
 def make_class(Base):
     ns = sys.modules[Base.__module__].__dict__
@@ -238,11 +396,15 @@ def make_class(Base):
             else:  # v1.09
                 picture = "LED_Image"  # v1.09
                 M08.SetArduName("LED")  # v1.09
-            text = M09.Get_Language_Str("Es wird der COM Port überprüft bzw. ausgewählt, an den der #1# angeschlossen ist.").replace("#1#", M08.GetArduName())  # v1.09
+            # text = M09.Get_Language_Str("Es wird der COM Port überprüft bzw. ausgewählt, an den der #1# angeschlossen ist.").replace("#1#", M08.GetArduName())  # v1.09  # v1.14 (entfallen)
+            # text = M09.Get_Language_Str("Es wird der COM Port überprüft bzw. ausgewählt, an dem die Lichtmaschine angeschlossen ist.")  # v1.14: Lichtmaschine statt 'LED Arduino'  # v1.16 (entfallen)
+            text = ""  # v1.16: der einleitende Satz wird nicht mehr angezeigt
             red_hint = ""  # v1.09
             if is_arduino:  # v1.09
-                text = text + vbCr + vbCr + M09.Get_Language_Str("OK, wenn die LEDs am richtigen Arduino schnell blinken.")  # v1.09
-                red_hint = M09.Get_Language_Str("Tipp: Der ausgewählte Arduino blinkt schnell")  # v1.09
+                # text = text + vbCr + vbCr + M09.Get_Language_Str("OK, wenn die LEDs am richtigen Arduino schnell blinken.")  # v1.09  # v1.15 (entfallen)
+                # text = text + vbCr + vbCr + M09.Get_Language_Str("OK, wenn die LEDs am richtigen Gerät schnell blinken.")  # v1.09  # v1.15: Gerät statt Arduino  # v1.16 (entfallen)
+                text = M09.Get_Language_Str("OK, wenn die LEDs am richtigen Gerät schnell blinken.")  # v1.09  # v1.15  # v1.16: ohne den einleitenden Satz
+                # red_hint = M09.Get_Language_Str("Tipp: Der ausgewählte Arduino blinkt schnell")  # v1.09  # v1.14 (entfallen: Hinweis ganz entfernt)
             return {"text": text, "red_hint": red_hint, "image": self._find_image(picture)}  # v1.09
 
         def _switch_type(self, typ):  # v1.07
@@ -273,6 +435,121 @@ def make_class(Base):
             except Exception:                                               # noqa: BLE001
                 logger.exception("Typwechsel in der Port-Auswahl fehlgeschlagen")
                 return False
+
+        # ------------------------------------------------------------ neuer Dialog (v1.11)
+        _GROUPS = ("Classic", "Pro", "Pico")                                # Reihenfolge der Gruppen; danach 'unbekannt'
+        _new_layout = False
+        _rows = []
+        _sel_dev = None
+        _prev_devs = None
+        _stored_port = ""
+
+        @staticmethod
+        def _norm_port(p):  # v1.11: gespeicherter Anschluss aus dem Blatt; alte Zahlen, ' ' und '999' gelten als 'keiner'
+            s = "" if p is None else str(p).strip()
+            return "" if s in ("", "999") or s.lstrip("-").isdigit() else s
+
+        def _sheet_group(self):  # v1.11: Gruppe des im Blatt eingestellten Boards
+            import proggen.M02a_Public as M02a
+            bt = M02a.Get_BoardTyp()
+            return "Pro" if bt == M02.HT_ESP32 else ("Pico" if bt == M02.HT_PICO else "Classic")
+
+        def _row(self, dev):  # v1.11
+            return next((r for r in self._rows if r["dev"] == dev), None)
+
+        def _apply_group(self, group):  # v1.11: Board des Blattes auf die Gruppe umstellen (Abbrechen macht es ueber _orig_buildopt rueckgaengig)
+            if group == self._sheet_group():
+                return False
+            return self._switch_type({"Classic": "Nano", "Pro": "ESP32", "Pico": "Pico"}[group])
+
+        def _classify_group(self, comport):  # v1.11
+            t = M07.Classify_Port(comport)
+            if not t:
+                d = str(getattr(comport, "description", "") or "")
+                if "USB Serial Port" in d or "tty" in d:                    # wie die Nano-Erkennung im Excel-Programm
+                    t = "Nano"
+            return {"Nano": "Classic", "ESP32": "Pro", "Pico": "Pico"}.get(t, "unbekannt")
+
+        def _scan(self):  # v1.11: alle Anschluesse [(Gruppe, Anschluss, Beschreibung)]
+            import re
+            res = []
+            try:
+                for cp in M07.portlist.comports(include_links=False):
+                    if os.name != "nt" and re.match(r"^/dev/ttyS\d+$", str(cp.device)) and str(cp.hwid).strip().lower() in ("n/a", ""):
+                        continue                                            # Linux: Platzhalter ohne Geraet
+                    res.append((self._classify_group(cp), str(cp.device), str(cp.description or "").strip()))
+            except Exception:                                               # noqa: BLE001
+                logger.debug("Anschluesse konnten nicht gelesen werden", exc_info=True)
+            return res
+
+        def _compute_new(self):  # v1.11: Liste aufbauen, Auswahl bestimmen, Ident und Blinken (M07.CheckCOMPort) nachfuehren
+            import re
+            sheet = self._sheet_group()
+            stored = self._stored_port
+            found = self._scan()
+            all_devs = {d for _t, d, _n in found}
+            rows = []
+            for typ, dev, desc in found:
+                if dev == stored and typ == "unbekannt":
+                    typ = sheet                                             # der im Blatt eingetragene Anschluss gilt als Board des Blattes
+                if typ == "unbekannt" and not self._show_unknown:
+                    continue
+                rows.append({"typ": typ, "dev": dev, "desc": desc, "offline": False})
+            if stored and stored not in all_devs:
+                rows.append({"typ": sheet, "dev": stored, "desc": "", "offline": True})   # das Board des Blattes steht immer in der Liste
+
+            def key(r):
+                m = re.search(r"(\d+)$", r["dev"])
+                g = self._GROUPS.index(r["typ"]) if r["typ"] in self._GROUPS else len(self._GROUPS)
+                return (g, int(m.group(1)) if m else 0, r["dev"])
+            rows.sort(key=key)
+            devs = [r["dev"] for r in rows]
+            online = [r for r in rows if not r["offline"]]
+            sel = self._sel_dev
+            if sel not in devs:
+                new = [d for d in devs if self._prev_devs is not None and d not in self._prev_devs and not self._row_offline(rows, d)]
+                if new:
+                    sel = new[0]                                            # neu angeschlossenes Geraet wird gewaehlt
+                elif stored in devs:
+                    sel = stored
+                else:
+                    pref = [r for r in online if r["typ"] == sheet] or online or rows
+                    sel = pref[0]["dev"] if pref else None
+            self._prev_devs = devs
+            self._rows, self._sel_dev = rows, sel
+            ns["LocalComPorts"] = devs
+            ns["PortNames"] = [r["desc"] or r["dev"] for r in rows]
+            if not rows:
+                M07.CheckCOMPort = "999"
+                if self._old_comport is not None:
+                    import proggen.M07_COM_Port_New as M07New
+                    M07New._Ident_Send_Cmd(self._old_comport, M07New._Ident_Board(), "~MLLIDENT 0")
+                    self._old_comport = None
+                return
+            idx = devs.index(sel)
+            cur = rows[idx]
+            M07.CheckCOMPort_Txt = ns["PortNames"][idx]
+            M07.CheckCOMPort = "999" if cur["offline"] else cur["dev"]       # offline: nichts blinken lassen
+            self.Com_Port_No = idx
+            self._sel_index = idx
+            new_comport = None if cur["offline"] else cur["dev"]
+            old_comport = self._old_comport
+            if new_comport != old_comport:
+                import proggen.M07_COM_Port_New as M07New
+                if old_comport is not None:
+                    M07New._Ident_Send_Cmd(old_comport, M07New._Ident_Board(), "~MLLIDENT 0")
+                if new_comport is not None:
+                    M07New.Ident_Send_Keepalive(new_comport)
+                self._old_comport = new_comport
+            old_ = ns["OldL_ComPorts"]
+            if not M30.isInitialised(old_) or list(old_) != devs:
+                logger.info("Anschluesse: %s (Blatt: %s, unbekannte Ports anzeigen: %s, gewaehlt: %s)",
+                            ["%s:%s%s" % (r["typ"], r["dev"], "(offline)" if r["offline"] else "") for r in rows], sheet, self._show_unknown, sel)
+            ns["OldL_ComPorts"] = devs
+
+        @staticmethod
+        def _row_offline(rows, dev):  # v1.11
+            return any(r["dev"] == dev and r["offline"] for r in rows)
 
         # ------------------------------------------------------------ Aktualisierung (auch aus dem Zeitgeber-Thread)
         def _compute(self, DefaultPort):
@@ -351,6 +628,15 @@ def make_class(Base):
                 return super().Update_SpinButton(DefaultPort)
             if not self.isInitialised:
                 return
+            if self._new_layout:  # v1.11
+                self._compute_new()
+                ui_ = self._ui
+                if ui_ and ui_.get("render_list"):
+                    ui_["loop"].call_soon_threadsafe(ui_["render_list"])
+                if self._sel_index != self._old_spin:
+                    self._old_spin = self._sel_index
+                    self.Show_Status(False, M09.Get_Language_Str("Aktualisiere Status ..."))
+                return
             ports, port, avail = self._compute(DefaultPort)
             ui_ = self._ui
             if ui_ and ui_["select"] is not None:
@@ -376,7 +662,8 @@ def make_class(Base):
                     ui_["status"].set_visibility(False)
                 else:
                     ui_["status"].set_text(str(Msg))
-                    ui_["status"].set_visibility(True)
+                    # ui_["status"].set_visibility(True)  # v1.17 (entfallen)
+                    ui_["status"].set_visibility(not getattr(self, "_new_layout", False))  # v1.17: Geraeteauswahl: Name des Anschlusses steht schon in der Liste, keine Statuszeile darueber
                     ui_["error"].set_visibility(False)
             ui_["loop"].call_soon_threadsafe(apply)
 
@@ -432,6 +719,42 @@ def make_class(Base):
             if Show_ComPort and not wlan_device:  # v1.07
                 self._orig_buildopt = self._read_buildopt()
                 self._remember_variant(self._orig_buildopt)
+            self._new_layout = bool(Show_ComPort and not wlan_device and Picture in ("LED_Image", "ESP32_Image", "PICO_Image"))  # v1.11
+            if self._new_layout:  # v1.11: neuer Dialog der Lichtmaschine
+                self._show_unknown = False
+                self._rows, self._sel_dev, self._prev_devs = [], None, None
+                self._stored_port = self._norm_port(ComPort_IO)
+                self._compute_new()
+                view = self._board_view()
+                tr = M09.Get_Language_Str
+                hint = tr("Zur Identifikation blinken die LEDs des ausgewählten Geräts schnell.\nEin anderes Gerät kann in der obigen Liste gewählt werden.\n"  # v1.14: Hinweis zur Liste (statt Pfeiltasten)
+                          "Das Gerät kann auch nachträglich angesteckt werden.")  # v1.14
+                spec = {"title": Title, "text": view["text"], "red_hint": view["red_hint"], "image": view["image"] or image, "hint": hint, "buttons": buttons,
+                        "list_title": tr("Gefundene Geräte"), "unknown_text": tr(info["unknown"] or "Unbekante Ports anzeigen"),  # v1.14: Geräte statt Boards
+                        # "none_text": tr("Kein Board gefunden. Bitte das Board per USB anschließen."),  # v1.15 (entfallen)
+                        "none_text": tr("Kein Gerät gefunden. Bitte das Gerät per USB anschließen."),  # v1.15: Gerät statt Board
+                        "col_type": tr("Typ"), "col_port": tr("Port"), "offline_text": tr("offline"),
+                        "groups": {"Classic": "Classic (Nano / Uno)", "Pro": "Pro (ESP32)", "Pico": "Pico (Raspberry Pico)", "unbekannt": tr("Unbekannt")},
+                        "types": {"unbekannt": tr("unbekannt")},
+                        "ask_text": tr("Um welchen Typ handelt es sich bei %1?"), "no_text": tr("Abbrechen"),
+                        "ask_options": {"Classic": "Classic (Nano / Uno)", "Pro": "Pro (ESP32)", "Pico": "Pico (Raspberry Pico)"}}
+                self.IsActive = True
+                pressed = wd.call_in_loop(_comport_async_new, self, spec, default=2)
+                self.IsActive = False
+                if self._old_comport is not None:
+                    import proggen.M07_COM_Port_New as M07New
+                    M07New._Ident_Send_Cmd(self._old_comport, M07New._Ident_Board(), "~MLLIDENT 0")
+                    self._old_comport = None
+                M07.CheckCOMPort = " "
+                if pressed != 3:                                            # Abbrechen: Typwechsel rueckgaengig machen
+                    if self._orig_buildopt is not None and self._read_buildopt() != self._orig_buildopt:
+                        self._write_buildopt(self._orig_buildopt)
+                        logger.info("Typwechsel in der Port-Auswahl durch Abbrechen rueckgaengig gemacht")
+                ns["Pressed_Button"] = pressed
+                if self._sel_dev:
+                    ComPort_IO = self._sel_dev
+                self._new_layout = False
+                return pressed, ComPort_IO
             if Show_ComPort:
                 ports, port, avail = self._compute(ComPort_IO)
                 # _old_comport initialisieren nach dem ersten _compute  # v1.10

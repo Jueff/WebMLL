@@ -1,8 +1,8 @@
-# Datei-Version: 1.13 (2026-11-25) - M06_Write_Header_SW.py
+# Datei-Version: 1.14 (2026-11-25) - M06_Write_Header_SW.py
 # ----------------------------------------------------------------------------------------------
 # Name:           M06_Write_Header_SW.py
 # Path:           proggen/M06_Write_Header_SW.py
-# Version:        1.13
+# Version:        1.14
 # Last Update:    2026-11-25
 # Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
@@ -12,6 +12,7 @@
 #   1.11  2026-11-19  Konfiguration getrennt von der Firmware (ESP32/Pico): SETUP_FASTLED legt die FastLED-Controller in einer Schleife ueber mllControllerConfig[] (Pin, erste LED, LED-Anzahl aus der Konfigurationsdatei) an;
 #                     die Firmware enthaelt dazu MLL_LED_PINS (alle LED-Pins der Plattform) und MLL_ADD_LEDS. Neue Funktionen Get_LED_Controller_List, Get_FastLED_Pin_List. Klassische Kopfdatei (Nano): unveraendert controllerN (Zeilen mit '# v1.11')
 #   1.10  2026-11-19  Konfiguration getrennt von der Firmware (ESP32/Pico): SETUP_FASTLED und die DMX-Defines benutzen die Zahl der LEDs je Kanal aus der Konfigurationsdatei (mllChOff/mllChCnt); START_SEND_INPUTS/TOTAL_SEND_INPUTS werden durch ENABLE_SEND_INPUT und Parameter der Konfigurationsdatei ersetzt. ATmega und klassische Kopfdatei unveraendert (Zeilen mit '# v1.10')
+#   1.14  2026-11-25  Einstellungen des Blattes 'Lichtsensor aktivieren' und 'Schaltzustaende speichern' gelten fuer alle Plattformen (vorher Lichtsensor nur ESP32). Zeilen mit '# v1.14'
 #   1.09  2026-11-19  Add_VarArgCnt_to_DstVars: NameError 'proggen' (fehlerhafte Umsetzung: proggen.clsExtensionParameter.Name statt der Schleifenvariablen) behoben; die Zielvariablen aus '...'/'OutList' werden wieder in die Liste eingetragen
 #   1.08  2026-11-19  Get_Matching_Arg: Endlosschleife bei den Argumenten '...' und 'OutList' (die Schleifenvariable wurde nicht weitergezaehlt): 'Setup uebertragen' und die Minimale-Firmware-Pruefung blieben bei einer Counter-Zeile ohne Rueckmeldung stehen (hang_dump.txt von Harold)
 #   1.07  2026-11-18  ESP-Einstellung 'Fotowiderstand aktivieren' aktiviert die LDR-Scanner-Initialisierung auch ohne Makrozeile (Beitrag moosbewohner, PR 9)
@@ -1741,8 +1742,10 @@ def Init_HeaderFile_Generation_SW(firstRun):
         MaxUsed_Loc_InCh = - 1
         # Read_LDR = False  # v1.07 (entfallen)
         esp32_options = getattr(P01.ActiveSheet, "esp32_options", None) or {}  # v1.07
-        Read_LDR = M02a.Get_BoardTyp() == M02.HT_ESP32 and esp32_options.get("ldr") is True  # v1.07
-        Store_Status_Enabled = False
+        # Read_LDR = M02a.Get_BoardTyp() == M02.HT_ESP32 and esp32_options.get("ldr") is True  # v1.07  # v1.14 (entfallen)
+        Read_LDR = esp32_options.get("ldr") is True  # v1.14: Lichtsensor auf allen Plattformen (Einstellungen des Blattes)
+        # Store_Status_Enabled = False  # v1.14 (entfallen)
+        Store_Status_Enabled = esp32_options.get("store_status") is True  # v1.14: Schaltzustaende speichern (Einstellungen des Blattes); sonst wie bisher ueber die Makrozeile
         Use_WS2811 = False
         # The following variables are read from the data lines
         SwitchA_InpCnt = 0

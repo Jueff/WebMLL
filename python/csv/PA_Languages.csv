@@ -862,7 +862,7 @@ Le lien doit être créé manuellement. Pour ce faire, copiez le contenu du pres
 VBA;M12_Copy_Prog 195;Fehler beim anlegen des Links;Error creating the link;Fout bij het maken van de snelkoppeling;Erreur lors de la création du lien;;;
 VBA;M12_Copy_Prog 200;Fehler beim schreiben der Datei ';Error writing file ';Fout bij het schrijven van bestand ';"Erreur lors de l'écriture du fichier """;;;
 VBA;M12_Copy_Prog 200;Fehler beim erzeugen der Kommandodatei;Error creating the command file;Fout bij het maken van het opdrachtbestand;Erreur lors de la création du fichier de commandes;;;
-VBA;M55_PWM_Data_Send 137;Fehler beim verbinden mit dem Arduino über COM;Error connecting to the Arduino via COM;Fout bij het verbinden met de Arduino via COM;Erreur de connexion à l'Arduino via COM;;;
+VBA;M55_PWM_Data_Send 137;Fehler beim Verbinden mit dem Gerät über COM;Error connecting to the device via COM;Fout bij het verbinden met het apparaat via COM;Erreur de connexion à l'appareil via COM;;;
 VBA;M55_PWM_Data_Send 141;"Evtl. ist der Port bereits von einem anderen Programm (Arduino IDE, Farbtest, serieller Monitor) belegt.|
 Falls das Excel Programm vorher mit einer Fehlermeldung abgebrochen wurde, dann kann es sein, dass der Port nicht richtig geschlossen wurde. In dem Fall müssen alle Excel Fenster geschlossen werden ;-(";"Possibly the port is already occupied by another program (Arduino IDE, color test, serial monitor).|
 If the Excel program was previously terminated with an error message, it may be that the port was not closed properly. In this case, all Excel windows must be closed ;-(";"Mogelijk is de poort al bezet door een ander programma (Arduino IDE, kleurentest, seriële monitor) |
@@ -877,7 +877,7 @@ VBA;M55_PWM_Data_Send 379; werden verwendet;are used;worden gebruikt; sont util
 VBA;M55_PWM_Data_Send 379;Zu viele analoge Schwellen;Too many analog thresholds;Te veel analoge drempels;Trop de seuils analogiques;;;
 VBA;M55_PWM_Data_Send 478;Öffne Verbindung...;Opening connection ...;Verbinding openen ;Connexion ouverte ...;;;
 VBA;M55_PWM_Data_Send 486;Fehler: Der Adruino reagiert nicht;Error: The Adruino is not responding;Fout: De Adruino reageert niet;Erreur: L'Adruino ne répond pas;;;
-VBA;M55_PWM_Data_Send 486;Fehler beim zugriff auf den Arduino an COM;Error accessing the Arduino on COM;Fout bij toegang tot de Arduino op COM ;Erreur d'accès à l'Arduino sur COM;;;
+VBA;M55_PWM_Data_Send 486;Fehler beim Zugriff auf das Gerät an COM;Error accessing the device on COM;Fout bij toegang tot het apparaat op COM ;Erreur d'accès à l'appareil sur COM;;;
 VBA;M55_PWM_Data_Send 498;"Fehler: Auf dem Arduino ist nicht das richtige Programm installiert.|
 Der Arduino muss mit dem Excel Programm 'Prog_Generator' konfiguriert werden.Dabei muss der 'LED Farbtest Mode' im 'Config' Blatt aktiviert sein.|
 |
@@ -891,7 +891,7 @@ Arduino-bericht:";"Erreur: Le programme correct n'est pas installé sur l'Arduin
 L'Arduino doit être configuré avec le programme Excel 'Prog_Generator'. Le 'Mode de test de couleur LED' doit être activé dans la feuille 'Config'. | 
 | 
 Message Arduino:";;;
-VBA;M55_PWM_Data_Send 499;Falsches Programm auf dem Arduino installiert;Wrong program installed on the Arduino;Verkeerd programma geïnstalleerd op de Arduino;Mauvais programme installé sur l'Arduino;;;
+VBA;M55_PWM_Data_Send 499;Falsches Programm auf dem Gerät installiert;Wrong program installed on the device;Verkeerd programma geïnstalleerd op het apparaat;Mauvais programme installé sur l'appareil;;;
 VBA;M55_PWM_Data_Send 605;Fehler: Die Anzahl Einträge (;Error: The number of entries (;Fout: het aantal vermeldingen (;Erreur: Le nombre d'entrées (;;;
 VBA;M55_PWM_Data_Send 609;") in der LED Zuordnungsliste ist falsch. Es müssen genau 12 per Komma getrennte Zahlen angegeben werden. |
 Jede Zahl beschreibt die LED Nummer welche von der entsprechenden Zeile der Mustertabelle angesprochen werden soll. Die erste Zahl steht dabei für die erste Zeile, ...";") in the LED assignment list is wrong. Exactly 12 numbers separated by commas must be specified. |

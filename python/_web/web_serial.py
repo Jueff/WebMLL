@@ -1,10 +1,10 @@
-# Datei-Version: 1.14 (2026-11-23) - web_serial.py
+# Datei-Version: 1.16 (2026-11-25) - web_serial.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_serial.py
 # Path:           _web/web_serial.py
-# Version:        1.14
-# Last Update:    2026-11-23
-# Author:         Harold Linke
+# Version:        1.16
+# Last Update:    2026-11-25
+# Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
 # History of Change:
 #   1.00  2026-10-12  Serielle Verbindung ohne Tk (Original, nicht erfasst)
@@ -21,7 +21,9 @@
 #   1.11  2026-11-16  Protokoll: Zeilen der Lichtmaschine (Empfang) werden mit Level DEBUG protokolliert, die Startmeldung mit der Auswertung (LEDs je Kanal, Summe, Version) mit Level INFO
 #   1.12  2026-11-19  Stilles Verbinden (quiet): keine Dialoge bei Fehlern (Automatisch verbinden beim Start und nach dem Hochladen); dtr_override fuer einen gefundenen Pico (Issue 20)
 #   1.14  2026-11-23  Issue 59: Verbinden ohne Anschlussangabe nimmt den Anschluss des aktiven Blatts (sheet_port_provider) vor der globalen Einstellung serportname
+#   1.15  2026-11-25  Titel der Meldung beim Verbindungsfehler: 'Fehler beim Öffnen der Verbindung' (statt 'des Ports'), jetzt uebersetzt. Zeilen mit '# v1.15'
 #   1.13  2026-11-21  Option LedOffOnDisconnect (Programm Einstellungen): Beim Trennen werden die LEDs nur noch ausgeschaltet, wenn die Option gesetzt ist (Vorgabe aus; vorher immer)
+#   1.16  2026-11-25  Texte: Gerät statt ARDUINO (Verbindungsstatus, Meldung bei falscher oder fehlender Antwort). Zeilen mit '# v1.16'
 # ----------------------------------------------------------------------------------------------
 """Serielle Verbindung zum Arduino/Pico ohne Tk (Mixin fuer HeadlessAppController).
 
@@ -602,7 +604,8 @@ class SerialMixin:
             self._msg("Es ist kein Port ausgewählt.", "Verbinden")
             return self._fail_connect()
         # self._set_connect_status("Versuch sich mit dem ARDUINO am Port " + port + " zu verbinden ...", "red")  # v1.04 (entfallen)
-        self._set_connect_status(tr('Versuch sich mit dem ARDUINO am Port ') + port + " zu verbinden ...", "red")  # v1.04
+        # self._set_connect_status(tr('Versuch sich mit dem ARDUINO am Port ') + port + " zu verbinden ...", "red")  # v1.04  # v1.16 (entfallen)
+        self._set_connect_status(tr('Versuch sich mit dem Gerät am Port ') + port + " zu verbinden ...", "red")  # v1.16: Gerät statt ARDUINO
         try:
             import serial
             self.ARDUINO_status = "Connecting"
@@ -612,7 +615,8 @@ class SerialMixin:
         except BaseException as e:                        # noqa: BLE001
             logger.info("Port %s nicht zu oeffnen: %s", port, e)
             macro = self.MacroDef.data.get("StartPage", {}) if getattr(self, "MacroDef", None) else {}
-            title = macro.get("connect_open_error_title", "Fehler beim Öffnen des Ports")
+            # title = macro.get("connect_open_error_title", "Fehler beim Öffnen des Ports")  # v1.15 (entfallen)
+            title = macro.get("connect_open_error_title", tr("Fehler beim Öffnen der Verbindung"))  # v1.15
             text = macro.get("msg_connect_open_error", "Der Port {} konnte nicht geöffnet werden.").format(port)
             answer = self._msg(text, title, 3 + 32)       # vbYesNoCancel + vbQuestion
             self._fail_connect()
@@ -661,10 +665,14 @@ class SerialMixin:
             time.sleep(0.01)
         self.send_to_ARDUINO("#X\r\n")
         if read_error:
-            self._msg("Falsche oder keine Antwort vom ARDUINO.\n\nPrüfe, ob das richtige MobaLedLib-Programm auf den "
-                      "Arduino geladen ist. Es muss mit dem Compilerschalter\n  #define RECEIVE_LED_COLOR_PER_RS232\n"
-                      "übersetzt sein. Das Programm kann mit dem Knopf 'Z. Arduino schicken' geladen werden.",
-                      "Fehler beim Lesen der Antwort des ARDUINO")
+            # self._msg("Falsche oder keine Antwort vom ARDUINO.\n\nPrüfe, ob das richtige MobaLedLib-Programm auf den "  # v1.16 (entfallen)
+            # "Arduino geladen ist. Es muss mit dem Compilerschalter\n  #define RECEIVE_LED_COLOR_PER_RS232\n"  # v1.16 (entfallen)
+            # "übersetzt sein. Das Programm kann mit dem Knopf 'Z. Arduino schicken' geladen werden.",  # v1.16 (entfallen)
+            # "Fehler beim Lesen der Antwort des ARDUINO")  # v1.16 (entfallen)
+            self._msg("Falsche oder keine Antwort vom Gerät.\n\nPrüfe, ob das richtige MobaLedLib-Programm auf das "  # v1.16: Gerät statt Arduino
+                      "Gerät geladen ist. Es muss mit dem Compilerschalter\n  #define RECEIVE_LED_COLOR_PER_RS232\n"  # v1.16
+                      "übersetzt sein. Das Programm kann mit dem Knopf 'Z. Arduino schicken' geladen werden.",  # v1.16
+                      "Fehler beim Lesen der Antwort des Geräts")  # v1.16
             try:
                 self.arduino.close()
             except Exception:                             # noqa: BLE001

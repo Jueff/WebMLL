@@ -1,10 +1,10 @@
-# Datei-Version: 5.25 (2026-11-25) - webmobaledlib.py
+# Datei-Version: 5.26 (2026-11-25) - webmobaledlib.py
 # ----------------------------------------------------------------------------------------------
 # Name:           webmobaledlib.py
 # Path:           webmobaledlib.py
-# Version:        5.25
+# Version:        5.26
 # Last Update:    2026-11-25
-# Author:         Harold Linke
+# Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
 # History of Change:
 #   1.39  2026-10-17  Reiter Patterngenerator (Runde 1): Anzeige der Tabelle, Aufbau erst beim ersten Oeffnen (build_patt, _PATT); Kopf eingefuegt; davor bis 1.38 nicht erfasst
@@ -58,6 +58,7 @@
 #   1.82  2026-10-20  Reiter direkt per Adresse aufrufen (/Farbtest ...) und mit ?vollbild=1 im Vollbild (web_tabs 1.00, web_fullscreen 1.02); index() baut ueber build_page
 #   1.81  2026-10-20  Vollbild: ein Knopf in der Kopfzeile neben Beenden statt je einer in jedem Reiter, Beenden bleibt im Vollbild (web_fullscreen 1.01, web_pattgen 1.17)
 #   1.80  2026-10-20  Knopf Vollbild in jedem Reiter (web_fullscreen 1.00, web_pattgen 1.16)
+#   5.26  2026-11-25  Hardware Optionen (Juergen): Reiter Lichtmaschine zeigt Hardware, Knopf Erkennen und Einstellungen des Blattes (Protokoll, Board-Variante, Schnelles Update je Blatt, Lichtsensor und Schaltzustaende als Makrozeilen, Anzeige auf dem Display); Dialog Erkennen mit Liste der Geraete (Classic/Pro/Pico, offline, unbekannte Ports); Texte Geraet/Lichtmaschine statt Arduino/Board (Menuepunkt Geraet wechseln) ; Anzeige auf dem Display: WLAN-Anzeigen nur mit WLAN; Geraeteauswahl ohne Einleitungssatz und Statuszeile (Anschlussname nur in der Liste), Liste doppelt so hoch; Bild der Hardware 50 % groesser (web_form_comport 1.17, web_form_options 1.66, headless_sheet_settings 1.00, M42_Dyn_Config 1.12, M06_Write_Header 1.18, M06_Write_Header_SW 1.14, M07_COM_Port_New 1.07, web_serial 1.16, web_esp32_ota 1.10, web_z21 1.06, web_form_ledcoloranim 1.01, web_form_servoanim 1.06, web_form_exchange 1.04, M06_Write_MLLConfig 1.01, M55_PWM_Data_Send 1.01, Web_Languages.csv, PA_Languages.csv)
 #   5.25  2026-11-25  Der geschuetzte Begriff LocoNet wird in der Oberflaeche nicht mehr benutzt: Startseite zeigt LNet-Zentrale (web_startpage 1.02, Web_Languages.csv)
 #   5.24  2026-11-25  Startseite: Fehler 'unsupported format character' nach Auswahl von Zentrale und Lichtmaschine behoben (web_startpage 1.01)
 #   5.23  2026-11-25  Startseite fuer Einsteiger (web_startpage 1.00, web_tabs 1.37): Auswahl der Zentrale und der Lichtmaschine (auch automatisch erkennen), Anleitung Setup uebertragen und Dialog Wizard, Knopf Anfangen (andere Zentralen-Tabellen ausblenden, Board einstellen, Startprogramm aus Startprogramme/ laden), Einstellung ShowStartPage, Hinweis zum Anfaenger Modus
@@ -654,6 +655,10 @@ REQUIRED_FILES = {  # v1.75
     "_web/web_startpage.py": "1.02", "_web/web_tabs.py": "1.37",  # v5.23  # v5.24  # v5.25
     "_web/web_form_other.py": "1.14",  # v5.22
     "proggen/M20_PageEvents_a_Functions.py": "1.15", "_web/web_esp32_ota.py": "1.09", "_web/web_form_servoanim.py": "1.05", "_web/web_pattgen.py": "1.25",  # v5.12
+    "_web/web_form_comport.py": "1.17", "_web/web_form_options.py": "1.66", "headless/headless_sheet_settings.py": "1.00", "proggen/M42_Dyn_Config.py": "1.12",  # v5.26
+    "_web/web_esp32_ota.py": "1.10", "_web/web_z21.py": "1.06", "_web/web_form_ledcoloranim.py": "1.01", "_web/web_form_servoanim.py": "1.06", "_web/web_form_exchange.py": "1.04",  # v5.26
+    "proggen/M06_Write_MLLConfig.py": "1.01", "pattgen/M55_PWM_Data_Send.py": "1.01",  # v5.26
+    "proggen/M06_Write_Header.py": "1.18", "proggen/M06_Write_Header_SW.py": "1.14", "proggen/M07_COM_Port_New.py": "1.07", "_web/web_serial.py": "1.16",  # v5.26
     "_web/web_dialogs.py": "1.13", "proggen/M18_Save_Load.py": "1.06",  # v4.96
     "_web/web_log.py": "1.12", "_web/web_form_options.py": "1.47",  # v4.90
     "_web/web_serial.py": "1.14",  # v4.91
@@ -1647,7 +1652,8 @@ def font_scales(ctrl) -> dict:
 # VERSION = "5.17 (2026-11-25)"  # v5.18 (entfallen)
 # VERSION = "5.23 (2026-11-25)"  # v5.23  # v5.22  # v5.21  # v5.20  # v5.19  # v5.11  # v5.12  # v5.13  # v5.14  # v5.15  # v5.16  # v5.17  # v5.18  # v3.64  # v4.26  # v4.27  # v4.28  # v4.29  # v4.30  # v4.31  # v4.32  # v4.33  # v4.34  # v4.35  # v4.36  # v4.37  # v4.38  # v4.39  # v4.40  # v4.41  # v4.42  # v4.43  # v4.44  # v4.45  # v4.46  # v4.47  # v4.48  # v4.49  # v4.50  # v4.51  # v4.52  # v4.53  # v4.54  # v4.55  # v4.56  # v4.57  # v4.58  # v4.59  # v4.60  # v4.61  # v4.62  # v4.63  # v4.64  # v4.65  # v4.66  # v4.67  # v4.68  # v4.69  # v4.70  # v4.71  # v4.72  # v4.73  # v4.74  # v4.75  # v4.76  # v4.77  # v4.78  # v4.79  # v4.80  # v4.81  # v4.82  # v4.83  # v4.84  # v4.85  # v4.86  # v4.87  # v4.88  # v4.89  # v4.90  # v4.91  # v4.92  # v4.93  # v4.94  # v4.95  # v4.96  # v4.97  # v4.98  # v4.99  # v5.00  # v5.01  # v5.02  # v5.03  # v5.04  # v5.24 (entfallen)
 # VERSION = "5.24 (2026-11-25)"  # v5.23  # v5.22  # v5.21  # v5.20  # v5.19  # v5.11  # v5.12  # v5.13  # v5.14  # v5.15  # v5.16  # v5.17  # v5.18  # v3.64  # v4.26  # v4.27  # v4.28  # v4.29  # v4.30  # v4.31  # v4.32  # v4.33  # v4.34  # v4.35  # v4.36  # v4.37  # v4.38  # v4.39  # v4.40  # v4.41  # v4.42  # v4.43  # v4.44  # v4.45  # v4.46  # v4.47  # v4.48  # v4.49  # v4.50  # v4.51  # v4.52  # v4.53  # v4.54  # v4.55  # v4.56  # v4.57  # v4.58  # v4.59  # v4.60  # v4.61  # v4.62  # v4.63  # v4.64  # v4.65  # v4.66  # v4.67  # v4.68  # v4.69  # v4.70  # v4.71  # v4.72  # v4.73  # v4.74  # v4.75  # v4.76  # v4.77  # v4.78  # v4.79  # v4.80  # v4.81  # v4.82  # v4.83  # v4.84  # v4.85  # v4.86  # v4.87  # v4.88  # v4.89  # v4.90  # v4.91  # v4.92  # v4.93  # v4.94  # v4.95  # v4.96  # v4.97  # v4.98  # v4.99  # v5.00  # v5.01  # v5.02  # v5.03  # v5.04  # v5.24  # v5.25 (entfallen)
-VERSION = "5.25 (2026-11-25)"  # v5.23  # v5.22  # v5.21  # v5.20  # v5.19  # v5.11  # v5.12  # v5.13  # v5.14  # v5.15  # v5.16  # v5.17  # v5.18  # v3.64  # v4.26  # v4.27  # v4.28  # v4.29  # v4.30  # v4.31  # v4.32  # v4.33  # v4.34  # v4.35  # v4.36  # v4.37  # v4.38  # v4.39  # v4.40  # v4.41  # v4.42  # v4.43  # v4.44  # v4.45  # v4.46  # v4.47  # v4.48  # v4.49  # v4.50  # v4.51  # v4.52  # v4.53  # v4.54  # v4.55  # v4.56  # v4.57  # v4.58  # v4.59  # v4.60  # v4.61  # v4.62  # v4.63  # v4.64  # v4.65  # v4.66  # v4.67  # v4.68  # v4.69  # v4.70  # v4.71  # v4.72  # v4.73  # v4.74  # v4.75  # v4.76  # v4.77  # v4.78  # v4.79  # v4.80  # v4.81  # v4.82  # v4.83  # v4.84  # v4.85  # v4.86  # v4.87  # v4.88  # v4.89  # v4.90  # v4.91  # v4.92  # v4.93  # v4.94  # v4.95  # v4.96  # v4.97  # v4.98  # v4.99  # v5.00  # v5.01  # v5.02  # v5.03  # v5.04  # v5.24  # v5.25
+# VERSION = "5.25 (2026-11-25)"  # v5.26 (entfallen)
+VERSION = "5.26 (2026-11-25)"  # v5.26  # v5.23  # v5.22  # v5.21  # v5.20  # v5.19  # v5.11  # v5.12  # v5.13  # v5.14  # v5.15  # v5.16  # v5.17  # v5.18  # v3.64  # v4.26  # v4.27  # v4.28  # v4.29  # v4.30  # v4.31  # v4.32  # v4.33  # v4.34  # v4.35  # v4.36  # v4.37  # v4.38  # v4.39  # v4.40  # v4.41  # v4.42  # v4.43  # v4.44  # v4.45  # v4.46  # v4.47  # v4.48  # v4.49  # v4.50  # v4.51  # v4.52  # v4.53  # v4.54  # v4.55  # v4.56  # v4.57  # v4.58  # v4.59  # v4.60  # v4.61  # v4.62  # v4.63  # v4.64  # v4.65  # v4.66  # v4.67  # v4.68  # v4.69  # v4.70  # v4.71  # v4.72  # v4.73  # v4.74  # v4.75  # v4.76  # v4.77  # v4.78  # v4.79  # v4.80  # v4.81  # v4.82  # v4.83  # v4.84  # v4.85  # v4.86  # v4.87  # v4.88  # v4.89  # v4.90  # v4.91  # v4.92  # v4.93  # v4.94  # v4.95  # v4.96  # v4.97  # v4.98  # v4.99  # v5.00  # v5.01  # v5.02  # v5.03  # v5.04  # v5.24  # v5.25
 # VERSION = "4.09 (2026-11-19)"  # v3.64 (entfallen)
 # VERSION = "4.08 (2026-11-19)"  # v3.64 (entfallen)
 # VERSION = "4.07 (2026-11-19)"  # v3.64 (entfallen)
@@ -2723,13 +2729,15 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
                     ui.menu_item(tr("Verbinden"), on_click=lambda: connect_arduino())  # v4.51 (vorher Menue Lichtmaschine)
                     ui.menu_item(tr("Verbindung trennen"), on_click=lambda: disconnect_arduino())  # v4.14
                     ui.menu_item(tr("Neu verbinden"), on_click=lambda: reconnect_arduino())  # v4.14
-                    ui.menu_item(tr("Board wechseln …"), on_click=lambda: change_board())  # v4.14
+                    # ui.menu_item(tr("Board wechseln …"), on_click=lambda: change_board())  # v4.14  # v5.26 (entfallen)
+                    ui.menu_item(tr("Gerät wechseln …"), on_click=lambda: change_board())  # v4.14  # v5.26: Gerät statt Board
                     ui.separator()  # v4.51
                     ui.menu_item(tr("Alle LED aus"), on_click=lambda: run_command(lambda: ctrl.led_off(), "Alle LED aus")())  # v4.51 (vorher Menue Lichtmaschine)
                     # ui.menu_item(tr("ESP32-Firmware über WLAN hochladen …"), on_click=lambda: web_esp32_ota.open_dialog(pio=ota_arduino.Find_PIO() if ota_options.Is_PlatformIO() else None))  # v4.51 (vorher Menue Lichtmaschine)  # v4.52 (entfallen: Knopf auf dem Reiter WLAN (OTA) der Optionen)
             # connect_arrow.tooltip(tr("Verbindung trennen, neu verbinden oder das Board wechseln"))  # v4.14  # v4.51 (entfallen)
             # connect_arrow.tooltip(tr("Verbinden, Verbindung trennen, neu verbinden, Board wechseln, alle LED aus oder ESP32-Firmware über WLAN hochladen"))  # v4.51  # v4.52 (entfallen)
-            connect_arrow.tooltip(tr("Verbinden, Verbindung trennen, neu verbinden, Board wechseln oder alle LED aus"))  # v4.52
+            # connect_arrow.tooltip(tr("Verbinden, Verbindung trennen, neu verbinden, Board wechseln oder alle LED aus"))  # v4.52  # v5.26 (entfallen)
+            connect_arrow.tooltip(tr("Verbinden, Verbindung trennen, neu verbinden, Gerät wechseln oder alle LED aus"))  # v4.52  # v5.26: wie der Menuepunkt
         # connect_btn.tooltip("Verbindung zum Arduino herstellen (wie Lichtmaschine → Verbinden). Rot: keine Verbindung, grün: verbunden. Trennen: Menü Lichtmaschine → Trennen")  # v2.01  # v3.83  # v3.84 (entfallen)
         # connect_btn.tooltip("Verbindung zur Lichtmaschine herstellen (wie ARDUINO → Verbinden). Rot: keine Verbindung, grün: verbunden. Trennen: Pfeil neben dem Knopf oder Menü ARDUINO → Trennen")  # v2.01  # v3.83  # v4.14  # v4.18 (entfallen)
         # connect_btn.tooltip("Verbindung zur Lichtmaschine herstellen (wie Lichtmaschine → Verbinden). Rot: keine Verbindung, grün: verbunden. Trennen: Pfeil neben dem Knopf oder Menü Lichtmaschine → Trennen")  # v4.18  # v4.51 (entfallen)

@@ -1,3 +1,15 @@
+# Datei-Version: 1.01 (2026-11-25) - M06_Write_MLLConfig.py
+# ----------------------------------------------------------------------------------------------
+# Name:           M06_Write_MLLConfig.py
+# Path:           proggen/M06_Write_MLLConfig.py
+# Version:        1.01
+# Last Update:    2026-11-25
+# Author:         Harold Linke, Jürgen Winkler
+# Licence:        LGPL V2.1
+# History of Change:
+#   1.00  2026-10-12  Stand der Umstellung (nicht erfasst)
+#   1.01  2026-11-25  Texte bei der Pruefung des Pico WLAN: 'mit einem anderen Gerät', 'des angeschlossenen Geräts' (statt Arduino). Zeilen mit '# v1.01'
+# ----------------------------------------------------------------------------------------------
 # -*- coding: utf-8 -*-
 #
 #         Write header
@@ -1418,8 +1430,10 @@ def create_MLLconfig_and_upload_to_PICO(pico_ip, ConfigTxT, LEDsInUse, ComPortCo
     
         if not is_ip_responsive(pico_ip):
             Msg = M09.Get_Language_Str('Fehler: Es ist kein Gerät mit der IP Adresse #1# angeschlossen.')
-            Msg = Replace(Msg, "#1#", str(pico_ip)) + vbCr + vbCr + M09.Get_Language_Str('Wollen sie es noch mal mit einem anderen Arduino oder einer anderen IP-Adresse versuchen?') + vbCr + vbCr + M09.Get_Language_Str('Mit \'Nein\' wird die Meldung ignoriert und versucht den Arduino trotzdem zu programmieren.')
-            select_variable_ = P01.MsgBox(Msg, vbYesNoCancel + vbQuestion, M09.Get_Language_Str('Fehler bei der Überprüfung des angeschlossenen Arduinos'))
+            # Msg = Replace(Msg, "#1#", str(pico_ip)) + vbCr + vbCr + M09.Get_Language_Str('Wollen sie es noch mal mit einem anderen Arduino oder einer anderen IP-Adresse versuchen?') + vbCr + vbCr + M09.Get_Language_Str('Mit \'Nein\' wird die Meldung ignoriert und versucht den Arduino trotzdem zu programmieren.')  # v1.01 (entfallen)
+            Msg = Replace(Msg, "#1#", str(pico_ip)) + vbCr + vbCr + M09.Get_Language_Str('Wollen sie es noch mal mit einem anderen Gerät oder einer anderen IP-Adresse versuchen?') + vbCr + vbCr + M09.Get_Language_Str('Mit \'Nein\' wird die Meldung ignoriert und versucht den Arduino trotzdem zu programmieren.')  # v1.01: Gerät statt Arduino
+            # select_variable_ = P01.MsgBox(Msg, vbYesNoCancel + vbQuestion, M09.Get_Language_Str('Fehler bei der Überprüfung des angeschlossenen Arduinos'))  # v1.01 (entfallen)
+            select_variable_ = P01.MsgBox(Msg, vbYesNoCancel + vbQuestion, M09.Get_Language_Str('Fehler bei der Überprüfung des angeschlossenen Geräts'))  # v1.01: Gerät statt Arduino
             if (select_variable_ == vbYes):
                 Retry = True
                 fn_return_value = M07New.USB_Port_Dialog(ComPortColumn)

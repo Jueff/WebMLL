@@ -1,5 +1,5 @@
-Datei-Version: 1.104 (2026-11-25) - HOC_intern.md
-Stand: Version 5.25
+Datei-Version: 1.105 (2026-11-25) - HOC_intern.md
+Stand: Version 5.26
 
 # webMobaLedLib: History of Change (intern, ausführlich)
 
@@ -24,6 +24,40 @@ Release-Stand 2.12 auf Wunsch des Entwicklers („Release bauen“). **Neu im Ab
 | `archiv/` | frühere Release-Hinweise, Versionslisten und ZIP (nichts gelöscht) |
 
 **Geprüft:** Dateipaket: `testzip` in Ordnung, alle 113 Dateien gleich dem Ordner `headless`, keine `__pycache__`, alle `.py` kompilieren, Versionsprüfung „alles passt“ (50 Einträge), 11 Dateien ausführbar (`.sh`, `.command`). **Nachbau des Entwickler-Ablaufs mit seinem echten Paket (1678 Dateien, Stand 2.05):** meine 113 Dateien darübergelegt, Prüfliste, ZIP gepackt, `release_tools check --previous <sein ZIP>`: **in Ordnung** (Version 2.12, 1678 Dateien, 6 neue, 0 fehlende, ZIP 16,6 MB). Alle 15 Prüfreihen laufen (17, 26, 15, 70, 28, 19, 43, 26, 16, 27, 8, 8, 8, 5, 9 Prüfungen). **Nicht geprüft:** `zip_erstellen.bat` und die Reparaturskripte unter Windows, ein abgebrochenes Update unter Windows, das Verhalten mit Acronis, der Download von GitHub.
+
+## 5.26 (2026-11-25), Hardware Optionen: Reiter Lichtmaschine, Geräteauswahl, Einstellungen des Blattes (Jürgen Winkler)
+
+**Wunsch:** Bisher wählte der Anwender zuerst das Board (Radioknöpfe) und suchte danach den Port. Ziel: wenige Klicks, alles möglichst automatisch, gut strukturiert und leicht verständlich. Entwickelt auf Stand 5.12 und auf 5.25 übertragen.
+
+* **Geräteauswahl** (Knopf **Erkennen**, vorher „USB Port erkennen“): Liste aller gefundenen Geräte, gruppiert nach Classic / Pro / Pico, mit Typ, Port und Name des Anschlusses. Das im Blatt gespeicherte Gerät steht immer in der Liste (Vermerk „offline“, wenn es nicht am USB hängt). „Unbekannte Ports anzeigen“ ist zunächst aus; eingeschaltet erscheint die Gruppe „unbekannt“, beim OK fragt das Programm nach dem Typ (OK links, Abbrechen rechts). Das Bild rechts folgt der Auswahl, neu angesteckte Geräte werden gewählt, Abbrechen stellt den alten Typ wieder her. Über der Liste nur noch der Hinweis für Classic, keine Statuszeile; Liste 520 px hoch. Die anderen Dialoge (rechter Arduino, ISP, WLAN/mDNS) bleiben.
+* **Reiter Lichtmaschine:** keine Radioknöpfe mehr, nur **Hardware:** (fett) mit Gerät und Port, Bild (50 % größer), Knopf **Erkennen**. Darunter **Einstellungen**: Protokoll (DCC/LNet/CAN, Pico nur DCC, Selectrix-Blatt gesperrt), Hardwarevariante (nur Classic: Nano alter Bootloader / neue Version / maximaler Speicher, Uno), Schnelles Update (ESP32/Pico), Lichtsensor aktivieren, Schaltzustände speichern, Anzeige auf dem Display mit Vorschau (nur ESP32; „WLAN, IP, LDR und Zeit“ und „WLAN, IP und Hostname“ nur bei eingeschaltetem WLAN, folgt dem Haken im Reiter WLAN (OTA); der Reiter „ESP Einstellungen“ entfällt). Reiter links ausgerichtet und schmaler, Dialog kompakter.
+* **Reiter DCC/LNet Arduino** folgt dem Protokoll sofort (Beschriftung; bei CAN ausgeblendet).
+* **Speicherung im Blatt:** Protokoll (Page-ID) und Variante (Build-Optionen) wie bisher; Display in `esp32_options`; **Schnelles Update je Blatt** (`esp32_options["serial_cfg"]`, die globale Einstellung ist nur noch Vorgabe); **Lichtsensor und Schaltzustände als Makrozeilen** `#define READ_LDR` und `#define ENABLE_STORE_STATUS()` (setzen = Zeile einfügen oder vorhandene ausgeschaltete einschalten, entfernen = alle Zeilen mit dem Makro löschen). Frühere Einträge `ldr`/`store_status` in `esp32_options` werden beim Schließen der Optionen in Makrozeilen übernommen.
+* **Code-Generator:** `READ_LDR` und `ENABLE_STORE_STATUS()` für alle Plattformen (vorher nur innerhalb `#ifdef ESP32`).
+* **Texte:** Gerät bzw. Lichtmaschine statt Arduino/Board: Fenster „Geräteauswahl“, „Gefundene Geräte“, „Kein Gerät gefunden …“, „OK, wenn die LEDs am richtigen Gerät …“, „Bitte Gerät an einen USB Anschluss …“, „Achtung: Das Gerät wird von einem anderen Programm benutzt.“, Menüpunkt „Gerät wechseln …“, „Fehler beim Öffnen der Verbindung“, Verbindungsstatus und -fehler, Z21, Test ohne Verbindung, Pico-WLAN-Prüfung, Patterngenerator (auch `PA_Languages.csv`), Makro-Parameter, „gleich zur Lichtmaschine schicken“, Entwicklungsumgebung, Erweiterungen, Meldungen in `MobaLedTest_macrodef.json` („Verbindung mit dem Gerät“, Anzeigename „Geräteschnittstelle“). Der rote Hinweis „Tipp: Der ausgewählte Arduino blinkt schnell“ entfällt. Protokoll „LNet“ ohne den Begriff LocoNet (wie 5.25).
+* Selectrix für Classic/Pro wurde versucht und wieder entfernt (andere Spalten; später).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_form_comport.py` | 1.17 | Geräteauswahl (Liste, Gruppen, offline, unbekannte Ports, Typabfrage), Texte, kompakter |
+| `_web/web_form_options.py` | 1.66 | Reiter Lichtmaschine, Einstellungen, Reiter DCC/LNet folgt dem Protokoll, Display-Anzeige nur mit WLAN, Hardwarevariante, Bild größer |
+| `headless/headless_sheet_settings.py` | 1.00 | neu: Einstellungen als Makrozeilen setzen/entfernen, Übernahme alter Einträge |
+| `proggen/M42_Dyn_Config.py` | 1.12 | Schnelles Update je Blatt (`Set_Sheet_Option`) |
+| `proggen/M06_Write_Header.py` | 1.18 | READ\_LDR / ENABLE\_STORE\_STATUS für alle Plattformen |
+| `proggen/M06_Write_Header_SW.py` | 1.14 | Lichtsensor und Schaltzustände auf allen Plattformen |
+| `proggen/M07_COM_Port_New.py` | 1.07 | Titel Geräteauswahl, Statusmeldungen mit Gerät, roter Hinweis entfernt |
+| `_web/web_serial.py` | 1.16 | „Fehler beim Öffnen der Verbindung“ (übersetzt), Texte Gerät |
+| `_web/web_esp32_ota.py` | 1.10 | `settings_panel()` gibt den Haken WLAN zurück |
+| `_web/web_z21.py`, `web_form_ledcoloranim.py`, `web_form_servoanim.py`, `web_form_exchange.py` | 1.06, 1.01, 1.06, 1.04 | Texte Gerät/Lichtmaschine |
+| `proggen/M06_Write_MLLConfig.py`, `pattgen/M55_PWM_Data_Send.py` | 1.01 | Texte Gerät (Versionskopf neu) |
+| `MobaLedTest_macrodef.json`, `MobaLedTest_macroparamdef.json`, `csv/PA_Languages.csv` | | Texte Gerät/Lichtmaschine |
+| `csv/Web_Languages.csv` | | neue und umbenannte Texte in allen Sprachen |
+| `webmobaledlib.py` | 5.26 | VERSION, REQUIRED\_FILES, Menüpunkt „Gerät wechseln …“ |
+| `install/BETATEST_Checkliste.md` | 4.06 | Punkte 371 bis 381 |
+| `test_hardware_dialog.py` | 1.00 | neu: 9 Tests (Liste der Geräte, Makrozeilen) |
+
+**Geprüft:** `python test_hardware_dialog.py` (9 Tests), `python -m py_compile` aller geänderten Dateien, Übersetzungen der neuen Texte in allen Sprachen, Versionsprüfung (REQUIRED\_FILES).
+**Nicht geprüft:** Oberfläche im Browser, echte Arbeitsmappe (Zeile einfügen/löschen, Autosave), Hardware (Erkennen, Ident-Blinken, Upload mit READ\_LDR / ENABLE\_STORE\_STATUS auf Nano und Pico), Windows/macOS/Linux/Raspberry Pi. Export eines einzelnen Blattes (`.MLL_pgf`) nimmt Schnelles Update und Display-Einstellung nicht mit.
 
 ## 5.25 (2026-11-25), Begriff LocoNet entfernt
 

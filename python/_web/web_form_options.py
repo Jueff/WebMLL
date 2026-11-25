@@ -1,8 +1,8 @@
-# Datei-Version: 1.50 (2026-11-25) - web_form_options.py
+# Datei-Version: 1.66 (2026-11-25) - web_form_options.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_form_options.py
 # Path:           _web/web_form_options.py
-# Version:        1.50
+# Version:        1.66
 # Last Update:    2026-11-25
 # Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
@@ -37,6 +37,24 @@
 #   1.44  2026-11-22  Version 4.68: Titel Hardware Optionen; Reiter Entwicklungsumgebung und Firmware Installation nicht im Anfaenger Modus; Boardnamen Lichtmaschine Classic/Pro/Pico; PlatformIO (Standard) zuerst, ARDUINO-IDE (nur Kompatibilitaet), Knopf ARDUINO-IDE Einstellungen nur mit ARDUINO-IDE; Hinweis WLAN (OTA) zu Schnelles Update
 #   1.45  2026-11-22  Version 4.70: Reiter Entwicklungsumgebung: roter Hinweis unter dem Haken Schnelles Update (nicht kompatibel mit WLAN)
 #   1.46  2026-11-22  Version 4.71: Warnhinweise zu Schnelles Update und WLAN entfernt (Pull Request 54: Schnelles Update geht fuer den ESP32 jetzt auch ueber WLAN); neuer Hinweistext zum Schnellen Update (aus dem Pull Request, dort als 1.44)
+#   1.66  2026-11-25  Anzeige auf dem Display: 'WLAN, IP, LDR und Zeit' und 'WLAN, IP und Hostname' nur, wenn WLAN am ESP32 eingeschaltet ist (folgt dem Haken im Reiter WLAN (OTA),
+#                     sonst Aus); 'Hardwarevariante' statt 'Board-Variante'; Bild der Hardware 50 % groesser; Texte 'auf die/der Lichtmaschine' statt Arduino; Protokoll 'LNet' ohne den Begriff LocoNet (wie 5.25). Zeilen mit '# v1.66'
+#   1.65  2026-11-25  Tooltip des Knopfes Erkennen: Protokoll wird nicht mehr im Dialog gewaehlt. Zeilen mit '# v1.65'
+#   1.64  2026-11-25  Reiter DCC/LNet Arduino folgt dem Protokoll im Dialog: Beschriftung wechselt sofort, bei CAN ausgeblendet (der Reiter wird jetzt immer angelegt). Zeilen mit '# v1.64'
+#   1.63  2026-11-25  Reiter links ausgerichtet; Knopf Erkennen unter der Hardware-Zeile; Haken heisst nur 'Schnelles Update' (Erklaerung im Tooltip). Zeilen mit '# v1.63'
+#   1.62  2026-11-25  Reiter nur so breit wie ihre Beschriftung; Hardware-Zeile: 'Hardware:' fett, danach die gewaehlte Hardware; Knopf Suchen heisst Erkennen. Zeilen mit '# v1.62'
+#   1.61  2026-11-25  Board-Variante: 'Nano (alter Bootloader)' und 'Nano (maximaler Speicher)' statt 'Nano Normal (old Bootloader)' und 'Nano (Full memory)'. Zeilen mit '# v1.61'
+#   1.60  2026-11-25  Hardware-Zeile zeigt bei Classic nur 'Lichtmaschine Classic, Mini'; Board-Variante: Nano Normal (old Bootloader), Nano (neue Version), Nano (Full memory), Uno. Zeilen mit '# v1.60'
+#   1.59  2026-11-25  Reiter Lichtmaschine kompakter: weniger Rand und Abstaende, Knopf Suchen dense, Protokoll und Board-Variante nebeneinander, Haken eng (dense), kleinere Display-Vorschau (esp_panel compact) und kleineres Bild. Zeilen mit '# v1.59'
+#   1.58  2026-11-25  Selectrix wieder aus der Protokoll-Liste entfernt (kommt spaeter); Stand wie 1.56. Zeilen mit '# v1.58'
+#   1.57  2026-11-25  (v1.58 entfallen) Protokoll Selectrix fuer Classic und Pro (ESP32) in der Liste; der Wechsel eines bestehenden Blattes zwischen Selectrix und DCC/LNet/CAN wird mit Hinweis abgewiesen (andere Spalten). Zeilen mit '# v1.57'
+#   1.56  2026-11-25  Pico: Protokoll nur DCC (ein anderes eingestelltes Protokoll bleibt sichtbar mit Hinweis, damit es auf DCC umgestellt werden kann). Zeilen mit '# v1.56'
+#   1.55  2026-11-25  Alle Einstellungen der Hauptseite stehen im Blatt: Lichtsensor und Schaltzustaende als Makrozeilen (#define READ_LDR, #define ENABLE_STORE_STATUS(), headless_sheet_settings), Schnelles Update je Blatt (M42 1.08), Display, Protokoll und Variante wie bisher. Zeilen mit '# v1.55'
+#   1.54  2026-11-25  Hauptseite: Lichtsensor und 'Schaltzustaende speichern' (vorher Zustaende werden gespeichert) fuer alle Plattformen, nicht nur ESP32. Zeilen mit '# v1.54'
+#   1.53  2026-11-25  Hauptseite: Display-Einstellung mit Vorschau (vorher Reiter ESP Einstellungen, der dann entfaellt), Namen 'Anzeige auf dem Display' / 'Vorschau des Displays' statt OLED; Schnelles Update ohne '(ESP32/Pico)'; Hinweis 'Kommunikationsmodus des Blattes' entfernt. Zeilen mit '# v1.53'
+#   1.52  2026-11-25  Die ESP32-Haken 'Lichtsensor aktivieren' (vorher Fotowiderstand) und 'Zustaende werden gespeichert' sind vom Reiter ESP Einstellungen auf die Hauptseite (Einstellungen) umgezogen; die OLED-Vorschau liest den Haken Lichtsensor von dort. Zeilen mit '# v1.52'
+#   1.51  2026-11-25  Reiter Lichtmaschine: Abschnitt heisst 'Einstellungen'; der Haken Schnelles Update (ESP32/Pico) ist vom Reiter Entwicklungsumgebung dorthin umgezogen (bleibt dort nur beim WLAN-Geraet). Zeilen mit '# v1.51'
+#   1.49  2026-11-25  Reiter Lichtmaschine: keine Auswahl des Boards mehr, nur Anzeige von Board, Port und Bild; der Knopf Suchen oeffnet den Port-Dialog (web_form_comport), dort werden Board, Variante, Port und Protokoll gewaehlt. Nur das WLAN-Geraet behaelt die Auswahl. Zeilen mit '# v1.49'
 #   1.48  2026-11-24  Pull Request 39 (Juergen, Issue 35), nur der Auswahldialog: Board und USB Port erkennen fragt bei mehreren gefundenen Board-Typen (Nano, ESP32, Pico) vorher nach dem gewuenschten Typ (_choose_detected_board_type). Der Umbau der Boardliste im Optionen-Dialog aus dem PR wurde nicht uebernommen. Zeilen mit '# v1.48'
 #   1.47  2026-11-23  Issue 58: Firmware installieren (Pico): eigener Anschluss, immer erfragt (nicht der Anschluss des Blatts, dort haengt die Lichtmaschine); beim Start ungueltig; bei verbundener Lichtmaschine auf diesem Anschluss wird vorher getrennt
 #   1.49  2026-11-24  Anzeigename MobaLedLib Studio statt webMobaLedLib in Texten der Oberflaeche. Zeilen mit '# v5.09'
@@ -213,7 +231,8 @@ def ext_panel(vals):  # v1.41 (vorher in _options_async, Reiter Erweiterungen)  
     async def confirm_foreign_code(spec):  # v1.32
         with ui.dialog().props("persistent") as dlg, ui.card().classes("w-[520px] max-w-full"):  # v1.32
             ui.label(tr("Fremden Code einbinden?")).classes("text-h6")  # v1.32
-            ui.label(tr("Die Erweiterung {spec} wird aus dem Internet geladen. Ihr Code wird beim Übersetzen in Ihr Programm eingebunden und auf dem Arduino ausgeführt. Fügen Sie nur Erweiterungen aus Quellen hinzu, denen Sie vertrauen.", spec=spec)).style("white-space: pre-line")  # v1.32
+            # ui.label(tr("Die Erweiterung {spec} wird aus dem Internet geladen. Ihr Code wird beim Übersetzen in Ihr Programm eingebunden und auf dem Arduino ausgeführt. Fügen Sie nur Erweiterungen aus Quellen hinzu, denen Sie vertrauen.", spec=spec)).style("white-space: pre-line")  # v1.32  # v1.66 (entfallen)
+            ui.label(tr("Die Erweiterung {spec} wird aus dem Internet geladen. Ihr Code wird beim Übersetzen in Ihr Programm eingebunden und auf der Lichtmaschine ausgeführt. Fügen Sie nur Erweiterungen aus Quellen hinzu, denen Sie vertrauen.", spec=spec)).style("white-space: pre-line")  # v1.32  # v1.66: Lichtmaschine statt Arduino
             with ui.row().classes("justify-end w-full"):  # v1.32
                 ui.button(tr("Abbrechen"), on_click=lambda: dlg.submit(False)).props("flat")  # v1.32
                 ui.button(tr("Hinzufügen"), on_click=lambda: dlg.submit(True)).props("color=primary")  # v1.32
@@ -326,9 +345,11 @@ async def _options_async(spec: dict, st: dict):
     with wd._bridge["client"]:
         # with ui.dialog().props("persistent") as dlg, ui.card().classes("w-[900px] max-w-full"):  # v1.12 (entfallen)
         # with ui.dialog().props("persistent") as dlg, ui.card().classes("w-[900px] max-w-full").style("max-height: 96vh; overflow-y: auto"):    # auf kleinen Bildschirmen (Laptop) scrollen, sonst fehlen die unteren Boards (Pico)  # v1.14 (entfallen)
-        ui.add_css(".mll-opttabs .q-tab { flex: 1 1 auto; min-width: 0; padding: 0 6px; }"                                     # v1.33
+        # ui.add_css(".mll-opttabs .q-tab { flex: 1 1 auto; min-width: 0; padding: 0 6px; }"                                     # v1.33  # v1.62 (entfallen)
+        ui.add_css(".mll-opttabs .q-tab { flex: 0 1 auto; min-width: 0; padding: 0 10px; min-height: 36px; }"                    # v1.33  # v1.62: Reiter nur so breit wie ihre Beschriftung
                    ".mll-opttabs .q-tab__label { white-space: normal; text-align: center; line-height: 1.15; font-size: 0.78rem; overflow-wrap: anywhere; }"  # v1.33
                    ".mll-opttabs .q-tabs__content { flex-wrap: nowrap; }")  # v1.33: lange Beschriftungen zweizeilig, alle Reiter sichtbar (ESP Einstellungen, Erweiterungen)
+        ui.add_css(".mll-optcard .mll-hw-panel.q-tab-panel { padding: 8px 4px; }")  # v1.59: Reiter Lichtmaschine kompakter
         ui.add_css(".mll-optcard > * { flex-shrink: 0; }")       # die Karte ist eine Spalte (flex): ohne das schrumpfen die Reiter und schneiden die unteren Knoepfe und Texte ab  # v1.14
         with ui.dialog().props("persistent") as dlg, ui.card().classes("w-[900px] max-w-full mll-optcard").style("max-height: 96vh; overflow-y: auto"):    # auf kleinen Bildschirmen (Laptop) scrollen, sonst fehlen die unteren Boards (Pico)  # v1.14
             ui.label(spec["title"]).classes("text-h6")
@@ -346,27 +367,37 @@ async def _options_async(spec: dict, st: dict):
                 3: tr("MLL-Zeit und LDR-Wert"), 4: tr("WLAN, IP, LDR und Zeit"),  # v1.30
                 5: tr("WLAN, IP und Hostname"),  # v1.30
             }  # v1.30
+            wifi_state = {"apply": None}  # v1.66: die Anzeigen mit WLAN (4, 5) gibt es nur, wenn WLAN am ESP32 eingeschaltet ist (Haken im Reiter WLAN (OTA))
 
-            def esp_panel():  # v1.30
-                with ui.row().classes("items-start gap-6"):  # v1.30
+            def shown_modes():  # v1.66
+                return {k: v for k, v in modes.items() if vals.get("esp32_wifi") or k not in (4, 5)}  # v1.66
+
+            def esp_panel(compact=False):  # v1.30  # v1.59: compact (Hauptseite): kleinere Vorschau
+                with ui.row().classes("items-start " + ("gap-3 no-wrap" if compact else "gap-6")):  # v1.30  # v1.59
                     with ui.column():  # v1.30
-                        mode = ui.select(modes, value=esp_settings.get("oled", 0), label=tr("OLED-Anzeige")).classes("w-64")  # v1.30
-                        ldr = ui.checkbox(tr("Fotowiderstand aktivieren"), value=esp_settings.get("ldr", False))  # v1.30
-                        store = ui.checkbox(tr("Zustände werden gespeichert"), value=esp_settings.get("store_status", False))  # v1.30
-                    with ui.column().classes("items-center gap-1"):  # v1.30
-                        ui.label(tr("OLED-Vorschau")).classes("text-caption")  # v1.30
+                        # mode = ui.select(modes, value=esp_settings.get("oled", 0), label=tr("Anzeige auf dem Display")).props("outlined dense" if compact else "").classes("w-56" if compact else "w-64")  # v1.30  # v1.53: verstaendlicher Name statt OLED-Anzeige  # v1.66 (entfallen)
+                        start_mode = esp_settings.get("oled", 0) if esp_settings.get("oled", 0) in shown_modes() else 0  # v1.66: ohne WLAN keine WLAN-Anzeige
+                        mode = ui.select(shown_modes(), value=start_mode, label=tr("Anzeige auf dem Display")).props("outlined dense" if compact else "").classes("w-56" if compact else "w-64")  # v1.30  # v1.53  # v1.66: nur die Anzeigen, die zum WLAN passen
+                        # ldr/store (Lichtsensor, Zustaende speichern) stehen jetzt auf der Hauptseite (Einstellungen)  # v1.52
+                    with ui.column().classes("items-center gap-0" if compact else "items-center gap-1"):  # v1.30  # v1.59
+                        if not compact:  # v1.59: auf der Hauptseite steht die Ueberschrift als Tooltip
+                            ui.label(tr("Vorschau des Displays")).classes("text-caption")  # v1.30  # v1.53
+                        size = ("width:176px; height:88px; padding:4px; font: 10px/19px monospace; " if compact else  # v1.59
+                                "width:256px; height:128px; padding:8px; font: 15px/27px monospace; ")  # v1.30
                         display = ui.label().style(  # v1.30
-                            "width:256px; height:128px; max-width:100%; padding:8px; "  # v1.30
+                            size + "max-width:100%; "  # v1.30  # v1.59
                             "background:#0c151b; color:#8edaff; white-space:pre; overflow:hidden; "  # v1.30
-                            "text-align:center; font: 15px/27px monospace; border-radius:8px"  # v1.30
+                            "text-align:center; border-radius:6px"  # v1.30  # v1.59
                         )  # v1.30
+                        if compact:  # v1.59
+                            display.tooltip(tr("Vorschau des Displays"))  # v1.59
 
                 frame = 0  # v1.30
 
                 def preview():  # v1.30
                     minutes = 18 * 60 + frame % 60  # v1.30
                     clock = f"{minutes // 60:02d}:{minutes % 60:02d}"  # v1.30
-                    sensor = f"LDR: {110 + frame % 30}" if ldr.value else "LDR: aus"  # v1.30
+                    sensor = f"LDR: {110 + frame % 30}" if vals.get("ldr") else "LDR: aus"  # v1.30  # v1.52  # v1.55
                     hostname = vals["esp32_hostname"]  # v1.30
                     # The firmware uses a smaller font when a long hostname needs two lines.  # v1.30
                     split = 18 if len(hostname) <= 36 else 32  # v1.30
@@ -383,22 +414,31 @@ async def _options_async(spec: dict, st: dict):
                         4: [status, address, sensor, f"MLL-Zeit: {clock}"],  # v1.30
                         5: [status, address, *host_lines],  # v1.30
                     }  # v1.30
-                    display.style("font-size: 11px" if mode.value == 5 and split == 32 else "font-size: 15px")  # v1.30
+                    big, small = ("10px", "7px") if compact else ("15px", "11px")  # v1.59
+                    display.style("font-size: " + (small if mode.value == 5 and split == 32 else big))  # v1.30  # v1.59
                     display.set_text("\n".join(lines[mode.value]))  # v1.30
 
                 def tick():  # v1.30
                     nonlocal frame  # v1.30
                     # if tabs.value == esp_tab.name:  # v1.30 (entfallen: ui.tab hat kein Attribut name)
-                    if tabs.value == esp_tab.props["name"]:  # v1.30
+                    if tabs.value in (esp_tab.props["name"], tab_objs[0].props["name"]):  # v1.30  # v1.53: auch auf der Hauptseite (Lichtmaschine)
                         frame += 1  # v1.30
                         preview()  # v1.30
 
                 def update(_event):  # v1.30
-                    vals["esp32_options"] = {"oled": mode.value, "ldr": ldr.value, "store_status": store.value}  # v1.30
+                    vals["esp32_options"] = {**vals["esp32_options"], "oled": mode.value}  # v1.30  # v1.52: ldr und store setzt die Hauptseite
                     preview()  # v1.30
 
-                for control in (mode, ldr, store):  # v1.30
+                for control in (mode,):  # v1.30  # v1.52
                     control.on_value_change(update)  # v1.30
+
+                def apply_wifi(on):  # v1.66: Haken 'WLAN am ESP32 aktivieren' geaendert: Auswahl anpassen
+                    vals["esp32_wifi"] = bool(on)  # v1.66
+                    mode.set_options(shown_modes(), value=mode.value if mode.value in shown_modes() else 0)  # v1.66
+                    preview()  # v1.66
+                wifi_state["apply"] = apply_wifi  # v1.66
+                if mode.value != esp_settings.get("oled", 0):  # v1.66: WLAN-Anzeige ohne WLAN wurde auf Aus gestellt
+                    vals["esp32_options"] = {**vals["esp32_options"], "oled": mode.value}  # v1.66
                 preview()  # v1.30
                 ui.timer(1, tick)  # v1.30
 
@@ -556,9 +596,16 @@ async def _options_async(spec: dict, st: dict):
                     return  # v1.06
                 nano_values = spec["pages"]["left"].get("nano_values")  # v1.06
                 if vals.get("auto_L") or vals.get("L") is None or nano_values is None:  # v1.06
-                    set_tab_visible(tab, dcc["initial"])  # v1.06
+                    # set_tab_visible(tab, dcc["initial"])  # v1.06  # v1.64 (entfallen)
+                    nano = dcc["nano"]  # v1.64
                 else:  # v1.06
-                    set_tab_visible(tab, vals["L"] in nano_values)  # v1.06
+                    # set_tab_visible(tab, vals["L"] in nano_values)  # v1.06  # v1.64 (entfallen)
+                    nano = vals["L"] in nano_values  # v1.64
+                proto = vals.get("protocol") or dcc["proto"]  # v1.64: Reiter heisst wie das Protokoll (DCC/LNet Arduino), bei CAN gibt es ihn nicht
+                set_tab_visible(tab, nano and proto != "CAN")  # v1.64
+                if proto != "CAN" and tab.props.get("label") != proto + " Arduino":  # v1.64
+                    tab.props["label"] = proto + " Arduino"  # v1.64
+                    tab.update()  # v1.64
 
             boards = []                                                # (Seite der Spezifikation, Radiogruppen) fuer refresh_boards  # v1.08
 
@@ -594,7 +641,7 @@ async def _options_async(spec: dict, st: dict):
                         vals[k] = e.value
                         update_pico_buttons()
                         ota_tab.set_visibility(vals.get("L") == esp32_value and esp32_value is not None)  # v1.09
-                        esp_tab.set_visibility(vals.get("L") == esp32_value and esp32_value is not None)  # v1.30
+                        esp_tab.set_visibility(vals.get("L") == esp32_value and esp32_value is not None and not has_summary)  # v1.30  # v1.53
                         update_dcc_tab()  # v1.06
                         other = g["b"] if which == "a" else g["a"]
                         if other is not None:
@@ -612,8 +659,9 @@ async def _options_async(spec: dict, st: dict):
                     boards.append((p, g))  # v1.08
 
             esp32_value = spec["pages"]["left"].get("esp32_value")
+            has_summary = bool(spec["pages"]["left"].get("summary"))  # v1.53
             # with ui.tabs().classes("w-full") as tabs:  # v1.33 (entfallen)
-            with ui.tabs().classes("w-full mll-opttabs") as tabs:  # v1.33
+            with ui.tabs().classes("w-full mll-opttabs").props("align=left") as tabs:  # v1.33  # v1.63: Reiter links ausgerichtet
                 tab_objs = [ui.tab(t["name"]) for t in spec["tabs"]]
                 for t, tab_obj in zip(spec["tabs"], tab_objs):  # v1.06
                     if t.get("ide_only"):  # v1.07
@@ -621,9 +669,10 @@ async def _options_async(spec: dict, st: dict):
                         set_tab_visible(tab_obj, not vals.get("use_pio"))  # v1.07
                     if t.get("nano_only"):  # v1.06
                         dcc["tab"], dcc["initial"] = tab_obj, bool(t.get("visible", True))  # v1.06
+                        dcc["nano"], dcc["proto"] = bool(t.get("nano", dcc["initial"])), str(vals.get("protocol") or "")  # v1.64
                         set_tab_visible(tab_obj, dcc["initial"])  # v1.06
                 esp_tab = ui.tab(tr("ESP Einstellungen"))  # v1.30
-                esp_tab.set_visibility(vals.get("L") == esp32_value and esp32_value is not None)  # v1.30
+                esp_tab.set_visibility(vals.get("L") == esp32_value and esp32_value is not None and not has_summary)  # v1.30  # v1.53: mit Hauptseite stehen die Einstellungen dort
                 ota_tab = ui.tab(tr("WLAN (OTA)"))
                 # ext_tab = ui.tab(tr("Erweiterungen"))  # v1.31  # v1.41 (entfallen: eigenes Fenster, Menue Einstellungen)
                 ota_tab.set_visibility(vals.get("L") == esp32_value and esp32_value is not None)
@@ -633,17 +682,55 @@ async def _options_async(spec: dict, st: dict):
             tabs.on_value_change(lambda e: _TAB.__setitem__("name", e.value))  # v1.35
             with ui.tab_panels(tabs, value=start_tab).classes("w-full"):  # v1.35
                 with ui.tab_panel(esp_tab):  # v1.30
-                    esp_panel()  # v1.30
+                    if not has_summary:  # v1.53: sonst auf der Hauptseite (esp_panel nur einmal aufbauen)
+                        esp_panel()  # v1.30
                 with ui.tab_panel(ota_tab):
                     # ui.label(tr('ACHTUNG: Die WLAN-Einstellung ist nicht kompatibel mit der Einstellung "Schnelles Update". "Schnelles Update" wird ignoriert, wenn WLAN eingeschaltet ist.')).classes("text-negative text-weight-medium")  # v1.44  # v1.46 (entfallen)
-                    settings_panel()
+                    # settings_panel()  # v1.66 (entfallen)
+                    wifi_cb = settings_panel()  # v1.66: Haken WLAN, damit die Anzeige auf dem Display folgt
+                    if wifi_cb is not None:  # v1.66
+                        wifi_cb.on_value_change(lambda e: wifi_state["apply"] and wifi_state["apply"](bool(e.value)))  # v1.66
                     if ota_upload_handler is not None:  # v1.40
                         ui.button(tr("ESP32-Firmware über WLAN hochladen …"), on_click=lambda: ota_upload_handler()).props("outline no-caps")  # v1.40
                 # with ui.tab_panel(ext_tab):  # v1.31  # v1.41 (entfallen)
                     # ext_panel()  # v1.31  # v1.41 (entfallen)
                 for t, tab in zip(spec["tabs"], tab_objs):
-                    with ui.tab_panel(tab):
-                        if t["kind"] == "arduino":
+                    with ui.tab_panel(tab).classes("mll-hw-panel" if t["kind"] == "arduino" and t["side"] == "left" and has_summary else ""):  # v1.59
+                        if t["kind"] == "arduino" and t["side"] == "left" and spec["pages"]["left"].get("summary"):  # v1.49: nur Anzeige, die Auswahl steht im Dialog des Knopfes Suchen
+                            sm = spec["pages"]["left"]["summary"]
+                            with ui.row().classes("items-start w-full no-wrap gap-4"):  # v1.59: kompakt
+                                with ui.column().classes("grow gap-1"):  # v1.59
+                                    with ui.row().classes("items-baseline gap-2 no-wrap"):  # v1.62: fester Text fett, danach die gewaehlte Hardware
+                                        ui.label(sm["hw_label"]).classes("text-body1 text-bold")  # v1.62
+                                        ui.label(sm["line"]).classes("text-body1")  # v1.62
+                                    for b in t["buttons"]:  # v1.63: Knopf Erkennen unter der Hardware-Zeile
+                                        sb = ui.button(wd.clean_text(b["text"]), on_click=action(b["handler"])).props("outline no-caps dense").classes("q-px-md")  # v1.59
+                                        if b.get("label"):
+                                            sb.tooltip(b["label"])
+                                    ui.separator().classes("q-my-xs")  # v1.59
+                                    ui.label(sm["config_title"]).classes("text-subtitle2")
+                                    with ui.row().classes("items-center gap-3 no-wrap"):  # v1.59: Protokoll und Variante nebeneinander
+                                        ui.select(sm["protocols"], value=sm["protocol"], label=sm["protocol_label"],
+                                                  on_change=lambda e: (vals.__setitem__("protocol", e.value), update_dcc_tab())).props("outlined dense").classes("w-40").set_enabled(len(sm["protocols"]) > 1)  # v1.58 (wie v1.56)  # v1.59
+                                        if sm["variants"]:
+                                            ui.select(sm["variants"], value=vals["L"] if vals.get("L") in sm["variants"] else 2, label=sm["variant_label"],
+                                                      on_change=lambda e: vals.__setitem__("L", e.value) if e.value else None).props("outlined dense").classes("w-80")  # v1.59
+                                    if sm["protocol_hint"]:  # v1.53: nur noch der Hinweis bei Selectrix
+                                        ui.label(sm["protocol_hint"]).classes("text-caption text-grey-7")
+                                    with ui.column().classes("gap-0"):  # v1.59: Haken eng untereinander
+                                        if sm["fast_update"]:  # v1.51: Schnelles Update (nur ESP32/Pico)
+                                            ui.checkbox(sm["serial_cfg_text"], value=bool(vals.get("serial_cfg")),
+                                                        on_change=lambda e: vals.__setitem__("serial_cfg", bool(e.value))).props("dense").classes("q-py-xs").tooltip(
+                                                next((x_["serial_cfg_hint"] for x_ in spec["tabs"] if x_.get("kind") == "ide"), ""))  # v1.59
+                                        # v1.55: Lichtsensor und Schaltzustaende sind Makrozeilen des Blattes (headless_sheet_settings)
+                                        ui.checkbox(sm["ldr_text"], value=bool(vals.get("ldr")), on_change=lambda e: vals.__setitem__("ldr", bool(e.value))).props("dense").classes("q-py-xs")  # v1.55  # v1.59
+                                        ui.checkbox(sm["store_text"], value=bool(vals.get("store_status")), on_change=lambda e: vals.__setitem__("store_status", bool(e.value))).props("dense").classes("q-py-xs")  # v1.55  # v1.59
+                                    if sm["esp_options"]:  # v1.52: nur die Display-Einstellung bleibt beim ESP32
+                                        esp_panel(compact=True)  # v1.53  # v1.59
+                                if sm["image"]:
+                                    # ui.image(sm["image"]).classes("w-40")  # v1.59  # v1.66 (entfallen)
+                                    ui.image(sm["image"]).classes("w-60")  # v1.59  # v1.66: Bild 50 % groesser (15rem statt 10rem)
+                        elif t["kind"] == "arduino":
                             # with ui.row().classes("items-start no-wrap w-full"):  # v1.20 (entfallen)
                             with ui.row().classes("items-start w-full").style("flex-wrap: wrap; gap: 1rem 2rem"):  # v1.20: auf schmalen Bildschirmen rutscht die Auswahl des Boards unter die Knoepfe
                                 with ui.column().classes("grow"):  # v1.20
@@ -659,8 +746,9 @@ async def _options_async(spec: dict, st: dict):
                             ui.radio({1: t["pio_text"], 0: t["arduino_text"]}, value=1 if vals.get("use_pio") else 0,  # v1.44
                                      # on_change=lambda e: vals.__setitem__("use_pio", bool(e.value)))  # v1.07 (entfallen)
                                      on_change=lambda e: (vals.__setitem__("use_pio", bool(e.value)), update_ide_tabs(), ide_btn["b"].set_visibility(not bool(e.value)) if "b" in ide_btn else None))  # v1.07  # v1.44
-                            ui.checkbox(t["serial_cfg_text"], value=bool(vals.get("serial_cfg")),  # v1.32
-                                        on_change=lambda e: vals.__setitem__("serial_cfg", bool(e.value))).tooltip(t["serial_cfg_hint"])  # v1.32
+                            if not spec["pages"]["left"].get("summary"):  # v1.51: sonst steht der Haken auf der Hauptseite (Einstellungen)
+                                ui.checkbox(t["serial_cfg_text"], value=bool(vals.get("serial_cfg")),  # v1.32
+                                            on_change=lambda e: vals.__setitem__("serial_cfg", bool(e.value))).tooltip(t["serial_cfg_hint"])  # v1.32
                             # ui.label(tr('ACHTUNG: Die "Schnelles Update" Einstellung ist nicht kompatibel mit der Einstellung "WLAN". "Schnelles Update" wird ignoriert, wenn WLAN eingeschaltet ist.')).classes("text-negative text-weight-medium")  # v1.45  # v1.46 (entfallen)
                             ui.label(t["status"]).classes("text-grey-8").style("white-space: pre-line")  # v1.04
                             for b in t["buttons"]:  # v1.04
@@ -744,6 +832,7 @@ def make_class(Base):
             setattr(self, PFX + "__Disable_Set_Arduino_Typ", False)
             self.control_to_radiobutton()
             import proggen.M28_Diverse as M28  # v1.04
+            from headless import headless_sheet_settings as HSS  # v1.55
             # return {"L": self.rb_res["_L"].get() or None, "R": self.rb_res["_R"].get() or None,  # v1.30 (entfallen)
             from headless.headless_esp32_ota import load_settings  # v1.30
             import proggen.M42_Dyn_Config as M42  # v1.32
@@ -754,8 +843,10 @@ def make_class(Base):
                     "auto_L": bool(self.Autodetect_Typ_L_CheckBox_var.get()),
                     # "auto_R": bool(self.Autodetect_Typ_R_CheckBox_var.get())}  # v1.04 (entfallen)
                     "auto_R": bool(self.Autodetect_Typ_R_CheckBox_var.get()),  # v1.04
+                    "protocol": str(M25.Page_ID or ""),  # v1.49
                     "use_pio": bool(M28.Get_Bool_Config_Var("Use_PlatformIO")),  # v1.04
-                    "serial_cfg": bool(M42.Option_Enabled())}  # v1.32
+                    "serial_cfg": bool(M42.Option_Enabled()),  # v1.32  # v1.55: Einstellung des Blattes (M42 1.08)
+                    "ldr": HSS.is_set("ldr"), "store_status": HSS.is_set("store_status")}  # v1.55: Makrozeilen des Blattes
 
         def _is_nano_value(self, value):  # v1.06
             """Gehoert der Wert des Radioknopfes zu einem Arduino Nano oder Uno (nicht ESP32 und nicht Pico)?"""  # v1.06
@@ -784,6 +875,70 @@ def make_class(Base):
                 items.append((d["value"], text_))  # v1.44 (Kommentar v1.08: ESP32 immer: ob er angezeigt wird, entscheidet der Dialog live)
             return sorted(items)
 
+        def _board_summary(self, M02a):  # v1.49: Anzeige im Reiter Lichtmaschine: Board, Variante, Port, Bild
+            from _web import web_form_comport as wfc
+            bt = M02a.Get_BoardTyp()
+            buildopt = str(P01.Cells(M02.SH_VARS_ROW, M25.BUILDOP_COL) or "")
+            if bt == M02.HT_ESP32:
+                board, picture = tr("Lichtmaschine Pro (ESP32)"), "ESP32_Image"
+            elif bt == M02.HT_PICO:
+                board, picture = tr("Lichtmaschine Pico Zero, MoLLi (Raspberry Pico)"), "PICO_Image"
+            else:
+                picture = "LED_Image"
+                # names = [(M02.BOARD_NANO_OLD, "Nano Normal (old Bootloader)"), (M02.BOARD_NANO_FULL, "Nano (Full memory)"),  # v1.60 (entfallen)
+                #          (M02.BOARD_NANO_NEW, "Lichtmaschine Classic, Mini (Nano (neue Version))"), (M02.BOARD_UNO_NORM, "Uno")]  # v1.60 (entfallen)
+                # board = next((tr(t_) for b_, t_ in names if b_ in buildopt), tr("Lichtmaschine Classic, Mini (Nano (neue Version))"))  # v1.60 (entfallen)
+                board = tr("Lichtmaschine Classic, Mini")  # v1.60: nur der Haupttyp, die Variante steht im Feld Board-Variante
+            raw = str(P01.Cells(M02.SH_VARS_ROW, M25.COMPort_COL) or "").strip().lstrip("*").strip()
+            port = "" if raw.upper() in ("", "999", "COM?", "NO DEVICE") else (("COM" + raw) if raw.isdigit() and os.name == "nt" else raw)
+            offline = False
+            if port:
+                try:  # ist der gespeicherte Anschluss gerade am USB zu finden?
+                    from serial.tools import list_ports as _lp
+                    offline = port.upper() not in {str(c.device).upper() for c in _lp.comports(include_links=False)}
+                except Exception:                                  # noqa: BLE001
+                    logger.debug("Anschlussliste nicht lesbar", exc_info=True)
+            if not port:
+                # line = tr("Hardware: {board} (kein Port gewählt)", board=board)  # v1.62 (entfallen)
+                line = board + " (" + tr("kein Port gewählt") + ")"  # v1.62: 'Hardware:' steht als fester Text davor
+            else:
+                # line = tr("Hardware: {board} an {port}", board=board, port=port) + (" (" + tr("offline") + ")" if offline else "")  # v1.62 (entfallen)
+                line = tr("{board} an {port}", board=board, port=port) + (" (" + tr("offline") + ")" if offline else "")  # v1.62
+            cur_pid = str(M25.Page_ID or "")                       # Protokoll: Selectrix hat andere Spalten als DCC/LNet/CAN, dort ist kein Wechsel moeglich
+            # pids = ["Selectrix"] if cur_pid == "Selectrix" else ["DCC", "LNet", "CAN"]  # v1.57 (entfallen)
+            # proto_hint = "" if len(pids) > 1 else tr("Selectrix kann nicht auf ein anderes Protokoll umgestellt werden.")  # v1.56  # v1.57 (entfallen)
+            # pids = ["DCC", "LNet", "CAN", "Selectrix"]  # v1.57: Classic und Pro (ESP32) koennen auch Selectrix  # v1.58 (entfallen: Selectrix kommt spaeter)
+            # proto_hint = ""  # v1.57  # v1.58 (entfallen)
+            pids = ["Selectrix"] if cur_pid == "Selectrix" else ["DCC", "LNet", "CAN"]  # v1.58 (wie v1.56)
+            proto_hint = "" if len(pids) > 1 else tr("Selectrix kann nicht auf ein anderes Protokoll umgestellt werden.")  # v1.58 (wie v1.56)
+            if bt == M02.HT_PICO:  # v1.56: der Pico kann nur DCC
+                if cur_pid == "Selectrix":  # v1.56
+                    pids = ["Selectrix"]  # v1.57: gesperrt
+                    proto_hint = tr("Beim Pico ist nur DCC möglich. Ein Selectrix-Blatt kann nicht umgestellt werden.")  # v1.56
+                else:  # v1.56
+                    pids = ["DCC"]  # v1.56
+                    if cur_pid and cur_pid != "DCC":  # v1.56: das eingestellte Protokoll bleibt sichtbar, damit es auf DCC umgestellt werden kann
+                        pids.insert(0, cur_pid)  # v1.56
+                        proto_hint = tr("Beim Pico ist nur DCC möglich. Bitte auf DCC umstellen.")  # v1.56
+            if cur_pid and cur_pid not in pids:
+                pids.append(cur_pid)
+            variants = None                                        # Board-Variante nur fuer Classic (Wert = Index der Boardliste)
+            if bt not in (M02.HT_ESP32, M02.HT_PICO):
+                # variants = {1: tr("Nano Normal (old Bootloader)"), 2: tr("Nano (neue Version)"),  # v1.60: ohne 'Lichtmaschine Classic, Mini'  # v1.61 (entfallen)
+                #             3: tr("Nano (Full memory)"), 4: tr("Uno")}  # v1.61 (entfallen)
+                variants = {1: tr("Nano (alter Bootloader)"), 2: tr("Nano (neue Version)"),  # v1.61
+                            3: tr("Nano (maximaler Speicher)"), 4: tr("Uno")}  # v1.61
+            return {"line": line, "hw_label": tr("Hardware") + ":", "image": wfc.find_image(picture),  # v1.62
+                    "config_title": tr("Einstellungen"),  # v1.51: vorher Weitere Einstellungen des Blattes
+                    "serial_cfg_text": tr("Schnelles Update"), "fast_update": bt in (M02.HT_ESP32, M02.HT_PICO),  # v1.51
+                    "esp_options": bt == M02.HT_ESP32, "ldr_text": tr("Lichtsensor aktivieren"), "store_text": tr("Schaltzustände speichern"),  # v1.54
+                     # v1.52
+                    # "protocols": {o: ("LNet (LocoNet)" if o == "LNet" else o) for o in pids}, "protocol": cur_pid, "protocol_label": tr("Protokoll"),  # v1.66 (entfallen)
+                    "protocols": {o: o for o in pids}, "protocol": cur_pid, "protocol_label": tr("Protokoll"),  # v1.66: nur 'LNet', der geschuetzte Begriff LocoNet steht nicht mehr in der Oberflaeche (5.25)
+                    "protocol_hint": proto_hint,  # v1.56
+                    # "variants": variants, "variant_label": tr("Board-Variante")}  # v1.66 (entfallen)
+                    "variants": variants, "variant_label": tr("Hardwarevariante")}  # v1.66: Hardwarevariante statt Board-Variante
+
         def _web_spec(self, first_page_only):
             import proggen.M02a_Public as M02a  # v1.06
             try:  # v1.44
@@ -798,6 +953,11 @@ def make_class(Base):
             # Quelltext: erst der WLAN-Zweig ("IP Adresse suchen"), dann der USB-Zweig ("USB Port erkennen")
             port_btn = (cands[0] if wlan_device else cands[-1]) if cands else {"text": "USB Port", "label": "", "disabled": False}
             left = [dict(port_btn, handler="__Detect_LED_Port_Button_Click")]
+            summary = None  # v1.49: Reiter Lichtmaschine zeigt nur Board und Port; gewaehlt wird im Dialog des Knopfes Suchen
+            if not wlan_device:  # v1.49
+                summary = self._board_summary(M02a)  # v1.49
+                left = [{"text": tr("Erkennen"), "handler": "__Detect_LED_Port_Button_Click", "disabled": False,  # v1.49
+                         "label": tr("Sucht die angeschlossenen Boards an allen USB Anschlüssen und zeigt sie in einer Liste. Dort werden Board und Port gewählt.")}]  # v1.49  # v1.65: Protokoll steht auf der Hauptseite
             if wlan_device and buttons.get("__Detect_LED_IP_Button_Click"):
                 left.append(dict(buttons["__Detect_LED_IP_Button_Click"][0], handler="__Detect_LED_IP_Button_Click"))
             # left.append({"text": tr("Firmware installieren"), "handler": "__Boot_Firmware_Button_Click", "disabled": False,  # v1.18: nicht mehr nur Pico (pico_only entfallen),       # nur mit dem Pico (wie im Excel-Programm)  # v1.09  # v1.43 (entfallen: Knopf steht jetzt im Reiter Firmware Installation)
@@ -818,14 +978,18 @@ def make_class(Base):
                               # "pico_values": [d["value"] for rb, d in self.radiobuttons.items() if rb.startswith("PICO") and rb.endswith("_L")]}}  # v1.11 (entfallen)
                               "pico_values": [d["value"] for rb, d in self.radiobuttons.items() if rb.startswith("PICO") and rb.endswith("_L")],  # v1.11
                               "firmware_available": self._firmware_available()}}  # v1.11
+            pages["left"]["summary"] = summary  # v1.49
             if not first_page_only:
-                if M25.Page_ID != "CAN":
+                # if M25.Page_ID != "CAN":  # v1.64 (entfallen: der Reiter wird immer angelegt und bei CAN ausgeblendet, damit er beim Wechsel des Protokolls im Dialog erscheinen kann)
+                if True:  # v1.64
                     # Wie im Excel-Programm (UpdateDCCSubPage): Der Reiter DCC Arduino gehoert nur zu einem Nano; bei Pico und ESP32 ist er ausgeblendet
                     # (und erscheint wieder, wenn man oben ein Nano-Board waehlt: nano_values, siehe _options_async)
                     tabs.append({"name": M25.Page_ID + " Arduino", "kind": "arduino", "side": "right",
                                  # "buttons": tab_buttons(buttons, ["__Detect_Right_Port_Button_Click", "__ProInstall_Button_Click"])})  # v1.06 (entfallen)
                                  "buttons": tab_buttons(buttons, ["__Detect_Right_Port_Button_Click", "__ProInstall_Button_Click"]),  # v1.06
-                                 "nano_only": True, "visible": M02a.Get_BoardTyp() == M02.HT_AM328})  # v1.06
+                                 # "nano_only": True, "visible": M02a.Get_BoardTyp() == M02.HT_AM328})  # v1.06  # v1.64 (entfallen)
+                                 "nano_only": True, "nano": M02a.Get_BoardTyp() == M02.HT_AM328,  # v1.64: Nano und Protokoll getrennt, der Dialog rechnet die Sichtbarkeit
+                                 "visible": M02a.Get_BoardTyp() == M02.HT_AM328 and M25.Page_ID != "CAN"})  # v1.06  # v1.64
                     pages["right"] = {"radios": self._radios("_R"), "subtitle": subtitle, "auto_text": auto_text, "detect_text": detect_text, "detect_hint": detect_hint}  # v1.25
                     pages["left"]["nano_values"] = [v for v, _text in pages["left"]["radios"] if self._is_nano_value(v)]  # v1.06
                 files = tab_buttons(buttons, ["__Import_Button_Click", "__Save_Button_Click", "__Load_Button_Click", "__Copy_Page_Button_Click"])
@@ -843,7 +1007,8 @@ def make_class(Base):
                 import proggen.M08_ARDUINO as M08  # v1.04
                 pio = M08.Find_PIO()  # v1.04
                 tabs.append({"name": tr("Entwicklungsumgebung"), "kind": "ide",  # v1.04
-                             "intro": tr("Womit sollen die Programme übersetzt und auf den Arduino geladen werden?"),  # v1.04
+                             # "intro": tr("Womit sollen die Programme übersetzt und auf den Arduino geladen werden?"),  # v1.04  # v1.66 (entfallen)
+                             "intro": tr("Womit sollen die Programme übersetzt und auf die Lichtmaschine geladen werden?"),  # v1.04  # v1.66: Lichtmaschine statt Arduino
                              # "texts": [tr("Das Programm webMobaLedLib selbst aktualisieren: Menü Hilfe → Update webMobaLedLib …")],  # v1.07  # v5.09 (entfallen)
                              "texts": [tr("Das Programm MobaLedLib Studio selbst aktualisieren: Menü Hilfe → Update MobaLedLib Studio …")],  # v1.07  # v5.09
                              "arduino_text": tr("ARDUINO-IDE (nur Kompatibilität - nicht mehr nutzen)"), "pio_text": tr("PlatformIO (Standard)"),  # v1.04  # v1.44
@@ -911,7 +1076,23 @@ def make_class(Base):
                 P01.ActiveSheet.esp32_options = dict(vals["esp32_options"])  # v1.30
             if "serial_cfg" in vals and vals["serial_cfg"] != initial.get("serial_cfg"):  # v1.32
                 import proggen.M42_Dyn_Config as M42  # v1.32
-                M42.Set_Option(vals["serial_cfg"])  # v1.32
+                # M42.Set_Option(vals["serial_cfg"])  # v1.32  # v1.55 (entfallen: global)
+                M42.Set_Sheet_Option(vals["serial_cfg"])  # v1.55: im Blatt
+            from headless import headless_sheet_settings as HSS  # v1.55: Lichtsensor und Schaltzustaende als Makrozeilen des Blattes setzen oder entfernen
+            for key_, text_ in (("ldr", "Lichtsensor aktivieren"), ("store_status", "Schaltzustände speichern")):  # v1.55
+                if key_ in vals and vals[key_] != initial.get(key_):  # v1.55
+                    try:  # v1.55
+                        HSS.apply(key_, vals[key_], description=tr(text_))  # v1.55
+                    except Exception:                                  # noqa: BLE001  # v1.55
+                        logger.exception("Optionen: Einstellung %s nicht ins Blatt uebernommen", key_)  # v1.55
+            try:  # v1.55: fruehere Eintraege in esp32_options (ldr, store_status) in Makrozeilen uebernehmen
+                HSS.migrate_legacy()  # v1.55
+            except Exception:                                          # noqa: BLE001  # v1.55
+                logger.exception("Optionen: fruehere Einstellungen nicht uebernommen")  # v1.55
+            if vals.get("protocol") and vals["protocol"] != initial.get("protocol"):  # v1.49: Protokoll (Page-ID) des Blattes
+                P01.CellDict[M02.SH_VARS_ROW, M02.PAGE_ID_COL] = vals["protocol"]  # v1.49
+                M25.Page_ID = vals["protocol"]  # v1.49
+                logger.info("Optionen: Protokoll des Blattes auf %s gestellt", vals["protocol"])  # v1.49
             self.rb_res["_L"].set(vals["L"] or 0)
             self.rb_res["_R"].set(vals["R"] or 0)
             self.Autodetect_Typ_L_CheckBox_var.set(1 if vals["auto_L"] else 0)
@@ -930,12 +1111,12 @@ def make_class(Base):
                 getattr(self, PFX + "__Autodetect_Typ_R_CheckBox_Click")()
             if vals["L"] != initial["L"] and self.rb_res["_L"].get():
                 self.Change_Board(True, self.boardlist[self.rb_res["_L"].get()])
-                self._web_board_changed(True)  # v1.23
+                self._web_board_changed(True, keep_port=initial["L"] is not None and self._is_nano_value(initial["L"]) and self._is_nano_value(vals["L"]))  # v1.23  # v1.49: Variante eines Nano: der Anschluss bleibt
             if vals["R"] != initial["R"] and self.rb_res["_R"].get():
                 self.Change_Board(False, self.boardlist[self.rb_res["_R"].get()])
                 self._web_board_changed(False)  # v1.23
 
-        def _web_board_changed(self, left):  # v1.23
+        def _web_board_changed(self, left, keep_port=False):  # v1.23  # v1.49: keep_port
             """Der Arduino-Typ wurde gewechselt: eine bestehende serielle Verbindung trennen und den gewaehlten COM Port zuruecksetzen. Beim naechsten Setup uebertragen startet dann
             die Port-Erkennung (port_is_available(' ') ist falsch) und es kommt nicht die Meldung 'Es ist kein ... an COM ... angeschlossen'."""  # v1.23
             try:  # v1.23
@@ -945,6 +1126,8 @@ def make_class(Base):
             except Exception:                                  # noqa: BLE001  # v1.23
                 logger.debug("Trennen beim Typwechsel fehlgeschlagen", exc_info=True)  # v1.23
             try:  # v1.23
+                if keep_port:  # v1.49
+                    return  # v1.49
                 P01.Cells(M02.SH_VARS_ROW, M25.COMPort_COL if left else M25.COMPrtR_COL).Value = " "  # v1.23
             except Exception:                                  # noqa: BLE001  # v1.23
                 logger.debug("COM Port nicht zurueckgesetzt", exc_info=True)  # v1.23

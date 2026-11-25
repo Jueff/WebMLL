@@ -1,9 +1,9 @@
-# Datei-Version: 1.05 (2026-11-23) - M07_COM_Port_New.py
+# Datei-Version: 1.07 (2026-11-25) - M07_COM_Port_New.py
 # ----------------------------------------------------------------------------------------------
 # Name:           M07_COM_Port_New.py
 # Path:           proggen/M07_COM_Port_New.py
-# Version:        1.05
-# Last Update:    2026-11-23
+# Version:        1.07
+# Last Update:    2026-11-25
 # Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
 # History of Change:
@@ -15,6 +15,10 @@
 #   1.05  2026-11-23  Identify (Juergen Winkler): ESP32/Pico (LED-Zentrale, ohne WLAN): die LEDs auf der Hauptplatine der gewaehlten Zentrale blinken (Firmware MLLIdentify.h). Der Zeitgeber
 #                     des Dialogs schickt jede Sekunde '~MLLIDENT 1' (Anschluss kurz oeffnen, senden, schliessen; kein DetectArduino), Ident_Stop() schickt nach dem Dialog '~MLLIDENT 0'. Neuer
 #                     Parameter MainBoard, Hinweistext fuer ESP32/Pico. Zeilen mit '# v1.05'
+#   1.06  2026-11-25  Texte: Fenstertitel 'Geräteauswahl' (statt 'Auswahl des COM Ports'), 'Bitte Gerät an einen USB Anschluss ... anschließen' (statt 'LED Arduino');
+#                     roter Hinweis 'Tipp: Der ausgewählte Arduino blinkt schnell' entfernt. Zeilen mit '# v1.06'
+#   1.07  2026-11-25  Weitere Texte: 'OK, wenn die LEDs am richtigen Gerät schnell blinken.', 'Achtung: Das Gerät wird von einem anderen Programm benutzt.' (jede Zeile
+#                     einzeln uebersetzt). Zeilen mit '# v1.07'
 # ----------------------------------------------------------------------------------------------
 # -*- coding: utf-8 -*-
 #
@@ -331,9 +335,12 @@ def __Blink_Arduino_LED():
                         F00.Select_COM_Port_UserForm.Show_Status(True, M09.Get_Language_Str('Kein PICO WL (mDNS Gerät) erkannt.' + vbCr + 'Bitte PICO WL einschalten'))
 
                     else:
-                        F00.Select_COM_Port_UserForm.Show_Status(True, Replace(M09.Get_Language_Str("Kein COM Port erkannt." + vbCr + "Bitte #1 an einen USB Anschluss des Computers anschließen"), "#1", M08.GetArduName()))
+                        # F00.Select_COM_Port_UserForm.Show_Status(True, Replace(M09.Get_Language_Str("Kein COM Port erkannt." + vbCr + "Bitte #1 an einen USB Anschluss des Computers anschließen"), "#1", M08.GetArduName()))  # v1.06 (entfallen)
+                        F00.Select_COM_Port_UserForm.Show_Status(True, M09.Get_Language_Str("Kein COM Port erkannt.", False, M09.xlWhole) + vbCr + M09.Get_Language_Str("Bitte Gerät an einen USB Anschluss des Computers anschließen", False, M09.xlWhole))  # v1.06: Gerät statt 'LED Arduino'
                 else:
-                    F00.Select_COM_Port_UserForm.Show_Status(True, Replace(M09.Get_Language_Str("Achtung: Der #1 wird von einem anderen Programm benutzt." + vbCr + "(Serieller Monitor?)" + vbCr + "Das Programm muss geschlossen werden! "), "#1", M08.GetArduName()))
+                    # F00.Select_COM_Port_UserForm.Show_Status(True, Replace(M09.Get_Language_Str("Achtung: Der #1 wird von einem anderen Programm benutzt." + vbCr + "(Serieller Monitor?)" + vbCr + "Das Programm muss geschlossen werden! "), "#1", M08.GetArduName()))  # v1.07 (entfallen)
+                    F00.Select_COM_Port_UserForm.Show_Status(True, M09.Get_Language_Str("Achtung: Das Gerät wird von einem anderen Programm benutzt.", False, M09.xlWhole) + vbCr  # v1.07: Gerät statt 'LED Arduino'
+                                                             + M09.Get_Language_Str("(Serieller Monitor?)", False, M09.xlWhole) + vbCr + M09.Get_Language_Str("Das Programm muss geschlossen werden!", False, M09.xlWhole))  # v1.07
             else:
                 F00.Select_COM_Port_UserForm.Show_Status(False, M07.CheckCOMPort_Txt)
         else:
@@ -398,7 +405,8 @@ def Select_Arduino_w_Blinking_LEDs_Dialog(Caption, Title, Text, Picture, IsArdui
     #  >0: Selected COM Port
     # The variable "CheckCOMPort_Res" is >= 0 if the Port is available
     if IsArduino:
-        hint = M09.Get_Language_Str(( 'Tipp: Der ausgewählte Arduino blinkt schnell' )) #VBA Error?
+        # hint = M09.Get_Language_Str(( 'Tipp: Der ausgewählte Arduino blinkt schnell' )) #VBA Error?  # v1.06 (entfallen: Hinweis ganz entfernt)
+        hint = ''  # v1.06
         PicoWL = False
     else:
         hint = ''
@@ -472,12 +480,14 @@ def Show_USB_Port_Dialog(ComPortColumn, ComPort):
     Text = Replace(M09.Get_Language_Str("Es wird der COM Port überprüft " + "bzw. ausgewählt, an den der #1# angeschlossen ist."), "#1#", M08.GetArduName())
                
     if IsArduino:
-        Text = Text + vbCr + vbCr + M09. Get_Language_Str("OK, wenn die LEDs am richtigen Arduino schnell blinken.")
+        # Text = Text + vbCr + vbCr + M09. Get_Language_Str("OK, wenn die LEDs am richtigen Arduino schnell blinken.")  # v1.07 (entfallen)
+        Text = Text + vbCr + vbCr + M09.Get_Language_Str("OK, wenn die LEDs am richtigen Gerät schnell blinken.", False, M09.xlWhole)  # v1.07: Gerät statt Arduino
     elif Picture in ('ESP32_Image', 'PICO_Image'):  # v1.05
         Text = Text + vbCr + vbCr + Replace(M09.Get_Language_Str("OK, wenn die LEDs auf der Hauptplatine des richtigen #1# schnell blinken."), "#1#", M08.GetArduName())  # v1.05
       
     # Res, ComPort = Select_Arduino_w_Blinking_LEDs_Dialog(M09.Get_Language_Str("Überprüfung des USB Ports"), M09.Get_Language_Str("Auswahl des COM Ports"), Text, Picture, IsArduino, M09.Get_Language_Str(' ; A Abbruch; O Ok'), ComPort)  # v1.05 (entfallen)
-    Res, ComPort = Select_Arduino_w_Blinking_LEDs_Dialog(M09.Get_Language_Str("Überprüfung des USB Ports"), M09.Get_Language_Str("Auswahl des COM Ports"), Text, Picture, IsArduino, M09.Get_Language_Str(' ; A Abbruch; O Ok'), ComPort, MainBoard=(ComPortColumn == M25.COMPort_COL))  # v1.05
+    # Res, ComPort = Select_Arduino_w_Blinking_LEDs_Dialog(M09.Get_Language_Str("Überprüfung des USB Ports"), M09.Get_Language_Str("Auswahl des COM Ports"), Text, Picture, IsArduino, M09.Get_Language_Str(' ; A Abbruch; O Ok'), ComPort, MainBoard=(ComPortColumn == M25.COMPort_COL))  # v1.05  # v1.06 (entfallen)
+    Res, ComPort = Select_Arduino_w_Blinking_LEDs_Dialog(M09.Get_Language_Str("Überprüfung des USB Ports"), M09.Get_Language_Str("Geräteauswahl", False, M09.xlWhole), Text, Picture, IsArduino, M09.Get_Language_Str(' ; A Abbruch; O Ok'), ComPort, MainBoard=(ComPortColumn == M25.COMPort_COL))  # v1.05  # v1.06: Titel Geräteauswahl
     fn_return_value = ( Res == 3 )
     return fn_return_value, ComPort
 

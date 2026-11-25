@@ -1,3 +1,15 @@
+# Datei-Version: 1.01 (2026-11-25) - M55_PWM_Data_Send.py
+# ----------------------------------------------------------------------------------------------
+# Name:           M55_PWM_Data_Send.py
+# Path:           pattgen/M55_PWM_Data_Send.py
+# Version:        1.01
+# Last Update:    2026-11-25
+# Author:         Harold Linke, Jürgen Winkler
+# Licence:        LGPL V2.1
+# History of Change:
+#   1.00  2026-10-12  Stand der Umstellung (nicht erfasst)
+#   1.01  2026-11-25  Fehlermeldungen: 'Fehler beim Verbinden mit dem Gerät', 'Fehler beim Zugriff auf das Gerät', 'Falsches Programm auf dem Gerät installiert' (statt Arduino). Zeilen mit '# v1.01'
+# ----------------------------------------------------------------------------------------------
 from vb2py.vbfunctions import *
 from vb2py.vbdebug import *
 import ExcelAPI.XLA_Application as X02
@@ -230,7 +242,8 @@ def Open_Port_with_Error_Msg(PortId, withReset):
     if Status != 0:
         # Handle error.
         Status = pattgen.M57_modCOMM.CommGetError(strError)
-        X02.MsgBox(pattgen.M09_Language.Get_Language_Str('Fehler beim verbinden mit dem Arduino über COM') + PortId + vbCr + '  ' + strError + vbCr + pattgen.M09_Language.Get_Language_Str('Evtl. ist der Port bereits von einem anderen Programm (Arduino IDE, Farbtest, serieller Monitor) belegt.' + vbCr + 'Falls das Excel Programm vorher mit einer Fehlermeldung abgebrochen wurde, dann kann es sein, ' + 'dass der Port nicht richtig geschlossen wurde. In dem Fall müssen alle Excel Fenster geschlossen werden ;-('), vbCritical, pattgen.M09_Language.Get_Language_Str('Fehler beim öffnen des COM Ports'))
+        # X02.MsgBox(pattgen.M09_Language.Get_Language_Str('Fehler beim verbinden mit dem Arduino über COM') + PortId + vbCr + '  ' + strError + vbCr + pattgen.M09_Language.Get_Language_Str('Evtl. ist der Port bereits von einem anderen Programm (Arduino IDE, Farbtest, serieller Monitor) belegt.' + vbCr + 'Falls das Excel Programm vorher mit einer Fehlermeldung abgebrochen wurde, dann kann es sein, ' + 'dass der Port nicht richtig geschlossen wurde. In dem Fall müssen alle Excel Fenster geschlossen werden ;-('), vbCritical, pattgen.M09_Language.Get_Language_Str('Fehler beim öffnen des COM Ports'))  # v1.01 (entfallen)
+        X02.MsgBox(pattgen.M09_Language.Get_Language_Str('Fehler beim Verbinden mit dem Gerät über COM') + PortId + vbCr + '  ' + strError + vbCr + pattgen.M09_Language.Get_Language_Str('Evtl. ist der Port bereits von einem anderen Programm (Arduino IDE, Farbtest, serieller Monitor) belegt.' + vbCr + 'Falls das Excel Programm vorher mit einer Fehlermeldung abgebrochen wurde, dann kann es sein, ' + 'dass der Port nicht richtig geschlossen wurde. In dem Fall müssen alle Excel Fenster geschlossen werden ;-('), vbCritical, pattgen.M09_Language.Get_Language_Str('Fehler beim öffnen des COM Ports'))  # v1.01: Gerät statt Arduino
         Close_Port(PortId)
     else:
         if withReset:
@@ -596,7 +609,8 @@ def Open_Port_With_Error_Msg_and_get_LastLED(PortId):
             break
     if BootMsg == '***Timeout***':
         Percent_Msg_UserForm.Hide()
-        X02.MsgBox(pattgen.M09_Language.Get_Language_Str('Fehler: Der Adruino reagiert nicht'), vbCritical, pattgen.M09_Language.Get_Language_Str('Fehler beim zugriff auf den Arduino an COM') + PortId)
+        # X02.MsgBox(pattgen.M09_Language.Get_Language_Str('Fehler: Der Adruino reagiert nicht'), vbCritical, pattgen.M09_Language.Get_Language_Str('Fehler beim zugriff auf den Arduino an COM') + PortId)  # v1.01 (entfallen)
+        X02.MsgBox(pattgen.M09_Language.Get_Language_Str('Fehler: Der Adruino reagiert nicht'), vbCritical, pattgen.M09_Language.Get_Language_Str('Fehler beim Zugriff auf das Gerät an COM') + PortId)  # v1.01: Gerät statt Arduino
         GoTo(ErrorHand)
     pattgen.M57_modCOMM.CommFlush(PortId)
     Debug.Print(BootMsg)
@@ -607,7 +621,8 @@ def Open_Port_With_Error_Msg_and_get_LastLED(PortId):
             for Idx in vbForRange(1, UBound(List)):
                 LastLEDNr = LastLEDNr + Val(List(Idx))
     if LastLEDNr <= 0:
-        X02.MsgBox(pattgen.M09_Language.Get_Language_Str('Fehler: Auf dem Arduino ist nicht das richtige Programm installiert.' + vbCr + 'Der Arduino muss mit dem Excel Programm \'Prog_Generator\' konfiguriert werden.' + 'Dabei muss der \'LED Farbtest Mode\' im \'Config\' Blatt aktiviert sein.' + vbCr + vbCr + 'Meldung von Arduino:') + vbCr + BootMsg, vbCritical, pattgen.M09_Language.Get_Language_Str('Falsches Programm auf dem Arduino installiert'))
+        # X02.MsgBox(pattgen.M09_Language.Get_Language_Str('Fehler: Auf dem Arduino ist nicht das richtige Programm installiert.' + vbCr + 'Der Arduino muss mit dem Excel Programm \'Prog_Generator\' konfiguriert werden.' + 'Dabei muss der \'LED Farbtest Mode\' im \'Config\' Blatt aktiviert sein.' + vbCr + vbCr + 'Meldung von Arduino:') + vbCr + BootMsg, vbCritical, pattgen.M09_Language.Get_Language_Str('Falsches Programm auf dem Arduino installiert'))  # v1.01 (entfallen)
+        X02.MsgBox(pattgen.M09_Language.Get_Language_Str('Fehler: Auf dem Arduino ist nicht das richtige Programm installiert.' + vbCr + 'Der Arduino muss mit dem Excel Programm \'Prog_Generator\' konfiguriert werden.' + 'Dabei muss der \'LED Farbtest Mode\' im \'Config\' Blatt aktiviert sein.' + vbCr + vbCr + 'Meldung von Arduino:') + vbCr + BootMsg, vbCritical, pattgen.M09_Language.Get_Language_Str('Falsches Programm auf dem Gerät installiert'))  # v1.01: Gerät statt Arduino
         GoTo(ErrorHand)
     Write_Com(PortId, '#L 0 0 0 0 FFFF' + vbLf)
     _fn_return_value = LastLEDNr

@@ -1,12 +1,13 @@
-# Datei-Version: 1.17 (2026-11-23) - M06_Write_Header.py
+# Datei-Version: 1.18 (2026-11-25) - M06_Write_Header.py
 # ----------------------------------------------------------------------------------------------
 # Name:           M06_Write_Header.py
 # Path:           proggen/M06_Write_Header.py
-# Version:        1.17
-# Last Update:    2026-11-23
+# Version:        1.18
+# Last Update:    2026-11-25
 # Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
 # History of Change:
+#   1.18  2026-11-25  Einstellungen des Blattes: READ_LDR und ENABLE_STORE_STATUS() fuer alle Plattformen, nur die Display-Einstellung (UI_MLLTime) bleibt in #ifdef ESP32. Zeilen mit '# v1.18'
 #   1.17  2026-11-23  Identify (Juergen Winkler): ESP32: die drei Status LEDs (WS2811) sind das erste Pixel von LED Kanal 7; Add_Status_LED_Macro legt den Kanal mit ConstRGB an, wenn der
 #                     Anwender ihn nicht benutzt (Status_LED_Extra, Status_LED_Offset, NUM_LEDS). MLL_P_CONTROLLER_CONFIG mit LED-Kanal (Konfigurationsdatei Format 7). #define MLL_IDENTIFY
 #                     fuer ESP32 und Pico (Konfiguration getrennt). Pico: Write_Pico_Mainboard_LED_Defines schreibt #define Mainboard_LED1..3 SI_0 (Pin ist Ausgang, LED aus) nur fuer die LEDs,
@@ -1853,13 +1854,14 @@ def Write_Header_File_and_Upload_to_Arduino(CreateFilesOnly=False, LEDsInUse=Non
                 for symbol in ("USE_ESP32_EXTENSIONS", "USE_UI"):  # v1.10
                     VBFiles.writeText(fp, f'#ifndef {symbol}\n#define {symbol}\n#endif', '\n')  # v1.10
                 VBFiles.writeText(fp, f'#undef UI_MLLTime\n#define UI_MLLTime {mode}', '\n')  # v1.10
-            for key, symbol, define in (  # v1.10
+            VBFiles.writeText(fp, '#endif', '\n')  # v1.18: nur die Display-Einstellung gehoert zum ESP32
+            for key, symbol, define in (  # v1.10  # v1.18: Lichtsensor und Schaltzustaende fuer alle Plattformen (vorher innerhalb von #ifdef ESP32)
                 ("ldr", "READ_LDR", "READ_LDR"),  # v1.10
                 ("store_status", "ENABLE_STORE_STATUS", "ENABLE_STORE_STATUS()"),  # v1.10
             ):  # v1.10
                 if options.get(key) is True:  # v1.10
                     VBFiles.writeText(fp, f'#ifndef {symbol}\n#define {define}\n#endif', '\n')  # v1.10
-            VBFiles.writeText(fp, '#endif', '\n')  # v1.10
+            # VBFiles.writeText(fp, '#endif', '\n')  # v1.10  # v1.18 (entfallen: steht jetzt vor den Defines)
 
     if DynMode:  # v1.07: die Firmware sieht nur die Praeprozessor-Zeilen der Konfiguration, die Makros stehen im Zweig CONFIG_ONLY
         VBFiles.writeText(fp, '// Preprocessor settings from the configuration', '\n')  # v1.07
