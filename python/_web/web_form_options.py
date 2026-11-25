@@ -1,8 +1,8 @@
-# Datei-Version: 1.67 (2026-11-25) - web_form_options.py
+# Datei-Version: 1.68 (2026-11-25) - web_form_options.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_form_options.py
 # Path:           _web/web_form_options.py
-# Version:        1.67
+# Version:        1.68
 # Last Update:    2026-11-25
 # Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
@@ -37,6 +37,8 @@
 #   1.44  2026-11-22  Version 4.68: Titel Hardware Optionen; Reiter Entwicklungsumgebung und Firmware Installation nicht im Anfaenger Modus; Boardnamen Lichtmaschine Classic/Pro/Pico; PlatformIO (Standard) zuerst, ARDUINO-IDE (nur Kompatibilitaet), Knopf ARDUINO-IDE Einstellungen nur mit ARDUINO-IDE; Hinweis WLAN (OTA) zu Schnelles Update
 #   1.45  2026-11-22  Version 4.70: Reiter Entwicklungsumgebung: roter Hinweis unter dem Haken Schnelles Update (nicht kompatibel mit WLAN)
 #   1.46  2026-11-22  Version 4.71: Warnhinweise zu Schnelles Update und WLAN entfernt (Pull Request 54: Schnelles Update geht fuer den ESP32 jetzt auch ueber WLAN); neuer Hinweistext zum Schnellen Update (aus dem Pull Request, dort als 1.44)
+#   1.68  2026-11-25  Protokoll Selectrix wieder in der Liste (soweit SupportsSelectrix der Plattform true ist) und Wechsel zwischen Selectrix und DCC/LNet/CAN mit Umrechnung der Adressen
+#                     (headless_protocol_switch): Rueckfrage, wenn das Blatt Adressen (keine Variablen) enthaelt; Rot/Gruen werden zu Taster. Zeilen mit '# v1.68'
 #   1.67  2026-11-25  Die Auswahl der Protokolle richtet sich nach der Tabelle Platform_Parameters (SupportsDCC, SupportsLNet, SupportsCAN je Plattform AM328, ESP32, PICO;
 #                     vorher fest: Pico nur DCC); ein eingestelltes, nicht unterstuetztes Protokoll bleibt sichtbar mit Hinweis. Zeilen mit '# v1.67'
 #   1.66  2026-11-25  Anzeige auf dem Display: 'WLAN, IP, LDR und Zeit' und 'WLAN, IP und Hostname' nur, wenn WLAN am ESP32 eingeschaltet ist (folgt dem Haken im Reiter WLAN (OTA),
@@ -930,15 +932,20 @@ def make_class(Base):
                 except Exception:                                  # noqa: BLE001  # v1.67
                     logger.debug("Supports%s fuer %s nicht lesbar", pid, bt, exc_info=True)  # v1.67
                     return True  # v1.67
-            if cur_pid == "Selectrix":  # v1.67: Selectrix hat andere Spalten als DCC/LNet/CAN, kein Wechsel
-                pids = ["Selectrix"]  # v1.67
-                proto_hint = tr("Selectrix kann nicht auf ein anderes Protokoll umgestellt werden.")  # v1.67
-            else:  # v1.67
-                pids = [p for p in ("DCC", "LNet", "CAN") if _supports(p)] or ["DCC"]  # v1.67
-                proto_hint = ""  # v1.67
-                if cur_pid and cur_pid not in pids:  # v1.67: das eingestellte Protokoll bleibt sichtbar, damit es umgestellt werden kann
-                    proto_hint = tr("Dieses Protokoll wird von der gewählten Hardware nicht unterstützt. Bitte auf {liste} umstellen.", liste=", ".join(pids))  # v1.67
-                    pids.insert(0, cur_pid)  # v1.67
+            # if cur_pid == "Selectrix":  # v1.67: Selectrix hat andere Spalten als DCC/LNet/CAN, kein Wechsel  # v1.68 (entfallen)
+            # pids = ["Selectrix"]  # v1.67  # v1.68 (entfallen)
+            # proto_hint = tr("Selectrix kann nicht auf ein anderes Protokoll umgestellt werden.")  # v1.67  # v1.68 (entfallen)
+            # else:  # v1.67  # v1.68 (entfallen)
+            # pids = [p for p in ("DCC", "LNet", "CAN") if _supports(p)] or ["DCC"]  # v1.67  # v1.68 (entfallen)
+            # proto_hint = ""  # v1.67  # v1.68 (entfallen)
+            # if cur_pid and cur_pid not in pids:  # v1.67: das eingestellte Protokoll bleibt sichtbar, damit es umgestellt werden kann  # v1.68 (entfallen)
+            # proto_hint = tr("Dieses Protokoll wird von der gewählten Hardware nicht unterstützt. Bitte auf {liste} umstellen.", liste=", ".join(pids))  # v1.67  # v1.68 (entfallen)
+            # pids.insert(0, cur_pid)  # v1.67  # v1.68 (entfallen)
+            pids = [p for p in ("DCC", "LNet", "CAN", "Selectrix") if _supports(p)] or ["DCC"]  # v1.68: Selectrix gehoert dazu, der Wechsel rechnet die Adressen um
+            proto_hint = ""  # v1.68
+            if cur_pid and cur_pid not in pids:  # v1.68: das eingestellte Protokoll bleibt sichtbar, damit es umgestellt werden kann
+                proto_hint = tr("Dieses Protokoll wird von der gewählten Hardware nicht unterstützt. Bitte auf {liste} umstellen.", liste=", ".join(pids))  # v1.68
+                pids.insert(0, cur_pid)  # v1.68
             if cur_pid and cur_pid not in pids:
                 pids.append(cur_pid)
             variants = None                                        # Board-Variante nur fuer Classic (Wert = Index der Boardliste)
@@ -1109,9 +1116,10 @@ def make_class(Base):
             except Exception:                                          # noqa: BLE001  # v1.55
                 logger.exception("Optionen: fruehere Einstellungen nicht uebernommen")  # v1.55
             if vals.get("protocol") and vals["protocol"] != initial.get("protocol"):  # v1.49: Protokoll (Page-ID) des Blattes
-                P01.CellDict[M02.SH_VARS_ROW, M02.PAGE_ID_COL] = vals["protocol"]  # v1.49
-                M25.Page_ID = vals["protocol"]  # v1.49
-                logger.info("Optionen: Protokoll des Blattes auf %s gestellt", vals["protocol"])  # v1.49
+                # P01.CellDict[M02.SH_VARS_ROW, M02.PAGE_ID_COL] = vals["protocol"]  # v1.49  # v1.68 (entfallen: steht in _web_set_protocol)
+                # M25.Page_ID = vals["protocol"]  # v1.49  # v1.68 (entfallen)
+                # logger.info("Optionen: Protokoll des Blattes auf %s gestellt", vals["protocol"])  # v1.49  # v1.68 (entfallen)
+                self._web_set_protocol(initial.get("protocol"), vals)  # v1.68
             self.rb_res["_L"].set(vals["L"] or 0)
             self.rb_res["_R"].set(vals["R"] or 0)
             self.Autodetect_Typ_L_CheckBox_var.set(1 if vals["auto_L"] else 0)
@@ -1134,6 +1142,30 @@ def make_class(Base):
             if vals["R"] != initial["R"] and self.rb_res["_R"].get():
                 self.Change_Board(False, self.boardlist[self.rb_res["_R"].get()])
                 self._web_board_changed(False)  # v1.23
+
+        def _web_set_protocol(self, old_pid, vals):  # v1.68
+            """Protokoll des Blattes umstellen. Zwischen Selectrix und DCC/LNet/CAN aendern sich die Spalten: dann werden die Adressen umgerechnet, mit vorheriger Rueckfrage,
+            wenn das Blatt Adressen (keine Variablen) enthaelt. Antwort Nein: das Protokoll bleibt, wie es war."""
+            from headless import headless_protocol_switch as PS  # v1.68
+            new_pid = vals["protocol"]  # v1.68
+            if not PS.crosses(old_pid, new_pid):  # v1.68: DCC, LNet und CAN haben dieselben Spalten
+                P01.CellDict[M02.SH_VARS_ROW, M02.PAGE_ID_COL] = new_pid  # v1.49
+                M25.Page_ID = new_pid  # v1.49
+                logger.info("Optionen: Protokoll des Blattes auf %s gestellt", new_pid)  # v1.49
+                return  # v1.68
+            ws = P01.ActiveSheet  # v1.68
+            info = PS.analyze(ws, old_pid)  # v1.68
+            if info["addresses"]:  # v1.68
+                if P01.MsgBox(PS.warning_text(info, old_pid, new_pid, tr), vbQuestion + vbYesNo, tr("Protokoll umstellen")) != vbYes:  # v1.68
+                    vals["protocol"] = old_pid  # v1.68
+                    logger.info("Optionen: Wechsel des Protokolls %s -> %s abgebrochen", old_pid, new_pid)  # v1.68
+                    return  # v1.68
+            try:  # v1.68
+                PS.convert(ws, new_pid)  # v1.68
+            except Exception as ex:                                    # noqa: BLE001  # v1.68
+                logger.exception("Optionen: Protokoll konnte nicht umgestellt werden")  # v1.68
+                vals["protocol"] = old_pid  # v1.68
+                P01.MsgBox(tr("Das Protokoll konnte nicht umgestellt werden: {ex}", ex=ex), vbCritical, tr("Protokoll umstellen"))  # v1.68
 
         def _web_board_changed(self, left, keep_port=False):  # v1.23  # v1.49: keep_port
             """Der Arduino-Typ wurde gewechselt: eine bestehende serielle Verbindung trennen und den gewaehlten COM Port zuruecksetzen. Beim naechsten Setup uebertragen startet dann

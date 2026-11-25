@@ -1,12 +1,15 @@
-# Datei-Version: 1.15 (2026-11-24) - M20_PageEvents_a_Functions.py
+# Datei-Version: 1.18 (2026-11-25) - M20_PageEvents_a_Functions.py
 # ----------------------------------------------------------------------------------------------
 # Name:           M20_PageEvents_a_Functions.py
 # Path:           proggen/M20_PageEvents_a_Functions.py
-# Version:        1.15
-# Last Update:    2026-11-24
-# Author:         Harold Linke
+# Version:        1.18
+# Last Update:    2026-11-25
+# Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
 # History of Change:
+#   1.18  2026-11-25  Selectrix: Pruefung der Wertebereiche bei der Eingabe (SX_Check_Input): Channel 0 bis 99 (Namen und Variablen sind erlaubt), Bitposition ganze Zahl 1 bis 8; bei einem ungueltigen Wert Meldung und die Zelle wird geleert. Zeilen mit '# v1.18'
+#   1.17  2026-11-25  Selectrix: der Dialog Taster/An-Aus oeffnet sich sofort, wenn Channel und Bitposition eingegeben sind und der Typ noch leer ist (wie bei DCC nach der Adresse), nicht erst beim erneuten Anklicken der Zelle Typ; Select_Typ_by_Dialog: bei Selectrix ist Channel 0 gueltig. Zeilen mit '# v1.17'
+#   1.16  2026-11-25  Update_TestButtons: bei Selectrix ist Channel 0 gueltig (Channel [0..99]); bisher loeschte die Pruefung 'Adresse kleiner 1' bei Channel 0 den Typ und die Testtasten. Zeilen mit '# v1.16'
 #   1.15  2026-11-24  Hilfe-Adresse im neuen Namensraum des Wikis (anleitungen/mobaledlibstudio/einfuehrung)
 #   1.14  2026-11-24  Issue 68: Ein Startwert 1 schaltet beim Zuruecksetzen der Testtasten alle Ein/Aus-Tasten derselben Adresse ein, nicht nur die Tasten der Zeile mit dem Startwert (Sync_Toggle_Buttons_by_Address)
 #   1.01  2026-10-17  Update_All_Start_LedNr: Sh.Visible in (xlSheetVisible, True) (bisher wurde kein Blatt berechnet), Durchgang wiederholen bis Zeile 1 stabil ist (Include-Feature); davor Original-Port, nicht erfasst
@@ -562,7 +565,8 @@ def Select_Typ_by_Dialog(Target):
     # if P01.val(M25.Get_Address_String(Target.Row)) < 1:                                           # 08.12.25: Juergen don't allow 0 DCC address  # v1.03  # v1.11 (entfallen)
     #     return  # v1.03  # v1.11 (entfallen)
     address = M25.Get_Address_String(Target.Row)  # v1.11
-    if P01.val(address.split(' - ', 1)[0]) < 1:  # v1.11: Adressspanne "5 - 8": nur die erste Adresse pruefen
+    # if P01.val(address.split(' - ', 1)[0]) < 1:  # v1.11: Adressspanne "5 - 8": nur die erste Adresse pruefen  # v1.17 (entfallen)
+    if P01.val(address.split(' - ', 1)[0]) < (0 if M25.Page_ID == 'Selectrix' else 1):  # v1.17: bei Selectrix ist Channel 0 gueltig
         return  # v1.11
     OldEvents = P01.Application.EnableEvents
     P01.Application.EnableEvents = False
@@ -580,6 +584,51 @@ def Select_Typ_by_Dialog(Target):
     finally:  # v1.11
         P01.Application.EnableEvents = OldEvents  # v1.11
     # (bisheriger Block mit getrennten Zweigen fuer Selectrix und DCC ist in v1.11 durch obigen Code ersetzt; Beitrag des Fork-Entwicklers moosbewohner, PR 5)  # v1.11
+
+def SX_Check_Input(Target):  # v1.18
+    """Selectrix: Wertebereich des Channels (Zahl 0 bis 99, auch '1 - 2'; Namen und Variablen sind erlaubt) oder der Bitposition (ganze Zahl 1 bis 8) pruefen.
+    Bei einem ungueltigen Wert: Meldung, Zelle leeren, Rueckgabe False."""  # v1.18
+    import re  # v1.18
+    if M25.Page_ID != 'Selectrix':  # v1.18
+        return True  # v1.18
+    Text = str(Target.Value if Target.Value is not None else '').strip()  # v1.18
+    if Text == '':  # v1.18
+        return True  # v1.18
+    try:  # v1.18
+        from _web.web_i18n import tr  # v1.18
+    except ImportError:  # v1.18
+        def tr(text, **values):  # v1.18
+            return text.format(**values) if values else text  # v1.18
+    if Target.Column == M25.SX_Bitposi_Col:  # v1.18
+        Ok = re.fullmatch(r'\d+', Text) is not None and 1 <= int(Text) <= 8  # v1.18
+        Msg = tr("Ungültiger Wert '{wert}': Die Bitposition muss eine ganze Zahl von 1 bis 8 sein.", wert=Text)  # v1.18
+    else:  # v1.18
+        Numbers = re.fullmatch(r'([+-]?\d+(?:[.,]\d+)?)(?:\s*-\s*(\d+))?', Text)  # v1.18: eine Zahl oder zwei Zahlen mit '-' getrennt; sonst ein Name oder eine Variable
+        if Numbers is None:  # v1.18
+            return True  # v1.18
+        Values = [Numbers.group(1).replace(',', '.')] + ([Numbers.group(2)] if Numbers.group(2) else [])  # v1.18
+        Ok = all(float(v) == int(float(v)) and 0 <= int(float(v)) <= 99 for v in Values)  # v1.18
+        Msg = tr("Ungültiger Wert '{wert}': Der Channel muss eine ganze Zahl von 0 bis 99 sein (oder ein Name).", wert=Text)  # v1.18
+    if Ok:  # v1.18
+        return True  # v1.18
+    P01.MsgBox(Msg, vbCritical, tr('Ungültiger Eintrag bei Selectrix'))  # v1.18
+    Target.Value = ''  # v1.18
+    ClearButtons(Target.Row)  # v1.18
+    return False  # v1.18
+
+def SX_Ask_Typ_if_Complete(Row):  # v1.17
+    """Selectrix: Sind Channel und Bitposition eingegeben und ist der Typ leer, den Dialog Taster/An-Aus oeffnen (bei DCC macht das Update_StartValue nach der Adresse)."""  # v1.17
+    if M25.Page_ID != 'Selectrix':  # v1.17
+        return  # v1.17
+    if P01.Cells(Row, M25.Inp_Typ_Col) != '':  # v1.17
+        return  # v1.17
+    Bit = P01.val(P01.Cells(Row, M25.SX_Bitposi_Col))  # v1.17
+    if Bit < 1 or Bit > 8:  # v1.17
+        return  # v1.17
+    Channel = M25.Get_First_Number_of_Range(Row, M25.SX_Channel_Col)  # v1.17
+    if Channel == '' or P01.val(Channel) < 0 or P01.val(Channel) > 99:  # v1.17
+        return  # v1.17
+    Select_Typ_by_Dialog(P01.Cells(Row, M25.Inp_Typ_Col))  # v1.17
 
 def Complete_Typ(Target, DialogIfEmpty=False):
     Txt = String()
@@ -999,8 +1048,10 @@ def Global_Worksheet_Change(Target):
                 Update_Start_LedNr()
                 Update_TestButtons(Row)
             elif (Target.Column == M25.SX_Bitposi_Col):
-                Complete_Addr_Column_with_InCnt(Row)
-                Update_TestButtons(Row)
+                if SX_Check_Input(Target):  # v1.18
+                    Complete_Addr_Column_with_InCnt(Row)
+                    Update_TestButtons(Row)
+                    SX_Ask_Typ_if_Complete(Row)  # v1.17
             elif (Target.Column == M25.Inp_Typ_Col):
                 Complete_Typ(Target)
                 Complete_Addr_Column_with_InCnt(Row)
@@ -1016,7 +1067,8 @@ def Global_Worksheet_Change(Target):
                     Update_StartValue(Row)
                 else:
                     #P01.ActiveCell().Offset(0, 1).Select        #' 15.10.20:
-                    pass
+                    if SX_Check_Input(Target):  # v1.18
+                        SX_Ask_Typ_if_Complete(Row)  # v1.17: Channel nach der Bitposition eingegeben
             elif (Target.Column == M25.InCnt___Col):
                 Complete_Addr_Column_with_InCnt(Row)
                 Update_TestButtons(Row)
@@ -1265,7 +1317,8 @@ def Update_TestButtons(Row, onValue=0, First_Call=True, redraw=False):
     Addr = M25.Get_First_Number_of_Range(Row, AddrColumn)
     #print("UpdateTestButton Row:",Row," Col:",AddrColumn," Addr:",Addr)
     # if Addr == '' or P01.val(Addr) < 0:  # v1.03 (entfallen)
-    if Addr == '' or P01.val(Addr) < 1:  # v1.03
+    # if Addr == '' or P01.val(Addr) < 1:  # v1.03  # v1.16 (entfallen)
+    if Addr == '' or P01.val(Addr) < (0 if isSx else 1):  # v1.16: bei Selectrix ist Channel 0 gueltig
         if __Rect_List_has_Row(Row):  # v1.03
             ClearButtons(Row)                                                                       # 08.12.25: Juergen clear buttons if address is removed  # v1.03
         P01.Cells(Row, M25.Inp_Typ_Col).Value = ''  # v1.03

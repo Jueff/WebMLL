@@ -1,14 +1,15 @@
-# Datei-Version: 1.03 (2026-11-21) - headless_sheet.py
+# Datei-Version: 1.04 (2026-11-25) - headless_sheet.py
 # ----------------------------------------------------------------------------------------------
 # Name:           headless_sheet.py
 # Path:           ExcelAPI/headless_sheet.py
-# Version:        1.03
-# Last Update:    2026-11-21
-# Author:         Harold Linke
+# Version:        1.04
+# Last Update:    2026-11-25
+# Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
 # History of Change:
 #   1.01  2026-10-17  getColorAt/setColorAt: Zellfarben fuer den Patterngenerator (bisher No-Op); davor 1.00 (2026-10-12), nicht erfasst
 #   1.02  2026-10-19  Zeilenhoehen nach Datenzeile speichern (data_row_height), get_row_heights und row_positions fuer die angezeigten Zeilen; vorher rutschten die Hoehen auf andere Zeilen, wenn danach Zeilen versteckt wurden
+#   1.04  2026-11-25  insert_column und delete_column: eine Spalte einfuegen oder entfernen (Daten, Farben, Breiten, versteckte Spalten wandern mit); gebraucht fuer den Wechsel zwischen Selectrix und DCC/LNet/CAN
 # ----------------------------------------------------------------------------------------------
 """HeadlessSheet: GUI-freier Ersatz für die von XLA_Application.py benutzte Teilmenge
 der tksheet-7-Schnittstelle (Datenhaltung, Spans, Highlights, versteckte Zeilen, Höhen).
@@ -484,6 +485,38 @@ class HeadlessSheet:
         self._manual_cells = {(mv(r), c) for (r, c) in self._manual_cells if not (n < 0 and r == at)}  # v1.03
         if self.displayed_rows:
             self.displayed_rows = sorted(mv(r) for r in self.displayed_rows if not (n < 0 and r == at))
+
+    # ------------------------------------------------------------------ Spalten  # v1.04
+    def insert_column(self, idx: int, width: int | None = None):  # v1.04
+        """Leere Spalte vor der 0-basierten Spalte idx einfuegen. Farben, Breiten und versteckte Spalten rechts davon wandern mit."""
+        self._shift_columns(idx, 1)  # v1.04
+        for row in self._data:  # v1.04
+            if len(row) >= idx:  # v1.04
+                row.insert(idx, "")  # v1.04
+        if width is not None:  # v1.04
+            self._col_w[idx] = int(width)  # v1.04
+        self._ncols = None  # v1.04
+
+    def delete_column(self, idx: int):  # v1.04
+        """0-basierte Spalte idx entfernen. Farben, Breiten und versteckte Spalten rechts davon wandern mit."""
+        self._shift_columns(idx, -1)  # v1.04
+        for row in self._data:  # v1.04
+            if len(row) > idx:  # v1.04
+                del row[idx]  # v1.04
+        self._ncols = None  # v1.04
+
+    def _shift_columns(self, at: int, n: int):  # v1.04
+        self._touch()  # v1.04
+
+        def mv(c):  # v1.04
+            return c + 1 if (n > 0 and c >= at) else (c - 1 if (n < 0 and c > at) else c)  # v1.04
+        gone = (lambda c: n < 0 and c == at)  # v1.04
+        self._col_w = {mv(c): w for c, w in self._col_w.items() if not gone(c)}  # v1.04
+        self._col_hl = {mv(c): h for c, h in self._col_hl.items() if not gone(c)}  # v1.04
+        self._cell_hl = {(r, mv(c)): h for (r, c), h in self._cell_hl.items() if not gone(c)}  # v1.04
+        self._manual_cells = {(r, mv(c)) for (r, c) in self._manual_cells if not gone(c)}  # v1.04
+        if self.displayed_columns:  # v1.04
+            self.displayed_columns = sorted(mv(c) for c in self.displayed_columns if not gone(c))  # v1.04
 
     # ------------------------------------------------------------------ Verstecken
     def hide_rows(self, rows=None, **kw):

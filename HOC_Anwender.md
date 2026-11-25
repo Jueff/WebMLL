@@ -1,9 +1,19 @@
-Datei-Version: 1.112 (2026-11-25) - HOC_Anwender.md
-Stand: Version 5.27
+Datei-Version: 1.113 (2026-11-25) - HOC_Anwender.md
+Stand: Version 5.28
 
 # MobaLedLib Studio: Änderungen (Kurzfassung)
 
 Gilt ab Version 1.39. Neueste Version oben.
+
+## Version 5.28 (2026-11-25)
+
+Neue Funktionen:
+- Selectrix ist wieder da: In den Hardware Optionen lässt sich das Protokoll eines Blatts auf Selectrix und zurück umstellen. Die Adressen werden umgerechnet (Adresse = Channel × 8 + Bitposition), vorher fragt das Programm nach.
+- Selectrix: Channel (0 bis 99) und Bitposition (1 bis 8) werden bei der Eingabe geprüft; der Dialog Taster / An-Aus öffnet sich sofort nach Channel und Bitposition.
+
+Korrekturen:
+- Selectrix mit Channel 0: Typ und Testtasten bleiben stehen.
+- Die Testtasten sind etwas kleiner und stehen einen Pixel höher in der Zelle.
 
 ## Version 5.27 (2026-11-25)
 
