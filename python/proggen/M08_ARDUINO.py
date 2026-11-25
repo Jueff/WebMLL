@@ -1,12 +1,14 @@
-# Datei-Version: 1.34 (2026-11-24) - M08_ARDUINO.py
+# Datei-Version: 1.36 (2026-11-25) - M08_ARDUINO.py
 # ----------------------------------------------------------------------------------------------
 # Name:           M08_ARDUINO.py
 # Path:           proggen/M08_ARDUINO.py
-# Version:        1.34
-# Last Update:    2026-11-24
+# Version:        1.36
+# Last Update:    2026-11-25
 # Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
 # History of Change:
+#   1.36  2026-11-25  Pull Request 71 (Juergen, Issue 70): Pico: Hat sich der COM Port nach dem Hochladen geaendert (Neustart), wird der neue Port ins Blatt eingetragen (__Write_Back_New_ComPort; Markierung '*' bleibt). Zeilen mit '# v1.36'
+#   1.35  2026-11-25  Bibliothek MobaLedLib bei file://: veraltete Kopie in .pio/libdeps (PlatformIO nimmt sie bei gleicher Version 3.5.0 weiter) wird geloescht, wenn die src-Dateien von libraries/MobaLedLib abweichen (Refresh_Lib_Copy; Pico: showColor fehlte, Log von Harold)
 #   1.34  2026-11-24  Identify (Jürgen Winkler, Pull Request 61): Pico: Seriennummer und Location des Anschlusses vor dem Hochladen ermitteln und an M42.After_Full_Flash geben (der Anschluss kann nach dem Neustart einen anderen Namen haben). Zeilen mit '# v1.34'
 #   1.33  2026-11-24  Ensure_Git: fehlt git beim Uebersetzen fuer ESP32 oder Pico, bietet das Programm die Installation an (auch im Anfaenger Modus)
 #   1.32  2026-11-24  ESP32: Nach dem vollstaendigen Hochladen per USB wird die Dateisystem-Partition (LittleFS) geloescht, bevor die Konfiguration kommt (Absturzschleife 'lfs_fs_grow_ assert failed' bei altem Dateisystem anderer Groesse)
@@ -755,6 +757,41 @@ def Lib_Link_Scheme() -> str:  # v1.16
     return _LIB_LINK_SCHEME[0]  # v1.16
 
 
+def Refresh_Lib_Copy(SrcDir):  # v1.35
+    """Bei file:// (keine Verknuepfung moeglich, zum Beispiel Windows ohne Entwicklermodus) kopiert PlatformIO die Bibliothek MobaLedLib nach .pio/libdeps/<env>/ und benutzt die Kopie weiter, solange die Versionsangabe (3.5.0) gleich bleibt:
+    eine geaenderte Datei der Bibliothek (zum Beispiel PicoFastLED.h mit showColor) kommt dann nie an. Hier wird eine Kopie, deren src-Dateien von der Bibliothek abweichen, geloescht; PlatformIO legt sie beim naechsten Lauf neu an.
+    Geloescht wird nur .pio/libdeps/<env>/MobaLedLib* im Projekt dieses Programms (platformio.ini beginnt mit '; Created by'); Fehler werden nur protokolliert."""  # v1.35
+    import filecmp  # v1.35
+    import shutil  # v1.35
+    try:  # v1.35
+        project = os.path.abspath(os.path.join(SrcDir, '..'))  # v1.35
+        libsrc = os.path.join(project, 'libraries', 'MobaLedLib', 'src')  # v1.35
+        libdeps = os.path.join(project, '.pio', 'libdeps')  # v1.35
+        if not os.path.isdir(libsrc) or not os.path.isdir(libdeps):  # v1.35
+            return  # v1.35
+        for env in os.listdir(libdeps):  # v1.35
+            envdir = os.path.join(libdeps, env)  # v1.35
+            if not os.path.isdir(envdir):  # v1.35
+                continue  # v1.35
+            for name in os.listdir(envdir):  # v1.35
+                copy = os.path.join(envdir, name)  # v1.35
+                if not name.startswith('MobaLedLib') or not os.path.isdir(copy) or os.path.islink(copy):  # v1.35: Verknuepfungen zeigen immer auf die aktuelle Bibliothek
+                    continue  # v1.35
+                csrc = os.path.join(copy, 'src')  # v1.35
+                stale = not os.path.isdir(csrc)  # v1.35
+                if not stale:  # v1.35
+                    for f in os.listdir(libsrc):  # v1.35
+                        a = os.path.join(libsrc, f)  # v1.35
+                        if os.path.isfile(a) and not (os.path.isfile(os.path.join(csrc, f)) and filecmp.cmp(a, os.path.join(csrc, f), shallow=False)):  # v1.35
+                            stale = True  # v1.35
+                            break  # v1.35
+                if stale:  # v1.35
+                    shutil.rmtree(copy, ignore_errors=True)  # v1.35
+                    logging.info("PlatformIO: veraltete Kopie der Bibliothek MobaLedLib geloescht (%s), sie wird neu angelegt", copy)  # v1.35
+    except Exception:  # noqa: BLE001  # v1.35
+        logging.getLogger(__name__).debug("Refresh_Lib_Copy fehlgeschlagen", exc_info=True)  # v1.35
+
+
 def Write_PIO_Project(environment, sketch_dir):
     return __Create_PIO_Build(None, environment, "", "", sketch_dir, track_project=False)
 
@@ -807,7 +844,8 @@ def __Create_PIO_Build(fp, Environment, ResultName, ComPort, SrcDir, track_proje
     if M02.Test_Suffix == "":    
         #VBFiles.writeText(fp2, '    MobaLedLib=file://../../libraries/MobaLedLib@3.5.0', '\n')
         # VBFiles.writeText(fp2, '    MobaLedLib=file://libraries/MobaLedLib@3.5.0', '\n')  # v1.16 (entfallen)
-        VBFiles.writeText(fp2, '    MobaLedLib=' + Lib_Link_Scheme() + '://libraries/MobaLedLib@3.5.0', '\n')  # v1.16: symlink:// wie Excel 3.5.0L3 (sonst file://)
+        # VBFiles.writeText(fp2, '    MobaLedLib=' + Lib_Link_Scheme() + '://libraries/MobaLedLib@3.5.0', '\n')  # v1.16: symlink:// wie Excel 3.5.0L3 (sonst file://)  # v5.15 (entfallen)
+        VBFiles.writeText(fp2, '    MobaLedLib=' + Lib_Link_Scheme() + '://libraries/MobaLedLib@3.5.0', '\n'); Refresh_Lib_Copy(SrcDir) if Lib_Link_Scheme() == 'file' else None  # v1.16: symlink:// wie Excel 3.5.0L3 (sonst file://)  # v5.15
     else:
         # VBFiles.writeText(fp2, '    MobaLedLib=file://libraries/MobaLedLib@3.5.0-'+ M02.Test_Suffix, '\n')  # v1.16 (entfallen)
         VBFiles.writeText(fp2, '    MobaLedLib=' + Lib_Link_Scheme() + '://libraries/MobaLedLib@3.5.0-'+ M02.Test_Suffix, '\n')  # v1.16
@@ -2562,14 +2600,35 @@ def Compile_and_Upload_Prog_to_Arduino(InoName, ComPortColumn, BuildOptColumn, S
             # if HexFile == '' and M42.Upload_Possible(Mode, ComPort) and not M42.After_Full_Flash(ComPort):  # v1.25: die Konfiguration kommt nach dem Programm  # v1.34 (entfallen)
             if HexFile == '' and M02a.Get_BoardTyp() == M02.HT_ESP32 and M42.Upload_Possible(Mode, ComPort):  # v1.32: altes Dateisystem loeschen
                 __Erase_ESP32_Filesystem(ComPort)  # v1.32
+            M42.Clear_Found_Port()  # v1.36: kein Anschluss aus einem frueheren Upload (anderes Board) ins Blatt schreiben
             if HexFile == '' and M42.Upload_Possible(Mode, ComPort) and not M42.After_Full_Flash(ComPort, expected_serial=pico_serial, expected_location=pico_location):  # v1.25: die Konfiguration kommt nach dem Programm  # v1.34
                 P01.MsgBox(M09.Get_Language_Str('Das Programm wurde hochgeladen, die Konfiguration konnte aber nicht übertragen werden.\n\nDie Lichtmaschine hat noch keine Konfiguration. Bitte noch einmal hochladen (Einzelheiten im Protokoll).'), vbInformation, M09.Get_Language_Str('Konfiguration nicht übertragen'))  # v1.25
+            __Write_Back_New_ComPort(ComPortColumn, ComPort)  # v1.36: Pico meldet sich nach dem Neustart evtl. an einem anderen COM Port
             M30.Show_Status_for_a_while(M09.Get_Language_Str('Programm erfolgreich hochgeladen. Kompilieren und Hochladen dauerte ') + P01.Format(P01.Time() - Start, 'hh:mm:ss'), '00:02:00')
         PG.global_controller.showFramebyName("ProgGeneratorPage")
         Last_Upload.update(ok=(not CreateFilesOnly), host='')  # v1.24: Hochladen per USB geklappt
         fn_return_value = True                                                         # VBA: Compile_and_Upload_Prog_to_Arduino = True (fehlte in der Umstellung: 'R OK' wurde nie gesetzt)  # v1.10
         return fn_return_value  # v1.10
         
+def __Write_Back_New_ComPort(ComPortColumn, OldPort):  # v1.36
+    """Pico: Nach dem Hochladen den neu gefundenen COM Port ins Blatt eintragen (nur Windows-Namen COMn). Eine Markierung '*' (belegt) bleibt erhalten."""  # v1.36
+    new_port = M42.Found_Port()  # v1.36
+    if not new_port:  # v1.36
+        return  # v1.36
+    s = str(new_port).strip()  # v1.36
+    if not (s.upper().startswith("COM") and s[3:].isdigit()):  # v1.36: Linux/macOS-Pfade werden nicht geschrieben
+        return  # v1.36
+    digits = s[3:]  # v1.36
+    cell = P01.Cells(M02.SH_VARS_ROW, ComPortColumn)  # v1.36
+    old = str(cell.Value)  # v1.36
+    if old.lstrip("*") == digits:  # v1.36: unveraendert
+        return  # v1.36
+    if old.startswith("*"):  # v1.36
+        cell.Value = "*" + digits  # v1.36
+    else:  # v1.36
+        cell.Value = int(digits)  # v1.36
+    Debug.Print('Neuer COM Port nach dem Hochladen: ' + str(OldPort) + ' -> ' + s)  # v1.36
+
 def __Erase_ESP32_Filesystem(ComPort):  # v1.32
     """Nach dem vollstaendigen USB-Upload: Dateisystem-Partition des ESP32 loeschen. Ein altes LittleFS anderer Groesse (zum Beispiel von einem frueheren Projekt)
     laesst die neue Firmware beim Mounten abstuerzen und endlos neu starten. Die Konfiguration wird danach uebertragen; WLAN-Zugangsdaten bleiben."""  # v1.32

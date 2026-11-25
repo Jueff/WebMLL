@@ -1,9 +1,9 @@
-# Datei-Version: 5.12 (2026-11-24) - webmobaledlib.py
+# Datei-Version: 5.25 (2026-11-25) - webmobaledlib.py
 # ----------------------------------------------------------------------------------------------
 # Name:           webmobaledlib.py
 # Path:           webmobaledlib.py
-# Version:        5.12
-# Last Update:    2026-11-24
+# Version:        5.25
+# Last Update:    2026-11-25
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
@@ -58,6 +58,13 @@
 #   1.82  2026-10-20  Reiter direkt per Adresse aufrufen (/Farbtest ...) und mit ?vollbild=1 im Vollbild (web_tabs 1.00, web_fullscreen 1.02); index() baut ueber build_page
 #   1.81  2026-10-20  Vollbild: ein Knopf in der Kopfzeile neben Beenden statt je einer in jedem Reiter, Beenden bleibt im Vollbild (web_fullscreen 1.01, web_pattgen 1.17)
 #   1.80  2026-10-20  Knopf Vollbild in jedem Reiter (web_fullscreen 1.00, web_pattgen 1.16)
+#   5.25  2026-11-25  Der geschuetzte Begriff LocoNet wird in der Oberflaeche nicht mehr benutzt: Startseite zeigt LNet-Zentrale (web_startpage 1.02, Web_Languages.csv)
+#   5.24  2026-11-25  Startseite: Fehler 'unsupported format character' nach Auswahl von Zentrale und Lichtmaschine behoben (web_startpage 1.01)
+#   5.23  2026-11-25  Startseite fuer Einsteiger (web_startpage 1.00, web_tabs 1.37): Auswahl der Zentrale und der Lichtmaschine (auch automatisch erkennen), Anleitung Setup uebertragen und Dialog Wizard, Knopf Anfangen (andere Zentralen-Tabellen ausblenden, Board einstellen, Startprogramm aus Startprogramme/ laden), Einstellung ShowStartPage, Hinweis zum Anfaenger Modus
+#   5.22  2026-11-25  Tooltip der Zielvariable (nur eine Zielvariable): erklaert, dass der Name fuer Zustand 0 eingegeben wird (Test0) und die weiteren Zustaende Test1, Test2 ... heissen (web_form_other 1.14)
+#   5.21  2026-11-25  Mini-Farbtest im Parameterformular (Farbe waehlen): LED-Nummer 0 / Kanal 0 voreingestellt, Farbaenderungen gehen nur an die Heartbeat-LED (web_form_other 1.13)
+#   5.20  2026-11-25  Forum/Test Harold, Parameterformular: eine leere oder ungueltige Eingabe (zum Beispiel keine Zielvariable) wurde trotz Fehlermeldung uebernommen, jetzt erscheint der Dialog wieder (Userform_Other 1.04); die Meldung nennt die Bezeichnung des Feldes statt DstVar1 (web_form_other 1.12)
+#   5.19  2026-11-25  Forum PeterVT11, Parameterformular der PushButton-Makros: 'Zielvariable' ohne die 1 (nur eine Zielvariable), 0/1-Flags als Ein/Aus-Schalter, Farben (RGB) als Textfeld mit Taste 'Farbe waehlen' (Mini-Farbtest) und Farbfeld (web_form_other 1.11)
 #   1.79  2026-10-20  Raspberry Pi, erster Start: Frage nach den ARDUINO Bibliotheken wird gestellt, wenn ein Browser verbunden ist (headless_startup 1.00, no_tk 1.01, M37_Inst_Libraries 1.01)
 #   1.78  2026-10-19  Mindestversion von web_access.py 1.09 (Einschalten legt die Firewall-Regel an)
 #   1.77  2026-10-19  Zugriff aus dem Netz als Einstellung (web_network 1.00, web_access 1.08): --host ohne Vorgabe, Rangfolge Aufruf, MLL_HOST, Einstellung; Hook fuer den Neustart
@@ -330,6 +337,12 @@
 #   5.10  2026-11-24  Desktop-Symbole heissen MobaLedLib Studio (Installationsskripte fuer Windows, Linux, macOS und Raspberry Pi legen sie neu an und entfernen die Symbole mit den frueheren Namen); Hinweistext von HSVColor nennt die Rainbow-Werte (Par_Description.csv); Text zur Firewall-Regel nennt den echten Regelnamen (web_access 1.14)
 #   5.11  2026-11-24  Rueckmeldung niederlaendischer Tester (4.98): Menue Einstellungen zeigt Uitbreidingen statt Erweiterungen; Hinweise (Tooltips) in den Einstellungsfenstern werden uebersetzt, 12 fehlende Hinweistexte uebersetzt (web_params 1.18, Web_Languages.csv)
 #   5.12  2026-11-24  Wiki-Namensraum anleitungen:mobaledlibstudio: Hilfe -> Hilfe oeffnen, Hilfe-Knoepfe (OTA, Servo-Animation, Timeline Editor) und alle Wiki-Seiten verweisen auf den neuen Namensraum (M20 1.15, web_esp32_ota 1.09, web_form_servoanim 1.05, web_pattgen 1.25)
+#   5.13  2026-11-25  Windows: Setup uebertragen oeffnete 5-6 mal kurz schwarze Konsolenfenster (Unterprozesse von pio, esptool, git ohne CREATE_NO_WINDOW); alle Popen-Aufrufe ohne eigene creationflags laufen jetzt ohne Fenster (_hide_console_windows)
+#   5.14  2026-11-25  Issue 60 (Rueckmeldung zu 5.12): Knoepfe Vorgang abbrechen und Schliessen im Protokoll-Fenster flackerten beim Setup uebertragen weiter; Entprellung zurueckgesetzt bei neuem Lauf, Vorgang gilt als laufend, solange in den letzten 3 s Ausgabe kam (web_log 1.13)
+#   5.15  2026-11-25  Pico: Kompilierfehler 'CLEDController has no member named showColor', wenn die PicoFastLED.h der Bibliothek aelter ist (ohne showColor): der erzeugte Header benutzt dann clearLeds(256) (M06_Write_Header_SW 1.13); PicoFastLED.h meldet showColor mit MLL_HAS_SHOWCOLOR
+#   5.16  2026-11-25  Pico-Kompilierfehler showColor, eigentliche Ursache: bei file:// (Windows ohne Verknuepfungen) benutzt PlatformIO eine alte Kopie der Bibliothek in .pio/libdeps; sie wird geloescht, wenn die src-Dateien abweichen (M08_ARDUINO 1.35, Refresh_Lib_Copy)
+#   5.17  2026-11-25  Pull Request 71 von Juergen (Issue 70): Pico: neuer COM Port nach dem Hochladen wird ins Blatt eingetragen, wait_for_port findet den Pico ueber Seriennummer oder Location, Suche nach dem Upload 10 s, Fehler ~MLLERR ohne Text und Abbruch bei ungeeigneter Firmware, ESP32Extensions.h nur fuer ESP32 (M08 1.36, M42 1.11, headless_dyn_config 1.06)
+#   5.18  2026-11-25  Pull Request 39 (Juergen), Tooltip-Texte: Hinweis zum Knopf Board und USB Port erkennen nennt Nano, ESP32, Pico und die Auswahl bei mehreren Modellen (web_form_options 1.50, Web_Languages.csv 2 Zeilen); Umbau der Boardliste bleibt aus
 #   5.09  2026-11-24  Anzeigename MobaLedLib Studio in der ganzen Oberflaeche (Web_Languages.csv in allen Sprachen, Meldungen, Update-Fenster, Installation und Reparatur, Dokumente und Wiki); technische Namen (Dateien, Datenordner, Symbole, Anmeldename, Regelnamen) unveraendert (web_dialogs 1.14, web_form_options 1.49, web_tabs 1.36, repair 1.05)
 #   5.08  2026-11-24  Name MobaLedLib Studio: Titel der Kopfzeile und Tabtitel des Browsers 'MobaLedLib Studio', das Versionsfeld zeigt nur die Version ohne 'webMobaLedLib' (interne Namen wie Anmeldung, Ordner, Firewallregel unveraendert)
 #   5.07  2026-11-24  House-Formular (House, GasLights): Regler, Zahlenfelder mit minus/plus und Mausrad, LED Kanal als Zahlenfeld (web_form_house 1.08)
@@ -416,6 +429,24 @@ import sys
 import tempfile
 import types
 import uuid
+
+
+def _hide_console_windows():  # v5.13
+    """Windows: Unterprozesse (pio, esptool, git, taskkill ...) oeffneten beim Setup uebertragen kurz schwarze Fenster. Alle subprocess.Popen-Aufrufe ohne eigene creationflags bekommen CREATE_NO_WINDOW (Aufrufe mit eigenen Flags, zum Beispiel der Neustart, bleiben unveraendert)."""  # v5.13
+    if os.name != "nt" or getattr(subprocess.Popen, "_mll_no_window", False):  # v5.13
+        return  # v5.13
+    flag = getattr(subprocess, "CREATE_NO_WINDOW", 0x08000000)  # v5.13
+    orig_init = subprocess.Popen.__init__  # v5.13
+
+    def _init(self, *args, **kwargs):  # v5.13
+        if not kwargs.get("creationflags"):  # v5.13
+            kwargs["creationflags"] = flag  # v5.13
+        orig_init(self, *args, **kwargs)  # v5.13
+    subprocess.Popen.__init__ = _init  # v5.13
+    subprocess.Popen._mll_no_window = True  # v5.13
+
+
+_hide_console_windows()  # v5.13
 
 os.environ["MLL_HEADLESS"] = "1"
 here = os.path.dirname(os.path.abspath(__file__))
@@ -610,6 +641,18 @@ REQUIRED_FILES = {  # v1.75
     "_web/web_dialogs.py": "1.14", "_web/web_form_options.py": "1.49", "_web/web_tabs.py": "1.36", "repair.py": "1.05",  # v5.09
     "_web/web_access.py": "1.14",  # v5.10
     "_web/web_params.py": "1.18",  # v5.11
+    "_web/web_log.py": "1.13",  # v5.14
+    "proggen/M06_Write_Header_SW.py": "1.13",  # v5.15
+    "proggen/M08_ARDUINO.py": "1.35",  # v5.16
+    "proggen/M08_ARDUINO.py": "1.36", "proggen/M42_Dyn_Config.py": "1.11", "headless/headless_dyn_config.py": "1.06",  # v5.17
+    "_web/web_form_options.py": "1.50",  # v5.18
+    "_web/web_form_other.py": "1.11",  # v5.19
+    "_web/web_form_other.py": "1.12", "proggen/Userform_Other.py": "1.04",  # v5.20
+    "_web/web_form_other.py": "1.13",  # v5.21
+    # "_web/web_startpage.py": "1.00", "_web/web_tabs.py": "1.37",  # v5.23  # v5.24 (entfallen)
+    # "_web/web_startpage.py": "1.01", "_web/web_tabs.py": "1.37",  # v5.23  # v5.24  # v5.25 (entfallen)
+    "_web/web_startpage.py": "1.02", "_web/web_tabs.py": "1.37",  # v5.23  # v5.24  # v5.25
+    "_web/web_form_other.py": "1.14",  # v5.22
     "proggen/M20_PageEvents_a_Functions.py": "1.15", "_web/web_esp32_ota.py": "1.09", "_web/web_form_servoanim.py": "1.05", "_web/web_pattgen.py": "1.25",  # v5.12
     "_web/web_dialogs.py": "1.13", "proggen/M18_Save_Load.py": "1.06",  # v4.96
     "_web/web_log.py": "1.12", "_web/web_form_options.py": "1.47",  # v4.90
@@ -1596,7 +1639,15 @@ def font_scales(ctrl) -> dict:
 # VERSION = "5.03 (2026-11-24)"  # v5.04 (entfallen)
 # VERSION = "5.10 (2026-11-24)"  # v5.11 (entfallen)
 # VERSION = "5.11 (2026-11-24)"  # v5.12 (entfallen)
-VERSION = "5.12 (2026-11-24)"  # v5.11  # v5.12  # v3.64  # v4.26  # v4.27  # v4.28  # v4.29  # v4.30  # v4.31  # v4.32  # v4.33  # v4.34  # v4.35  # v4.36  # v4.37  # v4.38  # v4.39  # v4.40  # v4.41  # v4.42  # v4.43  # v4.44  # v4.45  # v4.46  # v4.47  # v4.48  # v4.49  # v4.50  # v4.51  # v4.52  # v4.53  # v4.54  # v4.55  # v4.56  # v4.57  # v4.58  # v4.59  # v4.60  # v4.61  # v4.62  # v4.63  # v4.64  # v4.65  # v4.66  # v4.67  # v4.68  # v4.69  # v4.70  # v4.71  # v4.72  # v4.73  # v4.74  # v4.75  # v4.76  # v4.77  # v4.78  # v4.79  # v4.80  # v4.81  # v4.82  # v4.83  # v4.84  # v4.85  # v4.86  # v4.87  # v4.88  # v4.89  # v4.90  # v4.91  # v4.92  # v4.93  # v4.94  # v4.95  # v4.96  # v4.97  # v4.98  # v4.99  # v5.00  # v5.01  # v5.02  # v5.03  # v5.04
+# VERSION = "5.12 (2026-11-24)"  # v5.13 (entfallen)
+# VERSION = "5.13 (2026-11-25)"  # v5.14 (entfallen)
+# VERSION = "5.14 (2026-11-25)"  # v5.15 (entfallen)
+# VERSION = "5.15 (2026-11-25)"  # v5.16 (entfallen)
+# VERSION = "5.16 (2026-11-25)"  # v5.17 (entfallen)
+# VERSION = "5.17 (2026-11-25)"  # v5.18 (entfallen)
+# VERSION = "5.23 (2026-11-25)"  # v5.23  # v5.22  # v5.21  # v5.20  # v5.19  # v5.11  # v5.12  # v5.13  # v5.14  # v5.15  # v5.16  # v5.17  # v5.18  # v3.64  # v4.26  # v4.27  # v4.28  # v4.29  # v4.30  # v4.31  # v4.32  # v4.33  # v4.34  # v4.35  # v4.36  # v4.37  # v4.38  # v4.39  # v4.40  # v4.41  # v4.42  # v4.43  # v4.44  # v4.45  # v4.46  # v4.47  # v4.48  # v4.49  # v4.50  # v4.51  # v4.52  # v4.53  # v4.54  # v4.55  # v4.56  # v4.57  # v4.58  # v4.59  # v4.60  # v4.61  # v4.62  # v4.63  # v4.64  # v4.65  # v4.66  # v4.67  # v4.68  # v4.69  # v4.70  # v4.71  # v4.72  # v4.73  # v4.74  # v4.75  # v4.76  # v4.77  # v4.78  # v4.79  # v4.80  # v4.81  # v4.82  # v4.83  # v4.84  # v4.85  # v4.86  # v4.87  # v4.88  # v4.89  # v4.90  # v4.91  # v4.92  # v4.93  # v4.94  # v4.95  # v4.96  # v4.97  # v4.98  # v4.99  # v5.00  # v5.01  # v5.02  # v5.03  # v5.04  # v5.24 (entfallen)
+# VERSION = "5.24 (2026-11-25)"  # v5.23  # v5.22  # v5.21  # v5.20  # v5.19  # v5.11  # v5.12  # v5.13  # v5.14  # v5.15  # v5.16  # v5.17  # v5.18  # v3.64  # v4.26  # v4.27  # v4.28  # v4.29  # v4.30  # v4.31  # v4.32  # v4.33  # v4.34  # v4.35  # v4.36  # v4.37  # v4.38  # v4.39  # v4.40  # v4.41  # v4.42  # v4.43  # v4.44  # v4.45  # v4.46  # v4.47  # v4.48  # v4.49  # v4.50  # v4.51  # v4.52  # v4.53  # v4.54  # v4.55  # v4.56  # v4.57  # v4.58  # v4.59  # v4.60  # v4.61  # v4.62  # v4.63  # v4.64  # v4.65  # v4.66  # v4.67  # v4.68  # v4.69  # v4.70  # v4.71  # v4.72  # v4.73  # v4.74  # v4.75  # v4.76  # v4.77  # v4.78  # v4.79  # v4.80  # v4.81  # v4.82  # v4.83  # v4.84  # v4.85  # v4.86  # v4.87  # v4.88  # v4.89  # v4.90  # v4.91  # v4.92  # v4.93  # v4.94  # v4.95  # v4.96  # v4.97  # v4.98  # v4.99  # v5.00  # v5.01  # v5.02  # v5.03  # v5.04  # v5.24  # v5.25 (entfallen)
+VERSION = "5.25 (2026-11-25)"  # v5.23  # v5.22  # v5.21  # v5.20  # v5.19  # v5.11  # v5.12  # v5.13  # v5.14  # v5.15  # v5.16  # v5.17  # v5.18  # v3.64  # v4.26  # v4.27  # v4.28  # v4.29  # v4.30  # v4.31  # v4.32  # v4.33  # v4.34  # v4.35  # v4.36  # v4.37  # v4.38  # v4.39  # v4.40  # v4.41  # v4.42  # v4.43  # v4.44  # v4.45  # v4.46  # v4.47  # v4.48  # v4.49  # v4.50  # v4.51  # v4.52  # v4.53  # v4.54  # v4.55  # v4.56  # v4.57  # v4.58  # v4.59  # v4.60  # v4.61  # v4.62  # v4.63  # v4.64  # v4.65  # v4.66  # v4.67  # v4.68  # v4.69  # v4.70  # v4.71  # v4.72  # v4.73  # v4.74  # v4.75  # v4.76  # v4.77  # v4.78  # v4.79  # v4.80  # v4.81  # v4.82  # v4.83  # v4.84  # v4.85  # v4.86  # v4.87  # v4.88  # v4.89  # v4.90  # v4.91  # v4.92  # v4.93  # v4.94  # v4.95  # v4.96  # v4.97  # v4.98  # v4.99  # v5.00  # v5.01  # v5.02  # v5.03  # v5.04  # v5.24  # v5.25
 # VERSION = "4.09 (2026-11-19)"  # v3.64 (entfallen)
 # VERSION = "4.08 (2026-11-19)"  # v3.64 (entfallen)
 # VERSION = "4.07 (2026-11-19)"  # v3.64 (entfallen)
@@ -2197,6 +2248,7 @@ document.addEventListener('keydown', function (e) {
 # Zwischenspeichern: gemeinsamer Zustand ueber alle Browserfenster
 _AUTOSAVE = {"sig_seen": None, "sig_saved": None, "changed_at": 0.0, "saved_at": 0.0, "running": False}
 _RECOVERY = {"checked": False}
+_STARTPAGE = {"done": False, "open": False}  # v5.23: die Startseite wird einmal je Programmlauf gezeigt
 _AUTOCONNECT = {"done": False}  # v4.14: Verbinden beim Start nur einmal je Programmlauf (nicht bei jedem neuen Browserfenster)
 AUTOSAVE_IDLE = 3.0          # Sekunden Ruhe nach der letzten Aenderung
 AUTOSAVE_INTERVAL = 30.0     # frueheste Zeit zwischen zwei Sicherungen
@@ -7850,12 +7902,93 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
     ui.timer(1.5, run_startup_tasks, once=True)  # v1.79
 
     async def startup_extensions():  # v3.98
+        for _ in range(7200):  # v5.23: solange die Startseite offen ist, kommt die Frage nach den Erweiterungen nicht dazwischen
+            if not _STARTPAGE["open"]:  # v5.23
+                break  # v5.23
+            await asyncio.sleep(0.5)  # v5.23
         if await offer_extensions():  # v3.98
             show(state["ws"])  # v3.98
+
+    async def start_with_choice(central, machine):  # v5.23: Knopf Anfangen der Startseite
+        """Tabellen anderer Zentralen verbergen, die Tabelle der Zentrale oeffnen, Startprogramm der Lichtmaschine laden, Board einstellen"""  # v5.23
+        from _web import web_startpage as SP  # v5.23
+        page_ids = {}  # v5.23
+        for w_ in wb.sheets:  # v5.23
+            if getattr(w_, "Visible", True) is False:  # v5.23
+                continue  # v5.23
+            try:  # v5.23
+                page_ids[w_.Name] = str(w_.Cells(M02.SH_VARS_ROW, M02.PAGE_ID_COL)).strip()  # v5.23
+            except Exception:                              # noqa: BLE001  # v5.23
+                logger.debug("Kennung der Tabelle %s nicht gelesen", w_.Name, exc_info=True)  # v5.23
+        hide, show_, target = SP.plan_sheets(page_ids, central)  # v5.23
+        target_ws = None  # v5.23
+        for w_ in wb.sheets:  # v5.23
+            if w_.Name in hide:  # v5.23
+                w_.user_hidden = True  # v5.23
+            elif w_.Name in show_:  # v5.23
+                w_.user_hidden = False  # v5.23
+                if w_.Name == target:  # v5.23
+                    target_ws = w_  # v5.23
+        if target_ws is None:  # v5.23
+            ui.notify(tr("Die Tabelle der gewählten Zentrale wurde nicht gefunden."), type="warning")  # v5.23
+            return  # v5.23
+        activate(target_ws)  # v5.23
+        rebuild_sheet_tabs()  # v5.23
+        program = SP.program_file(here, machine, central)  # v5.23
+        logger.info("Startseite: Zentrale %s, Lichtmaschine %s, Tabelle %s, Startprogramm %s", central, machine, target, program or "-")  # v5.23
+
+        def work():  # v5.23
+            import proggen.M28_Diverse as _M28  # v5.23
+            if program:  # v5.23
+                M18.Read_PGF(program, True)  # v5.23: in die aktive Tabelle
+            if machine == "Pro":  # v5.23
+                board = M02.BOARD_ESP32  # v5.23
+            elif machine == "Pico":  # v5.23
+                board = M02.BOARD_PICO  # v5.23
+            else:  # v5.23: Classic / Mini (Nano): einen schon eingestellten Nano behalten (Bootloader), sonst Nano mit neuem Bootloader
+                board = None if str(_M28.Get_Old_Board(True)).startswith("--board arduino:avr:nano") else M02.BOARD_NANO_NEW  # v5.23
+            if board:  # v5.23
+                _M28.Change_Board_Typ(True, board)  # v5.23
+        await run_command(work, tr("Startseite: Tabelle vorbereiten"), live=False)()  # v5.23
+        show(state["ws"])  # v5.23
+
+    async def startup_startpage():  # v5.23
+        """Startseite fuer Einsteiger (Einstellung ShowStartPage, Vorgabe an)"""  # v5.23
+        from _web import web_startpage as SP  # v5.23
+        if not SP.is_enabled(ctrl):  # v5.23
+            return  # v5.23
+        for _ in range(50):  # v5.23
+            if not state["busy"]:  # v5.23
+                break  # v5.23
+            await asyncio.sleep(0.1)  # v5.23
+
+        async def sp_detect():  # v5.23
+            own_port, other_port = _stored_ports()  # v5.23
+            found = await run.io_bound(_search_lichtmaschine, own_port, other_port)  # v5.23
+            if not found:  # v5.23
+                return None, ""  # v5.23
+            return SP.machine_for_port_type(found[1]), found[0]  # v5.23
+        _STARTPAGE["open"] = True  # v5.23
+        try:  # v5.23
+            res = await SP.show_start_page(here, tr, detect=sp_detect, beginner=_web_tabs.is_beginner_mode(ctrl))  # v5.23
+        except Exception:                                  # noqa: BLE001  # v5.23
+            logger.exception("Startseite fehlgeschlagen")  # v5.23
+            res = None  # v5.23
+        finally:  # v5.23
+            _STARTPAGE["open"] = False  # v5.23
+        if not res:  # v5.23
+            return  # v5.23
+        if res.get("hide"):  # v5.23
+            SP.save_hide(ctrl)  # v5.23
+        if res.get("go") and res.get("central") and res.get("machine"):  # v5.23
+            await start_with_choice(res["central"], res["machine"])  # v5.23
     if not _AUTOCONNECT["done"]:  # v4.14: einmal je Programmlauf, parallel zum Laden der Tabellen
         _AUTOCONNECT["done"] = True  # v4.14
         ui.timer(2.0, startup_autoconnect, once=True)  # v4.14
     ui.timer(3.0, startup_extensions, once=True)  # v3.98: die geöffnete Datei benutzt eine ausgeschaltete Erweiterung?
+    if not _STARTPAGE["done"]:  # v5.23: Startseite fuer Einsteiger, einmal je Programmlauf
+        _STARTPAGE["done"] = True  # v5.23
+        ui.timer(1.0, startup_startpage, once=True)  # v5.23
 
     show(state["ws"])
     mark("Tabelle fuellen (show)")

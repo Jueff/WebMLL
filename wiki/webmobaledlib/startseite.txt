@@ -1,0 +1,100 @@
+====== MobaLedLib Studio – Die Startseite für Einsteiger ======
+//Seitenstand 1.01 (2026-11-25), gilt für Version 5.25//
+
+Beim Start zeigt MobaLedLib Studio eine **Startseite**. Sie führt dich in **drei Schritten** zu deinem ersten Programm auf der Lichtmaschine: Du sagst, **welche Modellbahnzentrale** und **welche Lichtmaschine** du hast. Das Programm öffnet dann die **passende Tabelle** mit einem **fertigen Startprogramm**. Du musst es nur noch auf die Lichtmaschine übertragen.
+
+{{:bilder:anleitungen:mobaledlibstudio:start_02_startseite.png?600|Die Startseite nach dem Start}}
+
+Die Startseite ist für **Einsteiger** gedacht. Als Experte kannst du sie mit **Überspringen** schließen oder ganz abschalten (siehe unten).
+
+===== Schritt 1: Die Modellbahnzentrale wählen =====
+
+Klicke auf die Zentrale, mit der deine Anlage gesteuert wird:
+
+^ Auswahl ^ Tabelle ^
+| **DCC-Zentrale** | **DCC** |
+| **Selectrix-Zentrale** | **Selectrix** |
+| **LNet-Zentrale** | **LNet** |
+| **Märklin CAN-Bus** | **CAN** |
+| **Ohne Zentrale** | **DCC** (siehe Hinweis) |
+
+Der gewählte Eintrag ist hervorgehoben. Unter der Auswahl steht, welche Tabelle benutzt wird. Alle **Tabellen, die du nicht brauchst, werden ausgeblendet**. Du siehst später nur die Tabelle deiner Zentrale.
+
+**Hinweis:** **Ohne Zentrale** wählst du, wenn du die Lichtmaschine erst einmal ohne Modellbahnzentrale ausprobieren willst. Dann wird die Tabelle **DCC** benutzt. Eine Zentrale brauchst du für den ersten Test nicht (siehe [[anleitungen:mobaledlibstudio:erstes_programm|Dein erstes Programm]]).
+
+===== Schritt 2: Die Lichtmaschine wählen =====
+
+Klicke auf deine Lichtmaschine:
+
+^ Auswahl ^ Platine ^ Eingestelltes Board ^
+| **Lichtmaschine Classic / Mini** | ARDUINO Nano | **Nano (neue Version)**, ein schon eingestellter Nano bleibt erhalten |
+| **Lichtmaschine Pro** | ESP32 | **ESP32** |
+| **Lichtmaschine Pico Zero / MoLLi** | Raspberry Pico | **Raspberry Pico** |
+
+Die Bilder zeigen die Platine. Du musst **nicht** selbst nachsehen, was auf deiner Lichtmaschine steckt: Schließe sie mit dem **USB-Kabel** an und klicke auf **Automatisch erkennen**. Das Programm sucht an allen USB-Anschlüssen. Findet es eine Lichtmaschine, wählt es sie **für dich aus** und zeigt den Namen und den Anschluss an. Findet es keine, kommt ein Hinweis: Prüfe das **USB-Kabel** (es muss Daten übertragen) und klicke noch einmal, oder wähle die Lichtmaschine **von Hand**.
+
+===== Schritt 3: Das Programm übertragen =====
+
+Sobald Zentrale **und** Lichtmaschine gewählt sind, steht unter Schritt 3 die **Anleitung für deine Kombination**:
+
+  - **Verbinde** die Lichtmaschine per USB mit dem Computer.
+  - Klicke in der Tabelle auf den Knopf **Setup übertragen**. Das Programm wird zur Lichtmaschine übertragen. Die **Heartbeat-LED** blinkt, wenn es geklappt hat.
+  - Für **eigene Beleuchtungen** klicke oben links auf **Dialog Wizard**. Das Programm fragt Schritt für Schritt alles ab. Danach überträgst du wieder mit **Setup übertragen**.
+
+Die beiden Knöpfe sind auf der Startseite **abgebildet**, genau wie in der Werkzeugleiste. So erkennst du sie sofort. Wie das Übertragen im Einzelnen abläuft, steht auf der Seite [[anleitungen:mobaledlibstudio:pg_arduino|Verbinden und Übertragen]].
+
+Gibt es für deine Auswahl ein **Startprogramm**, steht dort der Name der Tabelle, in die es geladen wird. Gibt es **noch keines**, steht dort, dass die **leere Tabelle** geöffnet wird. Dann trägst du die Zeilen selbst ein, wie auf der Seite [[anleitungen:mobaledlibstudio:erstes_programm|Dein erstes Programm]] beschrieben.
+
+===== Anfangen oder Überspringen =====
+
+Unten auf der Seite stehen zwei Knöpfe:
+
+^ Knopf ^ Wirkung ^
+| **Anfangen** | Erst aktiv, wenn **Zentrale und Lichtmaschine** gewählt sind. Das Programm **blendet die Tabellen der anderen Zentralen aus**, öffnet die Tabelle deiner Zentrale, **lädt das Startprogramm** in diese Tabelle und **stellt das Board ein**. Die Meldung **Startseite: Tabelle vorbereiten** zeigt, dass es arbeitet. |
+| **Überspringen** | Schließt die Startseite, **ohne etwas zu ändern**. Du siehst die Tabelle wie bisher. |
+
+**Achtung:** **Anfangen** lädt das Startprogramm in die **Tabelle deiner Zentrale**. Hast du dort schon **eigene Zeilen** eingetragen, wähle **Überspringen**. Dann bleibt alles, wie es ist. Die Startseite ist für den **ersten Start** gedacht.
+
+Mit dem Haken **Diese Startseite nicht mehr anzeigen** schaltest du die Startseite ab. Der Haken gilt auch, wenn du **Überspringen** wählst.
+
+===== Die Startseite wieder einschalten =====
+
+  - Öffne das Menü **Einstellungen, Allgemein**.
+  - Setze in der Gruppe **Allgemeine Einstellungen** den Haken **Startseite beim Programmstart anzeigen**.
+  - Klicke auf **Geänderte Einstellungen übernehmen**.
+
+Die Startseite erscheint beim **nächsten Start** des Programms. Sie erscheint **einmal je Start**, nicht bei jedem Neuladen der Seite im Browser. Siehe auch [[anleitungen:mobaledlibstudio:wz_programm_einstellungen|Programm Einstellungen]].
+
+===== Ausgeblendete Tabellen wieder einblenden =====
+
+**Anfangen** **löscht** keine Tabellen, sondern **versteckt** sie nur. Du holst sie so zurück:
+
+  - Klicke mit der **rechten Maustaste** auf einen **Blattreiter** unten (auf dem Tablet: lange drücken).
+  - Wähle **Versteckte Tabellen …**. Hinter dem Namen steht in Klammern, **wie viele** Tabellen versteckt sind.
+  - Setze im Fenster den Haken bei den Tabellen, die du wieder sehen willst, und blende sie ein. Du kannst auch **alle** einblenden.
+
+Mehr zu den Blattreitern steht auf der Seite [[anleitungen:mobaledlibstudio:pg_tabelle#die_blattreiter|Die Tabelle bedienen]].
+
+===== Im Anfänger Modus =====
+
+Ist der **Anfänger Modus** eingeschaltet, steht ganz unten auf der Startseite (unter den beiden Knöpfen) ein **Hinweis**: Du befindest dich im Anfänger Modus, viele Funktionen der MobaLedLib sind ausgeblendet, und du kannst ihn unter **Einstellungen, Allgemein** ausschalten, um die **volle Funktionalität** zu haben. Siehe [[anleitungen:mobaledlibstudio:modus|Anfänger Modus und Experten Modus]].
+
+===== Gut zu wissen =====
+
+  * Die **Startprogramme** liegen im Ordner ''Startprogramme'' im Programmordner. Sie heißen ''<Lichtmaschine>_<Zentrale>.MLL_pgf'' oder ''<Lichtmaschine>.MLL_pgf''. Du musst dort **nichts von Hand ändern**. Eine Beschreibung steht in der Datei ''Startprogramme/README.txt''.
+  * Die Startseite ist **neu** (seit 5.23). Die Texte gibt es zunächst **nur auf Deutsch**. In anderen Sprachen erscheint der englische oder der deutsche Text. Die Übersetzungen folgen, wenn die Rückmeldungen der Anwender vorliegen.
+  * Für die **Zentralen** gibt es noch keine Bilder, die Auswahl besteht aus **Namen**.
+  * Die Startseite öffnet sich **über** der Tabelle und füllt das ganze Fenster.
+
+===== Wenn etwas nicht klappt =====
+
+  * **Die Startseite erscheint nicht:** Ist der Haken **Startseite beim Programmstart anzeigen** (Einstellungen, Allgemein) gesetzt? Wurde sie mit **Diese Startseite nicht mehr anzeigen** abgeschaltet, setze den Haken wieder.
+  * **Automatisch erkennen findet nichts:** Prüfe das **USB-Kabel** (kein reines Ladekabel), stecke die Lichtmaschine neu an und versuche es noch einmal. Oder wähle die Lichtmaschine von Hand. Weitere Hilfe: [[anleitungen:mobaledlibstudio:fehlersuche|Fehlersuche]].
+  * **Es erscheint die leere Tabelle:** Für deine Auswahl liegt noch kein Startprogramm im Ordner ''Startprogramme''. Das ist kein Fehler. Gehe nach [[anleitungen:mobaledlibstudio:erstes_programm|Dein erstes Programm]] vor.
+  * **Die Tabelle der Zentrale fehlt:** Das Programm meldet **Die Tabelle der gewählten Zentrale wurde nicht gefunden.** Blende die Tabelle über **Versteckte Tabellen …** ein (siehe oben).
+
+===== Wie geht es weiter? =====
+
+  * [[anleitungen:mobaledlibstudio:erstes_programm|Dein erstes Programm]]: Die einzelnen Schritte im Detail.
+  * [[anleitungen:mobaledlibstudio:programmgenerator|Der Programmgenerator]]: So bedienst du die Tabelle.
+  * [[anleitungen:mobaledlibstudio:modus|Anfänger Modus und Experten Modus]]

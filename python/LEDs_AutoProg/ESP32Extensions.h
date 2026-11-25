@@ -23,12 +23,14 @@
  Revision History :
  ~~~~~~~~~~~~~~~~~
  currently no release deployed, still under construction
+ v1.01 (2026-11-24): gesamte Datei nur fuer ESP32 (#if defined(ESP32)); der Pico-Build bindet sie nicht ein. Zeilen mit 'v1.01'
 
 */
 
 #ifndef ESP32EXTENSIONS_H
 #define ESP32EXTENSIONS_H
 #define ESP32WIFI_H
+#if defined(ESP32)  // v1.01: ganze Datei nur auf dem ESP32; der Pico-Build bindet sie nicht ein
 #include "UserInterface.h"
 
 //#define USE_WIFI
@@ -291,4 +293,5 @@ void loopESP32Extensions2() {
 #endif
 #endif
 }
+#endif  // v1.01 ESP32
 #endif //ESP32EXTENSIONS_H

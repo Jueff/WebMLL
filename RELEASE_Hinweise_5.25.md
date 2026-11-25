@@ -1,9 +1,9 @@
-Datei-Version: 1.14 (2026-11-24) - RELEASE_Hinweise_5.12.md
-Gilt für MobaLedLib Studio 5.12
+Datei-Version: 1.15 (2026-11-25) - RELEASE_Hinweise_5.25.md
+Gilt für MobaLedLib Studio 5.25
 
-# MobaLedLib Studio 5.12
+# MobaLedLib Studio 5.25
 
-Anhänge dieses Releases: `webmobaledlib.zip` (Programm, mit `zip_erstellen.bat` Version 1.11 gebaut, `ROOT_IN_ZIP=1`), `START_HIER.txt` (erste Schritte), `ANLEITUNG_Installation.pdf` (Anleitung, Version 5.12) und `BETATEST_Checkliste.pdf` (Checkliste für Betatester, Version 3.93).
+Anhänge dieses Releases: `webmobaledlib.zip` (Programm, mit `zip_erstellen.bat` Version 1.11 gebaut, `ROOT_IN_ZIP=1`), `START_HIER.txt` (erste Schritte), `ANLEITUNG_Installation.pdf` (Anleitung, Version 5.25) und `BETATEST_Checkliste.pdf` (Checkliste für Betatester, Version 4.05).
 Installation: siehe `START_HIER.txt` und den Schnellstart der Anleitung. Aktualisieren: Menü **Hilfe → Update MobaLedLib Studio …**, danach das Programm **neu starten** und die Seite mit Strg+F5 neu laden.
 
 ## Wichtig beim Aktualisieren
@@ -12,7 +12,17 @@ Installation: siehe `START_HIER.txt` und den Schnellstart der Anleitung. Aktuali
 - **Nach dem Update das Programm neu starten** und die Seite neu laden. Oben darf keine rote Meldung stehen.
 - **Neues Programmsymbol (4.10):** Für die Verknüpfung auf dem Desktop den Installer noch einmal ausführen.
 
-## Neu seit Version 3.93 (3.94 bis 5.12)
+## Neu seit Version 3.93 (3.94 bis 5.25)
+
+**Neu seit 5.12 (5.13 bis 5.25):**
+- **Startseite für Einsteiger (5.23, 5.24):** Beim Start fragt MobaLedLib Studio nach der **Modellbahnzentrale** (DCC, Selectrix, LNet, Märklin CAN-Bus oder ohne Zentrale) und der **Lichtmaschine** (Classic / Mini, Pro, Pico Zero / MoLLI; auch „Automatisch erkennen“). Mit **Anfangen** blendet das Programm die Tabellen der anderen Zentralen aus, öffnet die richtige Tabelle, lädt das Startprogramm aus dem Ordner `Startprogramme` (sofern vorhanden) und stellt das Board ein. Die Seite erklärt den Weg mit **Setup übertragen** und **Dialog Wizard**. Im Anfänger Modus steht ein Hinweis darunter. Ausschalten mit dem Haken auf der Seite oder unter Einstellungen → Allgemein → „Startseite beim Programmstart anzeigen“. Die Texte gibt es zunächst nur auf Deutsch. **Die Startseite ist noch nicht im Browser geprüft.** Wiki: Seite `startseite`.
+- **Eingabefenster der Taster-Makros (5.19 bis 5.22, Anregung im Forum von PeterVT11):** Farben mit der Taste **Farbe wählen** (Mini-Farbtest, LED-Nummer 0, Kanal 0, es leuchtet nur die Heartbeat-LED), die Zahlen bleiben als Text änderbar, daneben ein Farbfeld. Werte 0/1 sind Ein/Aus-Schalter. Das Feld heißt „Zielvariable“, wenn es nur eine gibt; der Tooltip erklärt Test0, Test1, Test2.
+- **Fehler beim Speichern eines Makros (5.20):** Eine ungültige Eingabe (zum Beispiel keine Zielvariable) wurde trotz Fehlermeldung gespeichert. Jetzt erscheint das Eingabefenster wieder; die Meldung nennt den Namen des Eingabefeldes.
+- **Pico (5.15 bis 5.17, Beitrag von Jürgen, Pull Request 71, Issue 70):** Kein Abbruch mehr mit „no member named showColor“ (auch bei einer alten Kopie der Bibliothek in `.pio`). Ändert sich der COM-Port nach dem Hochladen, findet das Programm ihn wieder und trägt ihn ein. Meldet die Firmware einen Fehler, bricht die Übertragung mit verständlicher Meldung ab.
+- **Board und USB Port erkennen (5.18, Pull Request 39):** Der Hinweis zum Knopf beschreibt die Suche nach Nano, ESP32 und Pico, in allen Sprachen.
+- **Protokoll-Fenster (5.14, Issue 60):** Die Knöpfe „Vorgang abbrechen“ und „Schließen“ flackern nicht mehr. **Von Jürgen noch nicht bestätigt.**
+- **Windows (5.13):** Beim Übertragen öffnen sich keine kurzen schwarzen Konsolenfenster mehr.
+- **Begriff LocoNet (5.25):** Der geschützte Begriff steht nicht mehr in der Oberfläche und im Wiki, es heißt „LNet“. Der offizielle Lizenzdialog bleibt unverändert.
 
 **Neu seit 4.98 (4.99 bis 5.12):**
 - **Neuer Name MobaLedLib Studio (5.08, 5.09, 5.10):** Kopfzeile, Browser-Tab, Meldungen (auch Installation und Reparatur), Anleitung, Checkliste und Wiki heißen jetzt „MobaLedLib Studio“, in allen Sprachen. Das Desktop-Symbol heißt ebenfalls „MobaLedLib Studio“: Die Installationsskripte (Windows, Linux, macOS, Raspberry Pi) legen es neu an und entfernen die Symbole mit den alten Namen. **Dafür das Installationsskript einmal erneut ausführen** (nach einem Update über das Menü bleiben die alten Symbole bis dahin). Technische Namen bleiben: Dateinamen (`webmobaledlib.py`, `webmobaledlib.zip`), Datenordner `webMobaLedLib`, Update-Verfahren.

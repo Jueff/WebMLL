@@ -1,9 +1,9 @@
-# Datei-Version: 1.49 (2026-11-24) - web_form_options.py
+# Datei-Version: 1.50 (2026-11-25) - web_form_options.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_form_options.py
 # Path:           _web/web_form_options.py
-# Version:        1.49
-# Last Update:    2026-11-24
+# Version:        1.50
+# Last Update:    2026-11-25
 # Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
 # History of Change:
@@ -40,6 +40,7 @@
 #   1.48  2026-11-24  Pull Request 39 (Juergen, Issue 35), nur der Auswahldialog: Board und USB Port erkennen fragt bei mehreren gefundenen Board-Typen (Nano, ESP32, Pico) vorher nach dem gewuenschten Typ (_choose_detected_board_type). Der Umbau der Boardliste im Optionen-Dialog aus dem PR wurde nicht uebernommen. Zeilen mit '# v1.48'
 #   1.47  2026-11-23  Issue 58: Firmware installieren (Pico): eigener Anschluss, immer erfragt (nicht der Anschluss des Blatts, dort haengt die Lichtmaschine); beim Start ungueltig; bei verbundener Lichtmaschine auf diesem Anschluss wird vorher getrennt
 #   1.49  2026-11-24  Anzeigename MobaLedLib Studio statt webMobaLedLib in Texten der Oberflaeche. Zeilen mit '# v5.09'
+#   1.50  2026-11-25  Tooltip des Knopfes Board und USB Port erkennen nach Pull Request 39 (Juergen): Lichtmaschine nennt Nano, ESP32, Pico und die Auswahl bei mehreren Modellen (linke Seite: light_machine_hint, rechte Seite: detect_hint); der Umbau der Boardliste aus dem PR bleibt aus (Dialog wird von Juergen neu gestaltet)
 # ----------------------------------------------------------------------------------------------
 """Web-Ersatz fuer proggen/UserForm_Options.py (Optionen und spezielle Funktionen).
 
@@ -804,11 +805,14 @@ def make_class(Base):
             subtitle = M09.Get_Language_Str("Für andere Hauptplatine")
             auto_text = M09.Get_Language_Str("Automatisch erkennen")
             detect_text = tr("Board und USB Port erkennen")  # v1.25
-            detect_hint = tr("Sucht den angeschlossenen Arduino (Nano alt oder neu, ESP32, Pico) an allen USB Anschlüssen, stellt das erste gefundene Board ein und zeigt es mit dem USB Port an. Dort kann es übernommen oder ein anderer Typ gewählt werden.")  # v1.25
+            # detect_hint = tr("Sucht den angeschlossenen Arduino (Nano alt oder neu, ESP32, Pico) an allen USB Anschlüssen, stellt das erste gefundene Board ein und zeigt es mit dem USB Port an. Dort kann es übernommen oder ein anderer Typ gewählt werden.")  # v1.25  # v5.18 (entfallen)
+            detect_hint = tr("Sucht an allen USB-Anschlüssen nach Nano, ESP32 und Pico. Werden mehrere Board-Typen gefunden, können Sie den gewünschten Typ auswählen. Anschließend wird der passende USB-Port angezeigt.")
+            light_machine_hint = tr("Sucht an allen USB-Anschlüssen nach Lichtmaschinen (Nano, ESP32, Pico). Werden unterschiedliche Typen gefunden, können Sie die gewünschte Lichtmaschine auswählen. Anschließend wird der passende USB-Port angezeigt.")  # v5.18 (Pull Request 39, Juergen)  # v1.25  # v5.18
             tabs = [{"name": tr("Lichtmaschine"), "kind": "arduino", "side": "left", "buttons": left}]
             # pages = {"left": {"radios": self._radios("_L"), "subtitle": subtitle, "auto_text": auto_text}}  # v1.08 (entfallen)
             esp32_value = next((d["value"] for rb, d in self.radiobuttons.items() if rb.startswith("ESP32") and rb.endswith("_L")), None)  # v1.08
-            pages = {"left": {"radios": self._radios("_L"), "subtitle": subtitle, "auto_text": auto_text, "detect_text": detect_text, "detect_hint": detect_hint,  # v1.08  # v1.25
+            # pages = {"left": {"radios": self._radios("_L"), "subtitle": subtitle, "auto_text": auto_text, "detect_text": detect_text, "detect_hint": detect_hint,  # v1.08  # v1.25  # v5.18 (entfallen)
+            pages = {"left": {"radios": self._radios("_L"), "subtitle": subtitle, "auto_text": auto_text, "detect_text": detect_text, "detect_hint": light_machine_hint,  # v1.08  # v1.25  # v5.18
                               # "esp32_value": esp32_value, "esp32_lib": bool(M37.ESP32_Lib_Installed())}}  # v1.09 (entfallen)
                               "esp32_value": esp32_value, "esp32_lib": bool(M37.ESP32_Lib_Installed()),  # v1.09
                               # "pico_values": [d["value"] for rb, d in self.radiobuttons.items() if rb.startswith("PICO") and rb.endswith("_L")]}}  # v1.11 (entfallen)

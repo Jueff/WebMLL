@@ -1,12 +1,16 @@
-# Datei-Version: 1.10 (2026-11-24) - web_form_other.py
+# Datei-Version: 1.14 (2026-11-25) - web_form_other.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_form_other.py
 # Path:           _web/web_form_other.py
-# Version:        1.10
-# Last Update:    2026-11-24
+# Version:        1.14
+# Last Update:    2026-11-25
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
+#   1.14  2026-11-25  Tooltip der einzigen Zielvariable: Eingabe des Namens fuer Zustand 0 (zum Beispiel Test0), die weiteren Zustaende heissen Test1, Test2 ... Zeilen mit '# v1.14'
+#   1.13  2026-11-25  Mini-Farbtest aus dem Parameterformular: LED-Nummer 0 und LED-Kanal 0 voreingestellt (nur die Heartbeat-LED bekommt die Farbe), der Anwender kann die LED von Hand einstellen. Zeilen mit '# v1.13'
+#   1.12  2026-11-25  Die Bezeichnung 'Zielvariable' (ohne 1) gilt auch in den Fehlermeldungen. Zeilen mit '# v1.12'
+#   1.11  2026-11-25  Parameterformular: 0/1-Flags als Ein/Aus-Schalter, RGB-Farben als Textfeld mit Taste 'Farbe waehlen' (Mini-Farbtest) und Farbfeldern, 'Zielvariable 1' heisst bei nur einer Zielvariable 'Zielvariable'. Zeilen mit '# v1.11'
 #   1.10  2026-11-24  LED Kanal Auswahl als farbige Tasten (Gelb, Zyan, Rot, Gruen, Blau) statt Auswahlkreise. Zeilen mit '# v1.10'
 #   1.09  2026-11-24  Zahlenfelder mit fester Breite (Zahl sichtbar neben dem Regler), LED Channel als Zahlenfeld mit minus/plus wie die ms-Felder, Mausrad ueber Zahlenfeld und Regler aendert den Wert. Zeilen mit '# v1.09'
 #   1.08  2026-11-24  Eingabe der Parameter: Zahlenwerte mit Minimum und Maximum (Spannweite bis 1000) als Schieberegler mit Zahlenfeld und Tasten minus und plus, Zeitwerte als Felder Min, Sek und ms, der HSV-Farbwert (HSVColor) mit Regler im Farbverlauf und Farbfeld (Umrechnung wie hsv2rgb_rainbow der MobaLedLib). Der Wert bleibt derselbe Text wie vorher, die Pruefungen des Originals sind unveraendert. Zeilen mit '# v1.08'
@@ -27,6 +31,7 @@ Im Hauptthread (kein Worker) wird das Tk-Original verwendet.
 from __future__ import annotations
 
 import logging
+import re  # v1.11
 import sys
 
 from _web import web_dialogs as wd
@@ -336,6 +341,98 @@ def _add_time_row(ui, p, cur, ms):  # v1.08
     return _Holder(lambda: format_time_ms(total()))  # v1.08
 
 
+# ------------------------------------------------------------------ Schalter, Farbwahl, Bezeichnung (v1.11)
+
+def title_without_flag(title):
+    """'Zustände rotieren [0 / 1]' -> 'Zustände rotieren' (der Schalter zeigt den Wert)"""
+    return re.sub(r"\s*\[\s*0\s*/\s*1\s*\]\s*$", "", str(title))
+
+
+def single_target_title(title, keys):
+    """Die Zielvariable heisst 'Zielvariable 1', auch wenn das Makro nur eine hat (DstVar1 ohne DstVar2/DstVarN): dann ohne die Ziffer"""
+    if "DstVar1" in keys and not ({"DstVar2", "DstVarN"} & set(keys)):
+        return re.sub(r"\s+1\s*$", "", str(title))
+    return title
+
+
+def parse_rgb(text, count):
+    """'20 13 10' (oder mit Komma) -> Liste von count Zahlen 0..255; None, wenn die Anzahl nicht stimmt oder etwas keine Zahl ist"""
+    parts = [x for x in re.split(r"[\s,;]+", str(text).strip()) if x != ""]
+    if len(parts) != count:
+        return None
+    try:
+        return [min(max(int(x), 0), 255) for x in parts]
+    except ValueError:
+        return None
+
+
+def rgb_text(values):
+    """[r, g, b, r, g, b] -> 'r g b  r g b' (wie bei RGB2 im Excel-Programm: zwei Leerzeichen zwischen den Farben)"""
+    values = [int(v) for v in values]
+    return "  ".join(" ".join(str(v) for v in values[i:i + 3]) for i in range(0, len(values), 3))
+
+
+def _main_ctrl():
+    """Steuerung des Programms (fuer den Mini-Farbtest); None, wenn nicht gefunden"""
+    for name in ("__main__", "webmobaledlib"):
+        c = getattr(sys.modules.get(name), "ctrl", None)
+        if c is not None:
+            return c
+    return None
+
+
+def _add_flag_row(ui, p, cur):
+    """Wert 0 / 1 als Ein/Aus-Schalter. Rueckgabe: Holder mit '0' oder '1'."""
+    with ui.row().classes("w-full items-center no-wrap gap-3"):
+        ui.label(title_without_flag(p["title"])).classes("grow")
+        sw = ui.switch(value=(parse_int(cur) or 0) != 0)
+        shown = ui.label("1" if sw.value else "0").classes("text-grey-7 w-4 text-center")
+    sw.on_value_change(lambda e: shown.set_text("1" if e.value else "0"))
+    if p["tooltip"]:
+        sw.tooltip(p["tooltip"])
+    return _Holder(lambda: "1" if sw.value else "0")
+
+
+def _add_rgb_row(ui, p, cur, count):
+    """Farbe als Zahlen im Textfeld (nur so breit wie noetig, Experten aendern sie von Hand), Taste 'Farbe wählen' (Mini-Farbtest) und Felder mit der eingestellten Farbe.
+    count: 3 (RGB) oder 6 (RGB2: zwei Farben im Wechsel). Rueckgabe: das Eingabefeld (value = Text der Zahlen)."""
+    from _web.web_i18n import tr
+    with ui.row().classes("w-full items-center no-wrap gap-3"):
+        ui.label(p["title"]).classes("w-48 shrink-0")
+        inp = ui.input(value=str(cur)).props("outlined dense").style("width: %dch; flex: none" % (14 if count == 3 else 24))
+        button = ui.button(tr("Farbe wählen")).props("outline no-caps dense").classes("shrink-0")
+        swatches = [ui.element("div").style("width: 44px; height: 32px; border: 1px solid #888; border-radius: 4px; flex: none") for _ in range(count // 3)]
+
+    def show():
+        vals = parse_rgb(inp.value, count)
+        for i, sw in enumerate(swatches):
+            if vals is None:
+                sw.style("background: repeating-linear-gradient(45deg, #fff, #fff 4px, #ddd 4px, #ddd 8px)")
+            else:
+                sw.style("background: rgb(%d,%d,%d)" % tuple(vals[3 * i:3 * i + 3]))
+
+    async def pick():
+        from _web import web_colorcheck
+        from _web.web_i18n import tr
+        vals = parse_rgb(inp.value, count) or [0] * count
+        names = [tr("Farbe (R, G, B)")] if count == 3 else [tr("Farbe 1 (R1, G1, B1)"), tr("Farbe 2 (R2, G2, B2)")]
+        slots = [(names[i], tuple(vals[3 * i:3 * i + 3])) for i in range(count // 3)]
+        ctrl = _main_ctrl()
+        if ctrl is None:
+            return
+        # res = await web_colorcheck.open_mini(ctrl, None, title=tr("Mini-Farbtest"), slots=slots, passive=True)  # v1.13 (entfallen)
+        res = await web_colorcheck.open_mini(ctrl, None, title=tr("Mini-Farbtest"), slots=slots, led=(0, 1, 0), passive=True)  # LED 0, Kanal 0: nur die Heartbeat-LED; die Nummer kann im Mini-Farbtest von Hand geaendert werden; gesendet wird erst bei einer Farbaenderung  # v1.13
+        if res:
+            inp.set_value(rgb_text([v for c in res for v in c]))
+    inp.on_value_change(lambda _e: show())
+    button.on_click(pick)
+    show()
+    if p["tooltip"]:
+        inp.tooltip(p["tooltip"])
+    return inp
+
+
+
 LED_OPTION_COLORS = {"1": "#e0e0e0", "2": "#ffe44d", "3": "#4de8f0", "4": "#ff5c6e", "5": "#7ee07e", "6": "#6f8fff"}  # v1.10
 
 
@@ -383,7 +480,9 @@ async def _other_async(spec: dict, values: dict):
                 else:  # v1.09
                     chan = ui.input(label=spec["channel"]["label"], value=cval).props("outlined dense").classes("w-40")  # v1.09
             with ui.column().classes("w-full gap-1"):
+                keys_all = [q["key"] for q in spec["params"]]  # v1.11
                 for p in spec["params"]:
+                    p = dict(p, title=single_target_title(p["title"], keys_all))  # v1.11: Zielvariable ohne die 1, wenn es nur eine gibt
                     cur = values.get("params", {}).get(p["key"], p["value"])
                     if p["type"] == "List":
                         opts = list(p["options"] or [])
@@ -398,6 +497,10 @@ async def _other_async(spec: dict, values: dict):
                                 w = _add_hue_row(ui, p, cur)  # v1.08
                             elif p.get("ptype") == "Time" and parse_time_ms(cur) is not None:  # v1.08
                                 w = _add_time_row(ui, p, cur, parse_time_ms(cur))  # v1.08
+                            elif p.get("ptype") in ("RGB", "RGB2") and parse_rgb(cur, 3 if p.get("ptype") == "RGB" else 6) is not None:  # v1.11
+                                w = _add_rgb_row(ui, p, cur, 3 if p.get("ptype") == "RGB" else 6)  # v1.11
+                            elif p.get("ptype") == "" and str(p.get("mn", "")).strip() == "0" and str(p.get("mx", "")).strip() == "1" and parse_int(cur) in (0, 1):  # v1.11
+                                w = _add_flag_row(ui, p, cur)  # v1.11
                             elif p.get("ptype") == "" and slider_range(p.get("mn", ""), p.get("mx", ""), cur):  # v1.08
                                 w = _add_number_row(ui, p, cur, slider_range(p.get("mn", ""), p.get("mx", ""), cur))  # v1.08
                         if w is None:  # v1.08
@@ -570,6 +673,15 @@ def make_class(Base):
                             led_initial = v
                 Nr = Nr + 1
 
+            for q_nr, q in enumerate(params):  # v1.12: Bezeichnung 'Zielvariable' ohne die 1 auch in den Fehlermeldungen
+                q_old = q["title"]  # v1.14
+                q["title"] = single_target_title(q["title"], [x["key"] for x in params])  # v1.12
+                if q["title"] != q_old and q["key"] == "DstVar1":  # v1.14: nur eine Zielvariable: Hinweis auf die Namen der weiteren Zustaende
+                    from _web.web_i18n import tr  # v1.14
+                    q["tooltip"] = (str(q["tooltip"]) + "\n" if q["tooltip"] else "") + tr("Hier wird der Name für den Zustand 0 eingegeben, zum Beispiel Test0. Die Variablen für die weiteren Zustände heißen dann Test1, Test2, … (Zielvariable 1, 2, … in der Beschreibung).")  # v1.14
+            for q_nr, q in enumerate(params, 1):  # v1.12
+                if "LabelPar" + str(q_nr) in self.Controls:  # v1.12
+                    self.Controls["LabelPar" + str(q_nr)] = q["title"]  # v1.12
             self.CV_Adress = CV_Adress
             self.CV_Used = CV_used
             spec = {"title": self.title, "description": str(Description), "led_options": led_options,

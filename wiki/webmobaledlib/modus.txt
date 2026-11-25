@@ -1,5 +1,5 @@
 ====== MobaLedLib Studio – Anfänger Modus und Experten Modus ======
-//Seitenstand 1.05 (2026-11-24), gilt für Version 5.12//
+//Seitenstand 1.06 (2026-11-25), gilt für Version 5.23//
 
 MobaLedLib Studio hat viele Funktionen. Für den Einstieg brauchst du nur einen Teil davon. Deshalb gibt es zwei Modi.
 
@@ -13,6 +13,10 @@ Eine **neue Installation startet im Anfänger Modus**. Er zeigt nur, was du zum 
   * einige **Makros** in der **Makroauswahl**, in der Suche und in der grafischen Ansicht (welche, wird noch festgelegt).
 
 Alles andere funktioniert wie sonst, auch das Übertragen auf die Lichtmaschine.
+
+===== Der Hinweis auf der Startseite =====
+
+Im Anfänger Modus zeigt die [[anleitungen:mobaledlibstudio:startseite|Startseite]] unter den Knöpfen **Überspringen** und **Anfangen** einen Hinweis: **Sie befinden sich im Anfänger-Modus.** Viele Funktionen sind ausgeblendet. Du kannst den Modus unter **Einstellungen, Allgemein** ausschalten und hast dann die volle Funktionalität.
 
 ===== Zum Experten Modus umschalten =====
 

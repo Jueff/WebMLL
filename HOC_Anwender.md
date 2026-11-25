@@ -1,9 +1,81 @@
-Datei-Version: 1.96 (2026-11-24) - HOC_Anwender.md
-Stand: Version 5.12
+Datei-Version: 1.110 (2026-11-25) - HOC_Anwender.md
+Stand: Version 5.25
 
 # MobaLedLib Studio: Änderungen (Kurzfassung)
 
 Gilt ab Version 1.39. Neueste Version oben.
+
+## Version 5.25 (2026-11-25)
+
+Korrekturen:
+- Der geschützte Begriff „LocoNet“ wird in der Oberfläche und im Wiki nicht mehr benutzt, es heißt jetzt überall „LNet“ (Startseite: „LNet-Zentrale“).
+
+## Version 5.24 (2026-11-25)
+
+Korrekturen:
+- Startseite: Nach der Wahl von Zentrale und Lichtmaschine erschien die Anleitung nicht, die Seite brach mit einem Fehler ab. Das ist behoben.
+
+## Version 5.23 (2026-11-25)
+
+Neue Funktionen:
+- Startseite für Einsteiger: Zentrale und Lichtmaschine wählen (auch „Automatisch erkennen“), kurze Anleitung zum ersten Programm, der Knopf „Anfangen“ öffnet die passende Tabelle. Ausschalten mit dem Haken auf der Seite oder unter Einstellungen → Allgemein. Beschreibung im Wiki: Seite „startseite“.
+
+## Version 5.22 (2026-11-25)
+
+Korrekturen:
+- Der Tooltip der Zielvariable (Taster-Makros) erklärt, dass hier der Name für Zustand 0 eingegeben wird (zum Beispiel Test0) und die weiteren Zustände Test1, Test2, … heißen.
+
+## Version 5.21 (2026-11-25)
+
+Korrekturen:
+- „Farbe wählen“ im Eingabefenster der Makros: Der Mini-Farbtest ist auf LED-Nummer 0 und Kanal 0 eingestellt, die Farbe geht nur an die Heartbeat-LED. Wer die LED-Nummer kennt, kann sie im Mini-Farbtest von Hand ändern.
+
+## Version 5.20 (2026-11-25)
+
+Korrekturen:
+- Im Eingabefenster eines Makros wurde eine ungültige Eingabe (zum Beispiel keine Zielvariable) trotz Fehlermeldung gespeichert. Jetzt erscheint das Eingabefenster wieder.
+- Die Fehlermeldung nennt den Namen des Eingabefeldes (zum Beispiel „Zielvariable“) und nicht mehr den internen Namen.
+
+## Version 5.19 (2026-11-25)
+
+Neue Funktionen:
+- Im Eingabefenster der Taster-Makros (PushButton) wählt man Farben jetzt mit der Taste „Farbe wählen“ (Mini-Farbtest); die Zahlen bleiben als Text änderbar und daneben zeigt ein Feld die Farbe.
+- Werte, die nur 0 oder 1 sein können (zum Beispiel „Zustände rotieren“), stehen als Ein/Aus-Schalter da.
+
+Korrekturen:
+- Hat ein Makro nur eine Zielvariable, heißt das Feld „Zielvariable“ und nicht mehr „Zielvariable 1“ (Anregung im Forum).
+
+## Version 5.18 (2026-11-25)
+
+Korrekturen:
+- Der Hinweis (Maus über den Knopf „Board und USB Port erkennen“) beschreibt jetzt die Suche nach Nano, ESP32 und Pico und die Auswahl bei mehreren gefundenen Modellen, in allen Sprachen (Beitrag von Jürgen, Pull Request 39).
+
+## Version 5.17 (2026-11-25)
+
+Korrekturen:
+- Pico: Ändert sich der COM-Port nach dem Hochladen (der Pico meldet sich neu an), findet das Programm ihn über Seriennummer oder USB-Anschluss und trägt den neuen Port ins Blatt ein; die anschließende Konfigurationsübertragung klappt (Beitrag von Jürgen, Pull Request 71, Issue 70).
+- Meldet die Firmware einen Fehler, bricht die Übertragung sofort mit verständlicher Meldung ab.
+- Pico-Build: `ESP32Extensions.h` wird nur noch für den ESP32 kompiliert.
+
+## Version 5.16 (2026-11-25)
+
+Korrekturen:
+- Pico (und alle Boards): Eine veraltete Kopie der Bibliothek MobaLedLib im PlatformIO-Ordner `.pio` wird erkannt und erneuert (betrifft Rechner ohne symbolische Verknüpfungen). Der Fehler „no member named showColor“ kommt damit nicht mehr vor, auch wenn man die Bibliothek aktualisiert hat.
+
+## Version 5.15 (2026-11-25)
+
+Korrekturen:
+- Pico: Das Kompilieren bricht nicht mehr mit „no member named showColor“ ab, wenn die Bibliothek MobaLedLib noch eine ältere `PicoFastLED.h` hat.
+
+## Version 5.14 (2026-11-25)
+
+Korrekturen:
+- Die Knöpfe „Vorgang abbrechen“ und „Schließen“ im Protokoll-Fenster flackern beim Übertragen des Setups nicht mehr (Issue 60).
+
+## Version 5.13 (2026-11-25)
+
+Korrekturen:
+- Windows: Beim Übertragen des Setups öffnen sich keine kurzen schwarzen Konsolenfenster mehr.
 
 ## Version 5.12 (2026-11-24)
 

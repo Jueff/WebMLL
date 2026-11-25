@@ -254,6 +254,8 @@ public:
     }
 		virtual void clearLeds(int nLeds) {};
     virtual void showColor(const struct CRGB &data, int nLeds, uint8_t brightness) {};  // Pull Request 63
+    // MLL_HAS_SHOWCOLOR: der erzeugte Header (LEDs_AutoProg.h) erkennt damit, dass showColor() vorhanden ist  // v5.15
+#define MLL_HAS_SHOWCOLOR 1  // v5.15
 		virtual void showLeds(uint8_t brightness=255) = 0;
     virtual void show(const struct CRGB *data, int nLeds, uint8_t brightness) = 0;
 };

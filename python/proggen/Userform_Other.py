@@ -1,9 +1,9 @@
-# Datei-Version: 1.03 (2026-11-16) - Userform_Other.py
+# Datei-Version: 1.04 (2026-11-25) - Userform_Other.py
 # ----------------------------------------------------------------------------------------------
 # Name:           Userform_Other.py
 # Path:           proggen/Userform_Other.py
-# Version:        1.03
-# Last Update:    2026-11-16
+# Version:        1.04
+# Last Update:    2026-11-25
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
@@ -11,6 +11,7 @@
 #   1.01  2026-10-21  Version K des Excel-Programms: Parametertypen LED#OrName und LEDName (Check_Variable_Name), Option pf=<Praefix> (ValToParVal, ParValToVal, Prefix)
 #   1.02  2026-11-05  Check_Par_with_ErrMsg: Parametertyp RGB und RGB2 liefert den geprueften Farbwert zurueck (vorher True/False: im Makro stand 'True, True, True, True' statt der Farben); bei Fehler None (Korrektur des Entwicklers, im Programm 2.95); Check_RGB_List: die Fehlermeldung bei ungueltigen Farbwerten nennt jetzt den Parameter (vorher Abbruch mit NameError: Controls)
 #   1.03  2026-11-16  Check_Time_String: Zeitangaben mit Nachkommastellen (0.5 Sek, 0.8 Sec) wurden mit P01.val auf ganze Zahlen abgeschnitten (0.5 -> 0, Meldung 'zu klein'); jetzt float, Ergebnis in ms gerundet; Fehler von Check_Limit_to_MinMax/Check_Time_String (None) wurden nicht erkannt: die Eingabe wurde trotz Meldung uebernommen; Komma als Dezimalzeichen wird akzeptiert und im Makro als Punkt geschrieben
+#   1.04  2026-11-25  Check_Par_with_ErrMsg: Fehlermeldungen nennen die Bezeichnung des Eingabefeldes (zum Beispiel 'Zielvariable') statt des internen Namens (DstVar1); bei einem Fehler wird None geliefert, damit Create_Result abbricht und der Dialog wieder erscheint (vorher wurde der Wert trotz Meldung uebernommen). Zeilen mit '# v1.04'
 # ----------------------------------------------------------------------------------------------
 # -*- coding: utf-8 -*-
 #
@@ -355,7 +356,8 @@ class UserForm_Other():
     
     # VB2PY (UntranslatedCode) Argument Passing Semantics / Decorators not supported: val - ByRef 
     def Check_Par_with_ErrMsg(self, ParNr, value):
-        fn_return_value = ""
+        # fn_return_value = ""  # v1.04 (entfallen)
+        fn_return_value = None  # v1.04: bei einem Fehler None (Create_Result prueft auf None; vorher "": ein ungueltiger Wert, zum Beispiel eine leere Zielvariable, wurde trotz Meldung uebernommen)
         VarLabel = String()
     
         ShowErr = Boolean()
@@ -369,7 +371,8 @@ class UserForm_Other():
         #with_2.Value = Trim(with_2.Value)
         #Debug.Print "Check_Range " & ParName(ParNr - 1) & ": " & .Value
         value = parVariable.get()
-        VarLabel = paramName
+        # VarLabel = paramName  # v1.04 (entfallen)
+        VarLabel = self.Controls.get('LabelPar' + str(ParNr), paramName) if hasattr(self, 'Controls') else paramName  # v1.04
         select_1 = self.TypA(ParNr - 1)
         if (select_1 == ''):
             if not self.Check_Limit_to_MinMax(ParNr, value):  # v1.03 (liefert bei einem Fehler None, nicht False)

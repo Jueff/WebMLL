@@ -1,5 +1,5 @@
 # MobaLedLib Studio – Installation und Betrieb
-*Datei-Version: 5.12 (2026-11-24), gilt für Version 5.12*
+*Datei-Version: 5.25 (2026-11-25), gilt für Version 5.25*
 
 Windows · macOS · Linux-Desktop · Raspberry Pi
 
@@ -207,6 +207,18 @@ Endet ein Weg mit einem Fehler (zum Beispiel `xdg-open`, weil kein Standardbrows
 (`Browser geöffnet (xdg-open): http://localhost:8080`). Findet sich gar kein Browser, nennt das Programm die Adresse auf dem Bildschirm und im Protokoll, dann von Hand eingeben.
 Unter Linux zeigt `xdg-settings get default-web-browser`, welcher Browser als Standard eingetragen ist, und `xdg-settings set default-web-browser google-chrome.desktop`
 (oder `brave-browser.desktop`) stellt ihn ein.
+
+### 2.4a Die Startseite für Einsteiger (5.23)
+
+Beim Start zeigt MobaLedLib Studio eine Startseite. Sie führt in drei Schritten zum ersten Programm:
+
+1. **Modellbahnzentrale** wählen: DCC, Selectrix, LNet, CAN oder „Ohne Zentrale“ (dann wird die Tabelle DCC benutzt).
+2. **Lichtmaschine** wählen: Classic / Mini (Arduino Nano), Pro (ESP32) oder Pico Zero / MoLLi (Raspberry Pi Pico). Mit dem Knopf „Automatisch erkennen“ sucht das Programm eine angeschlossene Lichtmaschine und wählt sie aus.
+3. Die Seite erklärt, wie das erste Programm mit dem Knopf „Setup übertragen“ zur Lichtmaschine kommt und wie man mit dem „Dialog Wizard“ eigene Beleuchtungen anlegt.
+
+Der Knopf **Anfangen** blendet die Tabellen der anderen Zentralen aus (auch über das Kontextmenü der Blattreiter wieder einblendbar), öffnet die Tabelle der gewählten Zentrale, stellt das Board der Lichtmaschine ein und lädt das Startprogramm aus dem Ordner `Startprogramme` (Namen siehe `Startprogramme/README.txt`). Gibt es dort keine Datei für die Auswahl, bleibt die Tabelle leer.
+
+Mit dem Haken „Diese Startseite nicht mehr anzeigen“ schaltet man die Seite aus. Wieder einschalten: Einstellungen → Allgemein → „Startseite beim Programmstart anzeigen“. Ist der Anfänger-Modus eingeschaltet, steht unten ein Hinweis, wo man ihn ausschaltet.
 
 ### 2.5 Das Programmsymbol
 

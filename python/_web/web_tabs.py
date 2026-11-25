@@ -1,9 +1,9 @@
-# Datei-Version: 1.36 (2026-11-24) - web_tabs.py
+# Datei-Version: 1.37 (2026-11-25) - web_tabs.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_tabs.py
 # Path:           _web/web_tabs.py
-# Version:        1.36
-# Last Update:    2026-11-24
+# Version:        1.37
+# Last Update:    2026-11-25
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
@@ -44,6 +44,7 @@
 #   1.34  2026-11-21  Version 4.67: Hinweistext nennt Hardware Optionen (vorher Optionen Werkzeuge)
 #   1.35  2026-11-22  Version 4.69: Adresse /ARDUINOEinstellungen entfaellt (die Einstellungen sind ein Fenster im Menue Einstellungen und im Reiter Entwicklungsumgebung)
 #   1.36  2026-11-24  Anzeigename MobaLedLib Studio statt webMobaLedLib in Texten der Oberflaeche. Zeilen mit '# v5.09'
+#   1.37  2026-11-25  Neue Einstellung ShowStartPage (Allgemeine Einstellungen): Startseite beim Programmstart anzeigen, Vorgabe an (web_startpage 1.00)
 # ----------------------------------------------------------------------------------------------
 """Adressen der Reiter: Ein Reiter laesst sich direkt aufrufen, zum Beispiel http://localhost:8080/Farbtest. Mit dem Zusatz ?vollbild=1 oeffnet er sich gleich im Vollbild
 (Titel, Menue und Reiterleiste ausgeblendet, siehe web_fullscreen). Die Startseite / bleibt wie sie ist (Programm Generator).
@@ -171,6 +172,10 @@ PARAM_ADDITIONS = {"ColoredRowsBold": ({"ParName": "ColoredRowsBold", "Cnt": "1"
                                   "Input Text": "Automatisch mit der Lichtmaschine verbinden",  # v1.24
                                   "Hint": "Mit Haken (Vorgabe) stellt das Programm beim Start die Verbindung wieder her, die beim letzten Beenden aktiv war. War keine aktiv, sucht es eine angeschlossene Lichtmaschine (Nano, ESP32 oder Pico) und verbindet, wenn es genau eine findet. Nach „Setup übertragen“ verbindet es mit der Lichtmaschine, auf die gerade übertragen wurde (bei WLAN über WLAN). Ohne Haken verbindet nur der Knopf Mit Lichtmaschine verbinden."},  # v1.24
                                  "BeginnerMode"),  # v1.24  # v1.25
+                 "ShowStartPage": ({"ParName": "ShowStartPage", "Cnt": "1", "Type": "Checkbutton", "ConfigName": "ShowStartPage", "ParamLabelWidth": "25", "Min": "0", "Max": "255", "Default": "1",  # v1.37
+                                    "Input Text": "Startseite beim Programmstart anzeigen",  # v1.37
+                                    "Hint": "Mit Haken (Vorgabe) zeigt das Programm beim Start die Startseite für Einsteiger: Auswahl der Modellbahnzentrale und der Lichtmaschine, Anleitung für das erste Programm und der Knopf Anfangen. Auf der Startseite kann man sie mit dem Haken „Diese Startseite nicht mehr anzeigen“ ausschalten; hier schaltet man sie wieder ein."},  # v1.37
+                                   "AutoConnect"),  # v1.37
                  "LedOffOnDisconnect": ({"ParName": "LedOffOnDisconnect", "Cnt": "1", "Type": "Checkbutton", "ConfigName": "LedOffOnDisconnect", "ParamLabelWidth": "25", "Min": "0", "Max": "255", "Default": "0",  # v1.32
                                          "Input Text": "Beim Trennen alle LEDs ausschalten",  # v1.32
                                          "Hint": "Mit Haken sendet das Programm beim Trennen der Verbindung den Befehl Alle LEDs aus. Ohne Haken (Vorgabe) bleibt die Anlage beim Trennen unverändert: Die Lichtmaschine behält ihren Zustand, zum Beispiel die schwach leuchtenden LEDs der Pushbutton-Kanäle."},  # v1.32

@@ -1,5 +1,5 @@
-Datei-Version: 1.90 (2026-11-24) - HOC_intern.md
-Stand: Version 5.12
+Datei-Version: 1.104 (2026-11-25) - HOC_intern.md
+Stand: Version 5.25
 
 # webMobaLedLib: History of Change (intern, ausführlich)
 
@@ -25,6 +25,145 @@ Release-Stand 2.12 auf Wunsch des Entwicklers („Release bauen“). **Neu im Ab
 
 **Geprüft:** Dateipaket: `testzip` in Ordnung, alle 113 Dateien gleich dem Ordner `headless`, keine `__pycache__`, alle `.py` kompilieren, Versionsprüfung „alles passt“ (50 Einträge), 11 Dateien ausführbar (`.sh`, `.command`). **Nachbau des Entwickler-Ablaufs mit seinem echten Paket (1678 Dateien, Stand 2.05):** meine 113 Dateien darübergelegt, Prüfliste, ZIP gepackt, `release_tools check --previous <sein ZIP>`: **in Ordnung** (Version 2.12, 1678 Dateien, 6 neue, 0 fehlende, ZIP 16,6 MB). Alle 15 Prüfreihen laufen (17, 26, 15, 70, 28, 19, 43, 26, 16, 27, 8, 8, 8, 5, 9 Prüfungen). **Nicht geprüft:** `zip_erstellen.bat` und die Reparaturskripte unter Windows, ein abgebrochenes Update unter Windows, das Verhalten mit Acronis, der Download von GitHub.
 
+## 5.25 (2026-11-25), Begriff LocoNet entfernt
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_startpage.py` | 1.02 | Kurztext der Zentrale „LocoNet“ → „LNet-Zentrale“ |
+| `csv/Web_Languages.csv` | | Schlüssel „LocoNet“ → „LNet-Zentrale“ |
+| `webmobaledlib.py` | 5.25 | VERSION, REQUIRED_FILES |
+| `wiki/webmobaledlib/startseite.txt`, `erstes_programm.txt` | 1.01, 1.18 | LocoNet → LNet |
+| `wiki/LIESMICH_Wiki_Gesamt.md` | +0,01 | LocoNet → LNet (Datei steht auf GitHub) |
+
+Bewusst **nicht** geändert: Lizenztext und Link zu Digitrax (nennt die „LocoNet Personal Edition“ des Lizenzgebers), Bild `LocoNetLicense.png`, Bibliothek `LocoNet2` und Dateinamen, Z21-Protokollkonstanten (`LAN_LOCONET_…`), die Revisionsgeschichte.
+
+## 5.24 (2026-11-25), Korrektur der Startseite
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_startpage.py` | 1.01 | Schrittnummern der Anleitung (Schritt 3): `50%` im %-Format-String → `ValueError: unsupported format character`; die Seite brach nach der Wahl von Zentrale und Lichtmaschine ab. Jetzt `50%%` |
+| `webmobaledlib.py` | 5.24 | VERSION, REQUIRED_FILES `web_startpage` 1.01 |
+
+## 5.23 (2026-11-25), Startseite für Einsteiger
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_startpage.py` | 1.00 | neu: Dialog „Startseite“ (Zentrale, Lichtmaschine, Automatisch erkennen, Anleitung, Anfangen/Überspringen, Haken „nicht mehr anzeigen“, Hinweis Anfänger-Modus); Regeln als reine Funktionen: `plan_sheets` (Tabellen anderer Zentralen verbergen), `program_file` (Startprogramm `<Lichtmaschine>[_<Zentrale>].MLL_pgf`), `machine_for_port_type`, `is_enabled`, `save_hide` |
+| `_web/web_tabs.py` | 1.37 | neue Einstellung `ShowStartPage` (Allgemeine Einstellungen), Vorgabe an |
+| `webmobaledlib.py` | 5.23 | `startup_startpage` (Timer 1 s nach dem Aufbau, einmal je Programmlauf), `start_with_choice` (Tabellen verbergen = `user_hidden`, Tabelle öffnen, `M18.Read_PGF(Datei, True)`, `M28.Change_Board_Typ`), Erkennen über `_search_lichtmaschine`; die Frage nach den Erweiterungen wartet, solange die Startseite offen ist |
+| `csv/Web_Languages.csv` | | 42 neue Zeilen nur mit dem deutschen Text (Spalten der anderen Sprachen leer, Übersetzung folgt nach dem Feedback der Anwender; bis dahin gilt der deutsche Text) |
+| `Startprogramme/README.txt` | | neu: Namen der Startprogramme (die MLL_pgf-Dateien selbst liefert Harold) |
+
+Festlegungen: „Ohne Zentrale“ benutzt die Tabelle DCC. Board: Pro = ESP32, Pico = Pico; Classic/Mini behält einen eingestellten Nano (Bootloader), sonst Nano mit neuem Bootloader. Nicht im Browser getestet.
+
+Wiki zur Startseite (nur Dokumentation, keine Programmänderung):
+
+| Datei | Seitenstand | Änderung |
+|---|---|---|
+| `wiki/webmobaledlib/startseite.txt` | 1.00 | NEU: Auswahl, Automatisch erkennen, Anfangen/Überspringen, Ausschalten, Tabellen wieder einblenden, Anfänger-Hinweis |
+| `erstes_programm.txt` | 1.17 | Hinweis in Schritt 1 |
+| `modus.txt` | 1.06 | Abschnitt Hinweis auf der Startseite |
+| `wz_programm_einstellungen.txt` | 1.20 | Zeile Startseite beim Programmstart anzeigen |
+| `einfuehrung.txt` | 1.11 | Link |
+| `faq.txt` | 1.04 | zwei neue Fragen |
+| `pg_tabelle.txt` | 1.13 | Blattreiter-Menü: Tabelle verstecken, Versteckte Tabellen … |
+| `seiten_update.txt` | 1.12 | neue Seite und Bild `start_02_startseite.png` (fehlt noch) |
+| `wiki/LIESMICH_Wiki_Gesamt.md` | +0,01 | Abschnitt 5.23 |
+
+
+## 5.22 (2026-11-25), Tooltip der Zielvariable
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_form_other.py` | 1.14 | Hat das Makro nur eine Zielvariable (`DstVar1`), erklärt der Tooltip: Name für Zustand 0 eingeben (zum Beispiel Test0), die weiteren Zustände heißen Test1, Test2, … |
+| `csv/Web_Languages.csv` | | neuer Text (7 Sprachen) |
+| `webmobaledlib.py` | 5.22 | Version, Prüfliste |
+
+## 5.21 (2026-11-25), Mini-Farbtest im Parameterformular: Heartbeat-LED
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_form_other.py` | 1.13 | „Farbe wählen“ öffnet den Mini-Farbtest mit `led=(0, 1, 0)` (LED-Nummer 0, 1 LED, Kanal 0): Farbänderungen gehen nur an die Heartbeat-LED, solange der Anwender die LED nicht von Hand ändert. Weiter `passive=True`: beim Öffnen wird nichts gesendet, erst die erste Farbänderung gibt das Senden frei |
+| `webmobaledlib.py` | 5.21 | Version, Prüfliste |
+
+## 5.20 (2026-11-25), Fehler im Parameterformular: ungültige Eingabe wurde trotzdem gespeichert
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `proggen/Userform_Other.py` | 1.04 | `Check_Par_with_ErrMsg` lieferte bei einem Fehler `""` statt `None`; `Create_Result` prüft auf `None`, deshalb wurde zum Beispiel eine leere Zielvariable trotz der Meldung übernommen (Makro mit leerem Parameter gespeichert). Jetzt `None` bei jedem Fehler, der Dialog erscheint wieder mit den Eingaben. Die Meldungen nennen die Bezeichnung des Eingabefeldes (`Controls['LabelParN']`) statt des internen Namens (`DstVar1`) |
+| `_web/web_form_other.py` | 1.12 | Bezeichnung „Zielvariable“ ohne 1 schon beim Aufbau der Parameter, damit auch die Meldungen sie verwenden |
+| `webmobaledlib.py` | 5.20 | Version, Prüfliste |
+
+## 5.19 (2026-11-25), Forum PeterVT11: Parameterformular der PushButton-Makros
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_form_other.py` | 1.11 | Bezeichnung: ein Makro mit `DstVar1` ohne `DstVar2`/`DstVarN` zeigt „Zielvariable“ statt „Zielvariable 1“ (`single_target_title`). Parameter mit Bereich 0 bis 1 (Rotate, Use0, ResetLong …) als Ein/Aus-Schalter mit angezeigtem Wert 0/1 (`_add_flag_row`). RGB und RGB2 (Col0 bis Col5): Textfeld nur so breit wie nötig (Experten ändern die Zahlen von Hand), Taste „Farbe wählen“ ruft den Mini-Farbtest (passiv: es wird nichts an die Lichtmaschine gesendet), dahinter ein Farbfeld je Farbe (`_add_rgb_row`) |
+| `csv/Web_Languages.csv` | | 4 neue Zeilen: „Farbe wählen“, „Farbe (R, G, B)“, „Farbe 1 (R1, G1, B1)“, „Farbe 2 (R2, G2, B2)“ (7 Sprachen) |
+| `webmobaledlib.py` | 5.19 | Version, Prüfliste (`web_form_other` 1.11) |
+
+Hinweise: Der Mini-Farbtest im Formular kennt die LED der Zeile nicht, deshalb keine Live-Anzeige an der LED (nur Farbwahl). Ist der Text kein gültiges Zahlentripel (zum Beispiel ein Name), bleibt das normale Textfeld. Nicht getestet im Browser.
+
+## 5.18 (2026-11-25), Tooltip-Texte aus Pull Request 39 (Jürgen)
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_form_options.py` | 1.50 | Hinweis zum Knopf „Board und USB Port erkennen“: linke Seite (Lichtmaschine) `light_machine_hint`, rechte Seite `detect_hint` (neue Texte, nennen die Auswahl bei mehreren Modellen) |
+| `csv/Web_Languages.csv` | | zwei neue Zeilen für diese Texte (7 Sprachen, aus dem PR übernommen) |
+
+Nicht übernommen (Entscheidung Harold): Umbau der Boardliste im Optionen-Dialog aus PR 39 (`board_options`). Der Dialog wird von Jürgen neu gestaltet. Die übrigen Teile von PR 39 (Auswahldialog bei mehreren Modellen) sind seit 5.02 enthalten. Abgleich der offenen PRs (39, 54, 55, 57, 71): 54, 55, 57 vollständig, 71 seit 5.17, 39 wie beschrieben.
+
+## 5.17 (2026-11-25), Pull Request 71 (Jürgen, Issue 70): Pico-COM-Port nach dem Upload
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `headless/headless_dyn_config.py` | 1.06 | `wait_for_port`: Geräte-Pfad, Seriennummer **oder** Location in einer Schleife; Standard-Timeout 5 s; Protokoll der gefundenen Pico-Anschlüsse bei Misserfolg; `~MLLERR` auch ohne Text erkannt |
+| `proggen/M42_Dyn_Config.py` | 1.11 | `After_Full_Flash` merkt den gefundenen Anschluss (`Found_Port`), Suche nach dem Upload 10 s (vorher 25 s); `~MLLERR` bricht die Bereitschaftsprüfung sofort ab (Meldung „Firmware nicht geeignet“); neu `Clear_Found_Port` (Ergänzung: vor jedem Upload zurücksetzen) |
+| `proggen/M08_ARDUINO.py` | 1.36 | `__Write_Back_New_ComPort`: Hat sich der Port geändert, steht der neue Windows-Port (COMn) im Blatt, eine Markierung „*“ bleibt; Aufruf von `M42.Clear_Found_Port()` vor dem Upload (Ergänzung) |
+| `LEDs_AutoProg/ESP32Extensions.h` | 1.01 | gesamte Datei nur `#if defined(ESP32)`, der Pico-Build bindet sie nicht ein |
+| `csv/Web_Languages.csv` | | neue Meldung „Die Firmware am Anschluss {port} ist für die Konfiguration nicht geeignet …“ (7 Sprachen) |
+
+Änderungen am PR: Die Versionsnummer der Dateien im PR (M08 1.35) kollidierte mit meiner 1.35 (Kopie der Bibliothek, 5.16); der PR-Teil heißt jetzt 1.36 und seine Markierungen `# v1.36`. Ergänzt: `Clear_Found_Port`, weil `found_port` sonst vom letzten Pico-Upload stehen bleibt und bei einem anderen Board (zum Beispiel Nano) einen fremden COM-Port ins Blatt schreiben könnte. Der PR wurde nicht ausgeführt, nur angewendet und kompiliert.
+
+**Zu prüfen (Jürgen):** Die Suche nach dem Upload ist auf 10 s verkürzt; auf langsamen Rechnern (Treiber beim ersten Anschluss) kann das knapp sein. Der Fall „Port ist belegt, der Pico hat danach einen anderen Namen“ und das spätere „Setup übertragen“ mit altem Blattport (ohne vorheriges Hochladen) sind nicht abgedeckt: Dann bleibt der Eintrag im Blatt, bis der Port von Hand oder über „Board und USB Port erkennen“ gesetzt wird.
+
+## 5.16 (2026-11-25), Pico: veraltete Kopie der Bibliothek (eigentliche Ursache zu 5.15)
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `proggen/M08_ARDUINO.py` | 1.35 | Neu `Refresh_Lib_Copy(SrcDir)`: bei `file://` wird `.pio/libdeps/<env>/MobaLedLib*` gelöscht, wenn eine Datei in `src` von `libraries/MobaLedLib/src` abweicht (Inhaltsvergleich); Verknüpfungen (`symlink://`) bleiben unberührt. Aufruf beim Schreiben der `platformio.ini`. |
+
+Befund: Harolds `PicoFastLED.h` enthält `showColor()`, trotzdem meldet der Compiler „no member named showColor“. Der Rechner kann keine Verknüpfungen anlegen (Log: „Bibliothek MobaLedLib wird mit file:// eingebunden“). PlatformIO kopiert die Bibliothek dann nach `.pio/libdeps/pico/MobaLedLib` und benutzt die Kopie bei gleicher Versionsangabe (3.5.0) weiter; sie stammt aus der Zeit vor Pull Request 63. Der ESP32 war nicht betroffen (echte FastLED). Gleiche Ursache beschreibt `headless_pio_cache.py` (manuelles Löschen des Zwischenspeichers). Prüfung: Skript mit veralteter und gleicher Kopie (alte wird gelöscht, gleiche bleibt); nicht mit PlatformIO. Die Rückfallebene aus 5.15 bleibt.
+
+## 5.15 (2026-11-25), Pico: Fehler „showColor“ beim Kompilieren (Log von Harold)
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `proggen/M06_Write_Header_SW.py` | 1.13 | Der erzeugte Header `LEDs_AutoProg.h` definiert `MLL_CLEAR_CONTROLLER(c)`: bei `ARDUINO_ARCH_RP2040` ohne `MLL_HAS_SHOWCOLOR` wird `clearLeds(256)` aufgerufen, sonst `showColor(CRGB(0,0,0), MLL_CLEAR_LED_CNT, 0)`; `SETUP_FASTLED` benutzt das Makro |
+| `libraries/MobaLedLib/src/PicoFastLED.h` | | definiert `MLL_HAS_SHOWCOLOR` neben `showColor()` (Pull Request 63) |
+
+Befund im Log (Pico, 09:13 und 09:15): `LEDs_AutoProg.h:105:29: error: 'class CLEDController' has no member named 'showColor'`. Die Bibliothek wird aus `D:/Development/github/WebMLL/WebMLL/python/libraries/MobaLedLib` eingebunden (file://); ihre `PicoFastLED.h` hat dort offenbar noch kein `showColor()` (seit 5.00, Pull Request 63). Mit dem Makro übersetzt es auch dann; die überzähligen LEDs werden dann aber nicht ausgeschaltet (nur ESP32 und neue `PicoFastLED.h`). Der ESP32-Lauf (09:11) war in Ordnung.
+
+## 5.14 (2026-11-25), Knöpfe im Protokoll-Fenster (Issue 60, Rückmeldung von Jürgen zu 5.12)
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_log.py` | 1.13 | `set_running`: Zähler der ruhigen Abfragen (`_idle_polls`) wird bei neuem Lauf (`delete_text_from_textwindow`) und bei `show()` zurückgesetzt (vorher blieb er stehen, ein neuer Lauf wurde nach 1 weiteren ruhigen Abfrage beendet gemeldet); außerdem gilt der Vorgang als laufend, solange in den letzten 3 s Ausgabe kam (`_last_activity`) |
+
+Vermutete Ursache (nicht im Browser nachgestellt): Beim Setup übertragen folgen mehrere Läufe (Build, Upload, Verbinden) mit kurzen Lücken im Zustand „beschäftigt“. Der Zähler der ruhigen Abfragen blieb zwischen den Läufen stehen, so dass ein neuer Lauf nach 1 statt 3 Abfragen als beendet galt. Prüfung nur mit einem Skript für `set_running` (Entprellung, frische Ausgabe, Ablauf nach 3 ruhigen Abfragen).
+
+**Offen:** Bleibt das Flackern, bitte Jürgen nach Board (Nano, ESP32, Pico) und einem Video fragen; sonst liegt die Ursache bei `state["busy"]`, das die Sicherung (`_AUTOSAVE`) ohne Zähler setzt.
+
+## 5.13 (2026-11-25), schwarze Konsolenfenster unter Windows (Rückmeldung zu 5.12)
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `webmobaledlib.py` | 5.13 | Neu `_hide_console_windows()`: unter Windows bekommt jeder `subprocess.Popen`-Aufruf ohne eigene `creationflags` `CREATE_NO_WINDOW` (betrifft auch `run`, `check_output` und die Aufrufe in `M08_ARDUINO`, `headless_esp32_ota`, `headless_dyn_config`, `M30_Tools`). Aufrufe mit eigenen Flags (Neustart) bleiben. |
+
+Ursache: `pio`, `esptool`, `git` und `taskkill` wurden ohne das Flag gestartet; jeder Aufruf öffnete kurz ein Konsolenfenster (5 bis 6 mal bei „Setup übertragen“). Getestet nur mit simuliertem `os.name == "nt"` (Flags richtig gesetzt oder erhalten), nicht unter Windows.
+
+**Offen:** Issue 60 (Knöpfe flackern) tritt mit 5.12 weiter auf; die Stelle ist noch nicht gefunden. Es fehlen Angaben, welche Knöpfe flackern (Log-Fenster, Kopfzeile, Verbinden-Knopf).
+
 ## 5.12 (2026-11-24), Wiki-Namensraum mobaledlibstudio
 
 Auftrag (Harold): Im Wiki sind alle Links von `webmobaledlib` auf `mobaledlibstudio` umgestellt (Beispiel: `anleitungen/mobaledlibstudio/einfuehrung`). „Hilfe → Hilfe öffnen“ ging noch auf die alte Seite.
@@ -34,7 +173,7 @@ Auftrag (Harold): Im Wiki sind alle Links von `webmobaledlib` auf `mobaledlibstu
 | `webmobaledlib.py` | 5.12 | `help_url()` (Menü Hilfe → Hilfe öffnen) liefert `HELP_WIKI_URL` statt `HelpPageURL` aus `MobaLedTest_macrodef.json` (dort stand `anleitungen/spezial/pyprogramgenerator`; die Datei bleibt für die Tk-Oberfläche unverändert) |
 | `proggen/M20_PageEvents_a_Functions.py` | 1.15 | `HELP_WIKI_URL` = `https://wiki.mobaledlib.de/anleitungen/mobaledlibstudio/einfuehrung` |
 | `_web/web_esp32_ota.py`, `_web/web_form_servoanim.py`, `_web/web_pattgen.py` | 1.09, 1.05, 1.25 | Hilfe-Adressen: `mobaledlibstudio/ota`, `mobaledlibstudio/servo_animation` (vorher `spezial/pyprogramgenerator/servo_animation`), `mobaledlibstudio/patterngenerator` (vorher `spezial/patterngenerator`) |
-| Wiki (`wiki/webmobaledlib/*.txt`, 40 Seiten) | +0.01 | alle Links `anleitungen:webmobaledlib:…` → `anleitungen:mobaledlibstudio:…`, auch die Bild-Links `bilder:anleitungen:webmobaledlib:…` → `bilder:anleitungen:mobaledlibstudio:…` (siehe Hinweis); Kopf „gilt für Version 5.12“ |
+| Wiki (`wiki/webmobaledlib/*.txt`, 40 Seiten) | +0.01 | alle Links `anleitungen:webmobaledlib:…` → `anleitungen:mobaledlibstudio:…`, auch die Bild-Links `bilder:anleitungen:webmobaledlib:…` → `bilder:anleitungen:mobaledlibstudio:…` (siehe Hinweis); Kopf „gilt für Version 5.18“ |
 | `README.md`, `START_HIER.*`, `wiki/LIESMICH_Wiki_Gesamt.md`, `KI_prompt/KI_ENTWICKLUNG_Prompt.md` | | Wiki-Adressen angepasst |
 
 Nicht geändert: Der Zip-Ordner `wiki/webmobaledlib/` (Gruppe B, Lieferstruktur) und der Dateiname `webmobaledlib.zip`. Die Tk-Dialoge (zum Beispiel `Userform_Animation.py`) verweisen noch auf `spezial/…`; sie sind obsolet.

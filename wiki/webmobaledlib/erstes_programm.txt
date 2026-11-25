@@ -1,5 +1,5 @@
 ====== MobaLedLib Studio – Dein erstes Programm ======
-//Seitenstand 1.16 (2026-11-24), gilt für Version 5.12//
+//Seitenstand 1.18 (2026-11-25), gilt für Version 5.25//
 
 Auf dieser Seite bringst du eine LED zum Leuchten. Das dauert etwa **15 Minuten**, beim ersten Mal etwas länger. Danach weißt du, wie alles zusammenhängt.
 
@@ -12,6 +12,8 @@ Auf dieser Seite bringst du eine LED zum Leuchten. Das dauert etwa **15 Minuten*
 ===== Schritt 1: Das Programm starten =====
 
 Starte MobaLedLib Studio mit dem Symbol **MobaLedLib Studio** (Desktop). Nach 20 bis 60 Sekunden öffnet sich der Browser. Du siehst oben die Reiter und darunter eine Tabelle.
+
+**Seit 5.23 erscheint beim Start die Startseite.** Sie nimmt dir die **Schritte 2 bis 5** ab: Du wählst **Zentrale** und **Lichtmaschine**, klickst auf **Anfangen**, und das Programm öffnet die passende Tabelle mit einem fertigen Startprogramm und stellt das Board ein. Dann machst du mit **Schritt 6** weiter. Siehe [[anleitungen:mobaledlibstudio:startseite|Die Startseite für Einsteiger]]. Wählst du **Überspringen**, gehst du die Schritte 2 bis 5 von Hand durch.
 
 {{:bilder:anleitungen:mobaledlibstudio:erst_01_start.png?600|Das Programm nach dem Start}}
 
@@ -29,7 +31,7 @@ Unter der Tabelle stehen die **Tabellenblätter**. Wähle das Blatt, das zum **S
 | **DCC** | Anlagen mit einer **DCC**-Zentrale |
 | **Selectrix** | Anlagen mit **Selectrix** |
 | **CAN** | alle **Märklin**-Zentralen (CAN-Bus) |
-| **LNet** | **LocoNet** |
+| **LNet** | Anlagen mit **LNet** |
 
 Für diesen ersten Test spielt das Blatt **keine Rolle**, weil noch keine Verbindung zu einer Modellbahnzentrale gebraucht wird. Nimm **DCC**.
 

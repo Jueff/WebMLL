@@ -1,5 +1,5 @@
 ====== MobaLedLib Studio – Die Tabelle bedienen ======
-//Seitenstand 1.12 (2026-11-24), gilt für Version 5.12//
+//Seitenstand 1.13 (2026-11-25), gilt für Version 5.23//
 
 In der Tabelle des [[anleitungen:mobaledlibstudio:programmgenerator|Programmgenerators]] steht jede Zeile für einen Effekt oder ein Gerät. Auf dieser Seite steht, wie du die Tabelle bedienst.
 
@@ -76,6 +76,8 @@ Die **Blattreiter** ganz unten wählst du mit einem Klick. Mit der **rechten Mau
   * **Reiterfarbe:** Gibt dem Reiter eine Farbe. Die Schrift wird automatisch weiß oder schwarz, damit sie lesbar bleibt.
   * **Umbenennen …:** Das geht nur bei **eigenen Blättern** (Kopien). Die Blätter **DCC**, **Selectrix**, **CAN** und **LNet** und die Systemblätter heißen immer gleich, weil das Programm sie am Namen erkennt. Der Name darf höchstens 31 Zeichen haben und nicht die Zeichen ''[ ] : * ? / \'' enthalten.
   * **Duplizieren …:** Legt eine **Kopie** eines Datenblatts an (mit Zellen, Symbolen, Testtasten und Farbe). Das Programm schlägt einen freien Namen vor, zum Beispiel //DCC_1//.
+  * **Tabelle verstecken:** Blendet die Tabelle aus (sie wird nicht gelöscht). Die [[anleitungen:mobaledlibstudio:startseite|Startseite]] versteckt so die Tabellen der anderen Zentralen.
+  * **Versteckte Tabellen …:** Öffnet ein Fenster, in dem du versteckte Tabellen wieder einblendest. Hinter dem Namen steht in Klammern, wie viele Tabellen versteckt sind.
   * **Nach links verschieben**, **Nach rechts verschieben:** Ändert die Reihenfolge der Reiter.
   * **Spaltenbreiten übertragen …** (seit 4.08, Beitrag von moosbewohner): Du wählst die **Spalten** und die **Zielseiten**, und die Breiten werden auf diese Seiten übertragen. Bei kleinen Bildschirmen hilft außerdem der **Zellinnenabstand** (siehe [[anleitungen:mobaledlibstudio:wz_programm_einstellungen|Programm Einstellungen]]).
 

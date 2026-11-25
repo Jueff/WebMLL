@@ -1,12 +1,13 @@
-# Datei-Version: 1.12 (2026-11-24) - M06_Write_Header_SW.py
+# Datei-Version: 1.13 (2026-11-25) - M06_Write_Header_SW.py
 # ----------------------------------------------------------------------------------------------
 # Name:           M06_Write_Header_SW.py
 # Path:           proggen/M06_Write_Header_SW.py
-# Version:        1.12
-# Last Update:    2026-11-24
+# Version:        1.13
+# Last Update:    2026-11-25
 # Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
 # History of Change:
+#   1.13  2026-11-25  Pico mit aelterer PicoFastLED.h (ohne showColor) uebersetzte nicht: Hilfsmakro MLL_CLEAR_CONTROLLER, bei Pico ohne MLL_HAS_SHOWCOLOR wird clearLeds(256) benutzt (Log von Harold, Pico, Kompilierfehler showColor)
 #   1.12  2026-11-24  Pull Request 63 (Juergen, Issue 62): Konfiguration getrennt von der Firmware: beim Start werden MLL_CLEAR_LED_CNT (256, mit LONG_LED_ADDR 1000) schwarze Pixel je Controller ausgegeben (showColor), damit auch physisch angeschlossene, nicht mehr konfigurierte LEDs ausgehen. Zeilen mit '# v1.12'
 #   1.11  2026-11-19  Konfiguration getrennt von der Firmware (ESP32/Pico): SETUP_FASTLED legt die FastLED-Controller in einer Schleife ueber mllControllerConfig[] (Pin, erste LED, LED-Anzahl aus der Konfigurationsdatei) an;
 #                     die Firmware enthaelt dazu MLL_LED_PINS (alle LED-Pins der Plattform) und MLL_ADD_LEDS. Neue Funktionen Get_LED_Controller_List, Get_FastLED_Pin_List. Klassische Kopfdatei (Nano): unveraendert controllerN (Zeilen mit '# v1.11')
@@ -1434,6 +1435,12 @@ def Write_Switches_Header_File_Part_A(fp, Channel):
             VBFiles.writeText(fp, '#else', '\n')  # v1.12
             VBFiles.writeText(fp, '  #define MLL_CLEAR_LED_CNT 256', '\n')  # v1.12
             VBFiles.writeText(fp, '#endif', '\n')  # v1.12
+            VBFiles.writeText(fp, '// Pico: an older PicoFastLED.h has no showColor(), then clearLeds() is used (only the configured LEDs are cleared)', '\n')  # v1.13
+            VBFiles.writeText(fp, '#if defined(ARDUINO_ARCH_RP2040) && !defined(MLL_HAS_SHOWCOLOR)', '\n')  # v1.13
+            VBFiles.writeText(fp, '  #define MLL_CLEAR_CONTROLLER(c) (c)->clearLeds(256)', '\n')  # v1.13
+            VBFiles.writeText(fp, '#else', '\n')  # v1.13
+            VBFiles.writeText(fp, '  #define MLL_CLEAR_CONTROLLER(c) (c)->showColor(CRGB(0, 0, 0), MLL_CLEAR_LED_CNT, 0)', '\n')  # v1.13
+            VBFiles.writeText(fp, '#endif', '\n')  # v1.13
         VBFiles.writeText(fp, '/*********************/', '\n')
         VBFiles.writeText(fp, '#define SETUP_FASTLED()                                                      \\', '\n')
         VBFiles.writeText(fp, '/*********************/                                                      \\', '\n')
@@ -1477,7 +1484,8 @@ def Write_Switches_Header_File_Part_A(fp, Channel):
             VBFiles.writeText(fp, '    /* clearLeds(256) is clamped by FastLED to the configured LED count. LEDs which are physically */ \\', '\n')  # v1.12
             VBFiles.writeText(fp, '    /* connected but no longer configured would keep their last state. showColor() sends        */ \\', '\n')  # v1.12
             VBFiles.writeText(fp, '    /* MLL_CLEAR_LED_CNT black pixels without needing a data array.                              */ \\', '\n')  # v1.12
-            VBFiles.writeText(fp, '    if (Ctrl != NULL) Ctrl->showColor(CRGB(0, 0, 0), MLL_CLEAR_LED_CNT, 0); \\', '\n')  # v1.12
+            # VBFiles.writeText(fp, '    if (Ctrl != NULL) Ctrl->showColor(CRGB(0, 0, 0), MLL_CLEAR_LED_CNT, 0); \\', '\n')  # v1.12  # v5.15 (entfallen)
+            VBFiles.writeText(fp, '    if (Ctrl != NULL) MLL_CLEAR_CONTROLLER(Ctrl);                                    \\', '\n')  # v1.12  # v5.15
             VBFiles.writeText(fp, '    }                                                                        \\', '\n')  # v1.11
         else:  # v1.11
             VBFiles.writeText(fp, '                                                                             \\', '\n')

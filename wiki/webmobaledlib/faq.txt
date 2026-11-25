@@ -1,5 +1,5 @@
 ====== MobaLedLib Studio – Häufige Fragen ======
-//Seitenstand 1.03 (2026-11-24), gilt für Version 5.12//
+//Seitenstand 1.04 (2026-11-25), gilt für Version 5.23//
 
 Diese Seite beantwortet Fragen, die Einsteiger oft stellen. Fehlt deine Frage, schau in die [[anleitungen:mobaledlibstudio:fehlersuche|Fehlersuche]] oder frag im [[https://forum.mobaledlib.de/viewforum.php?f=14|Forum der MobaLedLib]].
 
@@ -37,3 +37,11 @@ Im **Datenordner** auf dem Rechner, auf dem MobaLedLib Studio läuft (Windows: '
 ===== Der Knopf „Online Wiki“ führt zur falschen Seite =====
 
 Bis 3.92 öffnete der Knopf die Beschreibung der Excel-Version. Seit 3.93 öffnet er die Seite //Einführung// dieser Anleitung.
+
+===== Die Startseite erscheint nicht mehr oder stört =====
+
+Beim Start zeigt das Programm seit 5.23 die [[anleitungen:mobaledlibstudio:startseite|Startseite für Einsteiger]]. Wenn du sie nicht brauchst, klicke auf **Überspringen** und setze den Haken **Diese Startseite nicht mehr anzeigen**. Wieder einschalten: Menü **Einstellungen, Allgemein**, Haken **Startseite beim Programmstart anzeigen**.
+
+===== Wo sind die Tabellen DCC, Selectrix, CAN und LNet geblieben? =====
+
+Nach **Anfangen** auf der Startseite sind die Tabellen der **anderen** Zentralen **versteckt**, nicht gelöscht. Klicke mit der rechten Maustaste auf einen Blattreiter und wähle **Versteckte Tabellen …**, um sie wieder einzublenden.

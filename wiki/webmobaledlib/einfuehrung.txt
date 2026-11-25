@@ -1,5 +1,5 @@
 ====== MobaLedLib Studio – Einführung ======
-//Seitenstand 1.11 (2026-11-24), gilt für Version 5.12//
+//Seitenstand 1.12 (2026-11-25), gilt für Version 5.23//
 
 ===== Was ist MobaLedLib Studio? =====
 
@@ -39,6 +39,7 @@ Vorkenntnisse brauchst du keine. Auf den folgenden Seiten steht jeder Schritt ei
 ===== Wie geht es weiter? =====
 
   - [[anleitungen:mobaledlibstudio:installation|Installation]]: Such dir die Seite für dein System aus.
+  - [[anleitungen:mobaledlibstudio:startseite|Die Startseite]]: Zentrale und Lichtmaschine wählen, Startprogramm laden (seit 5.23).
   - [[anleitungen:mobaledlibstudio:erstes_programm|Dein erstes Programm]]: Eine LED zum Leuchten bringen.
   - [[anleitungen:mobaledlibstudio:programmgenerator|Der Programmgenerator]]: So bedienst du die Tabelle.
   - [[anleitungen:mobaledlibstudio:modus|Anfänger Modus und Experten Modus]]: Warum fehlen manche Reiter und Makros?

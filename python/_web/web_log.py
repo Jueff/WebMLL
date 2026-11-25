@@ -1,12 +1,13 @@
-# Datei-Version: 1.12 (2026-11-23) - web_log.py
+# Datei-Version: 1.13 (2026-11-25) - web_log.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_log.py
 # Path:           _web/web_log.py
-# Version:        1.12
-# Last Update:    2026-11-23
+# Version:        1.13
+# Last Update:    2026-11-25
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
+#   1.13  2026-11-25  Issue 60 (Rueckmeldung zu 5.12): Knoepfe Vorgang abbrechen und Schliessen flackerten weiter beim Setup uebertragen: Zaehler der ruhigen Abfragen wird bei neuem Lauf und show() zurueckgesetzt; solange in den letzten 3 s Ausgabe kam, gilt der Vorgang als laufend
 #   1.12  2026-11-23  Issue 60: Knoepfe Vorgang abbrechen und Schliessen flackerten waehrend Kompilieren/Hochladen: das Ende des Vorgangs wird erst nach 3 Abfragen (1,5 s) gemeldet
 #   1.11  2026-11-20  Erfolgsfenster schliesst sich nach konfigurierbarer Verzögerung automatisch (MLL_WEBLOG_CLOSE_DELAY, 0 = sofort)
 #   1.10  2026-11-19  Vorgang abbrechen beendet zuerst einen laufenden ESP32-Build oder -Upload (headless_esp32_ota.cancel_running), sonst wie bisher
@@ -30,6 +31,7 @@ from __future__ import annotations
 import logging
 import os
 import re  # v1.06
+import time  # v1.13
 
 from _web import web_dialogs as wd
 try:  # v1.05
@@ -84,6 +86,8 @@ class WebLog:
         self._noise_count = 0  # v1.06
         arduino_log.info("----- %s: neuer Lauf -----", self.title)
         self._running = True  # v1.08: neuer Lauf
+        self._idle_polls = 0  # v1.13: Zaehler der ruhigen Abfragen neu beginnen
+        self._last_activity = time.monotonic()  # v1.13
         self.run_id += 1  # v1.09
         self._on_loop(self._apply_running)  # v1.08
         self._on_loop(self._cancel_close)
@@ -107,6 +111,7 @@ class WebLog:
                     arduino_log.info("Meldungen der ARDUINO IDE zum Netzwerk (JmDNS) werden nicht angezeigt und nicht protokolliert")  # v1.06
                 continue  # v1.06
             self.lines.append((line, classes))
+            self._last_activity = time.monotonic()  # v1.13: Ausgabe im Gang = Vorgang laeuft
             if line.strip():
                 arduino_log.log(logging.WARNING if highlight == "Error" else logging.INFO, "%s", line)
             self._on_loop(lambda l=line, c=classes: self._push(l, c))
@@ -133,6 +138,8 @@ class WebLog:
             return
         self._loop = wd._bridge["loop"]
         self._running = True  # v1.08: show() kommt aus dem Worker-Thread eines laufenden Vorgangs
+        self._idle_polls = 0  # v1.13
+        self._last_activity = time.monotonic()  # v1.13
         wd.call_in_loop(self._show_async, default=None)
 
     async def _show_async(self):
@@ -160,6 +167,8 @@ class WebLog:
     def set_running(self, running):  # v1.08
         """Laeuft ein Vorgang? Dann ist nur Vorgang abbrechen aktiv, sonst nur Schliessen (Aufruf aus dem Zeitgeber der Seite, im Ereignis-Thread)."""
         running = bool(running)
+        if not running and time.monotonic() - getattr(self, "_last_activity", 0.0) < 3.0:  # v1.13: in den letzten 3 s kam Ausgabe: der Vorgang laeuft noch (auch wenn busy kurz zurueckgesetzt war)
+            running = True  # v1.13
         if running:  # v1.12
             self._idle_polls = 0  # v1.12
         elif self._running:  # v1.12: Ende des Vorgangs erst melden, wenn es 3 Abfragen (1,5 s) hintereinander so ist: kein Flackern der Knoepfe, wenn ein kurzer Befehl den Zustand kurz zuruecksetzt (Issue 60)

@@ -1,9 +1,15 @@
-Datei-Version: 1.55 (2026-11-23) - LIESMICH_Wiki_Gesamt.md
-Gilt für Version 4.93
+Datei-Version: 1.57 (2026-11-25) - LIESMICH_Wiki_Gesamt.md
+Gilt für Version 5.25
 
 # Wiki-Kapitel „MobaLedLib Studio“: alle Seiten, Stand 4.93
 
 Dieses Paket enthält **alle 41 Seiten** in ihrer neuesten Fassung (Seitenstand jeweils um 0,01 erhöht). Es ersetzt die früheren Pakete der sechs Wellen. **Die Seiten erst veröffentlichen, wenn ein Release mit 3.04 (oder neuer) auf GitHub liegt.**
+
+## Neu seit Stand 5.12 (Stand 5.23): Startseite für Einsteiger
+
+* **Neue Seite `startseite` (1.00, 5.23):** Die Startseite beim Programmstart: Zentrale und Lichtmaschine wählen, Automatisch erkennen, Anleitung für das erste Programm, Anfangen / Überspringen, Hinweis im Anfänger Modus, Ausschalten und Wiedereinschalten, Ausgeblendete Tabellen wieder einblenden. **Bild fehlt noch:** `start_02_startseite.png` (Startseite nach dem Start, nichts gewählt; Harold nimmt es auf).
+* **Geändert:** `erstes_programm` (1.17, Hinweis auf die Startseite in Schritt 1), `modus` (1.06, Hinweis auf der Startseite), `wz_programm_einstellungen` (1.20, neue Einstellung „Startseite beim Programmstart anzeigen“), `einfuehrung` (1.11, Link), `faq` (1.04, zwei neue Fragen), `pg_tabelle` (1.13, Blattreiter-Menü: Tabelle verstecken, Versteckte Tabellen …), `seiten_update` (1.12).
+* Das Kapitel hat jetzt **42 Dateien**: 41 Seiten und `seiten_update`. Die Zählung in `seiten_update` nennt 41 Seiten.
 
 ## Neu seit Stand 4.79 (Stand 4.93)
 
@@ -64,7 +70,7 @@ Dieses Paket enthält **alle 41 Seiten** in ihrer neuesten Fassung (Seitenstand 
 3. **Python:** Die Installationsseiten beschreiben jetzt, was die Skripte wirklich tun: Das Skript **prüft** Python 3.10 oder neuer. **Windows:** installiert nach Rückfrage „Python 3.12 jetzt mit winget installieren [J,N]“ (ohne winget: Hinweis auf python.org). **Linux und Raspberry Pi:** installieren Python mit venv und pip und die anderen Pakete selbst über die Paketverwaltung (Passwort nötig; zu alte Systeme melden es). **macOS:** nur nach Rückfrage mit Homebrew, sonst muss Python vorher von python.org installiert werden. Im Begriffsblatt gibt es den Eintrag „Python“.
 
 4. **Korrekturen vom 2026-11-09 (Hinweise des Entwicklers):**
-   * **`erstes_programm` (1.03)** neu geschrieben. Neu: den **Programmgenerator öffnen** (Reiter **Programm Generator**, falls nicht offen); das **richtige Tabellenblatt** wählen (**DCC**, **Selectrix**, **CAN** = alle Märklin-Zentralen, **LNet** = LocoNet); die **Lichtmaschine einstellen** vor dem Übertragen: **Hardware Optionen → Reiter LED Arduino → Board → USB Port erkennen → Anschluss wählen**; der Hinweis, dass **Mit ARDUINO verbinden nur geht, wenn auf der Lichtmaschine schon ein MobaLedLib-Programm läuft** (bei neuen Boards nicht). Die Tabelle enthält die Zeile **Heartbeat LED** schon (Zeile „LED auf dem Mainboard“); das Makro wird nur geprüft und bei Bedarf neu eingetragen.
+   * **`erstes_programm` (1.03)** neu geschrieben. Neu: den **Programmgenerator öffnen** (Reiter **Programm Generator**, falls nicht offen); das **richtige Tabellenblatt** wählen (**DCC**, **Selectrix**, **CAN** = alle Märklin-Zentralen, **LNet** = Anlagen mit LNet); die **Lichtmaschine einstellen** vor dem Übertragen: **Hardware Optionen → Reiter LED Arduino → Board → USB Port erkennen → Anschluss wählen**; der Hinweis, dass **Mit ARDUINO verbinden nur geht, wenn auf der Lichtmaschine schon ein MobaLedLib-Programm läuft** (bei neuen Boards nicht). Die Tabelle enthält die Zeile **Heartbeat LED** schon (Zeile „LED auf dem Mainboard“); das Makro wird nur geprüft und bei Bedarf neu eingetragen.
    * **`wz_arduino_einstellungen` (1.03)** neu geschrieben: Der Reiter **ARDUINO Einstellungen** ist **nur für die ARDUINO IDE** nötig (mit PlatformIO nicht). Die Seite beschreibt nur noch, was sie wirklich enthält (Haken **Test ARDUINO Programm Creation**, Pfad zur ARDUINO IDE, **IDE suchen**, Pfad zu den Resourcen nur Mac). Die frühere Beschreibung (Anschluss, Board-Typ, Baudrate, Gefundene Geräte …) war falsch und ist entfernt.
    * **`pg_arduino` (1.03):** Abschnitt **Die Lichtmaschine einstellen** (Board und USB-Anschluss in **Hardware Optionen**) steht jetzt **vor** dem Verbinden; das Verbinden mit dem Hinweis zu neuen Boards; der falsche Satz zum Reiter **ARDUINO Einstellungen** entfällt.
    * **`werkzeuge` (1.02)** und **`pg_werkzeugleiste` (1.02):** Zeile **ARDUINO Einstellungen** und **Hardware Optionen** angeglichen (die Reiter des Optionenfensters: LED Arduino, Entwicklungsumgebung, Dateien, Update, Bootloader).

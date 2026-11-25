@@ -2588,3 +2588,53 @@ Sound Anschluss R;Sound connection R;Geluidsaansluiting R;Connexion son R;Colleg
 Vergleichsoperator;Comparison operator;Vergelijkingsoperator;Opérateur de comparaison;Operatore di confronto;Operador de comparación;Sammenligningsoperator
 Zeilenfarbe;Row color;Rijkleur;Couleur de ligne;Colore della riga;Color de la fila;Rækkefarve
 maximale Anzahl LED;Maximum number of LEDs;Maximaal aantal LED's;Nombre maximal de LED;Numero massimo di LED;Número máximo de LED;Maksimalt antal LED'er
+Die Firmware am Anschluss {port} ist für die Konfiguration nicht geeignet ({reason}). Die Konfiguration wurde nicht übertragen.;The firmware on port {port} is not suitable for the configuration ({reason}). The configuration was not transferred.;De firmware op poort {port} is niet geschikt voor de configuratie ({reason}). De configuratie is niet overgedragen.;Le micrologiciel du port {port} ne convient pas à la configuration ({reason}). La configuration n'a pas été transférée.;Il firmware sulla porta {port} non è adatto alla configurazione ({reason}). La configurazione non è stata trasferita.;El firmware del puerto {port} no es adecuado para la configuración ({reason}). La configuración no se ha transferido.;Firmwaren på porten {port} er ikke egnet til konfigurationen ({reason}). Konfigurationen blev ikke overført.
+Sucht an allen USB-Anschlüssen nach Nano, ESP32 und Pico. Werden mehrere Board-Typen gefunden, können Sie den gewünschten Typ auswählen. Anschließend wird der passende USB-Port angezeigt.;Searches all USB ports for Nano, ESP32 and Pico. If multiple board types are found, select the type you want to use. The matching USB port is then shown.;Zoekt op alle USB-poorten naar Nano, ESP32 en Pico. Als er meerdere boardtypen worden gevonden, kunt u het gewenste type selecteren. Daarna wordt de bijbehorende USB-poort weergegeven.;Recherche Nano, ESP32 et Pico sur tous les ports USB. Si plusieurs types de cartes sont trouvés, vous pouvez sélectionner celui que vous souhaitez utiliser. Le port USB correspondant s'affiche ensuite.;Cerca Nano, ESP32 e Pico su tutte le porte USB. Se vengono rilevati più tipi di scheda, è possibile selezionare quello desiderato. Verrà quindi mostrata la porta USB corrispondente.;Busca Nano, ESP32 y Pico en todos los puertos USB. Si se encuentran varios tipos de placa, puede seleccionar el que desea usar. A continuación se muestra el puerto USB correspondiente.;Søger efter Nano, ESP32 og Pico på alle USB-porte. Hvis der findes flere boardtyper, kan du vælge den ønskede type. Derefter vises den tilhørende USB-port.
+Sucht an allen USB-Anschlüssen nach Lichtmaschinen (Nano, ESP32, Pico). Werden unterschiedliche Typen gefunden, können Sie die gewünschte Lichtmaschine auswählen. Anschließend wird der passende USB-Port angezeigt.;Searches all USB ports for Lichtmaschine devices (Nano, ESP32, Pico). If different types are found, select the Lichtmaschine you want to use. The matching USB port is then shown.;Zoekt op alle USB-poorten naar Lichtmaschine-apparaten (Nano, ESP32, Pico). Als er verschillende typen worden gevonden, kunt u de gewenste Lichtmaschine selecteren. Daarna wordt de bijbehorende USB-poort weergegeven.;Recherche les appareils Lichtmaschine (Nano, ESP32, Pico) sur tous les ports USB. Si différents types sont détectés, vous pouvez sélectionner la Lichtmaschine souhaitée. Le port USB correspondant s'affiche ensuite.;Cerca i dispositivi Lichtmaschine (Nano, ESP32, Pico) su tutte le porte USB. Se vengono rilevati tipi diversi, è possibile selezionare la Lichtmaschine desiderata. Verrà quindi mostrata la porta USB corrispondente.;Busca dispositivos Lichtmaschine (Nano, ESP32, Pico) en todos los puertos USB. Si se encuentran distintos tipos, puede seleccionar la Lichtmaschine que desea usar. A continuación se muestra el puerto USB correspondiente.;Søger efter Lichtmaschine-enheder (Nano, ESP32, Pico) på alle USB-porte. Hvis der findes forskellige typer, kan du vælge den ønskede Lichtmaschine. Derefter vises den tilhørende USB-port.
+Farbe wählen;Choose color;Kleur kiezen;Choisir la couleur;Scegli colore;Elegir color;Vælg farve
+Farbe (R, G, B);Color (R, G, B);Kleur (R, G, B);Couleur (R, G, B);Colore (R, G, B);Color (R, G, B);Farve (R, G, B)
+Farbe 1 (R1, G1, B1);Color 1 (R1, G1, B1);Kleur 1 (R1, G1, B1);Couleur 1 (R1, G1, B1);Colore 1 (R1, G1, B1);Color 1 (R1, G1, B1);Farve 1 (R1, G1, B1)
+Farbe 2 (R2, G2, B2);Color 2 (R2, G2, B2);Kleur 2 (R2, G2, B2);Couleur 2 (R2, G2, B2);Colore 2 (R2, G2, B2);Color 2 (R2, G2, B2);Farve 2 (R2, G2, B2)
+Hier wird der Name für den Zustand 0 eingegeben, zum Beispiel Test0. Die Variablen für die weiteren Zustände heißen dann Test1, Test2, … (Zielvariable 1, 2, … in der Beschreibung).;Enter the name for state 0 here, for example Test0. The variables for the further states are then called Test1, Test2, … (target variable 1, 2, … in the description).;Voer hier de naam voor status 0 in, bijvoorbeeld Test0. De variabelen voor de volgende statussen heten dan Test1, Test2, … (doelvariabele 1, 2, … in de beschrijving).;Saisissez ici le nom de l'état 0, par exemple Test0. Les variables des états suivants s'appellent alors Test1, Test2, … (variable cible 1, 2, … dans la description).;Inserire qui il nome per lo stato 0, ad esempio Test0. Le variabili per gli stati successivi si chiamano quindi Test1, Test2, … (variabile di destinazione 1, 2, … nella descrizione).;Introduzca aquí el nombre del estado 0, por ejemplo Test0. Las variables de los estados siguientes se llaman entonces Test1, Test2, … (variable de destino 1, 2, … en la descripción).;Indtast her navnet for tilstand 0, for eksempel Test0. Variablerne for de følgende tilstande hedder så Test1, Test2, … (målvariabel 1, 2, … i beskrivelsen).
+1. Welche Modellbahnzentrale haben Sie?;;;;;;
+Alle Tabellen, die Sie nicht brauchen, werden ausgeblendet. Sie sehen später nur die Seite Ihrer Zentrale.;;;;;;
+2. Welche Lichtmaschine haben Sie?;;;;;;
+Automatisch erkennen;;;;;;
+Suche läuft …;;;;;;
+Gefunden: {name} am Anschluss {port}. Sie ist oben ausgewählt.;;;;;;
+Keine Lichtmaschine gefunden. Bitte per USB anschließen und noch einmal versuchen oder oben selbst auswählen.;;;;;;
+Lichtmaschine anschließen und auf „Automatisch erkennen“ klicken, dann wird sie für Sie ausgewählt.;;;;;;
+3. So schicken Sie Ihr erstes Programm zur Lichtmaschine;;;;;;
+Wählen Sie zuerst Zentrale und Lichtmaschine. Dann steht hier die Anleitung für Ihre Kombination.;;;;;;
+In der Tabelle „{tabelle}“ liegt schon ein Startprogramm für die {lichtmaschine}. Sie müssen es nur noch hochladen.;;;;;;
+Für diese Auswahl gibt es noch kein Startprogramm. Es wird die leere Tabelle „{tabelle}“ geöffnet.;;;;;;
+Verbinden Sie die Lichtmaschine per USB mit dem Computer.;;;;;;
+Klicken Sie in der Tabelle auf den Knopf;;;;;;
+Das Programm wird zur Lichtmaschine übertragen. Die Heartbeat-LED blinkt, wenn es geklappt hat.;;;;;;
+Für eigene Beleuchtungen klicken Sie oben links auf;;;;;;
+Das Programm fragt Schritt für Schritt alles ab. Danach übertragen Sie wieder mit „Setup übertragen“.;;;;;;
+Geladen wird: {pfad};;;;;;
+Diese Startseite nicht mehr anzeigen;;;;;;
+Wieder einschalten: Einstellungen → Allgemein → „Startseite beim Programmstart anzeigen“.;;;;;;
+Überspringen;;;;;;
+Anfangen;;;;;;
+Sie befinden sich im Anfänger-Modus.;;;;;;
+In diesem Modus sind viele Funktionen der MobaLedLib ausgeblendet. Sie können ihn unter Einstellungen → Allgemein ausschalten und haben dann die volle Funktionalität der MobaLedLib zur Verfügung.;;;;;;
+Willkommen! In drei Schritten zur ersten Beleuchtung;;;;;;
+Sagen Sie uns kurz, welche Zentrale und welche Lichtmaschine Sie haben. Danach öffnen wir die passende Tabelle mit einem fertigen Startprogramm. Sie müssen es nur noch zur Lichtmaschine schicken.;;;;;;
+DCC-Zentrale;;;;;;
+Selectrix-Zentrale;;;;;;
+LNet-Zentrale;;;;;;
+Märklin CAN-Bus;;;;;;
+Ohne Zentrale;;;;;;
+Es wird die Tabelle DCC benutzt;;;;;;
+Lichtmaschine Classic / Mini;;;;;;
+Lichtmaschine Pro;;;;;;
+Lichtmaschine Pico Zero / MoLLi;;;;;;
+Setup;;;;;;
+übertragen;;;;;;
+Wizard;;;;;;
+Die Tabelle der gewählten Zentrale wurde nicht gefunden.;;;;;;
+Startseite: Tabelle vorbereiten;;;;;;
+Startseite beim Programmstart anzeigen;;;;;;
+"Mit Haken (Vorgabe) zeigt das Programm beim Start die Startseite für Einsteiger: Auswahl der Modellbahnzentrale und der Lichtmaschine, Anleitung für das erste Programm und der Knopf Anfangen. Auf der Startseite kann man sie mit dem Haken „Diese Startseite nicht mehr anzeigen“ ausschalten; hier schaltet man sie wieder ein.";;;;;;
