@@ -7,8 +7,8 @@ Gilt ab Version 1.39. Neueste Version oben.
 
 ## Version 5.49 (2026-11-26)
 
-Korrekturen:
-- Die Anleitung ist nachgetragen: Logic, Hardware Optionen und Geräteauswahl, Tabelle bedienen, Selectrix, Farb Test, MobaLedLib 3.6.0, Verbindung (Statusmeldung, Trennen, Anschluss -7) und die Startseite (Pico Zero nur DCC, Bilder).
+Neue Funktionen:
+- Neues Menü „Werkzeuge“ mit Datenübertragung, Firmware installieren, ESP32-Firmware über WLAN hochladen und Wartung (Entwicklungsumgebung, PlatformIO, Bibliotheken). Diese Funktionen stehen nicht mehr in Einstellungen und Hardware Optionen. Im Anfänger Modus ist das Menü ausgeblendet. (Wunsch von Jürgen, Issue 75)
 
 ## Version 5.48 (2026-11-26)
 

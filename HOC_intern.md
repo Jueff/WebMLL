@@ -9,27 +9,79 @@ Pfade beziehen sich auf den Ordner `python`.
 
 ---
 
-## 5.49 (2026-11-26), Dokumente, Test und Ordnung (kein Programmverhalten)
+## 2.12 (2026-10-23) - Release-Stand
 
-Sitzung zur Übernahme des Stands: Das Paket 5.48 (Änderungen seit 4.93) wurde mit dem Gesamtpaket 5.47 und dem Release-Stand 5.41 abgeglichen. Dabei zeigte sich:
+Release-Stand 2.12 auf Wunsch des Entwicklers („Release bauen“). **Neu im Ablauf:** Es gibt kein von mir gebautes `webmobaledlib.zip` mehr (Ursache des Vorfalls 2 war ein ZIP mit altem Stand: ich kenne die Hilfsdateien, die Excel-Datei und die csv-Dateien des Entwicklers nicht). Das GitHub-Release baut nur `zip_erstellen.bat` (1.04) aus dem vollständigen Ordner `python`, mit Prüfliste und Prüfung. Das frühere `webmobaledlib.zip` (Stand 2.04, nur gelieferte Dateien) liegt als `archiv/webmobaledlib_Dateien_Stand_2.04.zip`.
 
-* **Anleitung zurückgefallen:** `install/ANLEITUNG_Installation.md` lag im Ordner `python` noch auf 5.23 (die PDF waren 5.39). Die Fassung 5.39 stammt aus dem Release-Stand 5.41 (`webmobaledlib_Dateien_Stand_5.41.zip`) und wurde übernommen; danach wurden die Änderungen 5.26 bis 5.48 nachgetragen (Logic, Hardware Optionen und Geräteauswahl, Tabelle bedienen, Selectrix, Farb Test, MobaLedLib 3.6.0, Verbindung mit Statusmeldung, Trennen und Anschluss -7; Startseite: Pico Zero nur DCC, Bilder). `LIESMICH_Wiki_Gesamt.md` 1.58 (Release-Stand 5.41) ersetzt die Fassung 1.57 des Pakets seit 4.93.
-* **Letztes Release ist 5.41** (nicht 4.93): Basis der kumulativen Änderungspakete ab jetzt: `Aenderungen_seit_Stand_5.41_Stand_5.49.zip`.
-* **`test_dyn_config_wlan.py`:** In `UploadFlowTests` fehlten in der Testumgebung von `Compile_and_Upload_ESP32_Setup` die Namen `Ensure_Git` und `subprocess` (seit `M08_ARDUINO` 1.33 gebraucht, die Funktion wird mit `ast` aus dem Quelltext geholt). Drei Fehler, schon vor 5.46 vorhanden; der Programmcode war in Ordnung. Jetzt 18 Tests bestanden.
-* **`HOC_intern.md`:** Die Einträge 5.26 bis 5.29 standen über 5.48 (unter dem Eintrag „2.12 Release-Stand“), und dieser stand selbst am Anfang statt neben dem Eintrag 2.12. Beide sind an die richtige Stelle verschoben (Länge der Datei unverändert, 416 Einträge).
-* **KI-Prompt** `KI_prompt/KI_ENTWICKLUNG_Prompt.md` 1.03: Stand 5.49, letztes Release 5.41, Regel zu den zwei Änderungs-ZIP, neue technische Fallen (`logger` nach `vb2py.vbdebug`, Sperren-Reihenfolge, Anschluss kleiner gleich 0, Startseite und `Lichtmaschinen_prop.json`, Beiträge von Dritten), Testhinweise, neue Liste der offenen Punkte.
+| Datei (Ordner `/mnt/user-data/outputs`) | Inhalt |
+|---|---|
+| `webmobaledlib_Dateien_Stand_2.12.zip` | **alle** von mir gelieferten Dateien (113, im Ordner `python`) zum Einspielen in den Ordner `python` des Entwicklers; **kein** Update-ZIP |
+| `ANLEITUNG_Installation.pdf` | Anleitung 2.68, 27 Seiten |
+| `BETATEST_Checkliste.pdf` | Checkliste 1.39, 8 Seiten |
+| `RELEASE_Hinweise_2.12.md` | Hinweise für GitHub (Anhänge: das mit `zip_erstellen.bat` gebaute ZIP und beide PDF) |
+| `VERSIONEN_Stand_2.12_2026-10-23.txt` | Versionen der 105 gelieferten Dateien mit Versionsangabe |
+| `RELEASE_Ablauf.md` | Ablauf für den Entwickler (2.12) |
+| `archiv/` | frühere Release-Hinweise, Versionslisten und ZIP (nichts gelöscht) |
+
+**Geprüft:** Dateipaket: `testzip` in Ordnung, alle 113 Dateien gleich dem Ordner `headless`, keine `__pycache__`, alle `.py` kompilieren, Versionsprüfung „alles passt“ (50 Einträge), 11 Dateien ausführbar (`.sh`, `.command`). **Nachbau des Entwickler-Ablaufs mit seinem echten Paket (1678 Dateien, Stand 2.05):** meine 113 Dateien darübergelegt, Prüfliste, ZIP gepackt, `release_tools check --previous <sein ZIP>`: **in Ordnung** (Version 2.12, 1678 Dateien, 6 neue, 0 fehlende, ZIP 16,6 MB). Alle 15 Prüfreihen laufen (17, 26, 15, 70, 28, 19, 43, 26, 16, 27, 8, 8, 8, 5, 9 Prüfungen). **Nicht geprüft:** `zip_erstellen.bat` und die Reparaturskripte unter Windows, ein abgebrochenes Update unter Windows, das Verhalten mit Acronis, der Download von GitHub.
+
+## 5.29 (2026-11-25), Logic: Eingänge in Gruppen, SwitchC
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_logic_builder.py` | 1.02 | Je Eingang zwei Felder: Art des Eingangs (`inch`, `vars`, Schalter A bis D, eigener Name; `group_of` bestimmt die Gruppe aus dem Namen) und der Eingang selbst (Auswahl #InCh, #InCh+1…+7; Variablen der Tabelle; Nummernfeld 1 bis 250 für SwitchA bis SwitchD; Textfeld). Die lange Liste SwitchA1…D16 entfällt (`switch_variables` entfernt). SwitchC aufgenommen |
+| `csv/Web_Languages.csv` | | Hinweistext neu (ohne Semikolon: Trennzeichen!), 10 neue Zeilen |
+| `webmobaledlib.py` | 5.29 | VERSION, REQUIRED_FILES |
+
+## 5.28 (2026-11-25), Logic: Eingangsvariablen SwitchA#, SwitchB#, SwitchD#
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_logic_builder.py` | 1.01 | `switch_variables()`: SwitchA1…16, SwitchB1…16, SwitchD1…16 stehen in der Auswahl (andere Nummern bis 250 eintippen); `check_dnf` prüft die Nummer 1 bis 250 (wie `Is_Switch_Var_then_Add_to_Ctr`); neuer Hinweistext |
+| `csv/Web_Languages.csv` | | Hinweistext geändert, eine Zeile neu |
+| `webmobaledlib.py` | 5.28 | VERSION, REQUIRED_FILES |
+
+SwitchC bewusst nicht aufgenommen (nicht gewünscht); der Name lässt sich eintippen.
+
+## 5.27 (2026-11-25), Logic-Dialog: Fehler beim Öffnen
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_form_other.py` | 1.16 | `_sheet_variables`: Der Typ der Parameter wird selbst aus `Par_Description` gelesen. `M10.Get_Par_Data` meldet unbekannte Namen (`On_Min`, `On_Limit` u. a. aus Makros anderer Zeilen der Tabelle) mit „Internal Error“ und beendet den Dialog; Logic ließ sich deshalb nicht öffnen |
+| `webmobaledlib.py` | 5.27 | VERSION, REQUIRED_FILES |
+
+## 5.26 (2026-11-25), Logic: Baukasten statt Textformel
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_logic_builder.py` | 1.00 | NEU, wiederverwendbarer Baustein: `parse_dnf`, `format_dnf`, `describe_dnf`, `check_dnf`, `variables_in_line` (reine Funktionen) und Klasse `LogicBuilder` (Bedingungen = UND-Gruppen, mit ODER verbunden, Schalter „nicht“, Auswahl mit freier Eingabe, Klartext-Vorschau, Makrotext, Prüfung, Umschalter „Als Text bearbeiten“). `FUNCS` nennt die Makros, die ihn benutzen (zurzeit `Logic`) |
+| `_web/web_form_other.py` | 1.15 | Parameter `...` der Funktionen in `FUNCS` → `LogicBuilder`; Ok prüft vorher (`try_ok`); kürzere Beschreibung; Bezeichnungen „Ergebnisvariable“, „Bedingungen“; `_sheet_variables`: Variablen der aktuellen Tabelle (Parameter vom Typ `Var` der Makros der Spalte Beleuchtung, Namen in Logic-Ausdrücken) |
+| `csv/Web_Languages.csv` | | 31 neue Zeilen (Deutsch, Englisch; übrige Sprachen fallen auf Englisch zurück) |
+| `webmobaledlib.py` | 5.26 | VERSION, REQUIRED_FILES |
+| Wiki `pg_tabelle.txt` | 1.14 | Abschnitt „Die Funktion Logic“; `seiten_update` 1.14 |
+
+Das Makro `Logic(Erg, A AND B OR …)` und `Create_Result` sind unverändert; der Baukasten erzeugt denselben Text. Nicht im Browser geprüft, nur die reinen Funktionen (Test mit 11 Ausdrücken).
+
+## 5.49 (2026-11-26), Issue 75 (Jürgen): Menü Werkzeuge
+
+**Wunsch:** „Einstellungen/Datenübertragung“ hat in Einstellungen nichts verloren; „Firmware übertragen“ und die Entwicklungsoptionen sind keine Hardware-Optionen. Harold: Menü **Werkzeuge**; im Anfänger Modus nicht sichtbar; die Entwicklungsumgebung nach **Werkzeuge/Wartung**.
+
+**Umsetzung:**
+* Neues Menü **Werkzeuge** (zwischen Einstellungen und Hilfe): Datenübertragung (aus Einstellungen), Firmware installieren …, ESP32-Firmware über WLAN hochladen … (der Knopf im Reiter WLAN (OTA) bleibt), Trenner, Wartung …
+* **Firmware installieren …** und **Wartung …** öffnen das Fenster der Hardware Optionen mit nur den passenden Reitern (`web_form_options.VIEW`, `Show(view=...)`): Firmware = Reiter Firmware Installation; Wartung = Reiter Entwicklungsumgebung und Update (ARDUINO-IDE: Bibliotheken und Boards). Die Hardware Optionen enthalten diese drei Reiter nicht mehr; die Handler der Knöpfe bleiben unverändert. In den Teilfenstern fehlen ESP Einstellungen und WLAN (OTA). Sind keine Reiter übrig (zum Beispiel Anfänger Modus), öffnen sich die Hardware Optionen wie bisher.
+* Im **Anfänger Modus** fehlt das ganze Menü Werkzeuge (`menu_elems["werkzeuge"]`, `apply_optional_tabs`). Die Datenübertragung ist damit für Anfänger nicht mehr im Menü (sie war vorher in Einstellungen sichtbar).
+* Texte „Werkzeuge“, „Wartung“, „Wartung …“, „Firmware installieren …“ sind noch **nicht übersetzt** (erscheinen deutsch).
+* Dokumentation: ANLEITUNG_Installation (5.49) und sieben Wiki-Seiten angepasst, `LIESMICH_Wiki_Gesamt` 1.59.
 
 | Datei | Version | Änderung |
 |-|-|-|
-| `webmobaledlib.py` | 5.49 | Version, History |
-| `test_dyn_config_wlan.py` | 1.06 | Testumgebung ergänzt |
-| `KI_prompt/KI_ENTWICKLUNG_Prompt.md` | 1.03 | auf Stand 5.49 |
-| `install/ANLEITUNG_Installation.md` | 5.49 | 5.39 aus dem Release-Stand, Nachträge 5.26 bis 5.48 |
-| `HOC_intern.md` | 1.128 | Reihenfolge, dieser Eintrag |
-| `HOC_Anwender.md` | 1.134 | Eintrag 5.49 |
+| `_web/web_form_options.py` | 1.75 | VIEW, Reiter Wartung/Firmware nur im Teilfenster, `Show(view=...)` |
+| `webmobaledlib.py` | 5.49 | Menü Werkzeuge, Handler, Anfänger Modus, REQUIRED_FILES |
+| `install/ANLEITUNG_Installation.md` | 5.49 | neuer Abschnitt, Pfade angepasst |
+| `install/BETATEST_Checkliste.md` | 4.26 | Punkt 412 |
+| Wiki | siehe oben | `wz_datenuebertragung`, `werkzeuge`, `modus`, `arduino_ide`, `ota`, `wz_arduino_einstellungen`, `pg_arduino` |
 
-**Tests:** `test_dyn_config_wlan` 18, `test_single_connection` 14, `test_dyn_config` 163 Prüfungen, `test_identify` 14, `test_macro_edit` 17, `test_table_sync` 24, `test_protocol_switch` 18, `test_esp32_build_directory` 3: alle bestanden; Start des Backends mit frischem Datenordner: Version 5.49. **Bekannt, unverändert:** `test_hardware_dialog` 4 Fehler (`_info` fehlt), `test_headless_contract` Teil 2 braucht echtes Tk.
-**Nicht geprüft:** Browser, Hardware, Windows, macOS, Raspberry Pi. Die PDF in `install_manual/` (Anleitung 4.54, Checkliste 3.36 im Ordner `python`) sind noch alt und werden mit dem nächsten Release-Stand neu gebaut. Kein Checklisten-Punkt nötig (keine sichtbare Änderung).
+**Nicht im Browser geprüft, nur Syntaxprüfung.**
 
 ## 5.48 (2026-11-26), Korrektur: -7 im Anschluss der Tabelle
 
@@ -395,43 +447,6 @@ Das Paket `Ver_3.6.0.zip` (Excel-Programm, Pattern Configurator, Symbole, Beispi
 
 **Geprüft:** `python test_hardware_dialog.py` (9 Tests), `python -m py_compile` aller geänderten Dateien, Übersetzungen der neuen Texte in allen Sprachen, Versionsprüfung (REQUIRED\_FILES).
 **Nicht geprüft:** Oberfläche im Browser, echte Arbeitsmappe (Zeile einfügen/löschen, Autosave), Hardware (Erkennen, Ident-Blinken, Upload mit READ\_LDR / ENABLE\_STORE\_STATUS auf Nano und Pico), Windows/macOS/Linux/Raspberry Pi. Export eines einzelnen Blattes (`.MLL_pgf`) nimmt Schnelles Update und Display-Einstellung nicht mit.
-
-## 5.29 (2026-11-25), Logic: Eingänge in Gruppen, SwitchC
-
-| Datei | Version | Änderung |
-|---|---|---|
-| `_web/web_logic_builder.py` | 1.02 | Je Eingang zwei Felder: Art des Eingangs (`inch`, `vars`, Schalter A bis D, eigener Name; `group_of` bestimmt die Gruppe aus dem Namen) und der Eingang selbst (Auswahl #InCh, #InCh+1…+7; Variablen der Tabelle; Nummernfeld 1 bis 250 für SwitchA bis SwitchD; Textfeld). Die lange Liste SwitchA1…D16 entfällt (`switch_variables` entfernt). SwitchC aufgenommen |
-| `csv/Web_Languages.csv` | | Hinweistext neu (ohne Semikolon: Trennzeichen!), 10 neue Zeilen |
-| `webmobaledlib.py` | 5.29 | VERSION, REQUIRED_FILES |
-
-## 5.28 (2026-11-25), Logic: Eingangsvariablen SwitchA#, SwitchB#, SwitchD#
-
-| Datei | Version | Änderung |
-|---|---|---|
-| `_web/web_logic_builder.py` | 1.01 | `switch_variables()`: SwitchA1…16, SwitchB1…16, SwitchD1…16 stehen in der Auswahl (andere Nummern bis 250 eintippen); `check_dnf` prüft die Nummer 1 bis 250 (wie `Is_Switch_Var_then_Add_to_Ctr`); neuer Hinweistext |
-| `csv/Web_Languages.csv` | | Hinweistext geändert, eine Zeile neu |
-| `webmobaledlib.py` | 5.28 | VERSION, REQUIRED_FILES |
-
-SwitchC bewusst nicht aufgenommen (nicht gewünscht); der Name lässt sich eintippen.
-
-## 5.27 (2026-11-25), Logic-Dialog: Fehler beim Öffnen
-
-| Datei | Version | Änderung |
-|---|---|---|
-| `_web/web_form_other.py` | 1.16 | `_sheet_variables`: Der Typ der Parameter wird selbst aus `Par_Description` gelesen. `M10.Get_Par_Data` meldet unbekannte Namen (`On_Min`, `On_Limit` u. a. aus Makros anderer Zeilen der Tabelle) mit „Internal Error“ und beendet den Dialog; Logic ließ sich deshalb nicht öffnen |
-| `webmobaledlib.py` | 5.27 | VERSION, REQUIRED_FILES |
-
-## 5.26 (2026-11-25), Logic: Baukasten statt Textformel
-
-| Datei | Version | Änderung |
-|---|---|---|
-| `_web/web_logic_builder.py` | 1.00 | NEU, wiederverwendbarer Baustein: `parse_dnf`, `format_dnf`, `describe_dnf`, `check_dnf`, `variables_in_line` (reine Funktionen) und Klasse `LogicBuilder` (Bedingungen = UND-Gruppen, mit ODER verbunden, Schalter „nicht“, Auswahl mit freier Eingabe, Klartext-Vorschau, Makrotext, Prüfung, Umschalter „Als Text bearbeiten“). `FUNCS` nennt die Makros, die ihn benutzen (zurzeit `Logic`) |
-| `_web/web_form_other.py` | 1.15 | Parameter `...` der Funktionen in `FUNCS` → `LogicBuilder`; Ok prüft vorher (`try_ok`); kürzere Beschreibung; Bezeichnungen „Ergebnisvariable“, „Bedingungen“; `_sheet_variables`: Variablen der aktuellen Tabelle (Parameter vom Typ `Var` der Makros der Spalte Beleuchtung, Namen in Logic-Ausdrücken) |
-| `csv/Web_Languages.csv` | | 31 neue Zeilen (Deutsch, Englisch; übrige Sprachen fallen auf Englisch zurück) |
-| `webmobaledlib.py` | 5.26 | VERSION, REQUIRED_FILES |
-| Wiki `pg_tabelle.txt` | 1.14 | Abschnitt „Die Funktion Logic“; `seiten_update` 1.14 |
-
-Das Makro `Logic(Erg, A AND B OR …)` und `Create_Result` sind unverändert; der Baukasten erzeugt denselben Text. Nicht im Browser geprüft, nur die reinen Funktionen (Test mit 11 Ausdrücken).
 
 ## 5.25 (2026-11-25), Begriff LocoNet entfernt
 
@@ -5371,22 +5386,6 @@ Tests (neu): `test_i18n.py` (36, Ersatzobjekte für NiceGUI): Katalog (216 Texte
 Tests (neu, `test_volatile.py`, 20; ersetzt `test_generated.py`): die 6 Dateien erkannt (auch Schreibweise), die 11 Gegenbeispiele nicht; nicht geschützt und nicht übersprungen; Prüfliste und ZIP enthalten sie, `check` in Ordnung; Update: 6 veränderte Dateien bei „gleich“, nach dem Update Byte für Byte wie vom Programm hinterlassen; Prüfung und `--all` ohne Fehler; zwei fehlende: bei „neu“ und installiert; späteres Release ohne sie löscht sie nicht; `repair.py --check-only` (nur die fehlende Programmdatei), Reparatur stellt die fehlende `.cmd` her und ersetzt die geänderte nicht, auch nicht mit `--all`; **mit Ihrem echten Paket**: alle 6 und die 6 anderen `.cmd`-Dateien in der Prüfliste, `check` in Ordnung (0 fehlende gegenüber dem vorherigen Release), Update auf das eigene Release mit allen 6 vom Programm verändert: nichts zu tun, Prüfung in Ordnung. Die übrigen Prüfreihen laufen weiter.
 
 **Release-Stand 2.13** (ersetzt den Stand 2.12, der die Dateien noch ausgeklammert hatte; die Dokumente von 2.12 liegen in `archiv/`): `webmobaledlib_Dateien_Stand_2.13.zip` (113 Dateien, alle von mir gelieferten, **kein** Update-ZIP), `ANLEITUNG_Installation.pdf` (2.69, 27 Seiten), `BETATEST_Checkliste.pdf` (1.40, 8 Seiten), `RELEASE_Hinweise_2.13.md`, `VERSIONEN_Stand_2.13_2026-10-23.txt` (105 Dateien), `RELEASE_Ablauf.md`, `zip_erstellen.bat` (1.05). Das GitHub-ZIP baut weiterhin nur `zip_erstellen.bat` aus dem vollständigen Ordner des Entwicklers. **Geprüft:** Dateipaket unbeschädigt, alle 113 Dateien gleich dem Ordner `headless`, alle `.py` kompilieren, Versionsprüfung „alles passt“ (50 Einträge); Nachbau mit seinem echten Paket (Stand 2.05) plus meinen Dateien: `check --previous` in Ordnung, Version 2.13, **1684 Dateien (die 6 LEDs_AutoProg-Dateien enthalten)**, 6 neue, 0 fehlende; alle 15 Prüfreihen laufen (20, 26, 15, 70, 28, 19, 43, 26, 16, 27, 8, 8, 8, 5, 9). **Nicht geprüft:** `zip_erstellen.bat` und die Reparaturskripte unter Windows, ein abgebrochenes Update unter Windows, Acronis, Download von GitHub.
-
-## 2.12 (2026-10-23) - Release-Stand
-
-Release-Stand 2.12 auf Wunsch des Entwicklers („Release bauen“). **Neu im Ablauf:** Es gibt kein von mir gebautes `webmobaledlib.zip` mehr (Ursache des Vorfalls 2 war ein ZIP mit altem Stand: ich kenne die Hilfsdateien, die Excel-Datei und die csv-Dateien des Entwicklers nicht). Das GitHub-Release baut nur `zip_erstellen.bat` (1.04) aus dem vollständigen Ordner `python`, mit Prüfliste und Prüfung. Das frühere `webmobaledlib.zip` (Stand 2.04, nur gelieferte Dateien) liegt als `archiv/webmobaledlib_Dateien_Stand_2.04.zip`.
-
-| Datei (Ordner `/mnt/user-data/outputs`) | Inhalt |
-|---|---|
-| `webmobaledlib_Dateien_Stand_2.12.zip` | **alle** von mir gelieferten Dateien (113, im Ordner `python`) zum Einspielen in den Ordner `python` des Entwicklers; **kein** Update-ZIP |
-| `ANLEITUNG_Installation.pdf` | Anleitung 2.68, 27 Seiten |
-| `BETATEST_Checkliste.pdf` | Checkliste 1.39, 8 Seiten |
-| `RELEASE_Hinweise_2.12.md` | Hinweise für GitHub (Anhänge: das mit `zip_erstellen.bat` gebaute ZIP und beide PDF) |
-| `VERSIONEN_Stand_2.12_2026-10-23.txt` | Versionen der 105 gelieferten Dateien mit Versionsangabe |
-| `RELEASE_Ablauf.md` | Ablauf für den Entwickler (2.12) |
-| `archiv/` | frühere Release-Hinweise, Versionslisten und ZIP (nichts gelöscht) |
-
-**Geprüft:** Dateipaket: `testzip` in Ordnung, alle 113 Dateien gleich dem Ordner `headless`, keine `__pycache__`, alle `.py` kompilieren, Versionsprüfung „alles passt“ (50 Einträge), 11 Dateien ausführbar (`.sh`, `.command`). **Nachbau des Entwickler-Ablaufs mit seinem echten Paket (1678 Dateien, Stand 2.05):** meine 113 Dateien darübergelegt, Prüfliste, ZIP gepackt, `release_tools check --previous <sein ZIP>`: **in Ordnung** (Version 2.12, 1678 Dateien, 6 neue, 0 fehlende, ZIP 16,6 MB). Alle 15 Prüfreihen laufen (17, 26, 15, 70, 28, 19, 43, 26, 16, 27, 8, 8, 8, 5, 9 Prüfungen). **Nicht geprüft:** `zip_erstellen.bat` und die Reparaturskripte unter Windows, ein abgebrochenes Update unter Windows, das Verhalten mit Acronis, der Download von GitHub.
 
 ## 2.12 (2026-10-23)
 

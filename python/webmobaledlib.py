@@ -68,7 +68,7 @@
 #   5.46  2026-11-26  Juergen Winkler, Pull Request 76 (dort V5.42): Verbindung: Statusmeldung neben dem Knopf zeigt Typ und Anschluss (Nicht verbunden - Pro/COM3, Verbunden mit Pro/COM3 - EFFECT Mode); eine negative Zahl im Anschluss der Lichtmaschine des Blatts ist ein Hinweis fuer den Auto-Reconnect (zuerst dieser Anschluss, am Start und nach dem Wiederherstellen, keine Suche ueber alle Anschluesse); der Knopf Mit Lichtmaschine verbinden heisst mit Verbindung Trennen (Menue: Trennen); nach Wiederherstellen eines zwischengespeicherten Stands passt sich die Verbindung an Typ und Anschluss des Blatts an; Strg+C beendet ohne Fehlermeldung; eine Verbindung pro Geraet: gemeinsame Anschluss-Sperre fuer Verbinden, Abfragen der Geraeteauswahl und Erkennung, eine offene Verbindung zum selben Anschluss oder ESP32 wird wiederverwendet (web_serial 1.20, M07_COM_Port_New 1.25, M07_COM_Port 1.17, KI_ENTWICKLUNG_Prompt 1.02, test_single_connection.py)
 #   5.47  2026-11-26  Fehler behoben: Upload ohne Anschluss in der Tabelle brach mit "module 'vb2py.logger' has no attribute 'warning'" ab (M07_COM_Port 1.18: logger nach den Importen neu gesetzt)
 #   5.48  2026-11-26  Fehler behoben (Harold): steht im Anschluss der Tabelle -7 (von Excel gesetzt, Hinweis fuer den Auto-Reconnect), kam beim Setup uebertragen 'Es ist kein PICO an COM Port COM-7 angeschlossen'; jetzt gilt eine Zahl <= 0 als kein Anschluss und es wird der Anschluss der aktiven Verbindung benutzt (F00_mainbuttons 1.03, M07_COM_Port 1.19)
-#   5.49  2026-11-26  Nur Dokumente und Tests (kein Programmverhalten): test_dyn_config_wlan 1.06 (Testumgebung), KI_ENTWICKLUNG_Prompt 1.03, Anleitung 5.49, HOC (Reihenfolge der Eintraege 5.26 bis 5.29)
+#   5.49  2026-11-26  Issue 75 (Juergen): neues Menue Werkzeuge mit Datenuebertragung (vorher Einstellungen), Firmware installieren, ESP32-Firmware ueber WLAN hochladen und Wartung (Entwicklungsumgebung und Update, vorher Reiter der Hardware Optionen); im Anfaenger Modus ausgeblendet (web_form_options 1.75)
 #   5.38  2026-11-26  Ohne Lichtmaschine kam die Meldung 'Fehler beim Oeffnen der Verbindung' bei jedem Wechsel auf einen Reiter mit Direktmodus (Farb Test, Servo Test, Sound Test): das automatische Verbinden beim Reiterwechsel scheitert jetzt nur einmal mit Meldung, danach wird nicht mehr versucht, bis eine Verbindung besteht oder der Anwender selbst verbindet (Menue, Testtasten)
 #   5.37  2026-11-26  Farb Test: Knopf 'Farb Test beenden' unten rechts (web_colorcheck 1.13); Set_ColTab oeffnet den Farb Test auch ohne Lichtmaschine, kein Anschluss noetig (M60_CheckColors 1.01); Parameterformular: Flags (OptCtrPar, CtrMode, RandMode) als aufklappbare Hakenliste (web_form_other 1.17, Web_Languages.csv)
 #   5.36  2026-11-26  Startseite: alle Kacheln gleich gross (auch Ohne Zentrale und die letzte Lichtmaschine), Raster statt Zeilenumbruch (web_startpage 1.05)
@@ -705,6 +705,7 @@ REQUIRED_FILES = {  # v1.75
     "proggen/M07_COM_Port_New.py": "1.25", "proggen/M07_COM_Port.py": "1.17", "_web/web_serial.py": "1.20",  # v5.46
     "proggen/M07_COM_Port.py": "1.18",  # v5.47
     "proggen/M07_COM_Port.py": "1.19", "proggen/F00_mainbuttons.py": "1.03",  # v5.48
+    "_web/web_form_options.py": "1.75",  # v5.49
 }  # v1.75
 FILE_PROBLEMS = []                                      # Zeilen der Abweichungen, gefuellt in main()  # v1.75
 
@@ -7621,6 +7622,14 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
     _wfo.arduino_settings_handler = open_arduino_settings  # v4.52: Knopf auf dem Reiter Entwicklungsumgebung der Optionen
     _wfo.ota_upload_handler = lambda: web_esp32_ota.open_dialog(pio=ota_arduino.Find_PIO() if ota_options.Is_PlatformIO() else None)  # v4.52: Knopf auf dem Reiter WLAN (OTA)
 
+    async def open_firmware_install():  # v5.49 (Issue 75)
+        """Menue Werkzeuge, Firmware installieren …: das Fenster mit dem Reiter Firmware Installation der Hardware Optionen"""  # v5.49
+        await run_command(lambda: __import__("proggen.F00_mainbuttons", fromlist=["x"]).UserForm_Options.Show(view="firmware"), "Firmware installieren")()  # v5.49
+
+    async def open_maintenance():  # v5.49 (Issue 75)
+        """Menue Werkzeuge, Wartung …: Entwicklungsumgebung (PlatformIO oder ARDUINO-IDE) und Update der Bibliotheken, vorher Reiter der Hardware Optionen"""  # v5.49
+        await run_command(lambda: __import__("proggen.F00_mainbuttons", fromlist=["x"]).UserForm_Options.Show(view="wartung"), "Wartung")()  # v5.49
+
     MENU = {
         "Datei": [
             ("Speichern (Strg+S)", permanent_save),  # v4.38 (Issue 49)
@@ -7672,9 +7681,16 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
             ("Spezial", lambda: open_settings_group("Spezialeinstellungen")),  # v4.51
             ("Erweiterungen …", open_extensions),  # v4.51: Schritt 2 verschiebt die Erweiterungen hierher, bis dahin das Optionenfenster auf dem Reiter Erweiterungen
             None,  # v4.51
-            ("Datenübertragung", lambda: __import__("_web.web_table_sync", fromlist=["open_dialog"]).open_dialog(on_changed=refresh_after_transfer)),  # v4.89 (Pull Request 57)
+            # ("Datenübertragung", lambda: __import__("_web.web_table_sync", fromlist=["open_dialog"]).open_dialog(on_changed=refresh_after_transfer)),  # v4.89 (Pull Request 57)  # v5.49 (entfallen: jetzt im Menue Werkzeuge)
             ("Einstellungen sichern …", export_settings),  # v4.24  # v4.51 (aus dem Menue Datei)
             ("Einstellungen übernehmen …", import_settings),  # v4.24  # v4.51 (aus dem Menue Datei)
+        ],
+        "Werkzeuge": [  # v5.49 (Issue 75, Juergen): Datenuebertragung, Firmware und Wartung stehen nicht mehr in den Einstellungen und Hardware Optionen; im Anfaenger Modus ausgeblendet
+            ("Datenübertragung", lambda: __import__("_web.web_table_sync", fromlist=["open_dialog"]).open_dialog(on_changed=refresh_after_transfer)),  # v4.89 (Pull Request 57)  # v5.49 (aus dem Menue Einstellungen)
+            ("Firmware installieren …", open_firmware_install),  # v5.49
+            ("ESP32-Firmware über WLAN hochladen …", lambda: web_esp32_ota.open_dialog(pio=ota_arduino.Find_PIO() if ota_options.Is_PlatformIO() else None)),  # v5.49 (auch im Reiter WLAN (OTA))
+            None,  # v5.49
+            ("Wartung …", open_maintenance),  # v5.49: Entwicklungsumgebung (PlatformIO, ARDUINO-IDE), Zwischenspeicher, Update der Bibliotheken
         ],
         "Hilfe": [
             ("Hilfe öffnen", run_command(open_help, "Hilfe")),
@@ -7690,7 +7706,10 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
                           ("Raspberry Pi neu starten ...", lambda: power_action(True))]
     with menu_slot:
         for title, items in MENU.items():
-            with ui.button(tr(title)).props("flat no-caps dense").classes("q-px-sm"):
+            # with ui.button(tr(title)).props("flat no-caps dense").classes("q-px-sm"):  # v5.49 (entfallen)
+            with ui.button(tr(title)).props("flat no-caps dense").classes("q-px-sm") as menu_button:  # v5.49
+                if title == "Werkzeuge":  # v5.49: das ganze Menue im Anfaenger Modus ausblenden (apply_optional_tabs)
+                    menu_elems["werkzeuge"] = menu_button  # v5.49
                 with ui.menu():
                     for entry in items:
                         if entry is None:

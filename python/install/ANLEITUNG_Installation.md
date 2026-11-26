@@ -208,11 +208,11 @@ Endet ein Weg mit einem Fehler (zum Beispiel `xdg-open`, weil kein Standardbrows
 Unter Linux zeigt `xdg-settings get default-web-browser`, welcher Browser als Standard eingetragen ist, und `xdg-settings set default-web-browser google-chrome.desktop`
 (oder `brave-browser.desktop`) stellt ihn ein.
 
-### 2.4a Die Startseite für Einsteiger (5.23, geändert 5.34 bis 5.43)
+### 2.4a Die Startseite für Einsteiger (5.23, geändert 5.34 bis 5.36)
 
 Beim Start zeigt MobaLedLib Studio eine Startseite. Sie führt in drei Schritten zum ersten Programm:
 
-1. **Lichtmaschine** wählen: Classic (Arduino Nano), Mini (Nano, nur DCC), Pro (ESP32), Pico Zero (Raspberry Pi Pico, nur DCC) oder MoLLi (Pico, nur DCC). Jede Lichtmaschine hat ihr eigenes Bild (5.43). Mit dem Knopf „Automatisch erkennen“ sucht das Programm eine angeschlossene Lichtmaschine und wählt sie aus. Die Lichtmaschinen stehen in der Liste `csv/Lichtmaschinen_prop.json`; ein neues Produkt wird nur dort ergänzt.
+1. **Lichtmaschine** wählen: Classic (Arduino Nano), Mini (Nano, nur DCC), Pro (ESP32), Pico Zero (Raspberry Pi Pico) oder MoLLi (Pico, nur DCC). Mit dem Knopf „Automatisch erkennen“ sucht das Programm eine angeschlossene Lichtmaschine und wählt sie aus. Die Lichtmaschinen stehen in der Liste `csv/Lichtmaschinen_prop.json`; ein neues Produkt wird nur dort ergänzt.
 2. **Modellbahnzentrale** wählen: Es erscheinen nur die Zentralen, die die gewählte Lichtmaschine unterstützt (DCC, Selectrix, LNet, CAN oder „Ohne Zentrale“, dann wird die Tabelle DCC benutzt). Wechselst du zu einer Lichtmaschine, die die gewählte Zentrale nicht kann, stellt das Programm DCC ein und sagt es dir.
 3. Die Seite erklärt, wie das erste Programm mit dem Knopf „Setup übertragen“ zur Lichtmaschine kommt und wie man mit dem „Dialog Wizard“ eigene Beleuchtungen anlegt.
 
@@ -1805,7 +1805,7 @@ Bei einer Fehlermeldung bitte den Text aus dem Installationsfenster und die Date
 
 ## ESP32: schnelle Konfiguration über WLAN (ab 4.71)
 
-In Hardware Optionen, Reiter Entwicklungsumgebung, **PlatformIO** wählen und „Schnelles Update: nur geänderte Konfiguration übertragen“ einschalten. WLAN und OTA am ESP32 wie bisher einrichten. Beim ersten Mal muss die Firmware mit der neuen Empfangsfunktion übertragen werden. Danach prüft das Programm bei jeder Übertragung über WLAN die Firmware im Gerät: Passt sie, wird nur die Konfiguration gesendet und der ESP32 startet neu. Ist die Konfiguration unverändert, wird nichts gesendet. Bei einem Übertragungsfehler gibt es bis zu drei Versuche, danach wird das ganze Programm hochgeladen. Ändern sich Hostname, OTA-Passwort oder OTA-Schalter, wird die Firmware ebenfalls neu übertragen. Pico und USB bleiben unverändert.
+Im Menü **Werkzeuge → Wartung** (bis 5.48: Hardware Optionen, Reiter Entwicklungsumgebung) **PlatformIO** wählen und „Schnelles Update: nur geänderte Konfiguration übertragen“ einschalten. WLAN und OTA am ESP32 wie bisher einrichten. Beim ersten Mal muss die Firmware mit der neuen Empfangsfunktion übertragen werden. Danach prüft das Programm bei jeder Übertragung über WLAN die Firmware im Gerät: Passt sie, wird nur die Konfiguration gesendet und der ESP32 startet neu. Ist die Konfiguration unverändert, wird nichts gesendet. Bei einem Übertragungsfehler gibt es bis zu drei Versuche, danach wird das ganze Programm hochgeladen. Ändern sich Hostname, OTA-Passwort oder OTA-Schalter, wird die Firmware ebenfalls neu übertragen. Pico und USB bleiben unverändert.
 
 ## ESP32: feste IP-Adresse statt DHCP (ab 4.79)
 
@@ -1820,7 +1820,7 @@ Der Mini-Farbtest funktioniert auch in der **Grafik-Ansicht** (Ketten und Anlage
 
 ## Datenübertragung zwischen PCs (ab 4.89)
 
-Unter **Einstellungen → Datenübertragung** kannst du Tabellen aus einem anderen PC im lokalen Netz übernehmen oder ausgewählte Zeilen in bestehende Tabellen einfügen. Die Freigabe am Quell-PC ist nach jedem Start ausgeschaltet und muss im Dialog bewusst aktiviert werden. Vor jeder Übernahme wird die bisherige Arbeitsmappe gesichert, „Letzten Import rückgängig machen“ stellt sie wieder her. Beim Einfügen ausgewählter Zeilen kannst du den LED-Kanal wählen (Standard 0). Die Tabellenansicht wird danach automatisch aktualisiert. Wird der Verbindungscode nicht akzeptiert, prüfe den im Quell-PC angezeigten Code und versuche es erneut. Die Daten werden im Netz unverschlüsselt übertragen, benutze die Funktion nur in einem vertrauenswürdigen Netz. Anleitung, Ports und Firewall: [Datenübertragung](../../DATENUEBERTRAGUNG.md).
+Unter **Werkzeuge → Datenübertragung** (bis 5.48: Einstellungen → Datenübertragung) kannst du Tabellen aus einem anderen PC im lokalen Netz übernehmen oder ausgewählte Zeilen in bestehende Tabellen einfügen. Die Freigabe am Quell-PC ist nach jedem Start ausgeschaltet und muss im Dialog bewusst aktiviert werden. Vor jeder Übernahme wird die bisherige Arbeitsmappe gesichert, „Letzten Import rückgängig machen“ stellt sie wieder her. Beim Einfügen ausgewählter Zeilen kannst du den LED-Kanal wählen (Standard 0). Die Tabellenansicht wird danach automatisch aktualisiert. Wird der Verbindungscode nicht akzeptiert, prüfe den im Quell-PC angezeigten Code und versuche es erneut. Die Daten werden im Netz unverschlüsselt übertragen, benutze die Funktion nur in einem vertrauenswürdigen Netz. Anleitung, Ports und Firewall: [Datenübertragung](../../DATENUEBERTRAGUNG.md).
 
 ## ESP32: Build erfolgreich, aber kein Upload (Korrektur 4.94)
 
@@ -1838,44 +1838,13 @@ Beim Laden einer MLL_PGF-Datei mit mehreren Tabellenblättern fragt das Programm
 
 Steht im seriellen Monitor `assert failed: lfs_fs_grow_` und blinkt die Platine dauernd, liegt im Flash ein altes Dateisystem eines früheren Projekts. Ab 4.97 löscht das Programm nach dem Hochladen per USB das Dateisystem des ESP32 selbst; die WLAN-Zugangsdaten bleiben erhalten, die Konfiguration wird danach neu übertragen. Ein Gerät, das schon abstürzt, wird durch **erneutes Hochladen per USB** repariert (nicht über WLAN).
 
-## Logic: Eingabefenster für die logische Verknüpfung (5.26 bis 5.29)
+## Neues Menü Werkzeuge (ab 5.49)
 
-Die Funktion **Logic** hat ein eigenes Eingabefenster. Du stellst die Bedingungen aus Eingängen zusammen: Innerhalb einer Bedingung gilt **UND**, zwischen den Bedingungen **ODER**, mit „nicht“ kehrst du einen Eingang um. Eine Vorschau zeigt den Ausdruck in Klartext, eine Prüfung meldet Fehler vor dem Speichern. Den Makrotext kannst du weiter von Hand bearbeiten (Umschalter „Als Text bearbeiten“).
+Auf Wunsch von Jürgen (Issue 75) gibt es zwischen **Einstellungen** und **Hilfe** das Menü **Werkzeuge**. Es enthält Dinge, die keine Einstellungen oder Hardware-Optionen sind:
 
-Die Eingänge sind in Gruppen geordnet: **Eingang dieser Zeile**, **Variable der Tabelle**, **Schalter A, B, C, D** (mit Nummernfeld 1 bis 250) und **Eigener Name**. Das Fenster öffnet sich auch, wenn in der Tabelle Makros mit Parametern wie On_Min oder On_Limit stehen (Korrektur 5.27).
+- **Datenübertragung** (vorher Einstellungen → Datenübertragung),
+- **Firmware installieren …** (vorher Hardware Optionen, Reiter Firmware Installation),
+- **ESP32-Firmware über WLAN hochladen …** (gibt es weiterhin auch im Reiter WLAN (OTA) der Hardware Optionen),
+- **Wartung …** (vorher Hardware Optionen, Reiter Entwicklungsumgebung und Update): PlatformIO oder ARDUINO-IDE wählen, Schnelles Update, PlatformIO prüfen und Zwischenspeicher löschen, Bibliotheken und Boards der ARDUINO-IDE.
 
-## Hardware Optionen: Reiter Lichtmaschine und Geräteauswahl (5.30)
-
-Der Reiter **Lichtmaschine** der Hardware Optionen zeigt die eingestellte Hardware mit Anschluss und Bild. Der Knopf **Erkennen** öffnet die **Geräteauswahl** mit allen angeschlossenen Lichtmaschinen (Classic, Pro, Pico) und auch dem Gerät des Blattes, wenn es gerade nicht angeschlossen ist. Der Dialog öffnet sofort; Typ und Version der Geräte erscheinen kurz danach (Spalten Typ, Anschluss, Version, USB Kennung). Andere MobaLedLib-Geräte (zum Beispiel Servo, Sound, 2x3) werden erkannt, sind aber nicht als Lichtmaschine wählbar. Belegt ein anderes Programm einen Anschluss, steht „blockiert“. Mit den Pfeiltasten rauf und runter wählst du das Gerät.
-
-- **Classic (Nano):** Der Bootloader (alt, neu, Full) wird erkannt und beim Schließen mit OK eingetragen.
-- **Pro (ESP32):** Es gibt das Auswahlfeld „Displaytyp“ (0,96" oder 1,3").
-- **Pico:** Hinter der Bezeichnung steht die **Seriennummer** (5.44), so lassen sich mehrere Picos unterscheiden.
-- Unter **Einstellungen** stehen Protokoll (nur, was die Hardware kann), Hardwarevariante, Schnelles Update, Lichtsensor, Schaltzustände speichern und beim Pro die Anzeige auf dem Display. Alles wird im Blatt gespeichert.
-- Hast du den Anschluss in den Hardware Optionen geändert, verbindet das Programm nach dem Schließen automatisch.
-
-## Tabelle bedienen wie in Excel (5.31)
-
-Nach dem Tippen in einer Zelle beenden die **Pfeiltasten** die Eingabe und wechseln in die Nachbarzelle. Nach **F2** oder Doppelklick bewegen sie den Cursor im Text. Ein **Doppelklick** auf Name und Beleuchtung öffnet die Makroauswahl; mit **Umschalt + Doppelklick**, **F2** oder **Enter** bearbeitest du den Makrotext von Hand. Nach dem Dialog Typ und nach Entf, Ausschneiden, Einfügen, Ausfüllen, Rückgängig und Wiederholen bleibt die Markierung in der Zelle. Entf löscht ohne die Meldung „Es läuft noch ein Vorgang“ (5.32).
-
-## Selectrix (5.33)
-
-In den Hardware Optionen lässt sich das **Protokoll eines Blatts** auf Selectrix und zurück umstellen. Die Adressen werden umgerechnet (Adresse = Channel × 8 + Bitposition); vorher fragt das Programm nach. Channel (0 bis 99) und Bitposition (1 bis 8) werden bei der Eingabe geprüft.
-
-## Farb Test, Flags und Verbindung ohne Lichtmaschine (5.37, 5.38)
-
-- Im **Farb Test** führt der Knopf **Farb Test beenden** unten rechts zurück zum Programm Generator. Das Makro **Set_ColTab** öffnet den Farb Test auch ohne angeschlossene Lichtmaschine.
-- Im Eingabefenster der Makros wählst du **Flags** (zum Beispiel „Optionale Zähler Parameter“, Mode, RandMode) in einer aufklappbaren Liste mit Haken.
-- Ohne angeschlossene Lichtmaschine erscheint „Fehler beim Öffnen der Verbindung“ beim Reiterwechsel nur noch einmal. Ein Klick auf eine Testtaste versucht wieder zu verbinden.
-
-## MobaLedLib 3.6.0 (5.40, 5.41)
-
-Das Programm meldet sich als „Ver. 3.6.0“, die Bibliothek MobaLedLib und die mitgelieferte Excel-Mappe sind auf dem Stand 3.6.0. Neu ist das Beispiel **AddressLearn** (Adressen einlernen, braucht die Erweiterung AddressLearnMLX).
-
-## Verbindung: Status, Trennen und Anschluss -7 (5.46 bis 5.48)
-
-- **Statusmeldung:** Neben dem Knopf **Mit Lichtmaschine verbinden** steht immer Typ und Anschluss, zum Beispiel „Nicht verbunden - Pro/COM3“ oder „Verbunden mit Pro/COM3 - EFFECT Mode“.
-- **Trennen:** Mit Verbindung heißt der Knopf **Trennen** (auch im Pfeilmenü) und trennt; ohne Verbindung verbindet er.
-- **Eine Verbindung pro Gerät:** Beim Start, im Menü und in der Geräteauswahl wird eine bestehende Verbindung wiederverwendet, der Anschluss wird nicht ein zweites Mal geöffnet. Strg+C in der Konsole beendet das Programm ohne Fehlermeldung.
-- **Anschluss mit negativer Zahl (zum Beispiel -7):** Das Excel-Programm schreibt beim Hochladen eine negative Zahl in den Anschluss der Lichtmaschine. MobaLedLib Studio liest sie als **Hinweis**: Beim Start wird zuerst COM7 versucht und sonst nicht weiter gesucht (dann hilft „Erkennen“). Sie gilt **nicht** als eingetragener Anschluss. Ist das Programm verbunden, lädt **Setup übertragen** auf den verbundenen Anschluss hoch; ohne Verbindung fragt das Programm nach dem Anschluss (Fenster Board und USB Port erkennen). Früher kam hier fälschlich „Es ist kein PICO an COM Port COM-7 angeschlossen“ (Korrektur 5.48).
-- Nach „Wiederherstellen“ eines zwischengespeicherten Stands passt sich die Verbindung an Typ und Anschluss im Blatt an.
+Im **Anfänger Modus** fehlt das ganze Menü Werkzeuge. Die Hardware Optionen enthalten nur noch die Reiter zur Lichtmaschine (Lichtmaschine, ESP und WLAN-Einstellungen, Dateien und weitere).
