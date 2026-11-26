@@ -1,12 +1,13 @@
-# Datei-Version: 1.04 (2026-11-27) - test_monitor_connect.py
+# Datei-Version: 1.05 (2026-11-27) - test_monitor_connect.py
 # ----------------------------------------------------------------------------------------------
 # Name:           test_monitor_connect.py
 # Path:           test_monitor_connect.py
-# Version:        1.04
+# Version:        1.05
 # Last Update:    2026-11-26
 # Author:         Jürgen Winkler
 # Licence:        LGPL V2.1
 # History of Change:
+#   1.05  2026-11-27  Der Monitor meldet DIRECT Mode, eine normale Verbindung EFFECT Mode (web_serial 1.28)
 #   1.04  2026-11-27  Wechsel vom Seriellen Monitor in den Programm Generator stellt die Verbindung auf das Blatt um (webmobaledlib 5.60)
 #   1.03  2026-11-27  Automatisch neu verbinden nach Verlust, nicht nach Trennen durch den Anwender (web_serial 1.27)
 #   1.02  2026-11-27  Die Statusanzeige nennt nach dem Verlust Typ und Anschluss (web_serial 1.26)
@@ -96,6 +97,9 @@ class MonitorConnectTests(unittest.TestCase):
         self.assertEqual(self.sent, [])                                          # kein '#?', kein '#X'
         self.assertEqual(self.fake.written, [])
         self.assertEqual(self.messages, [])                                      # kein Dialog 'Falsche oder keine Antwort'
+        self.assertIn("DIRECT Mode", self.ctrl.connect_status[0])               # Monitor = Direktmodus, nicht EFFECT Mode
+        self.assertNotIn("EFFECT Mode", self.ctrl.connect_status[0])
+        self.assertTrue(self.ctrl.monitor_connected)                             # fuer das Umstellen beim Verlassen des Monitors
         self.assertEqual(self.ctrl.ARDUINO_current_portname, "COM77")
         text, fg = self.ctrl.connect_status
         self.assertIn("COM77", text)

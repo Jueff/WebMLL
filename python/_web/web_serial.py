@@ -1,8 +1,8 @@
-# Datei-Version: 1.27 (2026-11-27) - web_serial.py
+# Datei-Version: 1.28 (2026-11-27) - web_serial.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_serial.py
 # Path:           _web/web_serial.py
-# Version:        1.27
+# Version:        1.28
 # Last Update:    2026-11-27
 # Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
@@ -17,6 +17,7 @@
 #   1.07  2026-11-14  ESP32: Verbindung ueber WLAN mit Anmeldung per HMAC (Port 2323, connect_esp32); Schreibfehler schliesst nur die eigene Verbindung (Beitrag des Fork-Entwicklers)
 #   1.08  2026-11-14  TcpPort: ungueltiger Hostname (UnicodeError, "label too long") wird als OSError gemeldet statt abzustuerzen
 #   1.09  2026-11-14  Automatisches Verbinden (ohne Anschlussangabe): ist fuer das Blatt eine ESP32-WLAN-Verbindung eingetragen (wifi_target_provider), wird zuerst WLAN versucht, sonst USB; connect(wlan=False) erzwingt USB
+#   1.28  2026-11-27  Der Serial Monitor liest nur mit und zeigt deshalb 'Verbunden mit COMx - DIRECT Mode' (nicht EFFECT Mode). Zeilen mit '# v1.28'
 #   1.27  2026-11-27  Automatisch neu verbinden: nach einem Verbindungsverlust wartet ein Hintergrundthread, bis der Anschluss wieder in der Portliste steht, und verbindet dann ohne Dialoge wieder (Serial Monitor: mitlesen, sonst wie beim Autoconnect). Trennen durch den Anwender beendet das Warten. Zeilen mit '# v1.27'
 #   1.26  2026-11-27  lost_port: der verlorene Anschluss, damit die Statusanzeige Typ und Anschluss nennt (Verbindung verloren - Pro/COM3). Zeilen mit '# v1.26'
 #   1.25  2026-11-27  Verbindungsverlust (USB abgezogen): ein Lesefehler des Empfangsthreads schliesst die Verbindung auch bei einem seriellen Anschluss (vorher nur bei WLAN); Status 'Verbindung verloren' (rot) und eine Zeile im Serial Monitor. Zeilen mit '# v1.25'
@@ -891,7 +892,7 @@ class SerialMixin:
             if getattr(self, "monitor_only", False):  # v1.22: Serial Monitor: nur mitlesen, keine Abfrage am Geraet
                 self.ARDUINO_current_portname = port
                 self.ARDUINO_status = "Connected"
-                self._set_connect_status(tr('Verbunden mit ') + port + " - EFFECT Mode", "green")  # derselbe Text wie beim zentralen Verbinden
+                self._set_connect_status(tr('Verbunden mit ') + port + " - DIRECT Mode", "green")  # v1.28: der Monitor ist der Direktmodus (kein EFFECT Mode)
                 self._start_reader()
                 return "ok", None
 

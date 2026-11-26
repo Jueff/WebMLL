@@ -1,9 +1,14 @@
-Datei-Version: 1.145 (2026-11-26) - HOC_Anwender.md
-Stand: Version 5.60
+Datei-Version: 1.146 (2026-11-26) - HOC_Anwender.md
+Stand: Version 5.61
 
 # MobaLedLib Studio: Änderungen (Kurzfassung)
 
 Gilt ab Version 1.39. Neueste Version oben.
+
+## Version 5.61 (2026-11-27)
+
+Neue Funktionen:
+- Der Serielle Monitor zeigt „Verbunden mit COMx - DIRECT Mode“, denn er liest nur mit. Eine bestehende Verbindung im EFFECT Mode bleibt beim Wechsel in den Monitor unverändert. Beim Wechsel zurück in den Programm Generator wird eine Monitor-Verbindung im EFFECT Mode neu aufgebaut.
 
 ## Version 5.60 (2026-11-27)
 

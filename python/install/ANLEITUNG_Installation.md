@@ -1,5 +1,5 @@
 # MobaLedLib Studio – Installation und Betrieb
-*Datei-Version: 5.60 (2026-11-27), gilt für Version 5.60*
+*Datei-Version: 5.61 (2026-11-27), gilt für Version 5.61*
 
 Windows · macOS · Linux-Desktop · Raspberry Pi
 
@@ -1857,4 +1857,4 @@ Bricht die Verbindung ab (zum Beispiel USB-Kabel abgezogen), erkennt das Program
 
 Sobald der Anschluss nach einem Verbindungsverlust wieder da ist (Kabel angesteckt), verbindet das Programm **automatisch neu**, ohne Dialog (im Seriellen Monitor wieder nur mitlesend). Wenn du selbst mit **Trennen** getrennt hast, bleibt die Verbindung getrennt.
 
-Verlässt du den **Seriellen Monitor** und wechselst in den **Programm Generator**, verbindet das Programm wieder mit dem Board und Anschluss des Blatts, außer die Verbindung geht schon zu demselben Anschluss.
+Der **Serielle Monitor** liest nur mit; verbindest du dort, zeigt der Status **DIRECT Mode**. War vorher schon eine Verbindung im EFFECT Mode da, bleibt sie beim Wechsel in den Monitor unverändert. Verlässt du den Monitor und wechselst in den **Programm Generator**, baut das Programm eine Verbindung im DIRECT Mode im **EFFECT Mode** neu auf (mit Board und Anschluss des Blatts); eine Verbindung im EFFECT Mode zu einem anderen Anschluss als dem des Blatts wird auf den des Blatts umgestellt.
