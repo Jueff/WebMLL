@@ -207,7 +207,7 @@
         "Max": "255",
         "Default": "",
         "Input Text": "Automatisch verbinden",
-        "Hint": "Es wird automatisch eine Verbindung zum ARDUINO aufgebaut"
+        "Hint": "Es wird automatisch eine Verbindung zum Gerät aufgebaut"
     },
     "AutoLoadWorkbooks": {
         "ParName": "AutoLoadWorkbooks",
@@ -250,8 +250,8 @@
         "Min": "0",
         "Max": "255",
         "Default": "1",
-        "Input Text": "Initialisiere LED-ARDUINO",
-        "Hint": "Initialisiere LED-ARDUINO"
+        "Input Text": "Initialisiere Gerät",
+        "Hint": "Initialisiere Gerät"
     },
     "ButtonARDUINOTest": {
         "ParName": "ButtonARDUINOTest",
@@ -261,7 +261,7 @@
         "Min": "0",
         "Max": "255",
         "Default": "1",
-        "Input Text": "Verbinden mit LED-ARDUINO",
+        "Input Text": "Verbinden mit dem Gerät",
         "Hint": "Stellt die Verbindung zum ausgewählten ARDUINO her und testet, ob die MobaLedLib richtig antwortet. Wenn alles ok ist, wird unten im Statusfeld <Verbunden> angezeigt"
     },
     "CC_BLUE": {

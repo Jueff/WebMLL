@@ -1,12 +1,14 @@
-# Datei-Version: 1.14 (2026-11-23) - M07_COM_Port.py
+# Datei-Version: 1.16 (2026-11-25) - M07_COM_Port.py
 # ----------------------------------------------------------------------------------------------
 # Name:           M07_COM_Port.py
 # Path:           proggen/M07_COM_Port.py
-# Version:        1.14
+# Version:        1.16
 # Last Update:    2026-11-23
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
+#   1.1.16  2026-11-26  BOOTLOADER_CACHE: Ergebnis der Bootloader-Abfrage der Geraeteauswahl (Nano) wird von Get_Arduino_Baudrate einmal innerhalb von 90 s wiederverwendet (die zweite Pruefung direkt nach OK schlug fehl). Zeilen mit '# v1.16'
+#   1.15  2026-11-25  SERVO_PORTS: Anschluesse mit einem PicoServo-Tiny (Servo-Modul); Classify_Port liefert dafuer 'Servo' (nicht Pico). Zeilen mit '# v1.15'
 #   1.14  2026-11-23  Ensure_Existing_USB_Port: Existiert der in der Tabelle eingetragene USB-Anschluss am Rechner nicht, wird (bei genau einem passenden Board) der vorhandene eingetragen, sonst gemeldet - vor dem langen Build des ESP32-Setups
 #   1.00  2026-10-12  Stand der Umstellung (nicht erfasst)
 #   1.13  2026-11-20  Issue 50: Ist kein Anschluss eingetragen, aber eine Verbindung zur Lichtmaschine aktiv, wird deren Anschluss (und Board) vor dem Hochladen in die Tabelle uebernommen (Fill_Port_From_Active_Connection, Einstellung UploadPortMode)
@@ -741,7 +743,11 @@ def Check_If_Port_is_Available(PortNr, BoardType=None):  # v1.09: BoardType wie 
 # VB2PY (UntranslatedCode) Argument Passing Semantics / Decorators not supported: PortNr - ByVal 
 NANO_LIKE_VIDS = (0x1A86, 0x0403, 0x2341, 0x2A03)                        # CH340/CH341, FTDI, Arduino: Hersteller der Anschluesse, an denen ein Nano oder Uno haengt (nicht: 0x10C4 Silicon Labs CP210x der ESP32, 0x2E8A Raspberry Pi)  # v1.04
 
+SERVO_PORTS = {}  # v1.15: Anschluss -> Version, an denen ein PicoServo-Tiny (Servo-Modul, kein Lichtmaschinen-Board) antwortet (Query_Servo_Info)
+
 def Classify_Port(comport):  # v1.10: Typ eines Anschlusses (Nano / Pico / ESP32 / "") anhand VID und Beschreibung, wie die Excel-Anzeige "Andere Typen"
+    if str(getattr(comport, 'device', '') or '') in SERVO_PORTS:  # v1.15: Servo-Modul erkannt: weder Lichtmaschine noch Pico
+        return 'Servo'
     desc = str(getattr(comport, 'description', '') or '')
     hwid = str(getattr(comport, 'hwid', '') or '').upper()
     vid = getattr(comport, 'vid', None)
@@ -882,6 +888,7 @@ def __TestDetect():
 # VB2PY (UntranslatedCode) Argument Passing Semantics / Decorators not supported: ComPort - ByVal 
 # VB2PY (UntranslatedCode) Argument Passing Semantics / Decorators not supported: DeviceSignatur - ByRef 
 # VB2PY (UntranslatedCode) Argument Passing Semantics / Decorators not supported: FirmwareVer - ByRef 
+BOOTLOADER_CACHE = {}  # v1.16: Anschluss (gross) -> (Zeit, Baudrate, Firmware, Signatur); gefuellt von der Geraeteauswahl (Query_Nano_Bootloader), einmal gelesen von Get_Arduino_Baudrate (gilt 90 s)
 _LAST_INFO = {"signature": 0, "firmware": ""}  # v1.12: Ergebnis der letzten Bootloader-Pruefung (die VBA-ByRef-Parameter gibt es in Python nicht)
 
 
@@ -892,6 +899,11 @@ def Get_Last_Detect_Info():  # v1.12
 
 def Get_Arduino_Baudrate(ComPort, Start_Baudrate, DeviceSignatur, FirmwareVer, DebugPrint=False):
     _LAST_INFO["signature"], _LAST_INFO["firmware"] = 0, ""  # v1.12
+    import time as _time  # v1.16
+    _cached = BOOTLOADER_CACHE.pop(str(ComPort).upper(), None)  # v1.16: die Geraeteauswahl hat den Bootloader dieses Anschlusses eben ermittelt: nicht noch einmal zuruecksetzen und abfragen
+    if _cached is not None and _time.monotonic() - _cached[0] < 90 and _cached[1] > 0:  # v1.16
+        _LAST_INFO["signature"], _LAST_INFO["firmware"] = _cached[3], _cached[2]  # v1.16
+        return _cached[1]  # v1.16
     fn_return_value = 0
     SWMajorVersion = Byte()
 

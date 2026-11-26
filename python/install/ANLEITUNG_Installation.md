@@ -1,5 +1,5 @@
 # MobaLedLib Studio – Installation und Betrieb
-*Datei-Version: 5.25 (2026-11-25), gilt für Version 5.25*
+*Datei-Version: 5.39 (2026-11-26), gilt für Version 5.39*
 
 Windows · macOS · Linux-Desktop · Raspberry Pi
 
@@ -208,12 +208,12 @@ Endet ein Weg mit einem Fehler (zum Beispiel `xdg-open`, weil kein Standardbrows
 Unter Linux zeigt `xdg-settings get default-web-browser`, welcher Browser als Standard eingetragen ist, und `xdg-settings set default-web-browser google-chrome.desktop`
 (oder `brave-browser.desktop`) stellt ihn ein.
 
-### 2.4a Die Startseite für Einsteiger (5.23)
+### 2.4a Die Startseite für Einsteiger (5.23, geändert 5.34 bis 5.36)
 
 Beim Start zeigt MobaLedLib Studio eine Startseite. Sie führt in drei Schritten zum ersten Programm:
 
-1. **Modellbahnzentrale** wählen: DCC, Selectrix, LNet, CAN oder „Ohne Zentrale“ (dann wird die Tabelle DCC benutzt).
-2. **Lichtmaschine** wählen: Classic / Mini (Arduino Nano), Pro (ESP32) oder Pico Zero / MoLLi (Raspberry Pi Pico). Mit dem Knopf „Automatisch erkennen“ sucht das Programm eine angeschlossene Lichtmaschine und wählt sie aus.
+1. **Lichtmaschine** wählen: Classic (Arduino Nano), Mini (Nano, nur DCC), Pro (ESP32), Pico Zero (Raspberry Pi Pico) oder MoLLi (Pico, nur DCC). Mit dem Knopf „Automatisch erkennen“ sucht das Programm eine angeschlossene Lichtmaschine und wählt sie aus. Die Lichtmaschinen stehen in der Liste `csv/Lichtmaschinen_prop.json`; ein neues Produkt wird nur dort ergänzt.
+2. **Modellbahnzentrale** wählen: Es erscheinen nur die Zentralen, die die gewählte Lichtmaschine unterstützt (DCC, Selectrix, LNet, CAN oder „Ohne Zentrale“, dann wird die Tabelle DCC benutzt). Wechselst du zu einer Lichtmaschine, die die gewählte Zentrale nicht kann, stellt das Programm DCC ein und sagt es dir.
 3. Die Seite erklärt, wie das erste Programm mit dem Knopf „Setup übertragen“ zur Lichtmaschine kommt und wie man mit dem „Dialog Wizard“ eigene Beleuchtungen anlegt.
 
 Der Knopf **Anfangen** blendet die Tabellen der anderen Zentralen aus (auch über das Kontextmenü der Blattreiter wieder einblendbar), öffnet die Tabelle der gewählten Zentrale, stellt das Board der Lichtmaschine ein und lädt das Startprogramm aus dem Ordner `Startprogramme` (Namen siehe `Startprogramme/README.txt`). Gibt es dort keine Datei für die Auswahl, bleibt die Tabelle leer.

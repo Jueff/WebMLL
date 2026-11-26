@@ -1,5 +1,5 @@
 ====== MobaLedLib Studio – Farb Test ======
-//Seitenstand 1.08 (2026-11-24), gilt für Version 5.12//
+//Seitenstand 1.09 (2026-11-26), gilt für Version 5.37//
 
 Mit dem **Farb Test** suchst du **Farben** aus und siehst sie sofort an einer LED an deiner Anlage. Das ist wichtig, weil LEDs Farben anders zeigen als der Bildschirm. Gefundene Farben kannst du in einer **Palette** sammeln.
 
@@ -28,6 +28,12 @@ Die **Palette** besteht aus **Farbfeldern**. Du kannst Farben aus der Palette ho
 ===== Farben für das Programm übernehmen =====
 
 Wenn du den Farb Test **aus einem Makro** heraus öffnest (zum Beispiel beim Makro **Set_ColTab**, das die Farbtabelle festlegt), erscheint oben ein Knopf **Palette übergeben**. Er gibt die Palette an das Makro zurück und beendet den Farb Test. Öffnest du den Reiter direkt, gibt es diesen Knopf nicht, und die Palette bleibt nur im Test.
+
+**Ohne Lichtmaschine:** Das Makro **Set_ColTab** öffnet den Farb Test **auch am Arbeitsplatz ohne angeschlossene Lichtmaschine**. Du musst keinen Anschluss wählen. Die Farben bearbeitest du am Bildschirm, die Vorschau zeigt sie dir. Nur das Leuchten an einer LED gibt es dann natürlich nicht.
+
+===== Den Farb Test beenden =====
+
+Unten rechts steht der Knopf **Farb Test beenden**. Er bringt dich zurück zum **Programm Generator**. Wurde der Farb Test aus einem Makro geöffnet, wird dabei **nichts** an das Makro übergeben. Dafür gibt es oben den Knopf **Palette übergeben**.
 
 ===== Die LED-Farbkorrektur =====
 

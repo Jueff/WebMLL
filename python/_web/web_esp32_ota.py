@@ -1,12 +1,13 @@
-# Datei-Version: 1.09 (2026-11-24) - web_esp32_ota.py
+# Datei-Version: 1.10 (2026-11-25) - web_esp32_ota.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_esp32_ota.py
 # Path:           _web/web_esp32_ota.py
-# Version:        1.09
-# Last Update:    2026-11-24
-# Author:         Harold Linke (Beitrag des Fork-Entwicklers, uebernommen in 3.37)
+# Version:        1.10
+# Last Update:    2026-11-25
+# Author:         Harold Linke, Jürgen Winkler (Beitrag des Fork-Entwicklers, uebernommen in 3.37)
 # Licence:        LGPL V2.1
 # History of Change:
+#   1.10  2026-11-25  settings_panel() gibt den Haken 'WLAN am ESP32 aktivieren' zurueck (Optionen: WLAN-Anzeigen auf dem Display nur mit WLAN). Zeilen mit '# v1.10'
 #   1.09  2026-11-24  Hilfe-Adresse im neuen Namensraum des Wikis
 #   1.08  2026-11-23  Adresse fuer WebMLL: die Adresse dieses Rechners wird abgelehnt (Verwechslung mit der IP des ESP32), bei fester IP gilt dann die IP des ESP32; Hinweistext
 #   1.07  2026-11-23  Reiter OTA: DHCP oder statische IP-Adresse (IP, Gateway, Subnetzmaske, DNS), Pruefung der Eingaben, Zieladresse = feste IP
@@ -279,6 +280,7 @@ def settings_panel():
         ui.button("WLAN über USB einrichten", on_click=setup_usb).props("outline")
         ui.button("Verbindung testen", on_click=check).props("outline")
         ui.button("Hilfe", on_click=lambda: ui.navigate.to(HELP_URL, new_tab=True)).props("flat icon=help")  # v1.04
+    return wifi  # v1.10: Haken 'WLAN am ESP32 aktivieren' fuer die Optionen (Anzeige auf dem Display folgt ihm)
 
 
 def open_usb_wifi(controller, on_address):

@@ -1,5 +1,5 @@
 ====== MobaLedLib Studio – Die Tabelle bedienen ======
-//Seitenstand 1.13 (2026-11-25), gilt für Version 5.23//
+//Seitenstand 1.17 (2026-11-26), gilt für Version 5.37//
 
 In der Tabelle des [[anleitungen:mobaledlibstudio:programmgenerator|Programmgenerators]] steht jede Zeile für einen Effekt oder ein Gerät. Auf dieser Seite steht, wie du die Tabelle bedienst.
 
@@ -50,6 +50,28 @@ Mit der **rechten Maustaste** (auf dem Tablet: lange drücken) auf eine Zelle er
 Klicke auf die **Zeilennummer**, um eine Zeile zu markieren. Mit der **Umschalttaste** markierst du einen Bereich, mit der **Strg-Taste** (am Mac **Cmd**) einzelne Zeilen. Du kannst auch mit der Maus einen Bereich von Zellen über mehrere Zeilen aufziehen.
 
 Die Knöpfe **Zeilen duplizieren**, **Zeilen löschen**, **Zeilen verschieben** und **Aus- oder Einblenden** wirken auf **alle markierten Zeilen**. Die Kopien beim Duplizieren stehen hinter der letzten markierten Zeile. Nach **Einfügen**, **Löschen**, **Duplizieren** und **Verschieben** springt die Ansicht nicht, und die betroffene Zeile ist markiert, so dass du gleich weiterarbeiten kannst (seit 4.84 bis 4.88). Was jeder Knopf macht, steht auf der Seite [[anleitungen:mobaledlibstudio:pg_werkzeugleiste|Die Werkzeugleiste]].
+
+===== Die Funktion „Logic“: Bedingungen zusammenstellen =====
+
+Mit **Logic** verknüpfst du mehrere Eingänge zu einem Ergebnis (zum Beispiel: das Signal zeigt Halt, wenn Schalter A **und** Schalter B gesetzt sind **oder** Schalter D). Seit 5.26 stellst du das im Eingabefenster aus **Bedingungen** zusammen, du musst keine Formel schreiben:
+
+  * **Ergebnisvariable:** Hier steht der Name der Variable, in die das Ergebnis geschrieben wird. Andere Zeilen können sie als Eingang benutzen.
+  * **Bedingung:** Jede Bedingung ist ein Kasten. Das Ergebnis ist **1**, wenn **mindestens eine** Bedingung zutrifft (die Bedingungen sind mit **ODER** verbunden).
+  * **Eingänge in einer Bedingung:** Eine Bedingung trifft zu, wenn **alle** ihre Eingänge zutreffen (**UND**). Der Haken **nicht** kehrt einen Eingang um. Zuerst wählst du die **Art des Eingangs**, dann den Eingang selbst: **Eingang dieser Zeile** (**#InCh**, über DCC, Selectrix oder CAN; weitere Eingänge der Zeile sind **#InCh+1**, **#InCh+2** …), **Variable der Tabelle** (Liste der Variablen der **aktuellen Tabelle**, ein eigener Name lässt sich auch eintippen), **Schalter A**, **B**, **C** oder **D** (**SwitchA1** bis **SwitchA250** usw.; du gibst nur die **Nummer** ein) oder **Eigener Name**.
+  * **+ UND weiterer Eingang** fügt einen Eingang zur Bedingung hinzu, **+ ODER weitere Bedingung** einen neuen Kasten.
+  * Unter den Kästen steht eine **Klartext-Vorschau** mit Klammern, zum Beispiel „(A und nicht C) oder D“, und der **Text im Makro**. Eine **Prüfung** vor dem Speichern meldet leere Bedingungen, ungültige Namen und Widersprüche wie „A und nicht A“.
+  * Mit dem Schalter **Als Text bearbeiten** gibst du den Ausdruck wie früher als Text ein (''A AND B OR A AND NOT C OR D''). Ausdrücke mit Klammern lassen sich nicht als Bedingungen zeigen und bleiben Text.
+
+Das Makro im Programm bleibt unverändert, vorhandene Zeilen lassen sich weiter öffnen.
+
+===== Flags im Eingabefenster eines Makros anklicken =====
+
+Manche Makros haben ein Feld für **Flags** (Optionen, die mit ''|'' getrennt hinter dem Namen stehen), zum Beispiel **Optionale Zähler Parameter** bei den Tastern oder **Mode** bei Zähler und Zufallsfunktionen. Du musst die Namen **nicht abschreiben**:
+
+  - Klappe unter dem Feld die Gruppe **Flags auswählen** auf.
+  - Setze den **Haken** bei den Flags, die du brauchst. Das Textfeld wird automatisch ausgefüllt, zum Beispiel ''CF_BINARY|CF_RANDOM''.
+  - Ist **kein** Haken gesetzt, steht der Normalwert im Feld (''0'' oder ''CM_NORMAL'').
+  - Du kannst den Text auch **von Hand** ändern. Dann gleichen sich die Haken an.
 
 ===== Zeilen aktivieren und deaktivieren =====
 

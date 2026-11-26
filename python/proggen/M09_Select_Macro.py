@@ -1,4 +1,15 @@
 # -*- coding: utf-8 -*-
+# Datei-Version: 1.01 (2026-11-26) - M09_Select_Macro.py
+# ----------------------------------------------------------------------------------------------
+# Name:           M09_Select_Macro.py
+# Path:           proggen/M09_Select_Macro.py
+# Version:        1.01
+# Last Update:    2026-11-26
+# Author:         Harold Linke
+# Licence:        LGPL V2.1
+# History of Change:
+#   1.01  2026-11-26  Makro aus der Tabelle Lib_Macros ohne den Kommentar der Zelle (Text nach dem §) lesen: Fehler 'Parameter Val1§Duration 0 not possible nicht gefunden' beim Makro Button; Kopf eingefuegt, davor nicht erfasst
+# ----------------------------------------------------------------------------------------------
 #
 #         Write header
 #
@@ -511,7 +522,8 @@ def __SelectMacros_Sub():
         _with2 = PG.ThisWorkbook.Sheets(M02.LIBMACROS_SH)
         DlgTyp = _with2.Cells(SelRow, M02.SM_Typ___COL)
         LEDs = _with2.Cells(SelRow, M02.SM_LEDS__COL)
-        Macro = _with2.Cells(SelRow, M02.SM_Macro_COL)
+        # Macro = _with2.Cells(SelRow, M02.SM_Macro_COL)  # v1.01 (entfallen)
+        Macro = str(_with2.Cells(SelRow, M02.SM_Macro_COL)).split('§')[0]  # v1.01: Kommentar der Zelle (Text nach dem §) gehoert nicht zum Makro: sonst 'Parameter Val1§Duration 0 not possible nicht gefunden' (Makro Button)
         LedChannels = P01.val(_with2.Cells(SelRow, M02.SM_SngLEDCOL))
         Def_Channel = P01.val(_with2.Cells(SelRow, M02.SM_DefCh_COL))
         Act_Channel = P01.val(P01.Cells(P01.ActiveCell().Row, M25.LED_Cha_Col))

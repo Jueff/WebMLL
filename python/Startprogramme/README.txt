@@ -1,4 +1,4 @@
-Startprogramme fuer die Startseite von MobaLedLib Studio (Version 5.23)
+Startprogramme fuer die Startseite von MobaLedLib Studio (Version 5.35)
 =====================================================================
 
 Hier liegen die Programme, die der Knopf "Anfangen" der Startseite in die Tabelle der gewaehlten Zentrale laedt.
@@ -12,10 +12,10 @@ Namen (ohne Leerzeichen, genau so geschrieben):
 Das Programm sucht zuerst die Datei fuer die Kombination, dann die Datei der Lichtmaschine allein.
 Gibt es keine, wird die leere Tabelle der Zentrale geoeffnet und die Startseite weist darauf hin.
 
-Lichtmaschine (Teil des Namens):
-  Classic_Mini        Lichtmaschine Classic / Mini (Arduino Nano)
+Lichtmaschine (Teil des Namens): Der Name steht pro Produkt im Feld "program" der Datei csv/Lichtmaschinen_prop.json.
+  Classic_Mini        Lichtmaschine Classic und Lichtmaschine Mini (Arduino Nano)
   Pro                 Lichtmaschine Pro (ESP32)
-  Pico_Zero_MoLLi     Lichtmaschine Pico Zero / MoLLi (Raspberry Pi Pico)
+  Pico_Zero_MoLLi     Lichtmaschine Pico Zero und Lichtmaschine MoLLi (Raspberry Pi Pico)
 
 Zentrale (Teil des Namens, nur fuer die Datei der Kombination):
   DCC, Selectrix, LNet, CAN     ("Ohne Zentrale" benutzt die Tabelle DCC, also DCC)

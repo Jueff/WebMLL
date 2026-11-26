@@ -1,10 +1,10 @@
-# Datei-Version: 1.05 (2026-11-24) - web_form_servoanim.py
+# Datei-Version: 1.06 (2026-11-25) - web_form_servoanim.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_form_servoanim.py
 # Path:           _web/web_form_servoanim.py
-# Version:        1.05
-# Last Update:    2026-11-24
-# Author:         Harold Linke
+# Version:        1.06
+# Last Update:    2026-11-25
+# Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
 # History of Change:
 #   1.02  2026-11-04  Ereignisse der Grafik per globalem Ereignis mll_servo (ui.on + emitEvent) statt $emit am Element ('getElement(...).$emit is not a function')
@@ -14,6 +14,7 @@
 #   1.03  2026-11-04  Frage nach dem ARDUINO: nach Abbrechen nicht mehr von selbst fragen (bis zum Neustart), nie gleichzeitig mehrmals; nur der Knopf Starte Test fragt wieder
 #   1.04  2026-11-04  harvest: Name der Fensterbeschreibung als Parameter (die LED Farb-Animation benutzt Main_Menu_Form_RSC)
 #   1.05  2026-11-24  Hilfe-Adresse: Wiki-Seite servo_animation im Namensraum mobaledlibstudio
+#   1.06  2026-11-25  Text: 'Es ist kein Gerät verbunden ...' (statt Arduino). Zeilen mit '# v1.06'
 # ----------------------------------------------------------------------------------------------
 """Web-Ersatz fuer proggen/Userform_ServoAnim.py (Dialog zu den Makros ServoAnim und ServoAnim2B).
 
@@ -399,7 +400,8 @@ async def _servoanim_async(spec: dict):
                 pull()
                 # if not await _ensure_direct():  # v1.03 (entfallen)
                 if not await _ensure_direct(explicit=True):  # v1.03
-                    ui.notify(tr("Es ist kein Arduino verbunden. Der Test braucht einen verbundenen ARDUINO."), type="warning")
+                    # ui.notify(tr("Es ist kein Arduino verbunden. Der Test braucht einen verbundenen ARDUINO."), type="warning")  # v1.06 (entfallen)
+                    ui.notify(tr("Es ist kein Gerät verbunden. Der Test braucht ein verbundenes Gerät."), type="warning")  # v1.06: Gerät statt Arduino
                     return
                 st["t"] = 0
                 test_btn.set_text(tr("Stop Test"))

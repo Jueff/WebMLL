@@ -1,5 +1,5 @@
 ====== Seiten Update ======
-//Seitenstand 1.13 (2026-11-25), gilt für Version 5.23//
+//Seitenstand 1.16 (2026-11-25), gilt für Version 5.29//
 
 **Arbeitsseite für den Wiki-Pflegenden, keine Anleitung für Anwender.** Sie listet alle Seiten und Bilder des Kapitels //webMobaLedLib// mit **Links**: Ein Klick auf einen **Seitennamen** öffnet die Seite, ein Klick auf einen **Bildnamen** öffnet das Bild. So lässt sich beim Aktualisieren Zeile für Zeile durchgehen. Diese Seite **nicht** in die Seitenleiste und nicht auf die Startseite aufnehmen.
 
@@ -26,7 +26,7 @@
 | [[anleitungen:mobaledlibstudio:pg_arduino|pg_arduino]] | webMobaLedLib – Verbinden und Übertragen | 1.16 | **geändert** | [[anleitungen:mobaledlibstudio:pg_arduino?do=edit|bearbeiten]] |
 | [[anleitungen:mobaledlibstudio:pg_grafisch|pg_grafisch]] | webMobaLedLib – Die grafische Ansicht | 1.05 | **geändert** | [[anleitungen:mobaledlibstudio:pg_grafisch?do=edit|bearbeiten]] |
 | [[anleitungen:mobaledlibstudio:pg_speichern|pg_speichern]] | webMobaLedLib – Speichern und Laden | 1.06 | **geändert** | [[anleitungen:mobaledlibstudio:pg_speichern?do=edit|bearbeiten]] |
-| [[anleitungen:mobaledlibstudio:pg_tabelle|pg_tabelle]] | webMobaLedLib – Die Tabelle bedienen | 1.13 | **geändert** | [[anleitungen:mobaledlibstudio:pg_tabelle?do=edit|bearbeiten]] |
+| [[anleitungen:mobaledlibstudio:pg_tabelle|pg_tabelle]] | webMobaLedLib – Die Tabelle bedienen | 1.16 | **geändert** | [[anleitungen:mobaledlibstudio:pg_tabelle?do=edit|bearbeiten]] |
 | [[anleitungen:mobaledlibstudio:pg_werkzeugleiste|pg_werkzeugleiste]] | webMobaLedLib – Die Werkzeugleiste | 1.12 | **geändert** | [[anleitungen:mobaledlibstudio:pg_werkzeugleiste?do=edit|bearbeiten]] |
 | [[anleitungen:mobaledlibstudio:programmgenerator|programmgenerator]] | webMobaLedLib – Der Programmgenerator | 1.09 | **geändert** | [[anleitungen:mobaledlibstudio:programmgenerator?do=edit|bearbeiten]] |
 | [[anleitungen:mobaledlibstudio:raspberrypi|raspberrypi]] | webMobaLedLib – Installation auf dem Raspberry Pi | 1.04 | nur Seitenstand | [[anleitungen:mobaledlibstudio:raspberrypi?do=edit|bearbeiten]] |

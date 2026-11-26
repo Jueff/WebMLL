@@ -1,9 +1,9 @@
-# Datei-Version: 1.02 (2026-11-25) - web_startpage.py
+# Datei-Version: 1.05 (2026-11-26) - web_startpage.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_startpage.py
 # Path:           _web/web_startpage.py
-# Version:        1.02
-# Last Update:    2026-11-25
+# Version:        1.05
+# Last Update:    2026-11-26
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
@@ -13,6 +13,9 @@
 #                     Lichtmaschine (Classic/Mini, Pro, Pico Zero/MoLLi, auch automatisch erkennen), Erklaerung "Setup uebertragen" und "Dialog Wizard",
 #                     Knopf Anfangen (blendet die anderen Zentralen-Tabellen aus, stellt das Board ein und laedt das Startprogramm aus
 #                     Startprogramme/<Lichtmaschine>[_<Zentrale>].MLL_pgf), Haken "nicht mehr anzeigen" (Einstellung ShowStartPage), Hinweis zum Anfaenger Modus
+#   1.03  2026-11-26  Reihenfolge: erst die Lichtmaschine, dann die Zentrale (nur die von der Lichtmaschine unterstuetzten); Lichtmaschinen aus csv/Lichtmaschinen_prop.json (jedes Produkt eine Kachel); Anrede Du statt Sie
+#   1.04  2026-11-26  Lichtmaschinen berichtigt: Mini (Nano, nur DCC), Pico Zero (alle Zentralen), MoLLi (Pico, nur DCC) je eine Kachel
+#   1.05  2026-11-26  Alle Kacheln (Lichtmaschinen und Zentralen) gleich gross: Raster statt Zeile mit Umbruch, die letzte Zeile wird nicht breiter, Kacheln einer Zeile gleich hoch
 # ----------------------------------------------------------------------------------------------
 """Startseite fuer Einsteiger.
 
@@ -37,12 +40,59 @@ CENTRALS = (
     ("CAN", "CAN", "Märklin CAN-Bus", "CAN"),
     ("None", "Ohne Zentrale", "Es wird die Tabelle DCC benutzt", "DCC"),
 )
-# Lichtmaschinen: Schluessel, Name, Kurztext, Dateiname des Startprogramms (ohne .MLL_pgf), Bild im Ordner images, Typ der Anschlusserkennung
-MACHINES = (
-    ("Classic", "Lichtmaschine Classic / Mini", "Arduino Nano", "Classic_Mini", "LED_image.png", "Nano"),
-    ("Pro", "Lichtmaschine Pro", "ESP32", "Pro", "ESP32_image.png", "ESP32"),
-    ("Pico", "Lichtmaschine Pico Zero / MoLLi", "Raspberry Pi Pico", "Pico_Zero_MoLLi", "PICO_image.png", "Pico"),
+# Lichtmaschinen: kommen aus csv/Lichtmaschinen_prop.json (load_machines). Jeder Eintrag ist ein Dictionary mit key, name, platform, board, centrals, text, program, image, detect.
+# Diese Liste gilt, wenn die Datei fehlt oder fehlerhaft ist.
+DEFAULT_MACHINES = (
+    {"key": "Classic", "name": "Lichtmaschine Classic", "platform": "AM328", "board": "Nano", "centrals": ["DCC", "Selectrix", "CAN", "LNet"], "text": "Arduino Nano", "program": "Classic_Mini", "image": "LED_image.png", "detect": "Nano"},
+    {"key": "Mini", "name": "Lichtmaschine Mini", "platform": "AM328", "board": "Nano", "centrals": ["DCC"], "text": "Arduino Nano", "program": "Classic_Mini", "image": "LED_image.png", "detect": ""},
+    {"key": "Pro", "name": "Lichtmaschine Pro", "platform": "ESP32", "board": "ESP32", "centrals": ["DCC", "Selectrix", "CAN", "LNet"], "text": "ESP32", "program": "Pro", "image": "ESP32_image.png", "detect": "ESP32"},
+    {"key": "PicoZero", "name": "Lichtmaschine Pico Zero", "platform": "PICO", "board": "Pico", "centrals": ["DCC", "Selectrix", "CAN", "LNet"], "text": "Raspberry Pi Pico", "program": "Pico_Zero_MoLLi", "image": "PICO_image.png", "detect": "Pico"},
+    {"key": "MoLLi", "name": "Lichtmaschine MoLLi", "platform": "PICO", "board": "Pico", "centrals": ["DCC"], "text": "Raspberry Pi Pico", "program": "Pico_Zero_MoLLi", "image": "PICO_image.png", "detect": ""},
 )
+MACHINES_FILE = os.path.join("csv", "Lichtmaschinen_prop.json")
+MACHINES = [dict(m) for m in DEFAULT_MACHINES]        # v1.03
+
+
+def load_machines(base_dir) -> list:
+    """Liest csv/Lichtmaschinen_prop.json (Eintraege ohne key oder name werden uebergangen). Bei einem Fehler gilt DEFAULT_MACHINES."""
+    global MACHINES
+    result = []
+    try:
+        import json
+        with open(os.path.join(base_dir, MACHINES_FILE), "r", encoding="utf-8") as fh:
+            data = json.load(fh)
+        for m in data.get("Lichtmaschinen", []):
+            if not isinstance(m, dict) or not m.get("key") or not m.get("name"):
+                continue
+            item = {"key": str(m["key"]), "name": str(m["name"]), "platform": str(m.get("platform", "")), "board": str(m.get("board", "")),
+                    "centrals": [str(c) for c in (m.get("centrals") or ["DCC"])], "text": str(m.get("text", "")),
+                    "program": str(m.get("program") or m["key"]), "image": str(m.get("image", "")), "detect": str(m.get("detect", ""))}
+            if all(x["key"] != item["key"] for x in result):
+                result.append(item)
+    except Exception:                                  # noqa: BLE001
+        logger.warning("%s nicht gelesen, eingebaute Liste benutzt", MACHINES_FILE, exc_info=True)
+        result = []
+    MACHINES = result or [dict(m) for m in DEFAULT_MACHINES]
+    return MACHINES
+
+
+def supported_centrals(machine_key) -> list:
+    """Zentralen (Schluessel aus CENTRALS), die die Lichtmaschine unterstuetzt, in der Reihenfolge von CENTRALS. 'Ohne Zentrale' (None) ist immer dabei.
+    Ohne Lichtmaschine: leere Liste."""
+    m = machine_by_key(machine_key)
+    if not m:
+        return []
+    wanted = {c.strip().lower() for c in m["centrals"]}
+    return [c[0] for c in CENTRALS if c[0] == "None" or c[0].lower() in wanted]
+
+
+def board_of(machine_key) -> str:
+    """Board der Lichtmaschine: Nano, ESP32 oder Pico ('' wenn unbekannt)"""
+    m = machine_by_key(machine_key)
+    return m["board"] if m else ""
+
+
+GRID_STYLE = "display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px;align-items:stretch"  # v1.05
 PAGE_IDS = ("DCC", "Selectrix", "LNet", "CAN")        # Tabellen der Zentralen
 PROGRAM_DIR = "Startprogramme"
 HERO_IMAGE = "Mobaled_ARDUINOs.png"
@@ -57,7 +107,7 @@ def central_by_key(key):
 
 def machine_by_key(key):
     for m in MACHINES:
-        if m[0] == key:
+        if m["key"] == key:
             return m
     return None
 
@@ -65,8 +115,8 @@ def machine_by_key(key):
 def machine_for_port_type(port_type):
     """Typ aus der Anschlusserkennung (Nano, ESP32, Pico) -> Schluessel der Lichtmaschine; None, wenn unbekannt"""
     for m in MACHINES:
-        if m[5] == port_type:
-            return m[0]
+        if m["detect"] and m["detect"] == port_type:
+            return m["key"]
     return None
 
 
@@ -81,7 +131,7 @@ def program_candidates(machine_key, central_key) -> list:
     m = machine_by_key(machine_key)
     if not m:
         return []
-    return ["%s_%s.MLL_pgf" % (m[3], page_id_for(central_key)), "%s.MLL_pgf" % m[3]]
+    return ["%s_%s.MLL_pgf" % (m["program"], page_id_for(central_key)), "%s.MLL_pgf" % m["program"]]
 
 
 def program_file(base_dir, machine_key, central_key):
@@ -128,7 +178,8 @@ async def show_start_page(base_dir, tr, *, detect, beginner=False):
     Der Haken 'nicht mehr anzeigen' wird hier ausgewertet (Rueckgabe-Schluessel "hide")."""
     from nicegui import ui
 
-    st = {"central": None, "machine": None, "detect": "idle", "port": "", "hide": False}
+    load_machines(base_dir)                            # v1.03
+    st = {"central": None, "machine": None, "detect": "idle", "port": "", "hide": False, "notice": ""}
     border = "1px solid rgba(128,128,128,.55)"
     blue = "#1565c0"
 
@@ -164,7 +215,16 @@ async def show_start_page(base_dir, tr, *, detect, beginner=False):
     def pick_machine(key):
         st["machine"] = key
         st["detect"] = "idle"
+        set_machine_side_effects()
         body.refresh()
+
+    def set_machine_side_effects():                    # v1.03: eine schon gewaehlte Zentrale, die die Lichtmaschine nicht kann, wird durch DCC ersetzt
+        st["notice"] = ""
+        if st["central"] and st["machine"] and st["central"] not in supported_centrals(st["machine"]):
+            old = central_by_key(st["central"])
+            st["central"] = "DCC"
+            st["notice"] = tr("{lichtmaschine} unterstützt {zentrale} nicht. Es wurde DCC eingestellt.",
+                              lichtmaschine=tr(machine_by_key(st["machine"])["name"]), zentrale=old[1] if old else "")
 
     async def do_detect():
         st["detect"] = "busy"
@@ -176,6 +236,7 @@ async def show_start_page(base_dir, tr, *, detect, beginner=False):
             key, port = None, ""
         if key and machine_by_key(key):
             st["machine"], st["detect"], st["port"] = key, "found", port or ""
+            set_machine_side_effects()                 # v1.03
         else:
             st["detect"] = "none"
         body.refresh()
@@ -214,53 +275,60 @@ async def show_start_page(base_dir, tr, *, detect, beginner=False):
         cen, mac = central_by_key(st["central"]), machine_by_key(st["machine"])
         ready = bool(cen and mac)
         with ui.row().classes("items-center").style("gap:12px 28px"):
-            badge(1, bool(cen), "Modellbahnzentrale")
-            badge(2, bool(mac), "Lichtmaschine")
+            badge(1, bool(mac), "Lichtmaschine")
+            badge(2, bool(cen), "Modellbahnzentrale")
             badge(3, ready, "So geht es los")
-        # Schritt 1
+        # Schritt 1: Lichtmaschine  # v1.03 (bisher Schritt 2)
         with ui.column().classes("w-full").style("gap:12px"):
-            ui.label(tr("1. Welche Modellbahnzentrale haben Sie?")).style("font-size:22px;font-weight:700")
-            ui.label(tr("Alle Tabellen, die Sie nicht brauchen, werden ausgeblendet. Sie sehen später nur die Seite Ihrer Zentrale.")).style("font-size:15px;opacity:.85")
-            with ui.row().classes("w-full").style("gap:14px"):
-                for key, name, sub, _pid in CENTRALS:
-                    tile(name, sub, st["central"] == key, lambda _e=None, k=key: pick_central(k))
-        # Schritt 2
-        with ui.column().classes("w-full").style("gap:12px"):
-            ui.label(tr("2. Welche Lichtmaschine haben Sie?")).style("font-size:22px;font-weight:700")
-            with ui.row().classes("w-full").style("gap:14px"):
-                for key, name, sub, _file, image, _typ in MACHINES:
-                    tile(name, sub, st["machine"] == key, lambda _e=None, k=key: pick_machine(k), image=image)
+            ui.label(tr("1. Welche Lichtmaschine hast du?")).style("font-size:22px;font-weight:700")
+            with ui.element("div").classes("w-full").style(GRID_STYLE):  # v1.05: gleich grosse Kacheln, auch in der letzten Zeile
+                for m in MACHINES:
+                    tile(m["name"], m["text"], st["machine"] == m["key"], lambda _e=None, k=m["key"]: pick_machine(k), image=m["image"])
             with ui.row().classes("w-full items-center").style("gap:14px;padding:14px 16px;border:%s;border-radius:12px" % border):
                 ui.button(tr("Automatisch erkennen"), on_click=do_detect).props("outline no-caps").style("min-height:44px")
                 if st["detect"] == "busy":
                     text = tr("Suche läuft …")
                 elif st["detect"] == "found":
-                    text = tr("Gefunden: {name} am Anschluss {port}. Sie ist oben ausgewählt.", name=tr(mac[1]) if mac else "", port=st["port"])
+                    text = tr("Gefunden: {name} am Anschluss {port}. Die Auswahl ist gesetzt.", name=tr(mac["name"]) if mac else "", port=st["port"])
                 elif st["detect"] == "none":
                     text = tr("Keine Lichtmaschine gefunden. Bitte per USB anschließen und noch einmal versuchen oder oben selbst auswählen.")
                 else:
-                    text = tr("Lichtmaschine anschließen und auf „Automatisch erkennen“ klicken, dann wird sie für Sie ausgewählt.")
+                    text = tr("Lichtmaschine anschließen und auf „Automatisch erkennen“ klicken, dann wird sie für dich ausgewählt.")
                 ui.label(text).style("flex:1 1 320px;font-size:15px").props('role=status')
-        # Schritt 3
+        # Schritt 2: Zentrale, nur die von der Lichtmaschine unterstuetzten  # v1.03 (bisher Schritt 1)
         with ui.column().classes("w-full").style("gap:12px"):
-            ui.label(tr("3. So schicken Sie Ihr erstes Programm zur Lichtmaschine")).style("font-size:22px;font-weight:700")
-            if not ready:
-                ui.label(tr("Wählen Sie zuerst Zentrale und Lichtmaschine. Dann steht hier die Anleitung für Ihre Kombination.")).style(
+            ui.label(tr("2. Welche Modellbahnzentrale hast du?")).style("font-size:22px;font-weight:700")
+            if not mac:
+                ui.label(tr("Wähle zuerst die Lichtmaschine. Dann siehst du, welche Zentralen möglich sind.")).style(
                     "padding:16px 18px;border:1px dashed rgba(128,128,128,.7);border-radius:12px;font-size:15px;opacity:.85")
             else:
-                program = program_file(base_dir, mac[0], cen[0])
+                ui.label(tr("Alle Tabellen, die du nicht brauchst, werden ausgeblendet. Du siehst später nur die Seite deiner Zentrale.")).style("font-size:15px;opacity:.85")
+                if st["notice"]:
+                    ui.label(st["notice"]).style("font-size:15px;font-weight:600").props('role=status')
+                with ui.element("div").classes("w-full").style(GRID_STYLE):  # v1.05: gleich grosse Kacheln, auch in der letzten Zeile
+                    for key, name, sub, _pid in CENTRALS:
+                        if key in supported_centrals(mac["key"]):
+                            tile(name, sub, st["central"] == key, lambda _e=None, k=key: pick_central(k))
+        # Schritt 3
+        with ui.column().classes("w-full").style("gap:12px"):
+            ui.label(tr("3. So schickst du dein erstes Programm zur Lichtmaschine")).style("font-size:22px;font-weight:700")
+            if not ready:
+                ui.label(tr("Wähle zuerst Lichtmaschine und Zentrale. Dann steht hier die Anleitung für deine Kombination.")).style(
+                    "padding:16px 18px;border:1px dashed rgba(128,128,128,.7);border-radius:12px;font-size:15px;opacity:.85")
+            else:
+                program = program_file(base_dir, mac["key"], cen[0])
                 with ui.column().classes("w-full").style("gap:14px;padding:20px 22px;border:%s;border-radius:14px" % border):
                     table = "DCC" if cen[0] == "None" else cen[1]
                     if program:
-                        ui.label(tr("In der Tabelle „{tabelle}“ liegt schon ein Startprogramm für die {lichtmaschine}. Sie müssen es nur noch hochladen.",
-                                    tabelle=table, lichtmaschine=tr(mac[1]))).style("font-size:16px;line-height:1.5")
+                        ui.label(tr("In der Tabelle „{tabelle}“ liegt schon ein Startprogramm für die {lichtmaschine}. Du musst es nur noch hochladen.",
+                                    tabelle=table, lichtmaschine=tr(mac["name"]))).style("font-size:16px;line-height:1.5")
                     else:
                         ui.label(tr("Für diese Auswahl gibt es noch kein Startprogramm. Es wird die leere Tabelle „{tabelle}“ geöffnet.", tabelle=table)).style("font-size:16px;line-height:1.5")
-                    step_row(1, tr("Verbinden Sie die Lichtmaschine per USB mit dem Computer."))
-                    step_row(2, tr("Klicken Sie in der Tabelle auf den Knopf"), lambda: step_button("Btn_Send_to_ARDUINO.png", "Setup", "übertragen"),
+                    step_row(1, tr("Verbinde die Lichtmaschine per USB mit dem Computer."))
+                    step_row(2, tr("Klicke in der Tabelle auf den Knopf"), lambda: step_button("Btn_Send_to_ARDUINO.png", "Setup", "übertragen"),
                              tr("Das Programm wird zur Lichtmaschine übertragen. Die Heartbeat-LED blinkt, wenn es geklappt hat."))
-                    step_row(3, tr("Für eigene Beleuchtungen klicken Sie oben links auf"), lambda: step_button("Btn_Dialog.png", "Dialog", "Wizard"),
-                             tr("Das Programm fragt Schritt für Schritt alles ab. Danach übertragen Sie wieder mit „Setup übertragen“."))
+                    step_row(3, tr("Für eigene Beleuchtungen klickst du oben links auf"), lambda: step_button("Btn_Dialog.png", "Dialog", "Wizard"),
+                             tr("Das Programm fragt Schritt für Schritt alles ab. Danach überträgst du wieder mit „Setup übertragen“."))
                     if program:
                         ui.label(tr("Geladen wird: {pfad}", pfad=PROGRAM_DIR + "/" + os.path.basename(program))).style(
                             "font-size:13px;opacity:.75;font-family:ui-monospace,Menlo,Consolas,monospace")
@@ -277,8 +345,8 @@ async def show_start_page(base_dir, tr, *, detect, beginner=False):
             with ui.row().classes("w-full no-wrap items-start").style("gap:14px;padding:14px 16px;border:1px solid rgba(21,101,192,.5);border-radius:12px;background:rgba(21,101,192,.10)").props("role=note"):
                 ui.icon("info").style("color:%s;font-size:24px;flex:none" % blue)
                 with ui.column().style("gap:2px;flex:1 1 auto;min-width:0"):
-                    ui.label(tr("Sie befinden sich im Anfänger-Modus.")).style("font-size:15px;line-height:1.5;font-weight:700")
-                    ui.label(tr("In diesem Modus sind viele Funktionen der MobaLedLib ausgeblendet. Sie können ihn unter Einstellungen → Allgemein ausschalten und haben dann die volle Funktionalität der MobaLedLib zur Verfügung.")).style(
+                    ui.label(tr("Du bist im Anfänger-Modus.")).style("font-size:15px;line-height:1.5;font-weight:700")
+                    ui.label(tr("In diesem Modus sind viele Funktionen der MobaLedLib ausgeblendet. Du kannst ihn unter Einstellungen → Allgemein ausschalten und hast dann die volle Funktionalität der MobaLedLib zur Verfügung.")).style(
                         "font-size:15px;line-height:1.5")
 
     with ui.dialog().props("persistent maximized") as dlg, ui.card().classes("w-full").style("overflow:auto;border-radius:0;align-items:center"):
@@ -287,7 +355,7 @@ async def show_start_page(base_dir, tr, *, detect, beginner=False):
                 with ui.column().style("gap:10px;flex:1 1 520px;min-width:0"):
                     ui.label("MobaLedLib Studio").style("font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:%s" % blue)
                     ui.label(tr("Willkommen! In drei Schritten zur ersten Beleuchtung")).style("font-size:36px;line-height:1.15;font-weight:700")
-                    ui.label(tr("Sagen Sie uns kurz, welche Zentrale und welche Lichtmaschine Sie haben. Danach öffnen wir die passende Tabelle mit einem fertigen Startprogramm. Sie müssen es nur noch zur Lichtmaschine schicken.")).style(
+                    ui.label(tr("Sag uns kurz, welche Lichtmaschine und welche Zentrale du hast. Danach öffnen wir die passende Tabelle mit einem fertigen Startprogramm. Du musst es nur noch zur Lichtmaschine schicken.")).style(
                         "font-size:18px;line-height:1.5;opacity:.9")
                 ui.image("/mll_images/" + HERO_IMAGE).props("fit=contain").style("width:210px;height:159px;flex:none")
             body()

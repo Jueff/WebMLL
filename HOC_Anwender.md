@@ -1,9 +1,112 @@
-Datei-Version: 1.110 (2026-11-25) - HOC_Anwender.md
-Stand: Version 5.25
+Datei-Version: 1.124 (2026-11-26) - HOC_Anwender.md
+Stand: Version 5.39
 
 # MobaLedLib Studio: Änderungen (Kurzfassung)
 
 Gilt ab Version 1.39. Neueste Version oben.
+
+## Version 5.39 (2026-11-26)
+
+Korrekturen:
+- Makro Button: Nach der Auswahl in der Makroauswahl erscheint keine Fehlermeldung „Parameter … nicht gefunden“ mehr.
+
+## Version 5.38 (2026-11-26)
+
+Korrekturen:
+- Ohne angeschlossene Lichtmaschine erscheint die Meldung „Fehler beim Öffnen der Verbindung“ beim Reiterwechsel nur noch einmal. Ein Klick auf eine Testtaste versucht wieder zu verbinden.
+
+## Version 5.37 (2026-11-26)
+
+Neue Funktionen:
+- Farb Test: Unten rechts steht ein Knopf „Farb Test beenden“, der zurück zum Programm Generator führt.
+- Eingabefenster der Makros: Flags (zum Beispiel „Optionale Zähler Parameter“ und Mode) wählst du in einer aufklappbaren Liste mit Haken aus, statt sie abzuschreiben.
+
+Korrekturen:
+- Das Makro Set_ColTab öffnet den Farb Test jetzt auch ohne angeschlossene Lichtmaschine.
+
+## Version 5.36 (2026-11-26)
+
+Korrekturen:
+- Startseite: Alle Kacheln (Lichtmaschinen und Zentralen, auch „Ohne Zentrale“) sind gleich groß.
+
+## Version 5.35 (2026-11-26)
+
+Korrekturen:
+- Startseite: Die Lichtmaschinen sind berichtigt. Mini (Nano) und MoLLi unterstützen nur DCC, Pico Zero alle Zentralen. Pico Zero und MoLLi haben je eine eigene Kachel.
+
+## Version 5.34 (2026-11-26)
+
+Neue Funktionen:
+- Startseite: Zuerst wählst du die Lichtmaschine, dann zeigt das Programm nur die Zentralen, die sie unterstützt (Pico, Mini und MoLLi: nur DCC).
+- Neue Kachel „Lichtmaschine Mini“. Die Lichtmaschinen stehen in einer Liste (csv/Lichtmaschinen_prop.json), ein neues Produkt wird nur dort ergänzt.
+- Die Startseite spricht dich jetzt mit Du an.
+
+## Version 5.33 (2026-11-26)
+
+(Jürgen Winkler, Pull Request 74; dort als 5.28)
+
+Neue Funktionen:
+- Selectrix ist wieder da: In den Hardware Optionen lässt sich das Protokoll eines Blatts auf Selectrix und zurück umstellen. Die Adressen werden umgerechnet (Adresse = Channel × 8 + Bitposition), vorher fragt das Programm nach.
+- Selectrix: Channel (0 bis 99) und Bitposition (1 bis 8) werden bei der Eingabe geprüft; der Dialog Taster / An-Aus öffnet sich sofort nach Channel und Bitposition.
+
+Korrekturen:
+- Selectrix mit Channel 0: Typ und Testtasten bleiben stehen.
+- Die Testtasten sind etwas kleiner und stehen einen Pixel höher in der Zelle.
+
+## Version 5.32 (2026-11-26)
+
+Korrekturen:
+- Beim Löschen mit Entf erscheint nicht mehr die Meldung „Es läuft noch ein Vorgang“.
+
+## Version 5.31 (2026-11-26)
+
+(Jürgen Winkler, Pull Request 73; dort als 5.27)
+
+Neue Funktionen:
+- Schnelle Eingabe wie in Excel: Nach dem Tippen in einer Zelle beenden die Pfeiltasten die Eingabe und wechseln in die Nachbarzelle. Nach F2 oder Doppelklick bewegen sie den Cursor im Text.
+- Ein Doppelklick auf Name und Beleuchtung öffnet die Makroauswahl; mit Umschalt + Doppelklick, F2 oder Enter bearbeitet man den Makrotext von Hand.
+
+Korrekturen:
+- Nach dem Dialog Typ und nach Entf, Ausschneiden, Einfügen, Ausfüllen, Rückgängig und Wiederholen bleibt die Markierung in der Zelle, und man kann mit der Tastatur weiterarbeiten.
+
+## Version 5.30 (2026-11-26)
+
+(Jürgen Winkler, Pull Request 72; dort als 5.26)
+
+Neue Funktionen:
+- Hardware Optionen: Der Reiter Lichtmaschine zeigt die eingestellte Hardware mit Port und Bild. Der Knopf „Erkennen“ öffnet die Geräteauswahl: alle angeschlossenen Lichtmaschinen (Classic, Pro, Pico) in einer Liste, das Gerät des Blattes auch offline. Unbekannte Anschlüsse lassen sich einblenden; beim Übernehmen fragt das Programm nach dem Typ.
+- Geräteauswahl: Der Dialog öffnet sofort, Typ und Version der Geräte erscheinen kurz danach (Spalten Typ, Port, Version, USB Kennung). Erkannt werden Lichtmaschinen (Classic, Pro, Pico) und andere MobaLedLib-Geräte (zum Beispiel Servo, Sound, 2x3); diese sind nicht als Lichtmaschine wählbar. Belegt ein anderes Programm einen Anschluss, steht „blockiert“, und beim Auswählen erscheint ein Hinweis. Mit den Pfeiltasten rauf und runter wählt man das Gerät.
+- Classic (Nano): Der Bootloader (alt, neu, Full) wird erkannt und beim Schließen mit OK in den Optionen eingetragen.
+- Pro (ESP32): Auswahlfeld „Displaytyp“ (0,96" oder 1,3").
+- Wurde der COM Port in den Hardware Optionen geändert, verbindet das Programm nach dem Schließen automatisch (Einstellung AutoConnect).
+- Unter „Einstellungen“ stehen Protokoll (nur die Protokolle, die die Hardware laut Plattform Parametern kann), Hardwarevariante, Schnelles Update, Lichtsensor, Schaltzustände speichern und (Pro) die Anzeige auf dem Display. Alles wird im Blatt gespeichert.
+- Lichtsensor und Schaltzustände speichern gibt es jetzt auf allen Lichtmaschinen; sie erscheinen als Zeile im Blatt.
+
+Korrekturen:
+- Der Reiter DCC/LNet Arduino heißt sofort wie das gewählte Protokoll und verschwindet bei CAN.
+- Anzeige auf dem Display: die Anzeigen mit WLAN gibt es nur bei eingeschaltetem WLAN.
+- Die Oberfläche spricht von Gerät und Lichtmaschine statt von Arduino und Board.
+- Eine negative Portnummer im Blatt (belegter Port) wurde als „an -3 (offline)“ angezeigt; jetzt gilt sie als „kein Port gewählt“.
+
+## Version 5.29 (2026-11-25)
+
+Neue Funktionen:
+- Logic: Die Eingänge sind in Gruppen geordnet: Eingang dieser Zeile, Variable der Tabelle, Schalter A, B, C, D (mit Nummernfeld 1 bis 250) und Eigener Name. Die lange Liste entfällt, SwitchC ist dabei.
+
+## Version 5.28 (2026-11-25)
+
+Neue Funktionen:
+- Logic: Die Eingangsvariablen der Taster und Schalter (SwitchA1 bis SwitchA250, SwitchB…, SwitchD…) stehen in der Auswahl; die ersten 16 jeder Gruppe in der Liste, andere Nummern lassen sich eintippen. Eine ungültige Nummer wird gemeldet.
+
+## Version 5.27 (2026-11-25)
+
+Korrekturen:
+- Logic: Das Eingabefenster ließ sich nicht öffnen, wenn in der Tabelle Makros mit Parametern wie On_Min oder On_Limit standen („Der Parameter Name … wurde nicht gefunden“). Das ist behoben.
+
+## Version 5.26 (2026-11-25)
+
+Neue Funktionen:
+- Die Funktion „Logic“ (logische Verknüpfung) hat ein neues Eingabefenster: Bedingungen werden aus Eingängen zusammengestellt (UND innerhalb einer Bedingung, ODER zwischen den Bedingungen, „nicht“ zum Umkehren), die Variablen der Tabelle stehen zur Auswahl. Eine Vorschau zeigt den Ausdruck in Klartext, eine Prüfung meldet Fehler vor dem Speichern. Der Text lässt sich weiter von Hand bearbeiten.
 
 ## Version 5.25 (2026-11-25)
 

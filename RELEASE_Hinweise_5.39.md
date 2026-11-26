@@ -1,9 +1,9 @@
-Datei-Version: 1.15 (2026-11-25) - RELEASE_Hinweise_5.25.md
-Gilt für MobaLedLib Studio 5.25
+Datei-Version: 1.16 (2026-11-26) - RELEASE_Hinweise_5.39.md
+Gilt für MobaLedLib Studio 5.39
 
-# MobaLedLib Studio 5.25
+# MobaLedLib Studio 5.39
 
-Anhänge dieses Releases: `webmobaledlib.zip` (Programm, mit `zip_erstellen.bat` Version 1.11 gebaut, `ROOT_IN_ZIP=1`), `START_HIER.txt` (erste Schritte), `ANLEITUNG_Installation.pdf` (Anleitung, Version 5.25) und `BETATEST_Checkliste.pdf` (Checkliste für Betatester, Version 4.05).
+Anhänge dieses Releases: `webmobaledlib.zip` (Programm, mit `zip_erstellen.bat` Version 1.11 gebaut, `ROOT_IN_ZIP=1`), `START_HIER.txt` (erste Schritte), `ANLEITUNG_Installation.pdf` (Anleitung, Version 5.39) und `BETATEST_Checkliste.pdf` (Checkliste für Betatester, Version 4.18).
 Installation: siehe `START_HIER.txt` und den Schnellstart der Anleitung. Aktualisieren: Menü **Hilfe → Update MobaLedLib Studio …**, danach das Programm **neu starten** und die Seite mit Strg+F5 neu laden.
 
 ## Wichtig beim Aktualisieren
@@ -12,7 +12,18 @@ Installation: siehe `START_HIER.txt` und den Schnellstart der Anleitung. Aktuali
 - **Nach dem Update das Programm neu starten** und die Seite neu laden. Oben darf keine rote Meldung stehen.
 - **Neues Programmsymbol (4.10):** Für die Verknüpfung auf dem Desktop den Installer noch einmal ausführen.
 
-## Neu seit Version 3.93 (3.94 bis 5.25)
+## Neu seit Version 3.93 (3.94 bis 5.39)
+
+**Neu seit 5.25 (5.26 bis 5.39):**
+- **Startseite überarbeitet (5.34 bis 5.36):** Zuerst wählt man die **Lichtmaschine**, dann zeigt das Programm nur die Zentralen, die sie unterstützt. Fünf Kacheln: Classic (Nano, alle Zentralen), Mini (Nano, nur DCC), Pro (ESP32, alle), Pico Zero (Pico, alle) und MoLLi (Pico, nur DCC). Alle Kacheln sind gleich groß, die Seite spricht mit Du. Die Lichtmaschinen stehen in `csv/Lichtmaschinen_prop.json`; ein neues Produkt wird nur dort ergänzt. Die Startprogramme `*.MLL_pgf` im Ordner `Startprogramme` liefert Harold noch.
+- **Logic (5.26 bis 5.29):** Neues Eingabefenster für die logische Verknüpfung (UND, ODER, nicht) mit Vorschau in Klartext und Prüfung. Eingänge in Gruppen: Eingang dieser Zeile, Variablen der Tabelle, Schalter A bis D (1 bis 250), eigener Name. Das Fenster öffnet auch, wenn in der Tabelle Makros mit Parametern wie On_Min stehen.
+- **Hardware Optionen und Geräteauswahl (5.30, Jürgen, Pull Request 72):** Der Reiter Lichtmaschine zeigt Hardware, Port und Bild. „Erkennen“ öffnet die Geräteauswahl mit Typ, Port, Version und USB Kennung, auch für andere MobaLedLib-Geräte; belegte Anschlüsse stehen als „blockiert“. Bootloader des Nano wird erkannt, ESP32 mit Displaytyp, Einstellungen (Protokoll, Lichtsensor, Schaltzustände speichern) im Blatt gespeichert.
+- **Tabelle bedienen wie in Excel (5.31, Jürgen, Pull Request 73):** Pfeiltasten beenden die Eingabe und wechseln die Zelle, Doppelklick auf Name und Beleuchtung öffnet die Makroauswahl, die Markierung bleibt nach Dialogen und Bearbeiten.
+- **Selectrix wieder da (5.33, Jürgen, Pull Request 74):** Protokoll eines Blatts auf Selectrix umstellbar, Adressen werden umgerechnet, Channel und Bitposition werden geprüft.
+- **Farb Test (5.37):** Knopf „Farb Test beenden“ unten rechts; Set_ColTab öffnet den Farb Test auch ohne angeschlossene Lichtmaschine.
+- **Eingabefenster der Makros (5.37):** Flags (Optionale Zähler Parameter, Mode, RandMode) wählt man in einer aufklappbaren Liste mit Haken.
+- **Korrekturen:** Entf löscht ohne Meldung „Es läuft noch ein Vorgang“ (5.32). Ohne angeschlossene Lichtmaschine erscheint „Fehler beim Öffnen der Verbindung“ beim Reiterwechsel nur einmal (5.38). Makro Button: kein Fehler „Parameter … nicht gefunden“ mehr, wenn die Bibliothek aus der xlsm geladen wird und eine Zelle einen Kommentar hat (5.39).
+- **Geprüft:** 5.31, 5.32, 5.33, 5.36, 5.38 und 5.39 hat der Entwickler im Browser bestätigt. Nur gebaut und kompiliert: Logic (5.26 bis 5.29), Hardware Optionen und Geräteauswahl (5.30), Startseite 5.34/5.35, Flags-Auswahl (5.37). Übersetzungen der neuen Texte gibt es nur Deutsch und Englisch.
 
 **Neu seit 5.12 (5.13 bis 5.25):**
 - **Startseite für Einsteiger (5.23, 5.24):** Beim Start fragt MobaLedLib Studio nach der **Modellbahnzentrale** (DCC, Selectrix, LNet, Märklin CAN-Bus oder ohne Zentrale) und der **Lichtmaschine** (Classic / Mini, Pro, Pico Zero / MoLLI; auch „Automatisch erkennen“). Mit **Anfangen** blendet das Programm die Tabellen der anderen Zentralen aus, öffnet die richtige Tabelle, lädt das Startprogramm aus dem Ordner `Startprogramme` (sofern vorhanden) und stellt das Board ein. Die Seite erklärt den Weg mit **Setup übertragen** und **Dialog Wizard**. Im Anfänger Modus steht ein Hinweis darunter. Ausschalten mit dem Haken auf der Seite oder unter Einstellungen → Allgemein → „Startseite beim Programmstart anzeigen“. Die Texte gibt es zunächst nur auf Deutsch. **Die Startseite ist noch nicht im Browser geprüft.** Wiki: Seite `startseite`.
@@ -144,7 +155,7 @@ Installation: siehe `START_HIER.txt` und den Schnellstart der Anleitung. Aktuali
 
 **Noch nicht an Hardware oder im Browser geprüft:** (die Funktionen 4.55 bis 4.93 hat der Entwickler im Browser geprüft; Rückmeldungen der Tester stehen aus). **Ab 4.94 nur gebaut und kompiliert, nicht an Hardware geprüft:** Löschen des ESP32-Dateisystems (4.97), feste IP in der minimalen Firmware (4.95), git-Installation durch die Installationsskripte und die Frage beim Übersetzen (4.98, nicht an einem frischen PC oder Mac getestet) Alles ab 4.11 (Einstellungen sichern/übernehmen, Ausgabe und Abbrechen beim ESP32-Build, Verbinden beim Start, inkrementelles Speichern und seine Tastenkombination, Kopfbereich (Abstand in Issue 22 nicht bestätigt), Erweiterungen mit `symlink://`, Name und Beschreibung aus `libraries.json`) wurde nur gebaut und kompiliert, nicht auf Hardware oder im Browser getestet. IRremote 4.x für InfraredMLX ist nicht mit einem Pico geprüft. Die Übersetzungen der neuen Texte (CSV) sind ungeprüft. Die Menüs ab 4.51 sind vom Entwickler im Browser getestet (4.74: Rückmeldung „Funktioniert“); Dunkler Modus und Dateinamen mit Datum (4.44 bis 4.50) ebenfalls. **Ab 4.99 nur gebaut und kompiliert, nicht an Hardware oder im Browser geprüft:** die Änderungen von 5.04 bis 5.12 (Parameterformular, House-Formular, Name, Symbole, Niederländisch, Hilfe-Adressen); die Installationsskripte nur mit `bash -n`. Bitte besonders Aussehen und Bedienung des Parameterformulars und das Entfernen der alten Desktop-Symbole prüfen.
 
-**Wiki:** Paket `webmobaledlib_Wiki_Gesamt_Stand_5.12.zip` (alle Seiten im Namensraum `mobaledlibstudio`, an die neuen Menüs angepasst, Hinweise in `LIESMICH_Wiki_Gesamt.md`). Die Bilder (Menüband, Programm Einstellungen, ARDUINO-IDE Einstellungen, Optionen, Datei-Menü, Verbinden) zeigen noch den alten Stand und müssen neu aufgenommen werden.
+**Wiki:** Paket `webmobaledlib_Wiki_Gesamt_Stand_5.39.zip` (alle Seiten im Namensraum `mobaledlibstudio`, an die neuen Menüs angepasst, Hinweise in `LIESMICH_Wiki_Gesamt.md`). Die Bilder (Menüband, Programm Einstellungen, ARDUINO-IDE Einstellungen, Optionen, Datei-Menü, Verbinden) zeigen noch den alten Stand und müssen neu aufgenommen werden.
 
 **Geplant:** Quell-URL direkt in der `platformio.ini` (Issue 6) ist nicht vorgesehen (Cache und `symlink://` bleiben); Rückfragen dazu stehen im Issue.
 

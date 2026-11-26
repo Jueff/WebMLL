@@ -1,10 +1,10 @@
-# Datei-Version: 5.25 (2026-11-25) - webmobaledlib.py
+# Datei-Version: 5.39 (2026-11-26) - webmobaledlib.py
 # ----------------------------------------------------------------------------------------------
 # Name:           webmobaledlib.py
 # Path:           webmobaledlib.py
-# Version:        5.25
-# Last Update:    2026-11-25
-# Author:         Harold Linke
+# Version:        5.39
+# Last Update:    2026-11-26
+# Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
 # History of Change:
 #   1.39  2026-10-17  Reiter Patterngenerator (Runde 1): Anzeige der Tabelle, Aufbau erst beim ersten Oeffnen (build_patt, _PATT); Kopf eingefuegt; davor bis 1.38 nicht erfasst
@@ -58,6 +58,20 @@
 #   1.82  2026-10-20  Reiter direkt per Adresse aufrufen (/Farbtest ...) und mit ?vollbild=1 im Vollbild (web_tabs 1.00, web_fullscreen 1.02); index() baut ueber build_page
 #   1.81  2026-10-20  Vollbild: ein Knopf in der Kopfzeile neben Beenden statt je einer in jedem Reiter, Beenden bleibt im Vollbild (web_fullscreen 1.01, web_pattgen 1.17)
 #   1.80  2026-10-20  Knopf Vollbild in jedem Reiter (web_fullscreen 1.00, web_pattgen 1.16)
+#   5.39  2026-11-26  Makro Button (und alle Makros, deren Zelle in Lib_Macros einen Kommentar hat): Fehler 'Der Parameter Name Val1§Duration 0 not possible wurde nicht im Sheet Par_Description gefunden' behoben, der Kommentar der Zelle (Text nach dem §) gehoert nicht zum Makro (M09_Select_Macro 1.01, M06_Write_Header_SW 1.15, web_form_other 1.18, web_macro_tree 1.13)
+#   5.38  2026-11-26  Ohne Lichtmaschine kam die Meldung 'Fehler beim Oeffnen der Verbindung' bei jedem Wechsel auf einen Reiter mit Direktmodus (Farb Test, Servo Test, Sound Test): das automatische Verbinden beim Reiterwechsel scheitert jetzt nur einmal mit Meldung, danach wird nicht mehr versucht, bis eine Verbindung besteht oder der Anwender selbst verbindet (Menue, Testtasten)
+#   5.37  2026-11-26  Farb Test: Knopf 'Farb Test beenden' unten rechts (web_colorcheck 1.13); Set_ColTab oeffnet den Farb Test auch ohne Lichtmaschine, kein Anschluss noetig (M60_CheckColors 1.01); Parameterformular: Flags (OptCtrPar, CtrMode, RandMode) als aufklappbare Hakenliste (web_form_other 1.17, Web_Languages.csv)
+#   5.36  2026-11-26  Startseite: alle Kacheln gleich gross (auch Ohne Zentrale und die letzte Lichtmaschine), Raster statt Zeilenumbruch (web_startpage 1.05)
+#   5.35  2026-11-26  Lichtmaschinen-Liste berichtigt: Mini (Nano, nur DCC), Pico Zero (alle Zentralen), MoLLi (Pico, nur DCC) (web_startpage 1.04, csv/Lichtmaschinen_prop.json 1.01, Web_Languages.csv)
+#   5.34  2026-11-26  Startseite: erst die Lichtmaschine, dann nur die Zentralen, die sie unterstuetzt (Pico und Mini nur DCC); Lichtmaschinen aus csv/Lichtmaschinen_prop.json, jedes Produkt eine Kachel (neues Produkt: nur die Liste ergaenzen); Lichtmaschine Mini eigene Kachel; Anrede Du statt Sie (web_startpage 1.03, Web_Languages.csv)
+#   5.33  2026-11-26  Selectrix wieder da (Juergen, Pull Request 74, dort als 5.28, Zeilen '# v5.28'): Das Protokoll eines Blatts laesst sich zwischen Selectrix und DCC/LNet/CAN wechseln. Die Spalte Bitposition wird eingefuegt oder entfernt, die Adressen werden umgerechnet (Adresse = Channel * 8 + Bitposition), Rot/Gruen werden zu Taster, die Testtasten werden neu gebaut; Rueckfrage mit Hinweis, wenn das Blatt Adressen (keine Variablen) enthaelt; beim Import einer Pgf-Datei zwischen Selectrix und anderen Blaettern gilt dieselbe Umrechnung (Bitposition 1 bis 8); Selectrix Channel 0 behaelt Typ und Testtasten (web_form_options 1.67, headless_protocol_switch 1.00, headless_sheet 1.04, M18_Save_Load 1.07, M20_PageEvents_a_Functions 1.17, Web_Languages.csv); Selectrix: der Dialog Taster/An-Aus oeffnet sich sofort nach Channel und Bitposition; Testtasten kleiner (16 Pixel) und 1 Pixel weiter oben in der Zelle; die Auswahl der Protokolle enthaelt Selectrix und folgt weiter der Tabelle Platform_Parameters (web_form_options 1.68); Selectrix prueft die Wertebereiche bei der Eingabe (Channel 0 bis 99, Bitposition 1 bis 8; M20 1.18)
+#   5.32  2026-11-26  Entf in der Tabelle: Meldung 'Es laeuft noch ein Vorgang' nach dem Loeschen unterdrueckt (zweites Entf-Ereignis kurz nach dem ersten und Tastenwiederholung werden ignoriert), Protokollzeile zur Diagnose
+#   5.31  2026-11-26  Tabelle bedienen wie in Excel (Juergen, Pull Request 73, dort als 5.27, Zeilen '# v5.27'): Wurde die Eingabe in einer Zelle durch Tippen begonnen, beenden die Pfeiltasten (hoch, runter, links, rechts) die Eingabe und wechseln in die Nachbarzelle; nach F2, Doppelklick oder Enter bleibt der Cursor im Text; Doppelklick auf Name und Beleuchtung oeffnet standardmaessig die Makroauswahl, Umschalt + Doppelklick bearbeitet den Text (web_layout 1.22); nach dem Dialog Typ sowie nach Entf, Ausschneiden, Einfuegen, Ausfuellen, Rueckgaengig und Wiederholen bleibt der Fokus in der Zelle (web_dialogs 1.15)
+#   5.30  2026-11-26  Hardware Optionen (Juergen, Pull Request 72, dort als 5.26 gefuehrt, Zeilen '# v5.26'): Reiter Lichtmaschine zeigt Hardware, Knopf Erkennen und Einstellungen des Blattes (Protokoll, Board-Variante, Schnelles Update je Blatt, Lichtsensor und Schaltzustaende als Makrozeilen, Anzeige auf dem Display); Dialog Erkennen mit Liste der Geraete (Classic/Pro/Pico, offline, unbekannte Ports); Texte Geraet/Lichtmaschine statt Arduino/Board (Menuepunkt Geraet wechseln) ; Anzeige auf dem Display: WLAN-Anzeigen nur mit WLAN; Geraeteauswahl ohne Einleitungssatz und Statuszeile (Anschlussname nur in der Liste), Liste doppelt so hoch; Bild der Hardware 50 % groesser; Protokollauswahl nach der Tabelle Platform_Parameters; Geraeteauswahl: Dialog oeffnet sofort, Typ und Version im Hintergrund (ESP32, Pico, Nano per #?, Servo und andere Geraete per ~MLLINFO), blockierte Ports, Bootloader des Nano, Pfeiltasten; ESP32: Displaytyp (OLED_TYP); Autoconnect nach Aenderung des COM Ports (web_form_comport 1.43, web_form_options 1.74, headless_sheet_settings 1.00, M42_Dyn_Config 1.12, M06_Write_Header 1.20, M06_Write_Header_SW 1.14, M07_COM_Port_New 1.24, M07_COM_Port 1.16, web_serial 1.18, web_esp32_ota 1.10, web_z21 1.06, web_form_ledcoloranim 1.01, web_form_servoanim 1.06, web_form_exchange 1.04, M06_Write_MLLConfig 1.01, M55_PWM_Data_Send 1.01, Web_Languages.csv, PA_Languages.csv)
+#   5.29  2026-11-25  Logic-Baukasten: Auswahl der Eingaenge in Gruppen (Eingang dieser Zeile, Variable der Tabelle, Schalter A bis D mit Nummernfeld, Eigener Name), SwitchC aufgenommen (web_logic_builder 1.02, Web_Languages.csv)
+#   5.28  2026-11-25  Logic-Baukasten: Eingangsvariablen SwitchA#, SwitchB#, SwitchD# in der Auswahl (web_logic_builder 1.01, Web_Languages.csv)
+#   5.27  2026-11-25  Logic-Dialog: Fehler 'Der Parameter Name On_Min wurde nicht im Sheet Par_Description gefunden' behoben, die Variablen der Tabelle werden ohne Fehlerdialog gelesen (web_form_other 1.16)
+#   5.26  2026-11-25  Logic: Parameterformular mit Baukasten fuer Bedingungen (UND-Gruppen mit ODER, 'nicht', Auswahl der Variablen der Tabelle, Klartext-Vorschau, Pruefung) statt Texteingabe; kuerzere Beschreibung; wiederverwendbarer Baustein web_logic_builder 1.00 (web_form_other 1.15, Web_Languages.csv)
 #   5.25  2026-11-25  Der geschuetzte Begriff LocoNet wird in der Oberflaeche nicht mehr benutzt: Startseite zeigt LNet-Zentrale (web_startpage 1.02, Web_Languages.csv)
 #   5.24  2026-11-25  Startseite: Fehler 'unsupported format character' nach Auswahl von Zentrale und Lichtmaschine behoben (web_startpage 1.01)
 #   5.23  2026-11-25  Startseite fuer Einsteiger (web_startpage 1.00, web_tabs 1.37): Auswahl der Zentrale und der Lichtmaschine (auch automatisch erkennen), Anleitung Setup uebertragen und Dialog Wizard, Knopf Anfangen (andere Zentralen-Tabellen ausblenden, Board einstellen, Startprogramm aus Startprogramme/ laden), Einstellung ShowStartPage, Hinweis zum Anfaenger Modus
@@ -652,11 +666,27 @@ REQUIRED_FILES = {  # v1.75
     # "_web/web_startpage.py": "1.00", "_web/web_tabs.py": "1.37",  # v5.23  # v5.24 (entfallen)
     # "_web/web_startpage.py": "1.01", "_web/web_tabs.py": "1.37",  # v5.23  # v5.24  # v5.25 (entfallen)
     "_web/web_startpage.py": "1.02", "_web/web_tabs.py": "1.37",  # v5.23  # v5.24  # v5.25
+    "_web/web_startpage.py": "1.03",  # v5.34
+    "_web/web_startpage.py": "1.04",  # v5.35
+    "_web/web_startpage.py": "1.05",  # v5.36
     "_web/web_form_other.py": "1.14",  # v5.22
+    "_web/web_form_other.py": "1.15", "_web/web_logic_builder.py": "1.00",  # v5.26
+    "_web/web_form_other.py": "1.16",  # v5.27
+    "_web/web_logic_builder.py": "1.01",  # v5.28
+    "_web/web_logic_builder.py": "1.02",  # v5.29
     "proggen/M20_PageEvents_a_Functions.py": "1.15", "_web/web_esp32_ota.py": "1.09", "_web/web_form_servoanim.py": "1.05", "_web/web_pattgen.py": "1.25",  # v5.12
+    "_web/web_form_comport.py": "1.43", "_web/web_form_options.py": "1.74", "headless/headless_sheet_settings.py": "1.00", "proggen/M42_Dyn_Config.py": "1.12",  # v5.26
+    "_web/web_esp32_ota.py": "1.10", "_web/web_z21.py": "1.06", "_web/web_form_ledcoloranim.py": "1.01", "_web/web_form_servoanim.py": "1.06", "_web/web_form_exchange.py": "1.04",  # v5.26
+    "proggen/M06_Write_MLLConfig.py": "1.01", "pattgen/M55_PWM_Data_Send.py": "1.01",  # v5.26
+    "proggen/M06_Write_Header.py": "1.20", "proggen/M06_Write_Header_SW.py": "1.14", "proggen/M07_COM_Port_New.py": "1.24", "proggen/M07_COM_Port.py": "1.16", "_web/web_serial.py": "1.18",  # v5.26
     "_web/web_dialogs.py": "1.13", "proggen/M18_Save_Load.py": "1.06",  # v4.96
     "_web/web_log.py": "1.12", "_web/web_form_options.py": "1.47",  # v4.90
     "_web/web_serial.py": "1.14",  # v4.91
+    "_web/web_layout.py": "1.22", "_web/web_dialogs.py": "1.15",  # v5.27
+    "_web/web_form_options.py": "1.68", "headless/headless_protocol_switch.py": "1.00", "ExcelAPI/headless_sheet.py": "1.04",  # v5.28
+    "proggen/M18_Save_Load.py": "1.07", "proggen/M20_PageEvents_a_Functions.py": "1.18",  # v5.28
+    "_web/web_colorcheck.py": "1.13", "_web/web_form_other.py": "1.17",  # v5.37
+    "_web/web_macro_tree.py": "1.13", "_web/web_form_other.py": "1.18", "proggen/M06_Write_Header_SW.py": "1.15",  # v5.39
 }  # v1.75
 FILE_PROBLEMS = []                                      # Zeilen der Abweichungen, gefuellt in main()  # v1.75
 
@@ -1444,6 +1474,88 @@ window.mllCopyMeta = function (api, node, colId) {
   }
   return {rows: [node.data._r], cols: [parseInt(String(colId).slice(1))]};
 };
+// v5.27: Eingabemodus wie in Excel: Wurde die Eingabe durch Tippen eines Zeichens begonnen, beenden die Pfeiltasten die Eingabe und wechseln in die Nachbarzelle
+// (schnelle Eingabe von Adressen). Nach F2, Doppelklick oder Enter bleibt der Cursor im Text (Bearbeiten-Modus); F2 schaltet im Eingabemodus ebenfalls dorthin um.
+// Zelle, die der Anwender zuletzt selbst angesteuert hat (Tastatur, Maus). Der Server setzt die Auswahl auch selbst (zum Beispiel auf die Zelle Typ, wenn er den Dialog
+// oeffnet), das geht ueber api.setFocusedCell: solche Aufrufe (mllProgUntil) zaehlen nicht. Nach dem Dialog bekommt diese Zelle den Tastaturfokus zurueck.
+window.mllUserCell = null;
+window.mllProgUntil = 0;
+window.mllWrapApi = function (api) {
+  if (api.mllOrigSetFocus) return;
+  const orig = api.setFocusedCell.bind(api);
+  api.mllOrigSetFocus = orig;
+  api.setFocusedCell = function () { window.mllProgUntil = Date.now() + 120; return orig.apply(null, arguments); };
+};
+window.mllCellFocused = function (e) {
+  window.mllApi = e.api;
+  window.mllWrapApi(e.api);
+  if (Date.now() < window.mllProgUntil || e.rowIndex === null || e.rowIndex === undefined || !e.column || e.rowPinned) return;
+  const node = e.api.getDisplayedRowAtIndex(e.rowIndex);
+  if (node) window.mllUserCell = {rowId: node.id, colId: e.column.getColId()};
+};
+// Die Tabelle wird nach Befehlen neu aufgebaut (neue Grid-API): die aktuelle API immer ueber das NiceGUI-Element holen, window.mllApi kann veraltet sein.
+window.mllGetApi = function () {
+  const el = document.querySelector('.nicegui-aggrid');
+  const id = el ? parseInt(String(el.id).replace('ng-', ''), 10) : NaN;
+  try { const c = isNaN(id) ? null : getElement(id); if (c && c.api) return c.api; } catch (err) { /* Element noch nicht da */ }
+  return window.mllApi;
+};
+// Befehle, die der Server ausfuehrt und danach die Tabelle neu zeichnet (Entf, Ausschneiden, Einfuegen, Ausfuellen, Rueckgaengig): der Fokus bleibt in der Zelle.
+window.mllRefocusLater = function () {
+  [300, 700, 1300].forEach(d => setTimeout(() => window.mllRefocus(), d));
+};
+window.mllRefocus = function () {
+  const api = window.mllGetApi();
+  if (!api || document.querySelector('.q-dialog')) return;
+  window.mllWrapApi(api);
+  const a = document.activeElement;
+  if (a && a !== document.body && (a.closest('.ag-cell') || a.tagName === 'INPUT' || a.tagName === 'TEXTAREA' || a.tagName === 'SELECT')) return;
+  let target = null;
+  const uc = window.mllUserCell;
+  if (uc) { const node = api.getRowNode(uc.rowId); if (node && node.rowIndex !== null && node.rowIndex !== undefined) target = {rowIndex: node.rowIndex, colId: uc.colId}; }
+  if (!target) { const fc = api.getFocusedCell(); if (fc) target = {rowIndex: fc.rowIndex, colId: fc.column.getColId()}; }
+  if (target) (api.mllOrigSetFocus || api.setFocusedCell)(target.rowIndex, target.colId, undefined, true);
+};
+window.mllTypedStart = false;
+// Das Flag wird in der Capture-Phase gesetzt (vor AG Grid): AG Grid startet das Bearbeiten schon im keydown, noch vor dem Ereignis cellKeyDown.
+if (!window.mllKeyHook) {
+  window.mllKeyHook = true;
+  document.addEventListener('keydown', ev => {
+    const t = ev.target;
+    if (t && t.tagName !== 'INPUT' && t.tagName !== 'TEXTAREA' && t.closest && t.closest('.ag-cell')) {
+      window.mllTypedStart = !!(ev.key && ev.key.length === 1 && !ev.ctrlKey && !ev.metaKey && !ev.altKey);
+    }
+  }, true);
+}
+window.mllArrowNav = function (api, ev) {
+  const inp = ev.target;
+  if (!inp || inp.dataset.mllNav !== '1') return;
+  if (ev.key === 'F2') { inp.dataset.mllNav = '0'; return; }
+  const dirs = {ArrowUp: [-1, 0], ArrowDown: [1, 0], ArrowLeft: [0, -1], ArrowRight: [0, 1]};
+  const d = dirs[ev.key];
+  if (!d || ev.shiftKey || ev.ctrlKey || ev.altKey || ev.metaKey) return;
+  const fc = api.getFocusedCell();
+  if (!fc) return;
+  ev.preventDefault(); ev.stopPropagation();
+  api.stopEditing(false);
+  let colKey = fc.column.getColId();
+  if (d[1]) {
+    const cols = api.getAllDisplayedColumns().filter(c => c.getColId() !== '_rn');
+    const i = cols.findIndex(c => c.getColId() === colKey) + d[1];
+    if (i >= 0 && i < cols.length) colKey = cols[i].getColId();
+  }
+  const rowIndex = Math.max(0, Math.min(api.getDisplayedRowCount() - 1, fc.rowIndex + d[0]));
+  (api.mllOrigSetFocus || api.setFocusedCell)(rowIndex, colKey, undefined, true);
+};
+window.mllEditStarted = function (e) {
+  if (!window.mllTypedStart) return;
+  setTimeout(() => {
+    const inp = document.querySelector('.ag-cell-inline-editing input');
+    if (!inp || inp.dataset.mllNav) return;
+    inp.dataset.mllNav = '1';
+    inp.addEventListener('keydown', ev => window.mllArrowNav(e.api, ev), true);
+  }, 0);
+};
 """
 
 # Rechtsklick auf eine Zelle: merkt sich die Zelle (fuer die Menueeintraege im Browser) und meldet sie dem Server.
@@ -1467,6 +1579,7 @@ EDIT_CELL_JS = ("() => { const c = window.mllCtx, api = window.mllCtxApi; if (!c
 # Tastenkuerzel in der Tabelle (nicht beim Bearbeiten): Strg+C/X/V und Entf wie im Kontextmenue.
 JS_CELL_KEYDOWN = ("e => { if (e.editing || !e.event || !e.node || !e.node.data) return; const k = e.event; "
                    "const ctrl = k.ctrlKey || k.metaKey; const col = e.column.getColId(); const r = e.node.data._r; "
+                   "if (k.key === 'Delete' || (ctrl && ['x', 'v', 'd', 'z', 'y'].includes(k.key.toLowerCase()))) window.mllRefocusLater(); "  # v5.27: nach dem Neuzeichnen der Tabelle den Fokus zurueck
                    "const txt = window.mllCopyText(e.api, e.node, col, e.value); "
                    # "if (ctrl && k.key.toLowerCase() === 'c') { window.mllClipSet(txt); } "  # v3.57  # v4.55 (entfallen)
                    # "else if (ctrl && k.key.toLowerCase() === 'x') { window.mllClipSet(txt); "  # v3.57  # v4.55 (entfallen)
@@ -1486,7 +1599,7 @@ JS_CELL_KEYDOWN = ("e => { if (e.editing || !e.event || !e.node || !e.node.data)
                    "else if (ctrl && (k.key.toLowerCase() === 'y' || (k.shiftKey && k.key.toLowerCase() === 'z'))) { k.preventDefault(); "  # v4.02: Wiederholen
                    "emitEvent('mll_cell_op', {op: 'redo', r: r, col: col}); } "  # v4.02
                    "else if (k.key === 'F3') { k.preventDefault(); emitEvent('mll_cell_op', {op: 'minicolor', r: r, col: col}); } "  # v4.58: Mini-Farbtest
-                   "else if (k.key === 'Delete') { emitEvent('mll_cell_op', {op: 'delete', r: r, col: col}); } }")
+                   "else if (k.key === 'Delete' && !k.repeat) { emitEvent('mll_cell_op', {op: 'delete', r: r, col: col}); } }")  # v5.32: ohne Tastenwiederholung
 
 # Kopfzeilen-Tooltips (Text hinter dem "§" der Ueberschrift) aus den Zeilendaten
 JS_TOOLTIP = ("params => (params.data && params.data._tt && params.data._tt[params.colDef.field]) "
@@ -1548,10 +1661,13 @@ html.mll-contrast body:not(.body--dark) .text-grey-6, html.mll-contrast body:not
 .q-tooltip { background: #fffde7 !important; color: #111111 !important; border: 1px solid #5f6b7a; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35); font-size: calc(13px * var(--mll-label-scale, 1)); line-height: 1.35; padding: 6px 10px; }
 .ag-tooltip { white-space: pre-wrap; max-width: 700px; font-size: calc(13px * var(--mll-grid-scale, 1)); background-color: #fffde7 !important; color: #111111 !important; border: 1px solid #5f6b7a !important; }  /* v4.49: Hell/dunkle Schrift wie .q-tooltip */
 /* .mll-tb { display: inline-block; min-width: ...; height: ...; line-height: ... (entfallen v3.27: Schalter unten abgeschnitten) */
+/* v5.28: Testtasten 16 statt 18 Pixel (passen sicher in die Zeile, auch die gelben Selectrix-Taster ohne Text), feste Groesse (flex: none), 1 Pixel weiter oben in der Zelle. Die bisherigen Zeilen stehen als Kommentar darunter. */
+/* (entfallen v5.28) .mll-tb { min-width: calc(18px * var(--mll-grid-scale, 1)); height: calc(18px * var(--mll-grid-scale, 1)); padding: 0 2px; font-size: calc(11px * var(--mll-grid-scale, 1)); } */
 .mll-tb { display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; vertical-align: middle;  /* v3.27 */
-          min-width: calc(18px * var(--mll-grid-scale, 1)); height: calc(18px * var(--mll-grid-scale, 1)); padding: 0 2px;  /* v3.27 */
+          flex: none; position: relative; top: -1px;  /* v5.28 */
+          min-width: calc(16px * var(--mll-grid-scale, 1)); height: calc(16px * var(--mll-grid-scale, 1)); padding: 0 2px;  /* v3.27, v5.28: 16 statt 18 Pixel */
           line-height: 1; border: 1px solid #000; margin-left: 3px;  /* v3.27 */
-          text-align: center; font-size: calc(11px * var(--mll-grid-scale, 1)); cursor: pointer; user-select: none; touch-action: none; }
+          text-align: center; font-size: calc(10px * var(--mll-grid-scale, 1)); cursor: pointer; user-select: none; touch-action: none; }  /* v5.28: Schrift 10 statt 11 Pixel */
 .mll-find .q-checkbox__label, .mll-find .q-field__native { font-size: 14px; }  /* v3.30 / v3.31: Schrift wie die Knoepfe */
 .mll-find .q-field--dense .q-field__control, .mll-find .q-field--dense .q-field__marginal { height: 28px; min-height: 28px; }  /* v3.30 / v3.31 / v3.32: Loeschkreuz mittig */
 .mll-find .q-field__marginal { align-items: center; }  /* v3.32 */
@@ -1647,7 +1763,21 @@ def font_scales(ctrl) -> dict:
 # VERSION = "5.17 (2026-11-25)"  # v5.18 (entfallen)
 # VERSION = "5.23 (2026-11-25)"  # v5.23  # v5.22  # v5.21  # v5.20  # v5.19  # v5.11  # v5.12  # v5.13  # v5.14  # v5.15  # v5.16  # v5.17  # v5.18  # v3.64  # v4.26  # v4.27  # v4.28  # v4.29  # v4.30  # v4.31  # v4.32  # v4.33  # v4.34  # v4.35  # v4.36  # v4.37  # v4.38  # v4.39  # v4.40  # v4.41  # v4.42  # v4.43  # v4.44  # v4.45  # v4.46  # v4.47  # v4.48  # v4.49  # v4.50  # v4.51  # v4.52  # v4.53  # v4.54  # v4.55  # v4.56  # v4.57  # v4.58  # v4.59  # v4.60  # v4.61  # v4.62  # v4.63  # v4.64  # v4.65  # v4.66  # v4.67  # v4.68  # v4.69  # v4.70  # v4.71  # v4.72  # v4.73  # v4.74  # v4.75  # v4.76  # v4.77  # v4.78  # v4.79  # v4.80  # v4.81  # v4.82  # v4.83  # v4.84  # v4.85  # v4.86  # v4.87  # v4.88  # v4.89  # v4.90  # v4.91  # v4.92  # v4.93  # v4.94  # v4.95  # v4.96  # v4.97  # v4.98  # v4.99  # v5.00  # v5.01  # v5.02  # v5.03  # v5.04  # v5.24 (entfallen)
 # VERSION = "5.24 (2026-11-25)"  # v5.23  # v5.22  # v5.21  # v5.20  # v5.19  # v5.11  # v5.12  # v5.13  # v5.14  # v5.15  # v5.16  # v5.17  # v5.18  # v3.64  # v4.26  # v4.27  # v4.28  # v4.29  # v4.30  # v4.31  # v4.32  # v4.33  # v4.34  # v4.35  # v4.36  # v4.37  # v4.38  # v4.39  # v4.40  # v4.41  # v4.42  # v4.43  # v4.44  # v4.45  # v4.46  # v4.47  # v4.48  # v4.49  # v4.50  # v4.51  # v4.52  # v4.53  # v4.54  # v4.55  # v4.56  # v4.57  # v4.58  # v4.59  # v4.60  # v4.61  # v4.62  # v4.63  # v4.64  # v4.65  # v4.66  # v4.67  # v4.68  # v4.69  # v4.70  # v4.71  # v4.72  # v4.73  # v4.74  # v4.75  # v4.76  # v4.77  # v4.78  # v4.79  # v4.80  # v4.81  # v4.82  # v4.83  # v4.84  # v4.85  # v4.86  # v4.87  # v4.88  # v4.89  # v4.90  # v4.91  # v4.92  # v4.93  # v4.94  # v4.95  # v4.96  # v4.97  # v4.98  # v4.99  # v5.00  # v5.01  # v5.02  # v5.03  # v5.04  # v5.24  # v5.25 (entfallen)
-VERSION = "5.25 (2026-11-25)"  # v5.23  # v5.22  # v5.21  # v5.20  # v5.19  # v5.11  # v5.12  # v5.13  # v5.14  # v5.15  # v5.16  # v5.17  # v5.18  # v3.64  # v4.26  # v4.27  # v4.28  # v4.29  # v4.30  # v4.31  # v4.32  # v4.33  # v4.34  # v4.35  # v4.36  # v4.37  # v4.38  # v4.39  # v4.40  # v4.41  # v4.42  # v4.43  # v4.44  # v4.45  # v4.46  # v4.47  # v4.48  # v4.49  # v4.50  # v4.51  # v4.52  # v4.53  # v4.54  # v4.55  # v4.56  # v4.57  # v4.58  # v4.59  # v4.60  # v4.61  # v4.62  # v4.63  # v4.64  # v4.65  # v4.66  # v4.67  # v4.68  # v4.69  # v4.70  # v4.71  # v4.72  # v4.73  # v4.74  # v4.75  # v4.76  # v4.77  # v4.78  # v4.79  # v4.80  # v4.81  # v4.82  # v4.83  # v4.84  # v4.85  # v4.86  # v4.87  # v4.88  # v4.89  # v4.90  # v4.91  # v4.92  # v4.93  # v4.94  # v4.95  # v4.96  # v4.97  # v4.98  # v4.99  # v5.00  # v5.01  # v5.02  # v5.03  # v5.04  # v5.24  # v5.25
+# VERSION = "5.25 (2026-11-25)"  # v5.23  # v5.22  # v5.21  # v5.20  # v5.19  # v5.11  # v5.12  # v5.13  # v5.14  # v5.15  # v5.16  # v5.17  # v5.18  # v3.64  # v4.26  # v4.27  # v4.28  # v4.29  # v4.30  # v4.31  # v4.32  # v4.33  # v4.34  # v4.35  # v4.36  # v4.37  # v4.38  # v4.39  # v4.40  # v4.41  # v4.42  # v4.43  # v4.44  # v4.45  # v4.46  # v4.47  # v4.48  # v4.49  # v4.50  # v4.51  # v4.52  # v4.53  # v4.54  # v4.55  # v4.56  # v4.57  # v4.58  # v4.59  # v4.60  # v4.61  # v4.62  # v4.63  # v4.64  # v4.65  # v4.66  # v4.67  # v4.68  # v4.69  # v4.70  # v4.71  # v4.72  # v4.73  # v4.74  # v4.75  # v4.76  # v4.77  # v4.78  # v4.79  # v4.80  # v4.81  # v4.82  # v4.83  # v4.84  # v4.85  # v4.86  # v4.87  # v4.88  # v4.89  # v4.90  # v4.91  # v4.92  # v4.93  # v4.94  # v4.95  # v4.96  # v4.97  # v4.98  # v4.99  # v5.00  # v5.01  # v5.02  # v5.03  # v5.04  # v5.24  # v5.25  # v5.26 (entfallen)
+# VERSION = "5.26 (2026-11-25)"  # v5.23  # v5.22  # v5.21  # v5.20  # v5.19  # v5.11  # v5.12  # v5.13  # v5.14  # v5.15  # v5.16  # v5.17  # v5.18  # v3.64  # v4.26  # v4.27  # v4.28  # v4.29  # v4.30  # v4.31  # v4.32  # v4.33  # v4.34  # v4.35  # v4.36  # v4.37  # v4.38  # v4.39  # v4.40  # v4.41  # v4.42  # v4.43  # v4.44  # v4.45  # v4.46  # v4.47  # v4.48  # v4.49  # v4.50  # v4.51  # v4.52  # v4.53  # v4.54  # v4.55  # v4.56  # v4.57  # v4.58  # v4.59  # v4.60  # v4.61  # v4.62  # v4.63  # v4.64  # v4.65  # v4.66  # v4.67  # v4.68  # v4.69  # v4.70  # v4.71  # v4.72  # v4.73  # v4.74  # v4.75  # v4.76  # v4.77  # v4.78  # v4.79  # v4.80  # v4.81  # v4.82  # v4.83  # v4.84  # v4.85  # v4.86  # v4.87  # v4.88  # v4.89  # v4.90  # v4.91  # v4.92  # v4.93  # v4.94  # v4.95  # v4.96  # v4.97  # v4.98  # v4.99  # v5.00  # v5.01  # v5.02  # v5.03  # v5.04  # v5.24  # v5.25  # v5.26  # v5.27 (entfallen)
+# VERSION = "5.27 (2026-11-25)"  # v5.23  # v5.22  # v5.21  # v5.20  # v5.19  # v5.11  # v5.12  # v5.13  # v5.14  # v5.15  # v5.16  # v5.17  # v5.18  # v3.64  # v4.26  # v4.27  # v4.28  # v4.29  # v4.30  # v4.31  # v4.32  # v4.33  # v4.34  # v4.35  # v4.36  # v4.37  # v4.38  # v4.39  # v4.40  # v4.41  # v4.42  # v4.43  # v4.44  # v4.45  # v4.46  # v4.47  # v4.48  # v4.49  # v4.50  # v4.51  # v4.52  # v4.53  # v4.54  # v4.55  # v4.56  # v4.57  # v4.58  # v4.59  # v4.60  # v4.61  # v4.62  # v4.63  # v4.64  # v4.65  # v4.66  # v4.67  # v4.68  # v4.69  # v4.70  # v4.71  # v4.72  # v4.73  # v4.74  # v4.75  # v4.76  # v4.77  # v4.78  # v4.79  # v4.80  # v4.81  # v4.82  # v4.83  # v4.84  # v4.85  # v4.86  # v4.87  # v4.88  # v4.89  # v4.90  # v4.91  # v4.92  # v4.93  # v4.94  # v4.95  # v4.96  # v4.97  # v4.98  # v4.99  # v5.00  # v5.01  # v5.02  # v5.03  # v5.04  # v5.24  # v5.25  # v5.26  # v5.27  # v5.28 (entfallen)
+# VERSION = "5.28 (2026-11-25)"  # v5.23  # v5.22  # v5.21  # v5.20  # v5.19  # v5.11  # v5.12  # v5.13  # v5.14  # v5.15  # v5.16  # v5.17  # v5.18  # v3.64  # v4.26  # v4.27  # v4.28  # v4.29  # v4.30  # v4.31  # v4.32  # v4.33  # v4.34  # v4.35  # v4.36  # v4.37  # v4.38  # v4.39  # v4.40  # v4.41  # v4.42  # v4.43  # v4.44  # v4.45  # v4.46  # v4.47  # v4.48  # v4.49  # v4.50  # v4.51  # v4.52  # v4.53  # v4.54  # v4.55  # v4.56  # v4.57  # v4.58  # v4.59  # v4.60  # v4.61  # v4.62  # v4.63  # v4.64  # v4.65  # v4.66  # v4.67  # v4.68  # v4.69  # v4.70  # v4.71  # v4.72  # v4.73  # v4.74  # v4.75  # v4.76  # v4.77  # v4.78  # v4.79  # v4.80  # v4.81  # v4.82  # v4.83  # v4.84  # v4.85  # v4.86  # v4.87  # v4.88  # v4.89  # v4.90  # v4.91  # v4.92  # v4.93  # v4.94  # v4.95  # v4.96  # v4.97  # v4.98  # v4.99  # v5.00  # v5.01  # v5.02  # v5.03  # v5.04  # v5.24  # v5.25  # v5.26  # v5.27  # v5.28  # v5.29 (entfallen)
+# VERSION = "5.29 (2026-11-25)"  # v5.30 (entfallen)
+# VERSION = "5.30 (2026-11-26)"  # v5.31 (entfallen)
+# VERSION = "5.31 (2026-11-26)"  # v5.32 (entfallen)
+# VERSION = "5.32 (2026-11-26)"  # v5.33 (entfallen)
+# VERSION = "5.33 (2026-11-26)"  # v5.34 (entfallen)
+# VERSION = "5.34 (2026-11-26)"  # v5.35 (entfallen)
+# VERSION = "5.35 (2026-11-26)"  # v5.36 (entfallen)
+# VERSION = "5.36 (2026-11-26)"  # v5.37 (entfallen)
+# VERSION = "5.37 (2026-11-26)"  # v5.38 (entfallen)
+# VERSION = "5.38 (2026-11-26)"  # v5.39 (entfallen)
+VERSION = "5.39 (2026-11-26)"  # v5.39  # v5.23  # v5.22  # v5.21  # v5.20  # v5.19  # v5.11  # v5.12  # v5.13  # v5.14  # v5.15  # v5.16  # v5.17  # v5.18  # v3.64  # v4.26  # v4.27  # v4.28  # v4.29  # v4.30  # v4.31  # v4.32  # v4.33  # v4.34  # v4.35  # v4.36  # v4.37  # v4.38  # v4.39  # v4.40  # v4.41  # v4.42  # v4.43  # v4.44  # v4.45  # v4.46  # v4.47  # v4.48  # v4.49  # v4.50  # v4.51  # v4.52  # v4.53  # v4.54  # v4.55  # v4.56  # v4.57  # v4.58  # v4.59  # v4.60  # v4.61  # v4.62  # v4.63  # v4.64  # v4.65  # v4.66  # v4.67  # v4.68  # v4.69  # v4.70  # v4.71  # v4.72  # v4.73  # v4.74  # v4.75  # v4.76  # v4.77  # v4.78  # v4.79  # v4.80  # v4.81  # v4.82  # v4.83  # v4.84  # v4.85  # v4.86  # v4.87  # v4.88  # v4.89  # v4.90  # v4.91  # v4.92  # v4.93  # v4.94  # v4.95  # v4.96  # v4.97  # v4.98  # v4.99  # v5.00  # v5.01  # v5.02  # v5.03  # v5.04  # v5.24  # v5.25  # v5.26  # v5.27  # v5.28  # v5.29
 # VERSION = "4.09 (2026-11-19)"  # v3.64 (entfallen)
 # VERSION = "4.08 (2026-11-19)"  # v3.64 (entfallen)
 # VERSION = "4.07 (2026-11-19)"  # v3.64 (entfallen)
@@ -2169,12 +2299,13 @@ JS_ROW_HEIGHT = ("params => Math.round((params.node.rowPinned ? "  # v3.71: eine
 
 JS_DBLCLICK = """
 <script>
-// Doppelklick auf Name und Beleuchtung (Spalten und erste Datenzeile setzt der Server in window.mllDbl): Makroauswahl statt Bearbeiten.
-// Schalter in den Programm Einstellungen (Standard aus). Die Capture-Phase faengt das Ereignis vor AG Grid ab, sonst startet das Bearbeiten.
+// Doppelklick auf Name und Beleuchtung (Spalten und erste Datenzeile setzt der Server in window.mllDbl): Makroauswahl statt Bearbeiten. Mit Umschalt: Bearbeiten.
+// Schalter in den Programm Einstellungen (Standard an seit 5.27). Die Capture-Phase faengt das Ereignis vor AG Grid ab, sonst startet das Bearbeiten.
 window.mllDbl = {on: false, cols: [], typeCol: null, first: 0};  // v3.71
 document.addEventListener('dblclick', function (e) {
   const d = window.mllDbl;
   if (!d) return;   // v3.71
+  if (e.shiftKey) return;   // v5.27: Umschalt + Doppelklick bearbeitet den Text (Experten)
   const cell = e.target && e.target.closest ? e.target.closest('.ag-cell') : null;
   if (!cell || cell.classList.contains('ag-cell-inline-editing')) return;          // im Editor selbst nichts abfangen
   const col = cell.getAttribute('col-id');
@@ -2723,13 +2854,15 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
                     ui.menu_item(tr("Verbinden"), on_click=lambda: connect_arduino())  # v4.51 (vorher Menue Lichtmaschine)
                     ui.menu_item(tr("Verbindung trennen"), on_click=lambda: disconnect_arduino())  # v4.14
                     ui.menu_item(tr("Neu verbinden"), on_click=lambda: reconnect_arduino())  # v4.14
-                    ui.menu_item(tr("Board wechseln …"), on_click=lambda: change_board())  # v4.14
+                    # ui.menu_item(tr("Board wechseln …"), on_click=lambda: change_board())  # v4.14  # v5.26 (entfallen)
+                    ui.menu_item(tr("Gerät wechseln …"), on_click=lambda: change_board())  # v4.14  # v5.26: Gerät statt Board
                     ui.separator()  # v4.51
                     ui.menu_item(tr("Alle LED aus"), on_click=lambda: run_command(lambda: ctrl.led_off(), "Alle LED aus")())  # v4.51 (vorher Menue Lichtmaschine)
                     # ui.menu_item(tr("ESP32-Firmware über WLAN hochladen …"), on_click=lambda: web_esp32_ota.open_dialog(pio=ota_arduino.Find_PIO() if ota_options.Is_PlatformIO() else None))  # v4.51 (vorher Menue Lichtmaschine)  # v4.52 (entfallen: Knopf auf dem Reiter WLAN (OTA) der Optionen)
             # connect_arrow.tooltip(tr("Verbindung trennen, neu verbinden oder das Board wechseln"))  # v4.14  # v4.51 (entfallen)
             # connect_arrow.tooltip(tr("Verbinden, Verbindung trennen, neu verbinden, Board wechseln, alle LED aus oder ESP32-Firmware über WLAN hochladen"))  # v4.51  # v4.52 (entfallen)
-            connect_arrow.tooltip(tr("Verbinden, Verbindung trennen, neu verbinden, Board wechseln oder alle LED aus"))  # v4.52
+            # connect_arrow.tooltip(tr("Verbinden, Verbindung trennen, neu verbinden, Board wechseln oder alle LED aus"))  # v4.52  # v5.26 (entfallen)
+            connect_arrow.tooltip(tr("Verbinden, Verbindung trennen, neu verbinden, Gerät wechseln oder alle LED aus"))  # v4.52  # v5.26: wie der Menuepunkt
         # connect_btn.tooltip("Verbindung zum Arduino herstellen (wie Lichtmaschine → Verbinden). Rot: keine Verbindung, grün: verbunden. Trennen: Menü Lichtmaschine → Trennen")  # v2.01  # v3.83  # v3.84 (entfallen)
         # connect_btn.tooltip("Verbindung zur Lichtmaschine herstellen (wie ARDUINO → Verbinden). Rot: keine Verbindung, grün: verbunden. Trennen: Pfeil neben dem Knopf oder Menü ARDUINO → Trennen")  # v2.01  # v3.83  # v4.14  # v4.18 (entfallen)
         # connect_btn.tooltip("Verbindung zur Lichtmaschine herstellen (wie Lichtmaschine → Verbinden). Rot: keine Verbindung, grün: verbunden. Trennen: Pfeil neben dem Knopf oder Menü Lichtmaschine → Trennen")  # v4.18  # v4.51 (entfallen)
@@ -3326,6 +3459,10 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
         "rowSelection": "multiple",
         ":onCellContextMenu": JS_CELL_CONTEXT,
         ":onCellKeyDown": JS_CELL_KEYDOWN,
+        ":onCellEditingStarted": "e => window.mllEditStarted(e)",  # v5.27
+        ":onCellFocused": "e => window.mllCellFocused(e)",  # v5.27
+        ":onCellEditingStopped": "e => { window.mllTypedStart = false; }",  # v5.27
+        ":onCellDoubleClicked": "e => { window.mllTypedStart = false; }",  # v5.27
         "preventDefaultOnContextMenu": True,
         "stopEditingWhenCellsLoseFocus": True,
         "suppressMovableColumns": True,
@@ -5367,7 +5504,14 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
         elif a.get("op") in ("cut", "delete"):  # v4.55
             if a.get("op") == "cut":  # v4.55
                 record_clip(a)  # v4.55
+            now_t = time.monotonic()  # v5.32
+            logger.info("Zellbefehl %s in Zeile %s, Spalte %s (busy=%s)", a.get("op"), a.get("r"), a.get("col"), state["busy"])  # v5.32: Diagnose zu 'Es laeuft noch ein Vorgang' nach Entf
+            if state["busy"] or now_t - state.get("last_clear_t", 0) < 0.8:  # v5.32: Entf ein zweites Mal (Tastenwiederholung oder doppeltes Ereignis) waehrend oder kurz nach dem Loeschen: ignorieren statt Warnung
+                state["last_clear_t"] = now_t  # v5.32
+                return  # v5.32
+            state["last_clear_t"] = now_t  # v5.32
             await op_clear()
+            state["last_clear_t"] = time.monotonic()  # v5.32
         elif a.get("op") == "paste":
             await op_paste(types.SimpleNamespace(args=a))
         elif a.get("op") == "filldown":  # v3.93
@@ -6673,6 +6817,7 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
     web_dialogs._bridge["auto_connect"] = auto_connect_after_detect  # v4.04
 
     async def connect_arduino():  # v2.01
+        state["auto_connect_failed"] = False  # v5.38: der Anwender verbindet selbst: spaetere Reiterwechsel duerfen wieder einmal versuchen
         settings = headless_esp32_ota.load_settings()
         if usb_port_missing() and not wifi_target():  # v4.04: noch kein Anschluss: gleich das Fenster Board und USB Port erkennen oeffnen (Reiter Lichtmaschine)
             ui.notify(tr("Es ist noch kein USB-Anschluss eingestellt. Bitte „Board und USB Port erkennen“ drücken. Danach wird automatisch verbunden."), type="info")  # v4.04
@@ -7830,8 +7975,13 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
             state["dcc"].tab_unselected()  # v1.95
         if new_tab in ("farb", "servo1", "servo2", "sound") and old_tab != new_tab and not state["busy"]:  # v3.25: Seiten mit Direktmodus verbinden selbst
             try:  # v3.25
-                if not ctrl.is_connection_open():  # v3.25
+                if ctrl.is_connection_open():  # v5.38: Verbindung da: Merker fuer den fehlgeschlagenen Versuch loeschen
+                    state["auto_connect_failed"] = False  # v5.38
+                elif state.get("auto_connect_failed"):  # v5.38: der Versuch ist schon einmal gescheitert und gemeldet worden: nicht bei jedem Reiterwechsel erneut (Testtasten und Menue Verbinden versuchen es weiter)
+                    logger.info("Automatisches Verbinden beim Oeffnen des Reiters %s uebersprungen (frueherer Versuch gescheitert)", new_tab)  # v5.38
+                else:  # v5.38
                     await _connect_command()  # v3.25: ohne after_connect: tab_selected startet den Direktmodus gleich danach
+                    state["auto_connect_failed"] = not ctrl.is_connection_open()  # v5.38: gescheitert: die Meldung kam einmal
             except Exception:                              # noqa: BLE001  # v3.25
                 logger.warning("Automatisches Verbinden beim Oeffnen des Reiters %s fehlgeschlagen", new_tab, exc_info=True)  # v3.25
         if new_tab == "farb" and old_tab != "farb":
@@ -7941,11 +8091,14 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
             import proggen.M28_Diverse as _M28  # v5.23
             if program:  # v5.23
                 M18.Read_PGF(program, True)  # v5.23: in die aktive Tabelle
-            if machine == "Pro":  # v5.23
+            board_kind = SP.board_of(machine)  # v5.34: Board aus csv/Lichtmaschinen_prop.json (Nano, ESP32, Pico)
+            # if machine == "Pro":  # v5.23  # v5.34 (entfallen)
+            if board_kind == "ESP32":  # v5.34
                 board = M02.BOARD_ESP32  # v5.23
-            elif machine == "Pico":  # v5.23
+            # elif machine == "Pico":  # v5.23  # v5.34 (entfallen)
+            elif board_kind == "Pico":  # v5.34
                 board = M02.BOARD_PICO  # v5.23
-            else:  # v5.23: Classic / Mini (Nano): einen schon eingestellten Nano behalten (Bootloader), sonst Nano mit neuem Bootloader
+            else:  # v5.23: Nano: einen schon eingestellten Nano behalten (Bootloader), sonst Nano mit neuem Bootloader
                 board = None if str(_M28.Get_Old_Board(True)).startswith("--board arduino:avr:nano") else M02.BOARD_NANO_NEW  # v5.23
             if board:  # v5.23
                 _M28.Change_Board_Typ(True, board)  # v5.23

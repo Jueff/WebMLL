@@ -1,5 +1,5 @@
-Datei-Version: 1.104 (2026-11-25) - HOC_intern.md
-Stand: Version 5.25
+Datei-Version: 1.118 (2026-11-26) - HOC_intern.md
+Stand: Version 5.39
 
 # webMobaLedLib: History of Change (intern, ausführlich)
 
@@ -24,6 +24,257 @@ Release-Stand 2.12 auf Wunsch des Entwicklers („Release bauen“). **Neu im Ab
 | `archiv/` | frühere Release-Hinweise, Versionslisten und ZIP (nichts gelöscht) |
 
 **Geprüft:** Dateipaket: `testzip` in Ordnung, alle 113 Dateien gleich dem Ordner `headless`, keine `__pycache__`, alle `.py` kompilieren, Versionsprüfung „alles passt“ (50 Einträge), 11 Dateien ausführbar (`.sh`, `.command`). **Nachbau des Entwickler-Ablaufs mit seinem echten Paket (1678 Dateien, Stand 2.05):** meine 113 Dateien darübergelegt, Prüfliste, ZIP gepackt, `release_tools check --previous <sein ZIP>`: **in Ordnung** (Version 2.12, 1678 Dateien, 6 neue, 0 fehlende, ZIP 16,6 MB). Alle 15 Prüfreihen laufen (17, 26, 15, 70, 28, 19, 43, 26, 16, 27, 8, 8, 8, 5, 9 Prüfungen). **Nicht geprüft:** `zip_erstellen.bat` und die Reparaturskripte unter Windows, ein abgebrochenes Update unter Windows, das Verhalten mit Acronis, der Download von GitHub.
+
+## 5.29 (2026-11-25), Logic: Eingänge in Gruppen, SwitchC
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_logic_builder.py` | 1.02 | Je Eingang zwei Felder: Art des Eingangs (`inch`, `vars`, Schalter A bis D, eigener Name; `group_of` bestimmt die Gruppe aus dem Namen) und der Eingang selbst (Auswahl #InCh, #InCh+1…+7; Variablen der Tabelle; Nummernfeld 1 bis 250 für SwitchA bis SwitchD; Textfeld). Die lange Liste SwitchA1…D16 entfällt (`switch_variables` entfernt). SwitchC aufgenommen |
+| `csv/Web_Languages.csv` | | Hinweistext neu (ohne Semikolon: Trennzeichen!), 10 neue Zeilen |
+| `webmobaledlib.py` | 5.29 | VERSION, REQUIRED_FILES |
+
+## 5.28 (2026-11-25), Logic: Eingangsvariablen SwitchA#, SwitchB#, SwitchD#
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_logic_builder.py` | 1.01 | `switch_variables()`: SwitchA1…16, SwitchB1…16, SwitchD1…16 stehen in der Auswahl (andere Nummern bis 250 eintippen); `check_dnf` prüft die Nummer 1 bis 250 (wie `Is_Switch_Var_then_Add_to_Ctr`); neuer Hinweistext |
+| `csv/Web_Languages.csv` | | Hinweistext geändert, eine Zeile neu |
+| `webmobaledlib.py` | 5.28 | VERSION, REQUIRED_FILES |
+
+SwitchC bewusst nicht aufgenommen (nicht gewünscht); der Name lässt sich eintippen.
+
+## 5.27 (2026-11-25), Logic-Dialog: Fehler beim Öffnen
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_form_other.py` | 1.16 | `_sheet_variables`: Der Typ der Parameter wird selbst aus `Par_Description` gelesen. `M10.Get_Par_Data` meldet unbekannte Namen (`On_Min`, `On_Limit` u. a. aus Makros anderer Zeilen der Tabelle) mit „Internal Error“ und beendet den Dialog; Logic ließ sich deshalb nicht öffnen |
+| `webmobaledlib.py` | 5.27 | VERSION, REQUIRED_FILES |
+
+## 5.26 (2026-11-25), Logic: Baukasten statt Textformel
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_logic_builder.py` | 1.00 | NEU, wiederverwendbarer Baustein: `parse_dnf`, `format_dnf`, `describe_dnf`, `check_dnf`, `variables_in_line` (reine Funktionen) und Klasse `LogicBuilder` (Bedingungen = UND-Gruppen, mit ODER verbunden, Schalter „nicht“, Auswahl mit freier Eingabe, Klartext-Vorschau, Makrotext, Prüfung, Umschalter „Als Text bearbeiten“). `FUNCS` nennt die Makros, die ihn benutzen (zurzeit `Logic`) |
+| `_web/web_form_other.py` | 1.15 | Parameter `...` der Funktionen in `FUNCS` → `LogicBuilder`; Ok prüft vorher (`try_ok`); kürzere Beschreibung; Bezeichnungen „Ergebnisvariable“, „Bedingungen“; `_sheet_variables`: Variablen der aktuellen Tabelle (Parameter vom Typ `Var` der Makros der Spalte Beleuchtung, Namen in Logic-Ausdrücken) |
+| `csv/Web_Languages.csv` | | 31 neue Zeilen (Deutsch, Englisch; übrige Sprachen fallen auf Englisch zurück) |
+| `webmobaledlib.py` | 5.26 | VERSION, REQUIRED_FILES |
+| Wiki `pg_tabelle.txt` | 1.14 | Abschnitt „Die Funktion Logic“; `seiten_update` 1.14 |
+
+Das Makro `Logic(Erg, A AND B OR …)` und `Create_Result` sind unverändert; der Baukasten erzeugt denselben Text. Nicht im Browser geprüft, nur die reinen Funktionen (Test mit 11 Ausdrücken).
+
+## 5.39 (2026-11-26), Makro Button: Fehler „Parameter Val1§Duration 0 not possible nicht gefunden“
+
+**Meldung (Harold, Bildschirmfoto):** Nach der Auswahl des Makros `Button(#LED, C_ALL, #InCh, 1 Min, 0, 1)` in der Makroauswahl: „Internal Error: Der Parameter Name 'Val1§Duration 0 not possible' wurde nicht im Sheet 'Par_Description' gefunden!“
+
+* **Ursache:** Beim Laden der Bibliothek aus der Excel-Datei hängt `XLA_Application` den Kommentar einer Zelle mit „§“ an den Zellentext an (Zelle O247 der Tabelle Lib_Macros hat den Kommentar „Duration 0 not possible“). Das Makro `Button(LED,Cx,InCh,Duration,Val0, Val1)` hieß damit `…Val1)§Duration 0 not possible`; der letzte Parameter hieß dann `Val1§Duration 0 not possible`. Die mitgelieferten csv-Dateien enthalten die Kommentare nicht, deshalb tritt der Fehler nur auf, wenn die Bibliothek aus der xlsm geladen wird (zwei weitere Kommentare dieser Art gibt es auf anderen Blättern).
+* **Änderung:** Der Makrotext wird überall, wo er aus Lib_Macros gelesen wird, am „§“ abgeschnitten: `M09_Select_Macro` (Parameterformular), `M06_Write_Header_SW` (`Org_Macro`, Zuordnung der Argumente beim Erzeugen des Codes), `web_form_other` (Variablen der Tabelle) und `web_macro_tree` (Anzeige des Makrotexts in der Makroauswahl).
+* Das Makro `Button` hatte die Kommentare schon in älteren Ständen; im Code stand die Behandlung nur bei Suche (`Find`) und Zahlen (`val`).
+
+| Datei | Version | Änderung |
+|-|-|-|
+| `proggen/M09_Select_Macro.py` | 1.01 | Makro ohne Zellkommentar, Kopf eingefügt |
+| `proggen/M06_Write_Header_SW.py` | 1.15 | `Org_Macro` ohne Zellkommentar |
+| `_web/web_form_other.py` | 1.18 | Parameternamen ohne Zellkommentar |
+| `_web/web_macro_tree.py` | 1.13 | Makrotext ohne Zellkommentar |
+| `webmobaledlib.py` | 5.39 | Version, REQUIRED_FILES |
+| `install/BETATEST_Checkliste.md` | 4.18 | Punkt 402 |
+
+**Nicht in der Anwendung geprüft** (kein Browser, keine Excel-Bibliothek mit Kommentaren hier). Der Ersatz ist eine einfache Textkürzung am ersten „§“.
+
+## 5.38 (2026-11-26), Meldung „Fehler beim Öffnen der Verbindung“ nur einmal
+
+**Rückmeldung (Harold, mit Bildschirmfoto):** Ohne angeschlossene Lichtmaschine erscheint bei jedem Reiterwechsel die Meldung „Fehler beim Öffnen der Verbindung“ (Text `msg_connect_open_error` aus MobaLedTest_macrodef.json). Sie soll nur einmal kommen; erst ein Klick auf eine Testtaste soll wieder einen Verbindungsversuch mit Meldung auslösen.
+
+* **Ursache (im Code gefunden):** Beim Wechsel auf einen Reiter mit Direktmodus (Farb Test, Servo Test 1 und 2, Sound Test) verbindet `on_tab` selbst (v3.25, `_connect_command`). Ohne Lichtmaschine scheiterte das jedes Mal mit der Meldung. Einen anderen automatischen Verbindungsversuch beim Wechsel **zum Programm Generator** habe ich nicht gefunden; die Meldung erscheint also vermutlich beim Wechsel auf einen dieser Reiter.
+* **Änderung (`webmobaledlib.py`):** Merker `state["auto_connect_failed"]`. Scheitert der automatische Versuch, kommt die Meldung einmal und weitere Reiterwechsel versuchen es nicht mehr (Protokollzeile „Automatisches Verbinden … übersprungen“). Der Merker wird gelöscht, sobald eine Verbindung besteht oder der Anwender selbst verbindet (Menü Verbinden, Knopf in Servo/Sound Test). Testtasten und DCC-Tastatur rufen `connect_if_not_connected` unverändert auf: Versuch und Meldung bei jedem Klick.
+* Der Merker gilt je geöffneter Browserseite; nach dem Neuladen der Seite gibt es wieder einen Versuch.
+
+| Datei | Version | Änderung |
+|-|-|-|
+| `webmobaledlib.py` | 5.38 | automatisches Verbinden beim Reiterwechsel nur einmal |
+| `install/BETATEST_Checkliste.md` | 4.17 | Punkt 401 |
+
+**Nicht im Browser geprüft. Falls die Meldung auch beim Wechsel zum Programm Generator weiter kommt:** Protokolldatei an der Stelle prüfen, welcher Befehl davor steht (Zeile „connect …“).
+
+## 5.37 (2026-11-26), Farb Test beenden, Set_ColTab ohne Lichtmaschine, Flags anklicken
+
+**Wünsche (Harold):** (1) Knopf unten rechts, um den Farb Test zu beenden. (2) Set_ColTab am Arbeitsplatz ohne Lichtmaschine: das Programm verlangte einen aktiven Port. Die Vorschau bleibt unverändert. (3) Optionale Parameter (Flags) im Eingabefenster der Taster-Makros zum Anklicken statt Abschreiben; es gibt weitere Makros mit Flags.
+
+* **Knopf „Farb Test beenden“** (`web_colorcheck.build`): immer sichtbar, unten rechts in der Karte, ruft `goto_generator` auf. Beim Verlassen des Reiters wird der Rückruf von Set_ColTab ohnehin gelöscht (bestehende Logik in `webmobaledlib.py`), es wird also nichts übergeben.
+* **Set_ColTab ohne Lichtmaschine** (`M60_CheckColors.Open_MobaLedCheckColors`): `Check_USB_Port_with_Dialog` wird nur noch aufgerufen, wenn **kein** Rückruf (Callback) vorliegt. Aus dem Makro Set_ColTab (Callback gesetzt) entfällt die Anschlussprüfung samt Dialog; die Palette lässt sich ohne Hardware bearbeiten. `__Change_Comport_in_ConfigFile` tut ohnehin nichts (sofortiges `return True`).
+* **Flags** (`web_form_other`): Parameter vom Typ **Mode** (`OptCtrPar`, `CtrMode`, `RandMode` in Par_Description) bekommen unter dem Textfeld die aufklappbare Gruppe „Flags auswählen“ mit einem Haken je Flag. Die Flagnamen werden aus dem **Hinweistext** des Parameters gelesen (`flags_in_hint`, Namen mit Muster `XX_NAME`; `*_NORMAL` ist der Normalwert), neue Flags erscheinen also, wenn sie im Hinweistext stehen. Haken und Text gleichen sich in beide Richtungen ab. Unbekannte Teile des Texts (zum Beispiel eine Zahl bei OptCtrPar) bleiben erhalten; ohne Haken steht der Normalwert (`0` oder `CM_NORMAL`) im Feld. Erklärungen zu den einzelnen Flags gibt es noch nicht (nur die Namen).
+
+| Datei | Version | Änderung |
+|-|-|-|
+| `_web/web_colorcheck.py` | 1.13 | Knopf Farb Test beenden |
+| `proggen/M60_CheckColors.py` | 1.01 | Set_ColTab ohne Anschlussprüfung, Kopf eingefügt |
+| `_web/web_form_other.py` | 1.17 | Flags als Hakenliste |
+| `webmobaledlib.py` | 5.37 | Version, REQUIRED_FILES |
+| `csv/Web_Languages.csv` | – | Zeilen „Flags auswählen“, „Farb Test beenden“ |
+| `install/BETATEST_Checkliste.md` | 4.16 | Punkte 398 bis 400 |
+| Wiki `wz_farbtest.txt` 1.09, `pg_tabelle.txt` 1.17 | – | Beschreibung |
+
+**Tests:** Syntax; Flag-Auswertung und Textbildung (Hilfsfunktionen) für die Hinweistexte von OptCtrPar und CtrMode. **Nicht im Browser geprüft.**
+
+## 5.36 (2026-11-26), Startseite: gleich große Kacheln
+
+**Rückmeldung (Harold, mit Bildschirmfoto):** Die fünfte Lichtmaschine (MoLLi) und „Ohne Zentrale“ standen allein in einer zweiten Zeile und füllten die ganze Breite; die Kachel „Pico Zero“ war wegen des Zeilenumbruchs im Namen höher.
+
+* Die Kacheln liegen jetzt in einem CSS-Raster (`GRID_STYLE`: `repeat(auto-fill, minmax(210px, 1fr))`, `align-items: stretch`) statt in einer Zeile mit Umbruch: gleiche Breite in jeder Zeile (auch die letzte), gleiche Höhe je Zeile. Gilt für Lichtmaschinen und Zentralen.
+
+| Datei | Version | Änderung |
+|-|-|-|
+| `_web/web_startpage.py` | 1.05 | Raster für die Kacheln |
+| `webmobaledlib.py` | 5.36 | Version |
+| `install/BETATEST_Checkliste.md` | 4.15 | Punkt 397 |
+
+**Nicht im Browser geprüft.**
+
+## 5.35 (2026-11-26), Lichtmaschinen-Liste berichtigt
+
+**Rückmeldung (Harold):** Classic: Nano, alle vier Zentralen. Mini: Nano, nur DCC. Pro: ESP32, alle vier. Pico Zero: Pico, alle Zentralen. MoLLi: Pico, nur DCC. (Die Angaben zu Mini und Pico/MoLLi in 5.34 waren falsch.)
+
+* `csv/Lichtmaschinen_prop.json` (1.01) und `DEFAULT_MACHINES`: fünf Kacheln Classic, Mini, Pro, Pico Zero (`PicoZero`), MoLLi. Startprogramme: `Classic_Mini` (Classic und Mini), `Pro`, `Pico_Zero_MoLLi` (Pico Zero und MoLLi); Felder `program` ändern, wenn ein Produkt eigene Programme bekommt.
+* Automatisches Erkennen: Nano → Classic, ESP32 → Pro, Pico → Pico Zero (Mini und MoLLi sind nicht unterscheidbar, `detect` leer).
+* Der Schlüssel `Pico` entfällt (`PicoZero`); der Code benutzt nur noch das Feld `board`.
+
+| Datei | Version | Änderung |
+|-|-|-|
+| `_web/web_startpage.py` | 1.04 | Liste berichtigt |
+| `csv/Lichtmaschinen_prop.json` | 1.01 | fünf Produkte |
+| `webmobaledlib.py` | 5.35 | Version |
+| `csv/Web_Languages.csv` | – | Zeilen Pico Zero, MoLLi |
+| Wiki `startseite.txt` | 1.03, `Startprogramme/README.txt` | Tabelle, Namen |
+
+## 5.34 (2026-11-26), Startseite: erst die Lichtmaschine, Zentralen nach Produkt, Anrede Du
+
+**Wünsche (Harold):** (1) Anrede Du statt Sie. (2) Auf der Startseite ließen sich für Pico und MoLLi die Zentralen Selectrix, LNet und CAN wählen, die diese Hardware nicht kann (nur DCC). Dazu eine Liste der Lichtmaschinen-Produkte; erst nach der Lichtmaschine fragen, dann nur die unterstützten Zentralen zeigen; jedes Produkt der Liste als eigene Kachel, ein neues Produkt nur durch Ergänzen der Liste.
+
+* **Neue Datei `csv/Lichtmaschinen_prop.json`:** je Produkt `key`, `name`, `platform`, `board` (Nano, ESP32, Pico), `centrals`, `text`, `program` (Name des Startprogramms), `image`, `detect` (Typ der Anschlusserkennung, leer = nicht erkennbar). Einträge: Classic (AM328, Nano; DCC, Selectrix, CAN, LNet), **Mini** (Pico; nur DCC; eigene Kachel, Programm `Pico_Zero_MoLLi`, nicht automatisch erkennbar), Pro (ESP32; alle), Pico Zero / MoLLi (Pico; nur DCC). Fehlt die Datei oder ist sie fehlerhaft, gilt die gleiche Liste fest im Modul (`DEFAULT_MACHINES`).
+* **Reihenfolge:** Schritt 1 Lichtmaschine (mit „Automatisch erkennen“), Schritt 2 Zentrale mit nur den unterstützten Kacheln (`supported_centrals`; „Ohne Zentrale“ immer), Schritt 3 Anleitung. Ohne gewählte Lichtmaschine steht in Schritt 2 ein Hinweis. Wechselt der Anwender die Lichtmaschine auf eine, die die schon gewählte Zentrale nicht kann, wird DCC eingestellt und das gemeldet.
+* **Board** beim Knopf Anfangen kommt aus dem Feld `board` (`SP.board_of`), nicht mehr aus dem Schlüssel der Lichtmaschine.
+* **Anrede Du** in allen Texten der Startseite (Web_Languages.csv: Schlüssel geändert, Übersetzungen der Zeilen unverändert übernommen, die Texte sind überwiegend ohnehin nur Deutsch; 1. und 2. Überschrift tauschen die Nummer).
+* **Startprogramme:** `Classic_Mini` heißt jetzt `Classic`; Mini benutzt `Pico_Zero_MoLLi`. Es liegen noch keine Dateien (README angepasst).
+* **Nicht geändert:** Die Hardware Optionen (Jürgen) benutzen weiter `SupportsSelectrix` in `Platform_Parameters.csv`; beide Quellen sollten später zusammengeführt werden (mit Jürgen abstimmen).
+
+| Datei | Version | Änderung |
+|-|-|-|
+| `_web/web_startpage.py` | 1.03 | Liste aus JSON, Reihenfolge, Zentralen je Produkt, Du |
+| `webmobaledlib.py` | 5.34 | Board aus der Liste, Version |
+| `csv/Lichtmaschinen_prop.json` | 1.00 | neu |
+| `csv/Web_Languages.csv` | – | Du-Texte, 4 neue Zeilen (Classic, Mini, Hinweise) |
+| `Startprogramme/README.txt` | – | Namen der Startprogramme |
+| `install/BETATEST_Checkliste.md` | 4.13 | Punkte 394 bis 396 |
+| Wiki `startseite.txt` | 1.02 | Reihenfolge, Tabelle der Produkte |
+
+**Tests:** Syntax; Logik der Liste (Zentralen je Produkt, Board, Erkennung, Startprogramm-Namen); Seite mit Attrappen der Oberfläche (Reihenfolge, Zentralen Classic/Mini, Hinweis nach Wechsel auf Mini). **Nicht im Browser geprüft.**
+
+## 5.33 (2026-11-26), Selectrix wieder da: Protokollwechsel mit Umrechnung (Jürgen Winkler, Pull Request 74)
+
+*Jürgen führt diese Änderung als Version 5.28 (aufgebaut auf seiner 5.27 = Pull Request 73); Zeilen im Code tragen `# v5.28`. Hier als 5.33 eingearbeitet. Versionsangaben „5.28“ in der Tabelle unten meinen 5.33; Checklistenpunkte 386 bis 388 von Jürgen stehen hier als 391 bis 393.*
+
+**Wunsch:** Im Excel-Programm gab es das Blatt Selectrix mit den Spalten Channel \[0..99\] und Bitposition \[1..8\] statt der einen Spalte Adresse. In der Web-Oberfläche fehlte Selectrix in den Hardware Optionen (der Wechsel zwischen den Protokollen ändert die Spalten).
+
+* **Protokoll wechseln:** `headless_protocol_switch.convert()` fügt die Spalte Bitposition ein (`HeadlessSheet.insert_column`) oder entfernt sie (`delete_column`); Zeile 1 (COM-Port, Build-Optionen …), Kopfzeile, Spaltenbreiten, Farben und Symbole wandern mit. DCC ↔ LNet ↔ CAN ändert nur die Kennung.
+* **Umrechnung:** Adresse = Channel × 8 + Bitposition (Bit 1 bis 8, Channel 0 bis 99, also Adressen 1 bis 800), wie der Code-Generator (`Addr = SX_Ch * 8 + Bit_P - 1`). Variablen und Namen bleiben. Adressen außerhalb 1 bis 800 bleiben als Zahl stehen (der Generator meldet den Channel). **Typen:** Rot/Grün und leer werden zu Taster, An/Aus bleibt; zurück wird Taster zu leerem Typ. Selectrix kennt An/Aus **und** Taster.
+* **Rückfrage:** Hat das Blatt mindestens eine Zeile mit Zahl als Adresse (Variablen zählen nicht), fragt das Programm vor dem Wechsel (Zahl der Adressen, Rot/Grün → Taster, Adressen über 800). Nein: das Protokoll bleibt.
+* **Auswahl:** Selectrix steht in der Liste, soweit `SupportsSelectrix` in `Platform_Parameters` für die Hardware auf true steht (Classic, Pro, Pico; die Pico-Firmware ist für Selectrix nicht fertig, das Hochladen meldet das).
+* **Testtasten:** werden beim Wechsel neu angelegt (Spalte Typ, Taster gelb, Text = Bitposition). **Kleiner:** 16 statt 18 Pixel, Schrift 10 statt 11, 1 Pixel höher in der Zelle (`.mll-tb`).
+* **Eingabeprüfung Selectrix** (`M20.SX_Check_Input`): Channel ganze Zahl 0 bis 99 (auch „1 - 2“; Namen und Variablen erlaubt), Bitposition ganze Zahl 1 bis 8; sonst Meldung und die Zelle wird geleert.
+* **Typ-Dialog:** öffnet sich sofort, wenn Channel und Bitposition eingegeben sind und der Typ leer ist (`M20.SX_Ask_Typ_if_Complete`, wie bei DCC nach der Adresse).
+* **Pgf-Import/Export:** gleiche Umrechnung wie der Wechsel (`M18`): Bitposition 1 bis 8 (vorher 0 bis 7, ungültig). Ein Selectrix-Block aus `Mainboard_Hardware_Test.MLL_pgf` des Excel-Programms lässt sich laden und mit identischen aktiven Zeilen wieder speichern.
+* **Fehler behoben:** `M20.Update_TestButtons` löschte bei Selectrix Channel 0 den Typ und die Testtasten; `Select_Typ_by_Dialog` brach bei Channel 0 ab.
+
+| Datei | Version | Änderung |
+|-|-|-|
+| `headless/headless_protocol_switch.py` | 1.00 | neu: Umrechnung, Analyse, Warntext, Wechsel des Blatts |
+| `ExcelAPI/headless_sheet.py` | 1.04 | `insert_column`, `delete_column` |
+| `_web/web_form_options.py` | 1.68 | Selectrix in der Auswahl, Rückfrage und Wechsel |
+| `proggen/M18_Save_Load.py` | 1.07 | Umrechnung beim Import wie der Wechsel |
+| `proggen/M20_PageEvents_a_Functions.py` | 1.18 | Channel 0, Typ-Dialog sofort, Eingabeprüfung Selectrix |
+| `webmobaledlib.py` | 5.33 | Programmversion, kleinere Testtasten |
+| `csv/Web_Languages.csv` | – | 12 neue Texte in sechs Sprachen |
+| `test_protocol_switch.py` | 1.00 | neu: 18 Tests (Umrechnung, Blatt, Testtasten, Pgf, Eingabeprüfung) |
+| `install/BETATEST_Checkliste.md` | 4.08 | Punkte 386 bis 388 |
+
+**Tests:** `python test_protocol_switch.py` (18 Tests; startet die echte Arbeitsmappe ohne Oberfläche mit leerem `MLL_DATA_DIR`), `python test_hardware_dialog.py` (9), Syntax, neue Texte mit `use_language(0..6)` und `tr`.
+
+**Nicht geprüft:** der Dialog Protokoll in den Hardware Optionen im Browser (Auswahl, Rückfrage), Selectrix-Blatt mit echten Eingaben im Browser (Typ-Dialog sofort, Meldung der Eingabeprüfung), kleinere Testtasten im Browser, Laden einer Selectrix-Datei aus dem echten Excel-Programm und Laden unserer Datei im Excel-Programm (nur das Format verglichen), Selectrix mit der Pico-Firmware, Windows, macOS, Linux, Raspberry Pi, Hardware. Die Umrechnung beim Import weicht vom alten Excel ab (dort Bitposition 0 bis 7). Die Übersetzungen außer Englisch sollten Muttersprachler prüfen.
+
+## 5.32 (2026-11-26), Entf: Meldung „Es läuft noch ein Vorgang“
+
+**Fehler (Rückmeldung zu 5.31):** Beim Löschen mit Entf erschien die Meldung „Es läuft noch ein Vorgang“, obwohl gelöscht wurde. Die Meldung stammt aus `write_cells`; es kam also ein zweiter Löschbefehl, während der erste noch lief. **Ursache nicht sicher geklärt** (nicht im Browser nachgestellt): doppeltes Ereignis oder Tastenwiederholung.
+
+| Datei | Version | Änderung |
+|-|-|-|
+| `webmobaledlib.py` | 5.32 | `on_cell_op`: zweites Entf während oder bis 0,8 s nach dem Löschen wird ignoriert; im Browser sendet Entf bei Tastenwiederholung (`k.repeat`) nichts; Protokollzeile „Zellbefehl delete …“ (mit `busy`) zur Diagnose |
+
+**Falls die Meldung bleibt:** in der Protokolldatei nach „Zellbefehl delete“ suchen; zwei Zeilen kurz hintereinander = doppeltes Ereignis, eine Zeile mit busy=True = Vorgang aus anderer Quelle.
+
+## 5.31 (2026-11-26), Tabelle bedienen wie in Excel: Pfeiltasten, Doppelklick auf Makrozellen, Fokus (Jürgen Winkler, Pull Request 73)
+
+*Jürgen führt diese Änderung als Version 5.27 (aufgebaut auf seiner 5.26 = Pull Request 72); Zeilen im Code tragen `# v5.27`. Hier als 5.31 eingearbeitet. Die Tabellenzeile „webmobaledlib.py 5.27“ unten meint 5.31; Checklistenpunkte 382 bis 385 von Jürgen stehen hier als 386 bis 389.*
+
+**Wunsch:** Adressen sollen sich wie im Excel-Programm schnell mit der Tastatur eingeben lassen; der Doppelklick auf Name und Beleuchtung soll die Makroauswahl öffnen (Anwender sollen den Makrotext nicht versehentlich von Hand bearbeiten); nach Dialogen und nach Entf soll man ohne Mausklick weiterarbeiten können.
+
+* **Pfeiltasten wie in Excel:** Wurde die Eingabe in einer Zelle durch **Tippen** begonnen (Eingabemodus), beenden Pfeil hoch, runter, links, rechts die Eingabe und gehen in die Nachbarzelle. Nach F2, Doppelklick oder Enter (Bearbeiten-Modus) bleibt der Cursor im Text; F2 schaltet im Eingabemodus ebenfalls um. Gilt nicht in mehrzeiligen Feldern. JavaScript in `webmobaledlib.py` (`mllArrowNav`, `mllEditStarted`); das Flag „Eingabe durch Tippen begonnen“ setzt ein Tastenhaken in der Capture-Phase, weil AG Grid das Bearbeiten schon im keydown startet (vor `cellKeyDown`).
+* **Doppelklick auf Name und Beleuchtung** öffnet standardmäßig die Makroauswahl (`web_layout.get_dblclick`: nicht eingestellt = an, bisher aus). **Umschalt + Doppelklick**, F2, Enter und das Kontextmenü „Zelle bearbeiten“ bearbeiten den Text. Der Haken in den Programm Einstellungen bleibt; ein früher ausgeschalteter Haken bleibt aus. Texte der Einstellung aktualisiert und übersetzt.
+* **Fokus bleibt in der Tabelle:** Nach dem Dialog Typ (`web_dialogs.refocus_grid`) und nach Entf, Strg+X, V, D, Z, Y (`mllRefocusLater`) bekommt die Zelle den Tastaturfokus zurück, in der der Anwender **vor** dem Befehl war. Dazu merkt sich die Oberfläche die zuletzt vom Anwender angesteuerte Zelle (`mllUserCell`); Fokuswechsel, die der Server über `api.setFocusedCell` auslöst (zum Beispiel die Auswahl der Zelle Typ), werden erkannt und zählen nicht. Die Tabelle wird nach Befehlen neu aufgebaut, daher wird die aktuelle Grid-API jedes Mal über das NiceGUI-Element geholt (`mllGetApi`); drei Versuche (0,3, 0,7, 1,3 s), weil das Neuzeichnen den Fokus erneut nehmen kann.
+
+| Datei | Version | Änderung |
+|-|-|-|
+| `webmobaledlib.py` | 5.31 | Programmversion, Pfeiltasten, Fokus, Umschalt + Doppelklick |
+| `_web/web_layout.py` | 1.22 | Doppelklick Makroauswahl Standard an, Text der Einstellung |
+| `_web/web_dialogs.py` | 1.15 | `refocus_grid` nach dem Dialog Typ (DCC und Selectrix) |
+| `csv/Web_Languages.csv` | – | neuer Text der Einstellung in sechs Sprachen |
+| `install/BETATEST_Checkliste.md` | 4.10 | Punkte 386 bis 389 |
+
+**Tests:** Syntax, Start des Servers mit leerem `MLL_DATA_DIR`; im Browser (Chromium der Entwicklungsumgebung): Pfeil runter und rechts nach Tippen übernimmt die Eingabe und wechselt die Zelle, F2 behält den Cursor im Text, Doppelklick löst die Makroauswahl aus und Umschalt + Doppelklick nicht, nach dem Typ-Dialog (DCC) liegt der Fokus wieder in der Zelle vor dem Dialog, nach Entf bleibt der Fokus in der Zelle; der neue Text mit `use_language(0..6)` und `tr`.
+
+**Nicht geprüft:** Fokus nach Strg+X, V, D, Z, Y und bei mehreren markierten Zellen; Safari, Firefox, Tablet (Pfeiltasten), Windows, macOS, Linux, Raspberry Pi; ganz schnelles Tippen mit Pfeiltaste innerhalb weniger Millisekunden nach dem ersten Zeichen (der Haken am Eingabefeld wird erst danach angelegt). Die Übersetzungen außer Englisch sollten Muttersprachler prüfen.
+
+## 5.30 (2026-11-26), Hardware Optionen: Reiter Lichtmaschine, Geräteauswahl, Einstellungen des Blattes (Jürgen Winkler, Pull Request 72)
+
+*Jürgen führt diese Änderung in seinem Zweig als Version 5.26 (Basis 5.25); die Zeilen im Code tragen `# v5.26`. Eingearbeitet mit den Versionen 5.26 bis 5.29 (Logic-Baukasten) als 5.30. Zusammengeführt wurden nur die Dateien `webmobaledlib.py`, `Web_Languages.csv`, HOC und Checkliste (Punkte 371 bis 381 von Jürgen, die Logic-Punkte stehen jetzt als 382 bis 385); alle anderen Dateien der Pull Request sind unverändert übernommen.*
+
+**Wunsch:** Bisher wählte der Anwender zuerst das Board (Radioknöpfe) und suchte danach den Port. Ziel: wenige Klicks, alles möglichst automatisch, gut strukturiert und leicht verständlich. Entwickelt auf Stand 5.12 und auf 5.25 übertragen.
+
+* **Geräteauswahl** (Knopf **Erkennen**, vorher „USB Port erkennen“): Liste aller gefundenen Geräte, gruppiert nach Classic / Pro / Pico, mit Typ, Port und Name des Anschlusses. Das im Blatt gespeicherte Gerät steht immer in der Liste (Vermerk „offline“, wenn es nicht am USB hängt). „Unbekannte Ports anzeigen“ ist zunächst aus; eingeschaltet erscheint die Gruppe „unbekannt“, beim OK fragt das Programm nach dem Typ (OK links, Abbrechen rechts). Das Bild rechts folgt der Auswahl, neu angesteckte Geräte werden gewählt, Abbrechen stellt den alten Typ wieder her. Über der Liste nur noch der Hinweis für Classic, keine Statuszeile; Liste 520 px hoch. Die anderen Dialoge (rechter Arduino, ISP, WLAN/mDNS) bleiben.
+* **Reiter Lichtmaschine:** keine Radioknöpfe mehr, nur **Hardware:** (fett) mit Gerät und Port, Bild (50 % größer), Knopf **Erkennen**. Darunter **Einstellungen**: Protokoll (DCC/LNet/CAN nach der Tabelle Platform_Parameters, Zeilen SupportsDCC/SupportsLNet/SupportsCAN je Plattform; ein nicht unterstütztes Protokoll bleibt mit Hinweis sichtbar; Selectrix-Blatt gesperrt), Hardwarevariante (nur Classic: Nano alter Bootloader / neue Version / maximaler Speicher, Uno), Schnelles Update (ESP32/Pico), Lichtsensor aktivieren, Schaltzustände speichern, Anzeige auf dem Display mit Vorschau (nur ESP32; „WLAN, IP, LDR und Zeit“ und „WLAN, IP und Hostname“ nur bei eingeschaltetem WLAN, folgt dem Haken im Reiter WLAN (OTA); der Reiter „ESP Einstellungen“ entfällt). Reiter links ausgerichtet und schmaler, Dialog kompakter.
+* **Reiter DCC/LNet Arduino** folgt dem Protokoll sofort (Beschriftung; bei CAN ausgeblendet).
+* **Speicherung im Blatt:** Protokoll (Page-ID) und Variante (Build-Optionen) wie bisher; Display in `esp32_options`; **Schnelles Update je Blatt** (`esp32_options["serial_cfg"]`, die globale Einstellung ist nur noch Vorgabe); **Lichtsensor und Schaltzustände als Makrozeilen** `#define READ_LDR` und `#define ENABLE_STORE_STATUS()` (setzen = Zeile einfügen oder vorhandene ausgeschaltete einschalten, entfernen = alle Zeilen mit dem Makro löschen). Frühere Einträge `ldr`/`store_status` in `esp32_options` werden beim Schließen der Optionen in Makrozeilen übernommen.
+* **Code-Generator:** `READ_LDR` und `ENABLE_STORE_STATUS()` für alle Plattformen (vorher nur innerhalb `#ifdef ESP32`).
+* **Texte:** Gerät bzw. Lichtmaschine statt Arduino/Board: Fenster „Geräteauswahl“, „Gefundene Geräte“, „Kein Gerät gefunden …“, „OK, wenn die LEDs am richtigen Gerät …“, „Bitte Gerät an einen USB Anschluss …“, „Achtung: Das Gerät wird von einem anderen Programm benutzt.“, Menüpunkt „Gerät wechseln …“, „Fehler beim Öffnen der Verbindung“, Verbindungsstatus und -fehler, Z21, Test ohne Verbindung, Pico-WLAN-Prüfung, Patterngenerator (auch `PA_Languages.csv`), Makro-Parameter, „gleich zur Lichtmaschine schicken“, Entwicklungsumgebung, Erweiterungen, Meldungen in `MobaLedTest_macrodef.json` („Verbindung mit dem Gerät“, Anzeigename „Geräteschnittstelle“). Der rote Hinweis „Tipp: Der ausgewählte Arduino blinkt schnell“ entfällt. Protokoll „LNet“ ohne den Begriff LocoNet (wie 5.25).
+* **Geräteauswahl, Abfrage im Hintergrund:** Der Dialog öffnet sofort nach der USB-Erkennung (Gruppen nach USB-Kennung, Typ „unbekannt“). Danach werden ESP32, Pico, Nano und andere MobaLedLib-Geräte nacheinander im Hintergrund abgefragt (die gewählte Zeile zuerst, bei jedem Öffnen neu). ESP32/Pico: `~MLLCFG INFO` und `~MLLINFO` in einer Sitzung (DTR/RTS vor `open()` aus, nur der Pico mit DTR an: kein Reset); Nano: `#?` (LEDs_AutoProg.ino) und danach `#X`. Spalten Typ, Port, Version, USB Kennung. Der Typ wird nur bei positiver Antwort gesetzt, „blockiert“ bei einem von einem anderen Programm belegten Port (beim Auswählen der vorhandene Hinweistext). `type` in `~MLLINFO`: `LICHTMASCHINE` (Plattform ESP32/PICO, Version = webMLL-Version der Firmware), `PICOSERVO` = „Servo“, `PICOSOUND` = „Sound“, `PICO2X3` = „2x3“, jeder andere Wert wird als Typ angezeigt (Gruppe „Andere MobaLedLib Geräte - nicht als Lichtmaschine wählbar“). Ein mit dem Hauptprogramm verbundener Anschluss wird nicht getrennt (Abfrage und `~MLLIDENT` laufen über diese Verbindung). Jede Abfrage steht mit Ergebnis und Dauer im Protokoll. Pfeil rauf/runter wählt das Gerät.
+* **Firmware:** `~MLLINFO` in `MLLAdminCommunication.h` (`type=LICHTMASCHINE platform=… ver=<webMLL-Version>`, Makro `MLL_FW_VERSION` kommt vom Code-Generator).
+* **Nano, Bootloader:** Der Bootloader (alt/neu/Full) des gewählten Nano wird im Hintergrund ermittelt (STK500 wie „Board und USB Port erkennen“), steht im Typ und wird bei OK in die Build-Optionen eingetragen; die Prüfung nach OK nutzt das Ergebnis 90 s lang (`BOOTLOADER_CACHE`).
+* **ESP32, Displaytyp:** Auswahlfeld „Displaytyp“ (`OLED_TYP` 1 = 1,3", 2 = 0,96", Standard 2) in `esp32_options["oled_typ"]`; der Code-Generator schreibt `#define OLED_TYP`.
+* **Autoconnect:** Wurde der COM Port in der Hardwaresuche geändert, verbindet das Programm nach dem Schließen der Optionen (Einstellung AutoConnect); stilles Verbinden ruht, solange die Geräteauswahl offen ist; eine negative Portnummer im Blatt (Excel: belegt) gilt als kein Port.
+* Selectrix für Classic/Pro wurde versucht und wieder entfernt (andere Spalten; später).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_form_comport.py` | 1.43 | Geräteauswahl (Liste, Gruppen, offline, unbekannte Ports, Typabfrage), Texte, kompakter; Abfrage von Typ und Version im Hintergrund, blockierte Ports, Bootloader des Nano, Pfeiltasten |
+| `_web/web_form_options.py` | 1.74 | Displaytyp, Autoconnect nach Portwechsel, Reiter Lichtmaschine, Einstellungen, Protokolle nach Platform_Parameters, Reiter DCC/LNet folgt dem Protokoll, Display-Anzeige nur mit WLAN, Hardwarevariante, Bild größer |
+| `headless/headless_sheet_settings.py` | 1.00 | neu: Einstellungen als Makrozeilen setzen/entfernen, Übernahme alter Einträge |
+| `proggen/M42_Dyn_Config.py` | 1.12 | Schnelles Update je Blatt (`Set_Sheet_Option`) |
+| `proggen/M06_Write_Header.py` | 1.20 | READ\_LDR / ENABLE\_STORE\_STATUS für alle Plattformen; `OLED_TYP` |
+| `proggen/M06_Write_Header_SW.py` | 1.14 | Lichtsensor und Schaltzustände auf allen Plattformen |
+| `proggen/M07_COM_Port_New.py` | 1.24 | Titel Geräteauswahl, Statusmeldungen mit Gerät, roter Hinweis entfernt; `~MLLIDENT` im Hintergrund, `Query_Info`, `Query_Nano_Info`, `Query_Nano_Bootloader`, blockierte Ports |
+| `proggen/M07_COM_Port.py` | 1.16 | Ergebnis der Bootloader-Abfrage der Geräteauswahl wird einmal wiederverwendet |
+| `LEDs_AutoProg/MLLAdminCommunication.h` | – | `~MLLINFO` (Typ, Plattform, webMLL-Version der Firmware) |
+| `_web/web_serial.py` | 1.18 | „Fehler beim Öffnen der Verbindung“ (übersetzt), Texte Gerät; stilles Verbinden ruht bei offener Geräteauswahl, Startmeldung gemerkt |
+| `_web/web_esp32_ota.py` | 1.10 | `settings_panel()` gibt den Haken WLAN zurück |
+| `_web/web_z21.py`, `web_form_ledcoloranim.py`, `web_form_servoanim.py`, `web_form_exchange.py` | 1.06, 1.01, 1.06, 1.04 | Texte Gerät/Lichtmaschine |
+| `proggen/M06_Write_MLLConfig.py`, `pattgen/M55_PWM_Data_Send.py` | 1.01 | Texte Gerät (Versionskopf neu) |
+| `MobaLedTest_macrodef.json`, `MobaLedTest_macroparamdef.json`, `csv/PA_Languages.csv` | | Texte Gerät/Lichtmaschine |
+| `csv/Web_Languages.csv` | | neue und umbenannte Texte in allen Sprachen |
+| `webmobaledlib.py` | 5.26 | VERSION, REQUIRED\_FILES, Menüpunkt „Gerät wechseln …“ |
+| `install/BETATEST_Checkliste.md` | 4.06 | Punkte 371 bis 381 |
+| `test_hardware_dialog.py` | 1.00 | neu: 9 Tests (Liste der Geräte, Makrozeilen) |
+
+**Geprüft:** `python test_hardware_dialog.py` (9 Tests), `python -m py_compile` aller geänderten Dateien, Übersetzungen der neuen Texte in allen Sprachen, Versionsprüfung (REQUIRED\_FILES).
+**Nicht geprüft:** Oberfläche im Browser, echte Arbeitsmappe (Zeile einfügen/löschen, Autosave), Hardware (Erkennen, Ident-Blinken, Upload mit READ\_LDR / ENABLE\_STORE\_STATUS auf Nano und Pico), Windows/macOS/Linux/Raspberry Pi. Export eines einzelnen Blattes (`.MLL_pgf`) nimmt Schnelles Update und Display-Einstellung nicht mit.
 
 ## 5.25 (2026-11-25), Begriff LocoNet entfernt
 

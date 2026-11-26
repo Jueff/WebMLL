@@ -1,15 +1,30 @@
 ====== MobaLedLib Studio – Die Startseite für Einsteiger ======
-//Seitenstand 1.01 (2026-11-25), gilt für Version 5.25//
+//Seitenstand 1.03 (2026-11-26), gilt für Version 5.35//
 
-Beim Start zeigt MobaLedLib Studio eine **Startseite**. Sie führt dich in **drei Schritten** zu deinem ersten Programm auf der Lichtmaschine: Du sagst, **welche Modellbahnzentrale** und **welche Lichtmaschine** du hast. Das Programm öffnet dann die **passende Tabelle** mit einem **fertigen Startprogramm**. Du musst es nur noch auf die Lichtmaschine übertragen.
+Beim Start zeigt MobaLedLib Studio eine **Startseite**. Sie führt dich in **drei Schritten** zu deinem ersten Programm auf der Lichtmaschine: Du sagst, **welche Lichtmaschine** und **welche Modellbahnzentrale** du hast. Das Programm öffnet dann die **passende Tabelle** mit einem **fertigen Startprogramm**. Du musst es nur noch auf die Lichtmaschine übertragen.
 
 {{:bilder:anleitungen:mobaledlibstudio:start_02_startseite.png?600|Die Startseite nach dem Start}}
 
 Die Startseite ist für **Einsteiger** gedacht. Als Experte kannst du sie mit **Überspringen** schließen oder ganz abschalten (siehe unten).
 
-===== Schritt 1: Die Modellbahnzentrale wählen =====
+===== Schritt 1: Die Lichtmaschine wählen =====
 
-Klicke auf die Zentrale, mit der deine Anlage gesteuert wird:
+Klicke auf deine Lichtmaschine:
+
+^ Auswahl ^ Platine ^ Eingestelltes Board ^ Unterstützte Zentralen ^
+| **Lichtmaschine Classic** | ARDUINO Nano | **Nano (neue Version)**, ein schon eingestellter Nano bleibt erhalten | DCC, Selectrix, LNet, CAN |
+| **Lichtmaschine Mini** | ARDUINO Nano | **Nano (neue Version)**, wie Classic | nur DCC |
+| **Lichtmaschine Pro** | ESP32 | **ESP32** | DCC, Selectrix, LNet, CAN |
+| **Lichtmaschine Pico Zero** | Raspberry Pico | **Raspberry Pico** | DCC, Selectrix, LNet, CAN |
+| **Lichtmaschine MoLLi** | Raspberry Pico | **Raspberry Pico** | nur DCC |
+
+Die Lichtmaschinen stehen in der Datei ''csv/Lichtmaschinen_prop.json''. Jedes Produkt dieser Liste erscheint als eigene Kachel. Kommt ein neues Produkt dazu, wird nur diese Liste ergänzt. Du musst dort **nichts von Hand ändern**.
+
+Die Bilder zeigen die Platine. Du musst **nicht** selbst nachsehen, was auf deiner Lichtmaschine steckt: Schließe sie mit dem **USB-Kabel** an und klicke auf **Automatisch erkennen**. Das Programm sucht an allen USB-Anschlüssen. Findet es eine Lichtmaschine, wählt es sie **für dich aus** und zeigt den Namen und den Anschluss an. Findet es keine, kommt ein Hinweis: Prüfe das **USB-Kabel** (es muss Daten übertragen) und klicke noch einmal, oder wähle die Lichtmaschine **von Hand**.
+
+===== Schritt 2: Die Modellbahnzentrale wählen =====
+
+Klicke auf die Zentrale, mit der deine Anlage gesteuert wird. Es erscheinen **nur die Zentralen, die deine Lichtmaschine unterstützt** (siehe Tabelle bei Schritt 1). Darum wählst du **zuerst die Lichtmaschine**.
 
 ^ Auswahl ^ Tabelle ^
 | **DCC-Zentrale** | **DCC** |
@@ -18,24 +33,13 @@ Klicke auf die Zentrale, mit der deine Anlage gesteuert wird:
 | **Märklin CAN-Bus** | **CAN** |
 | **Ohne Zentrale** | **DCC** (siehe Hinweis) |
 
-Der gewählte Eintrag ist hervorgehoben. Unter der Auswahl steht, welche Tabelle benutzt wird. Alle **Tabellen, die du nicht brauchst, werden ausgeblendet**. Du siehst später nur die Tabelle deiner Zentrale.
+Wechselst du die Lichtmaschine, nachdem du schon eine Zentrale gewählt hast, die die neue Lichtmaschine **nicht** kann, stellt das Programm **DCC** ein und sagt es dir. Der gewählte Eintrag ist hervorgehoben. Unter der Auswahl steht, welche Tabelle benutzt wird. Alle **Tabellen, die du nicht brauchst, werden ausgeblendet**. Du siehst später nur die Tabelle deiner Zentrale.
 
 **Hinweis:** **Ohne Zentrale** wählst du, wenn du die Lichtmaschine erst einmal ohne Modellbahnzentrale ausprobieren willst. Dann wird die Tabelle **DCC** benutzt. Eine Zentrale brauchst du für den ersten Test nicht (siehe [[anleitungen:mobaledlibstudio:erstes_programm|Dein erstes Programm]]).
 
-===== Schritt 2: Die Lichtmaschine wählen =====
-
-Klicke auf deine Lichtmaschine:
-
-^ Auswahl ^ Platine ^ Eingestelltes Board ^
-| **Lichtmaschine Classic / Mini** | ARDUINO Nano | **Nano (neue Version)**, ein schon eingestellter Nano bleibt erhalten |
-| **Lichtmaschine Pro** | ESP32 | **ESP32** |
-| **Lichtmaschine Pico Zero / MoLLi** | Raspberry Pico | **Raspberry Pico** |
-
-Die Bilder zeigen die Platine. Du musst **nicht** selbst nachsehen, was auf deiner Lichtmaschine steckt: Schließe sie mit dem **USB-Kabel** an und klicke auf **Automatisch erkennen**. Das Programm sucht an allen USB-Anschlüssen. Findet es eine Lichtmaschine, wählt es sie **für dich aus** und zeigt den Namen und den Anschluss an. Findet es keine, kommt ein Hinweis: Prüfe das **USB-Kabel** (es muss Daten übertragen) und klicke noch einmal, oder wähle die Lichtmaschine **von Hand**.
-
 ===== Schritt 3: Das Programm übertragen =====
 
-Sobald Zentrale **und** Lichtmaschine gewählt sind, steht unter Schritt 3 die **Anleitung für deine Kombination**:
+Sobald Lichtmaschine **und** Zentrale gewählt sind, steht unter Schritt 3 die **Anleitung für deine Kombination**:
 
   - **Verbinde** die Lichtmaschine per USB mit dem Computer.
   - Klicke in der Tabelle auf den Knopf **Setup übertragen**. Das Programm wird zur Lichtmaschine übertragen. Die **Heartbeat-LED** blinkt, wenn es geklappt hat.
@@ -50,7 +54,7 @@ Gibt es für deine Auswahl ein **Startprogramm**, steht dort der Name der Tabell
 Unten auf der Seite stehen zwei Knöpfe:
 
 ^ Knopf ^ Wirkung ^
-| **Anfangen** | Erst aktiv, wenn **Zentrale und Lichtmaschine** gewählt sind. Das Programm **blendet die Tabellen der anderen Zentralen aus**, öffnet die Tabelle deiner Zentrale, **lädt das Startprogramm** in diese Tabelle und **stellt das Board ein**. Die Meldung **Startseite: Tabelle vorbereiten** zeigt, dass es arbeitet. |
+| **Anfangen** | Erst aktiv, wenn **Lichtmaschine und Zentrale** gewählt sind. Das Programm **blendet die Tabellen der anderen Zentralen aus**, öffnet die Tabelle deiner Zentrale, **lädt das Startprogramm** in diese Tabelle und **stellt das Board ein**. Die Meldung **Startseite: Tabelle vorbereiten** zeigt, dass es arbeitet. |
 | **Überspringen** | Schließt die Startseite, **ohne etwas zu ändern**. Du siehst die Tabelle wie bisher. |
 
 **Achtung:** **Anfangen** lädt das Startprogramm in die **Tabelle deiner Zentrale**. Hast du dort schon **eigene Zeilen** eingetragen, wähle **Überspringen**. Dann bleibt alles, wie es ist. Die Startseite ist für den **ersten Start** gedacht.

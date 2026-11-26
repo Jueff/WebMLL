@@ -1,12 +1,13 @@
-# Datei-Version: 1.12 (2026-11-05) - web_macro_tree.py
+# Datei-Version: 1.13 (2026-11-26) - web_macro_tree.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_macro_tree.py
 # Path:           _web/web_macro_tree.py
-# Version:        1.12
-# Last Update:    2026-11-05
+# Version:        1.13
+# Last Update:    2026-11-26
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
+#   1.13  2026-11-26  Makrotext in der Makroauswahl ohne den Kommentar der Zelle (Text nach dem §). Zeile mit '# v1.13'
 #   1.12  2026-11-05  Anfaenger Modus: Makros aus csv/Beginner_Hidden_Macros.csv (Makro oder Gruppe) werden im Anfaenger Modus nicht angezeigt (Makrobaum, Suche, Grafik); set_beginner_check, load_hidden_rules, filter_beginner (fruehere Versionen ohne Eintrag)
 # ----------------------------------------------------------------------------------------------
 """Web-Ersatz fuer die Makroauswahl (proggen/SelectMacrosTreeForm.py, Tk-Treeview).
@@ -197,7 +198,8 @@ def collect_macro_rows():
         if detail == "":
             detail = cell(row, M02.SM_ShrtD_COL + lang * delta).replace("|", "\n")
         info[row] = {"name_cell": name_cell, "detail": detail,
-                     "macro_text": M30.Replace_Multi_Space(cell(row, M02.SM_Macro_COL)),
+                     # "macro_text": M30.Replace_Multi_Space(cell(row, M02.SM_Macro_COL)),  # v1.13 (entfallen)
+                     "macro_text": M30.Replace_Multi_Space(str(cell(row, M02.SM_Macro_COL)).split("§")[0]),  # v1.13: ohne Kommentar der Zelle
                      "group_path": cell(row, M02.SM_Group_COL).replace("|", " > ")}
         items.append({"row": row, "name": str(name), "name_cell": name_cell, "group": str(group),
                       # "short": str(short), "icon": icon})  # v1.05 (entfallen)

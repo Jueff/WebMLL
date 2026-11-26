@@ -12,6 +12,9 @@
 //   ~MLLCFG ABORT                     -> ~MLLCFG OK
 //   Fehler:                              ~MLLERR <Grund>
 //
+// --- Info (MLLINFO) -------------------------------------------------------------------
+//   ~MLLINFO                          -> ~MLLINFO type=LICHTMASCHINE platform=<ESP32|PICO> ver=<webMLL-Version>
+//
 // --- Identifikation (MLLIDENT) --------------------------------------------------------
 //   ~MLLIDENT 1   Blinken starten bzw. verlaengern (der PC schickt die Zeile jede Sekunde)  (keine Antwort)
 //   ~MLLIDENT 0   Blinken beenden                                                         (keine Antwort)
@@ -41,6 +44,28 @@ static void MllCommunicationError(Stream &port, const __FlashStringHelper* Reaso
 
 #include "MLLDynConfig.h"
 #include "MLLIdentify.h"
+
+#ifndef MLL_FW_VERSION
+  #define MLL_FW_VERSION "unknown"   // wird von webMLL in LEDs_AutoProg.h gesetzt (Version von webMLL, mit der die Firmware gebaut wurde)
+#endif
+
+#if defined(ESP32)
+  #define MLL_PLATFORM "ESP32"
+#elif defined(ARDUINO_RASPBERRY_PI_PICO) || defined(ARDUINO_ARCH_RP2040)
+  #define MLL_PLATFORM "PICO"
+#else
+  #define MLL_PLATFORM "unknown"
+#endif
+
+//----------------------------------------
+static void MllInfoReply(Stream &port)
+//----------------------------------------
+// Antwort auf '~MLLINFO' (Lichtmaschine ESP32/Pico): "~MLLINFO type=LICHTMASCHINE platform=<ESP32|PICO> ver=<webMLL-Version>".
+// webMLL erkennt damit das Board, die Plattform und die Version, mit der die Firmware gebaut wurde.
+{
+  port.print(F("~MLLINFO type=LICHTMASCHINE platform=" MLL_PLATFORM " ver="));
+  port.println(F(MLL_FW_VERSION));
+}
 
 #if !defined(MLL_DYNAMIC_CONFIG)
 // Stub for MllCfgProcessLine when MLL_DYNAMIC_CONFIG is not defined
@@ -78,6 +103,7 @@ bool MllAdminReceive(char c, Stream &port)
   if (!Complete || Over)                      MllCommunicationError(port, F("line"));
   else if (strncmp(Line, "MLLCFG ", 7) == 0)  MllCfgProcessLine(port, Line + 7);
   else if (strncmp(Line, "MLLIDENT ", 9) == 0) MllIdentProcessLine(port, Line + 9);  // MLLIDENT wird in MllIdentProcessLine verarbeitet
+  else if (strcmp(Line, "MLLINFO") == 0)      MllInfoReply(port);                   // ~MLLINFO: Typ und Version der Lichtmaschine
   else                                        MllCommunicationError(port, F("cmd"));
   return true;
 }

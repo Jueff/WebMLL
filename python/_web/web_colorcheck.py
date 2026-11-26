@@ -1,9 +1,9 @@
-# Datei-Version: 1.12 (2026-11-23) - web_colorcheck.py
+# Datei-Version: 1.13 (2026-11-26) - web_colorcheck.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_colorcheck.py
 # Path:           _web/web_colorcheck.py
-# Version:        1.12
-# Last Update:    2026-11-23
+# Version:        1.13
+# Last Update:    2026-11-26
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
@@ -12,6 +12,7 @@
 #   1.07  2026-11-16  Protokoll: wird die LED-Nummer oder Anzahl auf die Zahl der LEDs der Lichtmaschine (Startmeldung) begrenzt, steht das im Protokoll
 #   1.08  2026-11-21  Version 4.57: open_mini(): Mini-Farbtest als Fenster (Farbe live an die LED, OK gibt R,G,B zurueck) fuer die Tabelle (F3, Kontextmenue)
 #   1.09  2026-11-21  Version 4.59: open_mini(slots=...): mehrere Farben (Ein/Aus) mit Umschalter, Rueckgabe je Farbe (fuer ConstRGB)
+#   1.13  2026-11-26  Version 5.37: Knopf Farb Test beenden unten rechts (zurueck zum Programm Generator, auch ohne Palette zu uebergeben)
 #   1.12  2026-11-23  Version 4.82: open_mini(passive=True) (Mini-Farbtest ausser ConstRGB): beim Oeffnen wird NICHTS an die Lichtmaschine gesendet (kein Direktmodus, keine Farbe); erst Blinken oder eine Farbaenderung schaltet frei; model.quiet sperrt alle LED-Befehle
 #   1.11  2026-11-23  Version 4.80: Mini-Farbtest: "Blinken Ein/Aus" blinkt wieder (der verzoegerte Sendebefehl push() beendete das Blinken nach 0,3 s)
 #   1.10  2026-11-21  Version 4.60: open_mini(led=(Start LedNr, Anzahl, Kanal)): LED der Tabellenzeile statt der zuletzt benutzten
@@ -742,6 +743,8 @@ def build(ctrl, goto_generator=None, is_active=None, run_command=None):
                 refs["cnt"] = number(width="w-24", min=1, max=4095, step=1, value=model.ledcount, format="%d", on_change=on_cnt)
                 ui.button("Alle LED aus", on_click=led_off).props("outline no-caps")
                 ui.button("Blinken Ein/Aus", on_click=blink).props("outline no-caps")
+            with ui.row().classes("w-full justify-end"):  # v1.13: Knopf unten rechts, um den Farb Test zu beenden (zurueck zum Programm Generator)
+                ui.button(tr("Farb Test beenden"), icon="close", on_click=lambda: goto_generator() if goto_generator else None).props("outline no-caps")  # v1.13
 
     def build_palette():
         palette_grid.clear()

@@ -1,10 +1,10 @@
-# Datei-Version: 1.05 (2026-11-20) - web_z21.py
+# Datei-Version: 1.06 (2026-11-25) - web_z21.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_z21.py
 # Path:           _web/web_z21.py
-# Version:        1.05
-# Last Update:    2026-11-20
-# Author:         Harold Linke
+# Version:        1.06
+# Last Update:    2026-11-25
+# Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
 # History of Change:
 #   1.00  2026-10-21  Neu: Reiter Z21 Simulator (mlpyproggen/Z21MonitorPage.py ohne Tk), Phase 1: Z21-Protokoll ueber UDP 21105 mit einem Arduino (Start, Stop, Taster-Adressen, Protokollfenster)
@@ -13,6 +13,7 @@
 #   1.03  2026-11-05  Beschreibungstext der Seite wird uebersetzt (description_text)
 #   1.04  2026-11-17  Hinweistext: 'Mit Lichtmaschine verbinden' statt 'Mit ARDUINO verbinden'
 #   1.05  2026-11-20  Issue 51: Hinweisbox mit hellem Hintergrund bekommt dunkle Schrift (im Dunklen Modus war weisser Text auf hellem Grund nicht lesbar)
+#   1.06  2026-11-25  Text: 'nicht mit dem Gerät verbunden' (statt ARDUINO). Zeilen mit '# v1.06'
 # ----------------------------------------------------------------------------------------------
 """Web-Version der Seite "Z21 Simulator" (mlpyproggen/Z21MonitorPage.py, Klasse Z21MonitorPage, ohne Tk).
 
@@ -429,7 +430,8 @@ class Z21Simulator:
         command = "@ {:03} {:02} {:02}".format(dccaddress, channel, activate)
         if not self._connected():
             # self._fragments.append(f" [nicht mit dem ARDUINO verbunden: {command} nicht gesendet]")  # v1.02 (entfallen)
-            self._fragments.append(tr(' [nicht mit dem ARDUINO verbunden: {command} nicht gesendet]', command=command))  # v1.02
+            # self._fragments.append(tr(' [nicht mit dem ARDUINO verbunden: {command} nicht gesendet]', command=command))  # v1.02  # v1.06 (entfallen)
+            self._fragments.append(tr(' [nicht mit dem Gerät verbunden: {command} nicht gesendet]', command=command))  # v1.06: Gerät statt ARDUINO
             return
         self.ctrl.send_to_ARDUINO(command + "\n")
         self._fragments.append(" -> ARDUINO: " + command)

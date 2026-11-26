@@ -1,12 +1,13 @@
-# Datei-Version: 1.11 (2026-11-25) - M42_Dyn_Config.py
+# Datei-Version: 1.12 (2026-11-25) - M42_Dyn_Config.py
 # ----------------------------------------------------------------------------------------------
 # Name:           M42_Dyn_Config.py
 # Path:           proggen/M42_Dyn_Config.py
-# Version:        1.11
+# Version:        1.12
 # Last Update:    2026-11-25
 # Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
 # History of Change:
+#   1.12  2026-11-25  Schnelles Update (serial_cfg) je Blatt: Option_Enabled liest zuerst esp32_options des aktiven Blattes, Set_Sheet_Option schreibt dorthin. Zeilen mit '# v1.12'
 #   1.11  2026-11-25  Clear_Found_Port: der gefundene Anschluss eines frueheren Uploads wird vor jedem Upload geloescht (sonst haette ein anderes Board den Anschluss eines frueheren Pico ins Blatt bekommen koennen). Zeilen mit '# v1.11'
 #   1.10  2026-11-24  Nach dem Upload merkt sich After_Full_Flash den gefundenen Anschluss (Funktion Found_Port), M08 traegt ihn ins Blatt ein. Zeilen mit '# v1.10'
 #   1.09  2026-11-24  Timeout fuer die Suche nach dem Pico nach dem Upload von 25 s auf 10 s verkuerzt. Zeile mit '# v1.09'
@@ -54,6 +55,12 @@ _state = {"active": False, "off": False, "tools": None, "tools_checked": False, 
 
 
 def Option_Enabled():
+    try:  # v1.12: die Einstellung des Blattes (Optionen, Reiter Lichtmaschine -> Einstellungen) hat Vorrang
+        opts = getattr(P01.ActiveSheet, "esp32_options", None) or {}  # v1.12
+        if OPTION_KEY in opts:  # v1.12
+            return bool(opts[OPTION_KEY])  # v1.12
+    except Exception:                                      # noqa: BLE001  # v1.12
+        pass  # v1.12
     try:
         return bool(PG.global_controller.getConfigData(OPTION_KEY))
     except Exception:                                      # noqa: BLE001
@@ -63,6 +70,13 @@ def Option_Enabled():
 def Set_Option(value):
     PG.global_controller.setConfigData(OPTION_KEY, bool(value))
     PG.global_controller.SaveConfigData()
+
+
+def Set_Sheet_Option(value, sheet=None):  # v1.12: Schnelles Update je Blatt (wird mit dem Blatt gesichert); die globale Einstellung bleibt die Vorgabe fuer Blaetter ohne Eintrag
+    ws = sheet or P01.ActiveSheet  # v1.12
+    opts = dict(getattr(ws, "esp32_options", None) or {})  # v1.12
+    opts[OPTION_KEY] = bool(value)  # v1.12
+    ws.esp32_options = opts  # v1.12
 
 
 def Active():

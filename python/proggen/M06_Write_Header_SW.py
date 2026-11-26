@@ -1,17 +1,19 @@
-# Datei-Version: 1.13 (2026-11-25) - M06_Write_Header_SW.py
+# Datei-Version: 1.15 (2026-11-26) - M06_Write_Header_SW.py
 # ----------------------------------------------------------------------------------------------
 # Name:           M06_Write_Header_SW.py
 # Path:           proggen/M06_Write_Header_SW.py
-# Version:        1.13
-# Last Update:    2026-11-25
+# Version:        1.15
+# Last Update:    2026-11-26
 # Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
 # History of Change:
+#   1.15  2026-11-26  Makro aus Lib_Macros ohne den Kommentar der Zelle (Text nach dem §) lesen, sonst passen die Parameternamen (Val1§...) nicht (Makro Button). Zeile mit '# v1.15'
 #   1.13  2026-11-25  Pico mit aelterer PicoFastLED.h (ohne showColor) uebersetzte nicht: Hilfsmakro MLL_CLEAR_CONTROLLER, bei Pico ohne MLL_HAS_SHOWCOLOR wird clearLeds(256) benutzt (Log von Harold, Pico, Kompilierfehler showColor)
 #   1.12  2026-11-24  Pull Request 63 (Juergen, Issue 62): Konfiguration getrennt von der Firmware: beim Start werden MLL_CLEAR_LED_CNT (256, mit LONG_LED_ADDR 1000) schwarze Pixel je Controller ausgegeben (showColor), damit auch physisch angeschlossene, nicht mehr konfigurierte LEDs ausgehen. Zeilen mit '# v1.12'
 #   1.11  2026-11-19  Konfiguration getrennt von der Firmware (ESP32/Pico): SETUP_FASTLED legt die FastLED-Controller in einer Schleife ueber mllControllerConfig[] (Pin, erste LED, LED-Anzahl aus der Konfigurationsdatei) an;
 #                     die Firmware enthaelt dazu MLL_LED_PINS (alle LED-Pins der Plattform) und MLL_ADD_LEDS. Neue Funktionen Get_LED_Controller_List, Get_FastLED_Pin_List. Klassische Kopfdatei (Nano): unveraendert controllerN (Zeilen mit '# v1.11')
 #   1.10  2026-11-19  Konfiguration getrennt von der Firmware (ESP32/Pico): SETUP_FASTLED und die DMX-Defines benutzen die Zahl der LEDs je Kanal aus der Konfigurationsdatei (mllChOff/mllChCnt); START_SEND_INPUTS/TOTAL_SEND_INPUTS werden durch ENABLE_SEND_INPUT und Parameter der Konfigurationsdatei ersetzt. ATmega und klassische Kopfdatei unveraendert (Zeilen mit '# v1.10')
+#   1.14  2026-11-25  Einstellungen des Blattes 'Lichtsensor aktivieren' und 'Schaltzustaende speichern' gelten fuer alle Plattformen (vorher Lichtsensor nur ESP32). Zeilen mit '# v1.14'
 #   1.09  2026-11-19  Add_VarArgCnt_to_DstVars: NameError 'proggen' (fehlerhafte Umsetzung: proggen.clsExtensionParameter.Name statt der Schleifenvariablen) behoben; die Zielvariablen aus '...'/'OutList' werden wieder in die Liste eingetragen
 #   1.08  2026-11-19  Get_Matching_Arg: Endlosschleife bei den Argumenten '...' und 'OutList' (die Schleifenvariable wurde nicht weitergezaehlt): 'Setup uebertragen' und die Minimale-Firmware-Pruefung blieben bei einer Counter-Zeile ohne Rueckmeldung stehen (hang_dump.txt von Harold)
 #   1.07  2026-11-18  ESP-Einstellung 'Fotowiderstand aktivieren' aktiviert die LDR-Scanner-Initialisierung auch ohne Makrozeile (Beitrag moosbewohner, PR 9)
@@ -907,7 +909,8 @@ def Add_Inp_and_DstVars(line, r):
     else:
         _with0 = PG.ThisWorkbook.Sheets(M02.LIBMACROS_SH)
         OutCntStr = _with0.Cells(Org_Macro_Row, M02.SM_OutCntCOL)
-        Org_Macro = _with0.Cells(Org_Macro_Row, M02.SM_Macro_COL)
+        # Org_Macro = _with0.Cells(Org_Macro_Row, M02.SM_Macro_COL)  # v1.15 (entfallen)
+        Org_Macro = str(_with0.Cells(Org_Macro_Row, M02.SM_Macro_COL)).split('§')[0]  # v1.15: ohne Kommentar der Zelle (Text nach dem §)
         MacroType = _with0.Cells(Org_Macro_Row, M02.SM_Typ___COL)     # 21.11.25 Juergen support macro only extensions
         
         if Add_InpVars(Parts(0), Org_Macro, line, r, Org_Macro_Row) == False:
@@ -1741,8 +1744,10 @@ def Init_HeaderFile_Generation_SW(firstRun):
         MaxUsed_Loc_InCh = - 1
         # Read_LDR = False  # v1.07 (entfallen)
         esp32_options = getattr(P01.ActiveSheet, "esp32_options", None) or {}  # v1.07
-        Read_LDR = M02a.Get_BoardTyp() == M02.HT_ESP32 and esp32_options.get("ldr") is True  # v1.07
-        Store_Status_Enabled = False
+        # Read_LDR = M02a.Get_BoardTyp() == M02.HT_ESP32 and esp32_options.get("ldr") is True  # v1.07  # v1.14 (entfallen)
+        Read_LDR = esp32_options.get("ldr") is True  # v1.14: Lichtsensor auf allen Plattformen (Einstellungen des Blattes)
+        # Store_Status_Enabled = False  # v1.14 (entfallen)
+        Store_Status_Enabled = esp32_options.get("store_status") is True  # v1.14: Schaltzustaende speichern (Einstellungen des Blattes); sonst wie bisher ueber die Makrozeile
         Use_WS2811 = False
         # The following variables are read from the data lines
         SwitchA_InpCnt = 0

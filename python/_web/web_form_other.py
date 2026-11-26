@@ -1,12 +1,16 @@
-# Datei-Version: 1.14 (2026-11-25) - web_form_other.py
+# Datei-Version: 1.18 (2026-11-26) - web_form_other.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_form_other.py
 # Path:           _web/web_form_other.py
-# Version:        1.14
-# Last Update:    2026-11-25
+# Version:        1.18
+# Last Update:    2026-11-26
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
+#   1.18  2026-11-26  Parameternamen der Variablen der Tabelle ohne den Kommentar der Makrozelle (Text nach dem §). Zeile mit '# v1.18'
+#   1.17  2026-11-26  Parameter vom Typ Mode (OptCtrPar, CtrMode, RandMode): aufklappbare Gruppe 'Flags auswaehlen' mit einem Haken je Flag unter dem Textfeld, Haken und Text gleichen sich ab. Zeilen mit '# v1.17'
+#   1.16  2026-11-25  Korrektur: Variablen der Tabelle fuer den Baukasten lesen den Typ der Parameter ohne Fehlerdialog (On_Min, On_Limit u.a. fehlen in Par_Description: Logic liess sich nicht oeffnen). Zeilen mit '# v1.16'
+#   1.15  2026-11-25  Logic: Baukasten (Bedingungen mit UND/ODER, 'nicht', Variablenauswahl der Tabelle, Vorschau, Pruefung) statt Texteingabe, kuerzere Beschreibung, Bezeichnungen Ergebnisvariable und Bedingungen (web_logic_builder 1.00, Version 5.26). Zeilen mit '# v1.15'
 #   1.14  2026-11-25  Tooltip der einzigen Zielvariable: Eingabe des Namens fuer Zustand 0 (zum Beispiel Test0), die weiteren Zustaende heissen Test1, Test2 ... Zeilen mit '# v1.14'
 #   1.13  2026-11-25  Mini-Farbtest aus dem Parameterformular: LED-Nummer 0 und LED-Kanal 0 voreingestellt (nur die Heartbeat-LED bekommt die Farbe), der Anwender kann die LED von Hand einstellen. Zeilen mit '# v1.13'
 #   1.12  2026-11-25  Die Bezeichnung 'Zielvariable' (ohne 1) gilt auch in den Fehlermeldungen. Zeilen mit '# v1.12'
@@ -35,6 +39,7 @@ import re  # v1.11
 import sys
 
 from _web import web_dialogs as wd
+from _web import web_logic_builder as LB  # v1.15
 
 logger = logging.getLogger(__name__)
 
@@ -381,6 +386,80 @@ def _main_ctrl():
     return None
 
 
+FLAG_RE = re.compile(r"\b[A-Z]{2,3}_[A-Z0-9_]+\b")  # v1.17
+
+
+def flags_in_hint(hint) -> list:  # v1.17
+    """Namen der Flags (CF_BINARY, RF_SLOW ...) aus dem Hinweistext des Parameters, in der Reihenfolge des Texts, ohne die Normalwerte (CM_NORMAL, RM_NORMAL).
+    Der Text steht in allen Sprachen mit denselben Namen."""  # v1.17
+    names: list = []  # v1.17
+    for m in FLAG_RE.findall(str(hint or "")):  # v1.17
+        if m not in names and not m.endswith("_NORMAL"):  # v1.17
+            names.append(m)  # v1.17
+    return names  # v1.17
+
+
+def normal_value(hint) -> str:  # v1.17
+    """Wert ohne gesetzte Flags: der Normalwert aus dem Hinweistext (CM_NORMAL), sonst 0 (OptCtrPar)"""  # v1.17
+    for m in FLAG_RE.findall(str(hint or "")):  # v1.17
+        if m.endswith("_NORMAL"):  # v1.17
+            return m  # v1.17
+    return "0"  # v1.17
+
+
+def split_flags(text) -> list:  # v1.17
+    return [t.strip() for t in str(text or "").split("|") if t.strip() != ""]  # v1.17
+
+
+def join_flags(text, flags: list, checked: set, normal: str) -> str:  # v1.17
+    """Neuer Text: unbekannte Teile des alten Texts (zum Beispiel eine Zahl) bleiben, dann die angehakten Flags in der Reihenfolge der Liste.
+    Ist nichts uebrig, steht der Normalwert da."""  # v1.17
+    keep = [t for t in split_flags(text) if t not in flags and t != normal and not t.endswith("_NORMAL") and t != "0"]  # v1.17
+    parts = keep + [f for f in flags if f in checked]  # v1.17
+    return "|".join(parts) if parts else normal  # v1.17
+
+
+def _add_flags_picker(ui, p, w):  # v1.17
+    """Aufklappbare Gruppe mit einem Haken je Flag unter dem Textfeld w. Haken und Text gehen in beide Richtungen: Der Text bleibt von Hand aenderbar.
+    Rueckgabe: die Gruppe oder None, wenn der Hinweistext keine Flags nennt."""  # v1.17
+    from _web.web_i18n import tr
+    flags = flags_in_hint(p.get("tooltip"))  # v1.17
+    if not flags:  # v1.17
+        return None  # v1.17
+    normal = normal_value(p.get("tooltip"))  # v1.17
+    guard = {"on": False}  # v1.17
+    boxes: dict = {}  # v1.17
+    with ui.expansion(tr("Flags auswählen"), icon="checklist").classes("w-full").props("dense dense-toggle header-class=text-grey-8") as group:  # v1.17
+        with ui.element("div").style("display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:2px 16px"):  # v1.17
+            for name in flags:  # v1.17
+                boxes[name] = ui.checkbox(name, value=name in split_flags(w.value)).props("dense")  # v1.17
+
+    def from_boxes(_=None):  # v1.17
+        if guard["on"]:  # v1.17
+            return  # v1.17
+        guard["on"] = True  # v1.17
+        try:  # v1.17
+            w.set_value(join_flags(w.value, flags, {n for n, b in boxes.items() if b.value}, normal))  # v1.17
+        finally:  # v1.17
+            guard["on"] = False  # v1.17
+
+    def from_text(_=None):  # v1.17
+        if guard["on"]:  # v1.17
+            return  # v1.17
+        guard["on"] = True  # v1.17
+        try:  # v1.17
+            have = split_flags(w.value)  # v1.17
+            for n, b in boxes.items():  # v1.17
+                b.set_value(n in have)  # v1.17
+        finally:  # v1.17
+            guard["on"] = False  # v1.17
+
+    for b in boxes.values():  # v1.17
+        b.on_value_change(from_boxes)  # v1.17
+    w.on_value_change(from_text)  # v1.17
+    return group  # v1.17
+
+
 def _add_flag_row(ui, p, cur):
     """Wert 0 / 1 als Ein/Aus-Schalter. Rueckgabe: Holder mit '0' oder '1'."""
     with ui.row().classes("w-full items-center no-wrap gap-3"):
@@ -468,6 +547,7 @@ async def _other_async(spec: dict, values: dict):
             ui.label(spec["description"]).classes("mll-desc").style(
                 "white-space: pre-line; border: 1px solid #ccc; padding: 6px; width: 100%; max-height: 14em; overflow: auto")
             radio = chan = None
+            builder = None  # v1.15
             if spec["led_options"]:
                 ui.label("LED Kanal Auswahl").classes("text-bold")
                 radio = _add_led_buttons(ui, spec["led_options"], values.get("option", spec["led_initial"]))  # v1.10
@@ -484,6 +564,11 @@ async def _other_async(spec: dict, values: dict):
                 for p in spec["params"]:
                     p = dict(p, title=single_target_title(p["title"], keys_all))  # v1.11: Zielvariable ohne die 1, wenn es nur eine gibt
                     cur = values.get("params", {}).get(p["key"], p["value"])
+                    if p["key"] in ("...", "…") and LB.is_builder_func(spec.get("func")):  # v1.15: Baukasten statt Texteingabe (Logic)
+                        from _web.web_i18n import tr as _tr  # v1.15
+                        builder = LB.LogicBuilder(ui, cur, spec.get("variables") or [], _tr, p["title"])  # v1.15
+                        inputs[p["key"]] = builder  # v1.15
+                        continue  # v1.15
                     if p["type"] == "List":
                         opts = list(p["options"] or [])
                         if cur not in opts:
@@ -507,6 +592,8 @@ async def _other_async(spec: dict, values: dict):
                             w = ui.input(label=p["title"], value=str(cur)).props("outlined dense").classes("w-full")  # v1.08
                             if p["tooltip"]:  # v1.08
                                 w.tooltip(p["tooltip"])  # v1.08
+                            if p.get("ptype") == "Mode" and p.get("plain", True):  # v1.17: Flags zum Anklicken (OptCtrPar, CtrMode, RandMode)
+                                _add_flags_picker(ui, p, w)  # v1.17
                         inputs[p["key"]] = w  # v1.08
                         continue  # v1.08
                     if p["tooltip"]:
@@ -522,10 +609,65 @@ async def _other_async(spec: dict, values: dict):
                 ui.button("Abbrechen", on_click=lambda: dlg.submit((None, None))).props("flat").classes("mll-cancel")
                 if spec["patch"]:
                     ui.button("Patch", on_click=lambda: dlg.submit(("patch", collect()))).props("outline")
-                ui.button("Ok", on_click=lambda: dlg.submit(("ok", collect()))).classes("mll-default")
+                # ui.button("Ok", on_click=lambda: dlg.submit(("ok", collect()))).classes("mll-default")  # v1.15 (entfallen)
+                def try_ok():  # v1.15: Eingaben des Baukastens pruefen, bevor das Fenster schliesst
+                    errs = builder.errors() if builder else []  # v1.15
+                    if errs:  # v1.15
+                        builder.show_errors(errs)  # v1.15
+                        return  # v1.15
+                    dlg.submit(("ok", collect()))  # v1.15
+                ui.button("Ok", on_click=try_ok).classes("mll-default")  # v1.15
         res = await dlg
         wd.safe_delete(dlg)
     return res
+
+
+def _sheet_variables(ns) -> list:  # v1.15
+    """Variablen der aktuellen Tabelle (Parameter vom Typ Var der Makros in der Spalte Beleuchtung, Namen in Logic-Ausdruecken)."""  # v1.15
+    try:  # v1.15
+        M02, M25, M30, M09SM, M10, P01 = (ns[n] for n in ("M02", "M25", "M30", "M09SM", "M10", "P01"))  # v1.15
+        sheet = P01.ActiveSheet  # v1.15
+        lib = ns["PG"].ThisWorkbook.Sheets(M02.LIBMACROS_SH)  # v1.15
+    except Exception:                                  # noqa: BLE001  # v1.15
+        logger.debug("Variablen der Tabelle: Module nicht erreichbar", exc_info=True)  # v1.15
+        return []  # v1.15
+    par_cache: dict = {}  # v1.15
+    var_cache: dict = {}  # v1.15
+
+    def par_names_of(name):  # v1.15
+        if name not in par_cache:  # v1.15
+            par_cache[name] = None  # v1.15
+            row = M09SM.Find_Macro_in_Lib_Macros_Sheet(name + "(")  # v1.15
+            if row and lib is not None:  # v1.15
+                # text = str(lib.Cells(row, M02.SM_Macro_COL))  # v1.15  # v1.18 (entfallen)
+                text = str(lib.Cells(row, M02.SM_Macro_COL)).split("§")[0]  # v1.18: ohne Kommentar der Zelle
+                if "(" in text:  # v1.15
+                    inner = text.split("(", 1)[1].rsplit(")", 1)[0]  # v1.15
+                    par_cache[name] = [x.strip() for x in LB.split_args(inner)]  # v1.15
+        return par_cache[name]  # v1.15
+
+    # def is_var_par(par): ... M10.Get_Par_Data(par)  # v1.16 (entfallen): meldet unbekannte Parameter (On_Min, On_Limit ...) mit Fehlerdialog und beendet das Programm
+    def is_var_par(par):  # v1.16: Typ aus der Tabelle Par_Description lesen, ohne Fehlermeldung bei unbekannten Namen
+        if not var_cache:  # v1.16
+            try:  # v1.16
+                sh = ns["PG"].ThisWorkbook.Sheets(M02.PAR_DESCR_SH)  # v1.16
+                for r_ in range(getattr(M10, "__FirstDatRow", 2), M30.LastUsedRowIn(sh) + 1):  # v1.16
+                    n_ = str(sh.Cells(r_, M10.ParName_COL))  # v1.16
+                    if n_ and n_ not in var_cache:  # v1.16
+                        var_cache[n_] = str(sh.Cells(r_, M10.ParType_COL)) == "Var"  # v1.16
+            except Exception:                              # noqa: BLE001  # v1.16
+                logger.debug("Par_Description nicht gelesen", exc_info=True)  # v1.16
+                var_cache["DstVar"] = True  # v1.16
+        return var_cache.get(par, False)  # v1.16
+    names: list = []  # v1.15
+    try:  # v1.15
+        for row in range(M02.FirstDat_Row, M30.LastUsedRow() + 1):  # v1.15
+            cell = str(sheet.Cells(row, M25.Config__Col))  # v1.15
+            if "(" in cell:  # v1.15
+                names += LB.variables_in_line(cell, par_names_of, is_var_par)  # v1.15
+    except Exception:                                  # noqa: BLE001  # v1.15
+        logger.debug("Variablen der Tabelle nicht gelesen", exc_info=True)  # v1.15
+    return LB.unique_sorted(names)  # v1.15
 
 
 # ------------------------------------------------------------------ Klasse erzeugen
@@ -684,7 +826,19 @@ def make_class(Base):
                     self.Controls["LabelPar" + str(q_nr)] = q["title"]  # v1.12
             self.CV_Adress = CV_Adress
             self.CV_Used = CV_used
-            spec = {"title": self.title, "description": str(Description), "led_options": led_options,
+            variables = []  # v1.15
+            if LB.is_builder_func(Name):  # v1.15: Bezeichnungen, Beschreibung und Variablen der aktuellen Tabelle fuer den Baukasten
+                from _web.web_i18n import tr as _tr  # v1.15
+                for q_nr, q in enumerate(params, 1):  # v1.15
+                    if q["key"] == "DstVar":  # v1.15
+                        q["title"] = _tr("Ergebnisvariable")  # v1.15
+                    elif q["key"] in ("...", "…"):  # v1.15
+                        q["title"] = _tr("Bedingungen")  # v1.15
+                    if "LabelPar" + str(q_nr) in self.Controls:  # v1.15
+                        self.Controls["LabelPar" + str(q_nr)] = q["title"]  # v1.15
+                Description = _tr("Das Ergebnis ist 1, wenn mindestens eine Bedingung zutrifft. Eine Bedingung trifft zu, wenn alle Eingänge in ihr zutreffen. „nicht“ kehrt einen Eingang um.\nBeispiel: Das Signal zeigt Halt, wenn (Schalter A und Schalter B) oder (A und nicht C) oder D gesetzt ist.\nDas Ergebnis wird in der Ergebnisvariable gespeichert und kann in anderen Zeilen als Eingang benutzt werden.")  # v1.15
+                variables = _sheet_variables(ns)  # v1.15
+            spec = {"title": self.title, "description": str(Description), "led_options": led_options, "func": Name, "variables": variables,  # v1.15
                     "led_initial": led_initial, "channel": channel, "params": params,
                     "patch": CV_Adress is not None and CV_Adress != 0}
             values: dict = {}

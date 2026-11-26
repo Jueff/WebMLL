@@ -1,4 +1,15 @@
 # -*- coding: utf-8 -*-
+# Datei-Version: 1.01 (2026-11-26) - M60_CheckColors.py
+# ----------------------------------------------------------------------------------------------
+# Name:           M60_CheckColors.py
+# Path:           proggen/M60_CheckColors.py
+# Version:        1.01
+# Last Update:    2026-11-26
+# Author:         Harold Linke
+# Licence:        LGPL V2.1
+# History of Change:
+#   1.01  2026-11-26  Makro Set_ColTab: der Farbtest oeffnet auch ohne Lichtmaschine (kein Anschluss noetig), Kopf eingefuegt; davor nicht erfasst
+# ----------------------------------------------------------------------------------------------
 #
 #         Write header
 # -*- coding: utf-8 -*-
@@ -953,7 +964,8 @@ def Open_MobaLedCheckColors(Callback, Dest_Sheet="", Dest_Row=-1, libmacro_row=0
     # Com Port detection
     M25.Make_sure_that_Col_Variables_match()
     __Set_ColTab_to_Default()
-    if M07.Check_USB_Port_with_Dialog(M25.COMPort_COL) == False:
+    # if M07.Check_USB_Port_with_Dialog(M25.COMPort_COL) == False:  # v1.01 (entfallen)
+    if Callback is None and M07.Check_USB_Port_with_Dialog(M25.COMPort_COL) == False:  # v1.01: aus dem Makro Set_ColTab (Callback) ist kein Anschluss noetig: die Palette laesst sich auch am Arbeitsplatz ohne Lichtmaschine bearbeiten
         return
         # 04.05.20: Added exit (Prior Check_USB_Port_with_Dialog ends the program in case of an error)
     __Change_Comport_in_ConfigFile(P01.Cells(M02.SH_VARS_ROW, M25.COMPort_COL))
