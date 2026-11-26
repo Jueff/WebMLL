@@ -1,5 +1,5 @@
-Datei-Version: 1.120 (2026-11-26) - HOC_intern.md
-Stand: Version 5.41
+Datei-Version: 1.128 (2026-11-26) - HOC_intern.md
+Stand: Version 5.49
 
 # webMobaLedLib: History of Change (intern, ausführlich)
 
@@ -9,58 +9,137 @@ Pfade beziehen sich auf den Ordner `python`.
 
 ---
 
-## 2.12 (2026-10-23) - Release-Stand
+## 5.49 (2026-11-26), Dokumente, Test und Ordnung (kein Programmverhalten)
 
-Release-Stand 2.12 auf Wunsch des Entwicklers („Release bauen“). **Neu im Ablauf:** Es gibt kein von mir gebautes `webmobaledlib.zip` mehr (Ursache des Vorfalls 2 war ein ZIP mit altem Stand: ich kenne die Hilfsdateien, die Excel-Datei und die csv-Dateien des Entwicklers nicht). Das GitHub-Release baut nur `zip_erstellen.bat` (1.04) aus dem vollständigen Ordner `python`, mit Prüfliste und Prüfung. Das frühere `webmobaledlib.zip` (Stand 2.04, nur gelieferte Dateien) liegt als `archiv/webmobaledlib_Dateien_Stand_2.04.zip`.
+Sitzung zur Übernahme des Stands: Das Paket 5.48 (Änderungen seit 4.93) wurde mit dem Gesamtpaket 5.47 und dem Release-Stand 5.41 abgeglichen. Dabei zeigte sich:
 
-| Datei (Ordner `/mnt/user-data/outputs`) | Inhalt |
-|---|---|
-| `webmobaledlib_Dateien_Stand_2.12.zip` | **alle** von mir gelieferten Dateien (113, im Ordner `python`) zum Einspielen in den Ordner `python` des Entwicklers; **kein** Update-ZIP |
-| `ANLEITUNG_Installation.pdf` | Anleitung 2.68, 27 Seiten |
-| `BETATEST_Checkliste.pdf` | Checkliste 1.39, 8 Seiten |
-| `RELEASE_Hinweise_2.12.md` | Hinweise für GitHub (Anhänge: das mit `zip_erstellen.bat` gebaute ZIP und beide PDF) |
-| `VERSIONEN_Stand_2.12_2026-10-23.txt` | Versionen der 105 gelieferten Dateien mit Versionsangabe |
-| `RELEASE_Ablauf.md` | Ablauf für den Entwickler (2.12) |
-| `archiv/` | frühere Release-Hinweise, Versionslisten und ZIP (nichts gelöscht) |
-
-**Geprüft:** Dateipaket: `testzip` in Ordnung, alle 113 Dateien gleich dem Ordner `headless`, keine `__pycache__`, alle `.py` kompilieren, Versionsprüfung „alles passt“ (50 Einträge), 11 Dateien ausführbar (`.sh`, `.command`). **Nachbau des Entwickler-Ablaufs mit seinem echten Paket (1678 Dateien, Stand 2.05):** meine 113 Dateien darübergelegt, Prüfliste, ZIP gepackt, `release_tools check --previous <sein ZIP>`: **in Ordnung** (Version 2.12, 1678 Dateien, 6 neue, 0 fehlende, ZIP 16,6 MB). Alle 15 Prüfreihen laufen (17, 26, 15, 70, 28, 19, 43, 26, 16, 27, 8, 8, 8, 5, 9 Prüfungen). **Nicht geprüft:** `zip_erstellen.bat` und die Reparaturskripte unter Windows, ein abgebrochenes Update unter Windows, das Verhalten mit Acronis, der Download von GitHub.
-
-## 5.29 (2026-11-25), Logic: Eingänge in Gruppen, SwitchC
+* **Anleitung zurückgefallen:** `install/ANLEITUNG_Installation.md` lag im Ordner `python` noch auf 5.23 (die PDF waren 5.39). Die Fassung 5.39 stammt aus dem Release-Stand 5.41 (`webmobaledlib_Dateien_Stand_5.41.zip`) und wurde übernommen; danach wurden die Änderungen 5.26 bis 5.48 nachgetragen (Logic, Hardware Optionen und Geräteauswahl, Tabelle bedienen, Selectrix, Farb Test, MobaLedLib 3.6.0, Verbindung mit Statusmeldung, Trennen und Anschluss -7; Startseite: Pico Zero nur DCC, Bilder). `LIESMICH_Wiki_Gesamt.md` 1.58 (Release-Stand 5.41) ersetzt die Fassung 1.57 des Pakets seit 4.93.
+* **Letztes Release ist 5.41** (nicht 4.93): Basis der kumulativen Änderungspakete ab jetzt: `Aenderungen_seit_Stand_5.41_Stand_5.49.zip`.
+* **`test_dyn_config_wlan.py`:** In `UploadFlowTests` fehlten in der Testumgebung von `Compile_and_Upload_ESP32_Setup` die Namen `Ensure_Git` und `subprocess` (seit `M08_ARDUINO` 1.33 gebraucht, die Funktion wird mit `ast` aus dem Quelltext geholt). Drei Fehler, schon vor 5.46 vorhanden; der Programmcode war in Ordnung. Jetzt 18 Tests bestanden.
+* **`HOC_intern.md`:** Die Einträge 5.26 bis 5.29 standen über 5.48 (unter dem Eintrag „2.12 Release-Stand“), und dieser stand selbst am Anfang statt neben dem Eintrag 2.12. Beide sind an die richtige Stelle verschoben (Länge der Datei unverändert, 416 Einträge).
+* **KI-Prompt** `KI_prompt/KI_ENTWICKLUNG_Prompt.md` 1.03: Stand 5.49, letztes Release 5.41, Regel zu den zwei Änderungs-ZIP, neue technische Fallen (`logger` nach `vb2py.vbdebug`, Sperren-Reihenfolge, Anschluss kleiner gleich 0, Startseite und `Lichtmaschinen_prop.json`, Beiträge von Dritten), Testhinweise, neue Liste der offenen Punkte.
 
 | Datei | Version | Änderung |
-|---|---|---|
-| `_web/web_logic_builder.py` | 1.02 | Je Eingang zwei Felder: Art des Eingangs (`inch`, `vars`, Schalter A bis D, eigener Name; `group_of` bestimmt die Gruppe aus dem Namen) und der Eingang selbst (Auswahl #InCh, #InCh+1…+7; Variablen der Tabelle; Nummernfeld 1 bis 250 für SwitchA bis SwitchD; Textfeld). Die lange Liste SwitchA1…D16 entfällt (`switch_variables` entfernt). SwitchC aufgenommen |
-| `csv/Web_Languages.csv` | | Hinweistext neu (ohne Semikolon: Trennzeichen!), 10 neue Zeilen |
-| `webmobaledlib.py` | 5.29 | VERSION, REQUIRED_FILES |
+|-|-|-|
+| `webmobaledlib.py` | 5.49 | Version, History |
+| `test_dyn_config_wlan.py` | 1.06 | Testumgebung ergänzt |
+| `KI_prompt/KI_ENTWICKLUNG_Prompt.md` | 1.03 | auf Stand 5.49 |
+| `install/ANLEITUNG_Installation.md` | 5.49 | 5.39 aus dem Release-Stand, Nachträge 5.26 bis 5.48 |
+| `HOC_intern.md` | 1.128 | Reihenfolge, dieser Eintrag |
+| `HOC_Anwender.md` | 1.134 | Eintrag 5.49 |
 
-## 5.28 (2026-11-25), Logic: Eingangsvariablen SwitchA#, SwitchB#, SwitchD#
+**Tests:** `test_dyn_config_wlan` 18, `test_single_connection` 14, `test_dyn_config` 163 Prüfungen, `test_identify` 14, `test_macro_edit` 17, `test_table_sync` 24, `test_protocol_switch` 18, `test_esp32_build_directory` 3: alle bestanden; Start des Backends mit frischem Datenordner: Version 5.49. **Bekannt, unverändert:** `test_hardware_dialog` 4 Fehler (`_info` fehlt), `test_headless_contract` Teil 2 braucht echtes Tk.
+**Nicht geprüft:** Browser, Hardware, Windows, macOS, Raspberry Pi. Die PDF in `install_manual/` (Anleitung 4.54, Checkliste 3.36 im Ordner `python`) sind noch alt und werden mit dem nächsten Release-Stand neu gebaut. Kein Checklisten-Punkt nötig (keine sichtbare Änderung).
 
-| Datei | Version | Änderung |
-|---|---|---|
-| `_web/web_logic_builder.py` | 1.01 | `switch_variables()`: SwitchA1…16, SwitchB1…16, SwitchD1…16 stehen in der Auswahl (andere Nummern bis 250 eintippen); `check_dnf` prüft die Nummer 1 bis 250 (wie `Is_Switch_Var_then_Add_to_Ctr`); neuer Hinweistext |
-| `csv/Web_Languages.csv` | | Hinweistext geändert, eine Zeile neu |
-| `webmobaledlib.py` | 5.28 | VERSION, REQUIRED_FILES |
+## 5.48 (2026-11-26), Korrektur: -7 im Anschluss der Tabelle
 
-SwitchC bewusst nicht aufgenommen (nicht gewünscht); der Name lässt sich eintippen.
+Fehler (Harold, nach 5.46/5.47): Im Anschluss der Tabelle steht nach dem Start -7 (von Excel beim Hochladen gesetzt; Jürgens Hinweis für den Auto-Reconnect, 5.46). Verbinden klappt, aber „Setup übertragen“ meldet „Fehler bei der Überprüfung des angeschlossenen PICO: Es ist kein PICO an COM Port COM-7 angeschlossen“.
 
-## 5.27 (2026-11-25), Logic-Dialog: Fehler beim Öffnen
-
-| Datei | Version | Änderung |
-|---|---|---|
-| `_web/web_form_other.py` | 1.16 | `_sheet_variables`: Der Typ der Parameter wird selbst aus `Par_Description` gelesen. `M10.Get_Par_Data` meldet unbekannte Namen (`On_Min`, `On_Limit` u. a. aus Makros anderer Zeilen der Tabelle) mit „Internal Error“ und beendet den Dialog; Logic ließ sich deshalb nicht öffnen |
-| `webmobaledlib.py` | 5.27 | VERSION, REQUIRED_FILES |
-
-## 5.26 (2026-11-25), Logic: Baukasten statt Textformel
+Ursache: `F00_mainbuttons.port_is_available` kannte nur „*“, „COM?“, „NO DEVICE“, leer als „kein Anschluss“; „-7“ galt als vorhanden und wurde zu „COM-7“. Damit kam auch `Fill_Port_From_Active_Connection` (Anschluss der aktiven Verbindung eintragen) nie zum Zug. Jetzt: eine Zahl kleiner oder gleich 0 gilt als kein Anschluss (wie im Excel-Original, dort `Val(...) <= 0`). Ist verbunden, wird der Anschluss der aktiven Verbindung eingetragen (Vorrang: `ARDUINO_current_portname`, sonst `serportname`); sonst fragt das Programm wie bei leerem Anschluss.
 
 | Datei | Version | Änderung |
-|---|---|---|
-| `_web/web_logic_builder.py` | 1.00 | NEU, wiederverwendbarer Baustein: `parse_dnf`, `format_dnf`, `describe_dnf`, `check_dnf`, `variables_in_line` (reine Funktionen) und Klasse `LogicBuilder` (Bedingungen = UND-Gruppen, mit ODER verbunden, Schalter „nicht“, Auswahl mit freier Eingabe, Klartext-Vorschau, Makrotext, Prüfung, Umschalter „Als Text bearbeiten“). `FUNCS` nennt die Makros, die ihn benutzen (zurzeit `Logic`) |
-| `_web/web_form_other.py` | 1.15 | Parameter `...` der Funktionen in `FUNCS` → `LogicBuilder`; Ok prüft vorher (`try_ok`); kürzere Beschreibung; Bezeichnungen „Ergebnisvariable“, „Bedingungen“; `_sheet_variables`: Variablen der aktuellen Tabelle (Parameter vom Typ `Var` der Makros der Spalte Beleuchtung, Namen in Logic-Ausdrücken) |
-| `csv/Web_Languages.csv` | | 31 neue Zeilen (Deutsch, Englisch; übrige Sprachen fallen auf Englisch zurück) |
-| `webmobaledlib.py` | 5.26 | VERSION, REQUIRED_FILES |
-| Wiki `pg_tabelle.txt` | 1.14 | Abschnitt „Die Funktion Logic“; `seiten_update` 1.14 |
+|-|-|-|
+| `proggen/F00_mainbuttons.py` | 1.03 | `port_is_available`: Zahl <= 0 ist kein Anschluss |
+| `proggen/M07_COM_Port.py` | 1.19 | aktiver Anschluss hat Vorrang |
+| `webmobaledlib.py` | 5.48 | Version, REQUIRED_FILES |
 
-Das Makro `Logic(Erg, A AND B OR …)` und `Create_Result` sind unverändert; der Baukasten erzeugt denselben Text. Nicht im Browser geprüft, nur die reinen Funktionen (Test mit 11 Ausdrücken).
+**Nicht mit Hardware geprüft.**
+
+## 5.47 (2026-11-26), Korrektur Upload: Fehler logger.warning
+
+Fehler (Harold, nach 5.46): Beim Übertragen mit leerem Anschluss in der Tabelle kam `module 'vb2py.logger' has no attribute 'warning'`. Ursache: In `M07_COM_Port.py` wird `logger` am Anfang gesetzt, `from vb2py.vbdebug import *` überschreibt den Namen danach mit dem vb2py-Modul `vb2py.logger`. Der eigentliche Fehler in `Fill_Port_From_Active_Connection` (Anschluss der aktiven Verbindung übernehmen) wurde dadurch verdeckt; die Meldungen `logger.info/warning` in `M07_COM_Port.py` (seit 1.13) liefen nie. `logger` wird jetzt nach den Importen gesetzt. Hinweis: Falls danach der ursprüngliche Fehler im Log steht („Anschluss der aktiven Verbindung nicht uebernommen“), bitte das Log schicken.
+
+| Datei | Version | Änderung |
+|-|-|-|
+| `proggen/M07_COM_Port.py` | 1.18 | `logger` nach den Importen neu setzen |
+| `webmobaledlib.py` | 5.47 | Version, REQUIRED_FILES |
+
+## 5.46 (2026-11-26), Pull Request 76 (Jürgen Winkler, dort V5.42): Verbindung: Typ und Anschluss in der Statusmeldung, Knopf Trennen, Hinweis für den Auto-Reconnect, eine Verbindung pro Gerät
+
+**Wunsch (Jürgen):** Die Statusmeldung neben dem Knopf „Mit Lichtmaschine verbinden“ soll immer Typ und Anschluss nennen. Der Knopf soll mit Verbindung zu „Trennen“ werden. Nach „Zwischengespeicherter Stand → Wiederherstellen“ können sich Typ und Anschluss ändern; der Autoconnect muss das beachten. Strg+C soll ohne Fehlermeldung beenden. Pro Gerät soll es nur eine Verbindung geben.
+
+**Umsetzung:**
+* **Statusmeldung:** `connect_device_label` und `translate_connect_status` in `webmobaledlib.py`: „Nicht verbunden - Pro/COM3“, „Verbunden mit Pro/COM3 - EFFECT Mode“. Der Typ (Classic, Pro, Pico) kommt aus dem Blatt, der Anschluss aus der aktiven Verbindung, sonst aus dem Blatt (nicht aus der globalen Einstellung `serportname`, die auf einen alten Anschluss zeigen kann).
+* **Hinweis für den Auto-Reconnect:** Excel setzt beim Hochladen im Anschluss der Lichtmaschine (Zeile 1, Spalte Typ) eine **negative Zahl** (`port_set_busy`, `M08_ARDUINO`). Das Programm liest sie als Hinweis: zuerst dieser Anschluss (`-7` = COM7). Antwortet dort das Gerät mit dem Typ des Blatts (Typ aus der Startmeldung `LEDs_AutoProg Ver 3: PICO …`; `ARDUINO_boardtype` ist immer leer), wird verbunden und bleibt es. Sonst gibt es **keine** Suche über alle Anschlüsse; der Anwender sucht wie bisher über „Erkennen“.
+* **Knopf Trennen:** Mit Verbindung heißt der Knopf „Trennen“ und trennt; ohne Verbindung verbindet er. Im Pfeilmenü heißt der Punkt „Trennen“ (vorher „Verbindung trennen“).
+* **Wiederherstellen:** Nach „Wiederherstellen“ des zwischengespeicherten Stands prüft `connection_after_restore`, ob Typ oder Anschluss im Blatt von der offenen Verbindung abweichen; dann wird getrennt und mit dem Hinweis-Anschluss bzw. der passenden Lichtmaschine neu verbunden (unter einer Sperre, ein Hintergrund-Thread).
+* **Strg+C:** `ui.run()` löst einen `KeyboardInterrupt` aus; er wird abgefangen und protokolliert (vorher Traceback von uvicorn und asyncio).
+* **Doppelte Startmeldung im Protokoll:** Der Handshake legt die Meldung in `self.queue` (`RxLog.on_line` → `_on_rx_line` wertet sie schon aus, weil `SerialIF_teststring3` = `LEDs_AutoProg` ist) und ruft danach selbst auf. Die zweite Auswertung entfällt (`_evaluated_startmsg`, je Verbindung).
+* **Eine Verbindung pro Gerät:** `web_serial.PORT_ACCESS_LOCK` (RLock) macht Öffnen und Handshake eines Anschlusses exklusiv, auch gegenüber den Abfragen der Geräteauswahl (Typ, Version, `~MLLIDENT`, Bootloader: `M07_COM_Port_New._SERIAL_LOCK` ist dieselbe Sperre) und der Erkennung (`DetectArduino`, `Get_Arduino_Baudrate`). **Reihenfolge der Sperren immer:** `_conn_lock` → `PORT_ACCESS_LOCK` → `_DETECT_LOCK`. Die Fehlerdialoge beim Öffnen laufen außerhalb der Sperre (sonst blockiert sie die Geräteauswahl). Eine offene Verbindung zum selben Anschluss oder zur selben WLAN-Adresse wird wiederverwendet (`connect`, `connect_esp32`, `connectIP`, `IP:`-Port). `connect_if_not_connected` wartet auf einen laufenden Verbindungsaufbau. `connect_silent` setzt `quiet` und `dtr_override` unter der Sperre und lässt eine offene Verbindung unberührt; Wechsel (Blattwechsel, Wiederherstellen) trennen und verbinden unter derselben Sperre. Die Abfragen der Geräteauswahl prüfen nach dem Warten auf die Sperre noch einmal, ob das Hauptprogramm inzwischen verbunden hat (nicht ein zweites Mal öffnen, kein falsches „blockiert“). `close_arduino_connection_after_write_error` läuft unter `_conn_lock` (mit Timeout).
+
+| Datei | Version | Änderung |
+|-|-|-|
+| `webmobaledlib.py` | 5.46 | Statusmeldung mit Typ und Anschluss, Hinweis-Anschluss, Knopf Trennen, Wiederherstellen, Strg+C, `connect_silent` und Wechsel unter der Sperre |
+| `_web/web_serial.py` | 1.20 | `PORT_ACCESS_LOCK`, `_open_and_handshake`, `_is_connected_to`, Wiederverwendung (USB, WLAN), `connect_silent`, `connect_if_not_connected` wartet, einmalige Auswertung der Startmeldung |
+| `proggen/M07_COM_Port_New.py` | 1.25 | gemeinsame Sperre, erneute Prüfung der Hauptverbindung nach dem Warten, `_Main_Connection` nur nach dem Handshake |
+| `proggen/M07_COM_Port.py` | 1.17 | `Get_Arduino_Baudrate` und `DetectArduino` unter der Anschluss-Sperre; Autorenzeile |
+| `KI_prompt/KI_ENTWICKLUNG_Prompt.md` | 1.02 | Autorenregel (git-Benutzername und Tabelle Realnamen) |
+| `test_single_connection.py` | 1.00 | neu: 14 Tests (parallele Aufrufe, Wiederverwendung, Sperre, Reihenfolge, WLAN) |
+| `install/BETATEST_Checkliste.md` | 4.24 | Punkte 408 bis 410 |
+
+**Tests:** `test_single_connection.py` (14 Tests, bestanden): zehn Threads verbinden gleichzeitig, der Anschluss wird einmal geöffnet (Ersatz-Anschluss lehnt ein zweites Öffnen wie Windows mit `PermissionError` ab); Wiederverwendung USB und WLAN; stilles und normales Verbinden gleichzeitig; Sperre gegenüber einer Abfrage; gegenläufige Reihenfolge ohne Stillstand; Timeout beim Schließen nach Schreibfehler.
+
+**Nicht geprüft:** echte Hardware (Pico, ESP32, Nano), Oberfläche (Knopf, Statuszeile, Strg+C in der Konsole), `M07_COM_Port_New` mit der Excel-Schicht, Hochladen mit PlatformIO oder esptool (läuft außerhalb der Sperre: ein Autoconnect währenddessen könnte den Anschluss belegen), `_DetectArduino_once` tauscht weiterhin `controller.arduino` aus. `test_hardware_dialog.py` hatte schon vorher vier Fehler (`_info` fehlt), unabhängig von dieser Änderung.
+
+In unserer Zählung als 5.46 übernommen; die Zeilen im Code behalten Jürgens Markierung `# v5.42` bzw. `# v1.xx`. Nur die Meta-Dateien (Kopf, Verlauf, HOC, Checkliste) wurden angepasst. Nicht im Browser und nicht mit Hardware geprüft; Syntaxprüfung ok.
+
+## 5.45 (2026-11-26), Korrektur Einstellung Startseite
+
+Fehler (Harold): Die Einstellung „Startseite beim Programmstart anzeigen“ stand im Menü Einstellungen unter **Spezial**, die Startseite verweist aber auf **Einstellungen → Allgemein**. Ursache: Die Option fehlte in der Gruppenliste `SETTINGS_GROUPS` der Allgemeinen Einstellungen, alle nicht aufgeführten Optionen landen unter Spezial. Jetzt steht sie in den Allgemeinen Einstellungen, direkt nach dem Anfänger Modus.
+
+| Datei | Version | Änderung |
+|-|-|-|
+| `_web/web_params.py` | 1.19 | ShowStartPage in der Gruppe Allgemeine Einstellungen |
+| `webmobaledlib.py` | 5.45 | Version, REQUIRED_FILES |
+| `install/BETATEST_Checkliste.md` | 4.23 | Punkt 407 |
+
+## 5.44 (2026-11-26), Pull Request 74: weiterer Commit (Seriennummer bei Pico-Geräten)
+
+(Jürgen Winkler, Pull Request 74, Commit `bdcc6b7e01`, dort als 5.26)
+
+Jürgen hat den Pull Request am 26.11. gegen 09:15 neu gepusht; gegenüber dem bei 5.33 übernommenen Stand kam ein Commit dazu: **Geräteauswahl zeigt bei Pico-Geräten die Seriennummer.** Die anderen fünf Commits sind unverändert (nur neu aufgesetzt, die Kontrolle ergab keine weiteren Unterschiede am Code). Der Commit wurde als Diff auf unseren Stand angewendet; nur `web_form_comport.py` betroffen (Kopfdateien und HOC von Jürgen nicht übernommen).
+
+* Pico (USB-Hersteller 2E8A, auch Servo, Sound, 2x3): hinter der Bezeichnung der Verbindung steht die Seriennummer („Serielles USB-Gerät (COM5) E6616…“), sofern sie nicht schon darin vorkommt.
+
+| Datei | Version | Änderung |
+|-|-|-|
+| `_web/web_form_comport.py` | 1.44 | Seriennummer bei Pico-Geräten |
+| `webmobaledlib.py` | 5.44 | Version, REQUIRED_FILES |
+| `install/BETATEST_Checkliste.md` | 4.22 | Punkt 406 |
+
+**Nicht im Browser und nicht mit einem Pico geprüft.**
+
+## 5.43 (2026-11-26), Startseite: Bilder für Lichtmaschine Mini und MoLLi
+
+Harold hat die Bilder geliefert (Mini: Gehäuse gelb mit drei Tasten, MoLLi: schwarzes Gehäuse). Das Bild der Mini war ein JPG mit 1280×960; es wurde auf 300×225 verkleinert und als PNG abgelegt (wie die anderen Bilder der Startseite, rund 300 Pixel breit). Das Bild der MoLLi (188×216, PNG) ist unverändert. Damit ist der offene Punkt aus 5.42 erledigt.
+
+| Datei | Version | Änderung |
+|-|-|-|
+| `images/Mini_image.png` | - | neu |
+| `images/MoLLi_image.png` | - | neu |
+| `csv/Lichtmaschinen_prop.json` | 1.03 | `image` für Mini und MoLLi |
+| `_web/web_startpage.py` | 1.07 | `image` in der eingebauten Liste |
+| `webmobaledlib.py` | 5.43 | Version, REQUIRED_FILES |
+| `install/BETATEST_Checkliste.md` | 4.21 | Punkt 405 |
+
+**Nicht im Browser geprüft.**
+
+## 5.42 (2026-11-26), Startseite: Pico Zero nur mit DCC; Bilder offen
+
+**Meldung (Harold):** Auf der Startseite bot der Pico Zero die Zentralen DCC, Selectrix, LNet und CAN an; die letzten drei sind auf der Lichtmaschine nicht vorhanden.
+
+* **Änderung:** Pico Zero hat jetzt `centrals: ["DCC"]` in `csv/Lichtmaschinen_prop.json` (1.02) und in der eingebauten Liste `DEFAULT_MACHINES` (`web_startpage` 1.06). Damit zeigt die Seite nach der Wahl nur DCC. Das frühere „Pico Zero: alle Zentralen“ vom 26.11. (5.35) war nach dieser Rückmeldung falsch.
+* **Nicht geändert:** `Platform_Parameters.csv` (PICO: `SupportsSelectrix`, `SupportsCAN` = true) und damit die Hardware Optionen; sie beschreiben, was die Software für Pico kann. Bei Bedarf mit Jürgen klären (zweite Quelle, siehe 5.34).
+* **Bilder Lichtmaschine Mini und MoLLi:** Die Bilder sind noch die Platzhalter (`LED_image.png`, `PICO_image.png`). Die beiden Bilder aus dem Wiki konnte ich nicht laden (kein Zugriff auf wiki.mobaledlib.de aus der Arbeitsumgebung). Sobald die Dateien vorliegen (von Harold oder Michael), trage ich sie im Feld `image` der json ein und lege sie in `images` ab.
+
+| Datei | Version | Änderung |
+|-|-|-|
+| `_web/web_startpage.py` | 1.06 | Pico Zero nur DCC (eingebaute Liste) |
+| `csv/Lichtmaschinen_prop.json` | 1.02 | Pico Zero nur DCC |
+| `webmobaledlib.py` | 5.42 | Version, REQUIRED_FILES |
+| `install/BETATEST_Checkliste.md` | 4.20 | Punkt 404 |
+
+**Nicht im Browser geprüft.**
 
 ## 5.41 (2026-11-26), Bibliothek MobaLedLib 3.6.0: README übernommen
 
@@ -316,6 +395,43 @@ Das Paket `Ver_3.6.0.zip` (Excel-Programm, Pattern Configurator, Symbole, Beispi
 
 **Geprüft:** `python test_hardware_dialog.py` (9 Tests), `python -m py_compile` aller geänderten Dateien, Übersetzungen der neuen Texte in allen Sprachen, Versionsprüfung (REQUIRED\_FILES).
 **Nicht geprüft:** Oberfläche im Browser, echte Arbeitsmappe (Zeile einfügen/löschen, Autosave), Hardware (Erkennen, Ident-Blinken, Upload mit READ\_LDR / ENABLE\_STORE\_STATUS auf Nano und Pico), Windows/macOS/Linux/Raspberry Pi. Export eines einzelnen Blattes (`.MLL_pgf`) nimmt Schnelles Update und Display-Einstellung nicht mit.
+
+## 5.29 (2026-11-25), Logic: Eingänge in Gruppen, SwitchC
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_logic_builder.py` | 1.02 | Je Eingang zwei Felder: Art des Eingangs (`inch`, `vars`, Schalter A bis D, eigener Name; `group_of` bestimmt die Gruppe aus dem Namen) und der Eingang selbst (Auswahl #InCh, #InCh+1…+7; Variablen der Tabelle; Nummernfeld 1 bis 250 für SwitchA bis SwitchD; Textfeld). Die lange Liste SwitchA1…D16 entfällt (`switch_variables` entfernt). SwitchC aufgenommen |
+| `csv/Web_Languages.csv` | | Hinweistext neu (ohne Semikolon: Trennzeichen!), 10 neue Zeilen |
+| `webmobaledlib.py` | 5.29 | VERSION, REQUIRED_FILES |
+
+## 5.28 (2026-11-25), Logic: Eingangsvariablen SwitchA#, SwitchB#, SwitchD#
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_logic_builder.py` | 1.01 | `switch_variables()`: SwitchA1…16, SwitchB1…16, SwitchD1…16 stehen in der Auswahl (andere Nummern bis 250 eintippen); `check_dnf` prüft die Nummer 1 bis 250 (wie `Is_Switch_Var_then_Add_to_Ctr`); neuer Hinweistext |
+| `csv/Web_Languages.csv` | | Hinweistext geändert, eine Zeile neu |
+| `webmobaledlib.py` | 5.28 | VERSION, REQUIRED_FILES |
+
+SwitchC bewusst nicht aufgenommen (nicht gewünscht); der Name lässt sich eintippen.
+
+## 5.27 (2026-11-25), Logic-Dialog: Fehler beim Öffnen
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_form_other.py` | 1.16 | `_sheet_variables`: Der Typ der Parameter wird selbst aus `Par_Description` gelesen. `M10.Get_Par_Data` meldet unbekannte Namen (`On_Min`, `On_Limit` u. a. aus Makros anderer Zeilen der Tabelle) mit „Internal Error“ und beendet den Dialog; Logic ließ sich deshalb nicht öffnen |
+| `webmobaledlib.py` | 5.27 | VERSION, REQUIRED_FILES |
+
+## 5.26 (2026-11-25), Logic: Baukasten statt Textformel
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_logic_builder.py` | 1.00 | NEU, wiederverwendbarer Baustein: `parse_dnf`, `format_dnf`, `describe_dnf`, `check_dnf`, `variables_in_line` (reine Funktionen) und Klasse `LogicBuilder` (Bedingungen = UND-Gruppen, mit ODER verbunden, Schalter „nicht“, Auswahl mit freier Eingabe, Klartext-Vorschau, Makrotext, Prüfung, Umschalter „Als Text bearbeiten“). `FUNCS` nennt die Makros, die ihn benutzen (zurzeit `Logic`) |
+| `_web/web_form_other.py` | 1.15 | Parameter `...` der Funktionen in `FUNCS` → `LogicBuilder`; Ok prüft vorher (`try_ok`); kürzere Beschreibung; Bezeichnungen „Ergebnisvariable“, „Bedingungen“; `_sheet_variables`: Variablen der aktuellen Tabelle (Parameter vom Typ `Var` der Makros der Spalte Beleuchtung, Namen in Logic-Ausdrücken) |
+| `csv/Web_Languages.csv` | | 31 neue Zeilen (Deutsch, Englisch; übrige Sprachen fallen auf Englisch zurück) |
+| `webmobaledlib.py` | 5.26 | VERSION, REQUIRED_FILES |
+| Wiki `pg_tabelle.txt` | 1.14 | Abschnitt „Die Funktion Logic“; `seiten_update` 1.14 |
+
+Das Makro `Logic(Erg, A AND B OR …)` und `Create_Result` sind unverändert; der Baukasten erzeugt denselben Text. Nicht im Browser geprüft, nur die reinen Funktionen (Test mit 11 Ausdrücken).
 
 ## 5.25 (2026-11-25), Begriff LocoNet entfernt
 
@@ -5255,6 +5371,22 @@ Tests (neu): `test_i18n.py` (36, Ersatzobjekte für NiceGUI): Katalog (216 Texte
 Tests (neu, `test_volatile.py`, 20; ersetzt `test_generated.py`): die 6 Dateien erkannt (auch Schreibweise), die 11 Gegenbeispiele nicht; nicht geschützt und nicht übersprungen; Prüfliste und ZIP enthalten sie, `check` in Ordnung; Update: 6 veränderte Dateien bei „gleich“, nach dem Update Byte für Byte wie vom Programm hinterlassen; Prüfung und `--all` ohne Fehler; zwei fehlende: bei „neu“ und installiert; späteres Release ohne sie löscht sie nicht; `repair.py --check-only` (nur die fehlende Programmdatei), Reparatur stellt die fehlende `.cmd` her und ersetzt die geänderte nicht, auch nicht mit `--all`; **mit Ihrem echten Paket**: alle 6 und die 6 anderen `.cmd`-Dateien in der Prüfliste, `check` in Ordnung (0 fehlende gegenüber dem vorherigen Release), Update auf das eigene Release mit allen 6 vom Programm verändert: nichts zu tun, Prüfung in Ordnung. Die übrigen Prüfreihen laufen weiter.
 
 **Release-Stand 2.13** (ersetzt den Stand 2.12, der die Dateien noch ausgeklammert hatte; die Dokumente von 2.12 liegen in `archiv/`): `webmobaledlib_Dateien_Stand_2.13.zip` (113 Dateien, alle von mir gelieferten, **kein** Update-ZIP), `ANLEITUNG_Installation.pdf` (2.69, 27 Seiten), `BETATEST_Checkliste.pdf` (1.40, 8 Seiten), `RELEASE_Hinweise_2.13.md`, `VERSIONEN_Stand_2.13_2026-10-23.txt` (105 Dateien), `RELEASE_Ablauf.md`, `zip_erstellen.bat` (1.05). Das GitHub-ZIP baut weiterhin nur `zip_erstellen.bat` aus dem vollständigen Ordner des Entwicklers. **Geprüft:** Dateipaket unbeschädigt, alle 113 Dateien gleich dem Ordner `headless`, alle `.py` kompilieren, Versionsprüfung „alles passt“ (50 Einträge); Nachbau mit seinem echten Paket (Stand 2.05) plus meinen Dateien: `check --previous` in Ordnung, Version 2.13, **1684 Dateien (die 6 LEDs_AutoProg-Dateien enthalten)**, 6 neue, 0 fehlende; alle 15 Prüfreihen laufen (20, 26, 15, 70, 28, 19, 43, 26, 16, 27, 8, 8, 8, 5, 9). **Nicht geprüft:** `zip_erstellen.bat` und die Reparaturskripte unter Windows, ein abgebrochenes Update unter Windows, Acronis, Download von GitHub.
+
+## 2.12 (2026-10-23) - Release-Stand
+
+Release-Stand 2.12 auf Wunsch des Entwicklers („Release bauen“). **Neu im Ablauf:** Es gibt kein von mir gebautes `webmobaledlib.zip` mehr (Ursache des Vorfalls 2 war ein ZIP mit altem Stand: ich kenne die Hilfsdateien, die Excel-Datei und die csv-Dateien des Entwicklers nicht). Das GitHub-Release baut nur `zip_erstellen.bat` (1.04) aus dem vollständigen Ordner `python`, mit Prüfliste und Prüfung. Das frühere `webmobaledlib.zip` (Stand 2.04, nur gelieferte Dateien) liegt als `archiv/webmobaledlib_Dateien_Stand_2.04.zip`.
+
+| Datei (Ordner `/mnt/user-data/outputs`) | Inhalt |
+|---|---|
+| `webmobaledlib_Dateien_Stand_2.12.zip` | **alle** von mir gelieferten Dateien (113, im Ordner `python`) zum Einspielen in den Ordner `python` des Entwicklers; **kein** Update-ZIP |
+| `ANLEITUNG_Installation.pdf` | Anleitung 2.68, 27 Seiten |
+| `BETATEST_Checkliste.pdf` | Checkliste 1.39, 8 Seiten |
+| `RELEASE_Hinweise_2.12.md` | Hinweise für GitHub (Anhänge: das mit `zip_erstellen.bat` gebaute ZIP und beide PDF) |
+| `VERSIONEN_Stand_2.12_2026-10-23.txt` | Versionen der 105 gelieferten Dateien mit Versionsangabe |
+| `RELEASE_Ablauf.md` | Ablauf für den Entwickler (2.12) |
+| `archiv/` | frühere Release-Hinweise, Versionslisten und ZIP (nichts gelöscht) |
+
+**Geprüft:** Dateipaket: `testzip` in Ordnung, alle 113 Dateien gleich dem Ordner `headless`, keine `__pycache__`, alle `.py` kompilieren, Versionsprüfung „alles passt“ (50 Einträge), 11 Dateien ausführbar (`.sh`, `.command`). **Nachbau des Entwickler-Ablaufs mit seinem echten Paket (1678 Dateien, Stand 2.05):** meine 113 Dateien darübergelegt, Prüfliste, ZIP gepackt, `release_tools check --previous <sein ZIP>`: **in Ordnung** (Version 2.12, 1678 Dateien, 6 neue, 0 fehlende, ZIP 16,6 MB). Alle 15 Prüfreihen laufen (17, 26, 15, 70, 28, 19, 43, 26, 16, 27, 8, 8, 8, 5, 9 Prüfungen). **Nicht geprüft:** `zip_erstellen.bat` und die Reparaturskripte unter Windows, ein abgebrochenes Update unter Windows, das Verhalten mit Acronis, der Download von GitHub.
 
 ## 2.12 (2026-10-23)
 

@@ -1,9 +1,58 @@
-Datei-Version: 1.126 (2026-11-26) - HOC_Anwender.md
-Stand: Version 5.41
+Datei-Version: 1.134 (2026-11-26) - HOC_Anwender.md
+Stand: Version 5.49
 
 # MobaLedLib Studio: Änderungen (Kurzfassung)
 
 Gilt ab Version 1.39. Neueste Version oben.
+
+## Version 5.49 (2026-11-26)
+
+Korrekturen:
+- Die Anleitung ist nachgetragen: Logic, Hardware Optionen und Geräteauswahl, Tabelle bedienen, Selectrix, Farb Test, MobaLedLib 3.6.0, Verbindung (Statusmeldung, Trennen, Anschluss -7) und die Startseite (Pico Zero nur DCC, Bilder).
+
+## Version 5.48 (2026-11-26)
+
+Korrekturen:
+- Steht im Anschluss der Tabelle eine negative Zahl (zum Beispiel -7, von Excel gesetzt), meldet „Setup übertragen“ nicht mehr „kein PICO an COM-7“, sondern benutzt die aktive Verbindung.
+
+## Version 5.47 (2026-11-26)
+
+Korrekturen:
+- Setup übertragen ohne eingetragenen Anschluss brach mit „module vb2py.logger has no attribute warning“ ab; das ist behoben.
+
+## Version 5.46 (2026-11-26)
+
+Neue Funktionen:
+- Neben dem Knopf „Mit Lichtmaschine verbinden“ steht immer Typ und Anschluss der Lichtmaschine, zum Beispiel „Verbunden mit Pro/COM3 - EFFECT Mode“.
+- Mit Verbindung heißt der Knopf „Trennen“ (auch im Pfeilmenü).
+- Eine negative Zahl im Anschluss der Lichtmaschine im Blatt (von Excel gesetzt, zum Beispiel -7) ist ein Hinweis: Das Programm verbindet beim Start zuerst mit COM7 und sucht sonst nicht weiter.
+- Nach dem Wiederherstellen eines zwischengespeicherten Stands passt sich die Verbindung an Typ und Anschluss im Blatt an.
+
+Korrekturen:
+- Strg+C beendet das Programm ohne Fehlermeldung.
+- Pro Gerät gibt es nur eine Verbindung: Beim Start, im Menü und bei der Geräteauswahl wird eine bestehende Verbindung wiederverwendet statt den Anschluss ein zweites Mal zu öffnen.
+
+## Version 5.45 (2026-11-26)
+
+Korrekturen:
+- Die Einstellung „Startseite beim Programmstart anzeigen“ steht jetzt unter Einstellungen → Allgemein (vorher unter Spezial).
+
+## Version 5.44 (2026-11-26)
+
+(Jürgen Winkler, Pull Request 74, weiterer Commit)
+
+Neue Funktionen:
+- Geräteauswahl: Bei Pico-Geräten steht hinter der Bezeichnung die Seriennummer, so lassen sich mehrere Picos unterscheiden.
+
+## Version 5.43 (2026-11-26)
+
+Korrekturen:
+- Startseite: Lichtmaschine Mini und MoLLi zeigen jetzt ihr eigenes Bild.
+
+## Version 5.42 (2026-11-26)
+
+Korrekturen:
+- Startseite: Beim Pico Zero wird nur noch DCC angeboten (Selectrix, LNet und CAN gibt es auf dieser Lichtmaschine nicht).
 
 ## Version 5.41 (2026-11-26)
 
