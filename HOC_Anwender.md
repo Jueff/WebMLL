@@ -1,9 +1,14 @@
-Datei-Version: 1.143 (2026-11-26) - HOC_Anwender.md
-Stand: Version 5.58
+Datei-Version: 1.144 (2026-11-26) - HOC_Anwender.md
+Stand: Version 5.59
 
 # MobaLedLib Studio: Änderungen (Kurzfassung)
 
 Gilt ab Version 1.39. Neueste Version oben.
+
+## Version 5.59 (2026-11-27)
+
+Neue Funktionen:
+- Nach einem Verbindungsabbruch (zum Beispiel USB abgezogen) verbindet das Programm automatisch neu, sobald der Anschluss wieder da ist. Trennst du selbst mit dem Knopf, bleibt es getrennt.
 
 ## Version 5.58 (2026-11-27)
 

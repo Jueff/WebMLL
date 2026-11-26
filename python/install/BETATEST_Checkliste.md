@@ -1,5 +1,5 @@
 # MobaLedLib Studio – Checkliste für Betatester
-*Datei-Version: 4.29 (2026-11-27), gilt für Version 5.58*
+*Datei-Version: 4.30 (2026-11-27), gilt für Version 5.59*
 
 Danke, dass du die Web-Version testest. Ziel: **Installationsprobleme auf verschiedenen Systemen** und **Probleme der Oberfläche bei verschiedenen Arbeitsweisen** früh finden.
 Es genügt, wenn du das testest, was zu deinem System und deiner Arbeitsweise passt. Jede Rückmeldung hilft, auch „alles funktioniert“.
@@ -523,3 +523,4 @@ Rückmeldungen an den Entwickler (Kontakt siehe GitHub-Seite des Projekts: <http
 415. **Knöpfe beim Verbindungsaufbau (5.56, zu prüfen):** Oben in der Kopfzeile **Mit Lichtmaschine verbinden** klicken: Solange das Programm verbindet, sind der Knopf und sein Pfeil grau, gesperrt und der Knopf heißt „Verbinden...“; danach „Trennen“ (grün) und beide klickbar. Im Reiter Serieller Monitor ebenso.
 416. **Beenden im Protokoll (5.56):** Programm über das Menü beenden. In `webmobaledlib.log` steht am Ende „INFO webmobaledlib.exit Prozess … ordnungsgemäß beendet“ und nicht `webmobaledlib.crash`.
 417. **USB abziehen (5.57, zu prüfen):** Mit einem Gerät verbinden (Reiter Serieller Monitor oder Knopf in der Kopfzeile), dann das USB-Kabel abziehen: Werden beide Knöpfe rot („Verbinden“), steht als Status „Verbindung verloren - Pro/COMx“ (mit Typ und Anschluss, wie bei „Nicht verbunden“) und im Seriellen Monitor die Zeile „*** Verbindung zu COMx verloren“? Gerät wieder anstecken und neu verbinden: funktioniert es? Nicht an einem Gerät geprüft; bitte unter Windows, Linux und macOS testen.
+418. **Automatisch neu verbinden (5.59, zu prüfen):** Nach dem Abziehen (Punkt 417) das USB-Kabel wieder anstecken: Verbindet das Programm nach wenigen Sekunden von selbst (Knopf grün, Status „Verbunden mit …“, im Seriellen Monitor kommen wieder Ausgaben), ohne Fehlerdialog? Wird dagegen selbst **Trennen** geklickt und das Gerät aus- und angesteckt, bleibt es getrennt. Nicht an einem Gerät geprüft; bitte unter Windows, Linux und macOS testen.

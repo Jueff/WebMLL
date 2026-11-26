@@ -1,8 +1,8 @@
-# Datei-Version: 1.26 (2026-11-27) - web_serial.py
+# Datei-Version: 1.27 (2026-11-27) - web_serial.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_serial.py
 # Path:           _web/web_serial.py
-# Version:        1.26
+# Version:        1.27
 # Last Update:    2026-11-27
 # Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
@@ -17,6 +17,7 @@
 #   1.07  2026-11-14  ESP32: Verbindung ueber WLAN mit Anmeldung per HMAC (Port 2323, connect_esp32); Schreibfehler schliesst nur die eigene Verbindung (Beitrag des Fork-Entwicklers)
 #   1.08  2026-11-14  TcpPort: ungueltiger Hostname (UnicodeError, "label too long") wird als OSError gemeldet statt abzustuerzen
 #   1.09  2026-11-14  Automatisches Verbinden (ohne Anschlussangabe): ist fuer das Blatt eine ESP32-WLAN-Verbindung eingetragen (wifi_target_provider), wird zuerst WLAN versucht, sonst USB; connect(wlan=False) erzwingt USB
+#   1.27  2026-11-27  Automatisch neu verbinden: nach einem Verbindungsverlust wartet ein Hintergrundthread, bis der Anschluss wieder in der Portliste steht, und verbindet dann ohne Dialoge wieder (Serial Monitor: mitlesen, sonst wie beim Autoconnect). Trennen durch den Anwender beendet das Warten. Zeilen mit '# v1.27'
 #   1.26  2026-11-27  lost_port: der verlorene Anschluss, damit die Statusanzeige Typ und Anschluss nennt (Verbindung verloren - Pro/COM3). Zeilen mit '# v1.26'
 #   1.25  2026-11-27  Verbindungsverlust (USB abgezogen): ein Lesefehler des Empfangsthreads schliesst die Verbindung auch bei einem seriellen Anschluss (vorher nur bei WLAN); Status 'Verbindung verloren' (rot) und eine Zeile im Serial Monitor. Zeilen mit '# v1.25'
 #   1.24  2026-11-26  connecting: Kennzeichen, solange ein Verbindungsaufbau laeuft (Knoepfe in Kopfzeile und Serial Monitor zeigen dann Verbinden... grau und gesperrt). Zeilen mit '# v1.24'
@@ -380,9 +381,62 @@ class SerialMixin:
         name = str(getattr(self, "ARDUINO_current_portname", "") or getattr(port, "portstr", "") or getattr(port, "port", "") or "")
         logger.warning("Verbindung zu %s verloren (Lesefehler)", name)
         self.lost_port = name  # v1.26
+        monitor = bool(getattr(self, "monitor_connected", False))  # v1.27
         self.close_arduino_connection_after_write_error(expected_port=port)
         self._set_connect_status("Verbindung verloren", "red")
+        self._start_reconnect_watch(name, monitor)  # v1.27
         self.queue.put("*** " + tr("Verbindung zu {port} verloren", port=name) + "\r\n")
+
+    reconnect_interval = 1.0   # v1.27: Sekunden zwischen zwei Blicken in die Portliste
+    reconnect_settle = 1.5     # v1.27: Wartezeit, nachdem der Anschluss wieder da ist (der Treiber braucht einen Moment)
+    reconnect_max_wait = 1800  # v1.27: so lange (Sekunden) wird gewartet
+
+    def _start_reconnect_watch(self, port, monitor):  # v1.27
+        if not port or port.upper().startswith("IP:") or getattr(self, "ARDUINO_IP", False):
+            return                                                 # nur serielle Anschluesse
+        t = getattr(self, "_reconnect_thread", None)
+        if t is not None and t.is_alive():
+            return
+        self._reconnect_thread = threading.Thread(target=self._reconnect_watch, args=(port, monitor), name="serial-reconnect", daemon=True)
+        self._reconnect_thread.start()
+
+    def _port_present(self, port):  # v1.27
+        try:
+            from serial.tools import list_ports
+            return any(str(p.device).upper() == str(port).upper() for p in list_ports.comports())
+        except Exception:                                          # noqa: BLE001
+            return False
+
+    def _reconnect_watch(self, port, monitor):  # v1.27
+        """Wartet, bis der verlorene Anschluss wieder da ist, und verbindet neu. Endet, wenn der Anwender getrennt oder anders verbunden hat (lost_port geloescht oder Verbindung offen)."""
+        deadline = time.time() + self.reconnect_max_wait
+        failures = 0
+        logger.info("Warte auf den Anschluss %s fuer die automatische Neuverbindung", port)
+        while time.time() < deadline and failures < 3:
+            time.sleep(self.reconnect_interval)
+            if getattr(self, "lost_port", "") != port or self.is_connection_open():
+                return                                             # getrennt oder schon neu verbunden
+            if not self._port_present(port):
+                continue
+            time.sleep(self.reconnect_settle)
+            if getattr(self, "lost_port", "") != port or self.is_connection_open():
+                return
+            logger.info("Anschluss %s ist wieder da: verbinde neu", port)
+            self.quiet = True                                      # keine Dialoge im Hintergrund
+            try:
+                ok = self.connect_monitor(port) if monitor else self.connect_silent(port=port)
+            except Exception:                                      # noqa: BLE001
+                logger.warning("Automatische Neuverbindung zu %s fehlgeschlagen", port, exc_info=True)
+                ok = False
+            finally:
+                self.quiet = False
+            if ok:
+                self.lost_port = ""
+                logger.info("Neu verbunden mit %s", port)
+                return
+            failures += 1
+            self.lost_port = port                                  # weiter warten und noch einmal versuchen
+            self._set_connect_status("Verbindung verloren", "red")
 
     def _start_reader(self):
         self._stop_reader()
@@ -812,6 +866,7 @@ class SerialMixin:
 
     def _open_and_handshake(self, port):  # v1.24: Huelle, setzt das Kennzeichen connecting
         self.connecting = True  # v1.24
+        self.monitor_connected = bool(getattr(self, "monitor_only", False))  # v1.27: merken, ob nur mitgelesen wird (fuer die automatische Neuverbindung)
         try:
             return self._open_and_handshake_core(port)  # v1.24
         finally:
@@ -984,6 +1039,7 @@ class SerialMixin:
                 self.ARDUINO_current_portname = ""
                 self.ARDUINO_status = ""
                 self.send_active = False
+            self.lost_port = ""  # v1.27: Trennen durch den Anwender beendet das Warten auf die automatische Neuverbindung
             self._set_connect_status("Nicht Verbunden", "black")
 
     def close_arduino_connection_after_write_error(self, expected_port=None, lock_timeout=1.0):

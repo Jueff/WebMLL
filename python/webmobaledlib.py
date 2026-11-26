@@ -1,8 +1,8 @@
-# Datei-Version: 5.58 (2026-11-27) - webmobaledlib.py
+# Datei-Version: 5.59 (2026-11-27) - webmobaledlib.py
 # ----------------------------------------------------------------------------------------------
 # Name:           webmobaledlib.py
 # Path:           webmobaledlib.py
-# Version:        5.58
+# Version:        5.59
 # Last Update:    2026-11-26
 # Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
@@ -68,6 +68,7 @@
 #   5.46  2026-11-26  Juergen Winkler, Pull Request 76 (dort V5.42): Verbindung: Statusmeldung neben dem Knopf zeigt Typ und Anschluss (Nicht verbunden - Pro/COM3, Verbunden mit Pro/COM3 - EFFECT Mode); eine negative Zahl im Anschluss der Lichtmaschine des Blatts ist ein Hinweis fuer den Auto-Reconnect (zuerst dieser Anschluss, am Start und nach dem Wiederherstellen, keine Suche ueber alle Anschluesse); der Knopf Mit Lichtmaschine verbinden heisst mit Verbindung Trennen (Menue: Trennen); nach Wiederherstellen eines zwischengespeicherten Stands passt sich die Verbindung an Typ und Anschluss des Blatts an; Strg+C beendet ohne Fehlermeldung; eine Verbindung pro Geraet: gemeinsame Anschluss-Sperre fuer Verbinden, Abfragen der Geraeteauswahl und Erkennung, eine offene Verbindung zum selben Anschluss oder ESP32 wird wiederverwendet (web_serial 1.20, M07_COM_Port_New 1.25, M07_COM_Port 1.17, KI_ENTWICKLUNG_Prompt 1.02, test_single_connection.py)
 #   5.47  2026-11-26  Fehler behoben: Upload ohne Anschluss in der Tabelle brach mit "module 'vb2py.logger' has no attribute 'warning'" ab (M07_COM_Port 1.18: logger nach den Importen neu gesetzt)
 #   5.48  2026-11-26  Fehler behoben (Harold): steht im Anschluss der Tabelle -7 (von Excel gesetzt, Hinweis fuer den Auto-Reconnect), kam beim Setup uebertragen 'Es ist kein PICO an COM Port COM-7 angeschlossen'; jetzt gilt eine Zahl <= 0 als kein Anschluss und es wird der Anschluss der aktiven Verbindung benutzt (F00_mainbuttons 1.03, M07_COM_Port 1.19)
+#   5.59  2026-11-27  Automatisch neu verbinden: nach einem Verbindungsverlust (USB abgezogen) verbindet das Programm wieder, sobald der Anschluss zurueck ist (Serial Monitor: mitlesen); Trennen durch den Anwender beendet das Warten (web_serial 1.27). Zeilen mit '# v5.59'
 #   5.58  2026-11-27  Verbindung verloren nennt wie Nicht verbunden Typ und Anschluss (Verbindung verloren - Pro/COM3; web_serial 1.26). Zeilen mit '# v5.58'
 #   5.57  2026-11-27  Verbindungsverlust (zum Beispiel USB abgezogen) wird erkannt: Knoepfe rot, Status Verbindung verloren, Zeile im Serial Monitor (web_serial 1.25). Zeilen mit '# v5.57'
 #   5.56  2026-11-26  Serial Monitor: DTR nach dem Geraet am Anschluss (Pico antwortet), beim Wechsel des Anschlusses zeigen Knopf und Status die Schritte (Nicht verbunden, Verbindungsaufbau, Verbunden); waehrend des Verbindungsaufbaus sind beide Verbindungsknoepfe (Kopfzeile und Serieller Monitor) grau, gesperrt und heissen Verbinden... (web_serial 1.24, web_serial_page 1.07). Zeilen mit '# v5.56'
@@ -723,6 +724,7 @@ REQUIRED_FILES = {  # v1.75
     "_web/web_serial.py": "1.24",  # v5.56
     "_web/web_serial.py": "1.25",  # v5.57
     "_web/web_serial.py": "1.26",  # v5.58
+    "_web/web_serial.py": "1.27",  # v5.59
 }  # v1.75
 FILE_PROBLEMS = []                                      # Zeilen der Abweichungen, gefuellt in main()  # v1.75
 
@@ -1856,7 +1858,8 @@ def font_scales(ctrl) -> dict:
 # VERSION = "5.53 (2026-11-26)"  # v5.53  # v5.56 (entfallen)
 # VERSION = "5.56 (2026-11-26)"  # v5.56  # v5.57 (entfallen)
 # VERSION = "5.57 (2026-11-27)"  # v5.57  # v5.58 (entfallen)
-VERSION = "5.58 (2026-11-27)"  # v5.58
+# VERSION = "5.58 (2026-11-27)"  # v5.58  # v5.59 (entfallen)
+VERSION = "5.59 (2026-11-27)"  # v5.59
 # VERSION = "4.09 (2026-11-19)"  # v3.64 (entfallen)
 # VERSION = "4.08 (2026-11-19)"  # v3.64 (entfallen)
 # VERSION = "4.07 (2026-11-19)"  # v3.64 (entfallen)

@@ -1,12 +1,13 @@
-# Datei-Version: 1.02 (2026-11-27) - test_monitor_connect.py
+# Datei-Version: 1.03 (2026-11-27) - test_monitor_connect.py
 # ----------------------------------------------------------------------------------------------
 # Name:           test_monitor_connect.py
 # Path:           test_monitor_connect.py
-# Version:        1.02
+# Version:        1.03
 # Last Update:    2026-11-26
 # Author:         Jürgen Winkler
 # Licence:        LGPL V2.1
 # History of Change:
+#   1.03  2026-11-27  Automatisch neu verbinden nach Verlust, nicht nach Trennen durch den Anwender (web_serial 1.27)
 #   1.02  2026-11-27  Die Statusanzeige nennt nach dem Verlust Typ und Anschluss (web_serial 1.26)
 #   1.01  2026-11-27  Zwei Tests zum Verbindungsverlust (USB abgezogen, web_serial 1.25)
 #   1.00  2026-11-26  Neu: Serial Monitor verbindet nur zum Mitlesen (web_serial 1.22, connect_monitor): keine Abfrage am Geraet
@@ -31,6 +32,7 @@ class FakeSerial:
     """Ein Geraet, das nie antwortet; merkt sich, was ihm gesendet wurde"""
     def __init__(self):
         self.written, self.closed, self.in_waiting = [], False, 0
+        self.is_open = True
 
     def write(self, data):
         self.written.append(bytes(data))
@@ -76,12 +78,17 @@ class MonitorConnectTests(unittest.TestCase):
         c._wait_sent = lambda *a, **k: None
         c.arduino = None
         c.ARDUINO_current_portname = ""
+        self.saved_watch = (c.reconnect_max_wait, c.reconnect_interval, c.reconnect_settle)
+        c.reconnect_max_wait = 0                                                 # kein Warten im Hintergrund, ausser ein Test will es
+        c.lost_port = ""
 
     def tearDown(self):
         c = self.ctrl
         (c._open_serial, c._start_reader, c._msg, c.send_to_ARDUINO, c.send_to_ARDUINO_init_buffer, c._wait_sent) = self.saved
         c.arduino = None
         c.ARDUINO_current_portname = ""
+        c.reconnect_max_wait, c.reconnect_interval, c.reconnect_settle = self.saved_watch
+        c.lost_port = ""
 
     def test_monitor_connect_sends_nothing_and_shows_no_error(self):
         self.assertTrue(self.ctrl.connect_monitor("COM77"))
@@ -168,6 +175,68 @@ class MonitorConnectTests(unittest.TestCase):
         self.ctrl._reader_loop(port, stop)
         self.assertTrue(self.ctrl.is_connection_open() or self.ctrl.arduino is port)   # nicht vom Empfangsthread geschlossen
         self.assertNotIn("verloren", str(self.ctrl.connect_status[0]).lower())
+
+    def _lose_connection(self, port_name):
+        import threading
+        self.assertTrue(self.ctrl.connect_monitor(port_name))
+        port = self.fake
+
+        def broken_read(n=1):
+            raise OSError("ClearCommError failed")
+        port.read = broken_read
+        port.is_open = True
+        return port
+
+    def test_reconnects_automatically_when_the_port_comes_back(self):
+        import threading
+        import time
+        from types import SimpleNamespace
+        from serial.tools import list_ports
+        c = self.ctrl
+        present = []
+        orig = list_ports.comports
+        list_ports.comports = lambda *a, **k: [SimpleNamespace(device=d, vid=None, pid=None, description="x", hwid="") for d in present]
+        try:
+            old = self._lose_connection("COM74")
+            c.reconnect_max_wait, c.reconnect_interval, c.reconnect_settle = 10, 0.05, 0.05
+            self.fake = FakeSerial()                                             # das neue Geraet nach dem Anstecken
+            c._reader_loop(old, threading.Event())                               # Verlust: startet das Warten
+            self.assertFalse(c.is_connection_open())
+            time.sleep(0.3)
+            self.assertFalse(c.is_connection_open())                             # Anschluss fehlt noch: keine Neuverbindung
+            present.append("COM74")                                              # USB wieder angesteckt
+            for _ in range(60):
+                if c.is_connection_open():
+                    break
+                time.sleep(0.1)
+            self.assertTrue(c.is_connection_open())
+            self.assertEqual(c.ARDUINO_current_portname, "COM74")
+            self.assertEqual(c.lost_port, "")
+            self.assertEqual(self.sent, [])                                      # Serial Monitor: weiterhin nur mitlesen
+            self.assertEqual(self.messages, [])                                  # keine Dialoge im Hintergrund
+        finally:
+            list_ports.comports = orig
+            c.reconnect_max_wait = 0
+
+    def test_no_automatic_reconnect_after_disconnect_by_the_user(self):
+        import threading
+        import time
+        from types import SimpleNamespace
+        from serial.tools import list_ports
+        c = self.ctrl
+        orig = list_ports.comports
+        list_ports.comports = lambda *a, **k: [SimpleNamespace(device="COM73", vid=None, pid=None, description="x", hwid="")]
+        try:
+            old = self._lose_connection("COM73")
+            c.reconnect_max_wait, c.reconnect_interval, c.reconnect_settle = 10, 0.3, 0.05
+            c._reader_loop(old, threading.Event())
+            c.disconnect()                                                       # der Anwender trennt (Knopf Trennen)
+            self.assertEqual(c.lost_port, "")
+            time.sleep(1.0)
+            self.assertFalse(c.is_connection_open())                             # kein Neuverbinden gegen den Willen des Anwenders
+        finally:
+            list_ports.comports = orig
+            c.reconnect_max_wait = 0
 
     def test_normal_connect_still_queries_the_device(self):
         import time
