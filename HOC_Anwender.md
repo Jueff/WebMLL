@@ -1,9 +1,22 @@
-Datei-Version: 1.134 (2026-11-26) - HOC_Anwender.md
-Stand: Version 5.49
+Datei-Version: 1.135 (2026-11-26) - HOC_Anwender.md
+Stand: Version 5.50
 
 # MobaLedLib Studio: Änderungen (Kurzfassung)
 
 Gilt ab Version 1.39. Neueste Version oben.
+
+## Version 5.50 (2026-11-26)
+
+Neue Funktionen:
+- Das Fenster „Kompilieren und Hochladen“ lässt sich an der Titelzeile verschieben (Doppelklick: Ausgangsposition).
+- Firmware installieren (Pico) nutzt die Geräteauswahl; es werden nur Pico-Geräte gelistet, auch unbekannte und andere MobaLedLib Geräte sind wählbar.
+
+Korrekturen:
+- Selectrix: Channel 1 bis 99 und Bitposition 1 bis 8 werden geprüft (Eingabe und Header-Erzeugung); der Build mit leerem Eingang ist behoben.
+- DCC, LNet und CAN: die Adresse 0 ist nicht erlaubt.
+- Ein negativer Anschluss (-3) dient beim Hochladen und Setup übertragen als Hinweis auf COM3; wird das Gerät dort gefunden, steht der Anschluss danach im Blatt, sonst öffnet sich die Geräteauswahl.
+- Abbrechen in der Geräteauswahl schließt auch das Fenster Kompilieren und Hochladen; `COM?` steht nicht mehr in der Liste, OK ohne Auswahl ändert das Blatt nicht.
+- PGF-Import in ein verstecktes Blatt blendet es wieder ein.
 
 ## Version 5.49 (2026-11-26)
 

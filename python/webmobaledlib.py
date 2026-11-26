@@ -1,8 +1,8 @@
-# Datei-Version: 5.49 (2026-11-26) - webmobaledlib.py
+# Datei-Version: 5.50 (2026-11-26) - webmobaledlib.py
 # ----------------------------------------------------------------------------------------------
 # Name:           webmobaledlib.py
 # Path:           webmobaledlib.py
-# Version:        5.49
+# Version:        5.50
 # Last Update:    2026-11-26
 # Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
@@ -68,6 +68,7 @@
 #   5.46  2026-11-26  Juergen Winkler, Pull Request 76 (dort V5.42): Verbindung: Statusmeldung neben dem Knopf zeigt Typ und Anschluss (Nicht verbunden - Pro/COM3, Verbunden mit Pro/COM3 - EFFECT Mode); eine negative Zahl im Anschluss der Lichtmaschine des Blatts ist ein Hinweis fuer den Auto-Reconnect (zuerst dieser Anschluss, am Start und nach dem Wiederherstellen, keine Suche ueber alle Anschluesse); der Knopf Mit Lichtmaschine verbinden heisst mit Verbindung Trennen (Menue: Trennen); nach Wiederherstellen eines zwischengespeicherten Stands passt sich die Verbindung an Typ und Anschluss des Blatts an; Strg+C beendet ohne Fehlermeldung; eine Verbindung pro Geraet: gemeinsame Anschluss-Sperre fuer Verbinden, Abfragen der Geraeteauswahl und Erkennung, eine offene Verbindung zum selben Anschluss oder ESP32 wird wiederverwendet (web_serial 1.20, M07_COM_Port_New 1.25, M07_COM_Port 1.17, KI_ENTWICKLUNG_Prompt 1.02, test_single_connection.py)
 #   5.47  2026-11-26  Fehler behoben: Upload ohne Anschluss in der Tabelle brach mit "module 'vb2py.logger' has no attribute 'warning'" ab (M07_COM_Port 1.18: logger nach den Importen neu gesetzt)
 #   5.48  2026-11-26  Fehler behoben (Harold): steht im Anschluss der Tabelle -7 (von Excel gesetzt, Hinweis fuer den Auto-Reconnect), kam beim Setup uebertragen 'Es ist kein PICO an COM Port COM-7 angeschlossen'; jetzt gilt eine Zahl <= 0 als kein Anschluss und es wird der Anschluss der aktiven Verbindung benutzt (F00_mainbuttons 1.03, M07_COM_Port 1.19)
+#   5.50  2026-11-26  Anschluss im Blatt als negative Zahl (-3 = Hinweis, das Geraet war an COM3): Autoconnect traegt den gefundenen Anschluss ins Blatt ein (_store_hint_port); Setup uebertragen und Hochladen pruefen den Hinweis (M07_COM_Port 1.20: Resolve_Port_Hint), klappt das nicht, oeffnet sich der Dialog Board und USB Port erkennen
 #   5.49  2026-11-26  Issue 75 (Juergen): neues Menue Werkzeuge mit Datenuebertragung (vorher Einstellungen), Firmware installieren, ESP32-Firmware ueber WLAN hochladen und Wartung (Entwicklungsumgebung und Update, vorher Reiter der Hardware Optionen); im Anfaenger Modus ausgeblendet (web_form_options 1.75)
 #   5.38  2026-11-26  Ohne Lichtmaschine kam die Meldung 'Fehler beim Oeffnen der Verbindung' bei jedem Wechsel auf einen Reiter mit Direktmodus (Farb Test, Servo Test, Sound Test): das automatische Verbinden beim Reiterwechsel scheitert jetzt nur einmal mit Meldung, danach wird nicht mehr versucht, bis eine Verbindung besteht oder der Anwender selbst verbindet (Menue, Testtasten)
 #   5.37  2026-11-26  Farb Test: Knopf 'Farb Test beenden' unten rechts (web_colorcheck 1.13); Set_ColTab oeffnet den Farb Test auch ohne Lichtmaschine, kein Anschluss noetig (M60_CheckColors 1.01); Parameterformular: Flags (OptCtrPar, CtrMode, RandMode) als aufklappbare Hakenliste (web_form_other 1.17, Web_Languages.csv)
@@ -706,6 +707,9 @@ REQUIRED_FILES = {  # v1.75
     "proggen/M07_COM_Port.py": "1.18",  # v5.47
     "proggen/M07_COM_Port.py": "1.19", "proggen/F00_mainbuttons.py": "1.03",  # v5.48
     "_web/web_form_options.py": "1.75",  # v5.49
+    "proggen/M06_Write_Header.py": "1.21", "proggen/M07_COM_Port.py": "1.20", "proggen/M08_ARDUINO.py": "1.39", "proggen/M18_Save_Load.py": "1.08",  # v5.50
+    "proggen/M20_PageEvents_a_Functions.py": "1.19", "headless/headless_protocol_switch.py": "1.01", "_web/web_form_comport.py": "1.47", "_web/web_log.py": "1.15",  # v5.50
+    "_web/web_form_options.py": "1.76",  # v5.50
 }  # v1.75
 FILE_PROBLEMS = []                                      # Zeilen der Abweichungen, gefuellt in main()  # v1.75
 
@@ -1828,7 +1832,8 @@ def font_scales(ctrl) -> dict:
 # VERSION = "5.46 (2026-11-26)"  # v5.47 (entfallen)
 # VERSION = "5.47 (2026-11-26)"  # v5.48 (entfallen)
 # VERSION = "5.48 (2026-11-26)"  # v5.49 (entfallen)
-VERSION = "5.49 (2026-11-26)"  # v5.49
+# VERSION = "5.49 (2026-11-26)"  # v5.49  # v5.50 (entfallen)
+VERSION = "5.50 (2026-11-26)"  # v5.50
 # VERSION = "4.09 (2026-11-19)"  # v3.64 (entfallen)
 # VERSION = "4.08 (2026-11-19)"  # v3.64 (entfallen)
 # VERSION = "4.07 (2026-11-19)"  # v3.64 (entfallen)
@@ -7009,6 +7014,18 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
             return False  # v5.42
         return raw.startswith("-") and raw[1:].isdigit()  # v5.42
 
+    def _store_hint_port(port=""):  # v5.50: Der Anschluss im Blatt war eine negative Zahl (Hinweis) und die Verbindung ist zustande gekommen: den gefundenen Anschluss (COM3) ins Blatt eintragen
+        try:  # v5.50
+            if not _port_hint_flag() or state["ws"] is None or getattr(ctrl, "ARDUINO_IP", False):  # v5.50
+                return  # v5.50
+            found = str(getattr(ctrl, "ARDUINO_current_portname", "") or port or "").strip()  # v5.50
+            if not found or found.upper().startswith("IP:") or found.upper() in ("NO DEVICE", "COM?"):  # v5.50
+                return  # v5.50
+            state["ws"].CellDict[M02.SH_VARS_ROW, M25.COMPort_COL] = found  # v5.50
+            logger.info("Anschluss-Hinweis: Geraet gefunden, Anschluss %s ins Blatt eingetragen", found)  # v5.50
+        except Exception:                                  # noqa: BLE001  # v5.50
+            logger.debug("Anschluss nicht ins Blatt eingetragen", exc_info=True)  # v5.50
+
     def _connected_type() -> str:  # v5.42: Typ der offenen Verbindung aus der Startmeldung ('LEDs_AutoProg Ver 3: PICO ...'): "ESP32", "Pico" oder "Nano"
         msg = str(getattr(ctrl, "ARDUINO_startmessage", "") or "")  # v5.42: ARDUINO_boardtype ist immer leer
         m = re.search(r"Ver \d+: (\S+)", msg)  # v5.42
@@ -7055,6 +7072,8 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
                     except Exception:                      # noqa: BLE001  # v4.14
                         logger.debug("Anschluss nicht gespeichert", exc_info=True)  # v4.14
         if ok:  # v4.14
+            if hint:  # v5.50
+                _store_hint_port(what)  # v5.50
             ui.notify(tr("Mit der Lichtmaschine verbunden ({port}).", port=what), type="positive")  # v4.14
             after_connect()  # v4.14
         else:  # v4.14
@@ -7094,6 +7113,8 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
             what = await run.io_bound(_reconnect_for_sheet)  # v5.42
             ok = bool(what)  # v5.42
             if ok:  # v5.42
+                if hint_now:  # v5.50
+                    _store_hint_port(what)  # v5.50
                 try:  # v5.42
                     ctrl.setConfigData("serportname", what)  # v5.42
                 except Exception:                      # noqa: BLE001  # v5.42
@@ -7148,6 +7169,7 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
                 ok = await run.io_bound(_switch_connection, sheet_port, _sheet_board_type() == "Pico")  # v4.90
                 what = sheet_port  # v4.92
                 if ok:  # v4.92
+                    _store_hint_port(sheet_port)  # v5.50: negative Zahl im Blatt (Hinweis): den gefundenen Anschluss eintragen
                     try:  # v4.90
                         ctrl.setConfigData("serportname", sheet_port)  # v4.90
                     except Exception:                      # noqa: BLE001  # v4.90

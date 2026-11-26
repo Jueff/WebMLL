@@ -1,5 +1,5 @@
-Datei-Version: 1.128 (2026-11-26) - HOC_intern.md
-Stand: Version 5.49
+Datei-Version: 1.129 (2026-11-26) - HOC_intern.md
+Stand: Version 5.50
 
 # webMobaLedLib: History of Change (intern, ausführlich)
 
@@ -61,6 +61,33 @@ SwitchC bewusst nicht aufgenommen (nicht gewünscht); der Name lässt sich einti
 | Wiki `pg_tabelle.txt` | 1.14 | Abschnitt „Die Funktion Logic“; `seiten_update` 1.14 |
 
 Das Makro `Logic(Erg, A AND B OR …)` und `Create_Result` sind unverändert; der Baukasten erzeugt denselben Text. Nicht im Browser geprüft, nur die reinen Funktionen (Test mit 11 Ausdrücken).
+
+## 5.50 (2026-11-26), Selectrix Channel 1 bis 99, COM Port Hinweis, Firmware Geräteauswahl, Log-Fenster
+
+**Wunsch (Jürgen):** Selectrix-Blätter fehlerfrei bauen, den Anschluss-Hinweis (-3) auch beim Setup übertragen auswerten, bei Firmware installieren die Geräteauswahl benutzen, Abbrechen soll die Fenster schließen, das Log-Fenster verschiebbar.
+
+**Umsetzung:**
+* **Selectrix:** Channel 1 bis 99 und Bitposition 1 bis 8 (Eingabe `SX_Check_Input`, Generator `ProcessLine`: Fehler, das Header file wird nicht erzeugt). DCC, LNet, CAN: Adresse 0 ist nicht erlaubt (`Check_Address_Input`), die Sonderbehandlung entfällt. Ursache des leeren `#InCh` im SX-Build: `AddrList` begann mit dem Element 0 (`vbObjectInitialize`, `Erase` setzte nur Nullen), Adresse 0 galt als schon vorhanden; jetzt eine leere Liste. Umrechnung beim Protokollwechsel: Adresse = Channel × 8 + Bitposition, umrechenbar sind 9 bis 800.
+* **Anschluss-Hinweis:** `-3` im Anschluss der Tabelle: `Resolve_Port_Hint` prüft beim Hochladen und beim Setup übertragen, ob COM3 vorhanden ist und zum Typ des Blatts passt, und trägt es ein; sonst öffnet sich die Geräteauswahl (kein anderes Board wird stillschweigend eingetragen). Autoconnect trägt den gefundenen Anschluss ein (`_store_hint_port`).
+* **Geräteauswahl:** `COM?` ist keine Zeile mehr, OK ohne Auswahl ändert das Blatt nicht. Firmware installieren (Pico): `SelectPicoDevice` mit anderen Regeln (nur Pico-Geräte, unbekannte und andere MobaLedLib Geräte wählbar, „Unbekannte Ports anzeigen“ aktiv, bei „Andere MobaLedLib Geräte“ kein Bild, das Blatt bleibt unverändert).
+* **Abbrechen** in der Geräteauswahl schließt auch das Fenster Kompilieren und Hochladen (Setup übertragen und normales Hochladen).
+* **PGF-Import** in ein verstecktes Blatt (Startseite) blendet es wieder ein.
+* **Log-Fenster** schwebend und verschiebbar (Titelzeile, Doppelklick = Ausgangsposition); Meldungen werden gebündelt und beim Ziehen zurückgehalten (kein Ruckeln).
+
+| Datei | Version | Änderung |
+|-|-|-|
+| `proggen/M06_Write_Header.py` | 1.21 | Selectrix-Prüfung, Adresse 0, `AddressExists` |
+| `proggen/M20_PageEvents_a_Functions.py` | 1.19 | `Check_Address_Input`, Selectrix Channel 1 bis 99 |
+| `proggen/M07_COM_Port.py` | 1.20 | `Resolve_Port_Hint`, `Port_Hint_Number` |
+| `proggen/M08_ARDUINO.py` | 1.39 | Abbrechen schließt das Übertragungsfenster |
+| `proggen/M18_Save_Load.py` | 1.08 | Import in ein verstecktes Blatt |
+| `headless/headless_protocol_switch.py` | 1.01 | Channel 1 bis 99, Adressen 9 bis 800 |
+| `_web/web_form_comport.py` | 1.47 | Firmware-Auswahl, `COM?`, OK ohne Auswahl |
+| `_web/web_form_options.py` | 1.76 | Firmware installieren mit der Geräteauswahl |
+| `_web/web_log.py` | 1.15 | verschiebbar, Meldungen gebündelt |
+| `webmobaledlib.py` | 5.50 | Anschluss-Hinweis bei Autoconnect |
+| `test_port_hint.py`, `test_pico_device_dialog.py`, `test_log_drag.py` | 1.00 | neu |
+| `test_protocol_switch.py` | | 26 Tests |
 
 ## 5.49 (2026-11-26), Issue 75 (Jürgen): Menü Werkzeuge
 

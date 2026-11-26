@@ -1,12 +1,13 @@
-# Datei-Version: 1.75 (2026-11-26) - web_form_options.py
+# Datei-Version: 1.76 (2026-11-26) - web_form_options.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_form_options.py
 # Path:           _web/web_form_options.py
-# Version:        1.75
+# Version:        1.76
 # Last Update:    2026-11-26
 # Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
 # History of Change:
+#   1.76  2026-11-26  Firmware installieren (Pico): der Anschluss wird mit der Geraeteauswahl der Lichtmaschine gewaehlt (web_form_comport 1.45, SelectPicoDevice) statt mit dem eigenen kleinen Dialog; nur Pico-Geraete, auch unbekannte und andere MobaLedLib Geraete sind waehlbar. Zeilen mit '# v1.76'
 #   1.75  2026-11-26  Version 5.49 (Issue 75, Juergen): Menue Werkzeuge: die Reiter Entwicklungsumgebung und Update (Wartung) und Firmware Installation stehen nicht mehr in den Hardware Optionen, sondern oeffnen als eigene Fenster ueber Werkzeuge -> Wartung und Werkzeuge -> Firmware installieren (VIEW, Show(view=...))
 #   1.74  2026-11-26  Wurde der COM Port der Lichtmaschine in der Hardwaresuche (Geraeteauswahl) geaendert, verbindet das Programm nach dem Schliessen der Optionen automatisch (Einstellung AutoConnect); eine Verbindung zum alten Anschluss wird vorher getrennt. Zeilen mit '# v1.74'
 #   1.73  2026-11-26  Displaytyp: Liste nur mit '0,96"' und '1,3"', Standard 2 (0,96") wie in ESP32Extensions.h. Zeilen mit '# v1.73'
@@ -1491,27 +1492,25 @@ def make_class(Base):
                 return  # v1.09
             serial_port = None  # v1.47 (Issue 58): nicht der Anschluss des Blatts (dort haengt die Lichtmaschine), sondern ein eigener, immer erfragter Pico-Anschluss
             if not HP.find_boot_drives():  # v1.47: ein Pico im Bootmodus (Laufwerk RPI-RP2) braucht keinen Anschluss
-                pico_ports = HP.find_pico_serial_ports()  # v1.47
-                if pico_ports:  # v1.47: ohne Pico-Anschluss meldet flash_uf2 die Hilfe fuer den Anwender
-                    import mlpyproggen.Prog_Generator as PG_  # v1.47
-                    ctrl_ = PG_.global_controller  # v1.47
+                # Die Geraeteauswahl der Lichtmaschine mit anderen Regeln (v1.76): nur Pico-Geraete, auch unbekannte und andere MobaLedLib Geraete sind waehlbar; das Blatt bleibt unveraendert
+                import mlpyproggen.Prog_Generator as PG_  # v1.47
+                import proggen.F00_mainbuttons as F00_  # v1.76
+                ctrl_ = PG_.global_controller  # v1.47
+                connected = ""  # v1.47
+                try:  # v1.47
+                    if ctrl_.is_connection_open():  # v1.47
+                        connected = str(getattr(ctrl_, "ARDUINO_current_portname", "") or "").strip()  # v1.47
+                except Exception:                                  # noqa: BLE001  # v1.47
                     connected = ""  # v1.47
+                serial_port = F00_.Select_COM_Port_UserForm.SelectPicoDevice(M09.Get_Language_Str("Geräteauswahl", False, M09.xlWhole), _FW_PORT["port"])  # v1.76
+                if not serial_port:  # v1.47
+                    return  # v1.47
+                _FW_PORT["port"] = serial_port  # v1.47
+                if connected and serial_port.upper() == connected.upper():  # v1.47: der gewaehlte Anschluss ist die verbundene Lichtmaschine: Verbindung vorher trennen
                     try:  # v1.47
-                        if ctrl_.is_connection_open():  # v1.47
-                            connected = str(getattr(ctrl_, "ARDUINO_current_portname", "") or "").strip()  # v1.47
-                    except Exception:                                  # noqa: BLE001  # v1.47
-                        connected = ""  # v1.47
-                    texts = {"info": tr("Welcher Pico soll die Firmware bekommen? Bitte den Anschluss des Pico wählen, der neu programmiert wird."),  # v1.47
-                             "label": tr("Anschluss"), "cancel": tr("Abbrechen"), "connected": tr("(mit der Lichtmaschine verbunden)")}  # v1.47
-                    serial_port = wd.call_in_loop(_pick_fw_port_async, pico_ports, connected, _FW_PORT["port"], title, texts, default=None)  # v1.47
-                    if not serial_port:  # v1.47
-                        return  # v1.47
-                    _FW_PORT["port"] = serial_port  # v1.47
-                    if connected and serial_port.upper() == connected.upper():  # v1.47: der gewaehlte Anschluss ist die verbundene Lichtmaschine: Verbindung vorher trennen
-                        try:  # v1.47
-                            ctrl_.disconnect()  # v1.47
-                        except Exception:                              # noqa: BLE001  # v1.47
-                            logger.debug("Trennen vor der Firmware nicht moeglich", exc_info=True)  # v1.47
+                        ctrl_.disconnect()  # v1.47
+                    except Exception:                              # noqa: BLE001  # v1.47
+                        logger.debug("Trennen vor der Firmware nicht moeglich", exc_info=True)  # v1.47
             try:  # v1.09
                 # HP.flash_uf2(path, log=lambda text: logger.info("%s", text))  # v1.09  # v1.47 (entfallen)
                 HP.flash_uf2(path, serial_port=serial_port, log=lambda text: logger.info("%s", text))  # v1.47
