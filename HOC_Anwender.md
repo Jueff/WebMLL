@@ -1,9 +1,14 @@
-Datei-Version: 1.142 (2026-11-26) - HOC_Anwender.md
-Stand: Version 5.57
+Datei-Version: 1.143 (2026-11-26) - HOC_Anwender.md
+Stand: Version 5.58
 
 # MobaLedLib Studio: Änderungen (Kurzfassung)
 
 Gilt ab Version 1.39. Neueste Version oben.
+
+## Version 5.58 (2026-11-27)
+
+Neue Funktionen:
+- Der Status nach einem Verbindungsabbruch nennt wie „Nicht verbunden“ auch Gerät und Anschluss, zum Beispiel „Verbindung verloren - Pro/COM3“.
 
 ## Version 5.57 (2026-11-27)
 

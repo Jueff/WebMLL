@@ -1,12 +1,13 @@
-# Datei-Version: 1.01 (2026-11-27) - test_monitor_connect.py
+# Datei-Version: 1.02 (2026-11-27) - test_monitor_connect.py
 # ----------------------------------------------------------------------------------------------
 # Name:           test_monitor_connect.py
 # Path:           test_monitor_connect.py
-# Version:        1.01
+# Version:        1.02
 # Last Update:    2026-11-26
 # Author:         Jürgen Winkler
 # Licence:        LGPL V2.1
 # History of Change:
+#   1.02  2026-11-27  Die Statusanzeige nennt nach dem Verlust Typ und Anschluss (web_serial 1.26)
 #   1.01  2026-11-27  Zwei Tests zum Verbindungsverlust (USB abgezogen, web_serial 1.25)
 #   1.00  2026-11-26  Neu: Serial Monitor verbindet nur zum Mitlesen (web_serial 1.22, connect_monitor): keine Abfrage am Geraet
 # ----------------------------------------------------------------------------------------------
@@ -146,6 +147,11 @@ class MonitorConnectTests(unittest.TestCase):
         self.assertTrue(port.closed)
         self.assertEqual(self.ctrl.connect_status[1], "red")
         self.assertIn("verloren", self.ctrl.connect_status[0].lower())
+        import webmobaledlib as W
+        label = W.connect_device_label(self.ctrl, False, "COM3")                # Anschluss des Blatts: COM3, verloren ging COM76
+        self.assertTrue(label.endswith("COM76"), label)
+        shown = W.translate_connect_status(self.ctrl.connectstatus_text, label)
+        self.assertTrue(shown.startswith("Verbindung verloren - ") and shown.endswith("COM76"), shown)   # wie 'Nicht verbunden - Pro/COM3'
         seq, lines = self.ctrl.queue.lines_since(before)
         self.assertTrue(any("COM76" in text and "verloren" in text for _t, text in lines), lines)   # Zeile im Serial Monitor
 

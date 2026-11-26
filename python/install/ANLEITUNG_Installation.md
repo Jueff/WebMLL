@@ -1,5 +1,5 @@
 # MobaLedLib Studio – Installation und Betrieb
-*Datei-Version: 5.57 (2026-11-27), gilt für Version 5.57*
+*Datei-Version: 5.58 (2026-11-27), gilt für Version 5.58*
 
 Windows · macOS · Linux-Desktop · Raspberry Pi
 
@@ -1853,4 +1853,4 @@ Im **Anfänger Modus** fehlt das ganze Menü Werkzeuge. Die Hardware Optionen en
 
 Der Reiter **Serieller Monitor** liest nur mit: **Verbinden** öffnet den Anschluss ohne Abfrage am Gerät, daher geht es auch mit Geräten ohne das MobaLedLib-Programm. Die Hardware-Signale (DTR) richten sich nach dem Gerät am Anschluss (Pico, Nano, ESP32). Es gibt einen Knopf: rot **Verbinden**, grün **Trennen**. Ist die Verbindung offen und du wählst einen anderen Anschluss, zeigt das Programm der Reihe nach „Nicht verbunden“, „Verbindungsaufbau ... COMx“ und den neuen Zustand; die Ausgaben der vorherigen Verbindung werden gelöscht. Solange das Programm verbindet, sind die Verbindungsknöpfe in der Kopfzeile und im Seriellen Monitor grau, gesperrt und heißen „Verbinden...“.
 
-Bricht die Verbindung ab (zum Beispiel USB-Kabel abgezogen), erkennt das Programm das: Die Verbindungsknöpfe werden rot, der Status zeigt „Verbindung verloren“ und im Seriellen Monitor steht „*** Verbindung zu COMx verloren“. Nach dem Anstecken verbindest du wieder mit **Verbinden**.
+Bricht die Verbindung ab (zum Beispiel USB-Kabel abgezogen), erkennt das Programm das: Die Verbindungsknöpfe werden rot, der Status zeigt „Verbindung verloren - Pro/COMx“ (Typ und Anschluss wie bei „Nicht verbunden“) und im Seriellen Monitor steht „*** Verbindung zu COMx verloren“. Nach dem Anstecken verbindest du wieder mit **Verbinden**.

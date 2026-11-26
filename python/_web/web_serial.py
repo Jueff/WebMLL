@@ -1,8 +1,8 @@
-# Datei-Version: 1.25 (2026-11-27) - web_serial.py
+# Datei-Version: 1.26 (2026-11-27) - web_serial.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_serial.py
 # Path:           _web/web_serial.py
-# Version:        1.25
+# Version:        1.26
 # Last Update:    2026-11-27
 # Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
@@ -17,6 +17,7 @@
 #   1.07  2026-11-14  ESP32: Verbindung ueber WLAN mit Anmeldung per HMAC (Port 2323, connect_esp32); Schreibfehler schliesst nur die eigene Verbindung (Beitrag des Fork-Entwicklers)
 #   1.08  2026-11-14  TcpPort: ungueltiger Hostname (UnicodeError, "label too long") wird als OSError gemeldet statt abzustuerzen
 #   1.09  2026-11-14  Automatisches Verbinden (ohne Anschlussangabe): ist fuer das Blatt eine ESP32-WLAN-Verbindung eingetragen (wifi_target_provider), wird zuerst WLAN versucht, sonst USB; connect(wlan=False) erzwingt USB
+#   1.26  2026-11-27  lost_port: der verlorene Anschluss, damit die Statusanzeige Typ und Anschluss nennt (Verbindung verloren - Pro/COM3). Zeilen mit '# v1.26'
 #   1.25  2026-11-27  Verbindungsverlust (USB abgezogen): ein Lesefehler des Empfangsthreads schliesst die Verbindung auch bei einem seriellen Anschluss (vorher nur bei WLAN); Status 'Verbindung verloren' (rot) und eine Zeile im Serial Monitor. Zeilen mit '# v1.25'
 #   1.24  2026-11-26  connecting: Kennzeichen, solange ein Verbindungsaufbau laeuft (Knoepfe in Kopfzeile und Serial Monitor zeigen dann Verbinden... grau und gesperrt). Zeilen mit '# v1.24'
 #   1.23  2026-11-26  connect_monitor: DTR und RTS richten sich nach dem Typ des gewaehlten Anschlusses (USB-Kennung: Pico = an, Nano und ESP32 = aus) und nicht nach dem Board im Blatt; sonst schwieg ein Pico im Serial Monitor, wenn im Blatt ein anderes Board stand. Zeilen mit '# v1.23'
@@ -378,6 +379,7 @@ class SerialMixin:
         """Der Empfangsthread bekam einen Lesefehler, ohne dass getrennt wurde: Verbindung schliessen, Status und Zeile im Serial Monitor."""
         name = str(getattr(self, "ARDUINO_current_portname", "") or getattr(port, "portstr", "") or getattr(port, "port", "") or "")
         logger.warning("Verbindung zu %s verloren (Lesefehler)", name)
+        self.lost_port = name  # v1.26
         self.close_arduino_connection_after_write_error(expected_port=port)
         self._set_connect_status("Verbindung verloren", "red")
         self.queue.put("*** " + tr("Verbindung zu {port} verloren", port=name) + "\r\n")

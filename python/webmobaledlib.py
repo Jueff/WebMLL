@@ -1,8 +1,8 @@
-# Datei-Version: 5.57 (2026-11-27) - webmobaledlib.py
+# Datei-Version: 5.58 (2026-11-27) - webmobaledlib.py
 # ----------------------------------------------------------------------------------------------
 # Name:           webmobaledlib.py
 # Path:           webmobaledlib.py
-# Version:        5.57
+# Version:        5.58
 # Last Update:    2026-11-26
 # Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
@@ -68,6 +68,7 @@
 #   5.46  2026-11-26  Juergen Winkler, Pull Request 76 (dort V5.42): Verbindung: Statusmeldung neben dem Knopf zeigt Typ und Anschluss (Nicht verbunden - Pro/COM3, Verbunden mit Pro/COM3 - EFFECT Mode); eine negative Zahl im Anschluss der Lichtmaschine des Blatts ist ein Hinweis fuer den Auto-Reconnect (zuerst dieser Anschluss, am Start und nach dem Wiederherstellen, keine Suche ueber alle Anschluesse); der Knopf Mit Lichtmaschine verbinden heisst mit Verbindung Trennen (Menue: Trennen); nach Wiederherstellen eines zwischengespeicherten Stands passt sich die Verbindung an Typ und Anschluss des Blatts an; Strg+C beendet ohne Fehlermeldung; eine Verbindung pro Geraet: gemeinsame Anschluss-Sperre fuer Verbinden, Abfragen der Geraeteauswahl und Erkennung, eine offene Verbindung zum selben Anschluss oder ESP32 wird wiederverwendet (web_serial 1.20, M07_COM_Port_New 1.25, M07_COM_Port 1.17, KI_ENTWICKLUNG_Prompt 1.02, test_single_connection.py)
 #   5.47  2026-11-26  Fehler behoben: Upload ohne Anschluss in der Tabelle brach mit "module 'vb2py.logger' has no attribute 'warning'" ab (M07_COM_Port 1.18: logger nach den Importen neu gesetzt)
 #   5.48  2026-11-26  Fehler behoben (Harold): steht im Anschluss der Tabelle -7 (von Excel gesetzt, Hinweis fuer den Auto-Reconnect), kam beim Setup uebertragen 'Es ist kein PICO an COM Port COM-7 angeschlossen'; jetzt gilt eine Zahl <= 0 als kein Anschluss und es wird der Anschluss der aktiven Verbindung benutzt (F00_mainbuttons 1.03, M07_COM_Port 1.19)
+#   5.58  2026-11-27  Verbindung verloren nennt wie Nicht verbunden Typ und Anschluss (Verbindung verloren - Pro/COM3; web_serial 1.26). Zeilen mit '# v5.58'
 #   5.57  2026-11-27  Verbindungsverlust (zum Beispiel USB abgezogen) wird erkannt: Knoepfe rot, Status Verbindung verloren, Zeile im Serial Monitor (web_serial 1.25). Zeilen mit '# v5.57'
 #   5.56  2026-11-26  Serial Monitor: DTR nach dem Geraet am Anschluss (Pico antwortet), beim Wechsel des Anschlusses zeigen Knopf und Status die Schritte (Nicht verbunden, Verbindungsaufbau, Verbunden); waehrend des Verbindungsaufbaus sind beide Verbindungsknoepfe (Kopfzeile und Serieller Monitor) grau, gesperrt und heissen Verbinden... (web_serial 1.24, web_serial_page 1.07). Zeilen mit '# v5.56'
 #   5.55  2026-11-26  Zusammenfuehrung mit 5.54 (haroldlinke/main): die Dateien von Pull Request 80 und den Folgeaenderungen (5.50 bis 5.53 der Arbeitskopie) behalten ihren Stand; in 5.54 standen mehrere Dateien auf einem aelteren Stand (zum Beispiel M07_COM_Port 1.16, web_serial 1.18, web_startpage 1.05). Siehe HOC_intern 5.55
@@ -721,6 +722,7 @@ REQUIRED_FILES = {  # v1.75
     "_web/web_serial_page.py": "1.07", "proggen/M07_COM_Port_New.py": "1.29", "headless/headless_pico.py": "1.03",  # v5.52
     "_web/web_serial.py": "1.24",  # v5.56
     "_web/web_serial.py": "1.25",  # v5.57
+    "_web/web_serial.py": "1.26",  # v5.58
 }  # v1.75
 FILE_PROBLEMS = []                                      # Zeilen der Abweichungen, gefuellt in main()  # v1.75
 
@@ -819,6 +821,8 @@ except Exception:                                     # noqa: BLE001  # v2.79
 def connect_device_label(ctrl, connected, sheet_port=""):  # v5.42
     """Typ und Anschluss der Lichtmaschine fuer die Verbindungsmeldung, z. B. 'Pro/COM3'. Verbunden: der aktive Anschluss, sonst der des Blatts (sheet_port)."""
     port = str(getattr(ctrl, "ARDUINO_current_portname", "") or "").strip() if connected else ""  # v5.42
+    if not connected and str(getattr(ctrl, "connectstatus_text", "")).strip() in ("Verbindung verloren", tr("Verbindung verloren")):  # v5.58: nach einem Verbindungsverlust der verlorene Anschluss
+        port = str(getattr(ctrl, "lost_port", "") or "").strip()  # v5.58
     if not port:  # v5.42
         port = str(sheet_port or "").strip()  # v5.42: nur der Anschluss des Blatts, nicht die globale Einstellung
         if port.isdigit():  # v5.42
@@ -839,6 +843,8 @@ def connect_device_label(ctrl, connected, sheet_port=""):  # v5.42
 def translate_connect_status(text, device=""):  # v2.91, v5.42: device = 'Pro/COM3' wird angezeigt
     """Verbindungsstatus (kommt aus dem Controller auf Deutsch: 'Nicht verbunden', 'Nicht Verbunden', 'Verbunden COM5 - EFFECT Mode') in der eingestellten Sprache"""  # v2.91
     t = str(text or "")  # v2.91
+    if t.strip() in ("Verbindung verloren", tr("Verbindung verloren")):  # v5.58: wie Nicht verbunden mit Typ und Anschluss
+        return tr("Verbindung verloren") + (" - " + device if device else "")  # v5.58
     if t.strip().lower() == "nicht verbunden":  # v2.91
         return tr("Nicht verbunden") + (" - " + device if device else "")  # v2.91, v5.42
     m = re.fullmatch(r"Verbunden (.+) - (EFFECT|DIRECT) Mode", t)  # v2.91
@@ -1849,7 +1855,8 @@ def font_scales(ctrl) -> dict:
 # VERSION = "5.52 (2026-11-26)"  # v5.52  # v5.53 (entfallen)
 # VERSION = "5.53 (2026-11-26)"  # v5.53  # v5.56 (entfallen)
 # VERSION = "5.56 (2026-11-26)"  # v5.56  # v5.57 (entfallen)
-VERSION = "5.57 (2026-11-27)"  # v5.57
+# VERSION = "5.57 (2026-11-27)"  # v5.57  # v5.58 (entfallen)
+VERSION = "5.58 (2026-11-27)"  # v5.58
 # VERSION = "4.09 (2026-11-19)"  # v3.64 (entfallen)
 # VERSION = "4.08 (2026-11-19)"  # v3.64 (entfallen)
 # VERSION = "4.07 (2026-11-19)"  # v3.64 (entfallen)
