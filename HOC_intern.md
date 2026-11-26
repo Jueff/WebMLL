@@ -72,6 +72,7 @@ Das Makro `Logic(Erg, A AND B OR …)` und `Create_Result` sind unverändert; de
 * **Geräteauswahl:** `COM?` ist keine Zeile mehr, OK ohne Auswahl ändert das Blatt nicht. Firmware installieren (Pico): `SelectPicoDevice` mit anderen Regeln (nur Pico-Geräte, unbekannte und andere MobaLedLib Geräte wählbar, „Unbekannte Ports anzeigen“ aktiv, bei „Andere MobaLedLib Geräte“ kein Bild, das Blatt bleibt unverändert).
 * **Abbrechen** in der Geräteauswahl schließt auch das Fenster Kompilieren und Hochladen (Setup übertragen und normales Hochladen).
 * **PGF-Import** in ein verstecktes Blatt (Startseite) blendet es wieder ein.
+* **Firmware aus lokaler ZIP-Datei:** im Dialog Firmware herunterladen steht unter der Liste das Auswahlfeld für ZIP-Dateien (wie bei Update Testversion); die ZIP muss eine `*.uf2` enthalten, wird mit `unzip_safe` in den Firmware-Ordner entpackt (Rückfrage beim Überschreiben), danach ist die Firmware vorgewählt.
 * **Log-Fenster** schwebend und verschiebbar (Titelzeile, Doppelklick = Ausgangsposition); Meldungen werden gebündelt und beim Ziehen zurückgehalten (kein Ruckeln).
 
 | Datei | Version | Änderung |
@@ -85,6 +86,9 @@ Das Makro `Logic(Erg, A AND B OR …)` und `Create_Result` sind unverändert; de
 | `_web/web_form_comport.py` | 1.47 | Firmware-Auswahl, `COM?`, OK ohne Auswahl |
 | `_web/web_form_options.py` | 1.76 | Firmware installieren mit der Geräteauswahl |
 | `_web/web_log.py` | 1.15 | verschiebbar, Meldungen gebündelt |
+| `headless/headless_firmware_dl.py` | 1.01 | `check_local_zip`, `install_local_zip`, `entry_from_file` |
+| `_web/web_form_firmware_download.py` | 1.03 | Auswahlfeld für eine lokale ZIP-Datei |
+| `test_firmware_local_zip.py` | 1.00 | neu |
 | `webmobaledlib.py` | 5.50 | Anschluss-Hinweis bei Autoconnect |
 | `test_port_hint.py`, `test_pico_device_dialog.py`, `test_log_drag.py` | 1.00 | neu |
 | `test_protocol_switch.py` | | 26 Tests |

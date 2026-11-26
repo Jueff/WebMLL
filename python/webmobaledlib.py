@@ -710,6 +710,7 @@ REQUIRED_FILES = {  # v1.75
     "proggen/M06_Write_Header.py": "1.21", "proggen/M07_COM_Port.py": "1.20", "proggen/M08_ARDUINO.py": "1.39", "proggen/M18_Save_Load.py": "1.08",  # v5.50
     "proggen/M20_PageEvents_a_Functions.py": "1.19", "headless/headless_protocol_switch.py": "1.01", "_web/web_form_comport.py": "1.47", "_web/web_log.py": "1.15",  # v5.50
     "_web/web_form_options.py": "1.76",  # v5.50
+    "headless/headless_firmware_dl.py": "1.01", "_web/web_form_firmware_download.py": "1.03",  # v5.50
 }  # v1.75
 FILE_PROBLEMS = []                                      # Zeilen der Abweichungen, gefuellt in main()  # v1.75
 

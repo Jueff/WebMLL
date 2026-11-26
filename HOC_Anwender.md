@@ -9,6 +9,7 @@ Gilt ab Version 1.39. Neueste Version oben.
 
 Neue Funktionen:
 - Das Fenster „Kompilieren und Hochladen“ lässt sich an der Titelzeile verschieben (Doppelklick: Ausgangsposition).
+- Im Dialog „Firmware herunterladen“ lässt sich auch eine lokale ZIP-Datei mit Firmware installieren (gleiches Auswahlfeld wie bei Update Testversion).
 - Firmware installieren (Pico) nutzt die Geräteauswahl; es werden nur Pico-Geräte gelistet, auch unbekannte und andere MobaLedLib Geräte sind wählbar.
 
 Korrekturen:
