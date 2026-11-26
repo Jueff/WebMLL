@@ -9,6 +9,10 @@ Gilt ab Version 1.39. Neueste Version oben.
 
 Neue Funktionen:
 - Hardware Optionen: Der Reiter Lichtmaschine zeigt die eingestellte Hardware mit Port und Bild. Der Knopf „Erkennen“ öffnet die Geräteauswahl: alle angeschlossenen Lichtmaschinen (Classic, Pro, Pico) in einer Liste, das Gerät des Blattes auch offline. Unbekannte Anschlüsse lassen sich einblenden; beim Übernehmen fragt das Programm nach dem Typ.
+- Geräteauswahl: Der Dialog öffnet sofort, Typ und Version der Geräte erscheinen kurz danach (Spalten Typ, Port, Version, USB Kennung). Erkannt werden Lichtmaschinen (Classic, Pro, Pico) und andere MobaLedLib-Geräte (zum Beispiel Servo, Sound, 2x3); diese sind nicht als Lichtmaschine wählbar. Belegt ein anderes Programm einen Anschluss, steht „blockiert“, und beim Auswählen erscheint ein Hinweis. Mit den Pfeiltasten rauf und runter wählt man das Gerät.
+- Classic (Nano): Der Bootloader (alt, neu, Full) wird erkannt und beim Schließen mit OK in den Optionen eingetragen.
+- Pro (ESP32): Auswahlfeld „Displaytyp“ (0,96" oder 1,3").
+- Wurde der COM Port in den Hardware Optionen geändert, verbindet das Programm nach dem Schließen automatisch (Einstellung AutoConnect).
 - Unter „Einstellungen“ stehen Protokoll (nur die Protokolle, die die Hardware laut Plattform Parametern kann), Hardwarevariante, Schnelles Update, Lichtsensor, Schaltzustände speichern und (Pro) die Anzeige auf dem Display. Alles wird im Blatt gespeichert.
 - Lichtsensor und Schaltzustände speichern gibt es jetzt auf allen Lichtmaschinen; sie erscheinen als Zeile im Blatt.
 
@@ -16,6 +20,7 @@ Korrekturen:
 - Der Reiter DCC/LNet Arduino heißt sofort wie das gewählte Protokoll und verschwindet bei CAN.
 - Anzeige auf dem Display: die Anzeigen mit WLAN gibt es nur bei eingeschaltetem WLAN.
 - Die Oberfläche spricht von Gerät und Lichtmaschine statt von Arduino und Board.
+- Eine negative Portnummer im Blatt (belegter Port) wurde als „an -3 (offline)“ angezeigt; jetzt gilt sie als „kein Port gewählt“.
 
 ## Version 5.25 (2026-11-25)
 

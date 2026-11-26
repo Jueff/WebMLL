@@ -2688,3 +2688,17 @@ OK, wenn die LEDs am richtigen Gerät schnell blinken.;OK when the LEDs of the r
 Achtung: Das Gerät wird von einem anderen Programm benutzt.;Attention: the device is used by another program.;Let op: het apparaat wordt door een ander programma gebruikt.;Attention : l'appareil est utilisé par un autre programme.;Attenzione: il dispositivo è usato da un altro programma.;Atención: otro programa está usando el dispositivo.;Bemærk: enheden bruges af et andet program.
 (Serieller Monitor?);(Serial monitor?);(Seriële monitor?);(Moniteur série ?);(Monitor seriale?);(¿Monitor serie?);(Seriel monitor?)
 Das Programm muss geschlossen werden!;The program must be closed!;Het programma moet worden gesloten!;Le programme doit être fermé !;Il programma deve essere chiuso!;¡Hay que cerrar el programa!;Programmet skal lukkes!
+Firmware wird abgefragt ...;Querying firmware ...;Firmware wordt opgevraagd ...;Interrogation du micrologiciel ...;Interrogazione del firmware ...;Consultando el firmware ...;Firmware forespørges ...
+keine Firmware-Antwort;no firmware response;geen firmware-antwoord;aucune réponse du micrologiciel;nessuna risposta dal firmware;sin respuesta del firmware;intet firmwaresvar
+Firmware;Firmware;Firmware;Micrologiciel;Firmware;Firmware;Firmware
+Konfiguration gültig;Configuration valid;Configuratie geldig;Configuration valide;Configurazione valida;Configuración válida;Konfiguration gyldig
+keine gültige Konfiguration;no valid configuration;geen geldige configuratie;aucune configuration valide;nessuna configurazione valida;sin configuración válida;ingen gyldig konfiguration
+Andere MobaLedLib Geräte - nicht als Lichtmaschine wählbar;Other MobaLedLib devices - cannot be selected as light machine;Andere MobaLedLib-apparaten - niet als Lichtmaschine te kiezen;Autres appareils MobaLedLib - non sélectionnables comme machine à lumière;Altri dispositivi MobaLedLib - non selezionabili come macchina luci;Otros dispositivos MobaLedLib - no seleccionables como máquina de luz;Andre MobaLedLib-enheder - kan ikke vælges som lysmaskine
+Servo-Modul PicoServo-Tiny;PicoServo-Tiny servo module;PicoServo-Tiny servomodule;Module servo PicoServo-Tiny;Modulo servo PicoServo-Tiny;Módulo servo PicoServo-Tiny;PicoServo-Tiny servomodul
+Servo;Servo;Servo;Servo;Servo;Servo;Servo
+USB-ID;USB ID;USB-ID;USB-ID;USB-ID;USB-ID;USB-ID
+Bezeichnung;Description;Omschrijving;Désignation;Descrizione;Descripción;Betegnelse
+gebaut mit webMLL;built with webMLL;gebouwd met webMLL;construit avec webMLL;costruito con webMLL;construido con webMLL;bygget med webMLL
+webMLL-Version unbekannt;webMLL version unknown;webMLL-versie onbekend;version webMLL inconnue;versione webMLL sconosciuta;versión de webMLL desconocida;webMLL-version ukendt
+USB Kennung;USB identifier;USB-kenmerk;Identifiant USB;Identificativo USB;Identificador USB;USB-identifikation
+Displaytyp;Display type;Schermtype;Type d'écran;Tipo di display;Tipo de pantalla;Displaytype

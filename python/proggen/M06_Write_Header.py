@@ -1,12 +1,13 @@
-# Datei-Version: 1.18 (2026-11-25) - M06_Write_Header.py
+# Datei-Version: 1.20 (2026-11-25) - M06_Write_Header.py
 # ----------------------------------------------------------------------------------------------
 # Name:           M06_Write_Header.py
 # Path:           proggen/M06_Write_Header.py
-# Version:        1.18
+# Version:        1.20
 # Last Update:    2026-11-25
 # Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
 # History of Change:
+#   1.20  2026-11-26  ESP32: Displaytyp aus den Blatteinstellungen (esp32_options['oled_typ']) als '#define OLED_TYP 1|2' zusammen mit UI_MLLTime. Zeilen mit '# v1.20'
 #   1.18  2026-11-25  Einstellungen des Blattes: READ_LDR und ENABLE_STORE_STATUS() fuer alle Plattformen, nur die Display-Einstellung (UI_MLLTime) bleibt in #ifdef ESP32. Zeilen mit '# v1.18'
 #   1.17  2026-11-23  Identify (Juergen Winkler): ESP32: die drei Status LEDs (WS2811) sind das erste Pixel von LED Kanal 7; Add_Status_LED_Macro legt den Kanal mit ConstRGB an, wenn der
 #                     Anwender ihn nicht benutzt (Status_LED_Extra, Status_LED_Offset, NUM_LEDS). MLL_P_CONTROLLER_CONFIG mit LED-Kanal (Konfigurationsdatei Format 7). #define MLL_IDENTIFY
@@ -29,6 +30,7 @@
 #   1.11  2026-11-19  Konfiguration getrennt von der Firmware (ESP32/Pico, Option serial_cfg, M42_Dyn_Config): MLL_DYNAMIC_CONFIG, Tabellen zwischen //MLLDYN_BEGIN und //MLLDYN_END nur fuer CONFIG_ONLY (die Zeilen sind mit '# v1.07' markiert), Finalize mit Rueckfall auf die klassische Kopfdatei; die Startwerte (Set_Start_Values) gehen als Tabelle Start_Values_Tab in die Konfigurationsdatei
 #   1.12  2026-11-19  Konfiguration getrennt von der Firmware: NUM_LEDS, LEDS_PER_CHANNEL, START_MSG, LEDs je Kanal und die Controller-Tabelle (MLL_P_CONTROLLER_COUNT, MLL_P_CONTROLLER_CONFIG: Pin, erste LED, LED-Anzahl)
 #                     kommen aus der Konfigurationsdatei (Abschnitt Parameter), die Kopfdatei enthaelt sie nur noch zwischen den Marken; ohne die Funktion (ATmega, klassisch) bleibt alles wie bisher (Zeilen mit '# v1.12')
+#   1.19  2026-11-25  MLL_FW_VERSION: die Kopfdatei enthaelt die webMLL-Version (aus webmobaledlib.py), mit der sie erzeugt wird. Zeilen mit '# v1.19'
 #   1.13  2026-11-20  Issue 48: Fehler aus ProcessSheet (zum Beispiel 'Die Adresse ... wird bereits mit einem anderen Typ benutzt') gingen verloren, weil Write_Header_File_and_Upload_to_Arduino ErrorText vor der Pruefung leerte; Kompilieren startete trotz Fehler
 # ----------------------------------------------------------------------------------------------
 # -*- coding: utf-8 -*-
@@ -111,6 +113,20 @@ import proggen.M37_Inst_Libraries as M37
 import proggen.M38_Extensions as M38
 import proggen.M39_Simulator as M39
 import proggen.M42_Dyn_Config as M42  # v1.07
+
+
+def WebMLL_Version():  # v1.19: Version von webMLL (webmobaledlib.py: VERSION = "5.28 (2026-11-25)") -> "5.28"; sie geht als MLL_FW_VERSION in die Firmware (Antwort auf ~MLLINFO)
+    import os
+    import re
+    try:
+        here = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        with open(os.path.join(here, "webmobaledlib.py"), encoding="utf-8") as f:
+            m = re.search(r'^VERSION = "([0-9.]+)', f.read(), re.M)
+        if m:
+            return m.group(1)
+    except OSError:
+        pass
+    return "unknown"
 import headless.headless_dyn_config as DC  # v1.07
 #import proggen.M60_CheckColors as M60
 #import proggen.M70_Exp_Libraries as M70
@@ -1623,6 +1639,7 @@ def Write_Header_File_and_Upload_to_Arduino(CreateFilesOnly=False, LEDsInUse=Non
     if DynMode:  # v1.07
         VBFiles.writeText(fp, '#define MLL_DYNAMIC_CONFIG            // The data tables are not part of the firmware. They are loaded from the file system (see MLLDynConfig.h)', '\n')  # v1.07
         VBFiles.writeText(fp, '#define MLL_FIRMWARE_SIG "' + DC.SIG_PLACEHOLDER + '"', '\n')  # v1.07
+        VBFiles.writeText(fp, '#define MLL_FW_VERSION "' + WebMLL_Version() + '"', '\n')  # v1.19: webMLL-Version, mit der die Firmware gebaut wird (~MLLINFO): webMLL-Version, mit der die Firmware gebaut wird (~MLLINFO)
         # MLL_IDENTIFY: Enable MLLIdentify feature for ESP32/Pico with dynamic config (blink mainboard LEDs during COM port search)  # v1.17
         BoardTyp = M02a.Get_BoardTyp()  # v1.17
         if BoardTyp == M02.HT_ESP32 or BoardTyp == M02.HT_PICO:  # v1.17
@@ -1854,6 +1871,9 @@ def Write_Header_File_and_Upload_to_Arduino(CreateFilesOnly=False, LEDsInUse=Non
                 for symbol in ("USE_ESP32_EXTENSIONS", "USE_UI"):  # v1.10
                     VBFiles.writeText(fp, f'#ifndef {symbol}\n#define {symbol}\n#endif', '\n')  # v1.10
                 VBFiles.writeText(fp, f'#undef UI_MLLTime\n#define UI_MLLTime {mode}', '\n')  # v1.10
+                typ = options.get("oled_typ", 2)  # v1.20: Displaytyp (OLED_TYP in ESP32Extensions.h: 1 = 1,3 Zoll Adapterplatine, 2 = 0,96 Zoll Hauptplatine)
+                if type(typ) is int and typ in (1, 2):  # v1.20
+                    VBFiles.writeText(fp, f'#undef OLED_TYP\n#define OLED_TYP {typ}', '\n')  # v1.20
             VBFiles.writeText(fp, '#endif', '\n')  # v1.18: nur die Display-Einstellung gehoert zum ESP32
             for key, symbol, define in (  # v1.10  # v1.18: Lichtsensor und Schaltzustaende fuer alle Plattformen (vorher innerhalb von #ifdef ESP32)
                 ("ldr", "READ_LDR", "READ_LDR"),  # v1.10

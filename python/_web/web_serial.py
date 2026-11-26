@@ -1,8 +1,8 @@
-# Datei-Version: 1.16 (2026-11-25) - web_serial.py
+# Datei-Version: 1.18 (2026-11-25) - web_serial.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_serial.py
 # Path:           _web/web_serial.py
-# Version:        1.16
+# Version:        1.18
 # Last Update:    2026-11-25
 # Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
@@ -24,6 +24,8 @@
 #   1.15  2026-11-25  Titel der Meldung beim Verbindungsfehler: 'Fehler beim Öffnen der Verbindung' (statt 'des Ports'), jetzt uebersetzt. Zeilen mit '# v1.15'
 #   1.13  2026-11-21  Option LedOffOnDisconnect (Programm Einstellungen): Beim Trennen werden die LEDs nur noch ausgeschaltet, wenn die Option gesetzt ist (Vorgabe aus; vorher immer)
 #   1.16  2026-11-25  Texte: Gerät statt ARDUINO (Verbindungsstatus, Meldung bei falscher oder fehlender Antwort). Zeilen mit '# v1.16'
+#   1.17  2026-11-25  Stilles Verbinden waehrend des offenen Dialogs Geraeteauswahl wird uebersprungen; Trennung der Verbindung waehrend des Verbindens (self.arduino None) ergibt keinen Traceback mehr. Zeilen mit '# v1.17'
+#   1.18  2026-11-25  ARDUINO_startmessage: Startmeldung ('LEDs_AutoProg Ver 3: ...') der aktiven Verbindung, die Geraeteauswahl wertet sie fuer die Versionsanzeige des Nano aus. Zeilen mit '# v1.18'
 # ----------------------------------------------------------------------------------------------
 """Serielle Verbindung zum Arduino/Pico ohne Tk (Mixin fuer HeadlessAppController).
 
@@ -415,6 +417,7 @@ class SerialMixin:
     def determine_ARDUINO_Properties_from_Startmessage(self, startmessage):
         """Startmeldung z. B.: LEDs_AutoProg Ver 4: Type-3.3.2F5 FastLED 3.9.12 25.03.25 11:39,<LEDs je Kanal>"""
         self.ARDUINO_version = 0
+        self.ARDUINO_startmessage = str(startmessage or "")  # v1.18: fuer die Geraeteauswahl (Version der MobaLedLib-Bibliothek)
         m = re.search(r"Ver (\d+):", startmessage)
         version_number = int(m.group(1)) if m else None
         self.ARDUINO_version = version_number if version_number else 2
@@ -598,6 +601,13 @@ class SerialMixin:
         if port.startswith("IP:"):
             return self.connectIP(IPAdresse=port[3:])
         logger.info("connect %s", port)
+        try:  # v1.17: der Dialog Geraeteauswahl belegt die Anschluesse (Ident, Abfrage von Typ und Version): stilles Verbinden jetzt nicht
+            import proggen.M07_COM_Port_New as _M07Dlg
+            if getattr(self, "quiet", False) and getattr(_M07Dlg, "Device_Dialog_Open", False):
+                logger.info("Stilles Verbinden mit %s uebersprungen: der Dialog Geraeteauswahl ist offen", port)
+                return False
+        except Exception:                                  # noqa: BLE001
+            logger.debug("Dialog-Zustand nicht lesbar", exc_info=True)
         if self.is_connection_open():
             self.disconnect()
         if port == "" or port.upper() == "NO DEVICE":
@@ -612,6 +622,7 @@ class SerialMixin:
             # self.arduino = serial.Serial(port, baudrate=115200, timeout=2, parity=serial.PARITY_NONE,  # v1.06 (entfallen: oeffnete mit DTR an: Reset des Nano)
             #                              stopbits=serial.STOPBITS_ONE, bytesize=serial.EIGHTBITS)  # v1.06 (entfallen)
             self.arduino = self._open_serial(serial, port)  # v1.06
+            self.ARDUINO_startmessage = ""  # v1.18: Startmeldung des vorherigen Geraets verwerfen
         except BaseException as e:                        # noqa: BLE001
             logger.info("Port %s nicht zu oeffnen: %s", port, e)
             macro = self.MacroDef.data.get("StartPage", {}) if getattr(self, "MacroDef", None) else {}
@@ -642,27 +653,31 @@ class SerialMixin:
         txt, read_error = "", False
         t1 = _const("SerialIF_teststring1", "#?LEDs_AutoProg")
         trials, start = 0, time.time()
-        while True:                                       # wie im Original: bis zu 3 neue Anfragen im Sekundentakt
-            if self.arduino.in_waiting > 0:
-                while "\n" in txt:
-                    txt = txt.split("\n")[-1]
-                txt += self.arduino.read(self.arduino.in_waiting).decode(errors="ignore")
-                pos = txt.find(t1)
-                if pos != -1:
-                    pos2 = txt.find("\r\n", pos)
-                    if pos2 != -1:
-                        txt = txt[pos + 2:pos2]
-                        self.queue.put(txt)
-                        self.determine_ARDUINO_Properties_from_Startmessage(txt)
+        try:  # v1.17: wird die Verbindung waehrend des Verbindens von aussen getrennt (self.arduino ist dann None), kein Traceback
+            while True:                                       # wie im Original: bis zu 3 neue Anfragen im Sekundentakt
+                if self.arduino.in_waiting > 0:
+                    while "\n" in txt:
+                        txt = txt.split("\n")[-1]
+                    txt += self.arduino.read(self.arduino.in_waiting).decode(errors="ignore")
+                    pos = txt.find(t1)
+                    if pos != -1:
+                        pos2 = txt.find("\r\n", pos)
+                        if pos2 != -1:
+                            txt = txt[pos + 2:pos2]
+                            self.queue.put(txt)
+                            self.determine_ARDUINO_Properties_from_Startmessage(txt)
+                            break
+                if time.time() - start >= 1:
+                    trials += 1
+                    if trials > 3:
+                        read_error = True
                         break
-            if time.time() - start >= 1:
-                trials += 1
-                if trials > 3:
-                    read_error = True
-                    break
-                start = time.time()
-                self.arduino.write(b"#?\n")
-            time.sleep(0.01)
+                    start = time.time()
+                    self.arduino.write(b"#?\n")
+                time.sleep(0.01)
+        except (AttributeError, OSError):  # v1.17
+            logger.info("Verbindung zu %s wurde waehrend des Verbindens getrennt", port)
+            return self._fail_connect()
         self.send_to_ARDUINO("#X\r\n")
         if read_error:
             # self._msg("Falsche oder keine Antwort vom ARDUINO.\n\nPrüfe, ob das richtige MobaLedLib-Programm auf den "  # v1.16 (entfallen)

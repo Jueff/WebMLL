@@ -1,12 +1,17 @@
-# Datei-Version: 1.67 (2026-11-25) - web_form_options.py
+# Datei-Version: 1.74 (2026-11-25) - web_form_options.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_form_options.py
 # Path:           _web/web_form_options.py
-# Version:        1.67
+# Version:        1.74
 # Last Update:    2026-11-25
 # Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
 # History of Change:
+#   1.74  2026-11-26  Wurde der COM Port der Lichtmaschine in der Hardwaresuche (Geraeteauswahl) geaendert, verbindet das Programm nach dem Schliessen der Optionen automatisch (Einstellung AutoConnect); eine Verbindung zum alten Anschluss wird vorher getrennt. Zeilen mit '# v1.74'
+#   1.73  2026-11-26  Displaytyp: Liste nur mit '0,96"' und '1,3"', Standard 2 (0,96") wie in ESP32Extensions.h. Zeilen mit '# v1.73'
+#   1.72  2026-11-26  ESP32: Auswahlfeld 'Displaytyp' (OLED_TYP 1 = 1,3 Zoll Adapterplatine, 2 = 0,96 Zoll Hauptplatine) neben 'Anzeige auf dem Display'; gespeichert in esp32_options['oled_typ']. Zeilen mit '# v1.72'
+#   1.71  2026-11-25  Anzeige 'Lichtmaschine ... an -3 (offline)': eine negative Portnummer im Blatt (Excel-Kennzeichen fuer einen belegten Port) gilt als kein Port (auch bei Board und USB Port erkennen). Zeilen mit '# v1.71'
+#   1.70  2026-11-25  Board-Erkennung ohne serielle Abfrage: Pico wird nur ueber die USB-Kennung erkannt, Servo-Module erkennt der Dialog im Hintergrund (schnelles Oeffnen). Zeilen mit '# v1.70'
 #   1.18  2026-11-12  Excel-Programm 3.5.0L3: Der Knopf Firmware installieren steht fuer ALLE Boards im Reiter LED ARDUINO (vorher nur beim Raspberry Pi Pico und nur mit Firmware-Dateien im Ordner); der Firmware-Ordner wird bei Bedarf angelegt (fruehere Versionen ohne Eintrag)
 #   1.19  2026-11-12  Excel-Programm 3.5.0L3: Firmware installieren oeffnet die Auswahl auch ohne Firmware-Dateien; der Knopf Firmware laden holt Firmware aus dem Internet (web_form_firmware_download, headless_firmware_dl) und waehlt sie danach vor
 #   1.20  2026-11-12  Reiter LED ARDUINO: der Kommentar zum Knopf Firmware installieren steht unter dem Knopf (schmal) statt daneben; die Auswahl des Boards behaelt ihre Breite (keine umbrochenen Beschriftungen) und rutscht auf schmalen Bildschirmen unter die Knoepfe
@@ -37,6 +42,7 @@
 #   1.44  2026-11-22  Version 4.68: Titel Hardware Optionen; Reiter Entwicklungsumgebung und Firmware Installation nicht im Anfaenger Modus; Boardnamen Lichtmaschine Classic/Pro/Pico; PlatformIO (Standard) zuerst, ARDUINO-IDE (nur Kompatibilitaet), Knopf ARDUINO-IDE Einstellungen nur mit ARDUINO-IDE; Hinweis WLAN (OTA) zu Schnelles Update
 #   1.45  2026-11-22  Version 4.70: Reiter Entwicklungsumgebung: roter Hinweis unter dem Haken Schnelles Update (nicht kompatibel mit WLAN)
 #   1.46  2026-11-22  Version 4.71: Warnhinweise zu Schnelles Update und WLAN entfernt (Pull Request 54: Schnelles Update geht fuer den ESP32 jetzt auch ueber WLAN); neuer Hinweistext zum Schnellen Update (aus dem Pull Request, dort als 1.44)
+#   1.69  2026-11-25  Board und USB Port erkennen: ein PicoServo-Tiny (Servo-Modul, antwortet auf '~MLLINFO') wird nicht als Board angeboten. Zeilen mit '# v1.69'
 #   1.67  2026-11-25  Die Auswahl der Protokolle richtet sich nach der Tabelle Platform_Parameters (SupportsDCC, SupportsLNet, SupportsCAN je Plattform AM328, ESP32, PICO;
 #                     vorher fest: Pico nur DCC); ein eingestelltes, nicht unterstuetztes Protokoll bleibt sichtbar mit Hinweis. Zeilen mit '# v1.67'
 #   1.66  2026-11-25  Anzeige auf dem Display: 'WLAN, IP, LDR und Zeit' und 'WLAN, IP und Hostname' nur, wenn WLAN am ESP32 eingeschaltet ist (folgt dem Haken im Reiter WLAN (OTA),
@@ -380,6 +386,10 @@ async def _options_async(spec: dict, st: dict):
                         # mode = ui.select(modes, value=esp_settings.get("oled", 0), label=tr("Anzeige auf dem Display")).props("outlined dense" if compact else "").classes("w-56" if compact else "w-64")  # v1.30  # v1.53: verstaendlicher Name statt OLED-Anzeige  # v1.66 (entfallen)
                         start_mode = esp_settings.get("oled", 0) if esp_settings.get("oled", 0) in shown_modes() else 0  # v1.66: ohne WLAN keine WLAN-Anzeige
                         mode = ui.select(shown_modes(), value=start_mode, label=tr("Anzeige auf dem Display")).props("outlined dense" if compact else "").classes("w-56" if compact else "w-64")  # v1.30  # v1.53  # v1.66: nur die Anzeigen, die zum WLAN passen
+                        oled_types = {2: '0,96"', 1: '1,3"'}  # v1.72: OLED_TYP der Firmware (ESP32Extensions.h); v1.73: nur die Groesse, ohne Uebersetzung
+                        OLED_TYP_DEFAULT = 2  # v1.73: wie in ESP32Extensions.h (#define OLED_TYP 2 = 0,96" an der ESP32-Hauptplatine)
+                        start_typ = esp_settings.get("oled_typ", OLED_TYP_DEFAULT) if esp_settings.get("oled_typ", OLED_TYP_DEFAULT) in oled_types else OLED_TYP_DEFAULT  # v1.72  # v1.73
+                        oled_typ = ui.select(oled_types, value=start_typ, label=tr("Displaytyp")).props("outlined dense" if compact else "").classes("w-56" if compact else "w-64")  # v1.72
                         # ldr/store (Lichtsensor, Zustaende speichern) stehen jetzt auf der Hauptseite (Einstellungen)  # v1.52
                     with ui.column().classes("items-center gap-0" if compact else "items-center gap-1"):  # v1.30  # v1.59
                         if not compact:  # v1.59: auf der Hauptseite steht die Ueberschrift als Tooltip
@@ -428,10 +438,10 @@ async def _options_async(spec: dict, st: dict):
                         preview()  # v1.30
 
                 def update(_event):  # v1.30
-                    vals["esp32_options"] = {**vals["esp32_options"], "oled": mode.value}  # v1.30  # v1.52: ldr und store setzt die Hauptseite
+                    vals["esp32_options"] = {**vals["esp32_options"], "oled": mode.value, "oled_typ": oled_typ.value}  # v1.30  # v1.52: ldr und store setzt die Hauptseite  # v1.72: Displaytyp
                     preview()  # v1.30
 
-                for control in (mode,):  # v1.30  # v1.52
+                for control in (mode, oled_typ):  # v1.30  # v1.52  # v1.72: Displaytyp
                     control.on_value_change(update)  # v1.30
 
                 def apply_wifi(on):  # v1.66: Haken 'WLAN am ESP32 aktivieren' geaendert: Auswahl anpassen
@@ -799,11 +809,13 @@ def make_class(Base):
                 return
             self._web_running = True
             self._web_auto_connect = False  # v1.36
+            port_before = self._web_port_state()  # v1.74
             try:
                 self._web_loop(first_page_only)
             finally:
                 self._web_running = False
                 self.IsActive = False
+                self._web_port_changed(port_before)  # v1.74: COM Port in der Hardwaresuche geaendert: Autoconnect nach dem Schliessen
                 if getattr(self, "_web_auto_connect", False):  # v1.36: Anschluss der Lichtmaschine erkannt: danach gleich verbinden
                     self._web_auto_connect = False  # v1.36
                     hook, loop = wd._bridge.get("auto_connect"), wd._bridge.get("loop")  # v1.36
@@ -816,6 +828,48 @@ def make_class(Base):
                             logger.warning("Automatisches Verbinden nicht gestartet", exc_info=True)  # v1.36
 
         # --------------------------------------------------------------
+        def _web_port_state(self):  # v1.74: (Anschluss im Blatt, Einstellung serportname) fuer den Vergleich vor/nach dem Oeffnen der Optionen
+            try:
+                cell = str(P01.Cells(M02.SH_VARS_ROW, M25.COMPort_COL) or "")
+            except Exception:                                  # noqa: BLE001
+                cell = ""
+            try:
+                import mlpyproggen.Prog_Generator as PG
+                cfg = str(PG.global_controller.getConfigData("serportname") or "")
+            except Exception:                                  # noqa: BLE001
+                cfg = ""
+            return cell, cfg
+
+        @staticmethod
+        def _web_norm_port(raw):  # v1.74: Geraetename oder "" (kein Anschluss: leer, 999, COM?, NO DEVICE, negative Zahl, IP:)
+            raw = str(raw or "").strip().lstrip("*").strip()
+            if raw.startswith("-") or raw.upper() in ("", "999", "COM?", "NO DEVICE") or raw.upper().startswith("IP:"):
+                return ""
+            if raw.isdigit():
+                return ("COM" + raw) if os.name == "nt" else ""
+            return raw
+
+        def _web_port_changed(self, before):  # v1.74: Wurde der COM Port in der Hardwaresuche (Geraeteauswahl) geaendert, laeuft nach dem Schliessen des Fensters der Autoconnect
+            try:
+                after = self._web_port_state()
+                if after == before or getattr(self, "_web_auto_connect", False):
+                    return
+                new_port = self._web_norm_port(after[1]) or self._web_norm_port(after[0])
+                if not new_port:
+                    return
+                import mlpyproggen.Prog_Generator as PG
+                from _web import web_tabs
+                ctrl = PG.global_controller
+                if not web_tabs.is_auto_connect(ctrl):
+                    logger.info("Optionen: COM Port geaendert (%s), Autoconnect ist ausgeschaltet", new_port)
+                    return
+                if ctrl.is_connection_open() and str(getattr(ctrl.arduino, "port", "") or "").upper() != new_port.upper():
+                    ctrl.disconnect()                          # die Verbindung zum alten Anschluss beenden
+                self._web_auto_connect = True
+                logger.info("Optionen: COM Port geaendert (%s -> %s): nach dem Schliessen wird verbunden", before, after)
+            except Exception:                                  # noqa: BLE001
+                logger.debug("Aenderung des COM Ports nicht geprueft", exc_info=True)
+
         def _web_prepare(self, first_page_only):
             """Zustand wie UserForm_Initialize/Activate, aber ohne Tk."""
             M25.Make_sure_that_Col_Variables_match()
@@ -892,7 +946,7 @@ def make_class(Base):
                 # board = next((tr(t_) for b_, t_ in names if b_ in buildopt), tr("Lichtmaschine Classic, Mini (Nano (neue Version))"))  # v1.60 (entfallen)
                 board = tr("Lichtmaschine Classic, Mini")  # v1.60: nur der Haupttyp, die Variante steht im Feld Board-Variante
             raw = str(P01.Cells(M02.SH_VARS_ROW, M25.COMPort_COL) or "").strip().lstrip("*").strip()
-            port = "" if raw.upper() in ("", "999", "COM?", "NO DEVICE") else (("COM" + raw) if raw.isdigit() and os.name == "nt" else raw)
+            port = "" if raw.upper() in ("", "999", "COM?", "NO DEVICE") or (raw.startswith("-") and raw[1:].isdigit()) else (("COM" + raw) if raw.isdigit() and os.name == "nt" else raw)  # v1.71: negative Zahl (Excel-Kennzeichen fuer einen belegten Port) ist kein Port
             offline = False
             if port:
                 try:  # ist der gespeicherte Anschluss gerade am USB zu finden?
@@ -1172,7 +1226,8 @@ def make_class(Base):
                     if os.name != "nt" and re.match(r"^/dev/ttyS\d+$", str(cp.device)) and str(cp.hwid).strip().lower() in ("n/a", ""):  # v1.26
                         continue  # v1.26
                     t = M07.Classify_Port(cp)  # v1.26
-                    if t:  # v1.26
+                    # v1.70: keine serielle Abfrage beim Erkennen (nur USB-Kennung); Servo-Module erkennt der Dialog im Hintergrund
+                    if t and t != "Servo":  # v1.26  # v1.69: Servo-Module werden nicht als Board angeboten
                         cands.append((str(cp.device), t))  # v1.26
             except Exception:                                  # noqa: BLE001  # v1.26
                 logger.debug("Anschlussliste nicht lesbar", exc_info=True)  # v1.26
@@ -1189,6 +1244,8 @@ def make_class(Base):
                     raw = str(P01.Cells(M02.SH_VARS_ROW, col)).strip().lstrip("*").strip()  # v1.34
                 except Exception:                              # noqa: BLE001  # v1.34
                     return ""  # v1.34
+                if raw.startswith("-") and raw[1:].isdigit():  # v1.71: negative Zahl = belegter Port, kein Anschluss
+                    return ""  # v1.71
                 if raw.isdigit():  # v1.34: Nummer: unter Windows COM<n>
                     return ("COM" + raw) if os.name == "nt" else ""  # v1.34
                 return raw if raw.upper() not in ("COM?", "NO DEVICE") and not raw.upper().startswith("IP:") else ""  # v1.34
