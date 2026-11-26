@@ -1,9 +1,21 @@
-Datei-Version: 1.126 (2026-11-26) - HOC_Anwender.md
-Stand: Version 5.41
+Datei-Version: 1.127 (2026-11-26) - HOC_Anwender.md
+Stand: Version 5.42
 
 # MobaLedLib Studio: Änderungen (Kurzfassung)
 
 Gilt ab Version 1.39. Neueste Version oben.
+
+## Version 5.42 (2026-11-26)
+
+Neue Funktionen:
+- Neben dem Knopf „Mit Lichtmaschine verbinden“ steht immer Typ und Anschluss der Lichtmaschine, zum Beispiel „Verbunden mit Pro/COM3 - EFFECT Mode“.
+- Mit Verbindung heißt der Knopf „Trennen“ (auch im Pfeilmenü).
+- Eine negative Zahl im Anschluss der Lichtmaschine im Blatt (von Excel gesetzt, zum Beispiel -7) ist ein Hinweis: Das Programm verbindet beim Start zuerst mit COM7 und sucht sonst nicht weiter.
+- Nach dem Wiederherstellen eines zwischengespeicherten Stands passt sich die Verbindung an Typ und Anschluss im Blatt an.
+
+Korrekturen:
+- Strg+C beendet das Programm ohne Fehlermeldung.
+- Pro Gerät gibt es nur eine Verbindung: Beim Start, im Menü und bei der Geräteauswahl wird eine bestehende Verbindung wiederverwendet statt den Anschluss ein zweites Mal zu öffnen.
 
 ## Version 5.41 (2026-11-26)
 

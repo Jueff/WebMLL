@@ -1,12 +1,13 @@
-# Datei-Version: 1.16 (2026-11-25) - M07_COM_Port.py
+# Datei-Version: 1.17 (2026-11-26) - M07_COM_Port.py
 # ----------------------------------------------------------------------------------------------
 # Name:           M07_COM_Port.py
 # Path:           proggen/M07_COM_Port.py
-# Version:        1.16
-# Last Update:    2026-11-23
+# Version:        1.17
+# Last Update:    2026-11-26
 # Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
 # History of Change:
+#   1.17  2026-11-26  Eine Verbindung pro Geraet: Get_Arduino_Baudrate und DetectArduino laufen unter derselben Anschluss-Sperre wie das Verbinden und die Abfragen der Geraeteauswahl (web_serial.PORT_ACCESS_LOCK, Reihenfolge: Anschluss-Sperre vor _DETECT_LOCK). Zeilen mit '# v1.17'
 #   1.1.16  2026-11-26  BOOTLOADER_CACHE: Ergebnis der Bootloader-Abfrage der Geraeteauswahl (Nano) wird von Get_Arduino_Baudrate einmal innerhalb von 90 s wiederverwendet (die zweite Pruefung direkt nach OK schlug fehl). Zeilen mit '# v1.16'
 #   1.15  2026-11-25  SERVO_PORTS: Anschluesse mit einem PicoServo-Tiny (Servo-Modul); Classify_Port liefert dafuer 'Servo' (nicht Pico). Zeilen mit '# v1.15'
 #   1.14  2026-11-23  Ensure_Existing_USB_Port: Existiert der in der Tabelle eingetragene USB-Anschluss am Rechner nicht, wird (bei genau einem passenden Board) der vorhandene eingetragen, sonst gemeldet - vor dem langen Build des ESP32-Setups
@@ -897,7 +898,24 @@ def Get_Last_Detect_Info():  # v1.12
     return _LAST_INFO["firmware"], _LAST_INFO["signature"]  # v1.12
 
 
-def Get_Arduino_Baudrate(ComPort, Start_Baudrate, DeviceSignatur, FirmwareVer, DebugPrint=False):
+_FALLBACK_PORT_LOCK = threading.RLock()  # v1.17: nur wenn web_serial nicht importierbar ist (Tk-Programm)
+
+
+def _port_access_lock():  # v1.17
+    """Gemeinsame Sperre fuer Zugriffe auf serielle Anschluesse (web_serial.PORT_ACCESS_LOCK)."""  # v1.17
+    try:  # v1.17
+        from _web.web_serial import PORT_ACCESS_LOCK  # v1.17
+        return PORT_ACCESS_LOCK  # v1.17
+    except Exception:                                                  # noqa: BLE001  # v1.17
+        return _FALLBACK_PORT_LOCK  # v1.17
+
+
+def Get_Arduino_Baudrate(ComPort, Start_Baudrate, DeviceSignatur, FirmwareVer, DebugPrint=False):  # v1.17: exklusiv am Anschluss
+    with _port_access_lock():  # v1.17
+        return _Get_Arduino_Baudrate_impl(ComPort, Start_Baudrate, DeviceSignatur, FirmwareVer, DebugPrint)  # v1.17
+
+
+def _Get_Arduino_Baudrate_impl(ComPort, Start_Baudrate, DeviceSignatur, FirmwareVer, DebugPrint=False):  # v1.17 (vorher Get_Arduino_Baudrate)
     _LAST_INFO["signature"], _LAST_INFO["firmware"] = 0, ""  # v1.12
     import time as _time  # v1.16
     _cached = BOOTLOADER_CACHE.pop(str(ComPort).upper(), None)  # v1.16: die Geraeteauswahl hat den Bootloader dieses Anschlusses eben ermittelt: nicht noch einmal zuruecksetzen und abfragen
@@ -1160,7 +1178,7 @@ def DetectArduino(port, baudrate, HWVersion=255, SWMajorVersion=255, SWMinorVers
     zuruecksetzbar) bis zu DETECT_RETRIES-mal mit Pause (beim Blinken mit 50 Baud nur einmal: der Zeitgeber ruft jede Sekunde auf).
     Ergebnis wie bisher: 1 erkannt, 0 nicht erkannt, -1 Anschluss nicht zu oeffnen, -2 nicht zuweisbar, -3 nicht zuruecksetzbar."""  # v1.05
     retries = 1 if baudrate == 50 else DETECT_RETRIES  # v1.05
-    with _DETECT_LOCK:  # v1.05
+    with _port_access_lock(), _DETECT_LOCK:  # v1.05, v1.17: erst die Anschluss-Sperre (wie Verbinden und Geraeteauswahl), dann die eigene
         result = (0, None)  # v1.05
         for attempt in range(1, retries + 1):  # v1.05
             result = _DetectArduino_once(port, baudrate, HWVersion, SWMajorVersion, SWMinorVersion, DeviceSignatur, Trials, PrintDebug, SleepTime)  # v1.05

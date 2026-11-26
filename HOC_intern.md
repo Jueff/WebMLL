@@ -1,5 +1,5 @@
-Datei-Version: 1.120 (2026-11-26) - HOC_intern.md
-Stand: Version 5.41
+Datei-Version: 1.121 (2026-11-26) - HOC_intern.md
+Stand: Version 5.42
 
 # webMobaLedLib: History of Change (intern, ausführlich)
 
@@ -61,6 +61,33 @@ SwitchC bewusst nicht aufgenommen (nicht gewünscht); der Name lässt sich einti
 | Wiki `pg_tabelle.txt` | 1.14 | Abschnitt „Die Funktion Logic“; `seiten_update` 1.14 |
 
 Das Makro `Logic(Erg, A AND B OR …)` und `Create_Result` sind unverändert; der Baukasten erzeugt denselben Text. Nicht im Browser geprüft, nur die reinen Funktionen (Test mit 11 Ausdrücken).
+
+## 5.42 (2026-11-26), Verbindung: Typ und Anschluss in der Statusmeldung, Knopf Trennen, Hinweis für den Auto-Reconnect, eine Verbindung pro Gerät
+
+**Wunsch (Jürgen):** Die Statusmeldung neben dem Knopf „Mit Lichtmaschine verbinden“ soll immer Typ und Anschluss nennen. Der Knopf soll mit Verbindung zu „Trennen“ werden. Nach „Zwischengespeicherter Stand → Wiederherstellen“ können sich Typ und Anschluss ändern; der Autoconnect muss das beachten. Strg+C soll ohne Fehlermeldung beenden. Pro Gerät soll es nur eine Verbindung geben.
+
+**Umsetzung:**
+* **Statusmeldung:** `connect_device_label` und `translate_connect_status` in `webmobaledlib.py`: „Nicht verbunden - Pro/COM3“, „Verbunden mit Pro/COM3 - EFFECT Mode“. Der Typ (Classic, Pro, Pico) kommt aus dem Blatt, der Anschluss aus der aktiven Verbindung, sonst aus dem Blatt (nicht aus der globalen Einstellung `serportname`, die auf einen alten Anschluss zeigen kann).
+* **Hinweis für den Auto-Reconnect:** Excel setzt beim Hochladen im Anschluss der Lichtmaschine (Zeile 1, Spalte Typ) eine **negative Zahl** (`port_set_busy`, `M08_ARDUINO`). Das Programm liest sie als Hinweis: zuerst dieser Anschluss (`-7` = COM7). Antwortet dort das Gerät mit dem Typ des Blatts (Typ aus der Startmeldung `LEDs_AutoProg Ver 3: PICO …`; `ARDUINO_boardtype` ist immer leer), wird verbunden und bleibt es. Sonst gibt es **keine** Suche über alle Anschlüsse; der Anwender sucht wie bisher über „Erkennen“.
+* **Knopf Trennen:** Mit Verbindung heißt der Knopf „Trennen“ und trennt; ohne Verbindung verbindet er. Im Pfeilmenü heißt der Punkt „Trennen“ (vorher „Verbindung trennen“).
+* **Wiederherstellen:** Nach „Wiederherstellen“ des zwischengespeicherten Stands prüft `connection_after_restore`, ob Typ oder Anschluss im Blatt von der offenen Verbindung abweichen; dann wird getrennt und mit dem Hinweis-Anschluss bzw. der passenden Lichtmaschine neu verbunden (unter einer Sperre, ein Hintergrund-Thread).
+* **Strg+C:** `ui.run()` löst einen `KeyboardInterrupt` aus; er wird abgefangen und protokolliert (vorher Traceback von uvicorn und asyncio).
+* **Doppelte Startmeldung im Protokoll:** Der Handshake legt die Meldung in `self.queue` (`RxLog.on_line` → `_on_rx_line` wertet sie schon aus, weil `SerialIF_teststring3` = `LEDs_AutoProg` ist) und ruft danach selbst auf. Die zweite Auswertung entfällt (`_evaluated_startmsg`, je Verbindung).
+* **Eine Verbindung pro Gerät:** `web_serial.PORT_ACCESS_LOCK` (RLock) macht Öffnen und Handshake eines Anschlusses exklusiv, auch gegenüber den Abfragen der Geräteauswahl (Typ, Version, `~MLLIDENT`, Bootloader: `M07_COM_Port_New._SERIAL_LOCK` ist dieselbe Sperre) und der Erkennung (`DetectArduino`, `Get_Arduino_Baudrate`). **Reihenfolge der Sperren immer:** `_conn_lock` → `PORT_ACCESS_LOCK` → `_DETECT_LOCK`. Die Fehlerdialoge beim Öffnen laufen außerhalb der Sperre (sonst blockiert sie die Geräteauswahl). Eine offene Verbindung zum selben Anschluss oder zur selben WLAN-Adresse wird wiederverwendet (`connect`, `connect_esp32`, `connectIP`, `IP:`-Port). `connect_if_not_connected` wartet auf einen laufenden Verbindungsaufbau. `connect_silent` setzt `quiet` und `dtr_override` unter der Sperre und lässt eine offene Verbindung unberührt; Wechsel (Blattwechsel, Wiederherstellen) trennen und verbinden unter derselben Sperre. Die Abfragen der Geräteauswahl prüfen nach dem Warten auf die Sperre noch einmal, ob das Hauptprogramm inzwischen verbunden hat (nicht ein zweites Mal öffnen, kein falsches „blockiert“). `close_arduino_connection_after_write_error` läuft unter `_conn_lock` (mit Timeout).
+
+| Datei | Version | Änderung |
+|-|-|-|
+| `webmobaledlib.py` | 5.42 | Statusmeldung mit Typ und Anschluss, Hinweis-Anschluss, Knopf Trennen, Wiederherstellen, Strg+C, `connect_silent` und Wechsel unter der Sperre |
+| `_web/web_serial.py` | 1.20 | `PORT_ACCESS_LOCK`, `_open_and_handshake`, `_is_connected_to`, Wiederverwendung (USB, WLAN), `connect_silent`, `connect_if_not_connected` wartet, einmalige Auswertung der Startmeldung |
+| `proggen/M07_COM_Port_New.py` | 1.25 | gemeinsame Sperre, erneute Prüfung der Hauptverbindung nach dem Warten, `_Main_Connection` nur nach dem Handshake |
+| `proggen/M07_COM_Port.py` | 1.17 | `Get_Arduino_Baudrate` und `DetectArduino` unter der Anschluss-Sperre; Autorenzeile |
+| `KI_prompt/KI_ENTWICKLUNG_Prompt.md` | 1.02 | Autorenregel (git-Benutzername und Tabelle Realnamen) |
+| `test_single_connection.py` | 1.00 | neu: 14 Tests (parallele Aufrufe, Wiederverwendung, Sperre, Reihenfolge, WLAN) |
+| `install/BETATEST_Checkliste.md` | 4.20 | Punkte 404 bis 406 |
+
+**Tests:** `test_single_connection.py` (14 Tests, bestanden): zehn Threads verbinden gleichzeitig, der Anschluss wird einmal geöffnet (Ersatz-Anschluss lehnt ein zweites Öffnen wie Windows mit `PermissionError` ab); Wiederverwendung USB und WLAN; stilles und normales Verbinden gleichzeitig; Sperre gegenüber einer Abfrage; gegenläufige Reihenfolge ohne Stillstand; Timeout beim Schließen nach Schreibfehler.
+
+**Nicht geprüft:** echte Hardware (Pico, ESP32, Nano), Oberfläche (Knopf, Statuszeile, Strg+C in der Konsole), `M07_COM_Port_New` mit der Excel-Schicht, Hochladen mit PlatformIO oder esptool (läuft außerhalb der Sperre: ein Autoconnect währenddessen könnte den Anschluss belegen), `_DetectArduino_once` tauscht weiterhin `controller.arduino` aus. `test_hardware_dialog.py` hatte schon vorher vier Fehler (`_info` fehlt), unabhängig von dieser Änderung.
 
 ## 5.41 (2026-11-26), Bibliothek MobaLedLib 3.6.0: README übernommen
 
