@@ -71,7 +71,7 @@ Das Makro `Logic(Erg, A AND B OR …)` und `Create_Result` sind unverändert; de
 * **Firmware-Auswahl:** nach Plattform gruppiert (Überschrift = Name aus `platforms`, dann `devices`, sonst die Plattform), Liste höher und breiter; die Geräteauswahl wählt ein Gerät derselben Plattform vor, zeigt das Bild aus `platforms` und „Unbekannte Ports“ ist zunächst aus.
 * **Identitätszeile `~MLLINFO`** wird tolerant gelesen (`Parse_Kv`: unbekannte Schlüssel ignoriert, Groß-/Kleinschreibung, Anführungszeichen, Komma/Semikolon).
 * **LNet:** Wechsel des Protokolls auf LNet zeigt den Lizenzdialog, die Bestätigung gilt je Blatt (`esp32_options['lnet_license']`), steht nicht in der PGF-Datei und wird beim Kopieren eines Blatts nicht übernommen.
-* **Serial Monitor:** ein Verbindungsknopf mit der Statusanzeige des zentralen Knopfs; die Portauswahl zeigt Typ und Untertyp nach der USB-Kennung (CH340, CP2102, Pico ...).
+* **Serial Monitor:** ein Verbindungsknopf mit der Statusanzeige des zentralen Knopfs; er liest nur mit (`connect_monitor`: kein `#?`, keine Abfrage am Gerät, kein Fehlerdialog „Falsche oder keine Antwort“); die Portauswahl zeigt Typ und Untertyp nach der USB-Kennung (CH340, CP2102, Pico ...).
 
 | Datei | Version | Änderung |
 |-|-|-|
@@ -82,8 +82,9 @@ Das Makro `Logic(Erg, A AND B OR …)` und `Create_Result` sind unverändert; de
 | `_web/web_form_options.py` | 1.79 | Protokolle aus `devices`, LNet-Bestätigung |
 | `proggen/M07_COM_Port_New.py` | 1.29 | `Parse_Kv` |
 | `headless/headless_pico.py` | 1.03 | Plattform je Firmware, Sortierung |
-| `_web/web_serial.py` | 1.21 | Typ und Untertyp nach USB-Kennung |
-| `_web/web_serial_page.py` | 1.03 | ein Verbindungsknopf |
+| `_web/web_serial.py` | 1.22 | Typ und Untertyp nach USB-Kennung, `connect_monitor` |
+| `_web/web_serial_page.py` | 1.04 | ein Verbindungsknopf, nur Mitlesen |
+| `test_monitor_connect.py` | 1.00 | neu |
 | `webmobaledlib.py` | 5.52 | Kopieren ohne LNet-Bestätigung, Serial Monitor |
 | `test_port_labels.py` | 1.00 | neu |
 

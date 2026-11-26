@@ -1,8 +1,8 @@
-# Datei-Version: 1.21 (2026-11-26) - web_serial.py
+# Datei-Version: 1.22 (2026-11-26) - web_serial.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_serial.py
 # Path:           _web/web_serial.py
-# Version:        1.21
+# Version:        1.22
 # Last Update:    2026-11-26
 # Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
@@ -17,6 +17,7 @@
 #   1.07  2026-11-14  ESP32: Verbindung ueber WLAN mit Anmeldung per HMAC (Port 2323, connect_esp32); Schreibfehler schliesst nur die eigene Verbindung (Beitrag des Fork-Entwicklers)
 #   1.08  2026-11-14  TcpPort: ungueltiger Hostname (UnicodeError, "label too long") wird als OSError gemeldet statt abzustuerzen
 #   1.09  2026-11-14  Automatisches Verbinden (ohne Anschlussangabe): ist fuer das Blatt eine ESP32-WLAN-Verbindung eingetragen (wifi_target_provider), wird zuerst WLAN versucht, sonst USB; connect(wlan=False) erzwingt USB
+#   1.22  2026-11-26  connect_monitor: Verbinden nur zum Mitlesen (Serial Monitor): der Anschluss wird geoeffnet und gelesen, es gibt keine Abfrage am Geraet (kein '#?', kein '#X'); der Fehlerdialog 'Falsche oder keine Antwort vom Geraet' entfaellt. Zeilen mit '# v1.22'
 #   1.21  2026-11-26  Auswahl des Anschlusses im Serial Monitor zeigt bekannte Typen (Nano/Uno, ESP32, Pico, andere MobaLedLib Geraete laut ~MLLINFO) und den Untertyp nach der USB-Kennung (CH340, CP2102, FT232, Pico ...): list_serial_ports_typed, describe_port, usb_subtype. Zeilen mit '# v1.21'
 #   1.10  2026-11-14  connect_if_not_connected (Testtasten, DCC-Tastatur, Z21 ...) versucht auch mit Anschlussangabe zuerst die eingetragene ESP32-WLAN-Verbindung
 #   1.11  2026-11-16  Protokoll: Zeilen der Lichtmaschine (Empfang) werden mit Level DEBUG protokolliert, die Startmeldung mit der Auswertung (LEDs je Kanal, Summe, Version) mit Level INFO
@@ -740,6 +741,34 @@ class SerialMixin:
                   "Fehler beim Lesen der Antwort des Geräts")  # v1.16
         return False  # v1.20
 
+    def connect_monitor(self, port):  # v1.22
+        """Serial Monitor: den Anschluss nur oeffnen und mitlesen. Anders als connect() fragt es das Geraet nicht ab ('#?' mit Pruefung der Antwort LEDs_AutoProg): es kann jedes Geraet
+        sein, auch eines ohne MobaLedLib-Programm oder mit einem anderen. Rueckgabe True, wenn die Verbindung steht."""
+        port = str(port or "").strip()
+        if port.isdigit():
+            port = "COM" + port
+        if not port or port.upper() in ("NO DEVICE", "COM?"):
+            self._msg("Es ist kein Port ausgewählt.", "Verbinden")
+            return False
+        with self._conn_lock:
+            if self._is_connected_to(port):
+                return True
+            if self.is_connection_open():
+                self.disconnect()
+            self.ARDUINO_IP = False
+            self._set_connect_status(tr('Versuch sich mit dem Gerät am Port ') + port + " zu verbinden ...", "red")
+            self.monitor_only = True
+            try:
+                status, err = self._open_and_handshake(port)
+            finally:
+                self.monitor_only = False
+        if status == "ok":
+            return True
+        self._fail_connect()
+        if status == "open_error":
+            self._msg("Der Port {} konnte nicht geöffnet werden.".format(port), tr("Fehler beim Öffnen der Verbindung"))
+        return False
+
     def _is_connected_to(self, target, via_ip=False):  # v1.20
         """Ist schon eine fertig aufgebaute Verbindung zu diesem Anschluss (COM7, /dev/ttyUSB0) bzw. dieser IP-Adresse offen? ARDUINO_current_portname wird erst nach dem Handshake gesetzt."""  # v1.20
         return (self.is_connection_open() and bool(self.ARDUINO_IP) == bool(via_ip)  # v1.20
@@ -760,6 +789,13 @@ class SerialMixin:
             except BaseException as e:                    # noqa: BLE001
                 logger.info("Port %s nicht zu oeffnen: %s", port, e)
                 return "open_error", e  # v1.20
+
+            if getattr(self, "monitor_only", False):  # v1.22: Serial Monitor: nur mitlesen, keine Abfrage am Geraet
+                self.ARDUINO_current_portname = port
+                self.ARDUINO_status = "Connected"
+                self._set_connect_status(tr('Verbunden mit ') + port + " - EFFECT Mode", "green")  # derselbe Text wie beim zentralen Verbinden
+                self._start_reader()
+                return "ok", None
 
             time.sleep(1)
             self.send_to_ARDUINO_init_buffer(immediatly=True)

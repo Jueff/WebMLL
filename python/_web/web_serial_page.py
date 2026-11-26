@@ -1,5 +1,6 @@
-# Datei-Version: 1.03 (2026-11-26) - web_serial_page.py
+# Datei-Version: 1.04 (2026-11-26) - web_serial_page.py
 # History of Change:
+#   1.04  2026-11-26  Der Serial Monitor liest nur mit: Verbinden oeffnet den Anschluss ohne Abfrage am Geraet (ctrl.connect_monitor, kein '#?'), auch fuer Geraete ohne das MobaLedLib-Programm LEDs_AutoProg. Zeilen mit '# v1.04'
 #   1.03  2026-11-26  Verbinden und Trennen sind ein Knopf wie der zentrale Verbindungsknopf (rot: Mit Lichtmaschine verbinden, gruen: Trennen) und die Statusanzeige zeigt denselben Text wie dort ('Verbunden mit Pro/COM3 - EFFECT Mode'). Ohne Verbindung wird mit dem Anschluss der Auswahl verbunden, wenn er vom Anschluss des Blatts abweicht, sonst wie beim zentralen Knopf. Zeilen mit '# v1.03'
 #   1.02  2026-11-26  Die Auswahl des Anschlusses zeigt bekannte Typen und den Untertyp nach der USB-Kennung (zum Beispiel 'COM3 – ESP32 (CP2102, 10C4:EA60)'); der Wert bleibt der Name des Anschlusses. Zeilen mit '# v1.02'
 """Web-Version der SerialMonitorPage (Registerkarte "Serial Monitor").
@@ -56,14 +57,13 @@ def build(ctrl, run_command, connect_ui=None):  # v1.03: connect_ui = {toggle, s
                 connected = bool(ctrl.is_connection_open())
             except Exception:                                  # noqa: BLE001
                 connected = False
-            if "toggle" not in cui:                            # ohne zentralen Knopf (Tests): einfach verbinden oder trennen
-                await (run_command(lambda: ctrl.disconnect(), "Trennen") if connected else run_command(lambda: ctrl.connect(port_sel.value), "Verbinden"))()
+            if connected:                                      # trennen: genau die Logik des zentralen Knopfs (trennen und merken), ohne Knopf einfach trennen
+                await (cui["toggle"]() if "toggle" in cui else run_command(lambda: ctrl.disconnect(), "Trennen")())
                 return
-            sel, sheet = str(port_sel.value or "").strip(), str(cui["sheet_port"]() or "").strip()
-            if not connected and sel and sel.upper() != sheet.upper():   # anderer Anschluss gewaehlt als im Blatt: der Serial Monitor verbindet damit
-                await run_command(lambda: ctrl.connect(sel), "Verbinden")()
-                return
-            await cui["toggle"]()                              # sonst genau die Logik des zentralen Knopfs (trennen und merken, verbinden mit allen Pruefungen)
+            sel = str(port_sel.value or "").strip()
+            if not sel and "sheet_port" in cui:
+                sel = str(cui["sheet_port"]() or "").strip()   # nichts gewaehlt: der Anschluss des Blatts
+            await run_command(lambda: ctrl.connect_monitor(sel), "Verbinden")()  # v1.04: nur mitlesen, keine Abfrage am Geraet
 
         conn_btn = ui.button(text_off, on_click=toggle).props("unelevated no-caps dense color=negative").classes("mll-connect")  # v1.03
         status = ui.label("").classes("text-caption").style("white-space: nowrap")  # v1.03: wie die Statusanzeige neben dem zentralen Knopf
