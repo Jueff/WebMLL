@@ -1,12 +1,15 @@
-# Datei-Version: 1.76 (2026-11-26) - web_form_options.py
+# Datei-Version: 1.79 (2026-11-26) - web_form_options.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_form_options.py
 # Path:           _web/web_form_options.py
-# Version:        1.76
+# Version:        1.79
 # Last Update:    2026-11-26
 # Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
 # History of Change:
+#   1.79  2026-11-26  Wechsel des Protokolls auf LNet: der Dialog LNet Lizenzbestimmungen (private, nicht-kommerzielle Nutzung, LocoNet Personal Edition) muss bestaetigt werden; bei Abbrechen bleibt das bisherige Protokoll. Die Bestaetigung gilt je Blatt (esp32_options['lnet_license'], wird mit dem Blatt gesichert). Zeilen mit '# v1.79'
+#   1.78  2026-11-26  Reiter Lichtmaschine, Einstellungen: die erlaubten Protokolle kommen aus der Einstellung protocols in csv/Lichtmaschinen_prop.json (web_startpage.protocols_for_platform: Vereinigung der Lichtmaschinen der Plattform); ist die Plattform dort nicht eingetragen, gilt wie bisher Platform_Parameters. Zeilen mit '# v1.78'
+#   1.77  2026-11-26  Firmware installieren: die Plattform der gewaehlten Firmware geht an die Geraeteauswahl (ein Geraet derselben Plattform wird bevorzugt vorgewaehlt). Zeilen mit '# v1.77'
 #   1.76  2026-11-26  Firmware installieren (Pico): der Anschluss wird mit der Geraeteauswahl der Lichtmaschine gewaehlt (web_form_comport 1.45, SelectPicoDevice) statt mit dem eigenen kleinen Dialog; nur Pico-Geraete, auch unbekannte und andere MobaLedLib Geraete sind waehlbar. Zeilen mit '# v1.76'
 #   1.75  2026-11-26  Version 5.49 (Issue 75, Juergen): Menue Werkzeuge: die Reiter Entwicklungsumgebung und Update (Wartung) und Firmware Installation stehen nicht mehr in den Hardware Optionen, sondern oeffnen als eigene Fenster ueber Werkzeuge -> Wartung und Werkzeuge -> Firmware installieren (VIEW, Show(view=...))
 #   1.74  2026-11-26  Wurde der COM Port der Lichtmaschine in der Hardwaresuche (Geraeteauswahl) geaendert, verbindet das Programm nach dem Schliessen der Optionen automatisch (Einstellung AutoConnect); eine Verbindung zum alten Anschluss wird vorher getrennt. Zeilen mit '# v1.74'
@@ -1001,7 +1004,14 @@ def make_class(Base):
             # if cur_pid and cur_pid not in pids:  # v1.67: das eingestellte Protokoll bleibt sichtbar, damit es umgestellt werden kann  # v1.68 (entfallen)
             # proto_hint = tr("Dieses Protokoll wird von der gewählten Hardware nicht unterstützt. Bitte auf {liste} umstellen.", liste=", ".join(pids))  # v1.67  # v1.68 (entfallen)
             # pids.insert(0, cur_pid)  # v1.67  # v1.68 (entfallen)
-            pids = [p for p in ("DCC", "LNet", "CAN", "Selectrix") if _supports(p)] or ["DCC"]  # v1.68: Selectrix gehoert dazu, der Wechsel rechnet die Adressen um
+            # pids = [p for p in ("DCC", "LNet", "CAN", "Selectrix") if _supports(p)] or ["DCC"]  # v1.68: Selectrix gehoert dazu, der Wechsel rechnet die Adressen um  # v1.78 (entfallen)
+            allowed = None  # v1.78: Protokolle laut csv/Lichtmaschinen_prop.json (protocols)
+            try:  # v1.78
+                from _web import web_startpage as _SP  # v1.78
+                allowed = _SP.protocols_for_platform({M02.HT_AM328: "AM328", M02.HT_ESP32: "ESP32", M02.HT_PICO: "PICO"}.get(bt))  # v1.78
+            except Exception:                                      # noqa: BLE001  # v1.78
+                logger.debug("Protokolle aus Lichtmaschinen_prop.json nicht lesbar", exc_info=True)  # v1.78
+            pids = (list(allowed) if allowed is not None else [p for p in ("DCC", "LNet", "CAN", "Selectrix") if _supports(p)]) or ["DCC"]  # v1.68  # v1.78: erst die Einstellung protocols, sonst Platform_Parameters
             proto_hint = ""  # v1.68
             if cur_pid and cur_pid not in pids:  # v1.68: das eingestellte Protokoll bleibt sichtbar, damit es umgestellt werden kann
                 proto_hint = tr("Dieses Protokoll wird von der gewählten Hardware nicht unterstützt. Bitte auf {liste} umstellen.", liste=", ".join(pids))  # v1.68
@@ -1216,11 +1226,32 @@ def make_class(Base):
                 self.Change_Board(False, self.boardlist[self.rb_res["_R"].get()])
                 self._web_board_changed(False)  # v1.23
 
+        def _web_lnet_license(self):  # v1.79
+            """Dialog LNet Lizenzbestimmungen (UserForm_ConfirmLicense), wenn das aktive Blatt sie noch nicht bestaetigt hat. True: bestaetigt (jetzt oder frueher)."""
+            ws = P01.ActiveSheet  # v1.79
+            opts = dict(getattr(ws, "esp32_options", None) or {})  # v1.79
+            if opts.get("lnet_license"):  # v1.79
+                return True  # v1.79
+            try:  # v1.79
+                import proggen.F00_mainbuttons as F00_  # v1.79
+                confirmed = bool(F00_.UserForm_ConfirmLicense.ShowForm())  # v1.79
+            except Exception:                                      # noqa: BLE001  # v1.79
+                logger.exception("Optionen: Lizenzdialog LNet nicht angezeigt")  # v1.79
+                confirmed = False  # v1.79
+            if confirmed:  # v1.79
+                opts["lnet_license"] = True  # v1.79
+                ws.esp32_options = opts  # v1.79
+            return confirmed  # v1.79
+
         def _web_set_protocol(self, old_pid, vals):  # v1.68
             """Protokoll des Blattes umstellen. Zwischen Selectrix und DCC/LNet/CAN aendern sich die Spalten: dann werden die Adressen umgerechnet, mit vorheriger Rueckfrage,
             wenn das Blatt Adressen (keine Variablen) enthaelt. Antwort Nein: das Protokoll bleibt, wie es war."""
             from headless import headless_protocol_switch as PS  # v1.68
             new_pid = vals["protocol"]  # v1.68
+            if new_pid == "LNet" and old_pid != "LNet" and not self._web_lnet_license():  # v1.79: erst die Lizenzbestimmungen bestaetigen lassen (je Blatt einmal)
+                vals["protocol"] = old_pid  # v1.79
+                logger.info("Optionen: Wechsel des Protokolls %s -> LNet abgebrochen (Lizenzbestimmungen nicht bestaetigt)", old_pid)  # v1.79
+                return  # v1.79
             if not PS.crosses(old_pid, new_pid):  # v1.68: DCC, LNet und CAN haben dieselben Spalten
                 P01.CellDict[M02.SH_VARS_ROW, M02.PAGE_ID_COL] = new_pid  # v1.49
                 M25.Page_ID = new_pid  # v1.49
@@ -1502,7 +1533,8 @@ def make_class(Base):
                         connected = str(getattr(ctrl_, "ARDUINO_current_portname", "") or "").strip()  # v1.47
                 except Exception:                                  # noqa: BLE001  # v1.47
                     connected = ""  # v1.47
-                serial_port = F00_.Select_COM_Port_UserForm.SelectPicoDevice(M09.Get_Language_Str("Geräteauswahl", False, M09.xlWhole), _FW_PORT["port"])  # v1.76
+                serial_port = F00_.Select_COM_Port_UserForm.SelectPicoDevice(M09.Get_Language_Str("Geräteauswahl", False, M09.xlWhole), _FW_PORT["port"],
+                                                                         next((v.get("platform", "") for g_ in groups for v in g_["versions"] if v["file"] == os.path.basename(path)), ""))  # v1.76  # v1.77: Plattform der Firmware
                 if not serial_port:  # v1.47
                     return  # v1.47
                 _FW_PORT["port"] = serial_port  # v1.47

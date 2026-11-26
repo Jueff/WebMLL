@@ -1,5 +1,5 @@
 Datei-Version: 1.129 (2026-11-26) - HOC_intern.md
-Stand: Version 5.50
+Stand: Version 5.52
 
 # webMobaLedLib: History of Change (intern, ausführlich)
 
@@ -61,6 +61,31 @@ SwitchC bewusst nicht aufgenommen (nicht gewünscht); der Name lässt sich einti
 | Wiki `pg_tabelle.txt` | 1.14 | Abschnitt „Die Funktion Logic“; `seiten_update` 1.14 |
 
 Das Makro `Logic(Erg, A AND B OR …)` und `Create_Result` sind unverändert; der Baukasten erzeugt denselben Text. Nicht im Browser geprüft, nur die reinen Funktionen (Test mit 11 Ausdrücken).
+
+## 5.52 (2026-11-26), Plattformen, LNet-Bestätigung, Serial Monitor, Firmware-Auswahl
+
+**Wunsch (Jürgen):** Firmware nach Plattform gruppieren und das passende Gerät vorwählen, Plattformen anderer MobaLedLib Geräte in der JSON-Datei, Bestätigung der LNet-Lizenz beim Wechsel, ein Verbindungsknopf im Serial Monitor.
+
+**Umsetzung:**
+* **Lichtmaschinen_prop.json:** `devices` (Lichtmaschinen, Feld `protocols` statt `centrals`) und `platforms` (Plattformen anderer MobaLedLib Geräte: `platform`, `name`, `text`, `image`; Einträge `MLL512V1`, `MLLS88GWV1`). Kacheln: leere Fläche, wenn `image` leer ist oder die Datei fehlt. Die Hardware Optionen bieten die Protokolle aus `devices` an (`protocols_for_platform`).
+* **Firmware-Auswahl:** nach Plattform gruppiert (Überschrift = Name aus `platforms`, dann `devices`, sonst die Plattform), Liste höher und breiter; die Geräteauswahl wählt ein Gerät derselben Plattform vor, zeigt das Bild aus `platforms` und „Unbekannte Ports“ ist zunächst aus.
+* **Identitätszeile `~MLLINFO`** wird tolerant gelesen (`Parse_Kv`: unbekannte Schlüssel ignoriert, Groß-/Kleinschreibung, Anführungszeichen, Komma/Semikolon).
+* **LNet:** Wechsel des Protokolls auf LNet zeigt den Lizenzdialog, die Bestätigung gilt je Blatt (`esp32_options['lnet_license']`), steht nicht in der PGF-Datei und wird beim Kopieren eines Blatts nicht übernommen.
+* **Serial Monitor:** ein Verbindungsknopf mit der Statusanzeige des zentralen Knopfs; die Portauswahl zeigt Typ und Untertyp nach der USB-Kennung (CH340, CP2102, Pico ...).
+
+| Datei | Version | Änderung |
+|-|-|-|
+| `csv/Lichtmaschinen_prop.json` | 1.06 | `devices`, `platforms`, `protocols` |
+| `_web/web_startpage.py` | 1.13 | `load_platforms`, `platform_name`, `platform_image`, `protocols_for_platform` |
+| `_web/web_form_firmware.py` | 1.06 | nach Plattform gruppiert, Layout |
+| `_web/web_form_comport.py` | 1.51 | Vorwahl nach Plattform, Bild aus `platforms` |
+| `_web/web_form_options.py` | 1.79 | Protokolle aus `devices`, LNet-Bestätigung |
+| `proggen/M07_COM_Port_New.py` | 1.29 | `Parse_Kv` |
+| `headless/headless_pico.py` | 1.03 | Plattform je Firmware, Sortierung |
+| `_web/web_serial.py` | 1.21 | Typ und Untertyp nach USB-Kennung |
+| `_web/web_serial_page.py` | 1.03 | ein Verbindungsknopf |
+| `webmobaledlib.py` | 5.52 | Kopieren ohne LNet-Bestätigung, Serial Monitor |
+| `test_port_labels.py` | 1.00 | neu |
 
 ## 5.50 (2026-11-26), Selectrix Channel 1 bis 99, COM Port Hinweis, Firmware Geräteauswahl, Log-Fenster
 

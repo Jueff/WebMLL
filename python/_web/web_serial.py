@@ -1,8 +1,8 @@
-# Datei-Version: 1.20 (2026-11-26) - web_serial.py
+# Datei-Version: 1.21 (2026-11-26) - web_serial.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_serial.py
 # Path:           _web/web_serial.py
-# Version:        1.20
+# Version:        1.21
 # Last Update:    2026-11-26
 # Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
@@ -17,6 +17,7 @@
 #   1.07  2026-11-14  ESP32: Verbindung ueber WLAN mit Anmeldung per HMAC (Port 2323, connect_esp32); Schreibfehler schliesst nur die eigene Verbindung (Beitrag des Fork-Entwicklers)
 #   1.08  2026-11-14  TcpPort: ungueltiger Hostname (UnicodeError, "label too long") wird als OSError gemeldet statt abzustuerzen
 #   1.09  2026-11-14  Automatisches Verbinden (ohne Anschlussangabe): ist fuer das Blatt eine ESP32-WLAN-Verbindung eingetragen (wifi_target_provider), wird zuerst WLAN versucht, sonst USB; connect(wlan=False) erzwingt USB
+#   1.21  2026-11-26  Auswahl des Anschlusses im Serial Monitor zeigt bekannte Typen (Nano/Uno, ESP32, Pico, andere MobaLedLib Geraete laut ~MLLINFO) und den Untertyp nach der USB-Kennung (CH340, CP2102, FT232, Pico ...): list_serial_ports_typed, describe_port, usb_subtype. Zeilen mit '# v1.21'
 #   1.10  2026-11-14  connect_if_not_connected (Testtasten, DCC-Tastatur, Z21 ...) versucht auch mit Anschlussangabe zuerst die eingetragene ESP32-WLAN-Verbindung
 #   1.11  2026-11-16  Protokoll: Zeilen der Lichtmaschine (Empfang) werden mit Level DEBUG protokolliert, die Startmeldung mit der Auswertung (LEDs je Kanal, Summe, Version) mit Level INFO
 #   1.12  2026-11-19  Stilles Verbinden (quiet): keine Dialoge bei Fehlern (Automatisch verbinden beim Start und nach dem Hochladen); dtr_override fuer einen gefundenen Pico (Issue 20)
@@ -186,6 +187,69 @@ def list_serial_ports() -> list[tuple[str, str]]:
     try:
         from serial.tools import list_ports
         return [(p.device, p.description or "") for p in list_ports.comports()]
+    except Exception:                                     # noqa: BLE001
+        logger.debug("Portliste nicht verfuegbar", exc_info=True)
+        return []
+
+
+# ------------------------------------------------------------------------------------------ Typ und Untertyp eines Anschlusses (v1.21)
+USB_SUBTYPES = {  # (VID, PID) -> Untertyp; PID None = jedes Geraet dieses Herstellers
+    (0x1A86, 0x7523): "CH340", (0x1A86, 0x7522): "CH340", (0x1A86, 0x5523): "CH341", (0x1A86, 0x55D4): "CH9102", (0x1A86, None): "CH34x",
+    (0x10C4, 0xEA60): "CP2102", (0x10C4, 0xEA70): "CP2105", (0x10C4, 0xEA71): "CP2108", (0x10C4, None): "CP210x",
+    (0x0403, 0x6001): "FT232R", (0x0403, 0x6010): "FT2232", (0x0403, 0x6014): "FT232H", (0x0403, 0x6015): "FT231X", (0x0403, None): "FTDI",
+    (0x2341, None): "Arduino", (0x2A03, None): "Arduino",
+    (0x2E8A, 0x000A): "Seriell", (0x2E8A, 0x0003): "Bootmodus", (0x2E8A, 0x0005): "MicroPython", (0x2E8A, None): "Raspberry Pi",
+    (0x239A, 0x813D): "Adafruit Pico", (0x303A, None): "Espressif",
+}
+
+
+def usb_subtype(vid, pid) -> str:
+    """Untertyp nach der USB-Kennung (zum Beispiel CH340, CP2102, FT232R, Seriell beim Pico); '' wenn die Kennung nicht bekannt ist"""
+    if vid is None:
+        return ""
+    return USB_SUBTYPES.get((vid, pid)) or USB_SUBTYPES.get((vid, None)) or ""
+
+
+def port_type(p) -> str:
+    """Bekannter Typ des Anschlusses: 'Nano/Uno', 'ESP32', 'Pico' oder der type eines anderen MobaLedLib Geraets laut ~MLLINFO (PICOSERVO ...); '' wenn unbekannt.
+    Gleiche Regeln wie M07_COM_Port.Classify_Port (Hersteller-Kennung und Beschreibung)."""
+    vid = getattr(p, "vid", None)
+    desc = str(getattr(p, "description", "") or "")
+    hwid = str(getattr(p, "hwid", "") or "").upper()
+    import sys
+    other = getattr(sys.modules.get("proggen.M07_COM_Port_New"), "OTHER_TYPES", {}) or {}
+    if str(getattr(p, "device", "")) in other:
+        return str(other[str(p.device)])
+    if vid == 0x2E8A or "VID:PID=2E8A:" in hwid or "VID:PID=239A:813D" in hwid:
+        return "Pico"
+    if vid == 0x10C4 or "CP210x" in desc or "CP2102 USB to UART" in desc:
+        return "ESP32"
+    if vid in (0x1A86, 0x0403, 0x2341, 0x2A03) or "CH340" in desc or "Arduino" in desc or "FT232" in desc or "USB2.0-Ser" in desc or "VID:PID=0403:" in hwid:
+        return "Nano/Uno"
+    return ""
+
+
+def describe_port(p) -> str:
+    """Text fuer die Auswahl: 'COM3 – ESP32 (CP2102, 10C4:EA60)'. Ohne bekannten Typ die Beschreibung des Systems, mit USB-Kennung wenn es eine gibt."""
+    vid, pid = getattr(p, "vid", None), getattr(p, "pid", None)
+    usb = ("%04X:%04X" % (vid, pid or 0)) if vid is not None else ""
+    typ = port_type(p)
+    sub = usb_subtype(vid, pid)
+    details = ", ".join(x for x in (sub, usb) if x)
+    if typ:
+        text = typ + (" (" + details + ")" if details else "")
+    else:
+        desc = str(getattr(p, "description", "") or "").strip()
+        desc = "" if desc.lower() in ("n/a", str(getattr(p, "device", "")).lower()) else desc
+        text = " ".join(x for x in (desc, ("(" + usb + ")") if usb else "") if x)
+    return (str(p.device) + " – " + text) if text else str(p.device)
+
+
+def list_serial_ports_typed() -> list[tuple[str, str]]:
+    """[(Port, Text)] mit bekanntem Typ und Untertyp (describe_port); Reihenfolge wie list_serial_ports"""
+    try:
+        from serial.tools import list_ports
+        return [(p.device, describe_port(p)) for p in list_ports.comports()]
     except Exception:                                     # noqa: BLE001
         logger.debug("Portliste nicht verfuegbar", exc_info=True)
         return []

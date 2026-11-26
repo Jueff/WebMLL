@@ -1,4 +1,7 @@
-# Datei-Version: 1.01 (2026-10-13) - web_serial_page.py
+# Datei-Version: 1.03 (2026-11-26) - web_serial_page.py
+# History of Change:
+#   1.03  2026-11-26  Verbinden und Trennen sind ein Knopf wie der zentrale Verbindungsknopf (rot: Mit Lichtmaschine verbinden, gruen: Trennen) und die Statusanzeige zeigt denselben Text wie dort ('Verbunden mit Pro/COM3 - EFFECT Mode'). Ohne Verbindung wird mit dem Anschluss der Auswahl verbunden, wenn er vom Anschluss des Blatts abweicht, sonst wie beim zentralen Knopf. Zeilen mit '# v1.03'
+#   1.02  2026-11-26  Die Auswahl des Anschlusses zeigt bekannte Typen und den Untertyp nach der USB-Kennung (zum Beispiel 'COM3 – ESP32 (CP2102, 10C4:EA60)'); der Wert bleibt der Name des Anschlusses. Zeilen mit '# v1.02'
 """Web-Version der SerialMonitorPage (Registerkarte "Serial Monitor").
 
 Zeigt, was der Arduino/Pico sendet (mit Uhrzeit), und schickt Eingaben dorthin. Dazu eine Zeile zum Verbinden und
@@ -9,14 +12,14 @@ from __future__ import annotations
 import logging
 import time
 
-from _web.web_serial import list_serial_ports
+from _web.web_serial import list_serial_ports_typed  # v1.02
 
 logger = logging.getLogger(__name__)
 
 FG_CLASSES = {"green": "text-green-8", "red": "text-red-8", "orange": "text-orange-8"}
 
 
-def build(ctrl, run_command):
+def build(ctrl, run_command, connect_ui=None):  # v1.03: connect_ui = {toggle, status, sheet_port, texts} aus webmobaledlib (der zentrale Verbindungsknopf)
     """Baut die Seite in den aktuellen Container. run_command(func, label) ist der Befehlsrahmen aus webmobaledlib
     (fuehrt func im Hintergrund-Thread aus und aktualisiert danach die Anzeige)."""
     from nicegui import ui
@@ -24,32 +27,46 @@ def build(ctrl, run_command):
     macro = ctrl.MacroDef.data.get("SerialMonitorPage", {}) if getattr(ctrl, "MacroDef", None) else {}
     title = macro.get("Title", "Serial Monitor")
     send_text = macro.get("Button_1", "Senden")
-    state = {"seq": 0}
+    state = {"seq": 0, "connected_shown": None}
+    cui = connect_ui or {}  # v1.03
+    text_off, text_on = cui.get("texts") or ("Mit Lichtmaschine verbinden", "Trennen")  # v1.03
 
     ui.label(title).classes("text-h6")
 
     # ---- Verbindung
     def port_options():
-        ports = [p for p, _ in list_serial_ports()]
+        ports = {p: label for p, label in list_serial_ports_typed()}  # v1.02: Anschluss -> Text mit Typ und Untertyp
         cur = str(ctrl.getConfigData("serportname") or "")
         if cur and cur not in ports:
-            ports.append(cur)
+            ports[cur] = cur
         return ports, cur
 
     options, current = port_options()
     with ui.row().classes("items-center gap-3 w-full"):
         port_sel = ui.select(options, value=current or None, label="Port (COM…, /dev/tty… oder IP:…)",
-                             new_value_mode="add-unique").props("dense outlined use-input").classes("w-80")
+                             new_value_mode="add-unique").props("dense outlined use-input").classes("w-[28rem]")  # v1.02: breiter fuer den Typ
 
         def refresh_ports():
             opts, cur = port_options()
             port_sel.set_options(opts, value=port_sel.value or cur or None)
 
         ui.button(icon="refresh", on_click=refresh_ports).props("flat round dense").tooltip("Portliste aktualisieren")
-        ui.button("Verbinden", on_click=run_command(lambda: ctrl.connect(port_sel.value), "Verbinden")
-                  ).props("color=primary dense no-caps")
-        ui.button("Trennen", on_click=run_command(lambda: ctrl.disconnect(), "Trennen")).props("outline dense no-caps")
-        status = ui.label("").classes("text-bold")
+        async def toggle(_=None):  # v1.03: ein Knopf wie der zentrale Verbindungsknopf: mit Verbindung trennen, ohne Verbindung verbinden
+            try:
+                connected = bool(ctrl.is_connection_open())
+            except Exception:                                  # noqa: BLE001
+                connected = False
+            if "toggle" not in cui:                            # ohne zentralen Knopf (Tests): einfach verbinden oder trennen
+                await (run_command(lambda: ctrl.disconnect(), "Trennen") if connected else run_command(lambda: ctrl.connect(port_sel.value), "Verbinden"))()
+                return
+            sel, sheet = str(port_sel.value or "").strip(), str(cui["sheet_port"]() or "").strip()
+            if not connected and sel and sel.upper() != sheet.upper():   # anderer Anschluss gewaehlt als im Blatt: der Serial Monitor verbindet damit
+                await run_command(lambda: ctrl.connect(sel), "Verbinden")()
+                return
+            await cui["toggle"]()                              # sonst genau die Logik des zentralen Knopfs (trennen und merken, verbinden mit allen Pruefungen)
+
+        conn_btn = ui.button(text_off, on_click=toggle).props("unelevated no-caps dense color=negative").classes("mll-connect")  # v1.03
+        status = ui.label("").classes("text-caption").style("white-space: nowrap")  # v1.03: wie die Statusanzeige neben dem zentralen Knopf
 
     # ---- Eingabe
     def send(_=None):
@@ -75,8 +92,20 @@ def build(ctrl, run_command):
         state["seq"] = seq
         for t, text in lines:
             log.push(time.strftime("%H:%M:%S", time.localtime(t)) + "  " + text.rstrip("\r\n"))
-        text, fg = getattr(ctrl, "connect_status", ("", "black"))
-        status.set_text(text)
-        status.classes(replace="text-bold " + FG_CLASSES.get(fg, ""))
+        if "status" in cui:  # v1.03: derselbe Text und dieselbe Farbe wie beim zentralen Verbindungsknopf
+            text, fg = cui["status"]()
+        else:
+            text, fg = getattr(ctrl, "connect_status", ("", "black"))
+        if status.text != text:
+            status.set_text(text)
+        status.classes(replace="text-caption " + FG_CLASSES.get(fg, ""))
+        try:  # v1.03: Knopf rot ohne Verbindung, gruen mit Verbindung
+            connected = bool(ctrl.is_connection_open())
+        except Exception:                                      # noqa: BLE001
+            connected = False
+        if state["connected_shown"] != connected:
+            state["connected_shown"] = connected
+            conn_btn.set_text(text_on if connected else text_off)
+            conn_btn.props("color=positive" if connected else "color=negative")
 
     ui.timer(0.2, poll)

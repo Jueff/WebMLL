@@ -1,9 +1,16 @@
 Datei-Version: 1.135 (2026-11-26) - HOC_Anwender.md
-Stand: Version 5.50
+Stand: Version 5.52
 
 # MobaLedLib Studio: Änderungen (Kurzfassung)
 
 Gilt ab Version 1.39. Neueste Version oben.
+
+## Version 5.52 (2026-11-26)
+
+Neue Funktionen:
+- Serial Monitor: ein Verbindungsknopf (rot: verbinden, grün: Trennen) mit derselben Statusanzeige wie der zentrale Knopf; die Portauswahl zeigt Typ und Untertyp nach der USB-Kennung.
+- Firmware installieren: die Liste ist nach Plattform gruppiert, die Geräteauswahl wählt ein Gerät derselben Plattform vor.
+- Beim Wechsel des Protokolls auf LNet müssen die Lizenzbestimmungen bestätigt werden (einmal je Blatt).
 
 ## Version 5.50 (2026-11-26)
 

@@ -264,6 +264,70 @@ class SheetTests(unittest.TestCase):
             hidden.user_hidden = False
             self.ws.Activate()
 
+    def options_form(self):
+        import proggen.F00_mainbuttons as F00
+        return F00, F00.UserForm_Options
+
+    def test_lnet_needs_license_confirmation_once_per_sheet(self):
+        F00, options = self.options_form()
+        asked = []
+        original = F00.UserForm_ConfirmLicense.ShowForm
+        F00.UserForm_ConfirmLicense.ShowForm = lambda: asked.append(1) or answers.pop(0)
+        answers = [False, True]
+        try:
+            vals = {"protocol": "LNet"}
+            options._web_set_protocol("DCC", vals)                                     # abgelehnt: das Protokoll bleibt
+            self.assertEqual((vals["protocol"], str(self.ws.tksheet.data[0][1]), len(asked)), ("DCC", "DCC", 1))
+            self.assertFalse((getattr(self.ws, "esp32_options", None) or {}).get("lnet_license"))
+            vals = {"protocol": "LNet"}
+            options._web_set_protocol("DCC", vals)                                     # bestaetigt: Wechsel und Merken
+            self.assertEqual((vals["protocol"], str(self.ws.tksheet.data[0][1]), len(asked)), ("LNet", "LNet", 2))
+            self.assertTrue(self.ws.esp32_options.get("lnet_license"))
+            options._web_set_protocol("LNet", {"protocol": "DCC"})                     # zurueck auf DCC: keine Frage
+            vals = {"protocol": "LNet"}
+            options._web_set_protocol("DCC", vals)                                     # wieder LNet: schon bestaetigt, keine Frage mehr
+            self.assertEqual((vals["protocol"], len(asked)), ("LNet", 2))
+        finally:
+            F00.UserForm_ConfirmLicense.ShowForm = original
+            options._web_set_protocol(str(self.ws.tksheet.data[0][1]), {"protocol": "DCC"})
+            self.ws.esp32_options = {k: v for k, v in (getattr(self.ws, "esp32_options", None) or {}).items() if k != "lnet_license"}
+
+    def test_lnet_confirmation_is_not_exported_or_imported(self):
+        """Die Bestaetigung gehoert zum Blatt im Programm: sie steht nicht in der PGF-Datei, und ein aus einer PGF-Datei angelegtes Blatt hat sie nicht."""
+        self.ws.esp32_options = {"lnet_license": True, "serial_cfg": True}
+        try:
+            path = os.path.join(tempfile.mkdtemp(prefix="mll_pgf_"), "lic.MLL_pgf")
+            self.assertTrue(getattr(self.M18, "__Save_SingleSheet_to_pgf")(path, self.ws, True))
+            with open(path, "rb") as fh:
+                text = fh.read().decode("utf-8", "replace").lower()
+            self.assertNotIn("lnet_license", text)
+            self.assertNotIn("esp32_options", text)
+            self.assertNotIn("serial_cfg", text)
+            name = "LizenzImport"
+            with open(path, "rb") as fh:
+                data = fh.read().decode("utf-8")
+            data = data.replace("Sheet:\tDCC\tDCC", "Sheet:\tDCC\t" + name)
+            with open(path, "wb") as fh:
+                fh.write(data.encode("utf-8"))
+            self.assertTrue(self.M18.Read_PGF(path, False))
+            imported = next(s for s in self.wb.sheets if s.Name == name)
+            self.assertFalse((getattr(imported, "esp32_options", None) or {}).get("lnet_license"))
+        finally:
+            self.ws.esp32_options = {}
+            self.ws.Activate()
+
+    def test_other_protocols_need_no_license(self):
+        F00, options = self.options_form()
+        original = F00.UserForm_ConfirmLicense.ShowForm
+        F00.UserForm_ConfirmLicense.ShowForm = lambda: self.fail("Lizenzdialog ohne LNet")
+        try:
+            vals = {"protocol": "CAN"}
+            options._web_set_protocol("DCC", vals)
+            self.assertEqual(vals["protocol"], "CAN")
+        finally:
+            F00.UserForm_ConfirmLicense.ShowForm = original
+            options._web_set_protocol("CAN", {"protocol": "DCC"})
+
     def test_widths_and_columns_shift(self):
         before = self.ws.tksheet.get_total_columns()
         PS.convert(self.ws, "Selectrix")
