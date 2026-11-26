@@ -1,9 +1,14 @@
-Datei-Version: 1.141 (2026-11-26) - HOC_Anwender.md
-Stand: Version 5.56
+Datei-Version: 1.142 (2026-11-26) - HOC_Anwender.md
+Stand: Version 5.57
 
 # MobaLedLib Studio: Änderungen (Kurzfassung)
 
 Gilt ab Version 1.39. Neueste Version oben.
+
+## Version 5.57 (2026-11-27)
+
+Neue Funktionen:
+- Das Programm erkennt, wenn die Verbindung abbricht (zum Beispiel USB ausgesteckt): Die Knöpfe werden rot, der Status zeigt „Verbindung verloren“ und im Seriellen Monitor steht eine Zeile dazu (nicht mit echtem Abziehen an allen Systemen geprüft).
 
 ## Version 5.56 (2026-11-26)
 

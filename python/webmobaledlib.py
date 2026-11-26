@@ -1,8 +1,8 @@
-# Datei-Version: 5.56 (2026-11-26) - webmobaledlib.py
+# Datei-Version: 5.57 (2026-11-27) - webmobaledlib.py
 # ----------------------------------------------------------------------------------------------
 # Name:           webmobaledlib.py
 # Path:           webmobaledlib.py
-# Version:        5.56
+# Version:        5.57
 # Last Update:    2026-11-26
 # Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
@@ -68,6 +68,7 @@
 #   5.46  2026-11-26  Juergen Winkler, Pull Request 76 (dort V5.42): Verbindung: Statusmeldung neben dem Knopf zeigt Typ und Anschluss (Nicht verbunden - Pro/COM3, Verbunden mit Pro/COM3 - EFFECT Mode); eine negative Zahl im Anschluss der Lichtmaschine des Blatts ist ein Hinweis fuer den Auto-Reconnect (zuerst dieser Anschluss, am Start und nach dem Wiederherstellen, keine Suche ueber alle Anschluesse); der Knopf Mit Lichtmaschine verbinden heisst mit Verbindung Trennen (Menue: Trennen); nach Wiederherstellen eines zwischengespeicherten Stands passt sich die Verbindung an Typ und Anschluss des Blatts an; Strg+C beendet ohne Fehlermeldung; eine Verbindung pro Geraet: gemeinsame Anschluss-Sperre fuer Verbinden, Abfragen der Geraeteauswahl und Erkennung, eine offene Verbindung zum selben Anschluss oder ESP32 wird wiederverwendet (web_serial 1.20, M07_COM_Port_New 1.25, M07_COM_Port 1.17, KI_ENTWICKLUNG_Prompt 1.02, test_single_connection.py)
 #   5.47  2026-11-26  Fehler behoben: Upload ohne Anschluss in der Tabelle brach mit "module 'vb2py.logger' has no attribute 'warning'" ab (M07_COM_Port 1.18: logger nach den Importen neu gesetzt)
 #   5.48  2026-11-26  Fehler behoben (Harold): steht im Anschluss der Tabelle -7 (von Excel gesetzt, Hinweis fuer den Auto-Reconnect), kam beim Setup uebertragen 'Es ist kein PICO an COM Port COM-7 angeschlossen'; jetzt gilt eine Zahl <= 0 als kein Anschluss und es wird der Anschluss der aktiven Verbindung benutzt (F00_mainbuttons 1.03, M07_COM_Port 1.19)
+#   5.57  2026-11-27  Verbindungsverlust (zum Beispiel USB abgezogen) wird erkannt: Knoepfe rot, Status Verbindung verloren, Zeile im Serial Monitor (web_serial 1.25). Zeilen mit '# v5.57'
 #   5.56  2026-11-26  Serial Monitor: DTR nach dem Geraet am Anschluss (Pico antwortet), beim Wechsel des Anschlusses zeigen Knopf und Status die Schritte (Nicht verbunden, Verbindungsaufbau, Verbunden); waehrend des Verbindungsaufbaus sind beide Verbindungsknoepfe (Kopfzeile und Serieller Monitor) grau, gesperrt und heissen Verbinden... (web_serial 1.24, web_serial_page 1.07). Zeilen mit '# v5.56'
 #   5.55  2026-11-26  Zusammenfuehrung mit 5.54 (haroldlinke/main): die Dateien von Pull Request 80 und den Folgeaenderungen (5.50 bis 5.53 der Arbeitskopie) behalten ihren Stand; in 5.54 standen mehrere Dateien auf einem aelteren Stand (zum Beispiel M07_COM_Port 1.16, web_serial 1.18, web_startpage 1.05). Siehe HOC_intern 5.55
 #   5.53  2026-11-26  Der Reiter heisst Serieller Monitor (vorher Serial Monitor); der Knopf dort heisst nur Verbinden (vorher Mit Lichtmaschine verbinden; web_serial_page 1.05, web_tabs, csv/Web_Languages.csv). Zeilen mit '# v5.53'
@@ -719,6 +720,7 @@ REQUIRED_FILES = {  # v1.75
     "_web/web_form_comport.py": "1.51", "_web/web_form_options.py": "1.79", "_web/web_form_firmware.py": "1.06", "_web/web_startpage.py": "1.13", "_web/web_serial.py": "1.22",  # v5.52
     "_web/web_serial_page.py": "1.07", "proggen/M07_COM_Port_New.py": "1.29", "headless/headless_pico.py": "1.03",  # v5.52
     "_web/web_serial.py": "1.24",  # v5.56
+    "_web/web_serial.py": "1.25",  # v5.57
 }  # v1.75
 FILE_PROBLEMS = []                                      # Zeilen der Abweichungen, gefuellt in main()  # v1.75
 
@@ -1846,7 +1848,8 @@ def font_scales(ctrl) -> dict:
 # VERSION = "5.51 (2026-11-26)"  # v5.51  # v5.52 (entfallen)
 # VERSION = "5.52 (2026-11-26)"  # v5.52  # v5.53 (entfallen)
 # VERSION = "5.53 (2026-11-26)"  # v5.53  # v5.56 (entfallen)
-VERSION = "5.56 (2026-11-26)"  # v5.56
+# VERSION = "5.56 (2026-11-26)"  # v5.56  # v5.57 (entfallen)
+VERSION = "5.57 (2026-11-27)"  # v5.57
 # VERSION = "4.09 (2026-11-19)"  # v3.64 (entfallen)
 # VERSION = "4.08 (2026-11-19)"  # v3.64 (entfallen)
 # VERSION = "4.07 (2026-11-19)"  # v3.64 (entfallen)

@@ -1,5 +1,5 @@
-Datei-Version: 1.136 (2026-11-26) - HOC_intern.md
-Stand: Version 5.56
+Datei-Version: 1.137 (2026-11-26) - HOC_intern.md
+Stand: Version 5.57
 
 # webMobaLedLib: History of Change (intern, ausführlich)
 
@@ -9,9 +9,26 @@ Pfade beziehen sich auf den Ordner `python`.
 
 ---
 
-## 5.56 (2026-11-26), Zusammenführung mit 5.54, Pull Request 80 und Folgeänderungen (Jürgen): Selectrix, Anschluss-Hinweis, Firmware, Plattformen, Serieller Monitor
+## 5.57 (2026-11-27), Verbindungsverlust erkennen; 5.56 (2026-11-26), Zusammenführung mit 5.54, Pull Request 80 und Folgeänderungen (Jürgen): Selectrix, Anschluss-Hinweis, Firmware, Plattformen, Serieller Monitor
 
 **Zusammenführung mit 5.54:** Die Dateien dieser Änderungen sind auf den Stand von Jürgen gebracht (in 5.54 standen mehrere Dateien auf einem älteren Stand, zum Beispiel `M07_COM_Port.py` 1.16, `web_serial.py` 1.18, `web_startpage.py` 1.05). Die Einträge darunter (5.52 und 5.50 der Arbeitskopie) beschreiben den Inhalt.
+
+### Teil 4 (Arbeitskopie 5.57): Verbindungsverlust erkennen
+
+**Wunsch (Jürgen):** Der Serielle Monitor soll erkennen, wenn die Schnittstelle geschlossen wird, zum Beispiel USB ausgesteckt.
+
+**Ursache:** Der Empfangsthread beendete sich beim Lesefehler, schloss die Verbindung aber nur bei WLAN (`TcpPort`). Bei USB blieb `self.arduino` stehen (pyserial lässt `is_open` nach dem Abziehen auf True), Knopf und Status zeigten weiter „verbunden“.
+
+**Änderung:** Wirft `read()` einen Fehler, ohne dass der Anwender getrennt hat (`stop` nicht gesetzt, `self.arduino is port`), ruft der Empfangsthread `_connection_lost(port)`: Protokoll (Warnung), Verbindung über `close_arduino_connection_after_write_error` schließen, Status „Verbindung verloren“ (rot) und die Zeile „*** Verbindung zu COMx verloren“ im Seriellen Monitor. Die Knöpfe werden durch den Zeitgeber rot („Verbinden“). Neue Texte in `Web_Languages.csv` (sieben Sprachen, mit `catalog_text` geprüft). Zwei neue Tests in `test_monitor_connect.py`.
+
+**Nicht geprüft:** Das Abziehen eines echten USB-Geräts unter Windows, Linux und macOS (andere Fehlertexte von pyserial; gefangen wird jede Ausnahme von `read()`). Ein Anschluss, der nach dem Abziehen nur leere Lesungen liefert, ohne Fehler zu werfen, wird nicht erkannt.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_serial.py` | 1.25 | `_connection_lost`, Lesefehler schließt auch bei USB |
+| `webmobaledlib.py` | 5.57 | Versionsliste |
+| `csv/Web_Languages.csv` | | zwei neue Texte |
+| `test_monitor_connect.py` | 1.01 | zwei Tests |
 
 ### Teil 3 (Arbeitskopie 5.55 und 5.56): Serieller Monitor, Verbindungsaufbau, Protokoll
 

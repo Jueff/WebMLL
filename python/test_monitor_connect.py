@@ -1,12 +1,13 @@
-# Datei-Version: 1.00 (2026-11-26) - test_monitor_connect.py
+# Datei-Version: 1.01 (2026-11-27) - test_monitor_connect.py
 # ----------------------------------------------------------------------------------------------
 # Name:           test_monitor_connect.py
 # Path:           test_monitor_connect.py
-# Version:        1.00
+# Version:        1.01
 # Last Update:    2026-11-26
 # Author:         Jürgen Winkler
 # Licence:        LGPL V2.1
 # History of Change:
+#   1.01  2026-11-27  Zwei Tests zum Verbindungsverlust (USB abgezogen, web_serial 1.25)
 #   1.00  2026-11-26  Neu: Serial Monitor verbindet nur zum Mitlesen (web_serial 1.22, connect_monitor): keine Abfrage am Geraet
 # ----------------------------------------------------------------------------------------------
 """Aufruf: python test_monitor_connect.py
@@ -128,6 +129,39 @@ class MonitorConnectTests(unittest.TestCase):
             self.assertEqual(self.ctrl.dtr_override, orig_board)                 # gilt nur fuer diesen Aufruf
         finally:
             list_ports.comports = orig
+
+    def test_lost_connection_is_detected_when_usb_is_unplugged(self):
+        import threading
+        self.assertTrue(self.ctrl.connect_monitor("COM76"))
+        port = self.fake
+
+        def broken_read(n=1):
+            raise OSError("ClearCommError failed: Das Geraet erkennt den Befehl nicht")
+        port.read = broken_read
+        port.is_open = True
+        self.assertTrue(self.ctrl.is_connection_open())
+        before = self.ctrl.queue.lines_since(0)[0]
+        self.ctrl._reader_loop(port, threading.Event())                         # der Empfangsthread bekommt den Lesefehler
+        self.assertFalse(self.ctrl.is_connection_open())                        # Verbindung geschlossen
+        self.assertTrue(port.closed)
+        self.assertEqual(self.ctrl.connect_status[1], "red")
+        self.assertIn("verloren", self.ctrl.connect_status[0].lower())
+        seq, lines = self.ctrl.queue.lines_since(before)
+        self.assertTrue(any("COM76" in text and "verloren" in text for _t, text in lines), lines)   # Zeile im Serial Monitor
+
+    def test_own_disconnect_is_not_reported_as_lost(self):
+        import threading
+        self.assertTrue(self.ctrl.connect_monitor("COM75"))
+        port = self.fake
+
+        def broken_read(n=1):
+            raise OSError("closed")
+        port.read = broken_read
+        stop = threading.Event()
+        stop.set()                                                              # Trennen durch den Anwender setzt zuerst das Stoppzeichen
+        self.ctrl._reader_loop(port, stop)
+        self.assertTrue(self.ctrl.is_connection_open() or self.ctrl.arduino is port)   # nicht vom Empfangsthread geschlossen
+        self.assertNotIn("verloren", str(self.ctrl.connect_status[0]).lower())
 
     def test_normal_connect_still_queries_the_device(self):
         import time
