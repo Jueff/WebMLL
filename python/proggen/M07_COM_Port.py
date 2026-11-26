@@ -4,7 +4,7 @@
 # Path:           proggen/M07_COM_Port.py
 # Version:        1.16
 # Last Update:    2026-11-23
-# Author:         Harold Linke
+# Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
 # History of Change:
 #   1.1.16  2026-11-26  BOOTLOADER_CACHE: Ergebnis der Bootloader-Abfrage der Geraeteauswahl (Nano) wird von Get_Arduino_Baudrate einmal innerhalb von 90 s wiederverwendet (die zweite Pruefung direkt nach OK schlug fehl). Zeilen mit '# v1.16'
