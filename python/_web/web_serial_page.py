@@ -1,5 +1,6 @@
-# Datei-Version: 1.04 (2026-11-26) - web_serial_page.py
+# Datei-Version: 1.05 (2026-11-26) - web_serial_page.py
 # History of Change:
+#   1.05  2026-11-26  Die Ueberschrift heisst Serieller Monitor, der Knopf ohne Verbindung nur Verbinden. Zeilen mit '# v1.05'
 #   1.04  2026-11-26  Der Serial Monitor liest nur mit: Verbinden oeffnet den Anschluss ohne Abfrage am Geraet (ctrl.connect_monitor, kein '#?'), auch fuer Geraete ohne das MobaLedLib-Programm LEDs_AutoProg. Zeilen mit '# v1.04'
 #   1.03  2026-11-26  Verbinden und Trennen sind ein Knopf wie der zentrale Verbindungsknopf (rot: Mit Lichtmaschine verbinden, gruen: Trennen) und die Statusanzeige zeigt denselben Text wie dort ('Verbunden mit Pro/COM3 - EFFECT Mode'). Ohne Verbindung wird mit dem Anschluss der Auswahl verbunden, wenn er vom Anschluss des Blatts abweicht, sonst wie beim zentralen Knopf. Zeilen mit '# v1.03'
 #   1.02  2026-11-26  Die Auswahl des Anschlusses zeigt bekannte Typen und den Untertyp nach der USB-Kennung (zum Beispiel 'COM3 – ESP32 (CP2102, 10C4:EA60)'); der Wert bleibt der Name des Anschlusses. Zeilen mit '# v1.02'
@@ -26,11 +27,11 @@ def build(ctrl, run_command, connect_ui=None):  # v1.03: connect_ui = {toggle, s
     from nicegui import ui
 
     macro = ctrl.MacroDef.data.get("SerialMonitorPage", {}) if getattr(ctrl, "MacroDef", None) else {}
-    title = macro.get("Title", "Serial Monitor")
+    title = macro.get("Title", "Serieller Monitor")  # v1.05
     send_text = macro.get("Button_1", "Senden")
     state = {"seq": 0, "connected_shown": None}
     cui = connect_ui or {}  # v1.03
-    text_off, text_on = cui.get("texts") or ("Mit Lichtmaschine verbinden", "Trennen")  # v1.03
+    text_off, text_on = cui.get("texts") or ("Verbinden", "Trennen")  # v1.03  # v1.05
 
     ui.label(title).classes("text-h6")
 
