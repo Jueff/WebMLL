@@ -1,8 +1,8 @@
-# Datei-Version: 5.59 (2026-11-27) - webmobaledlib.py
+# Datei-Version: 5.60 (2026-11-27) - webmobaledlib.py
 # ----------------------------------------------------------------------------------------------
 # Name:           webmobaledlib.py
 # Path:           webmobaledlib.py
-# Version:        5.59
+# Version:        5.60
 # Last Update:    2026-11-26
 # Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
@@ -68,6 +68,7 @@
 #   5.46  2026-11-26  Juergen Winkler, Pull Request 76 (dort V5.42): Verbindung: Statusmeldung neben dem Knopf zeigt Typ und Anschluss (Nicht verbunden - Pro/COM3, Verbunden mit Pro/COM3 - EFFECT Mode); eine negative Zahl im Anschluss der Lichtmaschine des Blatts ist ein Hinweis fuer den Auto-Reconnect (zuerst dieser Anschluss, am Start und nach dem Wiederherstellen, keine Suche ueber alle Anschluesse); der Knopf Mit Lichtmaschine verbinden heisst mit Verbindung Trennen (Menue: Trennen); nach Wiederherstellen eines zwischengespeicherten Stands passt sich die Verbindung an Typ und Anschluss des Blatts an; Strg+C beendet ohne Fehlermeldung; eine Verbindung pro Geraet: gemeinsame Anschluss-Sperre fuer Verbinden, Abfragen der Geraeteauswahl und Erkennung, eine offene Verbindung zum selben Anschluss oder ESP32 wird wiederverwendet (web_serial 1.20, M07_COM_Port_New 1.25, M07_COM_Port 1.17, KI_ENTWICKLUNG_Prompt 1.02, test_single_connection.py)
 #   5.47  2026-11-26  Fehler behoben: Upload ohne Anschluss in der Tabelle brach mit "module 'vb2py.logger' has no attribute 'warning'" ab (M07_COM_Port 1.18: logger nach den Importen neu gesetzt)
 #   5.48  2026-11-26  Fehler behoben (Harold): steht im Anschluss der Tabelle -7 (von Excel gesetzt, Hinweis fuer den Auto-Reconnect), kam beim Setup uebertragen 'Es ist kein PICO an COM Port COM-7 angeschlossen'; jetzt gilt eine Zahl <= 0 als kein Anschluss und es wird der Anschluss der aktiven Verbindung benutzt (F00_mainbuttons 1.03, M07_COM_Port 1.19)
+#   5.60  2026-11-27  Wechsel vom Seriellen Monitor in den Programm Generator: die Verbindung wird wieder auf das Board und den Anschluss des Blatts umgestellt, ausser es ist derselbe Anschluss (sync_connection_to_sheet, monitor_left_for_sheet). Zeilen mit '# v5.60'
 #   5.59  2026-11-27  Automatisch neu verbinden: nach einem Verbindungsverlust (USB abgezogen) verbindet das Programm wieder, sobald der Anschluss zurueck ist (Serial Monitor: mitlesen); Trennen durch den Anwender beendet das Warten (web_serial 1.27). Zeilen mit '# v5.59'
 #   5.58  2026-11-27  Verbindung verloren nennt wie Nicht verbunden Typ und Anschluss (Verbindung verloren - Pro/COM3; web_serial 1.26). Zeilen mit '# v5.58'
 #   5.57  2026-11-27  Verbindungsverlust (zum Beispiel USB abgezogen) wird erkannt: Knoepfe rot, Status Verbindung verloren, Zeile im Serial Monitor (web_serial 1.25). Zeilen mit '# v5.57'
@@ -840,6 +841,11 @@ def connect_device_label(ctrl, connected, sheet_port=""):  # v5.42
         logger.debug("Typ der Lichtmaschine fuer die Verbindungsmeldung nicht lesbar", exc_info=True)  # v5.42
         typ = ""  # v5.42
     return "/".join(x for x in (typ, port) if x)  # v5.42
+
+
+def monitor_left_for_sheet(old_tab, new_tab):  # v5.60
+    """Wechsel vom Seriellen Monitor (mon) in den Programm Generator (pg): die Verbindung gehoert dann wieder zum Blatt (Board, Anschluss)."""  # v5.60
+    return old_tab == "mon" and new_tab == "pg"  # v5.60
 
 
 def translate_connect_status(text, device=""):  # v2.91, v5.42: device = 'Pro/COM3' wird angezeigt
@@ -1859,7 +1865,8 @@ def font_scales(ctrl) -> dict:
 # VERSION = "5.56 (2026-11-26)"  # v5.56  # v5.57 (entfallen)
 # VERSION = "5.57 (2026-11-27)"  # v5.57  # v5.58 (entfallen)
 # VERSION = "5.58 (2026-11-27)"  # v5.58  # v5.59 (entfallen)
-VERSION = "5.59 (2026-11-27)"  # v5.59
+# VERSION = "5.59 (2026-11-27)"  # v5.59  # v5.60 (entfallen)
+VERSION = "5.60 (2026-11-27)"  # v5.60
 # VERSION = "4.09 (2026-11-19)"  # v3.64 (entfallen)
 # VERSION = "4.08 (2026-11-19)"  # v3.64 (entfallen)
 # VERSION = "4.07 (2026-11-19)"  # v3.64 (entfallen)
@@ -8215,6 +8222,8 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
             state["z21"].tab_selected()                    # Status und Protokollfenster auffrischen  # v2.05
         if new_tab in settings_pages:
             settings_pages[new_tab][0].mark_saved()            # store_old_config (tabselected)
+        if monitor_left_for_sheet(old_tab, new_tab):  # v5.60: der Serielle Monitor kann mit einem anderen Anschluss verbunden sein: zurueck zum Board des Blatts (nichts, wenn es derselbe Anschluss ist oder das Blatt keinen hat)
+            asyncio.get_running_loop().create_task(sync_connection_to_sheet(state["ws"]))  # v5.60
     tabs.on_value_change(on_tab)
     if start_tab != "pg" and not _web_tabs.tab_enabled(start_tab, ctrl):                       # Adresse eines ausgeschalteten Reiters (/ServoTest2)  # v1.96
         # ui.notify(f"Der Reiter {_web_tabs.TAB_TITLES.get(start_tab, start_tab)} ist ausgeschaltet. Einschalten: Programm Einstellungen, \"DM Servo Einstellungen anzeigen\".", type="warning")  # v2.16 (entfallen)

@@ -1,5 +1,5 @@
 # MobaLedLib Studio – Installation und Betrieb
-*Datei-Version: 5.59 (2026-11-27), gilt für Version 5.59*
+*Datei-Version: 5.60 (2026-11-27), gilt für Version 5.60*
 
 Windows · macOS · Linux-Desktop · Raspberry Pi
 
@@ -1856,3 +1856,5 @@ Der Reiter **Serieller Monitor** liest nur mit: **Verbinden** öffnet den Anschl
 Bricht die Verbindung ab (zum Beispiel USB-Kabel abgezogen), erkennt das Programm das: Die Verbindungsknöpfe werden rot, der Status zeigt „Verbindung verloren - Pro/COMx“ (Typ und Anschluss wie bei „Nicht verbunden“) und im Seriellen Monitor steht „*** Verbindung zu COMx verloren“. Nach dem Anstecken verbindest du wieder mit **Verbinden**.
 
 Sobald der Anschluss nach einem Verbindungsverlust wieder da ist (Kabel angesteckt), verbindet das Programm **automatisch neu**, ohne Dialog (im Seriellen Monitor wieder nur mitlesend). Wenn du selbst mit **Trennen** getrennt hast, bleibt die Verbindung getrennt.
+
+Verlässt du den **Seriellen Monitor** und wechselst in den **Programm Generator**, verbindet das Programm wieder mit dem Board und Anschluss des Blatts, außer die Verbindung geht schon zu demselben Anschluss.

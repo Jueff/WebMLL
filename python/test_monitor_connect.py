@@ -1,12 +1,13 @@
-# Datei-Version: 1.03 (2026-11-27) - test_monitor_connect.py
+# Datei-Version: 1.04 (2026-11-27) - test_monitor_connect.py
 # ----------------------------------------------------------------------------------------------
 # Name:           test_monitor_connect.py
 # Path:           test_monitor_connect.py
-# Version:        1.03
+# Version:        1.04
 # Last Update:    2026-11-26
 # Author:         Jürgen Winkler
 # Licence:        LGPL V2.1
 # History of Change:
+#   1.04  2026-11-27  Wechsel vom Seriellen Monitor in den Programm Generator stellt die Verbindung auf das Blatt um (webmobaledlib 5.60)
 #   1.03  2026-11-27  Automatisch neu verbinden nach Verlust, nicht nach Trennen durch den Anwender (web_serial 1.27)
 #   1.02  2026-11-27  Die Statusanzeige nennt nach dem Verlust Typ und Anschluss (web_serial 1.26)
 #   1.01  2026-11-27  Zwei Tests zum Verbindungsverlust (USB abgezogen, web_serial 1.25)
@@ -237,6 +238,13 @@ class MonitorConnectTests(unittest.TestCase):
         finally:
             list_ports.comports = orig
             c.reconnect_max_wait = 0
+
+    def test_leaving_the_monitor_for_a_sheet_resyncs_the_connection(self):
+        import webmobaledlib as W
+        self.assertTrue(W.monitor_left_for_sheet("mon", "pg"))
+        self.assertFalse(W.monitor_left_for_sheet("pg", "mon"))
+        self.assertFalse(W.monitor_left_for_sheet("mon", "farb"))
+        self.assertFalse(W.monitor_left_for_sheet("pg", "pg"))
 
     def test_normal_connect_still_queries_the_device(self):
         import time

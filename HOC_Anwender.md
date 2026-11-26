@@ -1,9 +1,14 @@
-Datei-Version: 1.144 (2026-11-26) - HOC_Anwender.md
-Stand: Version 5.59
+Datei-Version: 1.145 (2026-11-26) - HOC_Anwender.md
+Stand: Version 5.60
 
 # MobaLedLib Studio: Änderungen (Kurzfassung)
 
 Gilt ab Version 1.39. Neueste Version oben.
+
+## Version 5.60 (2026-11-27)
+
+Neue Funktionen:
+- Wer vom Seriellen Monitor in den Programm Generator wechselt, wird wieder mit dem Board und Anschluss des Blatts verbunden, außer es ist derselbe Anschluss wie im Monitor.
 
 ## Version 5.59 (2026-11-27)
 
