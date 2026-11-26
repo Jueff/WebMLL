@@ -83,7 +83,7 @@ Das Makro `Logic(Erg, A AND B OR …)` und `Create_Result` sind unverändert; de
 | `proggen/M07_COM_Port_New.py` | 1.29 | `Parse_Kv` |
 | `headless/headless_pico.py` | 1.03 | Plattform je Firmware, Sortierung |
 | `_web/web_serial.py` | 1.22 | Typ und Untertyp nach USB-Kennung, `connect_monitor` |
-| `_web/web_serial_page.py` | 1.05 | ein Verbindungsknopf (Verbinden/Trennen), nur Mitlesen, Überschrift Serieller Monitor |
+| `_web/web_serial_page.py` | 1.06 | ein Verbindungsknopf (Verbinden/Trennen), nur Mitlesen, Überschrift Serieller Monitor, Wechsel der Portauswahl trennt und verbindet neu |
 | `test_monitor_connect.py` | 1.00 | neu |
 | `_web/web_tabs.py`, `csv/Web_Languages.csv`, `MobaLedTest_macrodef.json` | | Reiter und Seite heißen Serieller Monitor |
 | `webmobaledlib.py` | 5.52 | Kopieren ohne LNet-Bestätigung, Serial Monitor |

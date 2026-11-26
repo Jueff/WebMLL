@@ -715,7 +715,7 @@ REQUIRED_FILES = {  # v1.75
     "_web/web_form_options.py": "1.76",  # v5.50
     "headless/headless_firmware_dl.py": "1.01", "_web/web_form_firmware_download.py": "1.03",  # v5.50
     "_web/web_form_comport.py": "1.51", "_web/web_form_options.py": "1.79", "_web/web_form_firmware.py": "1.06", "_web/web_startpage.py": "1.13", "_web/web_serial.py": "1.22",  # v5.52
-    "_web/web_serial_page.py": "1.05", "proggen/M07_COM_Port_New.py": "1.29", "headless/headless_pico.py": "1.03",  # v5.52
+    "_web/web_serial_page.py": "1.06", "proggen/M07_COM_Port_New.py": "1.29", "headless/headless_pico.py": "1.03",  # v5.52
 }  # v1.75
 FILE_PROBLEMS = []                                      # Zeilen der Abweichungen, gefuellt in main()  # v1.75
 

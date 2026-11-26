@@ -1,5 +1,6 @@
-# Datei-Version: 1.05 (2026-11-26) - web_serial_page.py
+# Datei-Version: 1.06 (2026-11-26) - web_serial_page.py
 # History of Change:
+#   1.06  2026-11-26  Besteht eine Verbindung und wird in der Portauswahl ein anderer Anschluss gewaehlt, wird getrennt und mit dem neuen Anschluss neu verbunden (nur Mitlesen). Zeilen mit '# v1.06'
 #   1.05  2026-11-26  Die Ueberschrift heisst Serieller Monitor, der Knopf ohne Verbindung nur Verbinden. Zeilen mit '# v1.05'
 #   1.04  2026-11-26  Der Serial Monitor liest nur mit: Verbinden oeffnet den Anschluss ohne Abfrage am Geraet (ctrl.connect_monitor, kein '#?'), auch fuer Geraete ohne das MobaLedLib-Programm LEDs_AutoProg. Zeilen mit '# v1.04'
 #   1.03  2026-11-26  Verbinden und Trennen sind ein Knopf wie der zentrale Verbindungsknopf (rot: Mit Lichtmaschine verbinden, gruen: Trennen) und die Statusanzeige zeigt denselben Text wie dort ('Verbunden mit Pro/COM3 - EFFECT Mode'). Ohne Verbindung wird mit dem Anschluss der Auswahl verbunden, wenn er vom Anschluss des Blatts abweicht, sonst wie beim zentralen Knopf. Zeilen mit '# v1.03'
@@ -66,6 +67,25 @@ def build(ctrl, run_command, connect_ui=None):  # v1.03: connect_ui = {toggle, s
                 sel = str(cui["sheet_port"]() or "").strip()   # nichts gewaehlt: der Anschluss des Blatts
             await run_command(lambda: ctrl.connect_monitor(sel), "Verbinden")()  # v1.04: nur mitlesen, keine Abfrage am Geraet
 
+        async def on_port_change(e):  # v1.06: Verbindung steht und ein anderer Anschluss wird gewaehlt: trennen und mit dem neuen neu verbinden
+            new = str(e.value or "").strip()
+            if not new:
+                return
+            try:
+                connected = bool(ctrl.is_connection_open())
+            except Exception:                                  # noqa: BLE001
+                connected = False
+            if not connected or getattr(ctrl, "ARDUINO_IP", False):
+                return
+            if new.upper() == str(getattr(ctrl, "ARDUINO_current_portname", "") or "").strip().upper():
+                return                                         # derselbe Anschluss (zum Beispiel nach Aktualisieren der Liste)
+
+            def switch():
+                ctrl.disconnect()
+                return ctrl.connect_monitor(new)
+            await run_command(switch, "Verbinden")()
+
+        port_sel.on_value_change(on_port_change)  # v1.06
         conn_btn = ui.button(text_off, on_click=toggle).props("unelevated no-caps dense color=negative").classes("mll-connect")  # v1.03
         status = ui.label("").classes("text-caption").style("white-space: nowrap")  # v1.03: wie die Statusanzeige neben dem zentralen Knopf
 
