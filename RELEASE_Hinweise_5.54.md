@@ -1,9 +1,9 @@
-Datei-Version: 1.18 (2026-11-26) - RELEASE_Hinweise_5.41.md
-Gilt für MobaLedLib Studio 5.41
+Datei-Version: 1.19 (2026-11-26) - RELEASE_Hinweise_5.54.md
+Gilt für MobaLedLib Studio 5.54
 
-# MobaLedLib Studio 5.41
+# MobaLedLib Studio 5.54
 
-Anhänge dieses Releases: `webmobaledlib.zip` (Programm, mit `zip_erstellen.bat` Version 1.11 gebaut, `ROOT_IN_ZIP=1`), `START_HIER.txt` (erste Schritte), `ANLEITUNG_Installation.pdf` (Anleitung, Version 5.41) und `BETATEST_Checkliste.pdf` (Checkliste für Betatester, Version 4.19).
+Anhänge dieses Releases: `webmobaledlib.zip` (Programm, mit `zip_erstellen.bat` Version 1.11 gebaut, `ROOT_IN_ZIP=1`), `START_HIER.txt` (erste Schritte), `ANLEITUNG_Installation.pdf` (Anleitung, Version 5.54) und `BETATEST_Checkliste.pdf` (Checkliste für Betatester, Version 4.31).
 Installation: siehe `START_HIER.txt` und den Schnellstart der Anleitung. Aktualisieren: Menü **Hilfe → Update MobaLedLib Studio …**, danach das Programm **neu starten** und die Seite mit Strg+F5 neu laden.
 
 ## Wichtig beim Aktualisieren
@@ -12,7 +12,19 @@ Installation: siehe `START_HIER.txt` und den Schnellstart der Anleitung. Aktuali
 - **Nach dem Update das Programm neu starten** und die Seite neu laden. Oben darf keine rote Meldung stehen.
 - **Neues Programmsymbol (4.10):** Für die Verknüpfung auf dem Desktop den Installer noch einmal ausführen.
 
-## Neu seit Version 3.93 (3.94 bis 5.41)
+## Neu seit Version 3.93 (3.94 bis 5.54)
+
+**Neu seit 5.41 (5.42 bis 5.54):**
+- **Menü Werkzeuge (5.49, Wunsch von Jürgen, Issue 75):** Zwischen Einstellungen und Hilfe steht das Menü **Werkzeuge** mit Datenübertragung, Firmware installieren …, ESP32-Firmware über WLAN hochladen … und Wartung … (Entwicklungsumgebung, PlatformIO, Bibliotheken). Diese Funktionen stehen nicht mehr in Einstellungen und Hardware Optionen. Im Anfänger Modus ist das Menü ausgeblendet.
+- **LED Kanal (5.51, 5.52):** In den Dialogen der Makros mit LEDs steht der **LED Kanal oben**. Im Raum-Dialog steht der Haken **Individuelle Zeiten** über den Reglern. Neue Einstellung **Spalte LED/Sound Kanal in der Tabelle änderbar** (Programm Generator, Vorgabe aus): Die Spalte lässt sich dann in der Tabelle ändern und nach unten ausfüllen, die Start LedNr werden neu berechnet. Der Anwender ist selbst für richtige Werte verantwortlich.
+- **Servo-Hilfetext (5.51):** Deutsch „Programm Servo Einstellungen“ statt „Servo_Pos Programm“ (Excel-Mappe und csv).
+- **Zeilen 1 und 2 geschützt (5.50, Issue 77):** „Zeile einfügen“, „Zeilen löschen“ und „Zeilen verschieben“ verändern sie nicht mehr.
+- **Verbindung (5.46 bis 5.48, Pull Request 76 von Jürgen):** Neben dem Knopf steht Typ und Anschluss („Verbunden mit Pro/COM3 - EFFECT Mode“), mit Verbindung heißt der Knopf „Trennen“. Eine negative Zahl im Anschluss der Tabelle (zum Beispiel -7, von Excel gesetzt) ist ein Hinweis auf COM7; „-7“ wird nicht mehr als Anschluss COM-7 benutzt. Pro Gerät gibt es nur eine Verbindung. Strg+C beendet das Programm ohne Fehlermeldung. Setup übertragen ohne eingetragenen Anschluss brach mit „vb2py.logger has no attribute warning“ ab (behoben).
+- **Datenübertragung (5.53, Pull Request 78 von moosbewohner):** Quelladresse ohne `http://` mit Portfeld (Vorgabe 45875); der Verbindungscode braucht nur noch sechs Zeichen.
+- **Selectrix, Anschluss-Hinweis, Firmware (5.54, Pull Request 80 von Jürgen):** Selectrix: Channel 1 bis 99, Bitposition 1 bis 8 (Eingabe und Header); DCC, LNet und CAN: Adresse 0 nicht erlaubt. Der Anschluss-Hinweis (-3) wird auch bei Setup übertragen und Hochladen ausgewertet. Geräteauswahl: kein `COM?` mehr, OK ohne Auswahl ändert nichts, Abbrechen schließt das Übertragungsfenster; Firmware installieren (Pico) mit eigener Auswahl, lokale ZIP-Datei für die Firmware. Das Fenster Kompilieren und Hochladen ist verschiebbar. PGF-Import in ein verstecktes Blatt blendet es ein.
+- **Weiteres (5.42 bis 5.45):** Startseite: Pico Zero bietet nur DCC an; Mini und MoLLi zeigen ihr eigenes Bild. Geräteauswahl: Seriennummer bei Pico-Geräten (5.44, Jürgen). Die Einstellung „Startseite beim Programmstart anzeigen“ steht unter Allgemein.
+- **Zu prüfen:** Alle Punkte sind ohne Browser und ohne Hardware geprüft (Syntax und Tests ohne Oberfläche). Die Checkliste für Betatester hat dazu die Punkte 410 bis 416.
+- **Nicht enthalten:** Pull Request 79 (gemeinsamer Uploadweg M08, moosbewohner): noch nicht übernommen, der Entwickler bat um Neuaufbau auf diesen Stand.
 
 **Neu seit 5.39 (5.40, 5.41): Übernahme des offiziellen Release MobaLedLib 3.6.0**
 - Das Programm meldet sich als „Ver. 3.6.0“ (ohne Zusatz wie L3). Die Bibliothek hat die Version 3.6.0 (`library.properties`), die `platformio.ini` nennt `MobaLedLib@3.6.0`; die Tabelle Libraries der mitgelieferten Excel-Mappe `csv/Prog_Generator_MobaLedLib.xlsm` (Stand 3.6.0) verlangt diese Version.

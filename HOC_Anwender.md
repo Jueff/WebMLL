@@ -1,9 +1,49 @@
-Datei-Version: 1.134 (2026-11-26) - HOC_Anwender.md
-Stand: Version 5.49
+Datei-Version: 1.139 (2026-11-26) - HOC_Anwender.md
+Stand: Version 5.54
 
 # MobaLedLib Studio: Änderungen (Kurzfassung)
 
 Gilt ab Version 1.39. Neueste Version oben.
+
+## Version 5.54 (2026-11-26)
+
+Neue Funktionen:
+- Das Fenster „Kompilieren und Hochladen“ lässt sich an der Titelzeile verschieben (Doppelklick: Ausgangsposition).
+- Im Dialog „Firmware herunterladen“ lässt sich auch eine lokale ZIP-Datei mit Firmware installieren (gleiches Auswahlfeld wie bei Update Testversion).
+- Firmware installieren (Pico) nutzt die Geräteauswahl; es werden nur Pico-Geräte gelistet, auch unbekannte und andere MobaLedLib Geräte sind wählbar.
+
+Korrekturen:
+- Selectrix: Channel 1 bis 99 und Bitposition 1 bis 8 werden geprüft (Eingabe und Header-Erzeugung); der Build mit leerem Eingang ist behoben.
+- DCC, LNet und CAN: die Adresse 0 ist nicht erlaubt.
+- Ein negativer Anschluss (-3) dient beim Hochladen und Setup übertragen als Hinweis auf COM3; wird das Gerät dort gefunden, steht der Anschluss danach im Blatt, sonst öffnet sich die Geräteauswahl.
+- Abbrechen in der Geräteauswahl schließt auch das Fenster Kompilieren und Hochladen; `COM?` steht nicht mehr in der Liste, OK ohne Auswahl ändert das Blatt nicht.
+- PGF-Import in ein verstecktes Blatt blendet es wieder ein.
+
+## Version 5.53 (2026-11-26)
+
+Neue Funktionen:
+- Datenübertragung: Quelladresse und Port stehen getrennt nebeneinander (Vorgabe 45875), Pull Request 78.
+- Der Verbindungscode muss nur noch mindestens sechs Zeichen haben; längere und gespeicherte Codes bleiben gültig.
+
+## Version 5.52 (2026-11-26)
+
+Korrekturen:
+- Ist die Spalte „LED/Sound Kanal“ änderbar, werden nach einer Änderung (auch beim Ausfüllen nach unten) die Start LedNr jetzt neu berechnet.
+
+## Version 5.51 (2026-11-26)
+
+Neue Funktionen:
+- Neue Einstellung „Spalte LED/Sound Kanal in der Tabelle änderbar“ (Programm Generator Einstellungen, Standard Aus). Eingeschaltet kann die Spalte direkt in der Tabelle geändert und nach unten ausgefüllt werden. Du bist dann selbst für richtige Werte verantwortlich. Die LED-Nummern werden danach neu berechnet.
+
+Korrekturen:
+- Raum-Dialog: Der Haken „Individuelle Zeiten“ steht jetzt über den Reglern, der LED Kanal oben.
+- In den Makro-Dialogen steht der LED Kanal oben (nur bei Makros mit LEDs).
+- Servo-Hilfe: „Programm Servo Einstellungen“ statt „Servo_Pos Programm“ (deutsch).
+
+## Version 5.50 (2026-11-26)
+
+Korrekturen:
+- Die Zeilen 1 und 2 der Tabelle sind geschützt: „Zeile einfügen“, „Zeilen löschen“ und „Zeilen verschieben“ verändern sie nicht mehr (Issue 77).
 
 ## Version 5.49 (2026-11-26)
 

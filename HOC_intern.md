@@ -1,5 +1,5 @@
-Datei-Version: 1.128 (2026-11-26) - HOC_intern.md
-Stand: Version 5.49
+Datei-Version: 1.134 (2026-11-26) - HOC_intern.md
+Stand: Version 5.54
 
 # webMobaLedLib: History of Change (intern, ausführlich)
 
@@ -61,6 +61,102 @@ SwitchC bewusst nicht aufgenommen (nicht gewünscht); der Name lässt sich einti
 | Wiki `pg_tabelle.txt` | 1.14 | Abschnitt „Die Funktion Logic“; `seiten_update` 1.14 |
 
 Das Makro `Logic(Erg, A AND B OR …)` und `Create_Result` sind unverändert; der Baukasten erzeugt denselben Text. Nicht im Browser geprüft, nur die reinen Funktionen (Test mit 11 Ausdrücken).
+
+## 5.54 (2026-11-26), Pull Request 80 (Jueff, dort V5.50): Selectrix Channel 1 bis 99, COM Port Hinweis, Firmware Geräteauswahl, Log-Fenster
+
+Pull Request 80 von Jueff (dort als V5.50 auf 5.49 aufgebaut). Zeilen im Code behalten die Markierung `# v5.50` des PR, `release_manifest.json` ist nicht betroffen. Auf 5.53 eingespielt ohne Konflikte, auch nicht mit `Fill_Port_From_Active_Connection` (5.48). `test_protocol_switch.py` (26 Tests) und `test_firmware_local_zip.py` laufen, `test_port_hint.py` wird ohne Windows übersprungen, `test_log_drag.py` braucht den Browser (hier nicht lauffähig).
+
+**Wunsch (Jürgen):** Selectrix-Blätter fehlerfrei bauen, den Anschluss-Hinweis (-3) auch beim Setup übertragen auswerten, bei Firmware installieren die Geräteauswahl benutzen, Abbrechen soll die Fenster schließen, das Log-Fenster verschiebbar.
+
+**Umsetzung:**
+* **Selectrix:** Channel 1 bis 99 und Bitposition 1 bis 8 (Eingabe `SX_Check_Input`, Generator `ProcessLine`: Fehler, das Header file wird nicht erzeugt). DCC, LNet, CAN: Adresse 0 ist nicht erlaubt (`Check_Address_Input`), die Sonderbehandlung entfällt. Ursache des leeren `#InCh` im SX-Build: `AddrList` begann mit dem Element 0 (`vbObjectInitialize`, `Erase` setzte nur Nullen), Adresse 0 galt als schon vorhanden; jetzt eine leere Liste. Umrechnung beim Protokollwechsel: Adresse = Channel × 8 + Bitposition, umrechenbar sind 9 bis 800.
+* **Anschluss-Hinweis:** `-3` im Anschluss der Tabelle: `Resolve_Port_Hint` prüft beim Hochladen und beim Setup übertragen, ob COM3 vorhanden ist und zum Typ des Blatts passt, und trägt es ein; sonst öffnet sich die Geräteauswahl (kein anderes Board wird stillschweigend eingetragen). Autoconnect trägt den gefundenen Anschluss ein (`_store_hint_port`).
+* **Geräteauswahl:** `COM?` ist keine Zeile mehr, OK ohne Auswahl ändert das Blatt nicht. Firmware installieren (Pico): `SelectPicoDevice` mit anderen Regeln (nur Pico-Geräte, unbekannte und andere MobaLedLib Geräte wählbar, „Unbekannte Ports anzeigen“ aktiv, bei „Andere MobaLedLib Geräte“ kein Bild, das Blatt bleibt unverändert).
+* **Abbrechen** in der Geräteauswahl schließt auch das Fenster Kompilieren und Hochladen (Setup übertragen und normales Hochladen).
+* **PGF-Import** in ein verstecktes Blatt (Startseite) blendet es wieder ein.
+* **Firmware aus lokaler ZIP-Datei:** im Dialog Firmware herunterladen steht unter der Liste das Auswahlfeld für ZIP-Dateien (wie bei Update Testversion); die ZIP muss eine `*.uf2` enthalten, wird mit `unzip_safe` in den Firmware-Ordner entpackt (Rückfrage beim Überschreiben), danach ist die Firmware vorgewählt.
+* **Log-Fenster** schwebend und verschiebbar (Titelzeile, Doppelklick = Ausgangsposition); Meldungen werden gebündelt und beim Ziehen zurückgehalten (kein Ruckeln).
+
+| Datei | Version | Änderung |
+|-|-|-|
+| `proggen/M06_Write_Header.py` | 1.21 | Selectrix-Prüfung, Adresse 0, `AddressExists` |
+| `proggen/M20_PageEvents_a_Functions.py` | 1.19 | `Check_Address_Input`, Selectrix Channel 1 bis 99 |
+| `proggen/M07_COM_Port.py` | 1.20 | `Resolve_Port_Hint`, `Port_Hint_Number` |
+| `proggen/M08_ARDUINO.py` | 1.39 | Abbrechen schließt das Übertragungsfenster |
+| `proggen/M18_Save_Load.py` | 1.08 | Import in ein verstecktes Blatt |
+| `headless/headless_protocol_switch.py` | 1.01 | Channel 1 bis 99, Adressen 9 bis 800 |
+| `_web/web_form_comport.py` | 1.47 | Firmware-Auswahl, `COM?`, OK ohne Auswahl |
+| `_web/web_form_options.py` | 1.76 | Firmware installieren mit der Geräteauswahl |
+| `_web/web_log.py` | 1.15 | verschiebbar, Meldungen gebündelt |
+| `headless/headless_firmware_dl.py` | 1.01 | `check_local_zip`, `install_local_zip`, `entry_from_file` |
+| `_web/web_form_firmware_download.py` | 1.03 | Auswahlfeld für eine lokale ZIP-Datei |
+| `test_firmware_local_zip.py` | 1.00 | neu |
+| `webmobaledlib.py` | 5.54 | Anschluss-Hinweis bei Autoconnect |
+| `test_port_hint.py`, `test_pico_device_dialog.py`, `test_log_drag.py` | 1.00 | neu |
+| `test_protocol_switch.py` | | 26 Tests |
+| `csv/Languages.csv`, `csv/Web_Languages.csv`, `csv/xSelectrix.csv` | | Kopfzeilen [1..99], neue Texte |
+| `install/BETATEST_Checkliste.md` | 4.31 | Punkt 416 |
+| `install/ANLEITUNG_Installation.md` | 5.54 | Abschnitt |
+| Wiki `wz_datenuebertragung.txt` 1.04, `wz_programm_einstellungen.txt` 1.21, `pg_tabelle.txt` 1.18, `pg_arduino.txt` 1.20, `seiten_update.txt` 1.17 | | Adresse/Port, Option LED/Sound Kanal, LED Kanal oben, Selectrix-Grenzen, Anschluss-Hinweis, Firmware-ZIP, Log-Fenster |
+
+## 5.53 (2026-11-26), Pull Request 78 (moosbewohner): Datenübertragung, Quelladresse und Port
+
+Quelladresse ohne `http://` und schmales Portfeld (Vorgabe 45875); gespeicherte Adressen und Suchergebnisse füllen beide Felder, intern wird die URL wieder zusammengesetzt (eigene Ports, Hostnamen, IPv6, HTTPS bleiben möglich). Ungültige Ports: übersetzte Meldung. Verbindungscode: Mindestlänge sechs statt zwölf Zeichen (bestehende Codes bleiben gültig). Backend und Protokoll unverändert. `release_manifest.json` aus dem PR nicht übernommen (wird beim Release neu erzeugt). Gegen den PR geprüft: Code lässt sich ohne Konflikt einspielen; im Browser nicht getestet.
+
+| Datei | Version | Änderung |
+|-|-|-|
+| `_web/web_table_sync.py` | 1.10 | getrennte Adresse/Port, Mindestlänge 6 (Zeilen des PR mit v1.09/v1.10) |
+| `csv/Web_Languages.csv` | - | zwei neue Texte (Portmeldung, Codelänge) in sieben Sprachen |
+| `DATENUEBERTRAGUNG.md` 1.05, `DATENUEBERTRAGUNG_IP_PORT.md` 1.01 | - | Beschreibung, gilt für 5.53 |
+| `webmobaledlib.py` | 5.53 | VERSION, REQUIRED_FILES |
+| `install/BETATEST_Checkliste.md` | 4.30 | Punkt 415 |
+| `install/ANLEITUNG_Installation.md` | 5.53 | Abschnitt Quelladresse und Port |
+
+## 5.52 (2026-11-26): Korrektur zur Option LED/Sound Kanal
+
+Fehler (Harold, Test von 5.51): Wird der Kanal in der Tabelle geändert, werden die Start LedNr nicht neu berechnet. Im Testlauf ohne Oberfläche rechnet `Global_Worksheet_Change` richtig; die Ursache im Browser-Weg ließ sich ohne Oberfläche nicht finden. Deshalb ruft die Oberfläche die Neuberechnung jetzt selbst auf: neue Funktion `recalc_led_start(ws)` (Ereignisse aus, `Make_sure_that_Col_Variables_match`, `Update_Start_LedNr`, Fehler ins Log) nach dem Schreiben in `on_cell_changed` (Spalte LED_Cha_Col) und in `write_cells` (Ausfüllen nach unten, Einfügen, Rückgängig/Wiederholen, wenn Kanal-Zellen dabei sind; einmal nach allen Zellen).
+
+| Datei | Version | Änderung |
+|-|-|-|
+| `webmobaledlib.py` | 5.52 | `recalc_led_start`, Aufrufe, VERSION |
+| `install/BETATEST_Checkliste.md` | 4.29 | Punkt 414 ergänzt |
+| `install/ANLEITUNG_Installation.md` | 5.52 | gilt für 5.52 |
+
+## 5.51 (2026-11-26): Wünsche aus dem Test von 5.41
+
+* **Haus-Dialog (Raum/House):** der Haken „Individuelle Zeiten“ steht jetzt über den Reglern für die Zeiten (bisher darunter; Tester suchte, warum die Regler deaktiviert waren). Der LED Kanal steht oben unter der Beschreibung.
+* **LED Kanal oben:** In den Makro-Dialogen steht die Kanalwahl oben (nur bei Makros mit LEDs). Das nachträgliche Ändern in der Tabelle ist nicht mehr möglich.
+* **Servo-Hilfetext:** „Servo_Pos Programm“ heißt in der deutschen Hilfe jetzt „Programm Servo Einstellungen“ (`Prog_Generator_MobaLedLib.xlsm`: Lib_Macros, Par_Description, Texte; `csv/Lib_Macros.csv`, `csv/Par_Description.csv`). Andere Sprachen unverändert.
+* **Neue Einstellung `LedChannelEditable`** (Programm Generator Einstellungen, Standard Aus): Spalte „LED/ Sound Kanal“ ist in der Tabelle änderbar, auch Ausfüllen nach unten. Verantwortung beim Anwender. Nach jeder Änderung werden die LED-Nummern neu berechnet (`Worksheet_Change` → `Update_Start_LedNr`, wie bei einer Kanaländerung im Makro). Gilt ab der nächsten Anzeige der Tabelle.
+
+| Datei | Version | Änderung |
+|-|-|-|
+| `_web/web_form_house.py` | 1.09 | LED Kanal oben, Haken vor den Reglern |
+| `_web/web_tabs.py` | 1.38 | Einstellung LedChannelEditable |
+| `_web/web_params.py` | 1.20 | Einstellung in Gruppe Programm Generator |
+| `csv/Prog_Generator_MobaLedLib.xlsm`, `csv/Lib_Macros.csv`, `csv/Par_Description.csv` | - | Servo-Text |
+| `webmobaledlib.py` | 5.51 | `led_channel_editable()`, `readonly_columns`, VERSION, REQUIRED_FILES |
+| `install/BETATEST_Checkliste.md` | 4.28 | Punkt 414 |
+| `install/ANLEITUNG_Installation.md` | 5.51 | Hinweis zur Option |
+
+## 5.50 (2026-11-26), Issue 77 (Jürgen): Zeilen 1 und 2 geschützt
+
+Fehler: „Zeile einfügen“ fügte oberhalb von Zeile 1 eine neue Zeile ein (Harold, Test). Anforderung (Jürgen): Die Zeilen 1 und 2 der Datenblätter dürfen durch kein Kommando verändert werden.
+
+Stand der Prüfung: Kontextmenü, Einfügen, Ausfüllen, Bearbeiten und Datenübertragung schützten die Zeilen schon (`first_data_row0`, `FirstDat_Row`). Es fehlten die drei Knöpfe der Werkzeugleiste, die über `XLA_Application` laufen:
+* **Zeile einfügen** (`addrow_before_current_row`): ohne Auswahl oder mit Auswahl in Zeile 1 oder 2 wurde eingefügt (ohne Auswahl bei Index 0).
+* **Zeilen löschen** (`deleterows`): löschte auch Zeile 1 und 2.
+* **Zeilen verschieben** (`int_moveRows`): ließ Zeile 1/2 als Quelle und als Ziel zu.
+
+Jetzt prüft `XLA_Application._first_data_row0()` (Datenblätter: ab `FirstDat_Row`) an der untersten Stelle und lehnt die Befehle ab (mit Logeintrag). In `run_command` kommt zusätzlich der Hinweis „Die Zeilen 1 und 2 sind geschützt …“ (einfügen, löschen, kopieren; ohne Auswahl ebenfalls). „Zeilen kopieren“ (`M23.Proc_Copy_Row`) hatte die Prüfung schon.
+
+| Datei | Version | Änderung |
+|-|-|-|
+| `ExcelAPI/XLA_Application.py` | 1.25 | Schutz bei einfügen, löschen, verschieben |
+| `webmobaledlib.py` | 5.50 | Hinweis, Version, REQUIRED_FILES |
+| `install/BETATEST_Checkliste.md` | 4.27 | Punkt 413 |
+
+Test mit Attrappe: Einfügen bei Auswahl Zeile 1, 2, keine Auswahl abgelehnt; ab Zeile 3 erlaubt. **Nicht im Browser geprüft.** Nicht geändert: Ctrl+C von Zellen der Zeilen 1 und 2 (Jürgen: „auch nicht kopiert werden“), bitte bei ihm nachfragen, ob das gemeint ist.
 
 ## 5.49 (2026-11-26), Issue 75 (Jürgen): Menü Werkzeuge
 
