@@ -1,12 +1,13 @@
-# Datei-Version: 1.36 (2026-11-25) - M08_ARDUINO.py
+# Datei-Version: 1.37 (2026-11-26) - M08_ARDUINO.py
 # ----------------------------------------------------------------------------------------------
 # Name:           M08_ARDUINO.py
 # Path:           proggen/M08_ARDUINO.py
-# Version:        1.36
-# Last Update:    2026-11-25
+# Version:        1.37
+# Last Update:    2026-11-26
 # Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
 # History of Change:
+#   1.37  2026-11-26  Release MobaLedLib 3.6.0: platformio.ini nennt die Bibliothek mit M02.Lib_Version_Nr (3.6.0) statt fest 3.5.0, passend zur library.properties
 #   1.36  2026-11-25  Pull Request 71 (Juergen, Issue 70): Pico: Hat sich der COM Port nach dem Hochladen geaendert (Neustart), wird der neue Port ins Blatt eingetragen (__Write_Back_New_ComPort; Markierung '*' bleibt). Zeilen mit '# v1.36'
 #   1.35  2026-11-25  Bibliothek MobaLedLib bei file://: veraltete Kopie in .pio/libdeps (PlatformIO nimmt sie bei gleicher Version 3.5.0 weiter) wird geloescht, wenn die src-Dateien von libraries/MobaLedLib abweichen (Refresh_Lib_Copy; Pico: showColor fehlte, Log von Harold)
 #   1.34  2026-11-24  Identify (Jürgen Winkler, Pull Request 61): Pico: Seriennummer und Location des Anschlusses vor dem Hochladen ermitteln und an M42.After_Full_Flash geben (der Anschluss kann nach dem Neustart einen anderen Namen haben). Zeilen mit '# v1.34'
@@ -845,7 +846,8 @@ def __Create_PIO_Build(fp, Environment, ResultName, ComPort, SrcDir, track_proje
         #VBFiles.writeText(fp2, '    MobaLedLib=file://../../libraries/MobaLedLib@3.5.0', '\n')
         # VBFiles.writeText(fp2, '    MobaLedLib=file://libraries/MobaLedLib@3.5.0', '\n')  # v1.16 (entfallen)
         # VBFiles.writeText(fp2, '    MobaLedLib=' + Lib_Link_Scheme() + '://libraries/MobaLedLib@3.5.0', '\n')  # v1.16: symlink:// wie Excel 3.5.0L3 (sonst file://)  # v5.15 (entfallen)
-        VBFiles.writeText(fp2, '    MobaLedLib=' + Lib_Link_Scheme() + '://libraries/MobaLedLib@3.5.0', '\n'); Refresh_Lib_Copy(SrcDir) if Lib_Link_Scheme() == 'file' else None  # v1.16: symlink:// wie Excel 3.5.0L3 (sonst file://)  # v5.15
+        # VBFiles.writeText(fp2, '    MobaLedLib=' + Lib_Link_Scheme() + '://libraries/MobaLedLib@3.5.0', '\n'); Refresh_Lib_Copy(SrcDir) if Lib_Link_Scheme() == 'file' else None  # v1.16: symlink:// wie Excel 3.5.0L3 (sonst file://)  # v5.15  # v1.37 (entfallen)
+        VBFiles.writeText(fp2, '    MobaLedLib=' + Lib_Link_Scheme() + '://libraries/MobaLedLib@' + M02.Lib_Version_Nr, '\n'); Refresh_Lib_Copy(SrcDir) if Lib_Link_Scheme() == 'file' else None  # v1.37: Version der Bibliothek 3.6.0 (Excel schreibt hier noch 3.5.0)
     else:
         # VBFiles.writeText(fp2, '    MobaLedLib=file://libraries/MobaLedLib@3.5.0-'+ M02.Test_Suffix, '\n')  # v1.16 (entfallen)
         VBFiles.writeText(fp2, '    MobaLedLib=' + Lib_Link_Scheme() + '://libraries/MobaLedLib@3.5.0-'+ M02.Test_Suffix, '\n')  # v1.16

@@ -1,5 +1,5 @@
-Datei-Version: 1.118 (2026-11-26) - HOC_intern.md
-Stand: Version 5.39
+Datei-Version: 1.120 (2026-11-26) - HOC_intern.md
+Stand: Version 5.41
 
 # webMobaLedLib: History of Change (intern, ausführlich)
 
@@ -61,6 +61,47 @@ SwitchC bewusst nicht aufgenommen (nicht gewünscht); der Name lässt sich einti
 | Wiki `pg_tabelle.txt` | 1.14 | Abschnitt „Die Funktion Logic“; `seiten_update` 1.14 |
 
 Das Makro `Logic(Erg, A AND B OR …)` und `Create_Result` sind unverändert; der Baukasten erzeugt denselben Text. Nicht im Browser geprüft, nur die reinen Funktionen (Test mit 11 Ausdrücken).
+
+## 5.41 (2026-11-26), Bibliothek MobaLedLib 3.6.0: README übernommen
+
+Der Entwickler hat die Bibliothek mit dem Stand 3.6.0 auf GitHub verglichen: `README.md` unterscheidet sich (Abschnitt „New in release 3.6“, Versionsgeschichte 3.6.0), `PicoFastLED.h` bleibt bei unserer neueren Fassung, alle anderen Dateien sind gleich. Damit ist der offene Punkt (a) aus 5.40 erledigt.
+
+| Datei | Version | Änderung |
+|-|-|-|
+| `libraries/MobaLedLib/README.md` | 3.6.0 | Fassung des Entwicklers von 3.6.0 |
+| `webmobaledlib.py` | 5.41 | Version |
+
+## 5.40 (2026-11-26), Übernahme des offiziellen Release MobaLedLib 3.6.0
+
+Das Paket `Ver_3.6.0.zip` (Excel-Programm, Pattern Configurator, Symbole, Beispiele, `LEDs_AutoProg`, `Configuration`, `Boards`) wurde mit dem Stand 5.39 verglichen. Erwartung des Entwicklers: keine oder sehr kleine Änderungen.
+
+**Vorgehen:** Tabellen mit `xlsm_nach_csv.py` in csv geschrieben und verglichen, VBA mit `vbaextract.py` ausgelesen und gegen den Stand L3 (`out_Prog_Generator_MobaLedLib_1`) verglichen, alle übrigen Dateien gegen unseren Stand und gegen den Stand des Repositorys (`WebMLL-main`).
+
+**Ergebnis:**
+* **Tabellen unverändert:** `Lib_Macros` (376 Zeilen), `Platform_Parameters` und `Par_Description` sind in der neuen Mappe und in unserem csv gleich (Ausnahme: unser Text zu `HSVColor` ist bewusst ausführlicher). `Languages` enthält nichts, was bei uns fehlt (bei uns gibt es eine Zeile mehr, der Text mit `#1#` für den Namen des Geräts).
+* **VBA gegenüber L3:** nur `Lib_Version_Nr` 3.6.0, `Test_Suffix` leer und eine Umstellung in den Modulen `M06_Write_Header`, `M06_Write_Header_SW`, `M07_COM_Port_New`, `M08_Arduino`, `Select_COM_Port_UserForm` und `UserForm_Options`: Der Board-Typ wird als Parameter durchgereicht (`GetArduName(BoardType)`, `Create_Cmd_file(BoardType, …)`, `ConnectToCentralAndGetChannels(BoardType, …)`) statt aus dem Blatt gelesen. Das ändert nur die Namen in Meldungen, wenn man eine Pico-Firmware aufspielt, während das Blatt auf einem anderen Board steht. **Nicht übernommen** (die Web-Version fragt hier das Board des Blatts, die Firmware des Pico wird getrennt aufgespielt). Die Änderung „`clearLeds(256)` durch `showColor(CRGB(0, 0, 0), 256, 0)`“ gibt es bei uns seit 5.15 (`M06_Write_Header_SW` 1.13).
+* **Dateien in `LEDs_AutoProg`, `Configuration`, `Boards`:** Die Fassung im Release ist **älter** als unsere (ohne WLAN-Anzeige, ohne die Erweiterungen von Jürgen für OTA und Identify). Die Unterschiede sind nur unsere Weiterentwicklung, deshalb **nicht ersetzt**. `Mainboard_Hardware_Test.MLL_pgf` und die Beispiele `*.MLL_pcf` sind inhaltlich gleich (bei uns UTF-8 und Zeilenumbruch statt senkrechtem Tabulator).
+* **Symbole:** 472 Symbole im Release, es fehlen bei uns keine (`Signal2.bmp`, `Signal2_RGB.bmp` gibt es als `png`).
+
+**Geändert:**
+1. `proggen/M02_Public.py` 1.06: `Lib_Version_Nr = '3.6.0'`, `Test_Suffix = ''`. Das Programm zeigt „Ver. 3.6.0“.
+2. `proggen/M08_ARDUINO.py` 1.37: Die `platformio.ini` nennt die Bibliothek mit `M02.Lib_Version_Nr` (`MobaLedLib=symlink://libraries/MobaLedLib@3.6.0`); das Excel-Programm schreibt hier noch fest 3.5.0.
+3. `libraries/MobaLedLib/library.properties`: `version=3.6.0` (vorher `3.5.0-L3`), und `platformio.ini` im Ordner python (`@3.6.0`). Die Tabelle Libraries der neuen Mappe verlangt die Bibliothek 3.6.0.
+4. `csv/Prog_Generator_MobaLedLib.xlsm`: die Mappe von 3.6.0 (Blatt Libraries: MobaLedLib 3.6.0).
+5. Neues Beispiel `Prog_Generator_Examples/AddressLearn.MLL_pgf` (Adressen einlernen; braucht die Erweiterung AddressLearnMLX, die vorab ausgeschaltet ist).
+
+**Offen:** (a) Der **Inhalt der Bibliothek** `libraries/MobaLedLib` ist unverändert (Stand L3 mit unseren Ergänzungen); das ZIP von 3.6.0 enthält die Bibliothek nicht, sie liegt auf GitHub. Bitte den Stand dort mit unserem vergleichen. (b) **Pattern Configurator:** In der neuen `Pattern_Configurator.xlsm` hat `Timeout` (Blatt Par_Description) den Mindestwert 0, in unserem `csv/PA_Par_Description.csv` 1; ohne die alte Mappe ist nicht klar, ob das eine Änderung von 3.6.0 ist, deshalb nicht angefasst. (c) Die Bilder `Hp0_Zs1.png`, `KS1_Zs3_Zs6.png`, `KS_Signal_New1.png`, `Ks_HP0.png` in `Pattern_Config_Examples` sind im Release anders (kleiner) als bei uns; nicht ersetzt.
+
+| Datei | Version | Änderung |
+|-|-|-|
+| `proggen/M02_Public.py` | 1.06 | Lib_Version_Nr 3.6.0, Test_Suffix leer |
+| `proggen/M08_ARDUINO.py` | 1.37 | Bibliotheksversion in der platformio.ini |
+| `libraries/MobaLedLib/library.properties` | 3.6.0 | Version |
+| `platformio.ini` | - | Bibliothek @3.6.0 |
+| `csv/Prog_Generator_MobaLedLib.xlsm` | 3.6.0 | Mappe des Release |
+| `Prog_Generator_Examples/AddressLearn.MLL_pgf` | - | neu |
+| `webmobaledlib.py` | 5.40 | Version, REQUIRED_FILES |
+| `install/BETATEST_Checkliste.md` | 4.19 | Punkt 403 |
 
 ## 5.39 (2026-11-26), Makro Button: Fehler „Parameter Val1§Duration 0 not possible nicht gefunden“
 

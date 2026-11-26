@@ -1,8 +1,8 @@
-# Datei-Version: 5.39 (2026-11-26) - webmobaledlib.py
+# Datei-Version: 5.41 (2026-11-26) - webmobaledlib.py
 # ----------------------------------------------------------------------------------------------
 # Name:           webmobaledlib.py
 # Path:           webmobaledlib.py
-# Version:        5.39
+# Version:        5.41
 # Last Update:    2026-11-26
 # Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
@@ -59,6 +59,8 @@
 #   1.81  2026-10-20  Vollbild: ein Knopf in der Kopfzeile neben Beenden statt je einer in jedem Reiter, Beenden bleibt im Vollbild (web_fullscreen 1.01, web_pattgen 1.17)
 #   1.80  2026-10-20  Knopf Vollbild in jedem Reiter (web_fullscreen 1.00, web_pattgen 1.16)
 #   5.39  2026-11-26  Makro Button (und alle Makros, deren Zelle in Lib_Macros einen Kommentar hat): Fehler 'Der Parameter Name Val1§Duration 0 not possible wurde nicht im Sheet Par_Description gefunden' behoben, der Kommentar der Zelle (Text nach dem §) gehoert nicht zum Makro (M09_Select_Macro 1.01, M06_Write_Header_SW 1.15, web_form_other 1.18, web_macro_tree 1.13)
+#   5.40  2026-11-26  Offizielles Release MobaLedLib 3.6.0 uebernommen: Lib_Version_Nr 3.6.0 ohne Zusatz (M02_Public 1.06), platformio.ini nennt die Bibliothek mit dieser Version (M08_ARDUINO 1.37), library.properties 3.6.0, neue Excel-Arbeitsmappe csv/Prog_Generator_MobaLedLib.xlsm, neues Beispiel Prog_Generator_Examples/AddressLearn.MLL_pgf
+#   5.41  2026-11-26  Bibliothek MobaLedLib 3.6.0 verglichen (Harold): README.md der Bibliothek uebernommen (libraries/MobaLedLib/README.md); PicoFastLED.h bleibt (unsere Fassung ist neuer), alle anderen Dateien gleich
 #   5.38  2026-11-26  Ohne Lichtmaschine kam die Meldung 'Fehler beim Oeffnen der Verbindung' bei jedem Wechsel auf einen Reiter mit Direktmodus (Farb Test, Servo Test, Sound Test): das automatische Verbinden beim Reiterwechsel scheitert jetzt nur einmal mit Meldung, danach wird nicht mehr versucht, bis eine Verbindung besteht oder der Anwender selbst verbindet (Menue, Testtasten)
 #   5.37  2026-11-26  Farb Test: Knopf 'Farb Test beenden' unten rechts (web_colorcheck 1.13); Set_ColTab oeffnet den Farb Test auch ohne Lichtmaschine, kein Anschluss noetig (M60_CheckColors 1.01); Parameterformular: Flags (OptCtrPar, CtrMode, RandMode) als aufklappbare Hakenliste (web_form_other 1.17, Web_Languages.csv)
 #   5.36  2026-11-26  Startseite: alle Kacheln gleich gross (auch Ohne Zentrale und die letzte Lichtmaschine), Raster statt Zeilenumbruch (web_startpage 1.05)
@@ -687,6 +689,7 @@ REQUIRED_FILES = {  # v1.75
     "proggen/M18_Save_Load.py": "1.07", "proggen/M20_PageEvents_a_Functions.py": "1.18",  # v5.28
     "_web/web_colorcheck.py": "1.13", "_web/web_form_other.py": "1.17",  # v5.37
     "_web/web_macro_tree.py": "1.13", "_web/web_form_other.py": "1.18", "proggen/M06_Write_Header_SW.py": "1.15",  # v5.39
+    "proggen/M02_Public.py": "1.06", "proggen/M08_ARDUINO.py": "1.37",  # v5.40
 }  # v1.75
 FILE_PROBLEMS = []                                      # Zeilen der Abweichungen, gefuellt in main()  # v1.75
 
@@ -1777,7 +1780,9 @@ def font_scales(ctrl) -> dict:
 # VERSION = "5.36 (2026-11-26)"  # v5.37 (entfallen)
 # VERSION = "5.37 (2026-11-26)"  # v5.38 (entfallen)
 # VERSION = "5.38 (2026-11-26)"  # v5.39 (entfallen)
-VERSION = "5.39 (2026-11-26)"  # v5.39  # v5.23  # v5.22  # v5.21  # v5.20  # v5.19  # v5.11  # v5.12  # v5.13  # v5.14  # v5.15  # v5.16  # v5.17  # v5.18  # v3.64  # v4.26  # v4.27  # v4.28  # v4.29  # v4.30  # v4.31  # v4.32  # v4.33  # v4.34  # v4.35  # v4.36  # v4.37  # v4.38  # v4.39  # v4.40  # v4.41  # v4.42  # v4.43  # v4.44  # v4.45  # v4.46  # v4.47  # v4.48  # v4.49  # v4.50  # v4.51  # v4.52  # v4.53  # v4.54  # v4.55  # v4.56  # v4.57  # v4.58  # v4.59  # v4.60  # v4.61  # v4.62  # v4.63  # v4.64  # v4.65  # v4.66  # v4.67  # v4.68  # v4.69  # v4.70  # v4.71  # v4.72  # v4.73  # v4.74  # v4.75  # v4.76  # v4.77  # v4.78  # v4.79  # v4.80  # v4.81  # v4.82  # v4.83  # v4.84  # v4.85  # v4.86  # v4.87  # v4.88  # v4.89  # v4.90  # v4.91  # v4.92  # v4.93  # v4.94  # v4.95  # v4.96  # v4.97  # v4.98  # v4.99  # v5.00  # v5.01  # v5.02  # v5.03  # v5.04  # v5.24  # v5.25  # v5.26  # v5.27  # v5.28  # v5.29
+# VERSION = "5.39 (2026-11-26)"  # v5.40 (entfallen)
+# VERSION = "5.40 (2026-11-26)"  # v5.41 (entfallen)
+VERSION = "5.41 (2026-11-26)"  # v5.41  # v5.23  # v5.22  # v5.21  # v5.20  # v5.19  # v5.11  # v5.12  # v5.13  # v5.14  # v5.15  # v5.16  # v5.17  # v5.18  # v3.64  # v4.26  # v4.27  # v4.28  # v4.29  # v4.30  # v4.31  # v4.32  # v4.33  # v4.34  # v4.35  # v4.36  # v4.37  # v4.38  # v4.39  # v4.40  # v4.41  # v4.42  # v4.43  # v4.44  # v4.45  # v4.46  # v4.47  # v4.48  # v4.49  # v4.50  # v4.51  # v4.52  # v4.53  # v4.54  # v4.55  # v4.56  # v4.57  # v4.58  # v4.59  # v4.60  # v4.61  # v4.62  # v4.63  # v4.64  # v4.65  # v4.66  # v4.67  # v4.68  # v4.69  # v4.70  # v4.71  # v4.72  # v4.73  # v4.74  # v4.75  # v4.76  # v4.77  # v4.78  # v4.79  # v4.80  # v4.81  # v4.82  # v4.83  # v4.84  # v4.85  # v4.86  # v4.87  # v4.88  # v4.89  # v4.90  # v4.91  # v4.92  # v4.93  # v4.94  # v4.95  # v4.96  # v4.97  # v4.98  # v4.99  # v5.00  # v5.01  # v5.02  # v5.03  # v5.04  # v5.24  # v5.25  # v5.26  # v5.27  # v5.28  # v5.29
 # VERSION = "4.09 (2026-11-19)"  # v3.64 (entfallen)
 # VERSION = "4.08 (2026-11-19)"  # v3.64 (entfallen)
 # VERSION = "4.07 (2026-11-19)"  # v3.64 (entfallen)

@@ -1,9 +1,9 @@
-Datei-Version: 1.16 (2026-11-26) - RELEASE_Hinweise_5.39.md
-Gilt für MobaLedLib Studio 5.39
+Datei-Version: 1.18 (2026-11-26) - RELEASE_Hinweise_5.41.md
+Gilt für MobaLedLib Studio 5.41
 
-# MobaLedLib Studio 5.39
+# MobaLedLib Studio 5.41
 
-Anhänge dieses Releases: `webmobaledlib.zip` (Programm, mit `zip_erstellen.bat` Version 1.11 gebaut, `ROOT_IN_ZIP=1`), `START_HIER.txt` (erste Schritte), `ANLEITUNG_Installation.pdf` (Anleitung, Version 5.39) und `BETATEST_Checkliste.pdf` (Checkliste für Betatester, Version 4.18).
+Anhänge dieses Releases: `webmobaledlib.zip` (Programm, mit `zip_erstellen.bat` Version 1.11 gebaut, `ROOT_IN_ZIP=1`), `START_HIER.txt` (erste Schritte), `ANLEITUNG_Installation.pdf` (Anleitung, Version 5.41) und `BETATEST_Checkliste.pdf` (Checkliste für Betatester, Version 4.19).
 Installation: siehe `START_HIER.txt` und den Schnellstart der Anleitung. Aktualisieren: Menü **Hilfe → Update MobaLedLib Studio …**, danach das Programm **neu starten** und die Seite mit Strg+F5 neu laden.
 
 ## Wichtig beim Aktualisieren
@@ -12,7 +12,13 @@ Installation: siehe `START_HIER.txt` und den Schnellstart der Anleitung. Aktuali
 - **Nach dem Update das Programm neu starten** und die Seite neu laden. Oben darf keine rote Meldung stehen.
 - **Neues Programmsymbol (4.10):** Für die Verknüpfung auf dem Desktop den Installer noch einmal ausführen.
 
-## Neu seit Version 3.93 (3.94 bis 5.39)
+## Neu seit Version 3.93 (3.94 bis 5.41)
+
+**Neu seit 5.39 (5.40, 5.41): Übernahme des offiziellen Release MobaLedLib 3.6.0**
+- Das Programm meldet sich als „Ver. 3.6.0“ (ohne Zusatz wie L3). Die Bibliothek hat die Version 3.6.0 (`library.properties`), die `platformio.ini` nennt `MobaLedLib@3.6.0`; die Tabelle Libraries der mitgelieferten Excel-Mappe `csv/Prog_Generator_MobaLedLib.xlsm` (Stand 3.6.0) verlangt diese Version.
+- Der Vergleich mit dem Paket `Ver_3.6.0` ergab sonst keine Änderungen: Makrotabelle, Parameter und Plattformen sind gleich, die Dateien in `LEDs_AutoProg` sind im Release älter als unsere (die Erweiterungen für OTA, WLAN-Anzeige und Identify bleiben). Neu ist das Beispiel `AddressLearn.MLL_pgf` (braucht die Erweiterung AddressLearnMLX).
+- Die `README.md` der Bibliothek (`libraries/MobaLedLib`) ist die Fassung von 3.6.0 (5.41). Der Entwickler hat die Bibliothek mit GitHub verglichen: `PicoFastLED.h` bleibt bei unserer neueren Fassung, alle anderen Dateien sind gleich.
+- **Zu prüfen:** Timeout (Mindestwert 0 oder 1) im Pattern Configurator und vier abweichende Beispielbilder in `Pattern_Config_Examples`. Nur gebaut und kompiliert, nicht an Hardware geprüft.
 
 **Neu seit 5.25 (5.26 bis 5.39):**
 - **Startseite überarbeitet (5.34 bis 5.36):** Zuerst wählt man die **Lichtmaschine**, dann zeigt das Programm nur die Zentralen, die sie unterstützt. Fünf Kacheln: Classic (Nano, alle Zentralen), Mini (Nano, nur DCC), Pro (ESP32, alle), Pico Zero (Pico, alle) und MoLLi (Pico, nur DCC). Alle Kacheln sind gleich groß, die Seite spricht mit Du. Die Lichtmaschinen stehen in `csv/Lichtmaschinen_prop.json`; ein neues Produkt wird nur dort ergänzt. Die Startprogramme `*.MLL_pgf` im Ordner `Startprogramme` liefert Harold noch.

@@ -1,9 +1,9 @@
-# Datei-Version: 1.05 (2026-11-12) - M02_Public.py
+# Datei-Version: 1.06 (2026-11-26) - M02_Public.py
 # ----------------------------------------------------------------------------------------------
 # Name:           M02_Public.py
 # Path:           proggen/M02_Public.py
-# Version:        1.05
-# Last Update:    2026-11-12
+# Version:        1.06
+# Last Update:    2026-11-26
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
@@ -13,6 +13,7 @@
 #   1.03  2026-11-01  Excel-Programm 3.5.0-L: Test_Suffix L (Aenderung des Entwicklers, Zeile 77)
 #   1.04  2026-11-12  Excel-Programm 3.5.0L3: Support fuer den Arduino Nano Every (ATmega4809) entfernt (Jürgen, 09.11.26)
 #   1.05  2026-11-12  Excel-Programm 3.5.0L3: Test_Suffix L3 (Bibliothek MobaLedLib 3.5.0-L3)
+#   1.06  2026-11-26  Offizielles Release MobaLedLib 3.6.0: Lib_Version_Nr 3.6.0, Test_Suffix leer
 # ----------------------------------------------------------------------------------------------
 # -*- coding: utf-8 -*-
 #
@@ -74,11 +75,13 @@ from ExcelAPI.XLC_Excel_Consts import *
 #
 # ##################################################### Public Const
 
-Lib_Version_Nr = '3.5.0'                                   # If changed check also "Exp_Prog_Gen_Version" in Pattern_Configurator
+# Lib_Version_Nr = '3.5.0'  # v1.06 (entfallen)
+Lib_Version_Nr = '3.6.0'  # v1.06                                 # If changed check also "Exp_Prog_Gen_Version" in Pattern_Configurator
 # Test_Suffix = 'C1'                                          # The Excel programs use the same version number than the library to avoid confusion  # v1.01 (entfallen)
 # Test_Suffix = 'K'                                           # The Excel programs use the same version number than the library to avoid confusion  # v1.02 (entfallen)
 # Test_Suffix = 'L'                                           # The Excel programs use the same version number than the library to avoid confusion  # v2.65  # v1.05 (entfallen)
-Test_Suffix = 'L3'                                          # The Excel programs use the same version number than the library to avoid confusion  # v1.05
+# Test_Suffix = 'L3'  # v1.06 (entfallen)
+Test_Suffix = ''  # v1.06 Release 3.6.0: kein Zusatz                                        # The Excel programs use the same version number than the library to avoid confusion  # v1.05
 Prog_Version = 'Ver. ' + Lib_Version_Nr + Test_Suffix       # A sufix could be used for beta version
 Prog_Version_Nr = Lib_Version_Nr + Test_Suffix              # Call Gen_Release_Version() to update all sheets
 DEBUG_CHANGEEVENT = False

@@ -1,6 +1,6 @@
-Datei-Version: 1.13 (2026-11-26) - VERSIONEN_Stand_5.39_2026-11-26.txt
+Datei-Version: 1.15 (2026-11-26) - VERSIONEN_Stand_5.41_2026-11-26.txt
 
-MobaLedLib Studio, Release-Stand 2026-11-26 (webmobaledlib.py Version 5.39) - Versionen der von Claude gelieferten Dateien im Ordner python
+MobaLedLib Studio, Release-Stand 2026-11-26 (webmobaledlib.py Version 5.41) - Versionen der von Claude gelieferten Dateien im Ordner python
 
 arduino_prefs.py                     1.02
 fast_paths.py                        1.01
@@ -11,7 +11,7 @@ release_tools.py                     1.09
 repair.py                            1.05
 test_headless_contract.py            1.01
 userdata.py                          1.03
-webmobaledlib.py                     5.39
+webmobaledlib.py                     5.41
 _web/__init__.py                     1.00
 _web/mll_graph.js                    1.17
 _web/mll_servocurve.js               1.03
@@ -107,7 +107,7 @@ pi/esp32_index_check.py              1.00
 proggen/clsExtension.py              1.01
 proggen/DieseArbeitsmappe.py         1.04
 proggen/F00_mainbuttons.py           1.02
-proggen/M02_Public.py                1.05
+proggen/M02_Public.py                1.06
 proggen/M02a_Public.py               1.02
 proggen/M03_Dialog.py                1.03
 proggen/M06_Write_Header.py          1.20
@@ -115,7 +115,7 @@ proggen/M06_Write_Header_LED2Var.py  1.02
 proggen/M06_Write_Header_SW.py       1.15
 proggen/M07_COM_Port.py              1.16
 proggen/M07_COM_Port_New.py          1.24
-proggen/M08_ARDUINO.py               1.36
+proggen/M08_ARDUINO.py               1.37
 proggen/M08_Fast_ARDUINO.py          1.01
 proggen/M08_Install_FastBootLoader.py 1.03
 proggen/M09_Language.py              1.07
@@ -154,10 +154,10 @@ test_dyn_config_wlan.py              1.05
 
 MobaLedTest_macroparamdef.json (Hinweise der Schrifteinstellungen, 4.49; Standardschrift 4.73)
 MobaLedTest_macrodef.json (Texte der Einstellungsseiten, 4.73)
-wiki/ (42 Seiten, Paket webmobaledlib_Wiki_Gesamt_Stand_5.39.zip, an die Menues ab 4.51 angepasst)
+wiki/ (42 Seiten, Paket webmobaledlib_Wiki_Gesamt_Stand_5.41.zip, an die Menues ab 4.51 angepasst)
 
-PDF (install_manual/): ANLEITUNG_Installation.pdf = Version 5.39 BETATEST_Checkliste.pdf = Version 4.18
-Ausserhalb des Ordners python: zip_erstellen.bat Version 1.11 (liegt neben dem Ordner python, ROOT_IN_ZIP=1), START_HIER.txt und START_HIER.md (die .txt kommt in den obersten Ordner des ZIP, die .md ist fuer GitHub), RELEASE_Ablauf.md, HOC_intern.md, HOC_Anwender.md (Stand 5.39), DATEIEN_IM_PAKET_Issue26.md (Liste der Dateien, die nicht ins Paket muessen)
+PDF (install_manual/): ANLEITUNG_Installation.pdf = Version 5.41 BETATEST_Checkliste.pdf = Version 4.19
+Ausserhalb des Ordners python: zip_erstellen.bat Version 1.11 (liegt neben dem Ordner python, ROOT_IN_ZIP=1), START_HIER.txt und START_HIER.md (die .txt kommt in den obersten Ordner des ZIP, die .md ist fuer GitHub), RELEASE_Ablauf.md, HOC_intern.md, HOC_Anwender.md (Stand 5.41), DATEIEN_IM_PAKET_Issue26.md (Liste der Dateien, die nicht ins Paket muessen)
 Neu seit 3.93 (Versionen 3.94 bis 4.79): Aenderungen in webmobaledlib.py, ExcelAPI, _web (web_tabs, web_params, web_form_options, web_serial, web_form_*, web_layout, web_log u.a.; neu: web_settings_transfer), headless (neu: headless_extensions; headless_esp32_ota mit Ausgabe zeilenweise und Abbrechen), proggen (M06_Write_Header_SW, M07_COM_Port, M08_ARDUINO, M38_Extensions u.a.), mlpyproggen/Prog_Generator.py, install (neue Symbole, Anleitung, Checkliste), csv/Web_Languages.csv, libraries (P_ScheduleMLX, P_ScheduleDuoMLX), images
 
 Neu seit 4.79 (Versionen 4.80 bis 4.93):
@@ -204,7 +204,7 @@ install/install_mac.command          1.15
 pi/install_pi.sh                     1.13
 pi/uninstall_pi.sh                   1.02
 pi/mobaledlib.desktop.in             1.03
-proggen/M08_ARDUINO.py               1.36
+proggen/M08_ARDUINO.py               1.37
 csv/Web_Languages.csv (neue Zeilen, Name MobaLedLib Studio, Niederlaendisch, 7 Spalten), csv/Par_Description.csv (HSVColor)
 wiki/ (40 Seiten im Namensraum mobaledlibstudio)
 
@@ -216,10 +216,10 @@ _web/web_log.py                      1.13
 _web/web_tabs.py                     1.37   (Einstellung ShowStartPage)
 headless/headless_dyn_config.py      1.06
 proggen/M06_Write_Header_SW.py       1.15
-proggen/M08_ARDUINO.py               1.36
+proggen/M08_ARDUINO.py               1.37
 proggen/M42_Dyn_Config.py            1.12
 proggen/Userform_Other.py            1.04
-webmobaledlib.py                     5.39
+webmobaledlib.py                     5.41
 LEDs_AutoProg/ESP32Extensions.h      (nur noch fuer den ESP32 kompiliert, 5.17)
 libraries/MobaLedLib/src/PicoFastLED.h  (showColor, 5.15)
 Startprogramme/README.txt            (neu: Namen der Startprogramme fuer die Startseite; die Startprogramme selbst liefert Harold)
@@ -227,10 +227,10 @@ csv/Web_Languages.csv                (neue Zeilen: Parameterformular, Startseite
 install/ANLEITUNG_Installation.md    5.25  (Abschnitt 2.4a Startseite)
 install/BETATEST_Checkliste.md       4.05  (Punkte 363 bis 370)
 wiki/ (42 Seiten; neu: startseite; geaendert: erstes_programm, modus, wz_programm_einstellungen, einfuehrung, faq, pg_tabelle, seiten_update)
-Ausserhalb des Ordners python: HOC_intern.md, HOC_Anwender.md (Stand 5.39), LIESMICH_Wiki_Gesamt.md (im Wiki-Paket)
+Ausserhalb des Ordners python: HOC_intern.md, HOC_Anwender.md (Stand 5.41), LIESMICH_Wiki_Gesamt.md (im Wiki-Paket)
 Der Begriff LocoNet (geschuetzt) steht nicht mehr in der Oberflaeche und im Wiki; unveraendert bleiben der offizielle Lizenzdialog (Digitrax), das Bild LocoNetLicense.png, die Bibliothek LocoNet2 und die Z21-Konstanten.
 
-Neu seit 5.25 (Versionen 5.26 bis 5.39), Auswahl der wichtigsten Dateien (alle geaenderten Dateien: webmobaledlib_Dateien_Stand_5.39.zip):
+Neu seit 5.25 (Versionen 5.26 bis 5.40), Auswahl der wichtigsten Dateien (alle geaenderten Dateien: webmobaledlib_Dateien_Stand_5.41.zip):
 _web/web_startpage.py                1.05
 _web/web_colorcheck.py               1.13
 _web/web_form_other.py               1.18
@@ -242,11 +242,20 @@ _web/web_form_options.py             1.74
 proggen/M09_Select_Macro.py          1.01
 proggen/M06_Write_Header_SW.py       1.15
 proggen/M60_CheckColors.py           1.01
-webmobaledlib.py                     5.39
+webmobaledlib.py                     5.41
 csv/Lichtmaschinen_prop.json        1.01  (neu: Liste der Lichtmaschinen fuer die Startseite)
 Startprogramme/README.txt            (Namen der Startprogramme; die Startprogramme *.MLL_pgf liefert Harold noch)
 csv/Web_Languages.csv                (neue Zeilen nur Deutsch und Englisch, 7 Spalten)
 install/ANLEITUNG_Installation.md    5.39  (Abschnitt 2.4a Startseite)
-install/BETATEST_Checkliste.md       4.18  (Punkte bis 402)
+install/BETATEST_Checkliste.md       4.19  (Punkte bis 403)
 wiki/ (43 Dateien; geaendert: startseite, wz_farbtest, pg_tabelle)
-Ausserhalb des Ordners python: HOC_intern.md, HOC_Anwender.md (Stand 5.39), LIESMICH_Wiki_Gesamt.md (im Wiki-Paket)
+Ausserhalb des Ordners python: HOC_intern.md, HOC_Anwender.md (Stand 5.41), LIESMICH_Wiki_Gesamt.md (im Wiki-Paket)
+
+Neu in 5.40 und 5.41 (Release MobaLedLib 3.6.0):
+proggen/M02_Public.py                1.06   (Lib_Version_Nr 3.6.0, Test_Suffix leer)
+proggen/M08_ARDUINO.py               1.37   (platformio.ini: Bibliothek @3.6.0)
+libraries/MobaLedLib/library.properties  3.6.0
+platformio.ini                       (Bibliothek @3.6.0)
+csv/Prog_Generator_MobaLedLib.xlsm   3.6.0  (Mappe des Release)
+Prog_Generator_Examples/AddressLearn.MLL_pgf  (neu)
+libraries/MobaLedLib/README.md       3.6.0  (5.41, Fassung des Entwicklers)

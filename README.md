@@ -6,6 +6,5 @@ MobaLedLib Studio ist das Programm für deinen Computer, mit dem du dieses Progr
 
 Details findest Du im Wiki: https://wiki.mobaledlib.de/anleitungen/mobaledlibstudio/einfuehrung
 
-## Datenübertragung
+## 
 
-Optionale Übernahme von Tabellen oder ausgewählten Zeilen zwischen PCs im lokalen Netzwerk (ab 4.89, Beitrag von moosbewohner). Die Quellfreigabe bleibt beim Start ausgeschaltet. Bedienung, Sicherung und Grenzen: [Datenübertragung](DATENUEBERTRAGUNG.md).

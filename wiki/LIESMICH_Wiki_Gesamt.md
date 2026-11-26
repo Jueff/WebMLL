@@ -1,13 +1,9 @@
-Datei-Version: 1.58 (2026-11-26) - LIESMICH_Wiki_Gesamt.md
-Gilt für Version 5.39
+Datei-Version: 1.57 (2026-11-25) - LIESMICH_Wiki_Gesamt.md
+Gilt für Version 5.25
 
 # Wiki-Kapitel „MobaLedLib Studio“: alle Seiten, Stand 4.93
 
 Dieses Paket enthält **alle 41 Seiten** in ihrer neuesten Fassung (Seitenstand jeweils um 0,01 erhöht). Es ersetzt die früheren Pakete der sechs Wellen. **Die Seiten erst veröffentlichen, wenn ein Release mit 3.04 (oder neuer) auf GitHub liegt.**
-
-## Neu seit Stand 5.25 (Stand 5.39)
-
-* **Geändert:** `startseite` (1.03, Lichtmaschine zuerst, Zentralen je nach Lichtmaschine, Du-Form, gleich große Kacheln), `wz_farbtest` (1.09, Knopf „Farb Test beenden“), `pg_tabelle` (1.17, Bedienung der Tabelle wie in Excel, Doppelklick öffnet die Makroauswahl). **Bilder fehlen noch:** Startseite (`start_02_startseite.png`) und Logic-Eingabefenster.
 
 ## Neu seit Stand 5.12 (Stand 5.23): Startseite für Einsteiger
 

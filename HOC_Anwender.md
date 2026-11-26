@@ -1,9 +1,20 @@
-Datei-Version: 1.124 (2026-11-26) - HOC_Anwender.md
-Stand: Version 5.39
+Datei-Version: 1.126 (2026-11-26) - HOC_Anwender.md
+Stand: Version 5.41
 
 # MobaLedLib Studio: Änderungen (Kurzfassung)
 
 Gilt ab Version 1.39. Neueste Version oben.
+
+## Version 5.41 (2026-11-26)
+
+Neue Funktionen:
+- Die Bibliothek MobaLedLib ist auf dem Stand 3.6.0 (README mit den Neuerungen von 3.6.0).
+
+## Version 5.40 (2026-11-26)
+
+Neue Funktionen:
+- Das offizielle Release MobaLedLib 3.6.0 ist übernommen: Das Programm meldet sich als „Ver. 3.6.0“, die Bibliothek hat die Version 3.6.0.
+- Neues Beispiel „AddressLearn“ (Adressen einlernen, mit der Erweiterung AddressLearnMLX).
 
 ## Version 5.39 (2026-11-26)
 

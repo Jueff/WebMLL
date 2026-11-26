@@ -1,0 +1,6 @@
+[b]Änderungen seit V5.39 (5.40 und 5.41)[/b]
+
+[list][*]Das offizielle Release MobaLedLib 3.6.0 ist übernommen: Das Programm meldet sich als „Ver. 3.6.0“, die Bibliothek hat die Version 3.6.0, die Excel-Mappe im Programm ist die von 3.6.0.
+[*]Neues Beispiel „AddressLearn“ (Adressen einlernen, mit der Erweiterung AddressLearnMLX).[/list]
+
+Die README der Bibliothek ist auf dem Stand 3.6.0. Sonst gab es gegenüber 5.39 keine Änderungen. Nur gebaut und kompiliert, nicht an Hardware geprüft.
