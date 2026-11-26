@@ -1,5 +1,5 @@
-Datei-Version: 1.129 (2026-11-26) - HOC_intern.md
-Stand: Version 5.52
+Datei-Version: 1.136 (2026-11-26) - HOC_intern.md
+Stand: Version 5.56
 
 # webMobaLedLib: History of Change (intern, ausführlich)
 
@@ -8,6 +8,91 @@ Pro Version: was sich geändert hat und die Tabelle der geänderten Dateien (Dat
 Pfade beziehen sich auf den Ordner `python`.
 
 ---
+
+## 5.56 (2026-11-26), Zusammenführung mit 5.54, Pull Request 80 und Folgeänderungen (Jürgen): Selectrix, Anschluss-Hinweis, Firmware, Plattformen, Serieller Monitor
+
+**Zusammenführung mit 5.54:** Die Dateien dieser Änderungen sind auf den Stand von Jürgen gebracht (in 5.54 standen mehrere Dateien auf einem älteren Stand, zum Beispiel `M07_COM_Port.py` 1.16, `web_serial.py` 1.18, `web_startpage.py` 1.05). Die Einträge darunter (5.52 und 5.50 der Arbeitskopie) beschreiben den Inhalt.
+
+### Teil 3 (Arbeitskopie 5.55 und 5.56): Serieller Monitor, Verbindungsaufbau, Protokoll
+
+**Wunsch (Jürgen):** Der Serielle Monitor soll nur mitlesen; ein Pico antwortete dort nicht; beim Wechsel des Anschlusses sollen Knopf und Status jeden Schritt zeigen; während des Verbindungsaufbaus sollen beide Verbindungsknöpfe grau und gesperrt sein; im Protokoll stand beim normalen Beenden `INFO webmobaledlib.crash`.
+
+**Änderung:**
+- `connect_monitor` öffnet den Anschluss ohne Abfrage (`#?`); DTR und RTS richten sich nach dem Gerät am Anschluss (USB-Kennung: Pico an, Nano/Uno und ESP32 aus, unbekannt: Board des Blatts), nicht nach dem Board im Blatt. Vorher schwieg ein Pico, wenn im Blatt ein anderes Board stand.
+- `ctrl.connecting` ist gesetzt, solange `_open_and_handshake` läuft. Der Knopf in der Kopfzeile (mit Pfeil) und der Knopf im Seriellen Monitor sind dann grau, gesperrt (`disable()`) und heißen „Verbinden...“.
+- Wechsel des Anschlusses bei bestehender Verbindung: Ausgabe leeren, trennen, „Nicht verbunden“ (Knopf rot), „Verbindungsaufbau ... COMx“ (Knopf grau, gesperrt), danach der Zustand der Verbindung.
+- Die Meldung beim Prozessende kommt vom Logger `webmobaledlib.exit` („Prozess N ordnungsgemäß beendet“); vorher stand sie unter `webmobaledlib.crash` und sah nach einem Absturz aus.
+- Neue Texte in `Web_Languages.csv`: „Verbindungsaufbau ...“, „Verbinden...“ (alle sieben Sprachen, mit `catalog_text` geprüft).
+
+**Nicht geprüft:** Der Pico mit echter Hardware (DTR), die Anzeige der Schritte und das Sperren der Knöpfe im Browser sind nur mit Test und Demoseite mit Ersatzobjekt gesehen, nicht an einem Gerät. `test_log_drag.py` (Edge ohne Fenster) lieferte in dieser Umgebung keine Messwerte und ist nicht bestanden.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_serial.py` | 1.24 | `connect_monitor`, `_monitor_dtr`, `connecting` |
+| `_web/web_serial_page.py` | 1.07 | Ein Knopf, Schritte beim Wechsel, Knopf grau beim Verbindungsaufbau, Ausgabe leeren |
+| `_web/web_logging.py` | 1.06 | Logger `webmobaledlib.exit` |
+| `webmobaledlib.py` | 5.56 | Knopf in der Kopfzeile sperren, Versionsliste |
+| `csv/Web_Languages.csv` | | zwei neue Texte |
+| `test_monitor_connect.py` | | vier Tests (Mitlesen, DTR) |
+
+### Teil 2 (Arbeitskopie 5.52): Plattformen, LNet-Bestätigung, Serieller Monitor, Firmware-Auswahl
+
+**Wunsch (Jürgen):** Firmware nach Plattform gruppieren und das passende Gerät vorwählen, Plattformen anderer MobaLedLib Geräte in der JSON-Datei, Bestätigung der LNet-Lizenz beim Wechsel, ein Verbindungsknopf im Serial Monitor.
+
+**Umsetzung:**
+* **Lichtmaschinen_prop.json:** `devices` (Lichtmaschinen, Feld `protocols` statt `centrals`) und `platforms` (Plattformen anderer MobaLedLib Geräte: `platform`, `name`, `text`, `image`; Einträge `MLL512V1`, `MLLS88GWV1`). Kacheln: leere Fläche, wenn `image` leer ist oder die Datei fehlt. Die Hardware Optionen bieten die Protokolle aus `devices` an (`protocols_for_platform`).
+* **Firmware-Auswahl:** nach Plattform gruppiert (Überschrift = Name aus `platforms`, dann `devices`, sonst die Plattform), Liste höher und breiter; die Geräteauswahl wählt ein Gerät derselben Plattform vor, zeigt das Bild aus `platforms` und „Unbekannte Ports“ ist zunächst aus.
+* **Identitätszeile `~MLLINFO`** wird tolerant gelesen (`Parse_Kv`: unbekannte Schlüssel ignoriert, Groß-/Kleinschreibung, Anführungszeichen, Komma/Semikolon).
+* **LNet:** Wechsel des Protokolls auf LNet zeigt den Lizenzdialog, die Bestätigung gilt je Blatt (`esp32_options['lnet_license']`), steht nicht in der PGF-Datei und wird beim Kopieren eines Blatts nicht übernommen.
+* **Serial Monitor:** ein Verbindungsknopf mit der Statusanzeige des zentralen Knopfs; er liest nur mit (`connect_monitor`: kein `#?`, keine Abfrage am Gerät, kein Fehlerdialog „Falsche oder keine Antwort“); die Portauswahl zeigt Typ und Untertyp nach der USB-Kennung (CH340, CP2102, Pico ...).
+
+| Datei | Version | Änderung |
+|-|-|-|
+| `csv/Lichtmaschinen_prop.json` | 1.06 | `devices`, `platforms`, `protocols` |
+| `_web/web_startpage.py` | 1.13 | `load_platforms`, `platform_name`, `platform_image`, `protocols_for_platform` |
+| `_web/web_form_firmware.py` | 1.06 | nach Plattform gruppiert, Layout |
+| `_web/web_form_comport.py` | 1.51 | Vorwahl nach Plattform, Bild aus `platforms` |
+| `_web/web_form_options.py` | 1.79 | Protokolle aus `devices`, LNet-Bestätigung |
+| `proggen/M07_COM_Port_New.py` | 1.29 | `Parse_Kv` |
+| `headless/headless_pico.py` | 1.03 | Plattform je Firmware, Sortierung |
+| `_web/web_serial.py` | 1.22 | Typ und Untertyp nach USB-Kennung, `connect_monitor` |
+| `_web/web_serial_page.py` | 1.06 | ein Verbindungsknopf (Verbinden/Trennen), nur Mitlesen, Überschrift Serieller Monitor, Wechsel der Portauswahl trennt und verbindet neu |
+| `test_monitor_connect.py` | 1.00 | neu |
+| `_web/web_tabs.py`, `csv/Web_Languages.csv`, `MobaLedTest_macrodef.json` | | Reiter und Seite heißen Serieller Monitor |
+| `webmobaledlib.py` | 5.52 | Kopieren ohne LNet-Bestätigung, Serial Monitor |
+| `test_port_labels.py` | 1.00 | neu |
+
+### Teil 1 (Arbeitskopie 5.50): Selectrix Channel 1 bis 99, COM Port Hinweis, Firmware Geräteauswahl, Log-Fenster
+
+**Wunsch (Jürgen):** Selectrix-Blätter fehlerfrei bauen, den Anschluss-Hinweis (-3) auch beim Setup übertragen auswerten, bei Firmware installieren die Geräteauswahl benutzen, Abbrechen soll die Fenster schließen, das Log-Fenster verschiebbar.
+
+**Umsetzung:**
+* **Selectrix:** Channel 1 bis 99 und Bitposition 1 bis 8 (Eingabe `SX_Check_Input`, Generator `ProcessLine`: Fehler, das Header file wird nicht erzeugt). DCC, LNet, CAN: Adresse 0 ist nicht erlaubt (`Check_Address_Input`), die Sonderbehandlung entfällt. Ursache des leeren `#InCh` im SX-Build: `AddrList` begann mit dem Element 0 (`vbObjectInitialize`, `Erase` setzte nur Nullen), Adresse 0 galt als schon vorhanden; jetzt eine leere Liste. Umrechnung beim Protokollwechsel: Adresse = Channel × 8 + Bitposition, umrechenbar sind 9 bis 800.
+* **Anschluss-Hinweis:** `-3` im Anschluss der Tabelle: `Resolve_Port_Hint` prüft beim Hochladen und beim Setup übertragen, ob COM3 vorhanden ist und zum Typ des Blatts passt, und trägt es ein; sonst öffnet sich die Geräteauswahl (kein anderes Board wird stillschweigend eingetragen). Autoconnect trägt den gefundenen Anschluss ein (`_store_hint_port`).
+* **Geräteauswahl:** `COM?` ist keine Zeile mehr, OK ohne Auswahl ändert das Blatt nicht. Firmware installieren (Pico): `SelectPicoDevice` mit anderen Regeln (nur Pico-Geräte, unbekannte und andere MobaLedLib Geräte wählbar, „Unbekannte Ports anzeigen“ aktiv, bei „Andere MobaLedLib Geräte“ kein Bild, das Blatt bleibt unverändert).
+* **Abbrechen** in der Geräteauswahl schließt auch das Fenster Kompilieren und Hochladen (Setup übertragen und normales Hochladen).
+* **PGF-Import** in ein verstecktes Blatt (Startseite) blendet es wieder ein.
+* **Firmware aus lokaler ZIP-Datei:** im Dialog Firmware herunterladen steht unter der Liste das Auswahlfeld für ZIP-Dateien (wie bei Update Testversion); die ZIP muss eine `*.uf2` enthalten, wird mit `unzip_safe` in den Firmware-Ordner entpackt (Rückfrage beim Überschreiben), danach ist die Firmware vorgewählt.
+* **Log-Fenster** schwebend und verschiebbar (Titelzeile, Doppelklick = Ausgangsposition); Meldungen werden gebündelt und beim Ziehen zurückgehalten (kein Ruckeln).
+
+| Datei | Version | Änderung |
+|-|-|-|
+| `proggen/M06_Write_Header.py` | 1.21 | Selectrix-Prüfung, Adresse 0, `AddressExists` |
+| `proggen/M20_PageEvents_a_Functions.py` | 1.19 | `Check_Address_Input`, Selectrix Channel 1 bis 99 |
+| `proggen/M07_COM_Port.py` | 1.20 | `Resolve_Port_Hint`, `Port_Hint_Number` |
+| `proggen/M08_ARDUINO.py` | 1.39 | Abbrechen schließt das Übertragungsfenster |
+| `proggen/M18_Save_Load.py` | 1.08 | Import in ein verstecktes Blatt |
+| `headless/headless_protocol_switch.py` | 1.01 | Channel 1 bis 99, Adressen 9 bis 800 |
+| `_web/web_form_comport.py` | 1.47 | Firmware-Auswahl, `COM?`, OK ohne Auswahl |
+| `_web/web_form_options.py` | 1.76 | Firmware installieren mit der Geräteauswahl |
+| `_web/web_log.py` | 1.15 | verschiebbar, Meldungen gebündelt |
+| `headless/headless_firmware_dl.py` | 1.01 | `check_local_zip`, `install_local_zip`, `entry_from_file` |
+| `_web/web_form_firmware_download.py` | 1.03 | Auswahlfeld für eine lokale ZIP-Datei |
+| `test_firmware_local_zip.py` | 1.00 | neu |
+| `webmobaledlib.py` | 5.50 | Anschluss-Hinweis bei Autoconnect |
+| `test_port_hint.py`, `test_pico_device_dialog.py`, `test_log_drag.py` | 1.00 | neu |
+| `test_protocol_switch.py` | | 26 Tests |
+
 
 ## 2.12 (2026-10-23) - Release-Stand
 
@@ -62,34 +147,9 @@ SwitchC bewusst nicht aufgenommen (nicht gewünscht); der Name lässt sich einti
 
 Das Makro `Logic(Erg, A AND B OR …)` und `Create_Result` sind unverändert; der Baukasten erzeugt denselben Text. Nicht im Browser geprüft, nur die reinen Funktionen (Test mit 11 Ausdrücken).
 
-## 5.52 (2026-11-26), Plattformen, LNet-Bestätigung, Serial Monitor, Firmware-Auswahl
+## 5.54 (2026-11-26), Pull Request 80 (Jueff, dort V5.50): Selectrix Channel 1 bis 99, COM Port Hinweis, Firmware Geräteauswahl, Log-Fenster
 
-**Wunsch (Jürgen):** Firmware nach Plattform gruppieren und das passende Gerät vorwählen, Plattformen anderer MobaLedLib Geräte in der JSON-Datei, Bestätigung der LNet-Lizenz beim Wechsel, ein Verbindungsknopf im Serial Monitor.
-
-**Umsetzung:**
-* **Lichtmaschinen_prop.json:** `devices` (Lichtmaschinen, Feld `protocols` statt `centrals`) und `platforms` (Plattformen anderer MobaLedLib Geräte: `platform`, `name`, `text`, `image`; Einträge `MLL512V1`, `MLLS88GWV1`). Kacheln: leere Fläche, wenn `image` leer ist oder die Datei fehlt. Die Hardware Optionen bieten die Protokolle aus `devices` an (`protocols_for_platform`).
-* **Firmware-Auswahl:** nach Plattform gruppiert (Überschrift = Name aus `platforms`, dann `devices`, sonst die Plattform), Liste höher und breiter; die Geräteauswahl wählt ein Gerät derselben Plattform vor, zeigt das Bild aus `platforms` und „Unbekannte Ports“ ist zunächst aus.
-* **Identitätszeile `~MLLINFO`** wird tolerant gelesen (`Parse_Kv`: unbekannte Schlüssel ignoriert, Groß-/Kleinschreibung, Anführungszeichen, Komma/Semikolon).
-* **LNet:** Wechsel des Protokolls auf LNet zeigt den Lizenzdialog, die Bestätigung gilt je Blatt (`esp32_options['lnet_license']`), steht nicht in der PGF-Datei und wird beim Kopieren eines Blatts nicht übernommen.
-* **Serial Monitor:** ein Verbindungsknopf mit der Statusanzeige des zentralen Knopfs; er liest nur mit (`connect_monitor`: kein `#?`, keine Abfrage am Gerät, kein Fehlerdialog „Falsche oder keine Antwort“); die Portauswahl zeigt Typ und Untertyp nach der USB-Kennung (CH340, CP2102, Pico ...).
-
-| Datei | Version | Änderung |
-|-|-|-|
-| `csv/Lichtmaschinen_prop.json` | 1.06 | `devices`, `platforms`, `protocols` |
-| `_web/web_startpage.py` | 1.13 | `load_platforms`, `platform_name`, `platform_image`, `protocols_for_platform` |
-| `_web/web_form_firmware.py` | 1.06 | nach Plattform gruppiert, Layout |
-| `_web/web_form_comport.py` | 1.51 | Vorwahl nach Plattform, Bild aus `platforms` |
-| `_web/web_form_options.py` | 1.79 | Protokolle aus `devices`, LNet-Bestätigung |
-| `proggen/M07_COM_Port_New.py` | 1.29 | `Parse_Kv` |
-| `headless/headless_pico.py` | 1.03 | Plattform je Firmware, Sortierung |
-| `_web/web_serial.py` | 1.22 | Typ und Untertyp nach USB-Kennung, `connect_monitor` |
-| `_web/web_serial_page.py` | 1.06 | ein Verbindungsknopf (Verbinden/Trennen), nur Mitlesen, Überschrift Serieller Monitor, Wechsel der Portauswahl trennt und verbindet neu |
-| `test_monitor_connect.py` | 1.00 | neu |
-| `_web/web_tabs.py`, `csv/Web_Languages.csv`, `MobaLedTest_macrodef.json` | | Reiter und Seite heißen Serieller Monitor |
-| `webmobaledlib.py` | 5.52 | Kopieren ohne LNet-Bestätigung, Serial Monitor |
-| `test_port_labels.py` | 1.00 | neu |
-
-## 5.50 (2026-11-26), Selectrix Channel 1 bis 99, COM Port Hinweis, Firmware Geräteauswahl, Log-Fenster
+Pull Request 80 von Jueff (dort als V5.50 auf 5.49 aufgebaut). Zeilen im Code behalten die Markierung `# v5.50` des PR, `release_manifest.json` ist nicht betroffen. Auf 5.53 eingespielt ohne Konflikte, auch nicht mit `Fill_Port_From_Active_Connection` (5.48). `test_protocol_switch.py` (26 Tests) und `test_firmware_local_zip.py` laufen, `test_port_hint.py` wird ohne Windows übersprungen, `test_log_drag.py` braucht den Browser (hier nicht lauffähig).
 
 **Wunsch (Jürgen):** Selectrix-Blätter fehlerfrei bauen, den Anschluss-Hinweis (-3) auch beim Setup übertragen auswerten, bei Firmware installieren die Geräteauswahl benutzen, Abbrechen soll die Fenster schließen, das Log-Fenster verschiebbar.
 
@@ -116,9 +176,72 @@ Das Makro `Logic(Erg, A AND B OR …)` und `Create_Result` sind unverändert; de
 | `headless/headless_firmware_dl.py` | 1.01 | `check_local_zip`, `install_local_zip`, `entry_from_file` |
 | `_web/web_form_firmware_download.py` | 1.03 | Auswahlfeld für eine lokale ZIP-Datei |
 | `test_firmware_local_zip.py` | 1.00 | neu |
-| `webmobaledlib.py` | 5.50 | Anschluss-Hinweis bei Autoconnect |
+| `webmobaledlib.py` | 5.54 | Anschluss-Hinweis bei Autoconnect |
 | `test_port_hint.py`, `test_pico_device_dialog.py`, `test_log_drag.py` | 1.00 | neu |
 | `test_protocol_switch.py` | | 26 Tests |
+| `csv/Languages.csv`, `csv/Web_Languages.csv`, `csv/xSelectrix.csv` | | Kopfzeilen [1..99], neue Texte |
+| `install/BETATEST_Checkliste.md` | 4.31 | Punkt 416 |
+| `install/ANLEITUNG_Installation.md` | 5.54 | Abschnitt |
+| Wiki `wz_datenuebertragung.txt` 1.04, `wz_programm_einstellungen.txt` 1.21, `pg_tabelle.txt` 1.18, `pg_arduino.txt` 1.20, `seiten_update.txt` 1.17 | | Adresse/Port, Option LED/Sound Kanal, LED Kanal oben, Selectrix-Grenzen, Anschluss-Hinweis, Firmware-ZIP, Log-Fenster |
+
+## 5.53 (2026-11-26), Pull Request 78 (moosbewohner): Datenübertragung, Quelladresse und Port
+
+Quelladresse ohne `http://` und schmales Portfeld (Vorgabe 45875); gespeicherte Adressen und Suchergebnisse füllen beide Felder, intern wird die URL wieder zusammengesetzt (eigene Ports, Hostnamen, IPv6, HTTPS bleiben möglich). Ungültige Ports: übersetzte Meldung. Verbindungscode: Mindestlänge sechs statt zwölf Zeichen (bestehende Codes bleiben gültig). Backend und Protokoll unverändert. `release_manifest.json` aus dem PR nicht übernommen (wird beim Release neu erzeugt). Gegen den PR geprüft: Code lässt sich ohne Konflikt einspielen; im Browser nicht getestet.
+
+| Datei | Version | Änderung |
+|-|-|-|
+| `_web/web_table_sync.py` | 1.10 | getrennte Adresse/Port, Mindestlänge 6 (Zeilen des PR mit v1.09/v1.10) |
+| `csv/Web_Languages.csv` | - | zwei neue Texte (Portmeldung, Codelänge) in sieben Sprachen |
+| `DATENUEBERTRAGUNG.md` 1.05, `DATENUEBERTRAGUNG_IP_PORT.md` 1.01 | - | Beschreibung, gilt für 5.53 |
+| `webmobaledlib.py` | 5.53 | VERSION, REQUIRED_FILES |
+| `install/BETATEST_Checkliste.md` | 4.30 | Punkt 415 |
+| `install/ANLEITUNG_Installation.md` | 5.53 | Abschnitt Quelladresse und Port |
+
+## 5.52 (2026-11-26): Korrektur zur Option LED/Sound Kanal
+
+Fehler (Harold, Test von 5.51): Wird der Kanal in der Tabelle geändert, werden die Start LedNr nicht neu berechnet. Im Testlauf ohne Oberfläche rechnet `Global_Worksheet_Change` richtig; die Ursache im Browser-Weg ließ sich ohne Oberfläche nicht finden. Deshalb ruft die Oberfläche die Neuberechnung jetzt selbst auf: neue Funktion `recalc_led_start(ws)` (Ereignisse aus, `Make_sure_that_Col_Variables_match`, `Update_Start_LedNr`, Fehler ins Log) nach dem Schreiben in `on_cell_changed` (Spalte LED_Cha_Col) und in `write_cells` (Ausfüllen nach unten, Einfügen, Rückgängig/Wiederholen, wenn Kanal-Zellen dabei sind; einmal nach allen Zellen).
+
+| Datei | Version | Änderung |
+|-|-|-|
+| `webmobaledlib.py` | 5.52 | `recalc_led_start`, Aufrufe, VERSION |
+| `install/BETATEST_Checkliste.md` | 4.29 | Punkt 414 ergänzt |
+| `install/ANLEITUNG_Installation.md` | 5.52 | gilt für 5.52 |
+
+## 5.51 (2026-11-26): Wünsche aus dem Test von 5.41
+
+* **Haus-Dialog (Raum/House):** der Haken „Individuelle Zeiten“ steht jetzt über den Reglern für die Zeiten (bisher darunter; Tester suchte, warum die Regler deaktiviert waren). Der LED Kanal steht oben unter der Beschreibung.
+* **LED Kanal oben:** In den Makro-Dialogen steht die Kanalwahl oben (nur bei Makros mit LEDs). Das nachträgliche Ändern in der Tabelle ist nicht mehr möglich.
+* **Servo-Hilfetext:** „Servo_Pos Programm“ heißt in der deutschen Hilfe jetzt „Programm Servo Einstellungen“ (`Prog_Generator_MobaLedLib.xlsm`: Lib_Macros, Par_Description, Texte; `csv/Lib_Macros.csv`, `csv/Par_Description.csv`). Andere Sprachen unverändert.
+* **Neue Einstellung `LedChannelEditable`** (Programm Generator Einstellungen, Standard Aus): Spalte „LED/ Sound Kanal“ ist in der Tabelle änderbar, auch Ausfüllen nach unten. Verantwortung beim Anwender. Nach jeder Änderung werden die LED-Nummern neu berechnet (`Worksheet_Change` → `Update_Start_LedNr`, wie bei einer Kanaländerung im Makro). Gilt ab der nächsten Anzeige der Tabelle.
+
+| Datei | Version | Änderung |
+|-|-|-|
+| `_web/web_form_house.py` | 1.09 | LED Kanal oben, Haken vor den Reglern |
+| `_web/web_tabs.py` | 1.38 | Einstellung LedChannelEditable |
+| `_web/web_params.py` | 1.20 | Einstellung in Gruppe Programm Generator |
+| `csv/Prog_Generator_MobaLedLib.xlsm`, `csv/Lib_Macros.csv`, `csv/Par_Description.csv` | - | Servo-Text |
+| `webmobaledlib.py` | 5.51 | `led_channel_editable()`, `readonly_columns`, VERSION, REQUIRED_FILES |
+| `install/BETATEST_Checkliste.md` | 4.28 | Punkt 414 |
+| `install/ANLEITUNG_Installation.md` | 5.51 | Hinweis zur Option |
+
+## 5.50 (2026-11-26), Issue 77 (Jürgen): Zeilen 1 und 2 geschützt
+
+Fehler: „Zeile einfügen“ fügte oberhalb von Zeile 1 eine neue Zeile ein (Harold, Test). Anforderung (Jürgen): Die Zeilen 1 und 2 der Datenblätter dürfen durch kein Kommando verändert werden.
+
+Stand der Prüfung: Kontextmenü, Einfügen, Ausfüllen, Bearbeiten und Datenübertragung schützten die Zeilen schon (`first_data_row0`, `FirstDat_Row`). Es fehlten die drei Knöpfe der Werkzeugleiste, die über `XLA_Application` laufen:
+* **Zeile einfügen** (`addrow_before_current_row`): ohne Auswahl oder mit Auswahl in Zeile 1 oder 2 wurde eingefügt (ohne Auswahl bei Index 0).
+* **Zeilen löschen** (`deleterows`): löschte auch Zeile 1 und 2.
+* **Zeilen verschieben** (`int_moveRows`): ließ Zeile 1/2 als Quelle und als Ziel zu.
+
+Jetzt prüft `XLA_Application._first_data_row0()` (Datenblätter: ab `FirstDat_Row`) an der untersten Stelle und lehnt die Befehle ab (mit Logeintrag). In `run_command` kommt zusätzlich der Hinweis „Die Zeilen 1 und 2 sind geschützt …“ (einfügen, löschen, kopieren; ohne Auswahl ebenfalls). „Zeilen kopieren“ (`M23.Proc_Copy_Row`) hatte die Prüfung schon.
+
+| Datei | Version | Änderung |
+|-|-|-|
+| `ExcelAPI/XLA_Application.py` | 1.25 | Schutz bei einfügen, löschen, verschieben |
+| `webmobaledlib.py` | 5.50 | Hinweis, Version, REQUIRED_FILES |
+| `install/BETATEST_Checkliste.md` | 4.27 | Punkt 413 |
+
+Test mit Attrappe: Einfügen bei Auswahl Zeile 1, 2, keine Auswahl abgelehnt; ab Zeile 3 erlaubt. **Nicht im Browser geprüft.** Nicht geändert: Ctrl+C von Zellen der Zeilen 1 und 2 (Jürgen: „auch nicht kopiert werden“), bitte bei ihm nachfragen, ob das gemeint ist.
 
 ## 5.49 (2026-11-26), Issue 75 (Jürgen): Menü Werkzeuge
 

@@ -1,8 +1,8 @@
-# Datei-Version: 1.22 (2026-11-26) - web_serial.py
+# Datei-Version: 1.24 (2026-11-26) - web_serial.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_serial.py
 # Path:           _web/web_serial.py
-# Version:        1.22
+# Version:        1.24
 # Last Update:    2026-11-26
 # Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
@@ -17,6 +17,8 @@
 #   1.07  2026-11-14  ESP32: Verbindung ueber WLAN mit Anmeldung per HMAC (Port 2323, connect_esp32); Schreibfehler schliesst nur die eigene Verbindung (Beitrag des Fork-Entwicklers)
 #   1.08  2026-11-14  TcpPort: ungueltiger Hostname (UnicodeError, "label too long") wird als OSError gemeldet statt abzustuerzen
 #   1.09  2026-11-14  Automatisches Verbinden (ohne Anschlussangabe): ist fuer das Blatt eine ESP32-WLAN-Verbindung eingetragen (wifi_target_provider), wird zuerst WLAN versucht, sonst USB; connect(wlan=False) erzwingt USB
+#   1.24  2026-11-26  connecting: Kennzeichen, solange ein Verbindungsaufbau laeuft (Knoepfe in Kopfzeile und Serial Monitor zeigen dann Verbinden... grau und gesperrt). Zeilen mit '# v1.24'
+#   1.23  2026-11-26  connect_monitor: DTR und RTS richten sich nach dem Typ des gewaehlten Anschlusses (USB-Kennung: Pico = an, Nano und ESP32 = aus) und nicht nach dem Board im Blatt; sonst schwieg ein Pico im Serial Monitor, wenn im Blatt ein anderes Board stand. Zeilen mit '# v1.23'
 #   1.22  2026-11-26  connect_monitor: Verbinden nur zum Mitlesen (Serial Monitor): der Anschluss wird geoeffnet und gelesen, es gibt keine Abfrage am Geraet (kein '#?', kein '#X'); der Fehlerdialog 'Falsche oder keine Antwort vom Geraet' entfaellt. Zeilen mit '# v1.22'
 #   1.21  2026-11-26  Auswahl des Anschlusses im Serial Monitor zeigt bekannte Typen (Nano/Uno, ESP32, Pico, andere MobaLedLib Geraete laut ~MLLINFO) und den Untertyp nach der USB-Kennung (CH340, CP2102, FT232, Pico ...): list_serial_ports_typed, describe_port, usb_subtype. Zeilen mit '# v1.21'
 #   1.10  2026-11-14  connect_if_not_connected (Testtasten, DCC-Tastatur, Z21 ...) versucht auch mit Anschlussangabe zuerst die eingetragene ESP32-WLAN-Verbindung
@@ -741,6 +743,22 @@ class SerialMixin:
                   "Fehler beim Lesen der Antwort des Geräts")  # v1.16
         return False  # v1.20
 
+    @staticmethod
+    def _monitor_dtr(port):  # v1.23
+        """DTR (und RTS) fuer den Serial Monitor nach dem Geraet am Anschluss: True beim Pico (sein serieller USB-Anschluss sendet nur mit DTR), False bei Nano, Uno und ESP32 (DTR setzt sie
+        zurueck), None wenn der Typ nicht erkennbar ist (dann gilt das Board im Blatt wie beim normalen Verbinden)."""
+        try:
+            from serial.tools import list_ports
+            for p in list_ports.comports():
+                if str(p.device).upper() == str(port).upper():
+                    typ = port_type(p)
+                    if typ == "Pico" or getattr(p, "vid", None) == 0x2E8A:
+                        return True
+                    return False if typ in ("Nano/Uno", "ESP32") else None
+        except Exception:                                  # noqa: BLE001
+            logger.debug("Typ des Anschlusses nicht ermittelt", exc_info=True)
+        return None
+
     def connect_monitor(self, port):  # v1.22
         """Serial Monitor: den Anschluss nur oeffnen und mitlesen. Anders als connect() fragt es das Geraet nicht ab ('#?' mit Pruefung der Antwort LEDs_AutoProg): es kann jedes Geraet
         sein, auch eines ohne MobaLedLib-Programm oder mit einem anderen. Rueckgabe True, wenn die Verbindung steht."""
@@ -758,10 +776,15 @@ class SerialMixin:
             self.ARDUINO_IP = False
             self._set_connect_status(tr('Versuch sich mit dem Gerät am Port ') + port + " zu verbinden ...", "red")
             self.monitor_only = True
+            saved_dtr = self.dtr_override
+            dtr = self._monitor_dtr(port)  # v1.23
+            if dtr is not None:
+                self.dtr_override = dtr
             try:
                 status, err = self._open_and_handshake(port)
             finally:
                 self.monitor_only = False
+                self.dtr_override = saved_dtr
         if status == "ok":
             return True
         self._fail_connect()
@@ -774,7 +797,16 @@ class SerialMixin:
         return (self.is_connection_open() and bool(self.ARDUINO_IP) == bool(via_ip)  # v1.20
                 and str(getattr(self, "ARDUINO_current_portname", "") or "").upper() == str(target or "").upper())  # v1.20
 
-    def _open_and_handshake(self, port):  # v1.20: aus _connect verschoben; Ergebnis (Status, Fehler), Status: ok, open_error, dropped, read_error
+    connecting = False  # v1.24
+
+    def _open_and_handshake(self, port):  # v1.24: Huelle, setzt das Kennzeichen connecting
+        self.connecting = True  # v1.24
+        try:
+            return self._open_and_handshake_core(port)  # v1.24
+        finally:
+            self.connecting = False  # v1.24
+
+    def _open_and_handshake_core(self, port):  # v1.20: aus _connect verschoben; Ergebnis (Status, Fehler), Status: ok, open_error, dropped, read_error
         """Oeffnet den Anschluss und liest die Startmeldung ('#?'). Alles unter PORT_ACCESS_LOCK: Die Abfragen der Geraeteauswahl und die Erkennung greifen nicht dazwischen
         und oeffnen den Anschluss nicht ein zweites Mal. Keine Dialoge hier (sonst blockiert die Sperre die Geraeteauswahl)."""  # v1.20
         with PORT_ACCESS_LOCK:  # v1.20

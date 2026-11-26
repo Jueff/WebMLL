@@ -1,6 +1,6 @@
 # Datenübertragung zwischen PCs
 
-Datei-Version: 1.03 (2026-11-23), gilt für webMobaLedLib 4.89 (Pull Request 57 von moosbewohner).
+Datei-Version: 1.05 (2026-11-26), gilt für MobaLedLib Studio 5.53 (Pull Request 57 von moosbewohner).
 
 Öffne **Einstellungen → Datenübertragung**. Beide PCs arbeiten unabhängig mit ihren eigenen Daten. Die Funktion überträgt ausgewählte Programmgenerator-Tabellen oder ausgewählte Zeilen über das lokale Netzwerk. Sie benötigt weder ein Konto noch einen VPN-Tunnel.
 
@@ -44,3 +44,11 @@ Dialog und Validierungsmeldungen sind auf Deutsch, Englisch, Niederländisch, Fr
 ## Prüfung und Grenzen
 
 24 automatisierte Tests prüfen Paketgrenzen, lokale Einstellungen, Backup/Restore, Schreibfehler, Zeilenauswahl, Metadaten, Konflikte, Neuberechnung, deaktivierte Startfreigabe, alle sieben Sprachen sowie echte HTTP- und UDP-Kommunikation auf Loopback. Der Prototyp wurde auf Windows und der Linux-VM betrieben; Hardware-Upload, macOS, Raspberry Pi und iPad sind für diesen Branch nicht geprüft.
+
+## Quelladresse und Port
+
+Quelladresse ohne http:// eingeben, zum Beispiel 192.168.10.171. Rechts daneben steht der Port, normalerweise 45875. Gespeicherte Adressen und Suchergebnisse befüllen beide Felder. Der Port und die Übertragungstechnik ändern sich durch die neue Darstellung nicht.
+
+## Verbindungscode (Dialog 1.10)
+
+Der Verbindungscode muss mindestens sechs Zeichen enthalten. Längere und gespeicherte Codes bleiben gültig und werden nicht automatisch gekürzt. Zu prüfen: Wird ein Code mit fünf Zeichen abgelehnt und einer mit sechs Zeichen angenommen? Funktionieren längere Codes weiterhin?

@@ -1,18 +1,23 @@
-Datei-Version: 1.135 (2026-11-26) - HOC_Anwender.md
-Stand: Version 5.52
+Datei-Version: 1.141 (2026-11-26) - HOC_Anwender.md
+Stand: Version 5.56
 
 # MobaLedLib Studio: Änderungen (Kurzfassung)
 
 Gilt ab Version 1.39. Neueste Version oben.
 
-## Version 5.52 (2026-11-26)
+## Version 5.56 (2026-11-26)
 
 Neue Funktionen:
-- Serial Monitor: ein Verbindungsknopf (rot: verbinden, grün: Trennen) mit derselben Statusanzeige wie der zentrale Knopf; die Portauswahl zeigt Typ und Untertyp nach der USB-Kennung.
+- Serieller Monitor: Beim Wechsel des Anschlusses zeigen Knopf und Status jeden Schritt („Nicht verbunden“, „Verbindungsaufbau ...“, verbunden), die Ausgaben der vorherigen Verbindung werden gelöscht. Während des Verbindungsaufbaus sind die Verbindungsknöpfe (Kopfzeile und Serieller Monitor) grau und gesperrt.
+- Serieller Monitor: ein Verbindungsknopf (rot: verbinden, grün: Trennen) mit derselben Statusanzeige wie der zentrale Knopf; die Portauswahl zeigt Typ und Untertyp nach der USB-Kennung.
 - Firmware installieren: die Liste ist nach Plattform gruppiert, die Geräteauswahl wählt ein Gerät derselben Plattform vor.
 - Beim Wechsel des Protokolls auf LNet müssen die Lizenzbestimmungen bestätigt werden (einmal je Blatt).
 
-## Version 5.50 (2026-11-26)
+Fehler behoben:
+- Der Serielle Monitor zeigt jetzt auch die Ausgaben eines Pico (Hardware-Signale nach dem Gerät am Anschluss; nicht an einem Gerät geprüft).
+- Im Protokoll steht beim normalen Beenden nicht mehr `webmobaledlib.crash`, sondern `webmobaledlib.exit`.
+
+## Version 5.50 bis 5.52 der Arbeitskopie (Jürgen)
 
 Neue Funktionen:
 - Das Fenster „Kompilieren und Hochladen“ lässt sich an der Titelzeile verschieben (Doppelklick: Ausgangsposition).
@@ -25,6 +30,46 @@ Korrekturen:
 - Ein negativer Anschluss (-3) dient beim Hochladen und Setup übertragen als Hinweis auf COM3; wird das Gerät dort gefunden, steht der Anschluss danach im Blatt, sonst öffnet sich die Geräteauswahl.
 - Abbrechen in der Geräteauswahl schließt auch das Fenster Kompilieren und Hochladen; `COM?` steht nicht mehr in der Liste, OK ohne Auswahl ändert das Blatt nicht.
 - PGF-Import in ein verstecktes Blatt blendet es wieder ein.
+
+## Version 5.54 (2026-11-26)
+
+Neue Funktionen:
+- Das Fenster „Kompilieren und Hochladen“ lässt sich an der Titelzeile verschieben (Doppelklick: Ausgangsposition).
+- Im Dialog „Firmware herunterladen“ lässt sich auch eine lokale ZIP-Datei mit Firmware installieren (gleiches Auswahlfeld wie bei Update Testversion).
+- Firmware installieren (Pico) nutzt die Geräteauswahl; es werden nur Pico-Geräte gelistet, auch unbekannte und andere MobaLedLib Geräte sind wählbar.
+
+Korrekturen:
+- Selectrix: Channel 1 bis 99 und Bitposition 1 bis 8 werden geprüft (Eingabe und Header-Erzeugung); der Build mit leerem Eingang ist behoben.
+- DCC, LNet und CAN: die Adresse 0 ist nicht erlaubt.
+- Ein negativer Anschluss (-3) dient beim Hochladen und Setup übertragen als Hinweis auf COM3; wird das Gerät dort gefunden, steht der Anschluss danach im Blatt, sonst öffnet sich die Geräteauswahl.
+- Abbrechen in der Geräteauswahl schließt auch das Fenster Kompilieren und Hochladen; `COM?` steht nicht mehr in der Liste, OK ohne Auswahl ändert das Blatt nicht.
+- PGF-Import in ein verstecktes Blatt blendet es wieder ein.
+
+## Version 5.53 (2026-11-26)
+
+Neue Funktionen:
+- Datenübertragung: Quelladresse und Port stehen getrennt nebeneinander (Vorgabe 45875), Pull Request 78.
+- Der Verbindungscode muss nur noch mindestens sechs Zeichen haben; längere und gespeicherte Codes bleiben gültig.
+
+## Version 5.52 (2026-11-26)
+
+Korrekturen:
+- Ist die Spalte „LED/Sound Kanal“ änderbar, werden nach einer Änderung (auch beim Ausfüllen nach unten) die Start LedNr jetzt neu berechnet.
+
+## Version 5.51 (2026-11-26)
+
+Neue Funktionen:
+- Neue Einstellung „Spalte LED/Sound Kanal in der Tabelle änderbar“ (Programm Generator Einstellungen, Standard Aus). Eingeschaltet kann die Spalte direkt in der Tabelle geändert und nach unten ausgefüllt werden. Du bist dann selbst für richtige Werte verantwortlich. Die LED-Nummern werden danach neu berechnet.
+
+Korrekturen:
+- Raum-Dialog: Der Haken „Individuelle Zeiten“ steht jetzt über den Reglern, der LED Kanal oben.
+- In den Makro-Dialogen steht der LED Kanal oben (nur bei Makros mit LEDs).
+- Servo-Hilfe: „Programm Servo Einstellungen“ statt „Servo_Pos Programm“ (deutsch).
+
+## Version 5.50 (2026-11-26)
+
+Korrekturen:
+- Die Zeilen 1 und 2 der Tabelle sind geschützt: „Zeile einfügen“, „Zeilen löschen“ und „Zeilen verschieben“ verändern sie nicht mehr (Issue 77).
 
 ## Version 5.49 (2026-11-26)
 

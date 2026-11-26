@@ -1,5 +1,5 @@
 # MobaLedLib Studio – Installation und Betrieb
-*Datei-Version: 5.49 (2026-11-26), gilt für Version 5.49*
+*Datei-Version: 5.56 (2026-11-26), gilt für Version 5.56*
 
 Windows · macOS · Linux-Desktop · Raspberry Pi
 
@@ -1848,3 +1848,7 @@ Auf Wunsch von Jürgen (Issue 75) gibt es zwischen **Einstellungen** und **Hilfe
 - **Wartung …** (vorher Hardware Optionen, Reiter Entwicklungsumgebung und Update): PlatformIO oder ARDUINO-IDE wählen, Schnelles Update, PlatformIO prüfen und Zwischenspeicher löschen, Bibliotheken und Boards der ARDUINO-IDE.
 
 Im **Anfänger Modus** fehlt das ganze Menü Werkzeuge. Die Hardware Optionen enthalten nur noch die Reiter zur Lichtmaschine (Lichtmaschine, ESP und WLAN-Einstellungen, Dateien und weitere).
+
+## Serieller Monitor: Verbinden und Anschluss wechseln (ab 5.56)
+
+Der Reiter **Serieller Monitor** liest nur mit: **Verbinden** öffnet den Anschluss ohne Abfrage am Gerät, daher geht es auch mit Geräten ohne das MobaLedLib-Programm. Die Hardware-Signale (DTR) richten sich nach dem Gerät am Anschluss (Pico, Nano, ESP32). Es gibt einen Knopf: rot **Verbinden**, grün **Trennen**. Ist die Verbindung offen und du wählst einen anderen Anschluss, zeigt das Programm der Reihe nach „Nicht verbunden“, „Verbindungsaufbau ... COMx“ und den neuen Zustand; die Ausgaben der vorherigen Verbindung werden gelöscht. Solange das Programm verbindet, sind die Verbindungsknöpfe in der Kopfzeile und im Seriellen Monitor grau, gesperrt und heißen „Verbinden...“.

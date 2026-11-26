@@ -1,0 +1,11 @@
+[b]Änderungen seit V5.41 (5.42 bis 5.54)[/b]
+
+[list][*]Neues Menü „Werkzeuge“ (Datenübertragung, Firmware installieren, ESP32-Firmware über WLAN, Wartung); im Anfänger Modus ausgeblendet.
+[*]LED Kanal steht in den Makro-Dialogen oben (Raum-Dialog: Haken „Individuelle Zeiten“ über den Reglern). Neue Option „Spalte LED/Sound Kanal in der Tabelle änderbar“ (Vorgabe aus).
+[*]Zeilen 1 und 2 der Tabelle sind geschützt (Zeile einfügen, löschen, verschieben).
+[*]Verbindung: Anzeige von Typ und Anschluss, ein negativer Anschluss (-7) gilt als Hinweis, nur eine Verbindung pro Gerät, Strg+C ohne Fehlermeldung.
+[*]Datenübertragung: Adresse und Port getrennt, Verbindungscode ab sechs Zeichen.
+[*]Selectrix Channel 1 bis 99, Adresse 0 bei DCC/LNet/CAN nicht erlaubt, Geräteauswahl und Firmware installieren (Pico, lokale ZIP-Datei), verschiebbares Fenster Kompilieren und Hochladen.
+[*]Servo-Hilfetext: „Programm Servo Einstellungen“.[/list]
+
+Nur gebaut und mit Tests ohne Oberfläche geprüft, nicht an Hardware.
