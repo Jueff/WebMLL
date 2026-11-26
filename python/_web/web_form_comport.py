@@ -1,12 +1,13 @@
-# Datei-Version: 1.43 (2026-11-25) - web_form_comport.py
+# Datei-Version: 1.44 (2026-11-26) - web_form_comport.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_form_comport.py
 # Path:           _web/web_form_comport.py
-# Version:        1.43
+# Version:        1.44
 # Last Update:    2026-11-25
 # Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
 # History of Change:
+#   1.44  2026-11-26  Pico: hinter der USB Kennung steht die Seriennummer ('Serielles USB-Geraet (COM5) E6616...'). Zeilen mit '# v1.44'
 #   1.43  2026-11-26  Nano: der Bootloader (alt/neu/Full) des gewaehlten Geraets wird im Hintergrund ermittelt (Query_Nano_Bootloader), steht im Typ ('Nano neu') und wird bei OK in die Geraeteoptionen eingetragen. Zeilen mit '# v1.43'
 #   1.42  2026-11-26  Geraeteauswahl: Pfeil rauf/runter waehlt das vorige/naechste Geraet der Liste (ui.keyboard). Zeilen mit '# v1.42'
 #   1.41  2026-11-26  type PICOSOUND wird als 'Sound', PICO2X3 als '2x3', PICOSERVO als 'Servo' angezeigt (OTHER_TYPE_NAMES). Zeilen mit '# v1.41'
@@ -551,7 +552,12 @@ def make_class(Base):
                     if os.name != "nt" and re.match(r"^/dev/ttyS\d+$", str(cp.device)) and str(cp.hwid).strip().lower() in ("n/a", ""):
                         continue                                            # Linux: Platzhalter ohne Geraet
                     usb = ("%04X:%04X" % (cp.vid, cp.pid)) if cp.vid is not None and cp.pid is not None else ""  # v1.20: USB-ID wie VID:PID
-                    res.append((self._classify_group(cp), str(cp.device), str(cp.description or "").strip(), usb))
+                    grp = self._classify_group(cp)
+                    desc = str(cp.description or "").strip()
+                    sn = str(getattr(cp, "serial_number", "") or "").strip()  # v1.44: Pico: Seriennummer hinter der Bezeichnung
+                    if (grp in ("Pico", "Servo") or cp.vid == 0x2E8A) and sn and sn not in desc:  # v1.44: jedes Pico-Geraet (USB-Hersteller 2E8A), auch Servo/Sound/2x3
+                        desc = "%s %s" % (desc, sn)
+                    res.append((grp, str(cp.device), desc, usb))
             except Exception:                                               # noqa: BLE001
                 logger.debug("Anschluesse konnten nicht gelesen werden", exc_info=True)
             return res

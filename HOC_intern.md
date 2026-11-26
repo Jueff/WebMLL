@@ -44,7 +44,7 @@ Release-Stand 2.12 auf Wunsch des Entwicklers („Release bauen“). **Neu im Ab
 
 | Datei | Version | Änderung |
 |---|---|---|
-| `_web/web_form_comport.py` | 1.43 | Geräteauswahl (Liste, Gruppen, offline, unbekannte Ports, Typabfrage), Texte, kompakter; Abfrage von Typ und Version im Hintergrund, blockierte Ports, Bootloader des Nano, Pfeiltasten |
+| `_web/web_form_comport.py` | 1.44 | Geräteauswahl (Liste, Gruppen, offline, unbekannte Ports, Typabfrage), Texte, kompakter; Abfrage von Typ und Version im Hintergrund, blockierte Ports, Bootloader des Nano, Pfeiltasten, Seriennummer bei Pico-Geräten |
 | `_web/web_form_options.py` | 1.74 | Displaytyp, Autoconnect nach Portwechsel, Reiter Lichtmaschine, Einstellungen, Protokolle nach Platform_Parameters, Reiter DCC/LNet folgt dem Protokoll, Display-Anzeige nur mit WLAN, Hardwarevariante, Bild größer |
 | `headless/headless_sheet_settings.py` | 1.00 | neu: Einstellungen als Makrozeilen setzen/entfernen, Übernahme alter Einträge |
 | `proggen/M42_Dyn_Config.py` | 1.12 | Schnelles Update je Blatt (`Set_Sheet_Option`) |
