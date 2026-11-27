@@ -1,22 +1,22 @@
 ====== MobaLedLib Studio – Datenübertragung zwischen Rechnern ======
-//Seitenstand 1.02 (2026-11-24), gilt für Version 5.12//
+//Seitenstand 1.05 (2026-11-27), gilt für Version 5.55//
 
 Mit der **Datenübertragung** holst du Tabellen oder einzelne Zeilen von **einem anderen Rechner** im Heimnetz auf deinen Rechner. Das ist nützlich, wenn du zum Beispiel am Schreibtisch planst und die Tabellen an der Anlage (etwa auf dem Raspberry Pi) brauchst. Du brauchst dafür **kein Konto** und **kein Internet**. Beide Rechner arbeiten weiter mit ihren **eigenen** Daten, nichts wird automatisch abgeglichen.
 
-Du findest die Funktion im Menü //Einstellungen → Datenübertragung//. Sie hat zwei Reiter: **Dieser PC als Quelle** (hier gibst du Tabellen frei) und **Tabellen übernehmen** (hier holst du sie ab).
+Du findest die Funktion im Menü //Werkzeuge → Datenübertragung//. Sie hat zwei Reiter: **Dieser PC als Quelle** (hier gibst du Tabellen frei) und **Tabellen übernehmen** (hier holst du sie ab).
 
 ===== Auf dem Quell-Rechner freigeben =====
 
   - Öffne den Reiter **Dieser PC als Quelle**.
   - Gib einen **Namen** für den Rechner ein und wähle die **Tabellen**, die du freigeben willst.
-  - Übernimm den vorgeschlagenen **Verbindungscode** oder gib einen eigenen ein (mindestens **zwölf Zeichen**).
+  - Übernimm den vorgeschlagenen **Verbindungscode** oder gib einen eigenen ein (mindestens **sechs Zeichen**; ab 5.53, vorher zwölf. Längere und gespeicherte Codes bleiben gültig).
   - Klicke auf **Tabellenfreigabe aktivieren**. Der Quell-Rechner muss danach **laufen** und im Netz erreichbar bleiben.
 
 **Die Freigabe ist nach jedem Programmstart ausgeschaltet.** Name, Code und Auswahl bleiben gespeichert. **Freigabe ausschalten** beendet sie sofort. Die Freigabe stellt nur den **aktuellen Stand zum Lesen** bereit, sie schreibt nichts auf andere Rechner.
 
 ===== Auf dem Ziel-Rechner übernehmen =====
 
-  - Öffne den Reiter **Tabellen übernehmen** und klicke auf **Quell-PC suchen**. Wähle die Quelle aus. Wird sie nicht gefunden, gib die **Adresse** von Hand ein, zum Beispiel ''http://192.168.1.20:45875''.
+  - Öffne den Reiter **Tabellen übernehmen** und klicke auf **Quell-PC suchen**. Wähle die Quelle aus. Wird sie nicht gefunden, gib die **Adresse** von Hand ein: die **Quelladresse** ohne ''http://'' (zum Beispiel ''192.168.1.20'') und rechts daneben den **Port** (normalerweise ''45875''; ab 5.53). Gefundene und gespeicherte Quellen füllen beide Felder. Ungültige Ports (nicht 1 bis 65535) werden mit einer Meldung abgelehnt.
   - Trage den **Verbindungscode** des Quell-Rechners ein und klicke auf **Verbindung prüfen und übernehmen**. Stimmt der Code nicht, erscheint eine Meldung mit dem Hinweis, den Code zu prüfen.
   - Wähle die **Übernahmeart** (siehe unten).
   - Klicke auf **Übernehmen und sichern**. Danach zeigt die Tabellenansicht gleich den neuen Stand.
@@ -27,9 +27,9 @@ Du findest die Funktion im Menü //Einstellungen → Datenübertragung//. Sie ha
 | **Tabellen ersetzen** | Die gewählten Tabellen ersetzen die **gleichnamigen** Tabellen auf dem Ziel-Rechner. Fehlende Tabellen werden angelegt. Mit der Tabelle kommen auch die Kopfwerte und die Boardkonfiguration. |
 | **Zeilen in bestehende Tabelle einfügen** | Du wählst **eine** Quelltabelle und die **Zeilen** (zum Beispiel ''3-8, 12''), dazu die **Zieltabelle** und die **Stelle**: **Am Ende**, **Vor Zeile** oder **Nach Zeile**. Zeile 1 und 2 sind ausgeschlossen. Protokoll und Spaltenaufbau von Quelle und Ziel müssen zusammenpassen. Vorhandene Zeilen bleiben erhalten, die Kopfwerte der Zieltabelle auch. |
 
-==== Zeilen einfügen: LED-Kanal und Prüfung ====
+==== Zeilen einfügen: LM-Ausgang und Prüfung ====
 
-  * **LED-Kanal für eingefügte Zeilen:** Standard ist 0, für Taster-LEDs 1. Die Auswahl gilt für **alle** eingefügten Zeilen. Mit **LED-Kanäle der Quelle beibehalten** bleiben die Kanalwerte der Quelle erhalten. Bestehende Zeilen des Ziels werden nicht verändert.
+  * **LM-Ausgang für eingefügte Zeilen:** Standard ist 0, für Taster-LEDs 1. Die Auswahl gilt für **alle** eingefügten Zeilen. Mit **LED-Kanäle der Quelle beibehalten** bleiben die LM-Ausgänge der Quelle erhalten. Bestehende Zeilen des Ziels werden nicht verändert.
   * **Einfügen prüfen** zeigt die Zielposition und **Hinweise**: Adressen, die sich überschneiden, Namen, die es schon gibt, und fehlende include-Tabellen. Bei Konflikten musst du das Einfügen **ausdrücklich bestätigen**. Eigene Makros und symbolische Adressen prüft das Programm nicht vollständig. **Adressen ändert es nie von selbst.**
   * Zeilenfarben, Zeilenhöhen und ausgeblendete Zeilen werden mit übertragen. Handgezeichnete Formen und externe Bilddateien der Quellzeilen werden **nicht** mitkopiert.
 

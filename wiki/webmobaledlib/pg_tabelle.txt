@@ -1,5 +1,5 @@
 ====== MobaLedLib Studio – Die Tabelle bedienen ======
-//Seitenstand 1.17 (2026-11-26), gilt für Version 5.37//
+//Seitenstand 1.20 (2026-11-27), gilt für Version 5.56//
 
 In der Tabelle des [[anleitungen:mobaledlibstudio:programmgenerator|Programmgenerators]] steht jede Zeile für einen Effekt oder ein Gerät. Auf dieser Seite steht, wie du die Tabelle bedienst.
 
@@ -24,6 +24,16 @@ In der Makroauswahl stehen **alle Makros**, nach Gruppen sortiert (zum Beispiel 
 ===== Rückgängig und Wiederholen =====
 
 **Strg + Z** nimmt die letzte Änderung zurück, **Strg + Y** (oder **Strg + Umschalt + Z**) stellt sie wieder her. Das gilt überall auf der Seite, nicht beim Tippen in einem Feld, und steht auch im Kontextmenü. Das Programm merkt sich **die letzten 50 Änderungen je Blatt**: Eingabe in einer Zelle, Löschen, Ausschneiden, Einfügen, Nach unten ausfüllen, Reihe fortsetzen, Farbe setzen. Werden Zeilen eingefügt oder gelöscht, beginnt der Verlauf des Blatts neu.
+
+===== LM-Ausgang einstellen =====
+
+In allen Dialogen von Makros **mit LEDs** steht der **LM-Ausgang** (Lichtmaschine Ausgang; bis 5.54 „LED Kanal“) **oben** (ab 5.51; im Raum-Dialog direkt unter der Beschreibung). Bei Makros ohne LEDs fehlt er. Dort stellst du den Kanal ein, weil die Spalte **LM-Ausgang** in der Tabelle gesperrt ist. Wer sie trotzdem in der Tabelle ändern will, schaltet in den [[anleitungen:mobaledlibstudio:wz_programm_einstellungen|Programm Generator Einstellungen]] **Spalte LM-Ausgang in der Tabelle änderbar** ein (Vorgabe aus); die Start LedNr werden danach neu berechnet. Beim Einfügen eines **neuen Makros** ist der LM-Ausgang mit dem der nächsten Zeile darüber voreingestellt (ab 5.55); Makros mit eigenem Vorgabewert, zum Beispiel Taster, behalten ihn.
+
+Im **Raum-Dialog** (House) steht der Haken **Individuelle Zeiten** über den Reglern für die Zeiten (ab 5.51); ohne Haken sind die Regler gesperrt.
+
+===== Eingabegrenzen bei Selectrix und DCC =====
+
+Bei **Selectrix** gilt **Channel 1 bis 99** und **Bitposition 1 bis 8**; sonst erscheint eine Meldung und die Zelle wird geleert (ab 5.54). Bei **DCC, LNet und CAN** ist die **Adresse 0** nicht erlaubt. Beim Wechsel des Protokolls eines Blatts wird die Adresse als **Channel × 8 + Bitposition** umgerechnet (umrechenbar sind die Adressen 9 bis 800).
 
 ===== Makrotext direkt ändern (Spalte „Beleuchtung, Sound, oder andere Effekte“) =====
 

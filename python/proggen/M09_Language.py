@@ -1,9 +1,9 @@
-# Datei-Version: 1.07 (2026-11-14) - M09_Language.py
+# Datei-Version: 1.09 (2026-11-27) - M09_Language.py
 # ----------------------------------------------------------------------------------------------
 # Name:           M09_Language.py
 # Path:           proggen/M09_Language.py
-# Version:        1.07
-# Last Update:    2026-11-14
+# Version:        1.09
+# Last Update:    2026-11-27
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
@@ -15,6 +15,8 @@
 #   1.05  2026-11-04  Kopfzeilen der Datenblaetter: die Uebersetzung wird ueber den TEXT der Ueberschrift gefunden, nicht ueber die Adresse in der Tabelle Languages (J2 ...): im Web sind die Spalten Icon und Name eingefuegt, die Adressen stimmten nicht mehr (Name, Beleuchtung ..., Start LedNr ... und ihre Tooltips blieben deutsch); Spalten ohne Eintrag (Name, LED/ Sound Kanal) aus dem Katalog der Web-Oberflaeche
 #   1.06  2026-11-09  Tooltips der Kopfzeilen (Text nach dem §): Ohne Eintrag in der Tabelle Languages wird der Text im Katalog der Web-Oberflaeche gesucht (Name, LED/ Sound Kanal, LNet, Selectrix); vorher blieben sie deutsch
 #   1.07  2026-11-14  Testrest entfernt: Zeilen 939/940 setzten den Namen 'Pico Config' fuer Pins LED Bus, LED Nummer definieren, NextLED, Reserve LED (Meldung Tester Win11)
+#   1.08  2026-11-27  Version 5.55: Anzeige der Spalte LED/ Sound Kanal als LM-Anschluss (Ueberschrift und Tooltip, alle Sprachen); die Zelle in der Datei bleibt unveraendert (Spalten werden am Text der Ueberschrift erkannt)
+#   1.09  2026-11-27  Version 5.56: LM-Anschluss heisst jetzt LM-Ausgang
 # ----------------------------------------------------------------------------------------------
 # -*- coding: utf-8 -*-
 #
@@ -947,6 +949,12 @@ def __Display_Name(Config, Lang):  # v1.03
     return __NameCache[key]  # v1.03
 
 
+# LM_COLUMN_LABEL = 'LM-Anschluss'  # v1.08: neuer Name der Spalte LED/ Sound Kanal (Anzeige)  # v1.09 (entfallen)
+LM_COLUMN_LABEL = 'LM-Ausgang'  # v1.08: neuer Name der Spalte LED/ Sound Kanal (Anzeige)  # v1.09
+# LM_COLUMN_TIP = 'Benutzter LM-Ausgang (Lichtmaschine Ausgang). 0 = Standard, 1 = Taster. Wird automatisch vom Programm geschrieben. Achtung: Nur ändern, wenn die Einstellung „Spalte LM-Anschluss in der Tabelle änderbar“ eingeschaltet ist.'  # v1.08  # v1.09 (entfallen)
+LM_COLUMN_TIP = 'Benutzter LM-Ausgang (Lichtmaschine Ausgang). 0 = Standard, 1 = Taster. Wird automatisch vom Programm geschrieben. Achtung: Nur ändern, wenn die Einstellung „Spalte LM-Ausgang in der Tabelle änderbar“ eingeschaltet ist.'  # v1.09
+
+
 def Get_Display_Cells(Sh):  # v1.03
     # Anzeige der Kopfzeilen und der Namensspalte eines Datenblatts in der eingestellten Sprache: {(Zeile, Spalte): Text} (0-basiert). Die Zellen selbst bleiben unveraendert (wie bei den Tokens).
     # Die Namen werden aus den Makros der Spalte Config neu bestimmt (wie Update_Language_Name_Column_in_Sheet in Excel), auch in Deutsch: Ein Name kann beim Laden in einer anderen Sprache entstanden sein.
@@ -971,6 +979,29 @@ def Get_Display_Cells(Sh):  # v1.03
                         name = __Display_Name(cfg, lang)  # v1.03
                         if name != '' and name != str(row[M25.LanName_Col - 1]):  # v1.03
                             result[(r, M25.LanName_Col - 1)] = name  # v1.03
+        # v1.08: Die Spalte LED/ Sound Kanal heisst jetzt LM-Anschluss (Anzeige; die Zelle bleibt unveraendert)
+        c = M25.LED_Cha_Col - 1  # v1.08
+        hr = M02.Header_Row - 1  # v1.08
+        data = Sh.tksheet.data  # v1.08
+        if c >= 0 and hr < len(data) and c < len(data[hr]):  # v1.08
+            cur = str(result.get((hr, c), data[hr][c]))  # v1.08
+            label, sep, tip = cur.partition('§')  # v1.08
+            if label.strip() != '':  # v1.08
+                new_label = LM_COLUMN_LABEL  # v1.08
+                new_tip = tip  # v1.08
+                if sep:  # v1.08
+                    flat_tip = re.sub(r'\s+', ' ', tip).strip()  # v1.08
+                    if lang == 0:  # v1.08
+                        new_tip = LM_COLUMN_TIP if flat_tip.startswith('Benutzter LED Kanal') else tip  # v1.08
+                if lang != 0:  # v1.08
+                    try:  # v1.08
+                        from _web.web_i18n import catalog_text  # v1.08
+                        new_label = catalog_text(LM_COLUMN_LABEL, lang) or LM_COLUMN_LABEL  # v1.08
+                        if sep:  # v1.08
+                            new_tip = catalog_text(LM_COLUMN_TIP, lang) or tip  # v1.08
+                    except Exception:  # noqa: BLE001  # v1.08
+                        pass  # v1.08
+                result[(hr, c)] = new_label + (sep + new_tip if sep else '')  # v1.08
     except Exception:  # v1.03
         return {}  # v1.03
     return result  # v1.03

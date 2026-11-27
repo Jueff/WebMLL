@@ -1,15 +1,16 @@
-# Datei-Version: 1.01 (2026-11-25) - web_form_ledcoloranim.py
+# Datei-Version: 1.02 (2026-11-27) - web_form_ledcoloranim.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_form_ledcoloranim.py
 # Path:           _web/web_form_ledcoloranim.py
-# Version:        1.01
-# Last Update:    2026-11-25
+# Version:        1.02
+# Last Update:    2026-11-27
 # Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
 # History of Change:
 #   1.00  2026-11-04  Neu: Dialog "LED Farb-Animation" (Makro LEDColorAnim) im Browser. Ersetzt proggen/Userform_LEDColorAnim.py (Tk); Rechnung in headless_ledcoloranim.py (drei Kurven),
 #                     Grafik in mll_servocurve.js (mehrere Kurven), Fenster, Ereignisse, Test und Verbindung wie bei web_form_servoanim.py
 #   1.01  2026-11-25  Text: 'Es ist kein Gerät verbunden ...' (statt Arduino). Zeilen mit '# v1.01'
+#   1.02  2026-11-27  Version 5.57: Feld Anschluss-Kanal heisst LM-Ausgang, mit Tooltip
 # ----------------------------------------------------------------------------------------------
 """Web-Ersatz fuer proggen/Userform_LEDColorAnim.py (Dialog zum Makro LEDColorAnim).
 
@@ -86,7 +87,8 @@ async def _ledcoloranim_async(spec: dict):
                     with box(T("Anim_Address_Label")):
                         with ui.row().classes("w-full").style(row_style):
                             num("Adresse", T("Anim_Address_Label"), 0, 9999)
-                            num("Kanal", T("Anim_Address_Kanal_Label"), 0, 9)
+                            # num("Kanal", T("Anim_Address_Kanal_Label"), 0, 9)  # v1.02 (entfallen)
+                            num("Kanal", SW._translate("LM-Ausgang"), 0, 9).tooltip(SW._translate("Nummer des Lichtmaschinen Ausgangs"))  # v1.02
                     with box(T("Frame7")):
                         sel("RunType", "Anim_RunType_ListBox", T("LEDRunType_Label"))
                     with box(T("Frame4")):

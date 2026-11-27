@@ -1,0 +1,9 @@
+[b]Änderungen seit V5.54 (5.55 bis 5.60)[/b]
+
+[list][*]„LED Kanal“ heißt jetzt „LM-Ausgang“ (Lichtmaschine Ausgang) in Tabelle, Dialogen und Servo-/Soundtest; die farbigen Knöpfe heißen „LED RGB-Anschluss Auswahl“. Tooltips ergänzt.
+[*]Neues Makro übernimmt den LM-Ausgang der Zeile darüber.
+[*]Serieller Monitor: Verbindungsknopf, EFFECT/DIRECT Mode, Verbindungsverlust mit automatischem Neuverbinden, Setup übertragen über die offene Verbindung (Jürgen, PR 82).
+[*]Plattformen/Protokolle in Lichtmaschinen_prop.json, LNet-Lizenz je Blatt, Korrekturen bei Doppelklick und Ein/Aus-Tasten (Jürgen, PR 82).
+[*]ESP32: Makro Mainboard_LED schaltet die Status-LEDs der Hauptplatine (Jürgen, PR 83).[/list]
+
+Nur gebaut und mit Tests ohne Oberfläche geprüft, nicht an Hardware. PR 81 (M08-Upload) folgt.

@@ -1,5 +1,5 @@
 ====== MobaLedLib Studio – Programm Einstellungen ======
-//Seitenstand 1.20 (2026-11-25), gilt für Version 5.23//
+//Seitenstand 1.23 (2026-11-27), gilt für Version 5.56//
 
 Im Menü **Einstellungen** (seit 4.51, vorher der Reiter **Programm Einstellungen**) passt du das Programm an dich an: die **Sprache**, die **Schriftgröße**, die **Darstellung** und einiges mehr. Die Einstellungen werden **gespeichert**, wenn du auf **Geänderte Einstellungen übernehmen** (bzw. **Speichern**) klickst, und gelten danach für das Programm auf diesem Rechner. Einige wirken **sofort**, andere erst nach einem **Neustart** des Programms. Das steht bei der jeweiligen Einstellung als Hinweis, wenn du mit der Maus darauf zeigst.
 
@@ -56,6 +56,7 @@ Die Einstellungen stehen in **fünf Gruppen**, jede mit einer Überschrift. So f
 ^ Einstellung ^ Bedeutung ^
 | **Standardansicht des Programm Generators** | Ob ein Blatt mit **Tabelle**, **Grafik** oder **Beides** geöffnet wird. |
 | **Programmgenerator versteckte Tabellen anzeigen** | Zeigt zusätzlich die versteckten Blätter des Programmgenerators. Nur für Tester und Entwickler. |
+| **Spalte LM-Ausgang in der Tabelle änderbar** (ab 5.51, Vorgabe **aus**) | Mit Haken lässt sich die Spalte **LM-Ausgang** (bis 5.54 „LED/ Sound Kanal“) direkt in der Tabelle ändern, auch mit **Nach unten ausfüllen**. Ohne Haken ist sie gesperrt; den LM-Ausgang stellst du dann im Dialog des Makros ein. **Du bist selbst für richtige Werte verantwortlich.** Nach jeder Änderung rechnet das Programm die **Start LedNr** aller Zeilen neu. Die Einstellung gilt ab der nächsten Anzeige der Tabelle. |
 | **Bedienung der Tabelle** | Der Haken **Doppelklick auf Name und Beleuchtung öffnet die Makroauswahl** (siehe [[anleitungen:mobaledlibstudio:pg_tabelle|Die Tabelle bedienen]]). |
 
 ==== Farb Test Einstellungen ====

@@ -1,9 +1,9 @@
-# Datei-Version: 1.37 (2026-11-25) - web_tabs.py
+# Datei-Version: 1.41 (2026-11-27) - web_tabs.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_tabs.py
 # Path:           _web/web_tabs.py
-# Version:        1.37
-# Last Update:    2026-11-25
+# Version:        1.41
+# Last Update:    2026-11-27
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
@@ -45,6 +45,10 @@
 #   1.35  2026-11-22  Version 4.69: Adresse /ARDUINOEinstellungen entfaellt (die Einstellungen sind ein Fenster im Menue Einstellungen und im Reiter Entwicklungsumgebung)
 #   1.36  2026-11-24  Anzeigename MobaLedLib Studio statt webMobaLedLib in Texten der Oberflaeche. Zeilen mit '# v5.09'
 #   1.37  2026-11-25  Neue Einstellung ShowStartPage (Allgemeine Einstellungen): Startseite beim Programmstart anzeigen, Vorgabe an (web_startpage 1.00)
+#   1.38  2026-11-26  Version 5.51: neue Einstellung LedChannelEditable (Programm Generator): die Spalte LED/Sound Kanal der Tabelle ist von Hand aenderbar (Vorgabe aus)
+#   1.39  2026-11-27  Version 5.55: Text der Einstellung LedChannelEditable: Spalte LM-Anschluss statt LED/Sound Kanal
+#   1.40  2026-11-27  Version 5.56: LM-Anschluss heisst jetzt LM-Ausgang
+#   1.41  2026-11-27  Version 5.59: Pull Request 82 (Jueff, dort 1.37 bis 1.38): Reiter heisst Serieller Monitor, Hinweis Anfaenger Modus; mit der Einstellung LedChannelEditable zusammengefuehrt
 # ----------------------------------------------------------------------------------------------
 """Adressen der Reiter: Ein Reiter laesst sich direkt aufrufen, zum Beispiel http://localhost:8080/Farbtest. Mit dem Zusatz ?vollbild=1 oeffnet er sich gleich im Vollbild
 (Titel, Menue und Reiterleiste ausgeblendet, siehe web_fullscreen). Die Startseite / bleibt wie sie ist (Programm Generator).
@@ -77,7 +81,7 @@ TAB_URLS = {                                  # Adresse -> Schluessel des Reiter
 # TAB_TITLES = {"pg": "Programm Generator", "patt": "Patterngenerator", "progcfg": "ProgGenerator Einstellungen", "farb": "Farb Test", "servo1": "Servo Einstellungen", "servo2": "DM Servo Einstellungen", "sound": "Sound Test", "dcc": "DCC Keyboard", "mon": "Serial Monitor",  # v1.05 (entfallen)
 # TAB_TITLES = {"pg": "Programm Generator", "patt": "Patterngenerator", "progcfg": "ProgGenerator Einstellungen", "farb": "Farb Test", "servo1": "Servo Einstellungen", "servo2": "DM Servo Einstellungen", "sound": "Sound Test", "dcc": "DCC Keyboard", "z21": "Z21 Simulator", "mon": "Serial Monitor",  # v1.05  # v3.43 (entfallen)
 # TAB_TITLES = {"pg": "Programm Generator", "patt": "Timeline Editor", "progcfg": "ProgGenerator Einstellungen", "farb": "Farb Test", "servo1": "Servo Einstellungen", "servo2": "DM Servo Einstellungen", "sound": "Sound Test", "dcc": "DCC Keyboard", "z21": "Z21 Simulator", "mon": "Serial Monitor",  # v1.05  # v1.16  # v1.23 (entfallen)
-TAB_TITLES = {"pg": "Programm Generator", "patt": "Timeline Editor", "progcfg": "Tabelle Färben", "farb": "Farb Test", "servo1": "Servo Einstellungen", "servo2": "DM Servo Einstellungen", "sound": "Sound Test", "dcc": "DCC Keyboard", "z21": "Z21 Simulator", "mon": "Serial Monitor",  # v1.05  # v1.16  # v1.23
+TAB_TITLES = {"pg": "Programm Generator", "patt": "Timeline Editor", "progcfg": "Tabelle Färben", "farb": "Farb Test", "servo1": "Servo Einstellungen", "servo2": "DM Servo Einstellungen", "sound": "Sound Test", "dcc": "DCC Keyboard", "z21": "Z21 Simulator", "mon": "Serieller Monitor",  # v1.05  # v1.16  # v1.23  # v1.40: Serieller Monitor
               "arduinocfg": "ARDUINO Einstellungen", "config": "Programm Einstellungen"}
 _LOWER = {name.lower(): name for name in TAB_URLS}
 
@@ -166,7 +170,7 @@ PARAM_ADDITIONS = {"ColoredRowsBold": ({"ParName": "ColoredRowsBold", "Cnt": "1"
                                    "NanoBootloaderDetection"),  # v1.18
                  "BeginnerMode": ({"ParName": "BeginnerMode", "Cnt": "1", "Type": "Checkbutton", "ConfigName": "BeginnerMode", "ParamLabelWidth": "25", "Min": "0", "Max": "255", "Default": "",  # v1.12
                                    "Input Text": "Anfänger Modus",  # v1.12
-                                   "Hint": "Mit Haken (Anfänger Modus) werden Funktionen ausgeblendet, die für den Einstieg nicht nötig sind: die Reiter Timeline Editor, Z21 Simulator, ProgGenerator Einstellungen, Servo Einstellungen, Sound Test, DCC Keyboard, Serial Monitor und ARDUINO Einstellungen, der Doppelklick auf Name und Beleuchtung öffnet die Makroauswahl, der Knopf Zeilen Färben und einige Makros in der Makroauswahl. Ohne Haken (Experten Modus) ist alles sichtbar. Eine neue Installation startet im Anfänger Modus."},  # v1.12
+                                   "Hint": "Mit Haken (Anfänger Modus) werden Funktionen ausgeblendet, die für den Einstieg nicht nötig sind: die Reiter Timeline Editor, Z21 Simulator, ProgGenerator Einstellungen, Servo Einstellungen, Sound Test, DCC Keyboard, Serieller Monitor und ARDUINO Einstellungen, der Doppelklick auf Name und Beleuchtung öffnet die Makroauswahl, der Knopf Zeilen Färben und einige Makros in der Makroauswahl. Ohne Haken (Experten Modus) ist alles sichtbar. Eine neue Installation startet im Anfänger Modus."},  # v1.12
                                   "Language"),  # v1.12  # v1.24
                  "AutoConnect": ({"ParName": "AutoConnect", "Cnt": "1", "Type": "Checkbutton", "ConfigName": "AutoConnect", "ParamLabelWidth": "25", "Min": "0", "Max": "255", "Default": "1",  # v1.24
                                   "Input Text": "Automatisch mit der Lichtmaschine verbinden",  # v1.24
@@ -176,6 +180,13 @@ PARAM_ADDITIONS = {"ColoredRowsBold": ({"ParName": "ColoredRowsBold", "Cnt": "1"
                                     "Input Text": "Startseite beim Programmstart anzeigen",  # v1.37
                                     "Hint": "Mit Haken (Vorgabe) zeigt das Programm beim Start die Startseite für Einsteiger: Auswahl der Modellbahnzentrale und der Lichtmaschine, Anleitung für das erste Programm und der Knopf Anfangen. Auf der Startseite kann man sie mit dem Haken „Diese Startseite nicht mehr anzeigen“ ausschalten; hier schaltet man sie wieder ein."},  # v1.37
                                    "AutoConnect"),  # v1.37
+                 "LedChannelEditable": ({"ParName": "LedChannelEditable", "Cnt": "1", "Type": "Checkbutton", "ConfigName": "LedChannelEditable", "ParamLabelWidth": "25", "Min": "0", "Max": "255", "Default": "0",  # v1.38
+                                         # "Input Text": "Spalte LED/Sound Kanal in der Tabelle änderbar",  # v1.38 (entfallen)
+                                         # "Input Text": "Spalte LM-Anschluss in der Tabelle änderbar",  # v1.39  # v1.40 (entfallen)
+                                         "Input Text": "Spalte LM-Ausgang in der Tabelle änderbar",  # v1.40
+                                         # "Hint": "Ohne Haken (Vorgabe) wird die Spalte LM-Anschluss (LM-Ausgang, vorher LED/Sound Kanal) vom Programm gesetzt (aus dem Makro-Dialog) und ist gesperrt. Mit Haken kann man sie in der Tabelle von Hand ändern, auch mit Ausfüllen nach unten; danach berechnet das Programm alle LED Nummern neu. Das ist für Fortgeschrittene: Es liegt in deiner Verantwortung, dass die Kanäle zum Makro passen. Die Änderung gilt ab dem nächsten Anzeigen der Tabelle (zum Beispiel nach einem Blattwechsel)."},  # v1.38  # v1.40 (entfallen)
+                                         "Hint": "Ohne Haken (Vorgabe) wird die Spalte LM-Ausgang (vorher LED/Sound Kanal) vom Programm gesetzt (aus dem Makro-Dialog) und ist gesperrt. Mit Haken kann man sie in der Tabelle von Hand ändern, auch mit Ausfüllen nach unten; danach berechnet das Programm alle LED Nummern neu. Das ist für Fortgeschrittene: Es liegt in deiner Verantwortung, dass die Kanäle zum Makro passen. Die Änderung gilt ab dem nächsten Anzeigen der Tabelle (zum Beispiel nach einem Blattwechsel)."},  # v1.40
+                                        "ShowHiddentables"),  # v1.38
                  "LedOffOnDisconnect": ({"ParName": "LedOffOnDisconnect", "Cnt": "1", "Type": "Checkbutton", "ConfigName": "LedOffOnDisconnect", "ParamLabelWidth": "25", "Min": "0", "Max": "255", "Default": "0",  # v1.32
                                          "Input Text": "Beim Trennen alle LEDs ausschalten",  # v1.32
                                          "Hint": "Mit Haken sendet das Programm beim Trennen der Verbindung den Befehl Alle LEDs aus. Ohne Haken (Vorgabe) bleibt die Anlage beim Trennen unverändert: Die Lichtmaschine behält ihren Zustand, zum Beispiel die schwach leuchtenden LEDs der Pushbutton-Kanäle."},  # v1.32

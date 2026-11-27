@@ -1,9 +1,9 @@
-# Datei-Version: 1.06 (2026-11-25) - web_form_servoanim.py
+# Datei-Version: 1.07 (2026-11-27) - web_form_servoanim.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_form_servoanim.py
 # Path:           _web/web_form_servoanim.py
-# Version:        1.06
-# Last Update:    2026-11-25
+# Version:        1.07
+# Last Update:    2026-11-27
 # Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
 # History of Change:
@@ -15,6 +15,7 @@
 #   1.04  2026-11-04  harvest: Name der Fensterbeschreibung als Parameter (die LED Farb-Animation benutzt Main_Menu_Form_RSC)
 #   1.05  2026-11-24  Hilfe-Adresse: Wiki-Seite servo_animation im Namensraum mobaledlibstudio
 #   1.06  2026-11-25  Text: 'Es ist kein Gerät verbunden ...' (statt Arduino). Zeilen mit '# v1.06'
+#   1.07  2026-11-27  Version 5.57: Feld Anschluss-Kanal heisst LM-Ausgang, mit Tooltip
 # ----------------------------------------------------------------------------------------------
 """Web-Ersatz fuer proggen/Userform_ServoAnim.py (Dialog zu den Makros ServoAnim und ServoAnim2B).
 
@@ -188,7 +189,8 @@ async def _servoanim_async(spec: dict):
                         # with ui.row().classes("w-full no-wrap"):  # v1.01 (entfallen)
                         with ui.row().classes("w-full").style("gap: 6px"):  # v1.01
                             num("Adresse", T("Anim_Address_Label"), 0, 9999)
-                            num("Kanal", T("Anim_Address_Kanal_Label"), 0, 9)
+                            # num("Kanal", T("Anim_Address_Kanal_Label"), 0, 9)  # v1.07 (entfallen)
+                            num("Kanal", _translate("LM-Ausgang"), 0, 9).tooltip(_translate("Nummer des Lichtmaschinen Ausgangs"))  # v1.07
                     with box(T("FrameL1")):
                         sel("ServoType", "Anim_Type_ListBox", T("ServoType_Label"))
                     with box(T("FrameL1d")):

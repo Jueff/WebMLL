@@ -1,5 +1,5 @@
 ====== MobaLedLib Studio – Servo Einstellungen ======
-//Seitenstand 1.10 (2026-11-24), gilt für Version 5.12//
+//Seitenstand 1.12 (2026-11-27), gilt für Version 5.56//
 
 Mit dem Reiter **Servo Einstellungen** testest und stellst du **Servos der MobaLedLib-Servoplatine** ein. Das ist die Platine, an der Servos über **LED-Befehle** angeschlossen sind. Du stellst für jeden Servo die **kleinste und größte Stellung** und die **Geschwindigkeit** ein, damit er nirgends anstößt.
 
@@ -12,7 +12,7 @@ Die Seite ist für das **Smartphone** gebaut (eine Spalte, große Tasten). Mit *
 ===== So stellst du einen Servo ein =====
 
   - **Voraussetzung:** Auf der Lichtmaschine läuft **schon ein MobaLedLib-Programm** (bei einer **neuen** Lichtmaschine zuerst [[anleitungen:mobaledlibstudio:pg_arduino|übertragen]]). Du musst nicht vorher auf **Mit Lichtmaschine verbinden** klicken: Das Werkzeug **verbindet sich bei Bedarf selbst**. Es arbeitet im **Direktmodus** ([[anleitungen:mobaledlibstudio:pg_arduino#die_drei_arten_der_verbindung|Die drei Arten der Verbindung]]).
-  - Wähle in der Zeile **Servo Modul Auswahl** den Servo: die **LED Nummer** der Servoplatine, den **Anschluss** (0 bis 2) und den **LED Kanal**. Nach jeder Änderung wählt das Programm den Servo und lässt ihn **kurz wackeln**, damit du ihn erkennst.
+  - Wähle in der Zeile **Servo Modul Auswahl** den Servo: die **LED Nummer** der Servoplatine, den **Anschluss** (0 bis 2) und den **LM-Ausgang**. Nach jeder Änderung wählt das Programm den Servo und lässt ihn **kurz wackeln**, damit du ihn erkennst.
   - Mit dem **Regler Position** (Werte 10 bis 210) und den Pfeilen daneben bewegst du den Servo und siehst den Wert.
   - Klicke auf **Servo Konfigurieren**. Das Programm führt dich in **drei Schritten** durch **Minimalposition**, **Maximalposition** und **Geschwindigkeit**.
   - In jedem Schritt stellst du den Wert mit den Tasten **<< < > >>** ein. **Halte** die Taste gedrückt für größere Schritte. Am Computer geht es auch mit der **Tastatur** (seit 3.14): **Pfeil hoch** = `>`, **Pfeil runter** = `<`, **Bild hoch** = `>>`, **Bild runter** = `<<`; Taste gedrückt halten wie die Maustaste. **Weiter** geht zum nächsten Schritt.
@@ -26,5 +26,5 @@ Die Seite ist für das **Smartphone** gebaut (eine Spalte, große Tasten). Mit *
 ===== Gut zu wissen =====
 
   * Wenn du den Reiter wechselst, die Seite schließt oder das Programm beendest, bekommt der Servo den **Wert 0**, und ein laufender Ablauf wird abgebrochen. So bleibt kein Servo in Bewegung.
-  * Die Werte (**LED Nummer**, **Anschluss**, **LED Kanal**) werden gemerkt.
+  * Die Werte (**LED Nummer**, **Anschluss**, **LM-Ausgang**) werden gemerkt.
   * Den **Ablauf einer Servobewegung** stellst du mit dem Assistenten [[anleitungen:mobaledlibstudio:servo_animation|Servo Animation]] ein.

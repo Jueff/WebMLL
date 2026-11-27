@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
-# Datei-Version: 1.01 (2026-11-26) - M09_Select_Macro.py
+# Datei-Version: 1.02 (2026-11-27) - M09_Select_Macro.py
 # ----------------------------------------------------------------------------------------------
 # Name:           M09_Select_Macro.py
 # Path:           proggen/M09_Select_Macro.py
-# Version:        1.01
-# Last Update:    2026-11-26
+# Version:        1.02
+# Last Update:    2026-11-27
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
 #   1.01  2026-11-26  Makro aus der Tabelle Lib_Macros ohne den Kommentar der Zelle (Text nach dem §) lesen: Fehler 'Parameter Val1§Duration 0 not possible nicht gefunden' beim Makro Button; Kopf eingefuegt, davor nicht erfasst
+#   1.02  2026-11-27  Version 5.55: Bei einem neuen Makro wird der LM-Ausgang (LED/Sound Kanal) mit dem der naechsten Zeile darueber voreingestellt, wenn das Makro keinen eigenen Vorgabewert hat
 # ----------------------------------------------------------------------------------------------
 #
 #         Write header
@@ -526,6 +527,17 @@ def __SelectMacros_Sub():
         Macro = str(_with2.Cells(SelRow, M02.SM_Macro_COL)).split('§')[0]  # v1.01: Kommentar der Zelle (Text nach dem §) gehoert nicht zum Makro: sonst 'Parameter Val1§Duration 0 not possible nicht gefunden' (Makro Button)
         LedChannels = P01.val(_with2.Cells(SelRow, M02.SM_SngLEDCOL))
         Def_Channel = P01.val(_with2.Cells(SelRow, M02.SM_DefCh_COL))
+        if not Def_Channel:  # v1.02: neues Makro: LM-Ausgang der naechsten Zeile darueber voreinstellen (nur wenn das Makro keinen eigenen Vorgabewert hat, z.B. Button = 1)
+            try:
+                _r = P01.ActiveCell().Row - 1
+                while _r >= M02.Header_Row + 1:
+                    _ch = P01.val(P01.Cells(_r, M25.LED_Cha_Col))
+                    if _ch:
+                        Def_Channel = _ch
+                        break
+                    _r -= 1
+            except Exception:
+                pass
         Act_Channel = P01.val(P01.Cells(P01.ActiveCell().Row, M25.LED_Cha_Col))
         CV_Adress = P01.val(P01.Cells(P01.ActiveCell().Row, M25.Config__Col+6))
         CV_used = P01.val(P01.Cells(P01.ActiveCell().Row, M25.Config__Col+7))

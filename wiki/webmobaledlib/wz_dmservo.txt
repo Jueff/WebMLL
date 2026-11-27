@@ -1,5 +1,5 @@
 ====== MobaLedLib Studio – DM Servo Einstellungen ======
-//Seitenstand 1.08 (2026-11-24), gilt für Version 5.12//
+//Seitenstand 1.10 (2026-11-27), gilt für Version 5.56//
 
 Der Reiter **DM Servo Einstellungen** (DM = //Direct Mode//) stellt **Servos im Direct Mode** ein. Das sind Servos, die ein **ATtiny** ansteuert statt des WS2811-Bausteins. Für Servos an der normalen Servoplatine gibt es den Reiter [[anleitungen:mobaledlibstudio:wz_servo|Servo Einstellungen]].
 
@@ -8,7 +8,7 @@ Der Reiter **DM Servo Einstellungen** (DM = //Direct Mode//) stellt **Servos im 
 ===== So benutzt du ihn =====
 
   - **Voraussetzung:** Auf der Lichtmaschine läuft **schon ein MobaLedLib-Programm** (bei einer **neuen** Lichtmaschine zuerst [[anleitungen:mobaledlibstudio:pg_arduino|übertragen]]). Du musst nicht vorher auf **Mit Lichtmaschine verbinden** klicken: Das Werkzeug **verbindet sich bei Bedarf selbst**. Es arbeitet im **Effektmodus** ([[anleitungen:mobaledlibstudio:pg_arduino#die_drei_arten_der_verbindung|Die drei Arten der Verbindung]]).
-  - Stelle **Servo Modul Adresse** und **LED Kanal** ein.
+  - Stelle **Servo Modul Adresse** und **LM-Ausgang** ein.
   - Wähle die **Servo Betriebsart**:
 
 ^ Nr. ^ Betriebsart ^

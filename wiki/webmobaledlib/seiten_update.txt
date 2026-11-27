@@ -1,5 +1,5 @@
 ====== Seiten Update ======
-//Seitenstand 1.16 (2026-11-25), gilt für Version 5.29//
+//Seitenstand 1.19 (2026-11-27), gilt für Version 5.56//
 
 **Arbeitsseite für den Wiki-Pflegenden, keine Anleitung für Anwender.** Sie listet alle Seiten und Bilder des Kapitels //webMobaLedLib// mit **Links**: Ein Klick auf einen **Seitennamen** öffnet die Seite, ein Klick auf einen **Bildnamen** öffnet das Bild. So lässt sich beim Aktualisieren Zeile für Zeile durchgehen. Diese Seite **nicht** in die Seitenleiste und nicht auf die Startseite aufnehmen.
 
@@ -23,10 +23,10 @@
 | [[anleitungen:mobaledlibstudio:modus|modus]] | webMobaLedLib – Anfänger Modus und Experten Modus | 1.06 | **geändert** | [[anleitungen:mobaledlibstudio:modus?do=edit|bearbeiten]] |
 | [[anleitungen:mobaledlibstudio:ota|ota]] | webMobaLedLib – ESP32 per WLAN und OTA | 1.06 | **geändert** | [[anleitungen:mobaledlibstudio:ota?do=edit|bearbeiten]] |
 | [[anleitungen:mobaledlibstudio:patterngenerator|patterngenerator]] | webMobaLedLib – Der Timeline Editor | 1.02 | nur Seitenstand | [[anleitungen:mobaledlibstudio:patterngenerator?do=edit|bearbeiten]] |
-| [[anleitungen:mobaledlibstudio:pg_arduino|pg_arduino]] | webMobaLedLib – Verbinden und Übertragen | 1.16 | **geändert** | [[anleitungen:mobaledlibstudio:pg_arduino?do=edit|bearbeiten]] |
+| [[anleitungen:mobaledlibstudio:pg_arduino|pg_arduino]] | webMobaLedLib – Verbinden und Übertragen | 1.20 | **geändert** | [[anleitungen:mobaledlibstudio:pg_arduino?do=edit|bearbeiten]] |
 | [[anleitungen:mobaledlibstudio:pg_grafisch|pg_grafisch]] | webMobaLedLib – Die grafische Ansicht | 1.05 | **geändert** | [[anleitungen:mobaledlibstudio:pg_grafisch?do=edit|bearbeiten]] |
 | [[anleitungen:mobaledlibstudio:pg_speichern|pg_speichern]] | webMobaLedLib – Speichern und Laden | 1.06 | **geändert** | [[anleitungen:mobaledlibstudio:pg_speichern?do=edit|bearbeiten]] |
-| [[anleitungen:mobaledlibstudio:pg_tabelle|pg_tabelle]] | webMobaLedLib – Die Tabelle bedienen | 1.16 | **geändert** | [[anleitungen:mobaledlibstudio:pg_tabelle?do=edit|bearbeiten]] |
+| [[anleitungen:mobaledlibstudio:pg_tabelle|pg_tabelle]] | webMobaLedLib – Die Tabelle bedienen | 1.20 | **geändert** | [[anleitungen:mobaledlibstudio:pg_tabelle?do=edit|bearbeiten]] |
 | [[anleitungen:mobaledlibstudio:pg_werkzeugleiste|pg_werkzeugleiste]] | webMobaLedLib – Die Werkzeugleiste | 1.12 | **geändert** | [[anleitungen:mobaledlibstudio:pg_werkzeugleiste?do=edit|bearbeiten]] |
 | [[anleitungen:mobaledlibstudio:programmgenerator|programmgenerator]] | webMobaLedLib – Der Programmgenerator | 1.09 | **geändert** | [[anleitungen:mobaledlibstudio:programmgenerator?do=edit|bearbeiten]] |
 | [[anleitungen:mobaledlibstudio:raspberrypi|raspberrypi]] | webMobaLedLib – Installation auf dem Raspberry Pi | 1.04 | nur Seitenstand | [[anleitungen:mobaledlibstudio:raspberrypi?do=edit|bearbeiten]] |
@@ -38,15 +38,15 @@
 | [[anleitungen:mobaledlibstudio:werkzeuge|werkzeuge]] | webMobaLedLib – Die Werkzeug-Reiter | 1.11 | **geändert** | [[anleitungen:mobaledlibstudio:werkzeuge?do=edit|bearbeiten]] |
 | [[anleitungen:mobaledlibstudio:windows|windows]] | webMobaLedLib – Installation unter Windows | 1.03 | nur Seitenstand | [[anleitungen:mobaledlibstudio:windows?do=edit|bearbeiten]] |
 | [[anleitungen:mobaledlibstudio:wz_arduino_einstellungen|wz_arduino_einstellungen]] | webMobaLedLib – ARDUINO-IDE Einstellungen | 1.06 | **geändert** | [[anleitungen:mobaledlibstudio:wz_arduino_einstellungen?do=edit|bearbeiten]] |
-| [[anleitungen:mobaledlibstudio:wz_datenuebertragung|wz_datenuebertragung]] | webMobaLedLib – Datenübertragung zwischen Rechnern | 1.00 | **neu** | [[anleitungen:mobaledlibstudio:wz_datenuebertragung?do=edit|bearbeiten]] |
+| [[anleitungen:mobaledlibstudio:wz_datenuebertragung|wz_datenuebertragung]] | webMobaLedLib – Datenübertragung zwischen Rechnern | 1.05 | **neu** | [[anleitungen:mobaledlibstudio:wz_datenuebertragung?do=edit|bearbeiten]] |
 | [[anleitungen:mobaledlibstudio:wz_dcckeyboard|wz_dcckeyboard]] | webMobaLedLib – DCC Keyboard | 1.07 | nur Seitenstand | [[anleitungen:mobaledlibstudio:wz_dcckeyboard?do=edit|bearbeiten]] |
-| [[anleitungen:mobaledlibstudio:wz_dmservo|wz_dmservo]] | webMobaLedLib – DM Servo Einstellungen | 1.06 | nur Seitenstand | [[anleitungen:mobaledlibstudio:wz_dmservo?do=edit|bearbeiten]] |
+| [[anleitungen:mobaledlibstudio:wz_dmservo|wz_dmservo]] | webMobaLedLib – DM Servo Einstellungen | 1.10 | nur Seitenstand | [[anleitungen:mobaledlibstudio:wz_dmservo?do=edit|bearbeiten]] |
 | [[anleitungen:mobaledlibstudio:wz_farbtest|wz_farbtest]] | webMobaLedLib – Farb Test | 1.06 | nur Seitenstand | [[anleitungen:mobaledlibstudio:wz_farbtest?do=edit|bearbeiten]] |
 | [[anleitungen:mobaledlibstudio:wz_monitor|wz_monitor]] | webMobaLedLib – Serial Monitor | 1.05 | nur Seitenstand | [[anleitungen:mobaledlibstudio:wz_monitor?do=edit|bearbeiten]] |
 | [[anleitungen:mobaledlibstudio:wz_netzwerk|wz_netzwerk]] | webMobaLedLib – Zugriff aus dem Netz | 1.05 | **geändert** | [[anleitungen:mobaledlibstudio:wz_netzwerk?do=edit|bearbeiten]] |
-| [[anleitungen:mobaledlibstudio:wz_programm_einstellungen|wz_programm_einstellungen]] | webMobaLedLib – Programm Einstellungen | 1.20 | **geändert** | [[anleitungen:mobaledlibstudio:wz_programm_einstellungen?do=edit|bearbeiten]] |
-| [[anleitungen:mobaledlibstudio:wz_servo|wz_servo]] | webMobaLedLib – Servo Einstellungen | 1.08 | nur Seitenstand | [[anleitungen:mobaledlibstudio:wz_servo?do=edit|bearbeiten]] |
-| [[anleitungen:mobaledlibstudio:wz_sound|wz_sound]] | webMobaLedLib – Sound Test | 1.06 | nur Seitenstand | [[anleitungen:mobaledlibstudio:wz_sound?do=edit|bearbeiten]] |
+| [[anleitungen:mobaledlibstudio:wz_programm_einstellungen|wz_programm_einstellungen]] | webMobaLedLib – Programm Einstellungen | 1.23 | **geändert** | [[anleitungen:mobaledlibstudio:wz_programm_einstellungen?do=edit|bearbeiten]] |
+| [[anleitungen:mobaledlibstudio:wz_servo|wz_servo]] | webMobaLedLib – Servo Einstellungen | 1.12 | nur Seitenstand | [[anleitungen:mobaledlibstudio:wz_servo?do=edit|bearbeiten]] |
+| [[anleitungen:mobaledlibstudio:wz_sound|wz_sound]] | webMobaLedLib – Sound Test | 1.10 | nur Seitenstand | [[anleitungen:mobaledlibstudio:wz_sound?do=edit|bearbeiten]] |
 | [[anleitungen:mobaledlibstudio:wz_z21|wz_z21]] | webMobaLedLib – Z21 Simulator | 1.06 | nur Seitenstand | [[anleitungen:mobaledlibstudio:wz_z21?do=edit|bearbeiten]] |
 | [[anleitungen:mobaledlibstudio:erweiterungen|erweiterungen]] | webMobaLedLib – Erweiterungen (MLX) | 1.02 | **neu** | [[anleitungen:mobaledlibstudio:erweiterungen?do=edit|bearbeiten]] |
 

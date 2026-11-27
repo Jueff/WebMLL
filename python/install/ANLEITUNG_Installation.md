@@ -1,5 +1,5 @@
 # MobaLedLib Studio – Installation und Betrieb
-*Datei-Version: 5.39 (2026-11-26), gilt für Version 5.39*
+*Datei-Version: 5.60 (2026-11-27), gilt für Version 5.60*
 
 Windows · macOS · Linux-Desktop · Raspberry Pi
 
@@ -1008,7 +1008,7 @@ Der Reiter **Timeline Editor** erstellt aus einer Tabelle ein Muster für die LE
 Der Reiter **Servo Einstellungen** (früher Servo Test 1, Adresse `/ServoTest1`) bedient die Servoplatine der MobaLedLib (Servos über LED-Befehle) und ist wie der **Excel-Dialog „Servo Test und Einstellung“** aufgebaut. Er
 arbeitet über dieselbe serielle Verbindung wie der Farb Test: zuerst mit dem Arduino **verbinden** (Knopf **Mit Lichtmaschine verbinden** in der Kopfzeile oder Menü Lichtmaschine → Verbinden).
 
-- **Servo wählen:** In der Zeile **Servo Modul Auswahl** stehen **LED Nummer**, **Anschluss** (0 bis 2) und **LED Kanal**. Nach jeder Änderung wählt das Programm den Servo und lässt ihn
+- **Servo wählen:** In der Zeile **Servo Modul Auswahl** stehen **LED Nummer**, **Anschluss** (0 bis 2) und **LM-Ausgang** (bis 5.54 LED Kanal). Nach jeder Änderung wählt das Programm den Servo und lässt ihn
   **kurz wackeln**, damit man ihn erkennt. Die Werte werden gemerkt.
 - **Position:** Der Regler (10 bis 210) mit den Pfeilen daneben stellt die Position ein, rechts steht der Wert.
 - **Servo Konfigurieren** führt in drei Schritten durch **Minimalposition**, **Maximalposition** und **Geschwindigkeit**. Mit den Pfeiltasten **<< < > >>** wird der Wert eingestellt
@@ -1022,7 +1022,7 @@ arbeitet über dieselbe serielle Verbindung wie der Farb Test: zuerst mit dem Ar
 ### 2.13 DM Servo Einstellungen, Sound Test und DCC Keyboard
 
 - **DM Servo Einstellungen** (früher Servo Test 2, Adresse `/ServoTest2`) steuert Servos im **Direct Mode** (ein ATtiny statt des WS2811-Chips). Parameter: **Servo Modul Adresse**, **LED Kanal**, **Servo Betriebsart** (1 Normal, 2 und 3 Training, 4 Max Speed, 5 Invers, 6 Servo zurücksetzen, 7 Werkseinstellung, 8 letzte Position zurücksetzen, 9 Oszillator trimmen, 10 Speed Legacy; 0: es wird nichts gesendet) und **Fast Refresh**. Regler 0 bis 255, **Pos 0**, **Pos 255** und die Taste **ENTER** (gedrückt halten; in den Betriebsarten 2 und 3 zweimal drücken, die Beschriftung zeigt „2nd Step“). Nach ENTER in den Betriebsarten 4 bis 8 und 10 steht die Betriebsart auf 0. Die Betriebsart wird nicht gemerkt, die Seite beginnt immer mit 1. Das Programmieren des ATtiny (Hex-Datei) und das Formular für den Programmieradapter gibt es noch nicht. **Der Reiter erscheint nur, wenn in den Programm Einstellungen die Option „DM Servo Einstellungen anzeigen“ eingeschaltet ist** (und nach dem Speichern sofort, ohne Neustart; vorher hieß die Option „Programmgenerator anzeigen“ und hatte im Web keine Wirkung). Ruft man `/ServoTest2` bei ausgeschalteter Option auf, kommt ein Hinweis, und der Programm Generator bleibt offen.
-- **Sound Test** (`/SoundTest`) prüft die MLL-Soundplatine (MP3-TF-16): **Soundmodul-Adresse**, **LED Kanal**, **Impulslänge** und die Werte **R, G, B** (Sound-Auswahl) bestimmen den Ton. **Sound an ARDUINO schicken** sendet den Wert und beendet den Impuls nach der Impulslänge; Änderungen an Adresse, Impulslänge, R, G und B senden gleich (nach kurzer Ruhe beim Tippen). Zum Verbinden dient der Knopf **Mit Lichtmaschine verbinden** in der Kopfzeile (siehe 2.11). Beim Verlassen des Reiters oder der Seite wird ein laufender Impuls beendet. Die Tastenkürzel Strg-R und Alt-R der Tk-Seite gibt es nicht (Strg-R lädt im Browser die Seite neu).
+- **Sound Test** (`/SoundTest`) prüft die MLL-Soundplatine (MP3-TF-16): **Soundmodul-Adresse**, **LM-Ausgang**, **Impulslänge** und die Werte **R, G, B** (Sound-Auswahl) bestimmen den Ton. **Sound an ARDUINO schicken** sendet den Wert und beendet den Impuls nach der Impulslänge; Änderungen an Adresse, Impulslänge, R, G und B senden gleich (nach kurzer Ruhe beim Tippen). Zum Verbinden dient der Knopf **Mit Lichtmaschine verbinden** in der Kopfzeile (siehe 2.11). Beim Verlassen des Reiters oder der Seite wird ein laufender Impuls beendet. Die Tastenkürzel Strg-R und Alt-R der Tk-Seite gibt es nicht (Strg-R lädt im Browser die Seite neu).
 - **DCC Keyboard** (`/DCCKeyboard`) schickt dem ARDUINO die Kommandos `@ AAA CC 01`, die sonst der DCC-ARDUINO an den LED-ARDUINO schickt, damit man die DCC-Schalter ausprobieren kann: 32 Adressen ab der **DCC-Basisadresse**, je ein roter (Kanal 0, mit der Adresse beschriftet) und ein grüner Knopf (Kanal 1), in vier Gruppen zu acht. Beim ersten Tastendruck verbindet die Seite selbst; das kann etwas dauern, und manchmal reagiert der ARDUINO erst auf den zweiten Tastendruck.
 - Alle drei Seiten sind für das Smartphone gebaut (Beschreibung einzeilig und aufklappbar, große Tasten) und im Vollbild (2.11) gut zu bedienen.
 
@@ -1805,7 +1805,7 @@ Bei einer Fehlermeldung bitte den Text aus dem Installationsfenster und die Date
 
 ## ESP32: schnelle Konfiguration über WLAN (ab 4.71)
 
-In Hardware Optionen, Reiter Entwicklungsumgebung, **PlatformIO** wählen und „Schnelles Update: nur geänderte Konfiguration übertragen“ einschalten. WLAN und OTA am ESP32 wie bisher einrichten. Beim ersten Mal muss die Firmware mit der neuen Empfangsfunktion übertragen werden. Danach prüft das Programm bei jeder Übertragung über WLAN die Firmware im Gerät: Passt sie, wird nur die Konfiguration gesendet und der ESP32 startet neu. Ist die Konfiguration unverändert, wird nichts gesendet. Bei einem Übertragungsfehler gibt es bis zu drei Versuche, danach wird das ganze Programm hochgeladen. Ändern sich Hostname, OTA-Passwort oder OTA-Schalter, wird die Firmware ebenfalls neu übertragen. Pico und USB bleiben unverändert.
+Im Menü **Werkzeuge → Wartung** (bis 5.48: Hardware Optionen, Reiter Entwicklungsumgebung) **PlatformIO** wählen und „Schnelles Update: nur geänderte Konfiguration übertragen“ einschalten. WLAN und OTA am ESP32 wie bisher einrichten. Beim ersten Mal muss die Firmware mit der neuen Empfangsfunktion übertragen werden. Danach prüft das Programm bei jeder Übertragung über WLAN die Firmware im Gerät: Passt sie, wird nur die Konfiguration gesendet und der ESP32 startet neu. Ist die Konfiguration unverändert, wird nichts gesendet. Bei einem Übertragungsfehler gibt es bis zu drei Versuche, danach wird das ganze Programm hochgeladen. Ändern sich Hostname, OTA-Passwort oder OTA-Schalter, wird die Firmware ebenfalls neu übertragen. Pico und USB bleiben unverändert.
 
 ## ESP32: feste IP-Adresse statt DHCP (ab 4.79)
 
@@ -1820,7 +1820,7 @@ Der Mini-Farbtest funktioniert auch in der **Grafik-Ansicht** (Ketten und Anlage
 
 ## Datenübertragung zwischen PCs (ab 4.89)
 
-Unter **Einstellungen → Datenübertragung** kannst du Tabellen aus einem anderen PC im lokalen Netz übernehmen oder ausgewählte Zeilen in bestehende Tabellen einfügen. Die Freigabe am Quell-PC ist nach jedem Start ausgeschaltet und muss im Dialog bewusst aktiviert werden. Vor jeder Übernahme wird die bisherige Arbeitsmappe gesichert, „Letzten Import rückgängig machen“ stellt sie wieder her. Beim Einfügen ausgewählter Zeilen kannst du den LED-Kanal wählen (Standard 0). Die Tabellenansicht wird danach automatisch aktualisiert. Wird der Verbindungscode nicht akzeptiert, prüfe den im Quell-PC angezeigten Code und versuche es erneut. Die Daten werden im Netz unverschlüsselt übertragen, benutze die Funktion nur in einem vertrauenswürdigen Netz. Anleitung, Ports und Firewall: [Datenübertragung](../../DATENUEBERTRAGUNG.md).
+Unter **Werkzeuge → Datenübertragung** (bis 5.48: Einstellungen → Datenübertragung) kannst du Tabellen aus einem anderen PC im lokalen Netz übernehmen oder ausgewählte Zeilen in bestehende Tabellen einfügen. Die Freigabe am Quell-PC ist nach jedem Start ausgeschaltet und muss im Dialog bewusst aktiviert werden. Vor jeder Übernahme wird die bisherige Arbeitsmappe gesichert, „Letzten Import rückgängig machen“ stellt sie wieder her. Beim Einfügen ausgewählter Zeilen kannst du den LED-Kanal wählen (Standard 0). Die Tabellenansicht wird danach automatisch aktualisiert. Wird der Verbindungscode nicht akzeptiert, prüfe den im Quell-PC angezeigten Code und versuche es erneut. Die Daten werden im Netz unverschlüsselt übertragen, benutze die Funktion nur in einem vertrauenswürdigen Netz. Anleitung, Ports und Firewall: [Datenübertragung](../../DATENUEBERTRAGUNG.md).
 
 ## ESP32: Build erfolgreich, aber kein Upload (Korrektur 4.94)
 
@@ -1837,3 +1837,52 @@ Beim Laden einer MLL_PGF-Datei mit mehreren Tabellenblättern fragt das Programm
 ## ESP32 startet nach dem Hochladen endlos neu (Korrektur 4.97)
 
 Steht im seriellen Monitor `assert failed: lfs_fs_grow_` und blinkt die Platine dauernd, liegt im Flash ein altes Dateisystem eines früheren Projekts. Ab 4.97 löscht das Programm nach dem Hochladen per USB das Dateisystem des ESP32 selbst; die WLAN-Zugangsdaten bleiben erhalten, die Konfiguration wird danach neu übertragen. Ein Gerät, das schon abstürzt, wird durch **erneutes Hochladen per USB** repariert (nicht über WLAN).
+
+## Anschluss-Hinweis, Firmware-Auswahl, Selectrix (ab 5.54)
+
+- **Selectrix:** Channel 1 bis 99, Bitposition 1 bis 8; sonst Meldung und die Zelle wird geleert. Bei DCC, LNet und CAN ist die Adresse 0 nicht erlaubt.
+- **Negativer Anschluss (zum Beispiel -3):** Er gilt als Hinweis, dass das Gerät an COM3 war. Beim Hochladen und bei **Setup übertragen** nutzt das Programm COM3, wenn dort ein passendes Gerät hängt, und trägt es ins Blatt ein. Sonst öffnet sich die Geräteauswahl.
+- **Geräteauswahl:** `COM?` steht nicht mehr in der Liste. **OK** ohne Auswahl ändert das Blatt nicht. **Abbrechen** schließt auch das Fenster Kompilieren und Hochladen.
+- **Firmware installieren (Pico):** nur Pico-Geräte, auch unbekannte und andere MobaLedLib Geräte sind wählbar.
+- **Firmware herunterladen:** Eine lokale ZIP-Datei mit mindestens einer `*.uf2` lässt sich installieren.
+- **Fenster Kompilieren und Hochladen:** an der Titelzeile verschiebbar, Doppelklick setzt die Position zurück.
+- **PGF-Import** in ein verstecktes Blatt blendet es wieder ein.
+
+## Datenübertragung: Quelladresse und Port (ab 5.53)
+
+Im Reiter zum Empfangen steht die **Quelladresse** ohne `http://` (zum Beispiel 192.168.10.171), rechts daneben der **Port** (normalerweise 45875). Gespeicherte Adressen und Suchergebnisse füllen beide Felder. Der **Verbindungscode** muss mindestens sechs Zeichen haben; längere und gespeicherte Codes bleiben gültig.
+
+## LED Kanal oben, Spalte änderbar (ab 5.51)
+
+In den Dialogen der Makros mit LEDs steht der **LED Kanal** oben. Im Raum-Dialog steht der Haken **Individuelle Zeiten** über den Reglern. Wer die Spalte **LED/ Sound Kanal** direkt in der Tabelle ändern will, schaltet in den Programm Generator Einstellungen **Spalte LED/Sound Kanal in der Tabelle änderbar** ein (Standard Aus). Die Spalte lässt sich dann auch nach unten ausfüllen; die LED-Nummern werden neu berechnet. Du bist selbst für richtige Werte verantwortlich. Die Einstellung gilt ab der nächsten Anzeige der Tabelle.
+
+## Umbenennung LED Kanal in LM-Ausgang (ab 5.55, einheitlich ab 5.56)
+
+Der **LED Kanal** heißt jetzt **LM-Ausgang** (Lichtmaschine Ausgang; der Tooltip erklärt es). Die **LED-Kette** bleibt unverändert. Die Tabellenspalte, der Servo- und Soundtest und der Raum-Dialog heißen alle **LM-Ausgang** (in 5.55 hießen Spalte und Tests kurz „LM-Ausgang“); im Raum-Dialog heißen außerdem „RGB-LED Kanäle“ jetzt **Anzahl RGB-LEDs** und „Anzahl“ jetzt **Anzahl Räume**. Die Einstellung heißt **Spalte LM-Ausgang in der Tabelle änderbar**. Beim Einfügen eines **neuen Makros** ist der LM-Ausgang mit dem der nächsten Zeile darüber voreingestellt; Makros mit eigenem Vorgabewert (zum Beispiel Taster) behalten ihn. Die farbigen Knöpfe heißen ab 5.58 **LED RGB-Anschluss Auswahl** (vorher „LED Kanal Auswahl“; R, G, B eines WS2811). Im Servo- und im LED-Farb-Animations-Dialog heißt das Feld „Anschluss-Kanal“ jetzt **LM-Ausgang** (mit Tooltip). Beide Begriffe erklärt das Wiki auf der Seite Begriffe.
+
+## Neues Menü Werkzeuge (ab 5.49)
+
+Auf Wunsch von Jürgen (Issue 75) gibt es zwischen **Einstellungen** und **Hilfe** das Menü **Werkzeuge**. Es enthält Dinge, die keine Einstellungen oder Hardware-Optionen sind:
+
+- **Datenübertragung** (vorher Einstellungen → Datenübertragung),
+- **Firmware installieren …** (vorher Hardware Optionen, Reiter Firmware Installation),
+- **ESP32-Firmware über WLAN hochladen …** (gibt es weiterhin auch im Reiter WLAN (OTA) der Hardware Optionen),
+- **Wartung …** (vorher Hardware Optionen, Reiter Entwicklungsumgebung und Update): PlatformIO oder ARDUINO-IDE wählen, Schnelles Update, PlatformIO prüfen und Zwischenspeicher löschen, Bibliotheken und Boards der ARDUINO-IDE.
+
+Im **Anfänger Modus** fehlt das ganze Menü Werkzeuge. Die Hardware Optionen enthalten nur noch die Reiter zur Lichtmaschine (Lichtmaschine, ESP und WLAN-Einstellungen, Dateien und weitere).
+
+## Serieller Monitor: Verbinden und Anschluss wechseln (Pull Request 82, ab 5.59; bei Jueff 5.56 bis 5.69)
+
+Der Reiter **Serieller Monitor** zeigt, was das Gerät sendet: **Verbinden** testet kurz (höchstens 250 ms), ob das Gerät das MobaLedLib-Programm hat (EFFECT Mode); sonst liest er nur mit (DIRECT Mode), daher geht es auch mit anderen Geräten. Die Hardware-Signale (DTR) richten sich nach dem Gerät am Anschluss (Pico, Nano, ESP32). Es gibt einen Knopf: rot **Verbinden**, grün **Trennen**. Ist die Verbindung offen und du wählst einen anderen Anschluss, zeigt das Programm der Reihe nach „Nicht verbunden“, „Verbindungsaufbau ... COMx“ und den neuen Zustand; die Ausgaben der vorherigen Verbindung werden gelöscht. Solange das Programm verbindet, sind die Verbindungsknöpfe in der Kopfzeile und im Seriellen Monitor grau, gesperrt und heißen „Verbinden...“.
+
+Bricht die Verbindung ab (zum Beispiel USB-Kabel abgezogen), erkennt das Programm das: Die Verbindungsknöpfe werden rot, der Status zeigt „Verbindung verloren - Pro/COMx“ (Typ und Anschluss wie bei „Nicht verbunden“) und im Seriellen Monitor steht „*** Verbindung zu COMx verloren“. Nach dem Anstecken verbindest du wieder mit **Verbinden**.
+
+Sobald der Anschluss nach einem Verbindungsverlust wieder da ist (Kabel angesteckt), verbindet das Programm **automatisch neu**, ohne Dialog (im Seriellen Monitor wieder nur mitlesend). Wenn du selbst mit **Trennen** getrennt hast, bleibt die Verbindung getrennt.
+
+Der **Serielle Monitor** versucht zuerst im **EFFECT Mode** zu verbinden (ein schneller Test, nach spätestens 250 ms ist Schluss, auch bei Geräten, die gar nicht oder unsinnig antworten). Antwortet das Gerät nicht, liest er nur mit und der Status zeigt **DIRECT Mode**. War vorher schon eine Verbindung im EFFECT Mode da, bleibt sie beim Wechsel in den Monitor unverändert. Verlässt du den Monitor und wechselst in den **Programm Generator**, den **Farb Test**, **Servo Test**, **Sound Test**, das **DCC Keyboard** oder den **Patterngenerator**, baut das Programm eine Verbindung im DIRECT Mode im **EFFECT Mode** neu auf (mit Board und Anschluss des Blatts); eine Verbindung im EFFECT Mode zu einem anderen Anschluss als dem des Blatts wird auf den des Blatts umgestellt.
+
+Bei eingeschaltetem **Schnellen Update** schließt **Setup übertragen** eine bestehende Verbindung nicht: Ist das Programm schon im EFFECT Mode mit demselben Anschluss verbunden, geht die Konfiguration über diese Verbindung. Bei einer anderen Verbindung (DIRECT Mode im Seriellen Monitor, anderer Anschluss) wird wie bisher getrennt und neu geöffnet.
+
+Ein **Doppelklick** auf **Name** oder **Beleuchtung** einer Datenzeile öffnet die **Makroauswahl** (wie in Excel). Den Makrotext bearbeitest du mit **Umschalt + Doppelklick**, **F2**, **Enter** oder dem Kontextmenü „Zelle bearbeiten“. Wer den Schalter in einer älteren Version ausgeschaltet gespeichert hatte, bekommt ihn einmal eingeschaltet; ausschalten geht unter Programm Einstellungen, „Bedienung der Tabelle“.
+
+In der erzeugten Datei `LEDs_AutoProg.h` stehen beim **Schnellen Update** (ESP32, Pico) die Eingangskanal-Defines (`INCH_…`) und die Zählwerte `TOTAL_SWITCHES_A` bis `D` und `TOTAL_VARIABLES` zwischen `//MLLDYN_BEGIN` und `//MLLDYN_END`, also im Teil, der zur Konfiguration gehört und nicht zur Firmware.

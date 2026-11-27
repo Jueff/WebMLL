@@ -1,9 +1,9 @@
-Datei-Version: 1.19 (2026-11-26) - RELEASE_Hinweise_5.54.md
-Gilt für MobaLedLib Studio 5.54
+Datei-Version: 1.20 (2026-11-27) - RELEASE_Hinweise_5.60.md
+Gilt für MobaLedLib Studio 5.60
 
-# MobaLedLib Studio 5.54
+# MobaLedLib Studio 5.60
 
-Anhänge dieses Releases: `webmobaledlib.zip` (Programm, mit `zip_erstellen.bat` Version 1.11 gebaut, `ROOT_IN_ZIP=1`), `START_HIER.txt` (erste Schritte), `ANLEITUNG_Installation.pdf` (Anleitung, Version 5.54) und `BETATEST_Checkliste.pdf` (Checkliste für Betatester, Version 4.31).
+Anhänge dieses Releases: `webmobaledlib.zip` (Programm, mit `zip_erstellen.bat` Version 1.11 gebaut, `ROOT_IN_ZIP=1`), `START_HIER.txt` (erste Schritte), `ANLEITUNG_Installation.pdf` (Anleitung, Version 5.60) und `BETATEST_Checkliste.pdf` (Checkliste für Betatester, Version 4.36).
 Installation: siehe `START_HIER.txt` und den Schnellstart der Anleitung. Aktualisieren: Menü **Hilfe → Update MobaLedLib Studio …**, danach das Programm **neu starten** und die Seite mit Strg+F5 neu laden.
 
 ## Wichtig beim Aktualisieren
@@ -12,7 +12,17 @@ Installation: siehe `START_HIER.txt` und den Schnellstart der Anleitung. Aktuali
 - **Nach dem Update das Programm neu starten** und die Seite neu laden. Oben darf keine rote Meldung stehen.
 - **Neues Programmsymbol (4.10):** Für die Verknüpfung auf dem Desktop den Installer noch einmal ausführen.
 
-## Neu seit Version 3.93 (3.94 bis 5.54)
+## Neu seit Version 3.93 (3.94 bis 5.60)
+
+**Neu seit 5.54 (5.55 bis 5.60):**
+- **LM-Ausgang (5.55 bis 5.58, Wunsch von Harold):** Der „LED Kanal“ heißt jetzt **LM-Ausgang** (Lichtmaschine Ausgang; ein Tooltip erklärt ihn). Die LED-Kette bleibt unverändert. Die Tabellenspalte heißt **LM-Ausgang**, ebenso das Feld im Servo-, DM-Servo- und Soundtest, im Raum-Dialog (dort auch „Anzahl RGB-LEDs“ statt „RGB-LED Kanäle“ und „Anzahl Räume“ statt „Anzahl“), im Parameterformular, im Servo- und im LED-Farb-Animations-Dialog (vorher „Anschluss-Kanal“). Die Einstellung heißt „Spalte LM-Ausgang in der Tabelle änderbar“. Die farbigen Knöpfe heißen **LED RGB-Anschluss Auswahl** (vorher „LED Kanal Auswahl“; sie wählen R, G oder B eines WS2811-Moduls und haben mit dem LM-Ausgang nichts zu tun). Die Felder haben Tooltips („Nummer des Lichtmaschinen Ausgangs“); die Wiki-Seite Begriffe erklärt **LM-Ausgang** und **LED RGB-Anschluss**.
+- **Neues Makro (5.55):** Der LM-Ausgang ist mit dem der nächsten Zeile darüber voreingestellt (Makros mit eigenem Vorgabewert, zum Beispiel Taster, behalten ihn).
+- **Serieller Monitor und Verbindung (5.59, Pull Request 82 von Jürgen):** Ein Verbindungsknopf; **Verbinden** testet zuerst kurz auf den EFFECT Mode, sonst liest der Monitor nur mit (DIRECT Mode). Verbindungsverlust (zum Beispiel USB abgezogen) wird erkannt („Verbindung verloren - Pro/COMx“), danach verbindet das Programm automatisch neu. Beim Verlassen des Monitors stellt das Programm die Verbindung wieder auf das Blatt um. **Setup übertragen** mit schnellem Upload nutzt die offene Verbindung.
+- **Plattformen und Protokolle (5.59, Jürgen):** `csv/Lichtmaschinen_prop.json` mit devices, platforms und protocols; Firmware-Auswahl nach Plattform; die Bestätigung der LNet-Lizenz gilt nur für das eigene Blatt.
+- **Weitere Korrekturen (5.59, Jürgen):** ESP32 schreibt die Mainboard_LED-Defines nicht in die Kopfdatei; Doppelklick auf Name und Beleuchtung öffnet die Makroauswahl auch bei altem gespeicherten Schalter; die Ein/Aus-Tasten gleicher Adresse sind nach Setup übertragen alle eingeschaltet; die Kopfdatei enthält beim schnellen Update die Eingangskanal-Defines in den MLLDYN-Marken.
+- **ESP32: Mainboard_LED (5.60, Pull Request 83 von Jürgen):** Das Makro schaltet die drei Status-LEDs der Hauptplatine (vorher passierte nichts). Die Firmware ist nicht kompiliert und nicht am Board geprüft.
+- **Zu prüfen:** Alles ist ohne Browser und ohne Hardware geprüft (Syntax und Tests ohne Oberfläche). Jürgens Tests für den Seriellen Monitor liefen hier nicht (das Modul serial fehlt). Die Checkliste für Betatester hat dazu die Punkte 417 bis 433.
+- **Nicht enthalten:** Pull Request 81 (gemeinsamer Uploadweg M08, moosbewohner): wird als Nächstes geprüft.
 
 **Neu seit 5.41 (5.42 bis 5.54):**
 - **Menü Werkzeuge (5.49, Wunsch von Jürgen, Issue 75):** Zwischen Einstellungen und Hilfe steht das Menü **Werkzeuge** mit Datenübertragung, Firmware installieren …, ESP32-Firmware über WLAN hochladen … und Wartung … (Entwicklungsumgebung, PlatformIO, Bibliotheken). Diese Funktionen stehen nicht mehr in Einstellungen und Hardware Optionen. Im Anfänger Modus ist das Menü ausgeblendet.

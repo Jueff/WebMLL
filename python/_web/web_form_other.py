@@ -1,13 +1,16 @@
-# Datei-Version: 1.18 (2026-11-26) - web_form_other.py
+# Datei-Version: 1.21 (2026-11-27) - web_form_other.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_form_other.py
 # Path:           _web/web_form_other.py
-# Version:        1.18
-# Last Update:    2026-11-26
+# Version:        1.21
+# Last Update:    2026-11-27
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
 #   1.18  2026-11-26  Parameternamen der Variablen der Tabelle ohne den Kommentar der Makrozelle (Text nach dem §). Zeile mit '# v1.18'
+#   1.19  2026-11-27  Version 5.55: das Zahlenfeld des Makro-Dialogs heisst LM-Ausgang (vorher LED Channel); Voreinstellung kommt aus M09_Select_Macro
+#   1.20  2026-11-27  Version 5.56: Feld LM-Ausgang im Makro-Dialog breiter (Beschriftung nicht mehr abgeschnitten) und mit Tooltip "Nummer des Lichtmaschinen Ausgangs"
+#   1.21  2026-11-27  Version 5.57: LED Kanal Auswahl heisst LED RGB-Anschluss Auswahl
 #   1.17  2026-11-26  Parameter vom Typ Mode (OptCtrPar, CtrMode, RandMode): aufklappbare Gruppe 'Flags auswaehlen' mit einem Haken je Flag unter dem Textfeld, Haken und Text gleichen sich ab. Zeilen mit '# v1.17'
 #   1.16  2026-11-25  Korrektur: Variablen der Tabelle fuer den Baukasten lesen den Typ der Parameter ohne Fehlerdialog (On_Min, On_Limit u.a. fehlen in Par_Description: Logic liess sich nicht oeffnen). Zeilen mit '# v1.16'
 #   1.15  2026-11-25  Logic: Baukasten (Bedingungen mit UND/ODER, 'nicht', Variablenauswahl der Tabelle, Vorschau, Pruefung) statt Texteingabe, kuerzere Beschreibung, Bezeichnungen Ergebnisvariable und Bedingungen (web_logic_builder 1.00, Version 5.26). Zeilen mit '# v1.15'
@@ -549,16 +552,26 @@ async def _other_async(spec: dict, values: dict):
             radio = chan = None
             builder = None  # v1.15
             if spec["led_options"]:
-                ui.label("LED Kanal Auswahl").classes("text-bold")
+                # ui.label("LED Kanal Auswahl").classes("text-bold")  # v1.21 (entfallen)
+                try:  # v1.21
+                    from _web.web_i18n import tr as _tr_rgb  # v1.21
+                except ImportError:  # v1.21
+                    _tr_rgb = lambda t: t  # v1.21
+                ui.label(_tr_rgb("LED RGB-Anschluss Auswahl")).classes("text-bold")  # v1.21
                 radio = _add_led_buttons(ui, spec["led_options"], values.get("option", spec["led_initial"]))  # v1.10
             if spec["channel"]:
                 cval = values.get("channel", spec["channel"]["value"])  # v1.09
                 if parse_int(cval) is not None:  # v1.09: Zahl: Feld wie die anderen Zahlenfelder
-                    cnum = _stepper(ui, parse_int(cval), 0, 99999, 1, "w-36")  # v1.09
+                    # cnum = _stepper(ui, parse_int(cval), 0, 99999, 1, "w-36")  # v1.09 (entfallen)
+                    cnum = _stepper(ui, parse_int(cval), 0, 99999, 1, "w-48")  # v1.20: breiter, Beschriftung wurde abgeschnitten
                     cnum.props("label=\"%s\"" % spec["channel"]["label"])  # v1.09
+                    if spec["channel"].get("tooltip"):  # v1.20
+                        cnum.tooltip(spec["channel"]["tooltip"])  # v1.20
                     chan = _Holder(lambda: str(int(cnum.value or 0)))  # v1.09
                 else:  # v1.09
                     chan = ui.input(label=spec["channel"]["label"], value=cval).props("outlined dense").classes("w-40")  # v1.09
+                    if spec["channel"].get("tooltip"):  # v1.20
+                        chan.tooltip(spec["channel"]["tooltip"])  # v1.20
             with ui.column().classes("w-full gap-1"):
                 keys_all = [q["key"] for q in spec["params"]]  # v1.11
                 for p in spec["params"]:
@@ -706,9 +719,14 @@ def make_class(Base):
 
             channel = None
             if Show_Channel != M10.CHAN_TYPE_NONE:
-                channel = {"label": "LED Channel", "value": "1"}
+                # channel = {"label": "LED Channel", "value": "1"}  # v1.19 (entfallen)
+                try:  # v1.19
+                    from _web.web_i18n import tr as _tr_lm  # v1.19
+                except ImportError:  # v1.19
+                    _tr_lm = lambda t: t  # v1.19
+                channel = {"label": _tr_lm("LM-Ausgang"), "value": "1", "tooltip": _tr_lm("Nummer des Lichtmaschinen Ausgangs")}  # v1.19: Lichtmaschine Ausgang; v1.20 Tooltip
                 if Show_Channel == M10.CHAN_TYPE_SERIAL:
-                    channel = {"label": M09.Get_Language_Str("Sound Kanal"), "value": str(LED_Channel)}
+                    channel = {"label": M09.Get_Language_Str("Sound Kanal"), "value": str(LED_Channel), "tooltip": _tr_lm("Nummer des Lichtmaschinen Ausgangs")}  # v1.20: Tooltip
                 elif Show_Channel == M10.CHAN_TYPE_LED:
                     channel["value"] = str(LED_Channel if UseOldParams else Def_Channel)
 

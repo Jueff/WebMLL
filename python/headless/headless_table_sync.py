@@ -1,12 +1,13 @@
-# Datei-Version: 1.04 (2026-11-23) - headless_table_sync.py
+# Datei-Version: 1.05 (2026-11-27) - headless_table_sync.py
 # Name: headless_table_sync.py
 # Path: headless/headless_table_sync.py
-# Version: 1.04
-# Last Update: 2026-11-23
+# Version: 1.05
+# Last Update: 2026-11-27
 # Author: Harold Linke
 # Licence: LGPL V2.1
 # History of Change:
 #   1.04 2026-11-23 HTTP 403 beim Tabellenabruf als verstaendlichen Verbindungscode-Hinweis melden.
+#   1.05  2026-11-27  Version 5.55: Meldung LM-Ausgang statt LED-Kanal
 #   1.03 2026-11-23 LED-Kanal nur fuer eingefuegte Zeilen setzen und validieren.
 #   1.02 2026-11-23 Feature-Branch auf Basis 4.79; Sprachen und Startvorgaben dokumentiert.
 #   1.01 2026-11-23 Ausgewaehlte Zeilen mit Konfliktpruefung und Backup in bestehende Tabellen einfuegen.
@@ -267,7 +268,8 @@ def plan_row_insert(current, raw, source_name, rows, target_name, where="end", t
         except (ValueError, TypeError, OverflowError):  # v1.03
             valid = False  # v1.03
         if not valid:  # v1.03
-            raise ValueError("Bitte einen gültigen LED-Kanal auswählen.")  # v1.03
+            # raise ValueError("Bitte einen gültigen LED-Kanal auswählen.")  # v1.03 (entfallen)
+            raise ValueError("Bitte einen gültigen LM-Ausgang auswählen.")  # v1.05
         for row in inserted:  # v1.03
             row.extend([""] * max(0, channel_column + 1 - len(row)))  # v1.03
             row[channel_column] = channel  # v1.03

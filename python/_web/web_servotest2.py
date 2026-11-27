@@ -1,9 +1,9 @@
-# Datei-Version: 1.03 (2026-11-20) - web_servotest2.py
+# Datei-Version: 1.05 (2026-11-27) - web_servotest2.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_servotest2.py
 # Path:           _web/web_servotest2.py
-# Version:        1.03
-# Last Update:    2026-11-20
+# Version:        1.05
+# Last Update:    2026-11-27
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
@@ -11,6 +11,8 @@
 #   1.01  2026-10-21  Neu Servo2Page.on_connected: nach dem Verbinden (Taste Mit ARDUINO verbinden in der Kopfzeile oder Menue) den Direktmodus neu starten
 #   1.02  2026-11-05  Beschreibungstext der Seite wird uebersetzt (description_text; zugeklappt steht die erste Zeile der uebersetzten Beschreibung)
 #   1.03  2026-11-20  Issue 51: Hinweisbox mit hellem Hintergrund bekommt dunkle Schrift (im Dunklen Modus war weisser Text auf hellem Grund nicht lesbar)
+#   1.04  2026-11-27  Version 5.55: LED Kanal heisst LM-Anschluss (Feld und Hinweis)
+#   1.05  2026-11-27  Version 5.56: LM-Anschluss heisst jetzt LM-Ausgang
 # ----------------------------------------------------------------------------------------------
 """Web-Version der Seite "Servo Test 2" (mlpyproggen/ServoTestPage2.py, Klasse ServoTestPage2, ohne Tk): Servos im Direct Mode (Variante von Eckhart, ein ATtiny
 statt des WS2811-Chips, Kommandos mit CRC4-Pruefsumme).
@@ -72,7 +74,9 @@ MODES = {
 }
 PARAM_DEFAULTS = {                    # (Text, Min, Max, Vorgabe, Hinweis) falls MacroParamDef fehlt; Schluessel wie in MacroParamDef
     "ServoAddress": ("Servo Modul Adresse", 0, 32767, 1, "Moduladresse des Servos (LED-Nummer des Anschlusses)"),
-    "ServoLEDChannel": ("LED Kanal", 0, 99, 0, "LED Kanal an dem die Servoplatine angeschlossen ist"),
+    # "ServoLEDChannel": ("LED Kanal", 0, 99, 0, "LED Kanal an dem die Servoplatine angeschlossen ist"),  # v5.55 (entfallen)
+    # "ServoLEDChannel": ("LM-Anschluss", 0, 99, 0, "LM-Anschluss an dem die Servoplatine angeschlossen ist"),  # v5.55  # v1.05 (entfallen)
+    "ServoLEDChannel": ("LM-Ausgang", 0, 99, 0, "LM-Ausgang an dem die Servoplatine angeschlossen ist"),  # v1.05
     "ServoControl": ("Servo Betriebsart", 0, 10, 1, "Betriebsart des Servos"),
     "ServoCRCold": ("Fast Refresh (40 ms)", 0, 1, 0, "Refresh auf 40ms setzen (nur für Experten)"),
 }

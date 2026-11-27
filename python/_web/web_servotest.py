@@ -1,9 +1,9 @@
-# Datei-Version: 2.08 (2026-11-12) - web_servotest.py
+# Datei-Version: 2.10 (2026-11-27) - web_servotest.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_servotest.py
 # Path:           _web/web_servotest.py
-# Version:        2.08
-# Last Update:    2026-11-12
+# Version:        2.10
+# Last Update:    2026-11-27
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
@@ -17,6 +17,8 @@
 #   2.06  2026-10-26  Zusammengesetzte Meldungen (Verkettungen und f-Strings) mit tr(...) uebersetzbar gemacht
 #   2.07  2026-11-09  Die Beschreibung wird uebersetzt, bevor die erste Zeile fuer die zugeklappte Anzeige genommen wird (zugeklappt stand sie auf Deutsch, aufgeklappt in der Sprache)
 #   2.08  2026-11-12  Tastatur wie im Excel-Programm 3.5.0L (UserForm_ServoPos): Pfeil hoch/runter = > und <, Bild hoch/runter = >> und <<, solange die Pfeiltasten aktiv sind (Taste gedrueckt halten = Pfeiltaste gehalten); handle_servo_key; die Seite scrollt dabei nicht
+#   2.09  2026-11-27  Version 5.55: LED Kanal heisst LM-Anschluss (Feld und Hinweis)
+#   2.10  2026-11-27  Version 5.56: LM-Anschluss heisst jetzt LM-Ausgang
 # ----------------------------------------------------------------------------------------------
 """Web-Version der Seite "Servo Test 1" nach dem Excel-Dialog "Servo Test und Einstellung" (UserForm der Excel-Fassung, Stand Oktober 2026).
 
@@ -125,7 +127,9 @@ def handle_servo_key(model, key_name, action, shift=False, ctrl=False, alt=False
 PARAMS = ("ServoAddress", "ServoLEDChannel", "ServoChannel")          # Namen der gemerkten Werte (wie in der Tk-Fassung)
 PARAM_DEFAULTS = {                    # (Text im Excel-Dialog, Min, Max, Vorgabe, Hinweis)
     "ServoAddress": ("LED Nummer", 0, 32767, 1, "Moduladresse des Servos (LED-Nummer des Anschlusses)"),
-    "ServoLEDChannel": ("LED Kanal", 0, 99, 0, "LED Kanal an dem die Servoplatine angeschlossen ist"),
+    # "ServoLEDChannel": ("LED Kanal", 0, 99, 0, "LED Kanal an dem die Servoplatine angeschlossen ist"),  # v5.55 (entfallen)
+    # "ServoLEDChannel": ("LM-Anschluss", 0, 99, 0, "LM-Anschluss an dem die Servoplatine angeschlossen ist"),  # v5.55  # v2.10 (entfallen)
+    "ServoLEDChannel": ("LM-Ausgang", 0, 99, 0, "LM-Ausgang an dem die Servoplatine angeschlossen ist"),  # v2.10
     "ServoChannel": ("Anschluss", 0, 2, 0, "Anschluss des Servos (RGB-Nummer des Anschlusses)"),
 }
 

@@ -1,5 +1,5 @@
-Datei-Version: 1.134 (2026-11-26) - HOC_intern.md
-Stand: Version 5.54
+Datei-Version: 1.140 (2026-11-27) - HOC_intern.md
+Stand: Version 5.60
 
 # webMobaLedLib: History of Change (intern, ausführlich)
 
@@ -61,6 +61,223 @@ SwitchC bewusst nicht aufgenommen (nicht gewünscht); der Name lässt sich einti
 | Wiki `pg_tabelle.txt` | 1.14 | Abschnitt „Die Funktion Logic“; `seiten_update` 1.14 |
 
 Das Makro `Logic(Erg, A AND B OR …)` und `Create_Result` sind unverändert; der Baukasten erzeugt denselben Text. Nicht im Browser geprüft, nur die reinen Funktionen (Test mit 11 Ausdrücken).
+
+## 5.60 (2026-11-27), Pull Request 83 (Jueff): Mainboard_LED auf dem ESP32
+
+**Problem (Jürgen):** `Set_Mainboard_LEDs()` schrieb auf `LED1_PIN..LED3_PIN` (16, 14, 0). Das sind am ESP32 LED-Bus-Datenleitungen; die drei Hauptplatinen-LEDs sind dort die ersten drei Bytes von LED Kanal 7 (`MLLIdentify.h`) und haben keinen Pin.
+
+**Änderung:** Auf dem ESP32 (mit `MLL_ESP32_STATUS_LEDS`) schalten `Mainboard_LED1..3` über `MllStatusLedSet()` (gleiche Routine und Helligkeiten wie beim Identify Blinken); in `setup()` keine Pin-Konfiguration für LED1..3 (`!defined(ESP32)`). Nano und Pico unverändert. Ohne `MLL_DYNAMIC_CONFIG` bzw. `MLL_STATUS_LED_OFFSET` bleiben die LEDs auf dem ESP32 aus (wie vorher). Nicht kompiliert und nicht am Board getestet. Zeilen mit `// v1.04` (Identify 1.04 bei Jürgen).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `LEDs_AutoProg/LEDs_AutoProg.ino` | Identify 1.04 | Mainboard_LED auf dem ESP32 |
+| `webmobaledlib.py` | 5.60 | Version, Verlauf |
+| `install/BETATEST_Checkliste.md` | 4.36 | Punkt 433 |
+
+## 5.59 (2026-11-27), Pull Request 82 (Jueff, dort V5.51 bis V5.69)
+
+**Einspielen:** Gegen die Basis des PR (haroldlinke/main, Stand 93bbdaf, bei mehreren Dateien noch 5.41) 3-fach zusammengeführt: Dateien, die nur Jueff geändert hat, ersetzt. `web_params.py`: seine Fassung war älter als meine (ohne LedChannelEditable), meine bleibt. `webmobaledlib.py`, `web_tabs.py`, Web_Languages.csv und die Doku sind zusammengeführt, Meta-Versionsnummern neu gezählt, die Zeilenmarker `# v5.51` bis `# v5.69` des PR bleiben. Nicht übernommen: erzeugte Dateien (`LEDs_AutoProg.h`, `Configuration/dyn/*.o`, `mllcfg.bin`). Nicht an Geräten geprüft; die Tests von Jueff laufen hier nicht (kein `serial`, `tkinter`).
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_serial.py` | 1.31 | Serieller Monitor, Verbindungsverlust, Neuverbinden, EFFECT/DIRECT |
+| `_web/web_serial_page.py` | 1.07 | Verbindungsknopf, Reiter Serieller Monitor |
+| `_web/web_form_comport.py`, `web_form_options.py`, `web_form_firmware.py`, `web_startpage.py`, `web_layout.py`, `web_logging.py` | 1.51, 1.79, 1.06, 1.13, 1.23, 1.06 | Geräteauswahl nach Plattform, Protokolle, Doppelklick-Schalter |
+| `proggen/M06_Write_Header.py`, `M06_Write_Header_SW.py`, `M07_COM_Port_New.py`, `M08_ARDUINO.py`, `M20_PageEvents_a_Functions.py`, `M42_Dyn_Config.py` | 1.23, 1.16, 1.29, 1.40, 1.20, 1.13 | MLLDYN-Marken, Mainboard_LED, Reuse_Connection, Tasten gleicher Adresse |
+| `headless/headless_dyn_config.py`, `headless_pico.py` | 1.08, 1.03 | SharedLink, Plattformen |
+| `csv/Lichtmaschinen_prop.json` | 1.06 | devices, platforms, protocols |
+| `_web/web_tabs.py` | 1.41 | Reiter Serieller Monitor (mit meiner Einstellung zusammengeführt) |
+| `csv/Web_Languages.csv` | | 9 neue Zeilen von Jueff |
+| `MobaLedTest_macrodef.json` | | Titel Serieller Monitor |
+| `test_*.py` | | neue Tests (`test_monitor_connect`, `test_port_labels`, `test_dblclick_setting`), erweiterte Tests |
+| `webmobaledlib.py` | 5.59 | Zusammenführung (Kopf, REQUIRED_FILES, VERSION, `connect_device_label`, `monitor_left_for_sheet`) |
+
+Nachfolgend der Text von Jueff (seine Versionsnummern, Arbeitskopie):
+
+### 5.69 (2026-11-27), keine Mainboard-LED-Defines beim ESP32; 5.68 (2026-11-27), Eingangskanal-Defines und TOTAL_* in den MLLDYN-Marken; 5.67 (2026-11-27), Doppelklick auf Makrofelder auch mit altem gespeichertem Wert; 5.66 (2026-11-27), Startwert 1 setzt alle Ein/Aus-Tasten einer Adresse; 5.65 (2026-11-27), Setup übertragen ohne Verbindung zu schließen; 5.64 (2026-11-27), Test auf EFFECT Mode hart begrenzt; 5.63 (2026-11-27), Monitor testet zuerst auf EFFECT Mode; 5.62 (2026-11-27), Monitor verlassen in alle Verbindungs-Reiter; 5.61 (2026-11-27), Monitor = DIRECT Mode; 5.60 (2026-11-27), Verbindung beim Verlassen des Seriellen Monitors; 5.59 (2026-11-27), automatisch neu verbinden; 5.58 (2026-11-27), Verbindung verloren mit Typ und Anschluss; 5.57 (2026-11-27), Verbindungsverlust erkennen; 5.56 (2026-11-26), Zusammenführung mit 5.54, Pull Request 80 und Folgeänderungen (Jürgen): Selectrix, Anschluss-Hinweis, Firmware, Plattformen, Serieller Monitor
+
+**Zusammenführung mit 5.54:** Die Dateien dieser Änderungen sind auf den Stand von Jürgen gebracht (in 5.54 standen mehrere Dateien auf einem älteren Stand, zum Beispiel `M07_COM_Port.py` 1.16, `web_serial.py` 1.18, `web_startpage.py` 1.05). Die Einträge darunter (5.52 und 5.50 der Arbeitskopie) beschreiben den Inhalt.
+
+#### Teil 4 (Arbeitskopie 5.57): Verbindungsverlust erkennen
+
+**Wunsch (Jürgen):** Der Serielle Monitor soll erkennen, wenn die Schnittstelle geschlossen wird, zum Beispiel USB ausgesteckt.
+
+**Ursache:** Der Empfangsthread beendete sich beim Lesefehler, schloss die Verbindung aber nur bei WLAN (`TcpPort`). Bei USB blieb `self.arduino` stehen (pyserial lässt `is_open` nach dem Abziehen auf True), Knopf und Status zeigten weiter „verbunden“.
+
+**Änderung:** Wirft `read()` einen Fehler, ohne dass der Anwender getrennt hat (`stop` nicht gesetzt, `self.arduino is port`), ruft der Empfangsthread `_connection_lost(port)`: Protokoll (Warnung), Verbindung über `close_arduino_connection_after_write_error` schließen, Status „Verbindung verloren“ (rot) und die Zeile „*** Verbindung zu COMx verloren“ im Seriellen Monitor. Die Knöpfe werden durch den Zeitgeber rot („Verbinden“). Neue Texte in `Web_Languages.csv` (sieben Sprachen, mit `catalog_text` geprüft). Zwei neue Tests in `test_monitor_connect.py`.
+
+**Ergänzung 5.58:** Der Status heißt wie „Nicht verbunden - Pro/COM3“ jetzt „Verbindung verloren - Pro/COM3“ (Typ nach dem Board des Blatts, Anschluss der verlorene: `ctrl.lost_port`, `web_serial.py` 1.26; `connect_device_label` und `translate_connect_status` in `webmobaledlib.py` 5.58; Test in `test_monitor_connect.py` 1.02).
+
+**Ergänzung 5.59 (automatisch neu verbinden):** Nach dem Verlust startet `_connection_lost` den Thread `serial-reconnect` (`_reconnect_watch`, `web_serial.py` 1.27). Er sieht jede Sekunde (`reconnect_interval`) in die Portliste, wartet nach dem Erscheinen des Anschlusses 1,5 s (`reconnect_settle`) und verbindet ohne Dialoge neu: `connect_monitor` bei einer Monitor-Verbindung (`monitor_connected`), sonst `connect_silent(port=...)`. Er endet nach erfolgreicher Verbindung, nach 3 Fehlversuchen, nach 30 Minuten (`reconnect_max_wait`) oder wenn `lost_port` geleert wurde (`disconnect()` durch den Anwender) oder schon eine Verbindung offen ist. Nur serielle Anschlüsse, nicht WLAN. Nach der Neuverbindung läuft kein `after_connect` (Direktmodus-Reiter starten nicht neu). Zwei Tests in `test_monitor_connect.py` 1.03.
+
+**Ergänzung 5.60 (Monitor verlassen):** Beim Wechsel vom Reiter Serieller Monitor (`mon`) in den Programm Generator (`pg`) startet `on_tab` `sync_connection_to_sheet` (`monitor_left_for_sheet`, `webmobaledlib.py` 5.60). Diese bestehende Blattwechsel-Funktion stellt die offene Verbindung auf Board und Anschluss des Blatts um und lässt sie unverändert, wenn es derselbe Anschluss ist, wenn das Blatt keinen Anschluss hat oder wenn keine Verbindung offen ist. Eine Monitor-Verbindung zum selben Anschluss bleibt also mitlesend bestehen (keine Abfrage am Gerät). Test von `monitor_left_for_sheet` in `test_monitor_connect.py` 1.04; die Umstellung selbst ist nicht automatisch getestet.
+
+**Ergänzung 5.61 (DIRECT Mode):** Der Serielle Monitor liest nur mit, das ist der Direktmodus: `connect_monitor` meldet „Verbunden mit COMx - DIRECT Mode“ (vorher EFFECT Mode; `web_serial.py` 1.28). Eine normale Verbindung (EFFECT Mode) bleibt beim Wechsel in den Monitor unverändert. Beim Verlassen in Richtung Programm Generator ruft `on_tab` `sync_connection_to_sheet(ws, force=...)` mit `force = ctrl.monitor_connected`: Ist die Verbindung der Direktmodus des Monitors, wird sie im EFFECT Mode neu aufgebaut, mit dem Anschluss des Blatts oder, wenn das Blatt keinen hat oder derselbe gilt, am bisherigen Anschluss. Ohne `force` (EFFECT Mode) wie bisher nur bei anderem Anschluss. Test der Statusanzeige in `test_monitor_connect.py` 1.05; das Neuverbinden selbst ist nicht automatisch getestet.
+
+**Ergänzung 5.62 (Farb Test, Servo, Sound, DCC, Patterngenerator):** `monitor_left_for_sheet` gilt für `MONITOR_LEAVE_TABS` (`pg`, `farb`, `patt`, `servo1`, `servo2`, `sound`, `dcc`). `on_tab` wartet in diesem Fall auf `sync_connection_to_sheet(ws, force=ctrl.monitor_connected, restart=False)`, und zwar vor dem Start des Direktmodus der Seite (`tab_selected`) und vor dem automatischen Verbinden, damit die Seite nicht auf der Monitor-Verbindung startet und danach getrennt wird. `restart=False` verhindert `after_connect()` (die Seite startet den Direktmodus selbst). Nicht automatisch getestet: das Umstellen im Browser; getestet ist die Tab-Bedingung (`test_monitor_connect.py` 1.06).
+
+**Ergänzung 5.63 (EFFECT Mode zuerst):** `connect_monitor` öffnet den Anschluss wie bisher (DTR nach dem Gerät) und ruft dann `_quick_effect_probe` (`web_serial.py` 1.29): ein `#?` senden, höchstens `monitor_probe_ms` (250 ms) auf `#?LEDs_AutoProg` warten, kein Warten auf den Start des Geräts, keine Wiederholung. Antwort: normale Verbindung (Startmeldung ausgewertet, `#X` gesendet, Status EFFECT Mode, `monitor_connected = False`). Keine Antwort: nur mitlesen (DIRECT Mode, `monitor_connected = True`, keine weitere Abfrage). Antwortet ein Gerät später als nach 250 ms, steht seine Antwortzeile im Monitor. Folge: Beim Verlassen des Monitors wird eine im EFFECT Mode erkannte Verbindung nicht neu aufgebaut (nur bei anderem Anschluss des Blatts). Tests in `test_monitor_connect.py` 1.07 (Ersatzgerät mit und ohne Antwort, Zeit unter 0,6 s). Nicht geprüft: das Verhalten mit echten Nano, ESP32 und Pico (Antwortzeit innerhalb 250 ms, besonders nach einem Reset durch das Öffnen des Anschlusses).
+
+**Ergänzung 5.64 (Test hart begrenzt):** Bei unbekannten Geräten, die nicht oder nicht wie erwartet antworteten, hing das Verbinden. `_quick_effect_probe` läuft jetzt in einem eigenen Thread (`serial-probe`), wird nach `monitor_probe_ms` plus 50 ms aufgegeben (dann DIRECT Mode), setzt für das eine `#?` ein Schreib-Zeitlimit (`write_timeout`, danach wieder zurück), ruft kein `flush()` auf, liest höchstens 512 Byte je Schritt und behält höchstens 2000 Zeichen (kein Wachsen bei Dauerausgabe). Die Auswertung der Antwort (`queue`, `determine_ARDUINO_Properties_from_Startmessage`, `#X`) macht der aufrufende Thread nur bei Erfolg. Tests in `test_monitor_connect.py` 1.08: blockiertes Schreiben, Dauerausgabe ohne Zeilenende, halbe Antwort, Ausnahmen beim Lesen; alle unter 0,6 s im DIRECT Mode. Ursache des gemeldeten Hängens nicht an dem Gerät nachgestellt, vermutet wurde ein blockiertes Schreiben oder `flush()`; nicht mit echter Hardware geprüft.
+
+**Ergänzung 5.65 (Setup übertragen, schneller Weg):** Beim schnellen Upload (M42, Option „Schnelles Update“, nur die Konfiguration über `~MLLCFG`) rief M08 vor der Übertragung immer `disconnect()` auf; `headless_dyn_config.Link` öffnete den Anschluss selbst neu. Jetzt prüft `M42.Reuse_Connection(ComPort)`: ist der Controller über USB im EFFECT Mode (nicht `monitor_connected`) mit genau diesem Anschluss verbunden, wird nicht getrennt, und `Try_Config_Only(..., shared=True)` überträgt über `headless_dyn_config.SharedLink`: Senden direkt auf die offene Schnittstelle, Antworten über `ctrl.cfg_lines` (der Empfangsthread in `web_serial.py` 1.31 leitet Zeilen mit `~MLLCFG` oder `~MLLERR` dorthin, sie erscheinen nicht im Seriellen Monitor). Fällt der schnelle Weg auf das ganze Programm zurück, trennt M08 wie bisher vor dem Flashen. Nach der Übertragung startet das Gerät neu: beim ESP32 bleibt die USB-Verbindung offen, beim Pico verschwindet der Anschluss und die automatische Neuverbindung (5.59) baut sie wieder auf. M08 1.40, M42 1.13, `headless_dyn_config.py` 1.07, `web_serial.py` 1.31. Tests: `test_dyn_config.py` 1.04 (`test_shared_connection`: Verbindung bleibt, keine neue Öffnung, DIRECT Mode und anderer Anschluss nutzen sie nicht, Rückfall), `test_monitor_connect.py` 1.09 (Leitung der Zeilen). **Nicht geprüft:** mit echtem ESP32 oder Pico; ob das Gerät nach dem Neustart in dieser Verbindung ohne neuen Handshake weiter spricht.
+
+**Ergänzung 5.66 (Fehler: Startwert 1 und Tasten gleicher Adresse):** Nach dem Zurücksetzen der Testtasten (`M20.ResetTestButtons`, zum Beispiel nach Setup übertragen, `M06_Write_Header`) war bei mehreren Zeilen mit derselben Adresse nur die Taste der Zeile mit Startwert 1 eingeschaltet, die übrigen blieben aus (Beispiel: Adresse 1 und 33 mit je drei Zeilen). Ursache: `Sync_Toggle_Buttons_by_Address` (Issue 68, 5.01) verglich Richtung und Adresse im Namen der Taste als Text (`'00'`, `'01'`), der Name enthält aber Leerzeichen (`B   1- 0- 1-1`, das Format füllt mit Leerzeichen auf); die Funktion tat daher nichts. Jetzt werden Richtung und Adresse als Zahlen verglichen (`M20_PageEvents_a_Functions.py` 1.20). Eingeschaltet sind dann alle Ein/Aus-Tasten jeder Adresse, bei der eine Taste eingeschaltet ist (Startwert 1); der Name der eingeschalteten Taste hat Richtung 0, der nächste Druck schaltet aus. Test: `test_protocol_switch.py` 1.01 (`test_reset_switches_all_on_off_buttons_of_an_address_with_start_value_1`). Nicht geprüft: im Browser nach einem echten Setup übertragen.
+
+**Ergänzung 5.67 (Doppelklick auf Name und Beleuchtung):** Das Feature aus Pull Request 73 (dort 5.27, Branch `feature/tabelle-tastatur`: Doppelklick öffnet die Makroauswahl, Umschalt + Doppelklick, F2, Enter oder das Kontextmenü bearbeiten den Text) ist im Code vorhanden, wirkte aber nicht bei Anwendern, die den Schalter vor 5.27 gespeichert hatten: Der Standard „an“ gilt nur ohne gespeicherten Wert, ein früher gespeichertes `WebDblClickMacro: false` blieb aus. `web_layout.get_dblclick` (1.23) setzt einen solchen Wert einmal auf „an“ und merkt sich das mit `WebDblClickMacro527`; danach gilt die Wahl des Anwenders (Programm Einstellungen, „Bedienung der Tabelle“). Der Anfänger Modus bleibt immer an. Test: `test_dblclick_setting.py` 1.00. Nicht geprüft: das Verhalten im Browser nach der Umstellung.
+
+**Ergänzung 5.68 (LEDs_AutoProg.h, MLLDYN):** Im Modus `MLL_DYNAMIC_CONFIG` (ESP32/Pico, schnelles Update) stehen jetzt auch die Zeilen „Input channel defines for local inputs and expert users“ (`#define INCH_DCC_21_ONOFF ...`) in einem eigenen Block zwischen `//MLLDYN_BEGIN` und `//MLLDYN_END` (`M06_Write_Header.py` 1.22), ebenso `TOTAL_SWITCHES_A` bis `D` und `TOTAL_VARIABLES` (`M06_Write_Header_SW.py` 1.16). Der klassische Modus ist unverändert. Damit die Signatur die Nummern der Kanäle weiter berücksichtigt (die Namen `INCH_xxx` werden im Rest der Kopfdatei durch die Nummer ersetzt), liest `headless_dyn_config.normalize_header` (1.08) die `INCH_`-Defines jetzt auch aus den Blöcken. Geprüft: erzeugte Kopfdatei (Testblatt mit vier Adressen) im klassischen und im dynamischen Modus; `test_dyn_config.py` 1.05 (`test_inch_defines_inside_the_markers`). Nicht geprüft: das Übersetzen der Konfiguration mit den AVR-Werkzeugen und ein Upload an echten Geräten mit der neuen Kopfdatei.
+
+**Ergänzung 5.69 (ESP32: keine Mainboard-LED-Defines):** Das Makro `Mainboard_LED(n, Kanal)` erzeugt in der Konfiguration die Zeilen `#undef Mainboard_LEDn` und `#define Mainboard_LEDn <Kanal>`; im Modus `MLL_DYNAMIC_CONFIG` werden alle Präprozessor-Zeilen der Konfiguration in die Kopfdatei übernommen, auch diese (mit Verweisen wie `INCH_DCC_33_ONOFF`). `M06_Write_Header.Remove_Mainboard_LED_Defines` (1.23) entfernt sie beim ESP32 vor dem Schreiben der Kopfdatei (beide Modi); Nano und Pico (dort schreibt `Write_Pico_Mainboard_LED_Defines` seine eigenen Zeilen) bleiben unverändert, ebenso die übrigen Zeilen wie `#define LED_HEARTBEAT_PIN`. Test: `test_identify.py` 1.01 (`test_esp32_mainboard_led_defines`). Nicht geprüft: der Build für einen ESP32 mit einem Blatt, das `Mainboard_LED(...)` benutzt.
+
+**Nicht geprüft:** Das Abziehen eines echten USB-Geräts unter Windows, Linux und macOS (andere Fehlertexte von pyserial; gefangen wird jede Ausnahme von `read()`). Ein Anschluss, der nach dem Abziehen nur leere Lesungen liefert, ohne Fehler zu werfen, wird nicht erkannt.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_serial.py` | 1.25 | `_connection_lost`, Lesefehler schließt auch bei USB |
+| `webmobaledlib.py` | 5.57 | Versionsliste |
+| `csv/Web_Languages.csv` | | zwei neue Texte |
+| `test_monitor_connect.py` | 1.01 | zwei Tests |
+
+#### Teil 3 (Arbeitskopie 5.55 und 5.56): Serieller Monitor, Verbindungsaufbau, Protokoll
+
+**Wunsch (Jürgen):** Der Serielle Monitor soll nur mitlesen; ein Pico antwortete dort nicht; beim Wechsel des Anschlusses sollen Knopf und Status jeden Schritt zeigen; während des Verbindungsaufbaus sollen beide Verbindungsknöpfe grau und gesperrt sein; im Protokoll stand beim normalen Beenden `INFO webmobaledlib.crash`.
+
+**Änderung:**
+- `connect_monitor` öffnet den Anschluss ohne Abfrage (`#?`); DTR und RTS richten sich nach dem Gerät am Anschluss (USB-Kennung: Pico an, Nano/Uno und ESP32 aus, unbekannt: Board des Blatts), nicht nach dem Board im Blatt. Vorher schwieg ein Pico, wenn im Blatt ein anderes Board stand.
+- `ctrl.connecting` ist gesetzt, solange `_open_and_handshake` läuft. Der Knopf in der Kopfzeile (mit Pfeil) und der Knopf im Seriellen Monitor sind dann grau, gesperrt (`disable()`) und heißen „Verbinden...“.
+- Wechsel des Anschlusses bei bestehender Verbindung: Ausgabe leeren, trennen, „Nicht verbunden“ (Knopf rot), „Verbindungsaufbau ... COMx“ (Knopf grau, gesperrt), danach der Zustand der Verbindung.
+- Die Meldung beim Prozessende kommt vom Logger `webmobaledlib.exit` („Prozess N ordnungsgemäß beendet“); vorher stand sie unter `webmobaledlib.crash` und sah nach einem Absturz aus.
+- Neue Texte in `Web_Languages.csv`: „Verbindungsaufbau ...“, „Verbinden...“ (alle sieben Sprachen, mit `catalog_text` geprüft).
+
+**Nicht geprüft:** Der Pico mit echter Hardware (DTR), die Anzeige der Schritte und das Sperren der Knöpfe im Browser sind nur mit Test und Demoseite mit Ersatzobjekt gesehen, nicht an einem Gerät. `test_log_drag.py` (Edge ohne Fenster) lieferte in dieser Umgebung keine Messwerte und ist nicht bestanden.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_serial.py` | 1.24 | `connect_monitor`, `_monitor_dtr`, `connecting` |
+| `_web/web_serial_page.py` | 1.07 | Ein Knopf, Schritte beim Wechsel, Knopf grau beim Verbindungsaufbau, Ausgabe leeren |
+| `_web/web_logging.py` | 1.06 | Logger `webmobaledlib.exit` |
+| `webmobaledlib.py` | 5.56 | Knopf in der Kopfzeile sperren, Versionsliste |
+| `csv/Web_Languages.csv` | | zwei neue Texte |
+| `test_monitor_connect.py` | | vier Tests (Mitlesen, DTR) |
+
+#### Teil 2 (Arbeitskopie 5.52): Plattformen, LNet-Bestätigung, Serieller Monitor, Firmware-Auswahl
+
+**Wunsch (Jürgen):** Firmware nach Plattform gruppieren und das passende Gerät vorwählen, Plattformen anderer MobaLedLib Geräte in der JSON-Datei, Bestätigung der LNet-Lizenz beim Wechsel, ein Verbindungsknopf im Serial Monitor.
+
+**Umsetzung:**
+* **Lichtmaschinen_prop.json:** `devices` (Lichtmaschinen, Feld `protocols` statt `centrals`) und `platforms` (Plattformen anderer MobaLedLib Geräte: `platform`, `name`, `text`, `image`; Einträge `MLL512V1`, `MLLS88GWV1`). Kacheln: leere Fläche, wenn `image` leer ist oder die Datei fehlt. Die Hardware Optionen bieten die Protokolle aus `devices` an (`protocols_for_platform`).
+* **Firmware-Auswahl:** nach Plattform gruppiert (Überschrift = Name aus `platforms`, dann `devices`, sonst die Plattform), Liste höher und breiter; die Geräteauswahl wählt ein Gerät derselben Plattform vor, zeigt das Bild aus `platforms` und „Unbekannte Ports“ ist zunächst aus.
+* **Identitätszeile `~MLLINFO`** wird tolerant gelesen (`Parse_Kv`: unbekannte Schlüssel ignoriert, Groß-/Kleinschreibung, Anführungszeichen, Komma/Semikolon).
+* **LNet:** Wechsel des Protokolls auf LNet zeigt den Lizenzdialog, die Bestätigung gilt je Blatt (`esp32_options['lnet_license']`), steht nicht in der PGF-Datei und wird beim Kopieren eines Blatts nicht übernommen.
+* **Serial Monitor:** ein Verbindungsknopf mit der Statusanzeige des zentralen Knopfs; er liest nur mit (`connect_monitor`: kein `#?`, keine Abfrage am Gerät, kein Fehlerdialog „Falsche oder keine Antwort“); die Portauswahl zeigt Typ und Untertyp nach der USB-Kennung (CH340, CP2102, Pico ...).
+
+| Datei | Version | Änderung |
+|-|-|-|
+| `csv/Lichtmaschinen_prop.json` | 1.06 | `devices`, `platforms`, `protocols` |
+| `_web/web_startpage.py` | 1.13 | `load_platforms`, `platform_name`, `platform_image`, `protocols_for_platform` |
+| `_web/web_form_firmware.py` | 1.06 | nach Plattform gruppiert, Layout |
+| `_web/web_form_comport.py` | 1.51 | Vorwahl nach Plattform, Bild aus `platforms` |
+| `_web/web_form_options.py` | 1.79 | Protokolle aus `devices`, LNet-Bestätigung |
+| `proggen/M07_COM_Port_New.py` | 1.29 | `Parse_Kv` |
+| `headless/headless_pico.py` | 1.03 | Plattform je Firmware, Sortierung |
+| `_web/web_serial.py` | 1.22 | Typ und Untertyp nach USB-Kennung, `connect_monitor` |
+| `_web/web_serial_page.py` | 1.06 | ein Verbindungsknopf (Verbinden/Trennen), nur Mitlesen, Überschrift Serieller Monitor, Wechsel der Portauswahl trennt und verbindet neu |
+| `test_monitor_connect.py` | 1.00 | neu |
+| `_web/web_tabs.py`, `csv/Web_Languages.csv`, `MobaLedTest_macrodef.json` | | Reiter und Seite heißen Serieller Monitor |
+| `webmobaledlib.py` | 5.52 | Kopieren ohne LNet-Bestätigung, Serial Monitor |
+| `test_port_labels.py` | 1.00 | neu |
+
+#### Teil 1 (Arbeitskopie 5.50): Selectrix Channel 1 bis 99, COM Port Hinweis, Firmware Geräteauswahl, Log-Fenster
+
+**Wunsch (Jürgen):** Selectrix-Blätter fehlerfrei bauen, den Anschluss-Hinweis (-3) auch beim Setup übertragen auswerten, bei Firmware installieren die Geräteauswahl benutzen, Abbrechen soll die Fenster schließen, das Log-Fenster verschiebbar.
+
+**Umsetzung:**
+* **Selectrix:** Channel 1 bis 99 und Bitposition 1 bis 8 (Eingabe `SX_Check_Input`, Generator `ProcessLine`: Fehler, das Header file wird nicht erzeugt). DCC, LNet, CAN: Adresse 0 ist nicht erlaubt (`Check_Address_Input`), die Sonderbehandlung entfällt. Ursache des leeren `#InCh` im SX-Build: `AddrList` begann mit dem Element 0 (`vbObjectInitialize`, `Erase` setzte nur Nullen), Adresse 0 galt als schon vorhanden; jetzt eine leere Liste. Umrechnung beim Protokollwechsel: Adresse = Channel × 8 + Bitposition, umrechenbar sind 9 bis 800.
+* **Anschluss-Hinweis:** `-3` im Anschluss der Tabelle: `Resolve_Port_Hint` prüft beim Hochladen und beim Setup übertragen, ob COM3 vorhanden ist und zum Typ des Blatts passt, und trägt es ein; sonst öffnet sich die Geräteauswahl (kein anderes Board wird stillschweigend eingetragen). Autoconnect trägt den gefundenen Anschluss ein (`_store_hint_port`).
+* **Geräteauswahl:** `COM?` ist keine Zeile mehr, OK ohne Auswahl ändert das Blatt nicht. Firmware installieren (Pico): `SelectPicoDevice` mit anderen Regeln (nur Pico-Geräte, unbekannte und andere MobaLedLib Geräte wählbar, „Unbekannte Ports anzeigen“ aktiv, bei „Andere MobaLedLib Geräte“ kein Bild, das Blatt bleibt unverändert).
+* **Abbrechen** in der Geräteauswahl schließt auch das Fenster Kompilieren und Hochladen (Setup übertragen und normales Hochladen).
+* **PGF-Import** in ein verstecktes Blatt (Startseite) blendet es wieder ein.
+* **Firmware aus lokaler ZIP-Datei:** im Dialog Firmware herunterladen steht unter der Liste das Auswahlfeld für ZIP-Dateien (wie bei Update Testversion); die ZIP muss eine `*.uf2` enthalten, wird mit `unzip_safe` in den Firmware-Ordner entpackt (Rückfrage beim Überschreiben), danach ist die Firmware vorgewählt.
+* **Log-Fenster** schwebend und verschiebbar (Titelzeile, Doppelklick = Ausgangsposition); Meldungen werden gebündelt und beim Ziehen zurückgehalten (kein Ruckeln).
+
+| Datei | Version | Änderung |
+|-|-|-|
+| `proggen/M06_Write_Header.py` | 1.21 | Selectrix-Prüfung, Adresse 0, `AddressExists` |
+| `proggen/M20_PageEvents_a_Functions.py` | 1.19 | `Check_Address_Input`, Selectrix Channel 1 bis 99 |
+| `proggen/M07_COM_Port.py` | 1.20 | `Resolve_Port_Hint`, `Port_Hint_Number` |
+| `proggen/M08_ARDUINO.py` | 1.39 | Abbrechen schließt das Übertragungsfenster |
+| `proggen/M18_Save_Load.py` | 1.08 | Import in ein verstecktes Blatt |
+| `headless/headless_protocol_switch.py` | 1.01 | Channel 1 bis 99, Adressen 9 bis 800 |
+| `_web/web_form_comport.py` | 1.47 | Firmware-Auswahl, `COM?`, OK ohne Auswahl |
+| `_web/web_form_options.py` | 1.76 | Firmware installieren mit der Geräteauswahl |
+| `_web/web_log.py` | 1.15 | verschiebbar, Meldungen gebündelt |
+| `headless/headless_firmware_dl.py` | 1.01 | `check_local_zip`, `install_local_zip`, `entry_from_file` |
+| `_web/web_form_firmware_download.py` | 1.03 | Auswahlfeld für eine lokale ZIP-Datei |
+| `test_firmware_local_zip.py` | 1.00 | neu |
+| `webmobaledlib.py` | 5.50 | Anschluss-Hinweis bei Autoconnect |
+| `test_port_hint.py`, `test_pico_device_dialog.py`, `test_log_drag.py` | 1.00 | neu |
+| `test_protocol_switch.py` | | 26 Tests |
+
+## 5.58 (2026-11-27), LM-Ausgang in den Animations-Dialogen, LED RGB-Anschluss Auswahl, Begriffe
+
+**Wunsch (Harold):** Feld „Anschluss-Kanal“ in den Servo- und LED-Farb-Animations-Dialogen wird „LM-Ausgang“ mit Tooltip; „LED Kanal Auswahl“ (farbige Tasten) wird „LED RGB-Anschluss Auswahl“; beide Begriffe im Wiki erklären. Die Beschriftung der Excel/Tk-Dialoge (Userform_*.py, Caption „Anschluß-Kanal“) ist nicht geändert. Das Multiple-LEDColorAnim-Formular benutzt `web_form_ledcoloranim`.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_form_servoanim.py` | 1.07 | Feld LM-Ausgang, Tooltip |
+| `_web/web_form_ledcoloranim.py` | 1.02 | Feld LM-Ausgang, Tooltip |
+| `_web/web_form_other.py` | 1.21 | LED RGB-Anschluss Auswahl |
+| `csv/Web_Languages.csv` | | 1 neue Zeile (die Zeile „LED Kanal Auswahl“ bleibt) |
+| `webmobaledlib.py` | 5.58 | Version, REQUIRED_FILES |
+| Wiki `begriffe` 1.10 | | LM-Ausgang, LED RGB-Anschluss |
+
+## 5.57 (2026-11-27), Makro-Dialog: LM-Ausgang breiter, Tooltip
+
+**Wunsch (Harold):** Beschriftung „LM-Ausgang“ war abgeschnitten; Tooltip „Nummer des Lichtmaschinen Ausgangs“. Das Feld hat jetzt `w-48` statt `w-36` und trägt den Tooltip (Zahlen- und Textfeld, auch Sound Kanal). Offen: Felder „Kanal“ in den Servo-/LED-Animations-Dialogen und die farbigen Knöpfe „LED Kanal Auswahl“ haben noch keinen Tooltip.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `_web/web_form_other.py` | 1.20 | Breite, Tooltip |
+| `csv/Web_Languages.csv` | | 1 neue Zeile |
+| `webmobaledlib.py` | 5.57 | Version, REQUIRED_FILES |
+
+## 5.56 (2026-11-27), LM-Anschluss heißt einheitlich LM-Ausgang
+
+**Wunsch (Harold):** „LM-Anschluss“ in „LM-Ausgang“ ändern (Tippfehler im Auftrag zu 5.55). Betroffen: Spaltenüberschrift und Tooltip, Servo-, DM-Servo- und Soundtest, Einstellungstext. In `csv/Web_Languages.csv` entfällt die Zeile „LM-Anschluss“ (Doppelung zu „LM-Ausgang“), die übrigen drei Zeilen sind auf „LM-Ausgang“ umgestellt.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `proggen/M09_Language.py` | 1.09 | LM_COLUMN_LABEL und Tooltip |
+| `_web/web_servotest.py`, `web_servotest2.py`, `web_soundtest.py` | 2.10, 1.05, 1.05 | Feld LM-Ausgang |
+| `_web/web_tabs.py` | 1.40 | Einstellung „Spalte LM-Ausgang in der Tabelle änderbar“ |
+| `csv/Web_Languages.csv` | | Zeilen angepasst |
+| `webmobaledlib.py` | 5.56 | Version, REQUIRED_FILES |
+| `install/BETATEST_Checkliste.md` | 4.33, `install/ANLEITUNG_Installation.md` 5.56 | Wortlaut |
+| Wiki `pg_tabelle` 1.20, `wz_dmservo` 1.10, `wz_programm_einstellungen` 1.23, `wz_servo` 1.12, `wz_sound` 1.10, `seiten_update` 1.19 | | Wortlaut |
+
+## 5.55 (2026-11-27), Umbenennung LED-Kanal in LM-Ausgang, Voreinstellung bei neuem Makro
+
+**Wunsch (Harold):** LED-Kanal heißt LM-Ausgang (Tooltip „Lichtmaschine Ausgang“), die LED-Kette bleibt. Spalte und Servo-/Soundtest „LM-Anschluss“, Haus-Dialog „LM-Ausgang“, „Anzahl RGB-LEDs“, „Anzahl Räume“. Neues Makro: LM-Ausgang der nächsten Zeile darüber voreingestellt.
+
+**Umsetzung:** Die Spaltenüberschrift wird nur in der Anzeige ersetzt (`M09_Language.Get_Display_Cells`); die Zelle im Blatt bleibt „LED Channel“, damit die Spaltenerkennung nach Text unverändert funktioniert. Die farbigen Knöpfe „LED Kanal Auswahl“ (R/G/B eines WS2811) sind nicht der LM-Ausgang und bleiben. M06-Fehlermeldungen und die Excel/Tk-Tabelle Languages sind nicht umbenannt. Voreinstellung nur, wenn das Makro keinen eigenen Vorgabewert hat (`SM_DefCh_COL` leer oder 0). Neue Texte als Zeilen am Ende von `csv/Web_Languages.csv`, die alten Zeilen bleiben. Offen: nur verfügbare LM-Ausgänge wählbar, Anzeige ab 1 als Spezial-Option.
+
+| Datei | Version | Änderung |
+|---|---|---|
+| `proggen/M09_Select_Macro.py` | 1.02 | Voreinstellung LM-Ausgang |
+| `proggen/M09_Language.py` | 1.08 | Spaltenüberschrift LM-Anschluss und Tooltip |
+| `_web/web_form_house.py` | 1.10 | LM-Ausgang, Anzahl RGB-LEDs, Anzahl Räume |
+| `_web/web_form_other.py` | 1.19 | Feld LM-Ausgang |
+| `_web/web_house_tips.py` | 1.01 | Tooltip LM-Ausgang |
+| `_web/web_servotest.py`, `web_servotest2.py`, `web_soundtest.py` | 2.09, 1.04, 1.04 | LM-Anschluss |
+| `_web/web_table_sync.py` | 1.11 | LM-Ausgang für eingefügte Zeilen |
+| `_web/web_tabs.py` | 1.39 | Einstellung Spalte LM-Anschluss |
+| `headless/headless_table_sync.py` | 1.05 | Meldung |
+| `csv/Web_Languages.csv` | | 12 neue Zeilen |
+| `webmobaledlib.py` | 5.55 | Version, REQUIRED_FILES |
+| `install/BETATEST_Checkliste.md` | 4.32 | neuer Punkt |
+| `install/ANLEITUNG_Installation.md` | 5.55 | Abschnitt Umbenennung |
+| Wiki `pg_tabelle` 1.19, `wz_datenuebertragung` 1.05, `wz_dmservo` 1.09, `wz_programm_einstellungen` 1.22, `wz_servo` 1.11, `wz_sound` 1.09, `seiten_update` 1.18 | | LM-Ausgang |
 
 ## 5.54 (2026-11-26), Pull Request 80 (Jueff, dort V5.50): Selectrix Channel 1 bis 99, COM Port Hinweis, Firmware Geräteauswahl, Log-Fenster
 

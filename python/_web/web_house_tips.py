@@ -1,13 +1,14 @@
-# Datei-Version: 1.00 (2026-11-19) - web_house_tips.py
+# Datei-Version: 1.01 (2026-11-27) - web_house_tips.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_house_tips.py
 # Path:           _web/web_house_tips.py
-# Version:        1.00
-# Last Update:    2026-11-19
+# Version:        1.01
+# Last Update:    2026-11-27
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
 #   1.00  2026-11-19  Neu: Tooltips der Raumeffekte (House, GasLights) und der Felder des Dialogs, aus dem Formular UserForm_House des Excel-Programms
+#   1.01  2026-11-27  Version 5.55: Tooltip LM-Ausgang (Lichtmaschine Ausgang)
 #                     (ControlTipText). Die Texte sind die deutschen Schluessel der Tabelle Languages (csv/Languages.csv); die Uebersetzung holt
 #                     web_form_house.py mit M09.Get_Language_Str.
 # ----------------------------------------------------------------------------------------------
@@ -91,5 +92,6 @@ FIELD_TIPS = {
     'min_time': 'Der Parameter "Min_T" beschreibt wie lange minimal gewartet wird bis eine Änderung der aktiven der Beleuchtungen erfolgt. Das Programm wählt einen zufälligen Zeitpunkt zwischen "Min_T" und "Max_T". Die Zeit kann zwischen 0 und 254 Sekunden liegen.',
     'max_time': 'Der Parameter "Max_T" beschreibt wie lange maximal gewartet wird bis eine Änderung der aktiven der Beleuchtungen erfolgt. Das Programm wählt einen zufälligen Zeitpunkt zwischen "Min_T" und "Max_T". Die Zeit kann zwischen 0 und 254 Sekunden liegen.',
     'inv': 'Mit diesem Schalter wird der Eingang der House Funktion Invertiert. Das kann z.B. zusammen mit der Schedule Funktion genutzt werden.',
-    'led_channel': 'Gibt den verwendeten LED-Kanal an. Es können 4 verschiedene LED-Stränge angesteuert werden. 0 = Normal, 1 = Knopf Druck Aktion, 2, 3 Frei verfügbar.',
+    # 'led_channel': 'Gibt den verwendeten LED-Kanal an. Es können 4 verschiedene LED-Stränge angesteuert werden. 0 = Normal, 1 = Knopf Druck Aktion, 2, 3 Frei verfügbar.',  # v1.01 (entfallen)
+    'led_channel': 'LM-Ausgang (Lichtmaschine Ausgang): Gibt den verwendeten Ausgang der Lichtmaschine an. Es können 4 verschiedene LED-Stränge angesteuert werden. 0 = Normal, 1 = Knopf Druck Aktion, 2, 3 Frei verfügbar.',  # v1.01
 }

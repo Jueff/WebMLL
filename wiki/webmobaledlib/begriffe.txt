@@ -1,5 +1,5 @@
 ====== MobaLedLib Studio – Begriffe ======
-//Seitenstand 1.09 (2026-11-24), gilt für Version 5.12//
+//Seitenstand 1.10 (2026-11-27), gilt für Version 5.58//
 
 Hier stehen die Wörter, die auf den Seiten zu MobaLedLib Studio vorkommen, in alphabetischer Reihenfolge.
 
@@ -14,8 +14,10 @@ Hier stehen die Wörter, die auf den Seiten zu MobaLedLib Studio vorkommen, in a
 | **ESP32** | Ein Mikrocontroller. Er steckt in der **Lichtmaschine Pro**. |
 | **Heartbeat LED** | Die **erste LED** einer Kette. Sie sitzt bei **allen vier Lichtmaschinen fest auf der Platine** und blinkt in wechselnden Regenbogenfarben, damit man sieht, dass der **Prozessor arbeitet**. |
 | **Hochladen (Upload)** | Das fertige Programm vom Computer auf die Lichtmaschine schicken. In MobaLedLib Studio heißt der Knopf **Setup übertragen**. |
+| **LED RGB-Anschluss** | Ein WS2811-Modul hat **drei Ausgänge** (Rot, Grün, Blau), an die einzelne LEDs angeschlossen werden. Der **LED RGB-Anschluss** sagt, welche davon ein Makro benutzt: alle, nur zwei (Gelb = 1&2, Zyan = 2&3) oder einen einzelnen (Rot, Grün oder Blau). Im Parameterformular der Makros wählst du ihn mit den farbigen Tasten unter **LED RGB-Anschluss Auswahl** (bis 5.57 „LED Kanal Auswahl“). Nicht zu verwechseln mit dem **LM-Ausgang**. |
 | **LED-Kette** | Mehrere LEDs (WS2812 oder WS2811), die hintereinander an einem einzigen Anschluss hängen. Jede LED hat eine Nummer. |
 | **Lichtmaschine** | Die Steuerplatine der MobaLedLib. Sie steuert LEDs, Servos und Sound. Ihr Programm lädst du mit MobaLedLib Studio hoch. Es gibt vier: die **Lichtmaschine Classic** (mit ARDUINO Nano), die **Lichtmaschine Pro** (mit ESP32), die **Lichtmaschine Pico Zero** (mit Raspberry Pico) und die **Lichtmaschine Molli** (mit Raspberry Pico). |
+| **LM-Ausgang** | Kurz für **Lichtmaschine Ausgang**: die Nummer des Ausgangs der Lichtmaschine, an dem eine **LED-Kette** hängt. Es lassen sich mehrere LED-Ketten ansteuern: **0** = normale LEDs, **1** = Taster-LEDs (Knopf Druck Aktion), **2** und **3** frei verfügbar. In der Tabelle heißt die Spalte **LM-Ausgang** (bis 5.54 „LED Kanal“ oder „LED/ Sound Kanal“), im Servo-, Sound- und Raum-Dialog gibt es das gleiche Feld. Nicht zu verwechseln mit dem **LED RGB-Anschluss**. |
 | **Makro** | Eine fertige Funktion der MobaLedLib, zum Beispiel „Belebtes Haus“, „Straßenbeleuchtung“ oder „Heartbeat LED“. Du wählst ein Makro aus und stellst ein paar Werte ein. |
 | **Muster (Pattern)** | Eine selbst gemachte Folge von Lichteffekten. Sie wird im [[anleitungen:mobaledlibstudio:patterngenerator|Timeline Editor]] erstellt. |
 | **PlatformIO** | Ein Hilfsprogramm, das aus deiner Tabelle das Programm für die Lichtmaschine übersetzt und hochlädt. Es wird automatisch mitinstalliert. |

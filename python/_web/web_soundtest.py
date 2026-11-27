@@ -1,9 +1,9 @@
-# Datei-Version: 1.03 (2026-11-20) - web_soundtest.py
+# Datei-Version: 1.05 (2026-11-27) - web_soundtest.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_soundtest.py
 # Path:           _web/web_soundtest.py
-# Version:        1.03
-# Last Update:    2026-11-20
+# Version:        1.05
+# Last Update:    2026-11-27
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
@@ -11,6 +11,8 @@
 #   1.01  2026-10-21  Die Taste Verbinden entfaellt: verbunden wird mit der Taste Mit ARDUINO verbinden in der Kopfzeile fuer alle Reiter; neu SoundPage.on_connected (Direktmodus nach dem Verbinden)
 #   1.02  2026-11-05  Beschreibungstext der Seite wird uebersetzt (description_text)
 #   1.03  2026-11-20  Issue 51: Hinweisbox mit hellem Hintergrund bekommt dunkle Schrift (im Dunklen Modus war weisser Text auf hellem Grund nicht lesbar)
+#   1.04  2026-11-27  Version 5.55: LED Kanal heisst LM-Anschluss (Feld und Hinweis)
+#   1.05  2026-11-27  Version 5.56: LM-Anschluss heisst jetzt LM-Ausgang
 # ----------------------------------------------------------------------------------------------
 """Web-Version der Seite "Sound Test" (mlpyproggen/SoundCheckPage.py, Klasse SoundCheckPage, ohne Tk).
 
@@ -49,7 +51,9 @@ DEFINITION_KEYS = {"Sound_Address": "SoundAddress", "SoundLEDChannel": "SoundLED
                    "Sound_RED": "Sound_RED", "Sound_GREEN": "Sound_GREEN", "Sound_BLUE": "Sound_BLUE"}               # ParName -> Schluessel in MacroParamDef
 DEFAULTS = {                           # (Text, Min, Max, Vorgabe, Hinweis) falls MacroParamDef fehlt
     "Sound_Address": ("Soundmodul-Adresse", 0, 32767, 0, "Adresse des Soundmoduls"),
-    "SoundLEDChannel": ("LED Kanal", 0, 99, 0, "LED Kanal an dem die Soundplatine angeschlossen ist"),
+    # "SoundLEDChannel": ("LED Kanal", 0, 99, 0, "LED Kanal an dem die Soundplatine angeschlossen ist"),  # v5.55 (entfallen)
+    # "SoundLEDChannel": ("LM-Anschluss", 0, 99, 0, "LM-Anschluss an dem die Soundplatine angeschlossen ist"),  # v5.55  # v1.05 (entfallen)
+    "SoundLEDChannel": ("LM-Ausgang", 0, 99, 0, "LM-Ausgang an dem die Soundplatine angeschlossen ist"),  # v1.05
     "Sound_ImpulsLength": ("Impulslänge", 0, 1200, 0, "Länge des Impulses"),
     "Sound_RED": ("Sound Anschluss R", 0, 255, 0, "Sound Anschluss R"),
     "Sound_GREEN": ("Sound Anschluss G", 0, 255, 0, "Sound Anschluss G"),
