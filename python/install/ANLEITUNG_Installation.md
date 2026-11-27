@@ -1,5 +1,5 @@
 # MobaLedLib Studio – Installation und Betrieb
-*Datei-Version: 5.62 (2026-11-27), gilt für Version 5.62*
+*Datei-Version: 5.63 (2026-11-27), gilt für Version 5.63*
 
 Windows · macOS · Linux-Desktop · Raspberry Pi
 
@@ -1851,10 +1851,10 @@ Im **Anfänger Modus** fehlt das ganze Menü Werkzeuge. Die Hardware Optionen en
 
 ## Serieller Monitor: Verbinden und Anschluss wechseln (ab 5.56)
 
-Der Reiter **Serieller Monitor** liest nur mit: **Verbinden** öffnet den Anschluss ohne Abfrage am Gerät, daher geht es auch mit Geräten ohne das MobaLedLib-Programm. Die Hardware-Signale (DTR) richten sich nach dem Gerät am Anschluss (Pico, Nano, ESP32). Es gibt einen Knopf: rot **Verbinden**, grün **Trennen**. Ist die Verbindung offen und du wählst einen anderen Anschluss, zeigt das Programm der Reihe nach „Nicht verbunden“, „Verbindungsaufbau ... COMx“ und den neuen Zustand; die Ausgaben der vorherigen Verbindung werden gelöscht. Solange das Programm verbindet, sind die Verbindungsknöpfe in der Kopfzeile und im Seriellen Monitor grau, gesperrt und heißen „Verbinden...“.
+Der Reiter **Serieller Monitor** zeigt, was das Gerät sendet: **Verbinden** testet kurz (höchstens 250 ms), ob das Gerät das MobaLedLib-Programm hat (EFFECT Mode); sonst liest er nur mit (DIRECT Mode), daher geht es auch mit anderen Geräten. Die Hardware-Signale (DTR) richten sich nach dem Gerät am Anschluss (Pico, Nano, ESP32). Es gibt einen Knopf: rot **Verbinden**, grün **Trennen**. Ist die Verbindung offen und du wählst einen anderen Anschluss, zeigt das Programm der Reihe nach „Nicht verbunden“, „Verbindungsaufbau ... COMx“ und den neuen Zustand; die Ausgaben der vorherigen Verbindung werden gelöscht. Solange das Programm verbindet, sind die Verbindungsknöpfe in der Kopfzeile und im Seriellen Monitor grau, gesperrt und heißen „Verbinden...“.
 
 Bricht die Verbindung ab (zum Beispiel USB-Kabel abgezogen), erkennt das Programm das: Die Verbindungsknöpfe werden rot, der Status zeigt „Verbindung verloren - Pro/COMx“ (Typ und Anschluss wie bei „Nicht verbunden“) und im Seriellen Monitor steht „*** Verbindung zu COMx verloren“. Nach dem Anstecken verbindest du wieder mit **Verbinden**.
 
 Sobald der Anschluss nach einem Verbindungsverlust wieder da ist (Kabel angesteckt), verbindet das Programm **automatisch neu**, ohne Dialog (im Seriellen Monitor wieder nur mitlesend). Wenn du selbst mit **Trennen** getrennt hast, bleibt die Verbindung getrennt.
 
-Der **Serielle Monitor** liest nur mit; verbindest du dort, zeigt der Status **DIRECT Mode**. War vorher schon eine Verbindung im EFFECT Mode da, bleibt sie beim Wechsel in den Monitor unverändert. Verlässt du den Monitor und wechselst in den **Programm Generator**, den **Farb Test**, **Servo Test**, **Sound Test**, das **DCC Keyboard** oder den **Patterngenerator**, baut das Programm eine Verbindung im DIRECT Mode im **EFFECT Mode** neu auf (mit Board und Anschluss des Blatts); eine Verbindung im EFFECT Mode zu einem anderen Anschluss als dem des Blatts wird auf den des Blatts umgestellt.
+Der **Serielle Monitor** versucht zuerst im **EFFECT Mode** zu verbinden (ein schneller Test, höchstens 250 ms). Antwortet das Gerät nicht, liest er nur mit und der Status zeigt **DIRECT Mode**. War vorher schon eine Verbindung im EFFECT Mode da, bleibt sie beim Wechsel in den Monitor unverändert. Verlässt du den Monitor und wechselst in den **Programm Generator**, den **Farb Test**, **Servo Test**, **Sound Test**, das **DCC Keyboard** oder den **Patterngenerator**, baut das Programm eine Verbindung im DIRECT Mode im **EFFECT Mode** neu auf (mit Board und Anschluss des Blatts); eine Verbindung im EFFECT Mode zu einem anderen Anschluss als dem des Blatts wird auf den des Blatts umgestellt.

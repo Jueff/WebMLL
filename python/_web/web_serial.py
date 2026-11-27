@@ -1,8 +1,8 @@
-# Datei-Version: 1.28 (2026-11-27) - web_serial.py
+# Datei-Version: 1.29 (2026-11-27) - web_serial.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_serial.py
 # Path:           _web/web_serial.py
-# Version:        1.28
+# Version:        1.29
 # Last Update:    2026-11-27
 # Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
@@ -17,6 +17,7 @@
 #   1.07  2026-11-14  ESP32: Verbindung ueber WLAN mit Anmeldung per HMAC (Port 2323, connect_esp32); Schreibfehler schliesst nur die eigene Verbindung (Beitrag des Fork-Entwicklers)
 #   1.08  2026-11-14  TcpPort: ungueltiger Hostname (UnicodeError, "label too long") wird als OSError gemeldet statt abzustuerzen
 #   1.09  2026-11-14  Automatisches Verbinden (ohne Anschlussangabe): ist fuer das Blatt eine ESP32-WLAN-Verbindung eingetragen (wifi_target_provider), wird zuerst WLAN versucht, sonst USB; connect(wlan=False) erzwingt USB
+#   1.29  2026-11-27  Serial Monitor: zuerst ein schneller Test auf den EFFECT Mode (ein '#?' und hoechstens 250 ms warten, monitor_probe_ms); antwortet das Geraet mit LEDs_AutoProg, gilt die normale Verbindung (EFFECT Mode), sonst wird nur mitgelesen (DIRECT Mode). Zeilen mit '# v1.29'
 #   1.28  2026-11-27  Der Serial Monitor liest nur mit und zeigt deshalb 'Verbunden mit COMx - DIRECT Mode' (nicht EFFECT Mode). Zeilen mit '# v1.28'
 #   1.27  2026-11-27  Automatisch neu verbinden: nach einem Verbindungsverlust wartet ein Hintergrundthread, bis der Anschluss wieder in der Portliste steht, und verbindet dann ohne Dialoge wieder (Serial Monitor: mitlesen, sonst wie beim Autoconnect). Trennen durch den Anwender beendet das Warten. Zeilen mit '# v1.27'
 #   1.26  2026-11-27  lost_port: der verlorene Anschluss, damit die Statusanzeige Typ und Anschluss nennt (Verbindung verloren - Pro/COM3). Zeilen mit '# v1.26'
@@ -864,6 +865,36 @@ class SerialMixin:
                 and str(getattr(self, "ARDUINO_current_portname", "") or "").upper() == str(target or "").upper())  # v1.20
 
     connecting = False  # v1.24
+    monitor_probe_ms = 250  # v1.29: so lange wartet der Serial Monitor auf die Antwort des Tests auf den EFFECT Mode
+
+    def _quick_effect_probe(self, port):  # v1.29
+        """Schneller Test fuer den Serial Monitor: ein '#?' senden und hoechstens monitor_probe_ms auf '#?LEDs_AutoProg' warten (kein Warten auf den Start des Geraets, kein Wiederholen).
+        True: das Geraet meldet sich im EFFECT Mode (Startmeldung ausgewertet, '#X' gesendet wie beim normalen Verbinden)."""
+        t1 = _const("SerialIF_teststring1", "#?LEDs_AutoProg")
+        txt = ""
+        end = time.time() + self.monitor_probe_ms / 1000.0
+        try:
+            self.arduino.write(b"#?\r\n")
+            try:
+                self.arduino.flush()
+            except Exception:                                      # noqa: BLE001
+                pass
+            while time.time() < end:
+                if self.arduino.in_waiting > 0:
+                    txt += self.arduino.read(self.arduino.in_waiting).decode(errors="ignore")
+                    pos = txt.find(t1)
+                    if pos != -1:
+                        pos2 = txt.find(chr(13) + chr(10), pos)
+                        if pos2 != -1:
+                            msg = txt[pos + 2:pos2]
+                            self.queue.put(msg)
+                            self.determine_ARDUINO_Properties_from_Startmessage(msg)
+                            self.send_to_ARDUINO("#X" + chr(13) + chr(10))
+                            return True
+                time.sleep(0.005)
+        except (AttributeError, OSError, ValueError):
+            logger.debug("Schneller Test auf den EFFECT Mode ohne Ergebnis", exc_info=True)
+        return False
 
     def _open_and_handshake(self, port):  # v1.24: Huelle, setzt das Kennzeichen connecting
         self.connecting = True  # v1.24
@@ -889,7 +920,14 @@ class SerialMixin:
                 logger.info("Port %s nicht zu oeffnen: %s", port, e)
                 return "open_error", e  # v1.20
 
-            if getattr(self, "monitor_only", False):  # v1.22: Serial Monitor: nur mitlesen, keine Abfrage am Geraet
+            if getattr(self, "monitor_only", False) and self._quick_effect_probe(port):  # v1.29: Serial Monitor: das Geraet meldet sich im EFFECT Mode: normale Verbindung
+                self.monitor_connected = False  # v1.29
+                self.ARDUINO_current_portname = port  # v1.29
+                self.ARDUINO_status = "Connected"  # v1.29
+                self._set_connect_status(tr('Verbunden mit ') + port + " - EFFECT Mode", "green")  # v1.29
+                self._start_reader()  # v1.29
+                return "ok", None  # v1.29
+            if getattr(self, "monitor_only", False):  # v1.22: Serial Monitor: nur mitlesen, keine Abfrage am Geraet (DIRECT Mode)
                 self.ARDUINO_current_portname = port
                 self.ARDUINO_status = "Connected"
                 self._set_connect_status(tr('Verbunden mit ') + port + " - DIRECT Mode", "green")  # v1.28: der Monitor ist der Direktmodus (kein EFFECT Mode)

@@ -1,8 +1,8 @@
-# Datei-Version: 5.62 (2026-11-27) - webmobaledlib.py
+# Datei-Version: 5.63 (2026-11-27) - webmobaledlib.py
 # ----------------------------------------------------------------------------------------------
 # Name:           webmobaledlib.py
 # Path:           webmobaledlib.py
-# Version:        5.62
+# Version:        5.63
 # Last Update:    2026-11-26
 # Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
@@ -68,6 +68,7 @@
 #   5.46  2026-11-26  Juergen Winkler, Pull Request 76 (dort V5.42): Verbindung: Statusmeldung neben dem Knopf zeigt Typ und Anschluss (Nicht verbunden - Pro/COM3, Verbunden mit Pro/COM3 - EFFECT Mode); eine negative Zahl im Anschluss der Lichtmaschine des Blatts ist ein Hinweis fuer den Auto-Reconnect (zuerst dieser Anschluss, am Start und nach dem Wiederherstellen, keine Suche ueber alle Anschluesse); der Knopf Mit Lichtmaschine verbinden heisst mit Verbindung Trennen (Menue: Trennen); nach Wiederherstellen eines zwischengespeicherten Stands passt sich die Verbindung an Typ und Anschluss des Blatts an; Strg+C beendet ohne Fehlermeldung; eine Verbindung pro Geraet: gemeinsame Anschluss-Sperre fuer Verbinden, Abfragen der Geraeteauswahl und Erkennung, eine offene Verbindung zum selben Anschluss oder ESP32 wird wiederverwendet (web_serial 1.20, M07_COM_Port_New 1.25, M07_COM_Port 1.17, KI_ENTWICKLUNG_Prompt 1.02, test_single_connection.py)
 #   5.47  2026-11-26  Fehler behoben: Upload ohne Anschluss in der Tabelle brach mit "module 'vb2py.logger' has no attribute 'warning'" ab (M07_COM_Port 1.18: logger nach den Importen neu gesetzt)
 #   5.48  2026-11-26  Fehler behoben (Harold): steht im Anschluss der Tabelle -7 (von Excel gesetzt, Hinweis fuer den Auto-Reconnect), kam beim Setup uebertragen 'Es ist kein PICO an COM Port COM-7 angeschlossen'; jetzt gilt eine Zahl <= 0 als kein Anschluss und es wird der Anschluss der aktiven Verbindung benutzt (F00_mainbuttons 1.03, M07_COM_Port 1.19)
+#   5.63  2026-11-27  Serieller Monitor: Verbinden testet zuerst schnell (hoechstens 250 ms) auf den EFFECT Mode und liest nur mit (DIRECT Mode), wenn das Geraet nicht antwortet (web_serial 1.29). Zeilen mit '# v5.63'
 #   5.62  2026-11-27  Auch der Wechsel vom Seriellen Monitor in Farb Test, Servo Test, Sound Test, DCC Keyboard oder Patterngenerator baut eine Direktmodus-Verbindung des Monitors im EFFECT Mode mit dem Anschluss des Blatts neu auf (vor dem Start des Direktmodus der Seite); eine schon korrekte EFFECT Mode Verbindung bleibt (monitor_left_for_sheet, sync_connection_to_sheet restart). Zeilen mit '# v5.62'
 #   5.61  2026-11-27  Der Serielle Monitor zeigt 'DIRECT Mode' (liest nur mit); beim Verlassen in Richtung Programm Generator wird eine Direktmodus-Verbindung im EFFECT Mode neu aufgebaut (auch zum selben Anschluss), eine EFFECT Mode Verbindung bleibt wie bisher nur bei anderem Anschluss des Blatts nicht erhalten (web_serial 1.28, sync_connection_to_sheet force). Zeilen mit '# v5.61'
 #   5.60  2026-11-27  Wechsel vom Seriellen Monitor in den Programm Generator: die Verbindung wird wieder auf das Board und den Anschluss des Blatts umgestellt, ausser es ist derselbe Anschluss (sync_connection_to_sheet, monitor_left_for_sheet). Zeilen mit '# v5.60'
@@ -729,6 +730,7 @@ REQUIRED_FILES = {  # v1.75
     "_web/web_serial.py": "1.26",  # v5.58
     "_web/web_serial.py": "1.27",  # v5.59
     "_web/web_serial.py": "1.28",  # v5.61
+    "_web/web_serial.py": "1.29",  # v5.63
 }  # v1.75
 FILE_PROBLEMS = []                                      # Zeilen der Abweichungen, gefuellt in main()  # v1.75
 
@@ -1874,7 +1876,8 @@ def font_scales(ctrl) -> dict:
 # VERSION = "5.59 (2026-11-27)"  # v5.59  # v5.60 (entfallen)
 # VERSION = "5.60 (2026-11-27)"  # v5.60  # v5.61 (entfallen)
 # VERSION = "5.61 (2026-11-27)"  # v5.61  # v5.62 (entfallen)
-VERSION = "5.62 (2026-11-27)"  # v5.62
+# VERSION = "5.62 (2026-11-27)"  # v5.62  # v5.63 (entfallen)
+VERSION = "5.63 (2026-11-27)"  # v5.63
 # VERSION = "4.09 (2026-11-19)"  # v3.64 (entfallen)
 # VERSION = "4.08 (2026-11-19)"  # v3.64 (entfallen)
 # VERSION = "4.07 (2026-11-19)"  # v3.64 (entfallen)

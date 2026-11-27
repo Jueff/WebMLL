@@ -1,12 +1,13 @@
-# Datei-Version: 1.06 (2026-11-27) - test_monitor_connect.py
+# Datei-Version: 1.07 (2026-11-27) - test_monitor_connect.py
 # ----------------------------------------------------------------------------------------------
 # Name:           test_monitor_connect.py
 # Path:           test_monitor_connect.py
-# Version:        1.06
+# Version:        1.07
 # Last Update:    2026-11-26
 # Author:         Jürgen Winkler
 # Licence:        LGPL V2.1
 # History of Change:
+#   1.07  2026-11-27  Serial Monitor testet zuerst schnell (hoechstens 250 ms) auf den EFFECT Mode, sonst DIRECT Mode (web_serial 1.29)
 #   1.06  2026-11-27  Verlassen des Monitors auch in Richtung Farb Test, Servo, Sound, DCC, Patterngenerator (webmobaledlib 5.62)
 #   1.05  2026-11-27  Der Monitor meldet DIRECT Mode, eine normale Verbindung EFFECT Mode (web_serial 1.28)
 #   1.04  2026-11-27  Wechsel vom Seriellen Monitor in den Programm Generator stellt die Verbindung auf das Blatt um (webmobaledlib 5.60)
@@ -32,20 +33,28 @@ os.chdir(ROOT)
 
 
 class FakeSerial:
-    """Ein Geraet, das nie antwortet; merkt sich, was ihm gesendet wurde"""
-    def __init__(self):
-        self.written, self.closed, self.in_waiting = [], False, 0
+    """Ein Geraet, das nie antwortet (reply leer) oder auf '#?' mit reply antwortet; merkt sich, was ihm gesendet wurde"""
+    def __init__(self, reply=b""):
+        self.written, self.closed = [], False
+        self.reply, self.pending = reply, b""
         self.is_open = True
+
+    @property
+    def in_waiting(self):
+        return len(self.pending)
 
     def write(self, data):
         self.written.append(bytes(data))
+        if b"#?" in bytes(data):
+            self.pending += self.reply
         return len(data)
 
     def flush(self):
         pass
 
     def read(self, n=1):
-        return b""
+        data, self.pending = self.pending[:n], self.pending[n:]
+        return data
 
     def close(self):
         self.closed = True
@@ -93,10 +102,13 @@ class MonitorConnectTests(unittest.TestCase):
         c.reconnect_max_wait, c.reconnect_interval, c.reconnect_settle = self.saved_watch
         c.lost_port = ""
 
-    def test_monitor_connect_sends_nothing_and_shows_no_error(self):
+    def test_monitor_connect_without_answer_falls_back_to_direct_mode_quickly(self):
+        import time
+        start = time.time()
         self.assertTrue(self.ctrl.connect_monitor("COM77"))
-        self.assertEqual(self.sent, [])                                          # kein '#?', kein '#X'
-        self.assertEqual(self.fake.written, [])
+        self.assertLess(time.time() - start, 0.6)                                # der Test auf den EFFECT Mode dauert hoechstens 250 ms
+        self.assertEqual(self.sent, [])                                          # kein '#X' (nichts erkannt)
+        self.assertEqual(self.fake.written, [b"#?\r\n"])                         # nur die eine schnelle Abfrage, keine Wiederholung
         self.assertEqual(self.messages, [])                                      # kein Dialog 'Falsche oder keine Antwort'
         self.assertIn("DIRECT Mode", self.ctrl.connect_status[0])               # Monitor = Direktmodus, nicht EFFECT Mode
         self.assertNotIn("EFFECT Mode", self.ctrl.connect_status[0])
@@ -212,7 +224,7 @@ class MonitorConnectTests(unittest.TestCase):
             self.assertFalse(c.is_connection_open())                             # Anschluss fehlt noch: keine Neuverbindung
             present.append("COM74")                                              # USB wieder angesteckt
             for _ in range(60):
-                if c.is_connection_open():
+                if c.is_connection_open() and c.ARDUINO_current_portname == "COM74":   # der schnelle Test auf den EFFECT Mode dauert bis 250 ms
                     break
                 time.sleep(0.1)
             self.assertTrue(c.is_connection_open())
@@ -243,6 +255,16 @@ class MonitorConnectTests(unittest.TestCase):
         finally:
             list_ports.comports = orig
             c.reconnect_max_wait = 0
+
+    def test_monitor_connect_uses_effect_mode_when_the_device_answers(self):
+        self.fake = FakeSerial(reply=b"#?LEDs_AutoProg V3.5 Nano\r\n")
+        self.assertTrue(self.ctrl.connect_monitor("COM72"))
+        self.assertFalse(self.ctrl.monitor_connected)                            # normale Verbindung
+        self.assertIn("EFFECT Mode", self.ctrl.connect_status[0])
+        self.assertNotIn("DIRECT Mode", self.ctrl.connect_status[0])
+        self.assertIn("#X\r\n", self.sent)                                        # wie beim normalen Verbinden
+        self.assertEqual(self.messages, [])
+        self.assertEqual(self.ctrl.ARDUINO_current_portname, "COM72")
 
     def test_leaving_the_monitor_for_a_sheet_resyncs_the_connection(self):
         import webmobaledlib as W
