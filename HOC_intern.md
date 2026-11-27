@@ -1,5 +1,5 @@
-Datei-Version: 1.143 (2026-11-26) - HOC_intern.md
-Stand: Version 5.63
+Datei-Version: 1.144 (2026-11-26) - HOC_intern.md
+Stand: Version 5.64
 
 # webMobaLedLib: History of Change (intern, ausführlich)
 
@@ -9,7 +9,7 @@ Pfade beziehen sich auf den Ordner `python`.
 
 ---
 
-## 5.63 (2026-11-27), Monitor testet zuerst auf EFFECT Mode; 5.62 (2026-11-27), Monitor verlassen in alle Verbindungs-Reiter; 5.61 (2026-11-27), Monitor = DIRECT Mode; 5.60 (2026-11-27), Verbindung beim Verlassen des Seriellen Monitors; 5.59 (2026-11-27), automatisch neu verbinden; 5.58 (2026-11-27), Verbindung verloren mit Typ und Anschluss; 5.57 (2026-11-27), Verbindungsverlust erkennen; 5.56 (2026-11-26), Zusammenführung mit 5.54, Pull Request 80 und Folgeänderungen (Jürgen): Selectrix, Anschluss-Hinweis, Firmware, Plattformen, Serieller Monitor
+## 5.64 (2026-11-27), Test auf EFFECT Mode hart begrenzt; 5.63 (2026-11-27), Monitor testet zuerst auf EFFECT Mode; 5.62 (2026-11-27), Monitor verlassen in alle Verbindungs-Reiter; 5.61 (2026-11-27), Monitor = DIRECT Mode; 5.60 (2026-11-27), Verbindung beim Verlassen des Seriellen Monitors; 5.59 (2026-11-27), automatisch neu verbinden; 5.58 (2026-11-27), Verbindung verloren mit Typ und Anschluss; 5.57 (2026-11-27), Verbindungsverlust erkennen; 5.56 (2026-11-26), Zusammenführung mit 5.54, Pull Request 80 und Folgeänderungen (Jürgen): Selectrix, Anschluss-Hinweis, Firmware, Plattformen, Serieller Monitor
 
 **Zusammenführung mit 5.54:** Die Dateien dieser Änderungen sind auf den Stand von Jürgen gebracht (in 5.54 standen mehrere Dateien auf einem älteren Stand, zum Beispiel `M07_COM_Port.py` 1.16, `web_serial.py` 1.18, `web_startpage.py` 1.05). Die Einträge darunter (5.52 und 5.50 der Arbeitskopie) beschreiben den Inhalt.
 
@@ -32,6 +32,8 @@ Pfade beziehen sich auf den Ordner `python`.
 **Ergänzung 5.62 (Farb Test, Servo, Sound, DCC, Patterngenerator):** `monitor_left_for_sheet` gilt für `MONITOR_LEAVE_TABS` (`pg`, `farb`, `patt`, `servo1`, `servo2`, `sound`, `dcc`). `on_tab` wartet in diesem Fall auf `sync_connection_to_sheet(ws, force=ctrl.monitor_connected, restart=False)`, und zwar vor dem Start des Direktmodus der Seite (`tab_selected`) und vor dem automatischen Verbinden, damit die Seite nicht auf der Monitor-Verbindung startet und danach getrennt wird. `restart=False` verhindert `after_connect()` (die Seite startet den Direktmodus selbst). Nicht automatisch getestet: das Umstellen im Browser; getestet ist die Tab-Bedingung (`test_monitor_connect.py` 1.06).
 
 **Ergänzung 5.63 (EFFECT Mode zuerst):** `connect_monitor` öffnet den Anschluss wie bisher (DTR nach dem Gerät) und ruft dann `_quick_effect_probe` (`web_serial.py` 1.29): ein `#?` senden, höchstens `monitor_probe_ms` (250 ms) auf `#?LEDs_AutoProg` warten, kein Warten auf den Start des Geräts, keine Wiederholung. Antwort: normale Verbindung (Startmeldung ausgewertet, `#X` gesendet, Status EFFECT Mode, `monitor_connected = False`). Keine Antwort: nur mitlesen (DIRECT Mode, `monitor_connected = True`, keine weitere Abfrage). Antwortet ein Gerät später als nach 250 ms, steht seine Antwortzeile im Monitor. Folge: Beim Verlassen des Monitors wird eine im EFFECT Mode erkannte Verbindung nicht neu aufgebaut (nur bei anderem Anschluss des Blatts). Tests in `test_monitor_connect.py` 1.07 (Ersatzgerät mit und ohne Antwort, Zeit unter 0,6 s). Nicht geprüft: das Verhalten mit echten Nano, ESP32 und Pico (Antwortzeit innerhalb 250 ms, besonders nach einem Reset durch das Öffnen des Anschlusses).
+
+**Ergänzung 5.64 (Test hart begrenzt):** Bei unbekannten Geräten, die nicht oder nicht wie erwartet antworteten, hing das Verbinden. `_quick_effect_probe` läuft jetzt in einem eigenen Thread (`serial-probe`), wird nach `monitor_probe_ms` plus 50 ms aufgegeben (dann DIRECT Mode), setzt für das eine `#?` ein Schreib-Zeitlimit (`write_timeout`, danach wieder zurück), ruft kein `flush()` auf, liest höchstens 512 Byte je Schritt und behält höchstens 2000 Zeichen (kein Wachsen bei Dauerausgabe). Die Auswertung der Antwort (`queue`, `determine_ARDUINO_Properties_from_Startmessage`, `#X`) macht der aufrufende Thread nur bei Erfolg. Tests in `test_monitor_connect.py` 1.08: blockiertes Schreiben, Dauerausgabe ohne Zeilenende, halbe Antwort, Ausnahmen beim Lesen; alle unter 0,6 s im DIRECT Mode. Ursache des gemeldeten Hängens nicht an dem Gerät nachgestellt, vermutet wurde ein blockiertes Schreiben oder `flush()`; nicht mit echter Hardware geprüft.
 
 **Nicht geprüft:** Das Abziehen eines echten USB-Geräts unter Windows, Linux und macOS (andere Fehlertexte von pyserial; gefangen wird jede Ausnahme von `read()`). Ein Anschluss, der nach dem Abziehen nur leere Lesungen liefert, ohne Fehler zu werfen, wird nicht erkannt.
 

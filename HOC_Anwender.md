@@ -1,9 +1,14 @@
-Datei-Version: 1.148 (2026-11-26) - HOC_Anwender.md
-Stand: Version 5.63
+Datei-Version: 1.149 (2026-11-26) - HOC_Anwender.md
+Stand: Version 5.64
 
 # MobaLedLib Studio: Änderungen (Kurzfassung)
 
 Gilt ab Version 1.39. Neueste Version oben.
+
+## Version 5.64 (2026-11-27)
+
+Fehler behoben:
+- Der Serielle Monitor hing beim Verbinden mit unbekannten Geräten, die nicht oder nicht wie erwartet antworten. Der Test auf den EFFECT Mode ist jetzt auf 250 ms begrenzt, danach gilt der DIRECT Mode.
 
 ## Version 5.63 (2026-11-27)
 

@@ -1,8 +1,8 @@
-# Datei-Version: 1.29 (2026-11-27) - web_serial.py
+# Datei-Version: 1.30 (2026-11-27) - web_serial.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_serial.py
 # Path:           _web/web_serial.py
-# Version:        1.29
+# Version:        1.30
 # Last Update:    2026-11-27
 # Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
@@ -17,6 +17,7 @@
 #   1.07  2026-11-14  ESP32: Verbindung ueber WLAN mit Anmeldung per HMAC (Port 2323, connect_esp32); Schreibfehler schliesst nur die eigene Verbindung (Beitrag des Fork-Entwicklers)
 #   1.08  2026-11-14  TcpPort: ungueltiger Hostname (UnicodeError, "label too long") wird als OSError gemeldet statt abzustuerzen
 #   1.09  2026-11-14  Automatisches Verbinden (ohne Anschlussangabe): ist fuer das Blatt eine ESP32-WLAN-Verbindung eingetragen (wifi_target_provider), wird zuerst WLAN versucht, sonst USB; connect(wlan=False) erzwingt USB
+#   1.30  2026-11-27  Der schnelle Test auf den EFFECT Mode ist hart auf monitor_probe_ms begrenzt (eigener Thread, Schreib-Zeitlimit, kein flush): ein Geraet, das nicht oder nicht wie erwartet antwortet oder das Schreiben blockiert, haelt das Verbinden nicht auf. Zeilen mit '# v1.30'
 #   1.29  2026-11-27  Serial Monitor: zuerst ein schneller Test auf den EFFECT Mode (ein '#?' und hoechstens 250 ms warten, monitor_probe_ms); antwortet das Geraet mit LEDs_AutoProg, gilt die normale Verbindung (EFFECT Mode), sonst wird nur mitgelesen (DIRECT Mode). Zeilen mit '# v1.29'
 #   1.28  2026-11-27  Der Serial Monitor liest nur mit und zeigt deshalb 'Verbunden mit COMx - DIRECT Mode' (nicht EFFECT Mode). Zeilen mit '# v1.28'
 #   1.27  2026-11-27  Automatisch neu verbinden: nach einem Verbindungsverlust wartet ein Hintergrundthread, bis der Anschluss wieder in der Portliste steht, und verbindet dann ohne Dialoge wieder (Serial Monitor: mitlesen, sonst wie beim Autoconnect). Trennen durch den Anwender beendet das Warten. Zeilen mit '# v1.27'
@@ -867,34 +868,58 @@ class SerialMixin:
     connecting = False  # v1.24
     monitor_probe_ms = 250  # v1.29: so lange wartet der Serial Monitor auf die Antwort des Tests auf den EFFECT Mode
 
-    def _quick_effect_probe(self, port):  # v1.29
+    def _quick_effect_probe(self, port):  # v1.29, v1.30
         """Schneller Test fuer den Serial Monitor: ein '#?' senden und hoechstens monitor_probe_ms auf '#?LEDs_AutoProg' warten (kein Warten auf den Start des Geraets, kein Wiederholen).
+        Hart begrenzt: der Test laeuft in einem eigenen Thread, nach der Frist wird er aufgegeben (ein Geraet, das das Schreiben blockiert oder nur Unsinn sendet, haelt das Verbinden nicht auf).
         True: das Geraet meldet sich im EFFECT Mode (Startmeldung ausgewertet, '#X' gesendet wie beim normalen Verbinden)."""
         t1 = _const("SerialIF_teststring1", "#?LEDs_AutoProg")
-        txt = ""
-        end = time.time() + self.monitor_probe_ms / 1000.0
-        try:
-            self.arduino.write(b"#?\r\n")
+        limit = self.monitor_probe_ms / 1000.0
+        ser = self.arduino
+        cancel = threading.Event()
+        result = {"msg": None}
+        orig_write_timeout = getattr(ser, "write_timeout", None)
+
+        def worker():
+            txt = ""
+            end = time.time() + limit
             try:
-                self.arduino.flush()
+                try:
+                    ser.write_timeout = limit                      # ein blockiertes Schreiben bricht ab (pyserial: SerialTimeoutException)
+                except Exception:                                  # noqa: BLE001
+                    pass
+                ser.write(b"#?" + bytes([13, 10]))
+                while time.time() < end and not cancel.is_set():
+                    if ser.in_waiting > 0:
+                        txt += ser.read(min(ser.in_waiting, 512)).decode(errors="ignore")[-2000:]
+                        pos = txt.find(t1)
+                        if pos != -1:
+                            pos2 = txt.find(chr(13) + chr(10), pos)
+                            if pos2 != -1:
+                                result["msg"] = txt[pos + 2:pos2]
+                                return
+                        txt = txt[-2000:]
+                    time.sleep(0.005)
             except Exception:                                      # noqa: BLE001
-                pass
-            while time.time() < end:
-                if self.arduino.in_waiting > 0:
-                    txt += self.arduino.read(self.arduino.in_waiting).decode(errors="ignore")
-                    pos = txt.find(t1)
-                    if pos != -1:
-                        pos2 = txt.find(chr(13) + chr(10), pos)
-                        if pos2 != -1:
-                            msg = txt[pos + 2:pos2]
-                            self.queue.put(msg)
-                            self.determine_ARDUINO_Properties_from_Startmessage(msg)
-                            self.send_to_ARDUINO("#X" + chr(13) + chr(10))
-                            return True
-                time.sleep(0.005)
-        except (AttributeError, OSError, ValueError):
-            logger.debug("Schneller Test auf den EFFECT Mode ohne Ergebnis", exc_info=True)
-        return False
+                logger.debug("Schneller Test auf den EFFECT Mode ohne Ergebnis", exc_info=True)
+
+        t = threading.Thread(target=worker, name="serial-probe", daemon=True)
+        t.start()
+        t.join(limit + 0.05)
+        try:
+            ser.write_timeout = orig_write_timeout                 # wie vorher (ein haengendes Schreiben im Thread laeuft nach seinem Zeitlimit von selbst ab)
+        except Exception:                                          # noqa: BLE001
+            pass
+        if t.is_alive():
+            cancel.set()
+            logger.info("Schneller Test auf den EFFECT Mode an %s nach %d ms abgebrochen: DIRECT Mode", port, self.monitor_probe_ms)
+            return False
+        msg = result["msg"]
+        if msg is None:
+            return False
+        self.queue.put(msg)
+        self.determine_ARDUINO_Properties_from_Startmessage(msg)
+        self.send_to_ARDUINO("#X" + chr(13) + chr(10))
+        return True
 
     def _open_and_handshake(self, port):  # v1.24: Huelle, setzt das Kennzeichen connecting
         self.connecting = True  # v1.24

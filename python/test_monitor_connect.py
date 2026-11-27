@@ -1,12 +1,13 @@
-# Datei-Version: 1.07 (2026-11-27) - test_monitor_connect.py
+# Datei-Version: 1.08 (2026-11-27) - test_monitor_connect.py
 # ----------------------------------------------------------------------------------------------
 # Name:           test_monitor_connect.py
 # Path:           test_monitor_connect.py
-# Version:        1.07
+# Version:        1.08
 # Last Update:    2026-11-26
 # Author:         Jürgen Winkler
 # Licence:        LGPL V2.1
 # History of Change:
+#   1.08  2026-11-27  Geraete, die das Schreiben blockieren, Unsinn senden oder nur halb antworten, halten das Verbinden nicht auf (web_serial 1.30)
 #   1.07  2026-11-27  Serial Monitor testet zuerst schnell (hoechstens 250 ms) auf den EFFECT Mode, sonst DIRECT Mode (web_serial 1.29)
 #   1.06  2026-11-27  Verlassen des Monitors auch in Richtung Farb Test, Servo, Sound, DCC, Patterngenerator (webmobaledlib 5.62)
 #   1.05  2026-11-27  Der Monitor meldet DIRECT Mode, eine normale Verbindung EFFECT Mode (web_serial 1.28)
@@ -255,6 +256,46 @@ class MonitorConnectTests(unittest.TestCase):
         finally:
             list_ports.comports = orig
             c.reconnect_max_wait = 0
+
+    def _assert_direct_quickly(self, port, fake):
+        import time
+        self.fake = fake
+        start = time.time()
+        self.assertTrue(self.ctrl.connect_monitor(port))
+        took = time.time() - start
+        self.assertLess(took, 0.6, "Verbinden dauerte %.2f s" % took)         # spaetestens nach 250 ms im Direktmodus
+        self.assertTrue(self.ctrl.monitor_connected)
+        self.assertIn("DIRECT Mode", self.ctrl.connect_status[0])
+        self.assertEqual(self.ctrl.ARDUINO_current_portname, port)
+
+    def test_device_that_blocks_writing_does_not_hold_up_connecting(self):
+        import time
+
+        class Blocking(FakeSerial):
+            def write(self, data):
+                time.sleep(3)                                                 # das Geraet nimmt nichts an
+                return super().write(data)
+        self._assert_direct_quickly("COM71", Blocking())
+
+    def test_device_that_floods_garbage_does_not_hold_up_connecting(self):
+        class Flood(FakeSerial):
+            @property
+            def in_waiting(self):
+                return 4096                                                   # sendet ununterbrochen Unsinn ohne Zeilenende
+
+            def read(self, n=1):
+                return b"x" * n
+        self._assert_direct_quickly("COM70", Flood())
+
+    def test_device_with_half_an_answer_does_not_hold_up_connecting(self):
+        self._assert_direct_quickly("COM69", FakeSerial(reply=b"#?LEDs_AutoProg V3.5 ohne Zeilenende"))
+
+    def test_device_raising_errors_falls_back_to_direct_mode(self):
+        class Raising(FakeSerial):
+            @property
+            def in_waiting(self):
+                raise OSError("Geraet meldet Unsinn")
+        self._assert_direct_quickly("COM68", Raising())
 
     def test_monitor_connect_uses_effect_mode_when_the_device_answers(self):
         self.fake = FakeSerial(reply=b"#?LEDs_AutoProg V3.5 Nano\r\n")
