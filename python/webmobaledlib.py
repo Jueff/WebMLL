@@ -1,8 +1,8 @@
-# Datei-Version: 5.61 (2026-11-27) - webmobaledlib.py
+# Datei-Version: 5.62 (2026-11-27) - webmobaledlib.py
 # ----------------------------------------------------------------------------------------------
 # Name:           webmobaledlib.py
 # Path:           webmobaledlib.py
-# Version:        5.61
+# Version:        5.62
 # Last Update:    2026-11-26
 # Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
@@ -68,6 +68,7 @@
 #   5.46  2026-11-26  Juergen Winkler, Pull Request 76 (dort V5.42): Verbindung: Statusmeldung neben dem Knopf zeigt Typ und Anschluss (Nicht verbunden - Pro/COM3, Verbunden mit Pro/COM3 - EFFECT Mode); eine negative Zahl im Anschluss der Lichtmaschine des Blatts ist ein Hinweis fuer den Auto-Reconnect (zuerst dieser Anschluss, am Start und nach dem Wiederherstellen, keine Suche ueber alle Anschluesse); der Knopf Mit Lichtmaschine verbinden heisst mit Verbindung Trennen (Menue: Trennen); nach Wiederherstellen eines zwischengespeicherten Stands passt sich die Verbindung an Typ und Anschluss des Blatts an; Strg+C beendet ohne Fehlermeldung; eine Verbindung pro Geraet: gemeinsame Anschluss-Sperre fuer Verbinden, Abfragen der Geraeteauswahl und Erkennung, eine offene Verbindung zum selben Anschluss oder ESP32 wird wiederverwendet (web_serial 1.20, M07_COM_Port_New 1.25, M07_COM_Port 1.17, KI_ENTWICKLUNG_Prompt 1.02, test_single_connection.py)
 #   5.47  2026-11-26  Fehler behoben: Upload ohne Anschluss in der Tabelle brach mit "module 'vb2py.logger' has no attribute 'warning'" ab (M07_COM_Port 1.18: logger nach den Importen neu gesetzt)
 #   5.48  2026-11-26  Fehler behoben (Harold): steht im Anschluss der Tabelle -7 (von Excel gesetzt, Hinweis fuer den Auto-Reconnect), kam beim Setup uebertragen 'Es ist kein PICO an COM Port COM-7 angeschlossen'; jetzt gilt eine Zahl <= 0 als kein Anschluss und es wird der Anschluss der aktiven Verbindung benutzt (F00_mainbuttons 1.03, M07_COM_Port 1.19)
+#   5.62  2026-11-27  Auch der Wechsel vom Seriellen Monitor in Farb Test, Servo Test, Sound Test, DCC Keyboard oder Patterngenerator baut eine Direktmodus-Verbindung des Monitors im EFFECT Mode mit dem Anschluss des Blatts neu auf (vor dem Start des Direktmodus der Seite); eine schon korrekte EFFECT Mode Verbindung bleibt (monitor_left_for_sheet, sync_connection_to_sheet restart). Zeilen mit '# v5.62'
 #   5.61  2026-11-27  Der Serielle Monitor zeigt 'DIRECT Mode' (liest nur mit); beim Verlassen in Richtung Programm Generator wird eine Direktmodus-Verbindung im EFFECT Mode neu aufgebaut (auch zum selben Anschluss), eine EFFECT Mode Verbindung bleibt wie bisher nur bei anderem Anschluss des Blatts nicht erhalten (web_serial 1.28, sync_connection_to_sheet force). Zeilen mit '# v5.61'
 #   5.60  2026-11-27  Wechsel vom Seriellen Monitor in den Programm Generator: die Verbindung wird wieder auf das Board und den Anschluss des Blatts umgestellt, ausser es ist derselbe Anschluss (sync_connection_to_sheet, monitor_left_for_sheet). Zeilen mit '# v5.60'
 #   5.59  2026-11-27  Automatisch neu verbinden: nach einem Verbindungsverlust (USB abgezogen) verbindet das Programm wieder, sobald der Anschluss zurueck ist (Serial Monitor: mitlesen); Trennen durch den Anwender beendet das Warten (web_serial 1.27). Zeilen mit '# v5.59'
@@ -845,9 +846,12 @@ def connect_device_label(ctrl, connected, sheet_port=""):  # v5.42
     return "/".join(x for x in (typ, port) if x)  # v5.42
 
 
+MONITOR_LEAVE_TABS = ("pg", "farb", "patt", "servo1", "servo2", "sound", "dcc")  # v5.62
+
+
 def monitor_left_for_sheet(old_tab, new_tab):  # v5.60
-    """Wechsel vom Seriellen Monitor (mon) in den Programm Generator (pg): die Verbindung gehoert dann wieder zum Blatt (Board, Anschluss)."""  # v5.60
-    return old_tab == "mon" and new_tab == "pg"  # v5.60
+    """Wechsel vom Seriellen Monitor (mon) in den Programm Generator (pg), Farb Test, Servo Test, Sound Test, DCC Keyboard oder Patterngenerator: die Verbindung gehoert dann wieder zum Blatt (Board, Anschluss, EFFECT Mode)."""  # v5.60  # v5.62
+    return old_tab == "mon" and new_tab in MONITOR_LEAVE_TABS  # v5.60  # v5.62
 
 
 def translate_connect_status(text, device=""):  # v2.91, v5.42: device = 'Pro/COM3' wird angezeigt
@@ -1869,7 +1873,8 @@ def font_scales(ctrl) -> dict:
 # VERSION = "5.58 (2026-11-27)"  # v5.58  # v5.59 (entfallen)
 # VERSION = "5.59 (2026-11-27)"  # v5.59  # v5.60 (entfallen)
 # VERSION = "5.60 (2026-11-27)"  # v5.60  # v5.61 (entfallen)
-VERSION = "5.61 (2026-11-27)"  # v5.61
+# VERSION = "5.61 (2026-11-27)"  # v5.61  # v5.62 (entfallen)
+VERSION = "5.62 (2026-11-27)"  # v5.62
 # VERSION = "4.09 (2026-11-19)"  # v3.64 (entfallen)
 # VERSION = "4.08 (2026-11-19)"  # v3.64 (entfallen)
 # VERSION = "4.07 (2026-11-19)"  # v3.64 (entfallen)
@@ -7178,7 +7183,7 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
             logger.debug("Verbindung nach dem Wiederherstellen nicht angepasst", exc_info=True)  # v5.42
 
     # (Fassung 4.90/4.91 von sync_connection_to_sheet ersetzt in 4.92)
-    async def sync_connection_to_sheet(ws, force=False):  # v4.90 (Issue 59)  # v5.61: force = auch beim selben Anschluss neu verbinden (Direktmodus des Monitors -> EFFECT Mode)  # v4.92: auch WLAN (ESP32) und der Wechsel zwischen WLAN und USB
+    async def sync_connection_to_sheet(ws, force=False, restart=True):  # v4.90 (Issue 59)  # v5.61: force = auch beim selben Anschluss neu verbinden (Direktmodus des Monitors -> EFFECT Mode)  # v4.92: auch WLAN (ESP32) und der Wechsel zwischen WLAN und USB
         """Blattwechsel: Gehoert zum neuen Blatt eine andere Verbindung (USB-Anschluss oder ESP32 per WLAN) als die offene, die Verbindung schliessen und die des Blatts aufbauen.
         Ohne Verbindung im Blatt (kein Anschluss, kein WLAN-Ziel) oder ohne offene Verbindung geschieht nichts."""  # v4.90
         try:  # v4.90
@@ -7228,7 +7233,8 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
                         logger.debug("Anschluss nicht gespeichert", exc_info=True)  # v4.90
             if ok:  # v4.92
                 ui.notify(tr("Mit der Lichtmaschine verbunden ({port}).", port=what), type="positive")  # v4.90
-                after_connect()  # v4.90
+                if restart:  # v5.62: beim Reiterwechsel startet der Reiter den Direktmodus danach selbst
+                    after_connect()  # v4.90
             else:  # v4.92
                 logger.info("Blattwechsel: keine Verbindung hergestellt")  # v4.92
         except Exception:                                  # noqa: BLE001  # v4.90
@@ -8202,6 +8208,11 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
             state["sound"].tab_unselected()                # laufenden Impuls beenden, Direktmodus beenden  # v1.95
         if old_tab == "dcc" and new_tab != "dcc" and state.get("dcc") is not None:  # v1.95
             state["dcc"].tab_unselected()  # v1.95
+        if monitor_left_for_sheet(old_tab, new_tab):  # v5.60, v5.62: der Serielle Monitor ist der Direktmodus und kann mit einem anderen Anschluss verbunden sein: zurueck in den EFFECT Mode mit dem Anschluss des Blatts (nichts, wenn schon richtig verbunden); vor dem Start des Direktmodus der Seite
+            try:  # v5.62
+                await sync_connection_to_sheet(state["ws"], force=bool(getattr(ctrl, "monitor_connected", False)), restart=False)  # v5.61, v5.62
+            except Exception:                              # noqa: BLE001  # v5.62
+                logger.warning("Verbindung beim Verlassen des Seriellen Monitors nicht umgestellt", exc_info=True)  # v5.62
         if new_tab in ("farb", "servo1", "servo2", "sound") and old_tab != new_tab and not state["busy"]:  # v3.25: Seiten mit Direktmodus verbinden selbst
             try:  # v3.25
                 if ctrl.is_connection_open():  # v5.38: Verbindung da: Merker fuer den fehlgeschlagenen Versuch loeschen
@@ -8227,8 +8238,6 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
             state["z21"].tab_selected()                    # Status und Protokollfenster auffrischen  # v2.05
         if new_tab in settings_pages:
             settings_pages[new_tab][0].mark_saved()            # store_old_config (tabselected)
-        if monitor_left_for_sheet(old_tab, new_tab):  # v5.60: der Serielle Monitor kann mit einem anderen Anschluss verbunden sein: zurueck zum Board des Blatts (nichts, wenn es derselbe Anschluss ist oder das Blatt keinen hat)
-            asyncio.get_running_loop().create_task(sync_connection_to_sheet(state["ws"], force=bool(getattr(ctrl, "monitor_connected", False))))  # v5.60, v5.61: Direktmodus des Monitors: im EFFECT Mode neu verbinden
     tabs.on_value_change(on_tab)
     if start_tab != "pg" and not _web_tabs.tab_enabled(start_tab, ctrl):                       # Adresse eines ausgeschalteten Reiters (/ServoTest2)  # v1.96
         # ui.notify(f"Der Reiter {_web_tabs.TAB_TITLES.get(start_tab, start_tab)} ist ausgeschaltet. Einschalten: Programm Einstellungen, \"DM Servo Einstellungen anzeigen\".", type="warning")  # v2.16 (entfallen)

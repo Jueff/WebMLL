@@ -1,9 +1,14 @@
-Datei-Version: 1.146 (2026-11-26) - HOC_Anwender.md
-Stand: Version 5.61
+Datei-Version: 1.147 (2026-11-26) - HOC_Anwender.md
+Stand: Version 5.62
 
 # MobaLedLib Studio: Änderungen (Kurzfassung)
 
 Gilt ab Version 1.39. Neueste Version oben.
+
+## Version 5.62 (2026-11-27)
+
+Neue Funktionen:
+- Auch der Wechsel vom Seriellen Monitor in Farb Test, Servo Test, Sound Test, DCC Keyboard oder Patterngenerator baut die Verbindung im EFFECT Mode mit dem Anschluss des Blatts neu auf, außer es ist schon richtig im EFFECT Mode verbunden.
 
 ## Version 5.61 (2026-11-27)
 

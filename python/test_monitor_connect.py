@@ -1,12 +1,13 @@
-# Datei-Version: 1.05 (2026-11-27) - test_monitor_connect.py
+# Datei-Version: 1.06 (2026-11-27) - test_monitor_connect.py
 # ----------------------------------------------------------------------------------------------
 # Name:           test_monitor_connect.py
 # Path:           test_monitor_connect.py
-# Version:        1.05
+# Version:        1.06
 # Last Update:    2026-11-26
 # Author:         Jürgen Winkler
 # Licence:        LGPL V2.1
 # History of Change:
+#   1.06  2026-11-27  Verlassen des Monitors auch in Richtung Farb Test, Servo, Sound, DCC, Patterngenerator (webmobaledlib 5.62)
 #   1.05  2026-11-27  Der Monitor meldet DIRECT Mode, eine normale Verbindung EFFECT Mode (web_serial 1.28)
 #   1.04  2026-11-27  Wechsel vom Seriellen Monitor in den Programm Generator stellt die Verbindung auf das Blatt um (webmobaledlib 5.60)
 #   1.03  2026-11-27  Automatisch neu verbinden nach Verlust, nicht nach Trennen durch den Anwender (web_serial 1.27)
@@ -247,7 +248,11 @@ class MonitorConnectTests(unittest.TestCase):
         import webmobaledlib as W
         self.assertTrue(W.monitor_left_for_sheet("mon", "pg"))
         self.assertFalse(W.monitor_left_for_sheet("pg", "mon"))
-        self.assertFalse(W.monitor_left_for_sheet("mon", "farb"))
+        for tab in ("farb", "servo1", "servo2", "sound", "dcc", "patt"):
+            self.assertTrue(W.monitor_left_for_sheet("mon", tab), tab)
+        self.assertFalse(W.monitor_left_for_sheet("mon", "mon"))
+        self.assertFalse(W.monitor_left_for_sheet("mon", "z21"))                  # kein serieller Reiter
+        self.assertFalse(W.monitor_left_for_sheet("farb", "servo1"))
         self.assertFalse(W.monitor_left_for_sheet("pg", "pg"))
 
     def test_normal_connect_still_queries_the_device(self):

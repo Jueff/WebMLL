@@ -1,5 +1,5 @@
-Datei-Version: 1.141 (2026-11-26) - HOC_intern.md
-Stand: Version 5.61
+Datei-Version: 1.142 (2026-11-26) - HOC_intern.md
+Stand: Version 5.62
 
 # webMobaLedLib: History of Change (intern, ausführlich)
 
@@ -9,7 +9,7 @@ Pfade beziehen sich auf den Ordner `python`.
 
 ---
 
-## 5.61 (2026-11-27), Monitor = DIRECT Mode; 5.60 (2026-11-27), Verbindung beim Verlassen des Seriellen Monitors; 5.59 (2026-11-27), automatisch neu verbinden; 5.58 (2026-11-27), Verbindung verloren mit Typ und Anschluss; 5.57 (2026-11-27), Verbindungsverlust erkennen; 5.56 (2026-11-26), Zusammenführung mit 5.54, Pull Request 80 und Folgeänderungen (Jürgen): Selectrix, Anschluss-Hinweis, Firmware, Plattformen, Serieller Monitor
+## 5.62 (2026-11-27), Monitor verlassen in alle Verbindungs-Reiter; 5.61 (2026-11-27), Monitor = DIRECT Mode; 5.60 (2026-11-27), Verbindung beim Verlassen des Seriellen Monitors; 5.59 (2026-11-27), automatisch neu verbinden; 5.58 (2026-11-27), Verbindung verloren mit Typ und Anschluss; 5.57 (2026-11-27), Verbindungsverlust erkennen; 5.56 (2026-11-26), Zusammenführung mit 5.54, Pull Request 80 und Folgeänderungen (Jürgen): Selectrix, Anschluss-Hinweis, Firmware, Plattformen, Serieller Monitor
 
 **Zusammenführung mit 5.54:** Die Dateien dieser Änderungen sind auf den Stand von Jürgen gebracht (in 5.54 standen mehrere Dateien auf einem älteren Stand, zum Beispiel `M07_COM_Port.py` 1.16, `web_serial.py` 1.18, `web_startpage.py` 1.05). Die Einträge darunter (5.52 und 5.50 der Arbeitskopie) beschreiben den Inhalt.
 
@@ -28,6 +28,8 @@ Pfade beziehen sich auf den Ordner `python`.
 **Ergänzung 5.60 (Monitor verlassen):** Beim Wechsel vom Reiter Serieller Monitor (`mon`) in den Programm Generator (`pg`) startet `on_tab` `sync_connection_to_sheet` (`monitor_left_for_sheet`, `webmobaledlib.py` 5.60). Diese bestehende Blattwechsel-Funktion stellt die offene Verbindung auf Board und Anschluss des Blatts um und lässt sie unverändert, wenn es derselbe Anschluss ist, wenn das Blatt keinen Anschluss hat oder wenn keine Verbindung offen ist. Eine Monitor-Verbindung zum selben Anschluss bleibt also mitlesend bestehen (keine Abfrage am Gerät). Test von `monitor_left_for_sheet` in `test_monitor_connect.py` 1.04; die Umstellung selbst ist nicht automatisch getestet.
 
 **Ergänzung 5.61 (DIRECT Mode):** Der Serielle Monitor liest nur mit, das ist der Direktmodus: `connect_monitor` meldet „Verbunden mit COMx - DIRECT Mode“ (vorher EFFECT Mode; `web_serial.py` 1.28). Eine normale Verbindung (EFFECT Mode) bleibt beim Wechsel in den Monitor unverändert. Beim Verlassen in Richtung Programm Generator ruft `on_tab` `sync_connection_to_sheet(ws, force=...)` mit `force = ctrl.monitor_connected`: Ist die Verbindung der Direktmodus des Monitors, wird sie im EFFECT Mode neu aufgebaut, mit dem Anschluss des Blatts oder, wenn das Blatt keinen hat oder derselbe gilt, am bisherigen Anschluss. Ohne `force` (EFFECT Mode) wie bisher nur bei anderem Anschluss. Test der Statusanzeige in `test_monitor_connect.py` 1.05; das Neuverbinden selbst ist nicht automatisch getestet.
+
+**Ergänzung 5.62 (Farb Test, Servo, Sound, DCC, Patterngenerator):** `monitor_left_for_sheet` gilt für `MONITOR_LEAVE_TABS` (`pg`, `farb`, `patt`, `servo1`, `servo2`, `sound`, `dcc`). `on_tab` wartet in diesem Fall auf `sync_connection_to_sheet(ws, force=ctrl.monitor_connected, restart=False)`, und zwar vor dem Start des Direktmodus der Seite (`tab_selected`) und vor dem automatischen Verbinden, damit die Seite nicht auf der Monitor-Verbindung startet und danach getrennt wird. `restart=False` verhindert `after_connect()` (die Seite startet den Direktmodus selbst). Nicht automatisch getestet: das Umstellen im Browser; getestet ist die Tab-Bedingung (`test_monitor_connect.py` 1.06).
 
 **Nicht geprüft:** Das Abziehen eines echten USB-Geräts unter Windows, Linux und macOS (andere Fehlertexte von pyserial; gefangen wird jede Ausnahme von `read()`). Ein Anschluss, der nach dem Abziehen nur leere Lesungen liefert, ohne Fehler zu werfen, wird nicht erkannt.
 
