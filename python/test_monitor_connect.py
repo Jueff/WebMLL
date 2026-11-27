@@ -1,12 +1,13 @@
-# Datei-Version: 1.08 (2026-11-27) - test_monitor_connect.py
+# Datei-Version: 1.09 (2026-11-27) - test_monitor_connect.py
 # ----------------------------------------------------------------------------------------------
 # Name:           test_monitor_connect.py
 # Path:           test_monitor_connect.py
-# Version:        1.08
+# Version:        1.09
 # Last Update:    2026-11-26
 # Author:         Jürgen Winkler
 # Licence:        LGPL V2.1
 # History of Change:
+#   1.09  2026-11-27  Waehrend einer Konfigurationsuebertragung gehen ~MLLCFG-Zeilen an cfg_lines und nicht in den Serial Monitor (web_serial 1.31)
 #   1.08  2026-11-27  Geraete, die das Schreiben blockieren, Unsinn senden oder nur halb antworten, halten das Verbinden nicht auf (web_serial 1.30)
 #   1.07  2026-11-27  Serial Monitor testet zuerst schnell (hoechstens 250 ms) auf den EFFECT Mode, sonst DIRECT Mode (web_serial 1.29)
 #   1.06  2026-11-27  Verlassen des Monitors auch in Richtung Farb Test, Servo, Sound, DCC, Patterngenerator (webmobaledlib 5.62)
@@ -296,6 +297,39 @@ class MonitorConnectTests(unittest.TestCase):
             def in_waiting(self):
                 raise OSError("Geraet meldet Unsinn")
         self._assert_direct_quickly("COM68", Raising())
+
+    def test_config_lines_go_to_the_transfer_not_to_the_monitor(self):
+        import queue
+        import threading
+        stop = threading.Event()
+        data = bytearray(b"Programmmeldung" + bytes([13, 10]) + b"~MLLCFG ACK 100" + bytes([13, 10]) + b"~MLLERR Test" + bytes([13, 10]) + b"danach" + bytes([13, 10]))
+
+        class Port:
+            is_open = True
+            in_waiting = 0
+
+            def read(self, n=1):
+                if not data:
+                    stop.set()
+                    return b""
+                d = bytes(data[:n])
+                del data[:n]
+                return d
+        c = self.ctrl
+        c.cfg_lines = queue.Queue()
+        before = c.queue.lines_since(0)[0]
+        try:
+            c._reader_loop(Port(), stop)
+            got = []
+            while not c.cfg_lines.empty():
+                got.append(c.cfg_lines.get_nowait())
+        finally:
+            c.cfg_lines = None
+        self.assertEqual([g.strip() for g in got], ["~MLLCFG ACK 100", "~MLLERR Test"])   # an die Uebertragung
+        shown = [text.strip() for _t, text in c.queue.lines_since(before)[1]]
+        self.assertIn("Programmmeldung", shown)                                  # alles andere bleibt im Serial Monitor
+        self.assertIn("danach", shown)
+        self.assertFalse(any("~MLL" in s for s in shown), shown)
 
     def test_monitor_connect_uses_effect_mode_when_the_device_answers(self):
         self.fake = FakeSerial(reply=b"#?LEDs_AutoProg V3.5 Nano\r\n")

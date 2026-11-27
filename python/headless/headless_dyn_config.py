@@ -1,12 +1,13 @@
-# Datei-Version: 1.06 (2026-11-24) - headless_dyn_config.py
+# Datei-Version: 1.07 (2026-11-27) - headless_dyn_config.py
 # ----------------------------------------------------------------------------------------------
 # Name:           headless_dyn_config.py
 # Path:           headless/headless_dyn_config.py
-# Version:        1.06
-# Last Update:    2026-11-24
+# Version:        1.07
+# Last Update:    2026-11-27
 # Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
 # History of Change:
+#   1.07  2026-11-27  SharedLink: die Konfiguration ueber die schon offene Verbindung (EFFECT Mode, derselbe Anschluss) uebertragen, ohne sie zu schliessen und neu zu oeffnen; Link.read ruft _fill. Zeilen mit '# v1.07'
 #   1.06  2026-11-24  wait_for_port: Device-Pfad, Seriennummer und Location werden in einer Schleife ueber die Ports geprueft. Zeilen mit '# v1.06'
 #   1.05  2026-11-24  wait_for_port: Pico gilt schon als gefunden, wenn die Seriennummer ODER die Location (jeweils, wenn uebergeben) passt. Zeilen mit '# v1.05'
 #   1.04  2026-11-24  ~MLLERR wird auch ohne Leerzeichen und ohne Text erkannt (Fehler vom Geraet: unbekannter Fehler). Zeilen mit '# v1.04'
@@ -459,10 +460,52 @@ class Link:
                     return msg
             if time.time() >= end:
                 return None
-            try:
-                self.buf += self.ser.read(max(1, self.ser.in_waiting))
-            except Exception as e:                         # noqa: BLE001
-                raise DynConfigError("Schnittstelle: %s" % e)
+            self._fill(end)  # v1.07
+
+    def _fill(self, end):  # v1.07
+        try:
+            self.buf += self.ser.read(max(1, self.ser.in_waiting))
+        except Exception as e:                             # noqa: BLE001
+            raise DynConfigError("Schnittstelle: %s" % e)
+
+
+class SharedLink(Link):  # v1.07
+    """Wie Link, aber ueber die schon offene Verbindung des Controllers (zum Beispiel EFFECT Mode am selben Anschluss): die Verbindung wird weder geschlossen noch neu geoeffnet.
+    Gesendet wird direkt auf die offene Schnittstelle, die Antworten (~MLLCFG, ~MLLERR) liefert der Empfangsthread des Controllers ueber ctrl.cfg_lines (sie erscheinen nicht im Serial Monitor)."""
+
+    def __init__(self, ctrl):
+        import logging
+        import queue as _queue
+        self.log = logging.getLogger("dyn_cfg.link")
+        self.ctrl = ctrl
+        self.ser = ctrl.arduino
+        self.buf = b""
+        self.lines = _queue.Queue()
+        ctrl.cfg_lines = self.lines
+
+    def close(self):                                       # die Verbindung bleibt offen
+        if getattr(self.ctrl, "cfg_lines", None) is self.lines:
+            self.ctrl.cfg_lines = None
+
+    def clear(self):
+        self.buf = b""
+        try:
+            while True:
+                self.lines.get_nowait()
+        except Exception:                                  # noqa: BLE001
+            pass
+
+    def _fill(self, end):
+        import queue as _queue
+        if self.ctrl.arduino is not self.ser or not getattr(self.ser, "is_open", True):
+            raise DynConfigError("Schnittstelle: Verbindung geschlossen")
+        try:
+            text = self.lines.get(timeout=max(0.01, min(0.1, end - time.time())))
+        except _queue.Empty:
+            return
+        self.buf += text.encode("ascii", errors="replace")
+        if not self.buf.endswith(bytes([10])):
+            self.buf += bytes([10])
 
 
 class TcpLink(Link):  # v1.02

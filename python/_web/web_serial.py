@@ -1,8 +1,8 @@
-# Datei-Version: 1.30 (2026-11-27) - web_serial.py
+# Datei-Version: 1.31 (2026-11-27) - web_serial.py
 # ----------------------------------------------------------------------------------------------
 # Name:           web_serial.py
 # Path:           _web/web_serial.py
-# Version:        1.30
+# Version:        1.31
 # Last Update:    2026-11-27
 # Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
@@ -17,6 +17,7 @@
 #   1.07  2026-11-14  ESP32: Verbindung ueber WLAN mit Anmeldung per HMAC (Port 2323, connect_esp32); Schreibfehler schliesst nur die eigene Verbindung (Beitrag des Fork-Entwicklers)
 #   1.08  2026-11-14  TcpPort: ungueltiger Hostname (UnicodeError, "label too long") wird als OSError gemeldet statt abzustuerzen
 #   1.09  2026-11-14  Automatisches Verbinden (ohne Anschlussangabe): ist fuer das Blatt eine ESP32-WLAN-Verbindung eingetragen (wifi_target_provider), wird zuerst WLAN versucht, sonst USB; connect(wlan=False) erzwingt USB
+#   1.31  2026-11-27  cfg_lines: Zeilen mit ~MLLCFG oder ~MLLERR gehen waehrend einer Konfigurationsuebertragung (Setup uebertragen, schneller Weg) ueber die bestehende Verbindung an die Uebertragung statt in den Serial Monitor (headless_dyn_config.SharedLink). Zeilen mit '# v1.31'
 #   1.30  2026-11-27  Der schnelle Test auf den EFFECT Mode ist hart auf monitor_probe_ms begrenzt (eigener Thread, Schreib-Zeitlimit, kein flush): ein Geraet, das nicht oder nicht wie erwartet antwortet oder das Schreiben blockiert, haelt das Verbinden nicht auf. Zeilen mit '# v1.30'
 #   1.29  2026-11-27  Serial Monitor: zuerst ein schneller Test auf den EFFECT Mode (ein '#?' und hoechstens 250 ms warten, monitor_probe_ms); antwortet das Geraet mit LEDs_AutoProg, gilt die normale Verbindung (EFFECT Mode), sonst wird nur mitgelesen (DIRECT Mode). Zeilen mit '# v1.29'
 #   1.28  2026-11-27  Der Serial Monitor liest nur mit und zeigt deshalb 'Verbunden mit COMx - DIRECT Mode' (nicht EFFECT Mode). Zeilen mit '# v1.28'
@@ -269,6 +270,7 @@ class SerialMixin:
     def _serial_init(self):
         self.arduino = None
         self.queue = RxLog(on_line=self._on_rx_line)
+        self.cfg_lines = None  # v1.31: queue.Queue, solange die Konfiguration ueber diese Verbindung uebertragen wird
         self.rx_listeners: list = []                    # Funktionen text -> None, die jede Zeile vom Arduino bekommen (zum Beispiel der Z21 Simulator fuer die Rueckmeldung)  # v1.03
         self.ARDUINO_IP = False
         self.ARDUINO_current_portname = ""
@@ -329,6 +331,10 @@ class SerialMixin:
             except UnicodeDecodeError:
                 text = str(bytes(data))
             logger.debug("Lichtmaschine: %r", text)  # v1.11
+            cfg = self.cfg_lines  # v1.31
+            if cfg is not None and ("~MLLCFG" in text or "~MLLERR" in text):  # v1.31
+                cfg.put(text)  # v1.31
+                continue  # v1.31
             if not text.startswith("****"):
                 self.queue.put(text)
         logger.info("Empfangsthread (Telnet) beendet")
@@ -375,6 +381,10 @@ class SerialMixin:
                     text = str(bytes(buf))
                 buf.clear()
                 logger.debug("Lichtmaschine: %r", text)  # v1.11
+                cfg = self.cfg_lines  # v1.31
+                if cfg is not None and ("~MLLCFG" in text or "~MLLERR" in text):  # v1.31: Antwort der Konfigurationsuebertragung
+                    cfg.put(text)  # v1.31
+                    continue  # v1.31
                 if not text.startswith("****"):           # Debugmeldungen des Arduinos
                     self.queue.put(text)
         logger.info("Empfangsthread beendet")

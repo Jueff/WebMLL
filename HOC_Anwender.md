@@ -1,9 +1,14 @@
-Datei-Version: 1.149 (2026-11-26) - HOC_Anwender.md
-Stand: Version 5.64
+Datei-Version: 1.150 (2026-11-26) - HOC_Anwender.md
+Stand: Version 5.65
 
 # MobaLedLib Studio: Änderungen (Kurzfassung)
 
 Gilt ab Version 1.39. Neueste Version oben.
+
+## Version 5.65 (2026-11-27)
+
+Neue Funktionen:
+- Setup übertragen mit eingeschaltetem schnellem Upload (Schnelles Update): Ist schon im EFFECT Mode mit demselben Anschluss verbunden, bleibt die Verbindung bestehen und wird nicht geschlossen und neu geöffnet.
 
 ## Version 5.64 (2026-11-27)
 

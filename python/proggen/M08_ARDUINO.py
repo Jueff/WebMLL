@@ -1,12 +1,13 @@
-# Datei-Version: 1.39 (2026-11-26) - M08_ARDUINO.py
+# Datei-Version: 1.40 (2026-11-27) - M08_ARDUINO.py
 # ----------------------------------------------------------------------------------------------
 # Name:           M08_ARDUINO.py
 # Path:           proggen/M08_ARDUINO.py
-# Version:        1.39
-# Last Update:    2026-11-26
+# Version:        1.40
+# Last Update:    2026-11-27
 # Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
 # History of Change:
+#   1.40  2026-11-27  Setup uebertragen mit schnellem Upload (M42): ist schon im EFFECT Mode mit demselben Anschluss verbunden, bleibt die Verbindung bestehen (Shared, M42.Reuse_Connection) statt sie zu schliessen und neu zu oeffnen. Zeilen mit '# v1.40'
 #   1.39  2026-11-26  Kompilieren und Hochladen: Abbrechen in der Geraeteauswahl schliesst auch das Fenster Kompilieren und Hochladen sofort. Zeilen mit '# v1.39'
 #   1.38  2026-11-26  Setup uebertragen per USB: Abbrechen in der Geraeteauswahl schliesst auch das Fenster der Uebertragung sofort (kein Fehlertext 'kein USB-Anschluss gewaehlt'). Zeilen mit '# v1.38'
 #   1.37  2026-11-26  Release MobaLedLib 3.6.0: platformio.ini nennt die Bibliothek mit M02.Lib_Version_Nr (3.6.0) statt fest 3.5.0, passend zur library.properties
@@ -2524,8 +2525,10 @@ def Compile_and_Upload_Prog_to_Arduino(InoName, ComPortColumn, BuildOptColumn, S
     # Failed = not M39.UpdateSimulatorIfNeeded(False, (M28.Get_Num_Config_Var_Range("SimAutostart", 0, 3, 0) in (2,3)))  # v1.20 (entfallen)
     DynDone = False  # v1.25: nur die Konfiguration wurde uebertragen (ESP32/Pico, Option serial_cfg)
     if HexFile == '' and M42.Upload_Possible(Mode, ComPort):  # v1.25
-        PG.global_controller.disconnect()  # v1.25
-        DynDone = M42.Try_Config_Only(ComPort)  # v1.25
+        Shared = M42.Reuse_Connection(ComPort)  # v1.40: schon im EFFECT Mode mit diesem Anschluss verbunden: Verbindung nicht schliessen und neu oeffnen
+        if not Shared:  # v1.40
+            PG.global_controller.disconnect()  # v1.25
+        DynDone = M42.Try_Config_Only(ComPort, shared=Shared)  # v1.25, v1.40
     Failed = not M39.UpdateSimulatorIfNeeded(False, (M39.Get_Sim_Mode() in (2,3)))  # v1.20
 
     if not Failed and not DynDone:  # v1.25
