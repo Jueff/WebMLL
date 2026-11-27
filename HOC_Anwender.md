@@ -1,9 +1,14 @@
-Datei-Version: 1.153 (2026-11-26) - HOC_Anwender.md
-Stand: Version 5.68
+Datei-Version: 1.154 (2026-11-26) - HOC_Anwender.md
+Stand: Version 5.69
 
 # MobaLedLib Studio: Änderungen (Kurzfassung)
 
 Gilt ab Version 1.39. Neueste Version oben.
+
+## Version 5.69 (2026-11-27)
+
+Fehler behoben:
+- Beim ESP32 schreibt das Programm die Zeilen `#undef Mainboard_LEDn` und `#define Mainboard_LEDn ...` des Makros Mainboard_LED nicht mehr in die Datei LEDs_AutoProg.h (der ESP32 hat diese LEDs nicht).
 
 ## Version 5.68 (2026-11-27)
 

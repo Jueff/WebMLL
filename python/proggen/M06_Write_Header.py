@@ -1,12 +1,13 @@
-# Datei-Version: 1.22 (2026-11-27) - M06_Write_Header.py
+# Datei-Version: 1.23 (2026-11-27) - M06_Write_Header.py
 # ----------------------------------------------------------------------------------------------
 # Name:           M06_Write_Header.py
 # Path:           proggen/M06_Write_Header.py
-# Version:        1.22
+# Version:        1.23
 # Last Update:    2026-11-27
 # Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
 # History of Change:
+#   1.23  2026-11-27  ESP32: die Zeilen '#undef Mainboard_LEDn' und '#define Mainboard_LEDn ...' (Makro Mainboard_LED) werden nicht in die Kopfdatei geschrieben (Remove_Mainboard_LED_Defines); der ESP32 hat keine Mainboard LEDs an diesen Pins. Zeilen mit '# v1.23'
 #   1.22  2026-11-27  Im Modus MLL_DYNAMIC_CONFIG stehen die Zeilen 'Input channel defines for local inputs and expert users' (INCH_xxx) zwischen //MLLDYN_BEGIN und //MLLDYN_END (wie die Tabelle der externen Adressen), M06_Write_Header_SW 1.16 ebenso TOTAL_SWITCHES_A bis D und TOTAL_VARIABLES. Zeilen mit '# v1.22'
 #   1.21  2026-11-26  Selectrix: Channel 1 bis 99 und Bitposition 1 bis 8 sind erlaubt (Channel 0 und alles andere ist ein Fehler, das Header file wird nicht erzeugt); eine Zeile mit Channel aber ohne Bitposition ist ebenfalls ein Fehler. DCC, LNet, CAN: Adresse 0 ist nicht erlaubt (Fehler wie in M20 1.19), die Sonderbehandlung der Adresse 0 (v1.03) entfaellt. AddressExists: die Liste der Adressen beginnt leer (vorher mit dem Element 0, Erase setzte nur Nullen). Zeilen mit '# v1.21'
 #   1.20  2026-11-26  ESP32: Displaytyp aus den Blatteinstellungen (esp32_options['oled_typ']) als '#define OLED_TYP 1|2' zusammen mit UI_MLLTime. Zeilen mit '# v1.20'
@@ -309,6 +310,14 @@ def Write_Pico_Mainboard_LED_Defines(fp, Config_Txt):  # v1.17
         VBFiles.writeText(fp, '#ifndef Mainboard_LED' + str(Nr), '\n')  # v1.17
         VBFiles.writeText(fp, '#define Mainboard_LED' + str(Nr) + ' SI_0                       // Pico: mainboard LED ' + str(Nr) + ' is an output and off (blinks with ~MLLIDENT, MLLIdentify.h)', '\n')  # v1.17
         VBFiles.writeText(fp, '#endif', '\n')  # v1.17
+def Remove_Mainboard_LED_Defines(Config_Txt):  # v1.23
+#-------------------------------------------------------  # v1.23
+    """ESP32: die Zeilen '#undef Mainboard_LEDn' und '#define Mainboard_LEDn <Kanal>' aus dem Makro Mainboard_LED() gehoeren nicht in die Kopfdatei (der ESP32 hat keine Mainboard LEDs an diesen Pins,
+    die Defines verwiesen ausserdem auf Eingangskanaele). Andere Boards: der Text bleibt unveraendert. Die uebrigen Zeilen, auch '#undef LED_HEARTBEAT_PIN', bleiben."""
+    import re  # v1.23
+    if M02a.Get_BoardTyp() != M02.HT_ESP32:  # v1.23
+        return Config_Txt  # v1.23
+    return re.sub(r'(?m)^[ \t]*#[ \t]*(?:undef|define)[ \t]+Mainboard_LED\w*\b[^\r\n]*(?:\r?\n|\Z)', '', Config_Txt)  # v1.23
 #-------------------------------------------------------
 def ExpandName(Variablename):
 #-------------------------------------------------------
@@ -1881,6 +1890,7 @@ def Write_Header_File_and_Upload_to_Arduino(CreateFilesOnly=False, LEDsInUse=Non
                     VBFiles.writeText(fp, f'#ifndef {symbol}\n#define {define}\n#endif', '\n')  # v1.10
             # VBFiles.writeText(fp, '#endif', '\n')  # v1.10  # v1.18 (entfallen: steht jetzt vor den Defines)
 
+    ConfigTxt = Remove_Mainboard_LED_Defines(ConfigTxt)  # v1.23: ESP32: keine Mainboard LED Defines in der Kopfdatei
     if DynMode:  # v1.07: die Firmware sieht nur die Praeprozessor-Zeilen der Konfiguration, die Makros stehen im Zweig CONFIG_ONLY
         VBFiles.writeText(fp, '// Preprocessor settings from the configuration', '\n')  # v1.07
         for cfgline in ConfigTxt.splitlines():  # v1.07

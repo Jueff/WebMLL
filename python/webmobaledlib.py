@@ -1,8 +1,8 @@
-# Datei-Version: 5.68 (2026-11-27) - webmobaledlib.py
+# Datei-Version: 5.69 (2026-11-27) - webmobaledlib.py
 # ----------------------------------------------------------------------------------------------
 # Name:           webmobaledlib.py
 # Path:           webmobaledlib.py
-# Version:        5.68
+# Version:        5.69
 # Last Update:    2026-11-26
 # Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
@@ -68,6 +68,7 @@
 #   5.46  2026-11-26  Juergen Winkler, Pull Request 76 (dort V5.42): Verbindung: Statusmeldung neben dem Knopf zeigt Typ und Anschluss (Nicht verbunden - Pro/COM3, Verbunden mit Pro/COM3 - EFFECT Mode); eine negative Zahl im Anschluss der Lichtmaschine des Blatts ist ein Hinweis fuer den Auto-Reconnect (zuerst dieser Anschluss, am Start und nach dem Wiederherstellen, keine Suche ueber alle Anschluesse); der Knopf Mit Lichtmaschine verbinden heisst mit Verbindung Trennen (Menue: Trennen); nach Wiederherstellen eines zwischengespeicherten Stands passt sich die Verbindung an Typ und Anschluss des Blatts an; Strg+C beendet ohne Fehlermeldung; eine Verbindung pro Geraet: gemeinsame Anschluss-Sperre fuer Verbinden, Abfragen der Geraeteauswahl und Erkennung, eine offene Verbindung zum selben Anschluss oder ESP32 wird wiederverwendet (web_serial 1.20, M07_COM_Port_New 1.25, M07_COM_Port 1.17, KI_ENTWICKLUNG_Prompt 1.02, test_single_connection.py)
 #   5.47  2026-11-26  Fehler behoben: Upload ohne Anschluss in der Tabelle brach mit "module 'vb2py.logger' has no attribute 'warning'" ab (M07_COM_Port 1.18: logger nach den Importen neu gesetzt)
 #   5.48  2026-11-26  Fehler behoben (Harold): steht im Anschluss der Tabelle -7 (von Excel gesetzt, Hinweis fuer den Auto-Reconnect), kam beim Setup uebertragen 'Es ist kein PICO an COM Port COM-7 angeschlossen'; jetzt gilt eine Zahl <= 0 als kein Anschluss und es wird der Anschluss der aktiven Verbindung benutzt (F00_mainbuttons 1.03, M07_COM_Port 1.19)
+#   5.69  2026-11-27  ESP32: die Zeilen #undef/#define Mainboard_LEDn werden nicht in die Kopfdatei geschrieben (M06_Write_Header 1.23, Remove_Mainboard_LED_Defines). Zeilen mit '# v5.69'
 #   5.68  2026-11-27  LEDs_AutoProg.h im Modus MLL_DYNAMIC_CONFIG: die Eingangskanal-Defines (Input channel defines for local inputs and expert users) und TOTAL_SWITCHES_A bis D, TOTAL_VARIABLES stehen zwischen //MLLDYN_BEGIN und //MLLDYN_END (M06_Write_Header 1.22, M06_Write_Header_SW 1.16, headless_dyn_config 1.08). Zeilen mit '# v5.68'
 #   5.67  2026-11-27  Doppelklick auf Name und Beleuchtung oeffnet die Makroauswahl auch bei Anwendern, die den Schalter vor V5.27 (Standard damals aus) gespeichert hatten: der alte Wert aus wird einmal auf an gesetzt (web_layout 1.23). Zeilen mit '# v5.67'
 #   5.66  2026-11-27  Fehler behoben: nach dem Zuruecksetzen der Testtasten (zum Beispiel nach Setup uebertragen) war bei mehreren Zeilen mit derselben Adresse nur die Taste der Zeile mit Startwert 1 eingeschaltet, die anderen blieben aus (Sync_Toggle_Buttons_by_Address verglich die Richtung als Text, M20 1.20). Zeilen mit '# v5.66'
@@ -741,6 +742,7 @@ REQUIRED_FILES = {  # v1.75
     "proggen/M20_PageEvents_a_Functions.py": "1.20",  # v5.66
     "_web/web_layout.py": "1.23",  # v5.67
     "proggen/M06_Write_Header.py": "1.22", "proggen/M06_Write_Header_SW.py": "1.16", "headless/headless_dyn_config.py": "1.08",  # v5.68
+    "proggen/M06_Write_Header.py": "1.23",  # v5.69
 }  # v1.75
 FILE_PROBLEMS = []                                      # Zeilen der Abweichungen, gefuellt in main()  # v1.75
 
@@ -1892,7 +1894,8 @@ def font_scales(ctrl) -> dict:
 # VERSION = "5.65 (2026-11-27)"  # v5.65  # v5.66 (entfallen)
 # VERSION = "5.66 (2026-11-27)"  # v5.66  # v5.67 (entfallen)
 # VERSION = "5.67 (2026-11-27)"  # v5.67  # v5.68 (entfallen)
-VERSION = "5.68 (2026-11-27)"  # v5.68
+# VERSION = "5.68 (2026-11-27)"  # v5.68  # v5.69 (entfallen)
+VERSION = "5.69 (2026-11-27)"  # v5.69
 # VERSION = "4.09 (2026-11-19)"  # v3.64 (entfallen)
 # VERSION = "4.08 (2026-11-19)"  # v3.64 (entfallen)
 # VERSION = "4.07 (2026-11-19)"  # v3.64 (entfallen)
