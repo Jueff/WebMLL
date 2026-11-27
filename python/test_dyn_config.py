@@ -1,12 +1,13 @@
-# Datei-Version: 1.04 (2026-11-27) - test_dyn_config.py
+# Datei-Version: 1.05 (2026-11-27) - test_dyn_config.py
 # ----------------------------------------------------------------------------------------------
 # Name:           test_dyn_config.py
 # Path:           test_dyn_config.py
-# Version:        1.04
+# Version:        1.05
 # Last Update:    2026-11-27
 # Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
 # History of Change:
+#   1.05  2026-11-27  Eingangskanal-Defines und TOTAL_SWITCHES_* stehen zwischen den Marken MLLDYN: die Signatur beruecksichtigt die Nummern weiterhin (headless_dyn_config 1.08). Zeilen mit '# v1.05'
 #   1.04  2026-11-27  Uebertragung ueber die schon offene Verbindung (SharedLink, M42.Reuse_Connection): die Verbindung wird nicht geschlossen. Zeilen mit '# v1.04'
 #   1.03  2026-11-23  Konfigurationsdatei Format 7: Controller-Tabelle mit LED-Kanal (vier Werte je Controller), LED-Kanal 16 und eine Tabelle mit drei Werten werden abgelehnt. Zeilen
 #                     mit '# v1.03'
@@ -304,6 +305,21 @@ def test_protocol():
         check("stummes Geraet: query_info liefert None", DC.query_info(DC.Link("COM9"), 2.5) is None)
 
 
+# ---------------------------------------------------------------- Eingangskanal-Defines zwischen den Marken (v1.05)
+def test_inch_defines_inside_the_markers():
+    head = "#define X 1\n"
+    inside = ("//MLLDYN_BEGIN\n// Input channel defines for local inputs and expert users\n#define INCH_DCC_21_ONOFF   0   // LED auf dem Mainboard\n"
+              "#define INCH_DCC_33_ONOFF   3\n#define TOTAL_SWITCHES_A  0\n#define TOTAL_VARIABLES   0\n//MLLDYN_END\n")
+    use = "Config(INCH_DCC_33_ONOFF, 5)\n"
+    norm = DC.normalize_header(head + inside + use)
+    check("INCH in den Marken: Namen werden durch die Nummer ersetzt", "Config(3, 5)" in norm.replace(" ", "") or "Config(3,5)" in norm.replace(" ", ""), norm)
+    check("INCH in den Marken: kein define in der Signatur", "INCH_" not in norm and "TOTAL_" not in norm, norm)
+    other = DC.normalize_header(head + inside.replace("DCC_33_ONOFF   3", "DCC_33_ONOFF   4") + use)
+    check("andere Nummer im Kanal: andere Signaturbasis (wie ausserhalb der Marken)", other != norm)
+    outside = DC.normalize_header(head + inside.replace("//MLLDYN_BEGIN\n", "").replace("//MLLDYN_END\n", "") + use)
+    check("zwischen den Marken oder davor: dieselbe Signaturbasis", outside == norm, (outside, norm))
+
+
 # ---------------------------------------------------------------- Uebertragung ueber die offene Verbindung (v1.04)
 class FakeConnectedController:
     """Controller mit offener Verbindung (EFFECT Mode): schreibt auf das Ersatzgeraet und gibt dessen ~MLLCFG-Antworten wie der Empfangsthread in cfg_lines"""
@@ -472,7 +488,7 @@ def test_translation():
 
 
 if __name__ == "__main__":
-    for f in (test_format, test_signature, test_params, test_paths, test_build, test_protocol, test_shared_connection, test_output, test_translation):
+    for f in (test_format, test_signature, test_params, test_paths, test_build, test_protocol, test_inch_defines_inside_the_markers, test_shared_connection, test_output, test_translation):
         try:
             f()
         except Exception as e:                              # noqa: BLE001

@@ -1,5 +1,5 @@
 # MobaLedLib Studio – Installation und Betrieb
-*Datei-Version: 5.67 (2026-11-27), gilt für Version 5.67*
+*Datei-Version: 5.68 (2026-11-27), gilt für Version 5.68*
 
 Windows · macOS · Linux-Desktop · Raspberry Pi
 
@@ -1862,3 +1862,5 @@ Der **Serielle Monitor** versucht zuerst im **EFFECT Mode** zu verbinden (ein sc
 Bei eingeschaltetem **Schnellen Update** schließt **Setup übertragen** eine bestehende Verbindung nicht: Ist das Programm schon im EFFECT Mode mit demselben Anschluss verbunden, geht die Konfiguration über diese Verbindung. Bei einer anderen Verbindung (DIRECT Mode im Seriellen Monitor, anderer Anschluss) wird wie bisher getrennt und neu geöffnet.
 
 Ein **Doppelklick** auf **Name** oder **Beleuchtung** einer Datenzeile öffnet die **Makroauswahl** (wie in Excel). Den Makrotext bearbeitest du mit **Umschalt + Doppelklick**, **F2**, **Enter** oder dem Kontextmenü „Zelle bearbeiten“. Wer den Schalter in einer älteren Version ausgeschaltet gespeichert hatte, bekommt ihn einmal eingeschaltet; ausschalten geht unter Programm Einstellungen, „Bedienung der Tabelle“.
+
+In der erzeugten Datei `LEDs_AutoProg.h` stehen beim **Schnellen Update** (ESP32, Pico) die Eingangskanal-Defines (`INCH_…`) und die Zählwerte `TOTAL_SWITCHES_A` bis `D` und `TOTAL_VARIABLES` zwischen `//MLLDYN_BEGIN` und `//MLLDYN_END`, also im Teil, der zur Konfiguration gehört und nicht zur Firmware.

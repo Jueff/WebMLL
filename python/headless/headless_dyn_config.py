@@ -1,12 +1,13 @@
-# Datei-Version: 1.07 (2026-11-27) - headless_dyn_config.py
+# Datei-Version: 1.08 (2026-11-27) - headless_dyn_config.py
 # ----------------------------------------------------------------------------------------------
 # Name:           headless_dyn_config.py
 # Path:           headless/headless_dyn_config.py
-# Version:        1.07
+# Version:        1.08
 # Last Update:    2026-11-27
 # Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
 # History of Change:
+#   1.08  2026-11-27  normalize_header: die Namen der Eingangskanaele (INCH_xxx) werden auch aus den Zeilen zwischen //MLLDYN_BEGIN und //MLLDYN_END gelesen (dort stehen jetzt die Eingangskanal-Defines), sonst bliebe die Ersetzung durch die Nummer aus und eine Aenderung der Nummern ginge an der Signatur vorbei. Zeilen mit '# v1.08'
 #   1.07  2026-11-27  SharedLink: die Konfiguration ueber die schon offene Verbindung (EFFECT Mode, derselbe Anschluss) uebertragen, ohne sie zu schliessen und neu zu oeffnen; Link.read ruft _fill. Zeilen mit '# v1.07'
 #   1.06  2026-11-24  wait_for_port: Device-Pfad, Seriennummer und Location werden in einer Schleife ueber die Ports geprueft. Zeilen mit '# v1.06'
 #   1.05  2026-11-24  wait_for_port: Pico gilt schon als gefunden, wenn die Seriennummer ODER die Location (jeweils, wenn uebergeben) passt. Zeilen mit '# v1.05'
@@ -291,8 +292,12 @@ def normalize_header(text):
     """LEDs_AutoProg.h ohne alles, was die Firmware nicht beeinflusst: Datentabellen (zwischen den Marken), Zeitstempel, Signatur, Kommentare und die Namen der Eingangskanaele
     (INCH_xxx wird durch die Nummer ersetzt)."""
     lines, skip = [], False
+    inch = {}  # v1.08
     for line in text.splitlines():
         s = line.strip()
+        m_inch = re.match(r"\s*#\s*define\s+(INCH_\w+)\s+(\d+)\b", line)  # v1.08: auch in den Zeilen zwischen den Marken (dort stehen sie im Modus MLL_DYNAMIC_CONFIG)
+        if m_inch:  # v1.08
+            inch[m_inch.group(1)] = m_inch.group(2)  # v1.08
         if s == MARK_BEGIN:
             skip = True
             continue
@@ -304,13 +309,11 @@ def normalize_header(text):
         if re.match(r"#\s*define\s+(TOTAL_SWITCHES_[A-D]|TOTAL_VARIABLES)\b", s):  # v1.01: nur Information in der Kopfdatei, kein Programm benutzt diese Werte
             continue  # v1.01
         lines.append(line)
-    inch = {}
+    # inch = {}  # v1.08 (oben gefuellt)
     rest = []
     for line in lines:
         m = re.match(r"\s*#\s*define\s+(INCH_\w+)\s+(\d+)\b", line)
-        if m:
-            inch[m.group(1)] = m.group(2)
-        else:
+        if not m:  # v1.08
             rest.append(line)
     out = []
     for line in rest:

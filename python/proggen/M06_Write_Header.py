@@ -1,12 +1,13 @@
-# Datei-Version: 1.21 (2026-11-26) - M06_Write_Header.py
+# Datei-Version: 1.22 (2026-11-27) - M06_Write_Header.py
 # ----------------------------------------------------------------------------------------------
 # Name:           M06_Write_Header.py
 # Path:           proggen/M06_Write_Header.py
-# Version:        1.21
-# Last Update:    2026-11-26
+# Version:        1.22
+# Last Update:    2026-11-27
 # Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
 # History of Change:
+#   1.22  2026-11-27  Im Modus MLL_DYNAMIC_CONFIG stehen die Zeilen 'Input channel defines for local inputs and expert users' (INCH_xxx) zwischen //MLLDYN_BEGIN und //MLLDYN_END (wie die Tabelle der externen Adressen), M06_Write_Header_SW 1.16 ebenso TOTAL_SWITCHES_A bis D und TOTAL_VARIABLES. Zeilen mit '# v1.22'
 #   1.21  2026-11-26  Selectrix: Channel 1 bis 99 und Bitposition 1 bis 8 sind erlaubt (Channel 0 und alles andere ist ein Fehler, das Header file wird nicht erzeugt); eine Zeile mit Channel aber ohne Bitposition ist ebenfalls ein Fehler. DCC, LNet, CAN: Adresse 0 ist nicht erlaubt (Fehler wie in M20 1.19), die Sonderbehandlung der Adresse 0 (v1.03) entfaellt. AddressExists: die Liste der Adressen beginnt leer (vorher mit dem Element 0, Erase setzte nur Nullen). Zeilen mit '# v1.21'
 #   1.20  2026-11-26  ESP32: Displaytyp aus den Blatteinstellungen (esp32_options['oled_typ']) als '#define OLED_TYP 1|2' zusammen mit UI_MLLTime. Zeilen mit '# v1.20'
 #   1.18  2026-11-25  Einstellungen des Blattes: READ_LDR und ENABLE_STORE_STATUS() fuer alle Plattformen, nur die Display-Einstellung (UI_MLLTime) bleibt in #ifdef ESP32. Zeilen mit '# v1.18'
@@ -1817,9 +1818,13 @@ def Write_Header_File_and_Upload_to_Arduino(CreateFilesOnly=False, LEDsInUse=Non
         VBFiles.writeText(fp, '', '\n')
         VBFiles.writeText(fp, '', '\n')
     # Ext_AddrTxt_Used
+    if DynMode:  # v1.22: die Eingangskanaele gehoeren zur Konfiguration, nicht zur Firmware
+        VBFiles.writeText(fp, DC.MARK_BEGIN, '\n')  # v1.22
     VBFiles.writeText(fp, '// Input channel defines for local inputs and expert users', '\n')
     # 05.10.19: Moved out of the if because the local inputs are also stored here
     VBFiles.writeText(fp, InChTxt, '\n')
+    if DynMode:  # v1.22
+        VBFiles.writeText(fp, DC.MARK_END, '\n')  # v1.22
     VBFiles.writeText(fp, '', '\n')
     
     fret, Channel = M06SW.Write_Switches_Header_File_Part_A(fp, Channel)

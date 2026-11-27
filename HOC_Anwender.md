@@ -1,9 +1,14 @@
-Datei-Version: 1.152 (2026-11-26) - HOC_Anwender.md
-Stand: Version 5.67
+Datei-Version: 1.153 (2026-11-26) - HOC_Anwender.md
+Stand: Version 5.68
 
 # MobaLedLib Studio: Änderungen (Kurzfassung)
 
 Gilt ab Version 1.39. Neueste Version oben.
+
+## Version 5.68 (2026-11-27)
+
+Neue Funktionen:
+- Die erzeugte Datei LEDs_AutoProg.h enthält beim schnellen Update (ESP32, Pico) die Eingangskanal-Defines („Input channel defines …“) und die Zählwerte TOTAL_SWITCHES_A bis D und TOTAL_VARIABLES zwischen den Zeilen //MLLDYN_BEGIN und //MLLDYN_END. Änderungen daran gehören damit zur Konfiguration und nicht zur Firmware.
 
 ## Version 5.67 (2026-11-27)
 
