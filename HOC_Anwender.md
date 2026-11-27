@@ -1,9 +1,14 @@
-Datei-Version: 1.151 (2026-11-26) - HOC_Anwender.md
-Stand: Version 5.66
+Datei-Version: 1.152 (2026-11-26) - HOC_Anwender.md
+Stand: Version 5.67
 
 # MobaLedLib Studio: Änderungen (Kurzfassung)
 
 Gilt ab Version 1.39. Neueste Version oben.
+
+## Version 5.67 (2026-11-27)
+
+Fehler behoben:
+- Der Doppelklick auf Name und Beleuchtung öffnet die Makroauswahl jetzt auch dann, wenn der Schalter früher (vor 5.27, damals standardmäßig aus) gespeichert war. Der alte Wert „aus“ wird einmal auf „an“ gesetzt; wer danach selbst ausschaltet, bleibt bei „aus“. Den Makrotext bearbeitest du mit Umschalt + Doppelklick, F2, Enter oder dem Kontextmenü.
 
 ## Version 5.66 (2026-11-27)
 
