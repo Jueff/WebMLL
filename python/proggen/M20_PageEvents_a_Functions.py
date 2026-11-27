@@ -1,12 +1,13 @@
-# Datei-Version: 1.19 (2026-11-26) - M20_PageEvents_a_Functions.py
+# Datei-Version: 1.20 (2026-11-27) - M20_PageEvents_a_Functions.py
 # ----------------------------------------------------------------------------------------------
 # Name:           M20_PageEvents_a_Functions.py
 # Path:           proggen/M20_PageEvents_a_Functions.py
-# Version:        1.19
-# Last Update:    2026-11-26
+# Version:        1.20
+# Last Update:    2026-11-27
 # Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
 # History of Change:
+#   1.20  2026-11-27  Sync_Toggle_Buttons_by_Address (Issue 68) tat nichts: Richtung und Adresse im Namen der Taste wurden als Text '00'/'01' verglichen, der Name enthaelt aber ' 0'/' 1' (Format mit Leerzeichen). Jetzt Vergleich der Zahlen: nach dem Zuruecksetzen (zum Beispiel nach Setup uebertragen) sind alle Ein/Aus-Tasten einer Adresse mit Startwert 1 eingeschaltet. Zeilen mit '# v1.20'
 #   1.19  2026-11-26  DCC, LNet, CAN: Pruefung im Adressfeld (Check_Address_Input): Adresse 0 und kleiner sind nicht erlaubt. Selectrix: Channel 1 bis 99 (vorher 0 bis 99), Bitposition 1 bis 8. Bei einem ungueltigen Wert Meldung und die Zelle wird geleert. Zeilen mit '# v1.19'
 #   1.18  2026-11-25  Selectrix: Pruefung der Wertebereiche bei der Eingabe (SX_Check_Input): Channel 0 bis 99 (Namen und Variablen sind erlaubt), Bitposition ganze Zahl 1 bis 8; bei einem ungueltigen Wert Meldung und die Zelle wird geleert. Zeilen mit '# v1.18'
 #   1.17  2026-11-25  Selectrix: der Dialog Taster/An-Aus oeffnet sich sofort, wenn Channel und Bitposition eingegeben sind und der Typ noch leer ist (wie bei DCC nach der Adresse), nicht erst beim erneuten Anklicken der Zelle Typ; Select_Typ_by_Dialog: bei Selectrix ist Channel 0 gueltig. Zeilen mit '# v1.17'
@@ -1521,9 +1522,10 @@ def Sync_Toggle_Buttons_by_Address():  # v1.14
     # dem Startwert eingeschaltet; die Tasten gleicher Adresse in anderen Zeilen blieben aus.
     try:  # v1.14
         shapes = [sh for sh in P01.ActiveSheet.Shapes if sh.OnAction == 'DCCSend' and sh.Name[:1] == 'B' and len(sh.Name) >= 9]  # v1.14
-        on_addr = set(sh.Name[1:5] for sh in shapes if sh.Name[6:8] == '00')  # v1.14
+        # v1.20: der Name ist 'B' + Adresse (4 Stellen, mit Leerzeichen aufgefuellt) + '-' + Richtung (2 Stellen, ' 0' oder ' 1') ...: Zahlen vergleichen, nicht den Text '00'/'01'
+        on_addr = set(int(P01.val(sh.Name[1:5])) for sh in shapes if int(P01.val(sh.Name[6:8])) == 0)  # v1.14, v1.20
         for sh in shapes:  # v1.14
-            if sh.Name[6:8] == '01' and sh.Name[1:5] in on_addr and sh.AlternativeText != '':  # v1.14
+            if int(P01.val(sh.Name[6:8])) == 1 and int(P01.val(sh.Name[1:5])) in on_addr and sh.AlternativeText != '':  # v1.14, v1.20
                 tmp = sh.Name  # v1.14
                 sh.Name = sh.AlternativeText  # v1.14
                 sh.AlternativeText = tmp  # v1.14

@@ -1,9 +1,14 @@
-Datei-Version: 1.150 (2026-11-26) - HOC_Anwender.md
-Stand: Version 5.65
+Datei-Version: 1.151 (2026-11-26) - HOC_Anwender.md
+Stand: Version 5.66
 
 # MobaLedLib Studio: Änderungen (Kurzfassung)
 
 Gilt ab Version 1.39. Neueste Version oben.
+
+## Version 5.66 (2026-11-27)
+
+Fehler behoben:
+- Nach Setup übertragen standen bei mehreren Zeilen mit derselben Adresse nur die Ein/Aus-Tasten der Zeile mit Startwert 1 auf „ein“, die anderen Zeilen mit dieser Adresse blieben auf „aus“. Jetzt sind alle Tasten dieser Adresse eingeschaltet.
 
 ## Version 5.65 (2026-11-27)
 

@@ -1,12 +1,13 @@
-# Datei-Version: 1.00 (2026-11-25) - test_protocol_switch.py
+# Datei-Version: 1.01 (2026-11-27) - test_protocol_switch.py
 # ----------------------------------------------------------------------------------------------
 # Name:           test_protocol_switch.py
 # Path:           test_protocol_switch.py
-# Version:        1.00
-# Last Update:    2026-11-25
+# Version:        1.01
+# Last Update:    2026-11-27
 # Author:         Jürgen Winkler
 # Licence:        LGPL V2.1
 # History of Change:
+#   1.01  2026-11-27  Testtasten: nach dem Zuruecksetzen sind alle Ein/Aus-Tasten einer Adresse mit Startwert 1 eingeschaltet (M20 1.20)
 #   1.00  2026-11-25  Neu: Wechsel eines Blatts zwischen Selectrix und DCC/LNet/CAN (headless_protocol_switch 1.00), Umrechnung der Adressen, Testtasten, Pgf-Export und -Import
 # ----------------------------------------------------------------------------------------------
 """Aufruf: python test_protocol_switch.py
@@ -459,6 +460,23 @@ class SheetTests(unittest.TestCase):
         ts.data[5][3] = "5000"
         self.assertTrue(self.M20.SX_Check_Input(self.P01.Cells(6, self.M25.DCC_or_CAN_Add_Col)))
         self.assertEqual(ts.data[5][3], "5000")
+
+    def test_reset_switches_all_on_off_buttons_of_an_address_with_start_value_1(self):
+        self.fill([("21", "AnAus"), ("1", "AnAus"), ("1", "AnAus"), ("1", "AnAus"), ("33", "AnAus"), ("33", "AnAus"), ("33", "AnAus")])
+        ts = self.ws.tksheet
+        for r in (4, 8):                                             # Zeilen mit Adresse 1 und 33: nur die erste hat den Startwert 1
+            ts.data[r][self.M25.Start_V_Col - 1] = "1"
+        self.M20.ResetTestButtons(False)                              # wie nach Setup uebertragen
+        names = [(s.Name, s.TextFrame2.TextRange.Text) for s in self.ws.shapelist if s.OnAction == "DCCSend"]
+        on = {int(self.P01.val(n[1:5])): [] for n, _t in names}
+        for n, text in names:
+            on[int(self.P01.val(n[1:5]))].append(text)
+        self.assertEqual(on[21], ["0"])                              # kein Startwert: aus
+        self.assertEqual(on[1], ["1", "1", "1"], names)              # alle drei Tasten der Adresse 1 ein
+        self.assertEqual(on[33], ["1", "1", "1"], names)
+        for n, _t in names:                                          # Name und Anzeige stimmen ueberein: ein = Richtung 0 (der naechste Druck schaltet aus)
+            if int(self.P01.val(n[1:5])) in (1, 33):
+                self.assertEqual(int(self.P01.val(n[6:8])), 0, n)
 
     def test_warning_text(self):
         self.fill([("11", "Rot"), ("900", "")])
