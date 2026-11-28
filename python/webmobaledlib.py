@@ -1,9 +1,9 @@
-# Datei-Version: 5.60 (2026-11-27) - webmobaledlib.py
+# Datei-Version: 5.65 (2026-11-28) - webmobaledlib.py
 # ----------------------------------------------------------------------------------------------
 # Name:           webmobaledlib.py
 # Path:           webmobaledlib.py
-# Version:        5.60
-# Last Update:    2026-11-27
+# Version:        5.65
+# Last Update:    2026-11-28
 # Author:         Harold Linke, Jürgen Winkler
 # Licence:        LGPL V2.1
 # History of Change:
@@ -80,7 +80,12 @@
 #   5.57  2026-11-27  Makro-Dialog: Feld LM-Ausgang breiter (Beschriftung nicht mehr abgeschnitten) und mit Tooltip 'Nummer des Lichtmaschinen Ausgangs' (web_form_other 1.20, Web_Languages.csv)
 #   5.58  2026-11-27  Servo- und LED-Farb-Animations-Dialog: Feld Anschluss-Kanal heisst LM-Ausgang mit Tooltip; Parameterformular: LED Kanal Auswahl heisst LED RGB-Anschluss Auswahl; Wiki Begriffe: LM-Ausgang, LED RGB-Anschluss (web_form_servoanim 1.07, web_form_ledcoloranim 1.02, web_form_other 1.21, Web_Languages.csv)
 #   5.59  2026-11-27  Pull Request 82 (Jueff, dort V5.51 bis V5.69): Serieller Monitor (Verbindungsknopf, EFFECT oder DIRECT Mode, Verbindungsverlust mit automatischem Neuverbinden, Verlassen des Monitors stellt die Verbindung auf das Blatt um), Setup uebertragen mit schnellem Upload ueber die offene Verbindung, Plattformen und Protokolle (csv/Lichtmaschinen_prop.json: devices, platforms, protocols), LNet-Lizenz je Blatt, Selectrix-Pruefung, Firmware-Auswahl nach Plattform, ESP32: keine Mainboard_LED-Defines in der Kopfdatei, Doppelklick-Schalter, Sync_Toggle_Buttons_by_Address. Zeilen im Code behalten die Marker # v5.51 bis # v5.69 des PR; die Dateien web_params (Stand 5.51) und web_tabs sind zusammengefuehrt
+#   5.61  2026-11-28  Verbinden: Fehlermeldung unterscheidet keine Antwort, unlesbare Zeichen und andere Antwort; Knopfname 'Zum Arduino schicken'; Hinweis Uno/Nano neu (web_serial 1.32, Web_Languages.csv)
 #   5.60  2026-11-27  Pull Request 83 (Jueff, dort Identify 1.04): ESP32: das Makro Mainboard_LED(n, InCh) schaltet die drei Status LEDs der Hauptplatine ueber MllStatusLedSet() (wie das Identify Blinken); keine Pins mehr (LEDs_AutoProg.ino, Zeilen mit '// v1.04'; nicht kompiliert, nicht am Board getestet)
+#   5.62  2026-11-27  Farben und Cursor im Log-Fenster (Kompilieren und Hochladen): PlatformIO schreibt mit PLATFORMIO_FORCE_ANSI Farben und Fortschrittsanzeigen, das Fenster wertet sie aus (web_ansi 1.00, web_log 1.16, Prog_Generator 1.11, headless_esp32_ota 1.15; REQUIRED_FILES ergaenzt). Nicht am Board und nicht im Browser getestet
+#   5.63  2026-11-27  Blattwechsel (sync_connection_to_sheet): hat das Blatt keine eigene Verbindung und gehoert die offene Verbindung zu einer anderen Lichtmaschine (Typ aus der Startmeldung), wird sie getrennt; ist das Geraet des Blatts nicht erreichbar (Anschluss fehlt, WLAN-Ziel antwortet nicht, Hinweis-Anschluss mit anderem Typ), bleibt keine Verbindung zum bisherigen Geraet stehen (Meldung); meldet sich am eingestellten Anschluss ein anderer Typ als im Blatt, kommt eine Warnung. Zeilen mit '# v5.61'
+#   5.64  2026-11-27  Jürgen Winkler: Makrotext direkt bearbeiten: Makros der Extensions (zum Beispiel EX.IRReceiverNEC(23, 0, 2)) wurden als ungueltig abgewiesen (Name mit Punkt); jetzt werden Anzahl und Werte der Argumente wie im Extension-Dialog nach Typ, Min und Max der Metadaten der Extension geprueft (headless_macro_edit 1.02); im Dialog Ungueltiger Makrotext loest Return Aenderung pruefen aus, der Cursor steht beim Oeffnen im Makrotext. Zeilen mit '# v5.61'
+#   5.65  2026-11-28  Pull Request 88 (Jueff, dort V5.61 bis V5.70): 5.61: Hardware Optionen: die Lichtmaschine wird wieder gewaehlt (Menue aus devices der Lichtmaschinen_prop.json, gruppiert nach Plattform, Haupttyp aus board: Classic, Uno, Pro, Pico; die USB-Kennung bestimmt Uno/Nano, Original/Clone nicht sicher); anderer Haupttyp setzt den COM Port zurueck und fragt nach der Suche; die Geraeteauswahl zeigt nur Geraete des eingestellten Typs (web_form_options 1.80, web_form_comport 1.52) | 5.62: Erkennung der Plattform eines Anschlusses aus den USB-Daten nach den Regeln detectionRules in csv/Lichtmaschinen_prop.json (neu: headless/headless_usb_detect.py) statt fester Regeln in M07_COM_Port 1.21, web_serial 1.32, web_form_comport 1.52 | 5.63: Hardware Optionen: ohne im Blatt gespeicherte Lichtmaschine zeigt das Menue die Vorgabe der Plattform (platforms.defaultDevice in csv/Lichtmaschinen_prop.json 1.09: ATMega Classic, ESP32 Pro, Raspberry Pico Pico Zero; web_form_options 1.81, web_startpage 1.14) | 5.64: Geraeteauswahl bei Lichtmaschine Pico: die Gruppe 'Andere MobaLedLib Geraete' (nicht waehlbar) erscheint wieder (web_form_comport 1.53); Hardware Optionen: 'Gerät:' statt 'Hardware:', 'keine Schnittstelle gewählt' statt 'kein Port gewählt' (web_form_options 1.82) | 5.65: Menue der Lichtmaschine: Reihenfolge nach sortPriority (devices und platforms in csv/Lichtmaschinen_prop.json 1.10; hoechste Zahl zuerst, sonst nach Namen; ESP32 50, Pico 40, ATMega 30; web_form_options 1.83, web_startpage 1.15) | 5.66: Geraeteauswahl bei Lichtmaschine Pico: andere MobaLedLib Geraete sind waehlbar, OK fragt mit einer Sicherheitsabfrage nach (Vorgabe Nein) (web_form_comport 1.54) | 5.67: Hardware Optionen: Bild und Protokolle folgen der gewaehlten Lichtmaschine (devices.image, devices.protocols); feste Bildflaeche, Bild eingepasst, ohne Bild leere Flaeche (web_form_options 1.84) | 5.68: Geraeteauswahl: Bild der Lichtmaschine des Blattes (bei Uno vorher das Bild der Classic), ohne Bild leere Flaeche, Bildflaeche immer gleich gross (web_form_comport 1.55, web_form_options 1.85) | 5.69: Lichtmaschine ohne Protokoll (Mini, devices.protocols leer): keine Protokollauswahl, kein DCC/Selectrix/LNet Arduino; Knopf 'Suchen' (statt 'Erkennen') rechts in der Gerätezeile (web_form_options 1.87, web_startpage 1.16, Lichtmaschinen_prop.json 1.11) | 5.70: devices.detect verweist auf Regel-Sets in detectionRules (headless_usb_detect 1.02; Geraeteauswahl beim Uno mit den Uno-Regeln, web_form_comport 1.56, web_form_options 1.88; Startseite web_startpage 1.17); Menue Werkzeuge: Liste der USB Geraete (neu: _web/web_usb_list.py)
 #   5.38  2026-11-26  Ohne Lichtmaschine kam die Meldung 'Fehler beim Oeffnen der Verbindung' bei jedem Wechsel auf einen Reiter mit Direktmodus (Farb Test, Servo Test, Sound Test): das automatische Verbinden beim Reiterwechsel scheitert jetzt nur einmal mit Meldung, danach wird nicht mehr versucht, bis eine Verbindung besteht oder der Anwender selbst verbindet (Menue, Testtasten)
 #   5.37  2026-11-26  Farb Test: Knopf 'Farb Test beenden' unten rechts (web_colorcheck 1.13); Set_ColTab oeffnet den Farb Test auch ohne Lichtmaschine, kein Anschluss noetig (M60_CheckColors 1.01); Parameterformular: Flags (OptCtrPar, CtrMode, RandMode) als aufklappbare Hakenliste (web_form_other 1.17, Web_Languages.csv)
 #   5.36  2026-11-26  Startseite: alle Kacheln gleich gross (auch Ohne Zentrale und die letzte Lichtmaschine), Raster statt Zeilenumbruch (web_startpage 1.05)
@@ -729,7 +734,19 @@ REQUIRED_FILES = {  # v1.75
     "proggen/M09_Language.py": "1.09", "_web/web_servotest.py": "2.10", "_web/web_servotest2.py": "1.05", "_web/web_soundtest.py": "1.05", "_web/web_tabs.py": "1.40",  # v5.56
     "_web/web_form_other.py": "1.20",  # v5.57
     "_web/web_form_servoanim.py": "1.07", "_web/web_form_ledcoloranim.py": "1.02", "_web/web_form_other.py": "1.21",  # v5.58
-    "proggen/M06_Write_Header.py": "1.23", "proggen/M07_COM_Port.py": "1.20", "proggen/M08_ARDUINO.py": "1.40", "proggen/M18_Save_Load.py": "1.08", "proggen/M20_PageEvents_a_Functions.py": "1.20", "headless/headless_protocol_switch.py": "1.01", "_web/web_form_comport.py": "1.51", "_web/web_log.py": "1.15", "_web/web_form_options.py": "1.79", "headless/headless_firmware_dl.py": "1.01", "_web/web_form_firmware_download.py": "1.03", "_web/web_form_firmware.py": "1.06", "_web/web_startpage.py": "1.13", "_web/web_serial.py": "1.31", "_web/web_serial_page.py": "1.07", "proggen/M07_COM_Port_New.py": "1.29", "headless/headless_pico.py": "1.03", "headless/headless_dyn_config.py": "1.08", "proggen/M42_Dyn_Config.py": "1.13", "_web/web_layout.py": "1.23", "proggen/M06_Write_Header_SW.py": "1.16", "_web/web_logging.py": "1.06", "_web/web_tabs.py": "1.41",  # v5.59 (Pull Request 82, Jueff, dort V5.51 bis V5.69)
+    "proggen/M06_Write_Header.py": "1.23", "proggen/M07_COM_Port.py": "1.20", "proggen/M08_ARDUINO.py": "1.40", "proggen/M18_Save_Load.py": "1.08", "proggen/M20_PageEvents_a_Functions.py": "1.20", "headless/headless_protocol_switch.py": "1.01", "_web/web_form_comport.py": "1.51", "_web/web_log.py": "1.15", "_web/web_form_options.py": "1.79", "headless/headless_firmware_dl.py": "1.01", "_web/web_form_firmware_download.py": "1.03", "_web/web_form_firmware.py": "1.06", "_web/web_startpage.py": "1.13", "_web/web_serial.py": "1.32", "_web/web_serial_page.py": "1.07", "proggen/M07_COM_Port_New.py": "1.29", "headless/headless_pico.py": "1.03", "headless/headless_dyn_config.py": "1.08", "proggen/M42_Dyn_Config.py": "1.13", "_web/web_layout.py": "1.23", "proggen/M06_Write_Header_SW.py": "1.16", "_web/web_logging.py": "1.06", "_web/web_tabs.py": "1.41",  # v5.59 (Pull Request 82, Jueff, dort V5.51 bis V5.69)
+    "_web/web_log.py": "1.16", "_web/web_ansi.py": "1.00", "mlpyproggen/Prog_Generator.py": "1.11", "headless/headless_esp32_ota.py": "1.15",  # v5.62
+    "_web/web_form_options.py": "1.80", "_web/web_form_comport.py": "1.52",  # v5.65
+    "headless/headless_usb_detect.py": "1.01", "proggen/M07_COM_Port.py": "1.21", "_web/web_serial.py": "1.32",  # v5.65
+    "_web/web_form_options.py": "1.81", "_web/web_startpage.py": "1.14",  # v5.65
+    "_web/web_form_comport.py": "1.53", "_web/web_form_options.py": "1.82",  # v5.65
+    "_web/web_form_options.py": "1.83", "_web/web_startpage.py": "1.15",  # v5.65
+    "_web/web_form_comport.py": "1.54",  # v5.65
+    "_web/web_form_options.py": "1.84",  # v5.65
+    "_web/web_form_comport.py": "1.55", "_web/web_form_options.py": "1.85",  # v5.65
+    "_web/web_form_options.py": "1.87", "_web/web_startpage.py": "1.16",  # v5.65
+    "headless/headless_usb_detect.py": "1.02", "_web/web_form_comport.py": "1.56", "_web/web_form_options.py": "1.88", "_web/web_startpage.py": "1.17", "_web/web_usb_list.py": "1.00",  # v5.65
+    "_web/web_serial.py": "1.33", "mlpyproggen/Prog_Generator.py": "1.13", "proggen/M06_Write_Header.py": "1.26", "proggen/M06_Write_Header_SW.py": "1.17", "proggen/M08_ARDUINO.py": "1.43", "proggen/M42_Dyn_Config.py": "1.15", "headless/headless_dyn_config.py": "1.09", "headless/headless_macro_edit.py": "1.02",  # v5.65 (Stand nach den Pull Requests 85 bis 88)
 }  # v1.75
 FILE_PROBLEMS = []                                      # Zeilen der Abweichungen, gefuellt in main()  # v1.75
 
@@ -1875,7 +1892,9 @@ def font_scales(ctrl) -> dict:
 # VERSION = "5.57 (2026-11-27)"  # v5.58 (entfallen)
 # VERSION = "5.58 (2026-11-27)"  # v5.59 (entfallen)
 # VERSION = "5.59 (2026-11-27)"  # v5.60 (entfallen)
-VERSION = "5.60 (2026-11-27)"  # v5.60
+# VERSION = "5.60 (2026-11-27)"  # v5.61 (entfallen)
+# VERSION = "5.61 (2026-11-28)"  # v5.65 (entfallen)
+VERSION = "5.65 (2026-11-28)"  # v5.65
 # VERSION = "4.09 (2026-11-19)"  # v3.64 (entfallen)
 # VERSION = "4.08 (2026-11-19)"  # v3.64 (entfallen)
 # VERSION = "4.07 (2026-11-19)"  # v3.64 (entfallen)
@@ -5074,10 +5093,20 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
         if not lib_row:
             return  # Custom macros can be defined outside Lib_Macros.
         lib = wb.Sheets(M02.LIBMACROS_SH)
-        if str(lib.Cells(lib_row, M02.SM_Typ___COL)).strip() or str(lib.Cells(lib_row, M02.SM_Mode__COL)).strip():
+        # if str(lib.Cells(lib_row, M02.SM_Typ___COL)).strip() or str(lib.Cells(lib_row, M02.SM_Mode__COL)).strip():  # v5.61 (entfallen)
+        typ = str(lib.Cells(lib_row, M02.SM_Typ___COL)).strip()  # v5.61
+        is_extension = macro_edit.is_extension_type(typ)  # v5.61
+        if (typ and not is_extension) or str(lib.Cells(lib_row, M02.SM_Mode__COL)).strip():  # v5.61
             return  # Special forms have their own, sometimes variable syntax.
         template = str(lib.Cells(lib_row, M02.SM_Macro_COL))
         param_sheet = wb.Sheets(M02.PAR_DESCR_SH)
+        if is_extension:  # v5.61: the arguments of an extension are described by its metadata, checked like in the extension dialog
+            cells = lambda r, i: str(r[i]).strip() if len(r) > i and r[i] is not None else ""  # v5.61
+            parameters = {cells(r, 0): (cells(r, 2), cells(r, 3), cells(r, 4), cells(r, 7)) for r in param_sheet.tksheet.data if cells(r, 0)}  # v5.61
+            error = macro_edit.check_extension_arguments(template.split("§")[0], parsed[1], parameters, M02.PAT_LEDVariableName)  # v5.61
+            if error:  # v5.61
+                raise macro_edit.MacroSyntaxError(tr(error[0], **error[1]))  # v5.61
+            return  # v5.61
         types = {str(r[0]).strip(): str(r[2]).strip() for r in param_sheet.tksheet.data if len(r) > 2}
         count = macro_edit.expected_argument_count(template, types)
         if count is not None and len(parsed[1]) != count:
@@ -5121,7 +5150,9 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
         with ui.dialog().props("persistent") as dlg, ui.card().classes("w-[720px] max-w-full"):
             ui.label(tr("Ungültiger Makrotext")).classes("text-h6 text-negative")
             message = ui.label(error).classes("text-negative")
-            editor = ui.textarea(tr("Makrotext"), value=text).props("outlined autogrow").classes("w-full")
+            # editor = ui.textarea(tr("Makrotext"), value=text).props("outlined autogrow").classes("w-full")  # v5.61 (entfallen)
+            editor = ui.textarea(tr("Makrotext"), value=text).props("outlined autogrow autofocus").classes("w-full")  # v5.61: Cursor beim Oeffnen im Makrotext
+            editor.on("keydown.enter.exact.prevent", lambda _: dlg.submit(editor.value))  # v5.61: Return loest 'Änderung prüfen' aus (Umschalt+Return bleibt ein Zeilenumbruch)
             with ui.row().classes("w-full justify-end"):
                 ui.button(tr("Ursprünglichen Makrotext wiederherstellen"), on_click=lambda: dlg.submit(None)).props("flat")
                 ui.button(tr("Änderung prüfen"), on_click=lambda: dlg.submit(editor.value)).props("color=primary")
@@ -7238,6 +7269,11 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
             if force and target is None and not has_usb and current and not via_ip:  # v5.61: Blatt ohne Anschluss: im EFFECT Mode am bisherigen Anschluss neu verbinden
                 sheet_port, has_usb = current, True  # v5.61
             if target is None and not has_usb:  # v4.92: das Blatt hat keine eigene Verbindung: Verbindung bleibt
+                want, have = _sheet_board_type(), _connected_type()  # v5.61: ausser sie gehoert zu einer anderen Lichtmaschine (Typ laut Blatt, Typ aus der Startmeldung)
+                if want and _connected_type_known() and have != want and not force and not state["busy"]:  # v5.61
+                    logger.info("Blattwechsel %s: Blatt ohne eigene Verbindung, Blatt-Typ '%s', verbunden '%s': Verbindung getrennt", ws.Name, want, have)  # v5.61
+                    await run.io_bound(_disconnect_locked)  # v5.61
+                    ui.notify(tr("Die Verbindung wurde getrennt, weil das Blatt für eine andere Lichtmaschine ({want}) gilt als die verbundene ({have}).", want=want, have=have), type="warning")  # v5.61
                 return  # v4.92
             logger.info("Blattwechsel %s: USB-Anschluss '%s', WLAN-Ziel %s, offene Verbindung '%s' (WLAN: %s)", ws.Name, sheet_port if has_usb else "-", target[0] if target else "-", current, via_ip)  # v4.91  # v4.92
             if target is not None:  # v4.92
@@ -7259,7 +7295,8 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
                 what = target[0]  # v4.92
             if not ok and has_usb and _port_present(sheet_port):  # v4.92: kein WLAN-Ziel oder nicht erreichbar: USB-Anschluss des Blatts
                 logger.info("Blattwechsel: Verbindung %s -> %s", current, sheet_port)  # v4.90
-                ok = await run.io_bound(_switch_connection, sheet_port, _sheet_board_type() == "Pico")  # v4.90
+                hint_verify = (lambda: (not _connected_type_known()) or _connected_type_ok()) if _port_hint_flag() else None  # v5.61: Hinweis-Anschluss (negative Zahl): meldet sich dort eine andere Lichtmaschine, wieder trennen (und den Anschluss nicht ins Blatt eintragen)
+                ok = await run.io_bound(_switch_connection, sheet_port, _sheet_board_type() == "Pico", hint_verify)  # v4.90  # v5.61
                 what = sheet_port  # v4.92
                 if ok:  # v4.92
                     _store_hint_port(sheet_port)  # v5.50: negative Zahl im Blatt (Hinweis): den gefundenen Anschluss eintragen
@@ -7269,10 +7306,14 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
                         logger.debug("Anschluss nicht gespeichert", exc_info=True)  # v4.90
             if ok:  # v4.92
                 ui.notify(tr("Mit der Lichtmaschine verbunden ({port}).", port=what), type="positive")  # v4.90
+                if _connected_type_known() and not _connected_type_ok():  # v5.61: am eingestellten Anschluss meldet sich ein anderer Typ als im Blatt: warnen (der Anschluss bleibt, der Anwender hat ihn eingestellt)
+                    ui.notify(tr("Achtung: Am Anschluss {port} meldet sich eine andere Lichtmaschine ({have}) als im Blatt eingestellt ({want}).", port=what, have=_connected_type(), want=_sheet_board_type()), type="warning")  # v5.61
                 if restart:  # v5.62: beim Reiterwechsel startet der Reiter den Direktmodus danach selbst
                     after_connect()  # v4.90
             else:  # v4.92
                 logger.info("Blattwechsel: keine Verbindung hergestellt")  # v4.92
+                await run.io_bound(_disconnect_locked)  # v5.61: keine Verbindung zu einer anderen Lichtmaschine stehen lassen (der Anschluss des Blatts fehlt oder meldet sich nicht)
+                ui.notify(tr("Die Verbindung zum Gerät des Blatts ({port}) ist nicht möglich. Die bisherige Verbindung wurde getrennt. Bitte „Mit Lichtmaschine verbinden“ drücken.", port=(target[0] if target else sheet_port)), type="warning")  # v5.61
         except Exception:                                  # noqa: BLE001  # v4.90
             logger.debug("Verbindung nicht an das Blatt angepasst", exc_info=True)  # v4.90
 
@@ -7284,13 +7325,26 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
                 logger.debug("Trennen vor dem Wechsel fehlgeschlagen", exc_info=True)  # v4.92
             return _silent_connect(None, None, None, (host, password))  # v4.92
 
-    def _switch_connection(port, dtr):  # v4.90: im Hintergrund-Thread
+    def _connected_type_known() -> bool:  # v5.61: gibt es eine Startmeldung der verbundenen Lichtmaschine (sonst ist der Typ unbekannt und es wird nichts getrennt oder gewarnt)
+        return bool(re.search(r"Ver \d+: \S+", str(getattr(ctrl, "ARDUINO_startmessage", "") or "")))  # v5.61
+
+    def _disconnect_locked():  # v5.61: im Hintergrund-Thread: eine offene Verbindung unter der Verbindungs-Sperre trennen
+        with ctrl._conn_lock:  # v5.61
+            try:  # v5.61
+                if ctrl.is_connection_open():  # v5.61
+                    ctrl.disconnect()  # v5.61
+            except Exception:                              # noqa: BLE001  # v5.61
+                logger.debug("Trennen fehlgeschlagen", exc_info=True)  # v5.61
+
+    # def _switch_connection(port, dtr):  # v4.90: im Hintergrund-Thread  # v5.61 (entfallen: verify fuer den Hinweis-Anschluss)
+    def _switch_connection(port, dtr, verify=None):  # v5.61: im Hintergrund-Thread
         with ctrl._conn_lock:  # v5.42: Trennen und Verbinden zusammen (kein anderer Verbindungsaufbau dazwischen)
             try:  # v4.90
                 ctrl.disconnect()  # v4.90
             except Exception:                              # noqa: BLE001  # v4.90
                 logger.debug("Trennen vor dem Wechsel fehlgeschlagen", exc_info=True)  # v4.90
-            return _silent_connect(port, False, True if dtr else None)  # v4.90
+            # return _silent_connect(port, False, True if dtr else None)  # v4.90  # v5.61 (entfallen)
+            return _silent_connect(port, False, True if dtr else None, None, verify)  # v5.61
 
     sheet_conn_hook["fn"] = sync_connection_to_sheet  # v4.90
     ctrl.sheet_port_provider = lambda: (_stored_ports()[0] or None)  # v4.91 (Issue 59): Verbinden (Knopf, Menue, Trennen und neu Verbinden) nimmt den Anschluss des aktiven Blatts
@@ -7805,6 +7859,7 @@ def build_page(start_tab: str = "pg", fullscreen: bool = False):  # v1.82
             ("Datenübertragung", lambda: __import__("_web.web_table_sync", fromlist=["open_dialog"]).open_dialog(on_changed=refresh_after_transfer)),  # v4.89 (Pull Request 57)  # v5.49 (aus dem Menue Einstellungen)
             ("Firmware installieren …", open_firmware_install),  # v5.49
             ("ESP32-Firmware über WLAN hochladen …", lambda: web_esp32_ota.open_dialog(pio=ota_arduino.Find_PIO() if ota_options.Is_PlatformIO() else None)),  # v5.49 (auch im Reiter WLAN (OTA))
+            ("Liste der USB Geräte …", lambda: __import__("_web.web_usb_list", fromlist=["open_dialog"]).open_dialog()),  # v5.70: Daten fuer die Regeln detectionRules (csv/Lichtmaschinen_prop.json)
             None,  # v5.49
             ("Wartung …", open_maintenance),  # v5.49: Entwicklungsumgebung (PlatformIO, ARDUINO-IDE), Zwischenspeicher, Update der Bibliotheken
         ],

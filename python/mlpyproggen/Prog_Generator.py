@@ -1,9 +1,9 @@
-# Datei-Version: 1.10 (2026-11-19) - Prog_Generator.py
+# Datei-Version: 1.13 (2026-11-27) - Prog_Generator.py
 # ----------------------------------------------------------------------------------------------
 # Name:           Prog_Generator.py
 # Path:           mlpyproggen/Prog_Generator.py
-# Version:        1.10
-# Last Update:    2026-11-19
+# Version:        1.13
+# Last Update:    2026-11-27
 # Author:         Harold Linke
 # Licence:        LGPL V2.1
 # History of Change:
@@ -17,6 +17,9 @@
 #   1.07  2026-11-01  Hinweis bei fehlendem git nennt den Knopf Git installieren fuer alle Betriebssysteme und winget fuer Windows
 #   1.08  2026-11-03  start_ARDUINO_program_cmd: Parameter title ersetzt die Ueberschrift 'Kompilieren und Hochladen gestartet' (fertige Dateien werden nicht kompiliert)
 #   1.09  2026-11-15  Knopfleiste: Umschalttaste beim Klick merken (Simulator: Umschalt + Zum Arduino schicken)
+#   1.13  2026-11-27  start_ARDUINO_program_cmd: der Parameter preface (1.12) entfaellt wieder, M08 leert das Fenster nach einem Rueckfall vom schnellen Upload gar nicht mehr. Zeilen mit '# v1.13'
+#   1.12  2026-11-27  Setup uebertragen: der Text am Anfang des Log-Fensters ('Preparation of Program Started') ist uebersetzt (csv/Web_Languages.csv); start_ARDUINO_program_cmd: neuer Parameter preface (der Grund fuer das ganze Programm nach einem Rueckfall vom schnellen Upload wird auch angezeigt, wenn das Fenster geleert wird). Zeilen mit '# v1.12'
+#   1.11  2026-11-27  Farben und Cursor im Log-Fenster: PlatformIO bekommt PLATFORMIO_FORCE_ANSI=true (_pio_env); die Ausgabe wird blockweise gelesen (read1, UTF-8) statt zeilenweise, damit Fortschrittsanzeigen sofort erscheinen. Zeilen mit '# v1.11'
 #   1.10  2026-11-19  Vorgang abbrechen beendet den ganzen Prozessbaum (Shell und arduino-cli/avrdude/pio), der COM-Port wird sofort frei (Issue 15)
 # ----------------------------------------------------------------------------------------------
 # -*- coding: utf-8 -*-
@@ -77,6 +80,7 @@ import ExcelAPI.XLA_Application as P01
 import os
 
 import subprocess
+import codecs  # v1.11
 
 import logging
 import platform
@@ -388,6 +392,14 @@ def build_workbook_dict(default_font, default_smallfont, default_boldfont):
     return workbook_dict
 
 
+def _pio_env():  # v1.11
+    # Umgebung fuer die Befehle des Kompilierens: PlatformIO schreibt Farben und Fortschrittsanzeigen auch durch die Pipe (PLATFORMIO_FORCE_ANSI=true).
+    # Das Log-Fenster wertet sie aus (_web/web_ansi.py). Eine eigene Einstellung des Anwenders (PLATFORMIO_NO_ANSI usw.) bleibt erhalten.
+    env = dict(os.environ)
+    env.setdefault("PLATFORMIO_FORCE_ANSI", "true")
+    return env
+
+
 def _spawn_kwargs():  # v1.10
     """Popen-Parameter, damit der Prozess samt Kindprozessen abgebrochen werden kann (POSIX: eigene Prozessgruppe)."""  # v1.10
     return {} if platform.system() == "Windows" else {"start_new_session": True}  # v1.10
@@ -447,6 +459,15 @@ def _drain_output(process, page, timeout=2.0, collector=None):  # v1.04
         page.add_text_to_textwindow(line + "\n")  # v1.02
     if data:  # v1.02
         page.update()  # v1.02
+
+
+def _tr(text, **values):  # v1.12
+    """Text in der eingestellten Sprache (Katalog csv/Web_Languages.csv); ohne die Web-Uebersetzung bleibt er deutsch"""  # v1.12
+    try:  # v1.12
+        from _web.web_i18n import tr  # v1.12
+        return tr(text, **values)  # v1.12
+    except Exception:                                      # noqa: BLE001  # v1.12
+        return text.format(**values) if values else text  # v1.12
 
 
 class Prog_GeneratorPage(tk.Frame):
@@ -905,7 +926,8 @@ class Prog_GeneratorPage(tk.Frame):
     def upload_to_ARDUINO_Button_click(self, event=None):
         self.arduinoMonitorPage=self.controller.getFramebyName ("ARDUINOMonitorPage")
         self.arduinoMonitorPage.delete_text_from_textwindow()        
-        self.arduinoMonitorPage.add_text_to_textwindow("\n\n*******************************************************\n"+ "Preparation of Program Started" +"\n*******************************************************\n\n")
+        # self.arduinoMonitorPage.add_text_to_textwindow("\n\n*******************************************************\n"+ "Preparation of Program Started" +"\n*******************************************************\n\n")  # v1.12 (entfallen)
+        self.arduinoMonitorPage.add_text_to_textwindow("\n\n*******************************************************\n"+ _tr("Vorbereitung des Programms gestartet") +"\n*******************************************************\n\n")  # v1.12
         self.controller.showFramebyName("ARDUINOMonitorPage")
         self.arduinoMonitorPage.update()
         F00.Arduino_Button_Click()
@@ -922,7 +944,9 @@ class Prog_GeneratorPage(tk.Frame):
             self.Show_Status_for_a_while(M09.Get_Language_Str('Programm erfolgreich hochgeladen. Kompilieren und Hochladen dauerte ') + P01.Format(self.upload_duration, 'hh:mm:ss'), '00:02:00')
     
     # def start_ARDUINO_program_cmd(self,startfile,arduino_type="Left", empty_text=True, show_intro=True):  # v1.08 (entfallen)
-    def start_ARDUINO_program_cmd(self,startfile,arduino_type="Left", empty_text=True, show_intro=True, title=""):  # v1.08
+    # def start_ARDUINO_program_cmd(self,startfile,arduino_type="Left", empty_text=True, show_intro=True, title=""):  # v1.08  # v1.12 (entfallen)
+    # def start_ARDUINO_program_cmd(self,startfile,arduino_type="Left", empty_text=True, show_intro=True, title="", preface=""):  # v1.12  # v1.13 (entfallen)
+    def start_ARDUINO_program_cmd(self,startfile,arduino_type="Left", empty_text=True, show_intro=True, title=""):  # v1.13
         self.Update_Compile_Time(Start=True)
         macrodata = self.controller.MacroDef.data.get("ARDUINOMonitorPage",{})
         self.ARDUINO_message1 = macrodata.get("Message_1","")
@@ -931,6 +955,8 @@ class Prog_GeneratorPage(tk.Frame):
         self.arduinoMonitorPage=self.controller.getFramebyName ("ARDUINOMonitorPage")
         if empty_text:
             self.arduinoMonitorPage.delete_text_from_textwindow()
+        # if preface:  # v1.12: Grund fuer das ganze Programm (Rueckfall vom schnellen Upload) steht auch nach dem Leeren im Fenster  # v1.13 (entfallen)
+            # self.arduinoMonitorPage.add_text_to_textwindow(preface if preface.endswith('\n') else preface + "\n")  # v1.12  # v1.13 (entfallen)
         self.controller.showFramebyName("ARDUINOMonitorPage")
         logging.debug(repr(startfile))
         
@@ -1160,31 +1186,45 @@ class Prog_GeneratorPage(tk.Frame):
             collected = []                                                 # Ausgabezeilen (fuer die Erkennung von UnknownPackageError)  # v1.03
             for attempt in (1, 2):  # v1.03
                 # self.process = subprocess.Popen(cmd_str, stdout=subprocess.PIPE,stderr=subprocess.STDOUT,stdin = subprocess.DEVNULL,shell=True)  # v1.03 (entfallen v1.10)
-                self.process = subprocess.Popen(cmd_str, stdout=subprocess.PIPE,stderr=subprocess.STDOUT,stdin = subprocess.DEVNULL,shell=True, **_spawn_kwargs())  # v1.10
+                self.process = subprocess.Popen(cmd_str, stdout=subprocess.PIPE,stderr=subprocess.STDOUT,stdin = subprocess.DEVNULL,shell=True, env=_pio_env(), **_spawn_kwargs())  # v1.10, v1.11: PlatformIO mit Farben und Cursor
                 self.continue_loop=True  # v1.03
                 collected.clear()  # v1.03
-                # Poll process.stdout to show stdout live
-                while True:  # v1.03
-                    output = self.process.stdout.readline()  # v1.03
-                    if output:  # v1.03
-                        try:  # v1.03
-                            text_line = output.decode('utf-8', errors='replace')  # v1.03
-                            collected.append(text_line)  # v1.03
-                            self.arduinoMonitorPage.add_text_to_textwindow(text_line+"\n")  # v1.03
-                        except BaseException as e:  # v1.03
-                            logging.debug("ProgGenerator - execute_shell_cmd-output:"+str(e))  # v1.03
-                        self.arduinoMonitorPage.update()  # v1.03
-                    if self.process.poll() is not None:  # v1.03
-                        logging.debug("shell ended")  # v1.03
-                        # _drain_output(self.process, self.arduinoMonitorPage)  # v1.04 (entfallen)
-                        _drain_output(self.process, self.arduinoMonitorPage, collector=collected)  # v1.04
-                        break  # v1.03
-                    if not output:  # v1.03
-                        time.sleep(0.01)  # v1.03
+                # # Poll process.stdout to show stdout live  # v1.11 (entfallen)
+                # while True:
+                #     output = self.process.stdout.readline()
+                #     if output:
+                #         text_line = output.decode('utf-8', errors='replace')
+                #         collected.append(text_line)
+                #         self.arduinoMonitorPage.add_text_to_textwindow(text_line+"\n")
+                #         self.arduinoMonitorPage.update()
+                #     if self.process.poll() is not None:
+                #         _drain_output(self.process, self.arduinoMonitorPage, collector=collected)
+                #         break
+                #     if not output:
+                #         time.sleep(0.01)
+                # v1.11: blockweise lesen (read1) statt zeilenweise: Fortschrittsanzeigen mit CR erscheinen sofort. Die Ausgabe geht als Text durch den Terminal-Emulator des Log-Fensters (Farben, Cursor)
+                decoder = codecs.getincrementaldecoder("utf-8")(errors="replace")  # v1.11
+                while True:  # v1.11: endet, wenn die Pipe geschlossen ist (Prozess beendet)
+                    chunk = self.process.stdout.read1(4096)  # v1.11: wartet, bis Ausgabe da ist
+                    if not chunk:  # v1.11
+                        break  # v1.11
+                    text_part = decoder.decode(chunk)  # v1.11
+                    if text_part:  # v1.11
+                        collected.append(text_part)  # v1.11
+                        try:  # v1.11
+                            self.arduinoMonitorPage.add_text_to_textwindow(text_part)  # v1.11
+                        except BaseException as e:  # v1.11
+                            logging.debug("ProgGenerator - execute_shell_cmd-output:"+str(e))  # v1.11
+                        self.arduinoMonitorPage.update()  # v1.11
+                tail = decoder.decode(b"", final=True)  # v1.11: Rest eines unvollstaendigen Zeichens
+                if tail:  # v1.11
+                    collected.append(tail)  # v1.11
+                    self.arduinoMonitorPage.add_text_to_textwindow(tail)  # v1.11
+                self.process.wait()  # v1.11
                 rc = self.process.returncode  # v1.03
                 # PlatformIO: Die Paketverwaltung (Registry im Netz) meldet manchmal fuer ein Paket UnknownPackageError, das es gibt. Dann einmal wiederholen:
                 # die schon geladenen Pakete bleiben, es wird nur noch das Fehlende geholt.
-                if rc != 0 and attempt == 1 and not self.userbreak and "pio " in cmd_str and any("UnknownPackageError" in l for l in collected):  # v1.03
+                if rc != 0 and attempt == 1 and not self.userbreak and "pio " in cmd_str and "UnknownPackageError" in "".join(collected):  # v1.03, v1.11: Text zusammengefuegt (ein Wort kann zwei Bloecke teilen)
                     self.arduinoMonitorPage.add_text_to_textwindow("\n" + M09.Get_Language_Str("PlatformIO konnte ein Paket nicht finden (UnknownPackageError). Zweiter Versuch ...") + "\n")  # v1.03
                     logging.info("PlatformIO: UnknownPackageError, zweiter Versuch")  # v1.03
                     time.sleep(3)  # v1.03

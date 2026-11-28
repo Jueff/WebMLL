@@ -1,0 +1,10 @@
+[b]Änderungen seit V5.60 (5.61 bis 5.65)[/b]
+
+[list][*]Hardware Optionen: Die Lichtmaschine wird wieder gewählt (Classic, Mini, Pro, Pico Zero, MoLLi, Uno). Bild und Protokolle folgen der Wahl, die Geräteauswahl zeigt nur passende Geräte (Jürgen, PR 88).
+[*]Neu im Menü Werkzeuge: Liste der USB Geräte; die Erkennung läuft über detectionRules in Lichtmaschinen_prop.json (Jürgen, PR 88).
+[*]Log-Fenster beim Kompilieren und Hochladen mit Farben und Fortschrittsanzeige (Jürgen, PR 85).
+[*]Mainboard LEDs aus der Konfigurationsdatei, SPI entfernt, Blattwechsel trennt die Verbindung bei anderer Lichtmaschine, Protokollfenster bei Setup übertragen (Jürgen, PR 86).
+[*]Makrotext von Erweiterungen wird beim direkten Bearbeiten richtig geprüft, Return im Fehlerdialog (Jürgen, PR 87).
+[*]Verbinden: genauere Fehlermeldung (keine Antwort / unlesbare Zeichen) mit Hinweis zum Uno.[/list]
+
+Nur gebaut und mit Tests ohne Oberfläche geprüft, nicht an Hardware. Bitte vor allem die neuen Dialoge testen (Checkliste Punkte 434 bis 451). PR 81 (M08-Upload) folgt.
